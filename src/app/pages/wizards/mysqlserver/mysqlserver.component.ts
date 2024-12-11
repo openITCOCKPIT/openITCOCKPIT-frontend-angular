@@ -23,7 +23,6 @@ import {
 import { FormsModule } from '@angular/forms';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { DebounceDirective } from '../../../directives/debounce.directive';
@@ -74,7 +73,7 @@ import { WizardsAbstractComponent } from '../wizards-abstract/wizards-abstract.c
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MysqlserverComponent extends WizardsAbstractComponent {
-    private readonly MysqlserverWizardService: MysqlserverWizardService = inject(MysqlserverWizardService);
+    protected override WizardService: MysqlserverWizardService = inject(MysqlserverWizardService);
 
     protected serverAddr: string = 'localhost';
     protected systemName: string = 'mysqlserver';
@@ -89,37 +88,9 @@ export class MysqlserverComponent extends WizardsAbstractComponent {
         username: ''
     } as MysqlWizardPost;
 
-    public submit(): void {
-        this.subscriptions.add(this.MysqlserverWizardService.submit(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    const title: string = this.TranslocoService.translate('Success');
-                    const msg: string = this.TranslocoService.translate('Data saved successfully');
 
-                    this.notyService.genericSuccess(msg, title);
-                    this.router.navigate(['/wizards/index']);
-                    return;
-                }
-                // Error
-                this.notyService.genericError();
-                const errorResponse: GenericValidationError = result.data as GenericValidationError;
-                if (result) {
-                    this.errors = errorResponse;
-
-                }
-            })
-        );
-    }
-
-    public loadWizard() {
-        this.subscriptions.add(this.MysqlserverWizardService.fetch(this.post.host_id)
-            .subscribe((result: MysqlWizardGet) => {
-                this.post.username = result.username;
-                this.post.password = result.password;
-
-                // Call default stub that fills services and calls CDR.
-                this.afterWizardLoaded(result);
-            }));
+    protected override wizardLoad(result: MysqlWizardGet): void {
+        this.post.username = result.username;
+        this.post.password = result.password;
     }
 }

@@ -60,7 +60,7 @@ import { NgIf } from '@angular/common';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PrinterComponent extends WizardsAbstractComponent {
-    private readonly PrinterWizardService: PrinterWizardService = inject(PrinterWizardService);
+    protected override WizardService: PrinterWizardService = inject(PrinterWizardService);
 
     protected override post: PrinterWizardPost = {
 // Default fields from the base wizard
@@ -99,37 +99,4 @@ export class PrinterComponent extends WizardsAbstractComponent {
         {key: '3DESDE', value: '3desde'},
     ];
 
-    public submit(): void {
-        this.subscriptions.add(this.PrinterWizardService.submit(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    const title: string = this.TranslocoService.translate('Success');
-                    const msg: string = this.TranslocoService.translate('Data saved successfully');
-
-                    this.notyService.genericSuccess(msg, title);
-                    this.router.navigate(['/services/notMonitored']);
-                    return;
-                }
-                // Error
-                this.notyService.genericError();
-                const errorResponse: GenericValidationError = result.data as GenericValidationError;
-                if (result) {
-                    this.errors = errorResponse;
-
-                }
-            })
-        );
-    }
-
-    public loadWizard() {
-        this.subscriptions.add(this.PrinterWizardService.fetch(this.post.host_id)
-            .subscribe((result: PrinterWizardGet) => {
-                this.servicetemplates = result.servicetemplates;
-                this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
-
-                // Call default stub that fills services and calls CDR.
-                this.afterWizardLoaded(result);
-            }));
-    }
 }

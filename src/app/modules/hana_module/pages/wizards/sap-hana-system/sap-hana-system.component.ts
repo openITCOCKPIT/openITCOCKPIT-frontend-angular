@@ -21,6 +21,7 @@ import { GenericResponseWrapper, GenericValidationError } from '../../../../../g
 import { SapHanaSystemWizardService } from './sap-hana-system-wizard.service';
 import { SapHanaSystemWizardGet, SapHanaSystemWizardPost } from './sap-hana-system-wizard.interface';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
+import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mssql-wizard.interface';
 
 @Component({
     selector: 'oitc-sap-hana-system',
@@ -47,7 +48,7 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SapHanaSystemComponent extends WizardsAbstractComponent {
-    private readonly SapHanaSystemWizardService: SapHanaSystemWizardService = inject(SapHanaSystemWizardService);
+    protected override WizardService: SapHanaSystemWizardService = inject(SapHanaSystemWizardService);
 
     protected override post: SapHanaSystemWizardPost = {
 // Default fields from the base wizard
@@ -61,43 +62,11 @@ export class SapHanaSystemComponent extends WizardsAbstractComponent {
         typeId: 'sap-hana-system'
     } as SapHanaSystemWizardPost;
 
-    public loadWizard(): void {
-        this.subscriptions.add(this.SapHanaSystemWizardService.fetch(this.post.host_id)
-            .subscribe((result: SapHanaSystemWizardGet) => {
-                this.servicetemplates = result.servicetemplates;
-                this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
-
-                this.post.dbuser = result.dbuser;
-                this.post.dbpassword = result.dbpassword;
-                this.post.dbtenantport = result.dbtenantport;
-                this.post.dbsystemport = result.dbsystemport;
-
-                // Call default stub that fills services and calls CDR.
-                this.afterWizardLoaded(result);
-            }));
-    }
-
-    public submit(): void {
-        this.subscriptions.add(this.SapHanaSystemWizardService.submit(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    const title: string = this.TranslocoService.translate('Success');
-                    const msg: string = this.TranslocoService.translate('Data saved successfully');
-
-                    this.notyService.genericSuccess(msg, title);
-                    this.router.navigate(['/wizards/index']);
-                    return;
-                }
-                // Error
-                this.notyService.genericError();
-                const errorResponse: GenericValidationError = result.data as GenericValidationError;
-                if (result) {
-                    this.errors = errorResponse;
-
-                }
-            })
-        );
+    protected override wizardLoad(result: SapHanaSystemWizardGet): void {
+        this.post.dbuser = result.dbuser;
+        this.post.dbpassword = result.dbpassword;
+        this.post.dbtenantport = result.dbtenantport;
+        this.post.dbsystemport = result.dbsystemport;
     }
 
 }

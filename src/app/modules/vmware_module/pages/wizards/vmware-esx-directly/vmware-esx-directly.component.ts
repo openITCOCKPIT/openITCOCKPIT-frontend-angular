@@ -21,6 +21,7 @@ import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
+import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mssql-wizard.interface';
 
 @Component({
     selector: 'oitc-vmware-esx-directly',
@@ -47,7 +48,7 @@ import { RouterLink } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VmwareEsxDirectlyComponent extends WizardsAbstractComponent {
-    private readonly VmwareEsxDirectlyWizardService: VmwareEsxDirectlyWizardService = inject(VmwareEsxDirectlyWizardService);
+    protected override WizardService: VmwareEsxDirectlyWizardService = inject(VmwareEsxDirectlyWizardService);
 
     protected override post: VmwareEsxDirectlyWizardPost = {
 // Default fields from the base wizard
@@ -60,42 +61,9 @@ export class VmwareEsxDirectlyComponent extends WizardsAbstractComponent {
         typeId: 'vmware-esx-directly'
     } as VmwareEsxDirectlyWizardPost;
 
-    public loadWizard(): void {
-        this.subscriptions.add(this.VmwareEsxDirectlyWizardService.fetch(this.post.host_id)
-            .subscribe((result: VmwareEsxDirectlyWizardGet) => {
-                this.servicetemplates = result.servicetemplates;
-                this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
-
-                this.post.username = result.username;
-                this.post.password = result.password;
-                this.post.vcenter = result.vcenter;
-
-                // Call default stub that fills services and calls CDR.
-                this.afterWizardLoaded(result);
-            }));
+    protected override wizardLoad(result: VmwareEsxDirectlyWizardGet): void {
+        this.post.username = result.username;
+        this.post.password = result.password;
+        this.post.vcenter = result.vcenter;
     }
-
-    public submit(): void {
-        this.subscriptions.add(this.VmwareEsxDirectlyWizardService.submit(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    const title: string = this.TranslocoService.translate('Success');
-                    const msg: string = this.TranslocoService.translate('Data saved successfully');
-
-                    this.notyService.genericSuccess(msg, title);
-                    this.router.navigate(['/wizards/index']);
-                    return;
-                }
-                // Error
-                this.notyService.genericError();
-                const errorResponse: GenericValidationError = result.data as GenericValidationError;
-                if (result) {
-                    this.errors = errorResponse;
-
-                }
-            })
-        );
-    }
-
 }

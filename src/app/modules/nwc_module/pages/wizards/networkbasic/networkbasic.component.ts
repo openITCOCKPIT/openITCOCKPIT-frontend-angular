@@ -50,7 +50,7 @@ import {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NetworkbasicComponent extends WizardsAbstractComponent {
-    private readonly NetworkbasicWizardService: NetworkbasicWizardService = inject(NetworkbasicWizardService);
+    protected override WizardService: NetworkbasicWizardService = inject(NetworkbasicWizardService);
 
     protected override post: NetworkbasicWizardPost = {
 // Default fields from the base wizard
@@ -89,37 +89,4 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         {key: '3DESDE', value: '3desde'},
     ];
 
-    public submit(): void {
-        this.subscriptions.add(this.NetworkbasicWizardService.submit(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    const title: string = this.TranslocoService.translate('Success');
-                    const msg: string = this.TranslocoService.translate('Data saved successfully');
-
-                    this.notyService.genericSuccess(msg, title);
-                    this.router.navigate(['/services/notMonitored']);
-                    return;
-                }
-                // Error
-                this.notyService.genericError();
-                const errorResponse: GenericValidationError = result.data as GenericValidationError;
-                if (result) {
-                    this.errors = errorResponse;
-
-                }
-            })
-        );
-    }
-
-    public loadWizard() {
-        this.subscriptions.add(this.NetworkbasicWizardService.fetch(this.post.host_id)
-            .subscribe((result: NetworkbasicWizardGet) => {
-                this.servicetemplates = result.servicetemplates;
-                this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
-
-                // Call default stub that fills services and calls CDR.
-                this.afterWizardLoaded(result);
-            }));
-    }
 }

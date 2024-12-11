@@ -20,6 +20,7 @@ import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
+import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mssql-wizard.interface';
 
 @Component({
     selector: 'oitc-oracle',
@@ -47,7 +48,7 @@ import { RouterLink } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OracleComponent extends WizardsAbstractComponent {
-    private readonly OracleWizardService: OracleWizardService = inject(OracleWizardService);
+    protected override WizardService: OracleWizardService = inject(OracleWizardService);
 
     protected override post: OracleWizardPost = {
 // Default fields from the base wizard
@@ -58,41 +59,8 @@ export class OracleComponent extends WizardsAbstractComponent {
         dbpass: ''
     } as OracleWizardPost;
 
-    public loadWizard(): void {
-        this.subscriptions.add(this.OracleWizardService.fetch(this.post.host_id)
-            .subscribe((result: OracleWizardGet) => {
-                this.servicetemplates = result.servicetemplates;
-                this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
-
-                this.post.dbuser = result.dbuser;
-                this.post.dbpass = result.dbpass;
-
-                // Call default stub that fills services and calls CDR.
-                this.afterWizardLoaded(result);
-            }));
+    protected override wizardLoad(result: OracleWizardGet): void {
+        this.post.dbuser = result.dbuser;
+        this.post.dbpass = result.dbpass;
     }
-
-    public submit(): void {
-        this.subscriptions.add(this.OracleWizardService.submit(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    const title: string = this.TranslocoService.translate('Success');
-                    const msg: string = this.TranslocoService.translate('Data saved successfully');
-
-                    this.notyService.genericSuccess(msg, title);
-                    this.router.navigate(['/wizards/index']);
-                    return;
-                }
-                // Error
-                this.notyService.genericError();
-                const errorResponse: GenericValidationError = result.data as GenericValidationError;
-                if (result) {
-                    this.errors = errorResponse;
-
-                }
-            })
-        );
-    }
-
 }

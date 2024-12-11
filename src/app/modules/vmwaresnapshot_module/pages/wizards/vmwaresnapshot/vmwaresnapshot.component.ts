@@ -25,6 +25,7 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { VmwareSnapshotWizardGet, VmwareSnapshotWizardPost } from './vmwaresnapshot-wizard.interface';
 import { VmwaresnapshotWizardService } from './vmwaresnapshot-wizard.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
+import { MysqlWizardGet } from '../../../../../pages/wizards/mysqlserver/mysqlserver-wizard.interface';
 
 @Component({
     selector: 'oitc-vmwaresnapshot',
@@ -55,7 +56,7 @@ import { GenericResponseWrapper, GenericValidationError } from '../../../../../g
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VmwaresnapshotComponent extends WizardsAbstractComponent {
-    private readonly VmwareSnapshotWizardService: VmwaresnapshotWizardService = inject(VmwaresnapshotWizardService);
+    protected override WizardService: VmwaresnapshotWizardService = inject(VmwaresnapshotWizardService);
 
     protected override post: VmwareSnapshotWizardPost = {
 // Default fields from the base wizard
@@ -67,43 +68,10 @@ export class VmwaresnapshotComponent extends WizardsAbstractComponent {
         vmwhost: ''
     } as VmwareSnapshotWizardPost;
 
-    public loadWizard(): void {
-        this.subscriptions.add(this.VmwareSnapshotWizardService.fetch(this.post.host_id)
-            .subscribe((result: VmwareSnapshotWizardGet) => {
-                this.servicetemplates = result.servicetemplates;
-                this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
-
-                this.post.password = result.password;
-                this.post.username = result.username;
-                this.post.vmwhost = result.vmwhost;
-
-
-                // Call default stub that fills services and calls CDR.
-                this.afterWizardLoaded(result);
-            }));
-    }
-
-    public submit(): void {
-        this.subscriptions.add(this.VmwareSnapshotWizardService.submit(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    const title: string = this.TranslocoService.translate('Success');
-                    const msg: string = this.TranslocoService.translate('Data saved successfully');
-
-                    this.notyService.genericSuccess(msg, title);
-                    this.router.navigate(['/services/notMonitored']);
-                    return;
-                }
-                // Error
-                this.notyService.genericError();
-                const errorResponse: GenericValidationError = result.data as GenericValidationError;
-                if (result) {
-                    this.errors = errorResponse;
-
-                }
-            })
-        );
+    protected override wizardLoad(result: VmwareSnapshotWizardGet): void {
+        this.post.password = result.password;
+        this.post.username = result.username;
+        this.post.vmwhost = result.vmwhost;
     }
 
 }

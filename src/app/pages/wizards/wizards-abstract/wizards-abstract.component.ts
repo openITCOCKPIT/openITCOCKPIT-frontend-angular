@@ -3,9 +3,10 @@ import { TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { GenericValidationError } from '../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { MysqlWizardPost } from '../mysqlserver/mysqlserver-wizard.interface';
 import { Service, Servicetemplate, WizardGet } from '../wizards.interface';
+import { WizardsService } from '../wizards.service';
 
 @Component({
     selector: 'oitc-wizards-abstract',
@@ -22,6 +23,8 @@ export abstract class WizardsAbstractComponent implements OnInit, OnDestroy {
     protected readonly notyService: NotyService = inject(NotyService);
     protected readonly router: Router = inject(Router);
     protected readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+
+    protected WizardService: WizardsService = {} as WizardsService;
 
     protected hostId: number = 0;
     protected errors: GenericValidationError = {} as GenericValidationError;
@@ -63,7 +66,43 @@ export abstract class WizardsAbstractComponent implements OnInit, OnDestroy {
     }
 
 
-    abstract submit(): void;
+    public submit(): void {
+        this.subscriptions.add(this.WizardService.submit(this.post)
+            .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+                    const title: string = this.TranslocoService.translate('Success');
+                    const msg: string = this.TranslocoService.translate('Data saved successfully');
 
-    abstract loadWizard(): void;
+                    this.notyService.genericSuccess(msg, title);
+                    this.router.navigate(['/services/notMonitored']);
+                    return;
+                }
+                // Error
+                this.notyService.genericError();
+                const errorResponse: GenericValidationError = result.data as GenericValidationError;
+                if (result) {
+                    this.errors = errorResponse;
+
+                }
+            })
+        );
+    }
+
+    protected wizardLoad(result: WizardGet): void {
+    }
+
+    public loadWizard() {
+        this.subscriptions.add(this.WizardService.fetch(this.post.host_id)
+            .subscribe((result: WizardGet) => {
+                this.servicetemplates = result.servicetemplates;
+                this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
+
+                // Call custom implementation
+                this.wizardLoad(result);
+
+                // Call default stub that fills services and calls CDR.
+                this.afterWizardLoaded(result);
+            }));
+    }
 }

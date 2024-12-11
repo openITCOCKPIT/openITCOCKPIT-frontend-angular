@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { UpsWizardService } from './ups-wizard.service';
-import { UpsWizardGet, UpsWizardPost } from './ups-wizard.interface';
+import { UpsWizardPost } from './ups-wizard.interface';
 import {
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    FormControlDirective, FormLabelDirective
+    FormControlDirective,
+    FormLabelDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -52,7 +52,7 @@ import { RouterLink } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UpsComponent extends WizardsAbstractComponent {
-    private readonly UpsWizardService: UpsWizardService = inject(UpsWizardService);
+    protected override WizardService: UpsWizardService = inject(UpsWizardService);
 
     protected override post: UpsWizardPost = {
 // Default fields from the base wizard
@@ -91,37 +91,4 @@ export class UpsComponent extends WizardsAbstractComponent {
         {key: '3DESDE', value: '3desde'},
     ];
 
-    public submit(): void {
-        this.subscriptions.add(this.UpsWizardService.submit(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    const title: string = this.TranslocoService.translate('Success');
-                    const msg: string = this.TranslocoService.translate('Data saved successfully');
-
-                    this.notyService.genericSuccess(msg, title);
-                    this.router.navigate(['/services/notMonitored']);
-                    return;
-                }
-                // Error
-                this.notyService.genericError();
-                const errorResponse: GenericValidationError = result.data as GenericValidationError;
-                if (result) {
-                    this.errors = errorResponse;
-
-                }
-            })
-        );
-    }
-
-    public loadWizard() {
-        this.subscriptions.add(this.UpsWizardService.fetch(this.post.host_id)
-            .subscribe((result: UpsWizardGet) => {
-                this.servicetemplates = result.servicetemplates;
-                this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
-
-                // Call default stub that fills services and calls CDR.
-                this.afterWizardLoaded(result);
-            }));
-    }
 }

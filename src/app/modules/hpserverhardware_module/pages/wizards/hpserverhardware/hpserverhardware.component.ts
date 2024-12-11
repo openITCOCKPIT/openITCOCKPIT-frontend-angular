@@ -52,8 +52,7 @@ import { RouterLink } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HpserverhardwareComponent extends WizardsAbstractComponent {
-    private readonly HpServerHardwareWizardService: HpServerHardwareWizardService = inject(HpServerHardwareWizardService);
-
+    protected override WizardService: HpServerHardwareWizardService = inject(HpServerHardwareWizardService);
     protected override post: HpServerHardwareWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
@@ -69,6 +68,7 @@ export class HpserverhardwareComponent extends WizardsAbstractComponent {
         snmpCommunity: '',
         snmpVersion: '2'
     } as HpServerHardwareWizardPost;
+
     protected snmpVersions: SelectKeyValueString[] = [
         {value: '1', key: 'SNMP V 1'},
         {value: '2', key: 'SNMP V 2c'},
@@ -91,37 +91,4 @@ export class HpserverhardwareComponent extends WizardsAbstractComponent {
         {key: '3DESDE', value: '3desde'},
     ];
 
-    public submit(): void {
-        this.subscriptions.add(this.HpServerHardwareWizardService.submit(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    const title: string = this.TranslocoService.translate('Success');
-                    const msg: string = this.TranslocoService.translate('Data saved successfully');
-
-                    this.notyService.genericSuccess(msg, title);
-                    this.router.navigate(['/services/notMonitored']);
-                    return;
-                }
-                // Error
-                this.notyService.genericError();
-                const errorResponse: GenericValidationError = result.data as GenericValidationError;
-                if (result) {
-                    this.errors = errorResponse;
-
-                }
-            })
-        );
-    }
-
-    public loadWizard() {
-        this.subscriptions.add(this.HpServerHardwareWizardService.fetch(this.post.host_id)
-            .subscribe((result: HpServerHardwareWizardGet) => {
-                this.servicetemplates = result.servicetemplates;
-                this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
-
-                // Call default stub that fills services and calls CDR.
-                this.afterWizardLoaded(result);
-            }));
-    }
 }

@@ -62,7 +62,7 @@
                              [queryParams]="{'typeId': wizard.value.type_id, 'title' : wizard.value.title, 'state' : wizard.value.state, 'selectedOs': wizard.value.selected_os}">
                             <div class="d-flex align-items-center">
                                 <div class="wizard-logo-image">
-                                    <img src="/img/wizards/{{wizard.value.image}}">
+                                    <img [src]="'./assets/images/wizards/'+wizard.value.image" [alt]="wizard.value.title">
                                 </div>
                                 <div class="pl-10">
                                     <h5>

@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
+import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mssql-wizard.interface';
 
 @Component({
     selector: 'oitc-sap-hana-tenant',
@@ -47,7 +48,7 @@ import {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SapHanaTenantComponent extends WizardsAbstractComponent {
-    private readonly SapHanaTenantWizardService: SapHanaTenantWizardService = inject(SapHanaTenantWizardService);
+    protected override WizardService: SapHanaTenantWizardService = inject(SapHanaTenantWizardService);
 
     protected override post: SapHanaTenantWizardPost = {
 // Default fields from the base wizard
@@ -61,43 +62,10 @@ export class SapHanaTenantComponent extends WizardsAbstractComponent {
         typeId: 'sap-hana-tenant'
     } as SapHanaTenantWizardPost;
 
-    public loadWizard(): void {
-        this.subscriptions.add(this.SapHanaTenantWizardService.fetch(this.post.host_id)
-            .subscribe((result: SapHanaTenantWizardGet) => {
-                this.servicetemplates = result.servicetemplates;
-                this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
-
-                this.post.dbuser = result.dbuser;
-                this.post.dbpassword = result.dbpassword;
-                this.post.dbtenantport = result.dbtenantport;
-                this.post.dbsystemport = result.dbsystemport;
-
-                // Call default stub that fills services and calls CDR.
-                this.afterWizardLoaded(result);
-            }));
+    protected override wizardLoad(result: SapHanaTenantWizardGet): void {
+        this.post.dbuser = result.dbuser;
+        this.post.dbpassword = result.dbpassword;
+        this.post.dbtenantport = result.dbtenantport;
+        this.post.dbsystemport = result.dbsystemport;
     }
-
-    public submit(): void {
-        this.subscriptions.add(this.SapHanaTenantWizardService.submit(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    const title: string = this.TranslocoService.translate('Success');
-                    const msg: string = this.TranslocoService.translate('Data saved successfully');
-
-                    this.notyService.genericSuccess(msg, title);
-                    this.router.navigate(['/wizards/index']);
-                    return;
-                }
-                // Error
-                this.notyService.genericError();
-                const errorResponse: GenericValidationError = result.data as GenericValidationError;
-                if (result) {
-                    this.errors = errorResponse;
-
-                }
-            })
-        );
-    }
-
 }
