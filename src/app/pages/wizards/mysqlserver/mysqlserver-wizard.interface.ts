@@ -5,6 +5,7 @@ import { WizardGet, WizardPost } from '../wizards.interface';
 export interface MysqlWizardGet extends WizardGet {
     username: string
     password: string
+    database: string
 }
 
 // WIZARD POST

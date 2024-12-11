@@ -4,8 +4,7 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { MysqlWizardPost } from '../mysqlserver/mysqlserver-wizard.interface';
-import { Service, Servicetemplate, WizardGet } from '../wizards.interface';
+import { Service, WizardGet, WizardPost } from '../wizards.interface';
 import { WizardsService } from '../wizards.service';
 
 @Component({
@@ -24,15 +23,15 @@ export abstract class WizardsAbstractComponent implements OnInit, OnDestroy {
     protected readonly router: Router = inject(Router);
     protected readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
-    protected WizardService: WizardsService = {} as WizardsService;
-
+    // Fields that are final.
     protected hostId: number = 0;
     protected errors: GenericValidationError = {} as GenericValidationError;
-    protected servicetemplates: Servicetemplate[] = [];
-    protected servicesNamesForExistCheck: string[] = [];
-    protected post: any = {
+
+    // These fields are implemented in the child classes
+    protected WizardService: WizardsService = {} as WizardsService;
+    protected post: WizardPost = {
         host_id: 0
-    } as MysqlWizardPost;
+    } as WizardPost;
 
     public ngOnInit() {
         this.post.host_id = Number(this.route.snapshot.paramMap.get('hostId'));
@@ -45,26 +44,24 @@ export abstract class WizardsAbstractComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    protected afterWizardLoaded(result: WizardGet): void {
-        // Set fields
-        this.servicetemplates = result.servicetemplates;
-        this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
+    protected isServiceAlreadyPresent(objectOfCurrentServices: { [key: string]: string }, serviceName: string): boolean {
+        return Object.values(objectOfCurrentServices).includes(serviceName);
+    }
 
-        // Import services
-        for (let key in this.servicetemplates) {
+    protected createServicesFromServiceTemplates(result: WizardGet): void {
+        for (let key in result.servicetemplates) {
             this.post.services.push(
                 {
                     host_id: this.post.host_id,
-                    servicetemplate_id: this.servicetemplates[key].id,
-                    name: this.servicetemplates[key].name,
-                    description: this.servicetemplates[key].description,
-                    servicecommandargumentvalues: this.servicetemplates[key].servicetemplatecommandargumentvalues,
-                    createService: ! this.servicesNamesForExistCheck.includes(this.servicetemplates[key].name)
+                    servicetemplate_id: result.servicetemplates[key].id,
+                    name: result.servicetemplates[key].name,
+                    description: result.servicetemplates[key].description,
+                    servicecommandargumentvalues: result.servicetemplates[key].servicetemplatecommandargumentvalues,
+                    createService: !this.isServiceAlreadyPresent(result.servicesNamesForExistCheck, result.servicetemplates[key].name)
                 } as Service);
         }
         this.cdr.markForCheck();
     }
-
 
     public submit(): void {
         this.subscriptions.add(this.WizardService.submit(this.post)
@@ -83,7 +80,6 @@ export abstract class WizardsAbstractComponent implements OnInit, OnDestroy {
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
-
                 }
             })
         );
@@ -95,14 +91,11 @@ export abstract class WizardsAbstractComponent implements OnInit, OnDestroy {
     public loadWizard() {
         this.subscriptions.add(this.WizardService.fetch(this.post.host_id)
             .subscribe((result: WizardGet) => {
-                this.servicetemplates = result.servicetemplates;
-                this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
+                // Create services from service the templates.
+                this.createServicesFromServiceTemplates(result);
 
-                // Call custom implementation
+                // Call custom implementation that may import specific fields from the given result.
                 this.wizardLoad(result);
-
-                // Call default stub that fills services and calls CDR.
-                this.afterWizardLoaded(result);
             }));
     }
 }

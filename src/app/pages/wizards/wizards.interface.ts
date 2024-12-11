@@ -64,7 +64,7 @@ export interface Commandargument {
 // WIZARD GET
 export interface WizardGet {
     servicetemplates: Servicetemplate[]
-    servicesNamesForExistCheck: string[]
+    servicesNamesForExistCheck: { [key: string]: string }
 }
 
 export interface Servicetemplate {

@@ -73,11 +73,8 @@ import { WizardsAbstractComponent } from '../wizards-abstract/wizards-abstract.c
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MysqlserverComponent extends WizardsAbstractComponent {
+    // Inherited fields
     protected override WizardService: MysqlserverWizardService = inject(MysqlserverWizardService);
-
-    protected serverAddr: string = 'localhost';
-    protected systemName: string = 'mysqlserver';
-
     protected override post: MysqlWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
@@ -88,9 +85,12 @@ export class MysqlserverComponent extends WizardsAbstractComponent {
         username: ''
     } as MysqlWizardPost;
 
+    protected serverAddr: string = 'localhost';
+    protected systemName: string = 'mysqlserver';
 
     protected override wizardLoad(result: MysqlWizardGet): void {
         this.post.username = result.username;
         this.post.password = result.password;
+        this.post.database = result.database;
     }
 }
