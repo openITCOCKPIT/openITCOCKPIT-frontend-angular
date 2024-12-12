@@ -72,6 +72,7 @@ export class VmwaresnapshotComponent extends WizardsAbstractComponent {
         this.post.password = result.password;
         this.post.username = result.username;
         this.post.vmwhost = result.vmwhost;
+        super.wizardLoad(result);
     }
 
 }

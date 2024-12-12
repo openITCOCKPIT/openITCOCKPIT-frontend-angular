@@ -70,6 +70,7 @@ export class VmwarehorizonComponent extends WizardsAbstractComponent {
         this.post.vmwarepass = result.vmwarepass;
         this.post.vmwareuser = result.vmwareuser;
         this.post.vmwaredomain = result.vmwaredomain;
+        super.wizardLoad(result);
     }
 
 }

@@ -62,5 +62,6 @@ export class OracleComponent extends WizardsAbstractComponent {
     protected override wizardLoad(result: OracleWizardGet): void {
         this.post.dbuser = result.dbuser;
         this.post.dbpass = result.dbpass;
+        super.wizardLoad(result);
     }
 }

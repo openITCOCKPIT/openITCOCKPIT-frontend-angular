@@ -70,6 +70,7 @@ export class SapComponent extends WizardsAbstractComponent {
         this.post.rfcpassword = result.rfcpassword;
         this.post.sid = result.sid;
         this.post.msgroup = result.msgroup;
+        super.wizardLoad(result);
     }
 
 }

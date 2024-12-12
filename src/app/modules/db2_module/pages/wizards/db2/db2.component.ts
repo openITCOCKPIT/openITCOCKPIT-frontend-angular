@@ -68,6 +68,7 @@ export class Db2Component extends WizardsAbstractComponent {
     protected override wizardLoad(result: Db2WizardGet): void {
         this.post.dbuser = result.dbuser;
         this.post.dbpass = result.dbpass;
+        super.wizardLoad(result);
     }
 
 }

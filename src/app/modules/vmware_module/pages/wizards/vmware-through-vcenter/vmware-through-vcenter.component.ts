@@ -66,6 +66,7 @@ export class VmwareThroughVcenterComponent extends WizardsAbstractComponent {
         this.post.username = result.username;
         this.post.password = result.password;
         this.post.vcenter = result.vcenter;
+        super.wizardLoad(result);
     }
 
 }

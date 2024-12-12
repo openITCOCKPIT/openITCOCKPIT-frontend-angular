@@ -60,6 +60,7 @@ export class MssqlComponent extends WizardsAbstractComponent {
     protected override wizardLoad(result: MssqlWizardGet): void {
         this.post.dbpass = result.dbpass;
         this.post.dbuser = result.dbuser;
+        super.wizardLoad(result);
     }
 
 }

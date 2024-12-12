@@ -67,6 +67,7 @@ export class SapHanaSystemComponent extends WizardsAbstractComponent {
         this.post.dbpassword = result.dbpassword;
         this.post.dbtenantport = result.dbtenantport;
         this.post.dbsystemport = result.dbsystemport;
+        super.wizardLoad(result);
     }
 
 }

@@ -92,5 +92,6 @@ export class MysqlserverComponent extends WizardsAbstractComponent {
         this.post.username = result.username;
         this.post.password = result.password;
         this.post.database = result.database;
+        super.wizardLoad(result);
     }
 }
