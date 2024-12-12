@@ -54,13 +54,14 @@ interface EvcGraphNode {
     id: string
     parentId: string | null
     service?: EvcService
-    operator?: EventcorrelationOperators | null,
+    operator?: EventcorrelationOperators | string | null,
     type: 'service' | 'operator',
     totalHeight?: number, // only for operators
     fNodeParentId?: string,
     position: IPoint,
     layerIndex: number,
     usedBy?: string[]
+    evcTreeItem?: EvcTreeItem // Holds the EvcTreeItem for the service for edit
 }
 
 interface EvcGraphGroup {
@@ -335,7 +336,8 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                             position: {
                                 x: X, // First layer services are always on the left side of the canvas
                                 y: Y
-                            }
+                            },
+                            evcTreeItem: evcTreeItem
                         });
 
                         // If we are the first service in this "group of services", we save the Y position
@@ -443,7 +445,8 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                             position: {
                                 x: X + vServiceX,
                                 y: vServiceY
-                            }
+                            },
+                            evcTreeItem: evcTreeItem
                         });
 
                         // Save the Y position for the next layer of operators / vServices
@@ -483,8 +486,6 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
             heightOfAllGroups += (firstLayerServicesCount * (SERVICE_HEIGHT + NODE_SEP)) + RANK_SEP; // RANK_SEP is used as padding bottom
         }
 
-        console.log(heightOfAllGroups);
-
         evcTree.forEach((evcLayer: EvcTree, layerIndex: number) => {
             this.groups.push({
                 id: generateGuid(), // uuid to trigger the change detection of ngfor track by group.id
@@ -499,7 +500,6 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                 }
             });
         });
-        console.log(this.groups);
 
         return nodes;
     }

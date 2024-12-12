@@ -45,7 +45,8 @@
                     <div class="service-node">
                         <div class="evc-service-edit-box" *ngIf="node.evcNode.layerIndex > 0">
                             <c-button-group aria-label="Basic example" role="group">
-                                <button cButton color="primary" size="xs">
+                                <button cButton color="primary" size="xs"
+                                        (click)="toggleVServiceModalFunc(node.evcNode.layerIndex, 'edit', node.evcNode.evcTreeItem)">
                                     <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
                                 </button>
                                 <button cButton color="danger" size="xs"
