@@ -3,11 +3,11 @@
     <fieldset>
         <legend class="fs-md fieldset-legend-border-bottom">
             <h4>
-                {{ title }}
-                <span class="help-block italic text-primary">
-                    {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
-                </span>
+                {{ title() }}
             </h4>
+            <span class="help-block italic text-primary">
+                {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
+            </span>
 
             <div ng-repeat="error in errors.services">
                 <h5 class="text-danger"></h5>
@@ -30,11 +30,10 @@
                             [multiple]="true"
                             [selectOnTab]="true"
                             [isOpen]="false"
-                            [placeholder]="'Filter by service name'|transloco"
-                            (change)="search()">
+                            [placeholder]="'Filter by service name'|transloco">
                     </ng-select>
                     <span cInputGroupText (click)="toggleCheck()" class="cursor-pointer">
-                        <i class="fas fa-lg fa-check-square"></i> {{ t('Toggle checkboxes') }}
+                        <i class="fas fa-lg fa-check-square alert-icon"></i> {{ t('Toggle checkboxes') }}
                     </span>
                 </c-input-group>
             </c-col>
@@ -42,19 +41,19 @@
 
 
         <ul style="margin:0;padding:0">
-            <ol style="margin:0;padding:0" *ngFor="let service of post.services">
+            <ol style="margin:0;padding:0" *ngFor="let service of post().services">
                 <ng-container *ngIf="hasName(service.name)">
 
                     <div class="mb-3 form-group">
                         <div>
                             <input cFormCheckInput
                                    type="checkbox"
-                                   id="{{service.name}}"
+                                   [id]="service.name"
                                    class="alert-icon"
                                    name="checkbox"
                                    [ngModel]="service.createService"/>
                             <label class="custom-control-label custom-control-label-ok"
-                                   for="{{service.name}}">
+                                   [for]="service.name">
                                 {{ service.name }}
                                 <span class="help-block italic">
                                     {{ service.description }}

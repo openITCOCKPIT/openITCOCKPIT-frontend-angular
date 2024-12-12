@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    effect,
+    inject,
+    input,
+    OnChanges,
+    SimpleChanges,
+} from '@angular/core';
 import {
     ColComponent,
     FormCheckInputDirective,
@@ -34,13 +43,18 @@ import { Service, WizardPost } from '../../../pages/wizards/wizards.interface';
     styleUrl: './wizards-dynamicfields.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WizardsDynamicfieldsComponent {
-    private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+export class WizardsDynamicfieldsComponent implements OnChanges {
+    public cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     protected searchedTags: string[] = [];
 
+    public post = input.required<WizardPost>();
+    public title = input.required<string>();
 
-    @Input({required: true}) post: WizardPost = {} as WizardPost;
-    @Input({required: true}) title: string = '';
+    constructor() {
+        effect(() => {
+            this.cdr.markForCheck();
+        });
+    }
 
     protected hasName = (name: string): boolean => {
         if (this.searchedTags.length === 0) {
@@ -52,7 +66,7 @@ export class WizardsDynamicfieldsComponent {
     }
 
     protected toggleCheck(): void {
-        this.post.services.forEach((service: Service) => {
+        this.post().services.forEach((service: Service) => {
             if (!this.hasName(service.name)) {
                 return;
             }
@@ -61,10 +75,6 @@ export class WizardsDynamicfieldsComponent {
         this.cdr.markForCheck();
     }
 
-    protected search = (): void => {
-        console.warn(this.searchedTags);
-        this.cdr.markForCheck();
-    }
     protected detectColor = function (label: string): string {
         if (label.match(/warning/gi)) {
             return 'warning';
@@ -76,4 +86,9 @@ export class WizardsDynamicfieldsComponent {
 
         return '';
     };
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        console.warn(changes);
+        this.cdr.markForCheck();
+    }
 }
