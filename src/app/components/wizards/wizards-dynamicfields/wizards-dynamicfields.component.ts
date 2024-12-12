@@ -65,10 +65,10 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
         });
     }
 
-    protected toggleCheck(service: Service | undefined): void {
-        if (service) {
+    protected toggleCheck(theService: Service | undefined): void {
+        if (theService) {
             this.post().services.forEach((service: Service) => {
-                if (service.servicetemplate_id === service.servicetemplate_id) {
+                if (service.servicetemplate_id === theService.servicetemplate_id) {
                     service.createService = !service.createService;
                 }
             });
