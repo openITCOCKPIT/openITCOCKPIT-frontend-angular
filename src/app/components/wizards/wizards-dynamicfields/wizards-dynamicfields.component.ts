@@ -65,7 +65,16 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
         });
     }
 
-    protected toggleCheck(): void {
+    protected toggleCheck(service: Service | undefined): void {
+        if (service) {
+            this.post().services.forEach((service: Service) => {
+                if (service.servicetemplate_id === service.servicetemplate_id) {
+                    service.createService = !service.createService;
+                }
+            });
+            this.cdr.markForCheck();
+            return;
+        }
         this.post().services.forEach((service: Service) => {
             if (!this.hasName(service.name)) {
                 return;
@@ -88,7 +97,6 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
     };
 
     public ngOnChanges(changes: SimpleChanges): void {
-        console.warn(changes);
         this.cdr.markForCheck();
     }
 }

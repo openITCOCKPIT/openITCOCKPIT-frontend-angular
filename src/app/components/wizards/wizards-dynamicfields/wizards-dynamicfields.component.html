@@ -32,7 +32,7 @@
                             [isOpen]="false"
                             [placeholder]="'Filter by service name'|transloco">
                     </ng-select>
-                    <span cInputGroupText (click)="toggleCheck()" class="cursor-pointer">
+                    <span cInputGroupText (click)="toggleCheck(undefined)" class="cursor-pointer">
                         <i class="fas fa-lg fa-check-square alert-icon"></i> {{ t('Toggle checkboxes') }}
                     </span>
                 </c-input-group>
@@ -51,6 +51,7 @@
                                    [id]="service.name"
                                    class="alert-icon"
                                    name="checkbox"
+                                   (change)="toggleCheck(service)"
                                    [ngModel]="service.createService"/>
                             <label class="custom-control-label custom-control-label-ok"
                                    [for]="service.name">
