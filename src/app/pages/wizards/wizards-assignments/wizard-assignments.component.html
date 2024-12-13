@@ -128,7 +128,8 @@
                     </td>
                     <td class="width-50">
                         <oitc-actions-button [permission]="'wizards.edit'"
-                                             [url]="'/wizards/edit/' + wizard.value.uuid + '/' + wizard.value.title">
+                                             [url]="'/wizards/edit/' + wizard.value.uuid + '/' + wizard.value.title"
+                                             *ngIf="  wizard.value.necessity_of_assignment">
                             <oitc-actions-button-element [permission]="'wizards.edit'"
                                                          [url]="'/wizards/edit/' + wizard.value.uuid + '/' + wizard.value.title">
                                 <fa-icon [icon]="['fas', 'gear']"></fa-icon>
