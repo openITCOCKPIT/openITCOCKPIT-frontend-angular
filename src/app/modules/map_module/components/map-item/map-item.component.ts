@@ -3,13 +3,12 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    effect,
     ElementRef,
     EventEmitter,
     inject,
-    Input,
-    OnChanges,
+    input,
     Output,
-    SimpleChanges,
     ViewChild
 } from '@angular/core';
 import { ContextAction, Mapitem, MapItemPosition } from './map-item.interface';
@@ -29,18 +28,24 @@ import { TranslocoService } from '@jsverse/transloco';
     styleUrl: './map-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapItemComponent implements AfterViewInit, OnChanges {
+export class MapItemComponent implements AfterViewInit {
     @ViewChild('container', {static: true}) containerRef!: ElementRef<HTMLDivElement>;
 
-    @Input() layer: number = 0;
-    @Input() position: MapItemPosition = {x: 0, y: 0};
-    @Input() labelPosition: LabelPosition = LabelPosition.RIGHT;
-    @Input() showLabel: boolean = true;
-    @Input() dragEnabled: boolean = true;
-    @Input({required: true}) itemId!: number;
-    @Input({required: true}) mapId!: string;
-    @Input() gridSize: { x: number, y: number } = {x: 25, y: 25}; // Grid size for snapping
-    @Input() gridEnabled: boolean = true;
+    public mapItem = input<Mapitem>();
+
+    private position: MapItemPosition = {x: 0, y: 0};
+
+    private _id!: number;
+    private _mapId!: number;
+    private _x: number = 0;
+    private _y: number = 0;
+    private _zIndex: string = "0";
+    private _labelPosition: number = LabelPosition.BOTTOM;
+    protected showLabel: boolean = true;
+
+    public gridSize: { x: number, y: number } = {x: 25, y: 25}; // Grid size for snapping
+    public gridEnabled: boolean = true;
+    public isViewMode: boolean = true;
 
     @Output() dropItemEvent = new EventEmitter<Mapitem>();
     @Output() contextActionEvent = new EventEmitter<ContextAction>();
@@ -51,100 +56,39 @@ export class MapItemComponent implements AfterViewInit, OnChanges {
     private initialOffset: { x: number, y: number } = {x: 0, y: 0}; // Initial offset when dragging (needed to prevent bouncing after start dragging)
     private mapCanvasComponent: MapCanvasComponent;
 
-    protected contextMenuItems: MenuItem[] = [
-        {
-            label: this.TranslocoService.translate('Edit'),
-            icon: 'fa fa-cog',
-            command: () => {
-                console.log('Edit');
-            }
-        },
-        {
-            separator: true
-        },
-        {
-            label: this.TranslocoService.translate('Label position'),
-            icon: 'fa fa-font',
-            items: [
-                {
-                    label: this.TranslocoService.translate('Top'),
-                    icon: 'fa fa-up-long',
-                    command: () => {
-                        this.labelPosition = LabelPosition.TOP;
-                        this.cdr.markForCheck();
-                        console.log('Top');
-                    }
-                },
-                {
-                    label: this.TranslocoService.translate('Right'),
-                    icon: 'fa fa-right-long',
-                    command: () => {
-                        this.labelPosition = LabelPosition.RIGHT;
-                        this.cdr.markForCheck();
-                        console.log('Right');
-                    }
-                },
-                {
-                    label: this.TranslocoService.translate('Bottom'),
-                    icon: 'fa fa-down-long',
-                    command: () => {
-                        this.labelPosition = LabelPosition.BOTTOM;
-                        this.cdr.markForCheck();
-                        console.log('Bottom');
-                    }
-                },
-                {
-                    label: this.TranslocoService.translate('Left'),
-                    icon: 'fa fa-left-long',
-                    command: () => {
-                        this.labelPosition = LabelPosition.LEFT;
-                        this.cdr.markForCheck();
-                        console.log('Left');
-                    }
-                }
-            ]
-        },
-        {
-            separator: true
-        },
-        {
-            label: this.TranslocoService.translate('Delete'),
-            styleClass: 'text-danger',
-            icon: 'fa fa-trash',
-            command: () => {
-                console.log('Delete');
-            }
-        }
-    ];
+    protected contextMenuItems: MenuItem[] = this.getDefaultContextMenuItems();
 
     constructor(private parent: MapCanvasComponent) {
         this.mapCanvasComponent = parent;
+        effect(() => {
+            this._id = this.mapItem()!.id;
+            this._mapId = this.mapItem()!.map_id;
+            this._x = this.mapItem()!.x;
+            this._y = this.mapItem()!.y;
+            this._zIndex = this.mapItem()!.z_index!;
+            this._labelPosition = this.mapItem()!.label_possition!;
+            this.showLabel = this.mapItem()!.show_label!;
+            this.setPosition();
+            this.setLayer(this._zIndex);
+        });
     }
 
-    public setLayer(layer: number): void {
-        this.containerRef.nativeElement.style.zIndex = layer.toString();
+    public setLayer(layer: string): void {
+        this.containerRef.nativeElement.style.zIndex = layer;
         this.cdr.markForCheck();
     }
 
-    public setPosition(position: MapItemPosition): void {
-        this.containerRef.nativeElement.style.left = `${position.x}px`;
-        this.containerRef.nativeElement.style.top = `${position.y}px`;
+    public setPosition(): void {
+        this.position = {x: this._x, y: this._y};
+        this.containerRef.nativeElement.style.left = `${this.position.x}px`;
+        this.containerRef.nativeElement.style.top = `${this.position.y}px`;
         this.cdr.markForCheck();
     }
 
     ngAfterViewInit() {
         this.cdr.markForCheck();
-        this.setLayer(this.layer);
-        this.setPosition(this.position);
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['position']) {
-            this.setPosition(this.position);
-        }
-        if (changes['layer']) {
-            this.setLayer(this.layer);
-        }
+        this.setLayer(this._zIndex);
+        this.setPosition();
     }
 
     public onDragStart(cdkEvent: CdkDragStart<any>) {
@@ -179,7 +123,7 @@ export class MapItemComponent implements AfterViewInit, OnChanges {
         const posX = mapItem.x - mapCanvas.x;
         const posY = mapItem.y - mapCanvas.y;
 
-        this.dropItemEvent.emit({id: this.itemId, x: posX, y: posY, map_id: this.mapId});
+        this.dropItemEvent.emit({id: this._id, x: posX, y: posY, map_id: this._mapId});
 
         this.cdr.markForCheck();
     }
@@ -198,7 +142,115 @@ export class MapItemComponent implements AfterViewInit, OnChanges {
     }
 
     public getLabelPositionClass(): string {
-        return 'map-element-label-' + this.labelPosition;
-    };
+        return 'map-element-label-' + LabelPosition[this._labelPosition].toLowerCase();
+    }
+
+    private getDefaultContextMenuItems(): MenuItem[] {
+        return [
+            {
+                label: this.TranslocoService.translate('Edit'),
+                icon: 'fa fa-cog',
+                command: () => {
+                    this.cdr.markForCheck();
+                }
+            },
+            {
+                separator: true
+            },
+            {
+                label: this.TranslocoService.translate('Label position'),
+                icon: 'fa fa-font',
+                items: [
+                    {
+                        label: this.TranslocoService.translate('Top'),
+                        icon: 'fa fa-up-long',
+                        command: () => {
+                            this.contextActionEvent.emit({
+                                type: 'labelPosition',
+                                data: {
+                                    id: this._id,
+                                    x: this._x,
+                                    y: this._y,
+                                    map_id: this._mapId,
+                                    label_possition: LabelPosition.TOP
+                                }
+                            });
+                            this.cdr.markForCheck();
+                        }
+                    },
+                    {
+                        label: this.TranslocoService.translate('Right'),
+                        icon: 'fa fa-right-long',
+                        command: () => {
+                            this.contextActionEvent.emit({
+                                type: 'labelPosition',
+                                data: {
+                                    id: this._id,
+                                    x: this._x,
+                                    y: this._y,
+                                    map_id: this._mapId,
+                                    label_possition: LabelPosition.RIGHT
+                                }
+                            });
+                            this.cdr.markForCheck();
+                        }
+                    },
+                    {
+                        label: this.TranslocoService.translate('Bottom'),
+                        icon: 'fa fa-down-long',
+                        command: () => {
+                            this.contextActionEvent.emit({
+                                type: 'labelPosition',
+                                data: {
+                                    id: this._id,
+                                    x: this._x,
+                                    y: this._y,
+                                    map_id: this._mapId,
+                                    label_possition: LabelPosition.BOTTOM
+                                }
+                            });
+                            this.cdr.markForCheck();
+                        }
+                    },
+                    {
+                        label: this.TranslocoService.translate('Left'),
+                        icon: 'fa fa-left-long',
+                        command: () => {
+                            this.contextActionEvent.emit({
+                                type: 'labelPosition',
+                                data: {
+                                    id: this._id,
+                                    x: this._x,
+                                    y: this._y,
+                                    map_id: this._mapId,
+                                    label_possition: LabelPosition.LEFT
+                                }
+                            });
+                            this.cdr.markForCheck();
+                        }
+                    }
+                ]
+            },
+            {
+                separator: true
+            },
+            {
+                label: this.TranslocoService.translate('Delete'),
+                styleClass: 'text-danger',
+                icon: 'fa fa-trash',
+                command: () => {
+                    this.contextActionEvent.emit({
+                        type: 'delete', data: {
+                            id: this._id,
+                            x: this._x,
+                            y: this._y,
+                            map_id: this._mapId,
+                        }
+                    });
+                    this.cdr.markForCheck();
+                }
+            }
+        ]
+    }
 
 }

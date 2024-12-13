@@ -1,5 +1,5 @@
 <div cdkDrag #container class="map-element-container" [ngClass]="getLabelPositionClass()"
-     [draggable]="dragEnabled"
+     [draggable]="isViewMode"
      (cdkDragStarted)="onDragStart($event)"
      (cdkDragEnded)="onDragEnd($event)"
      [cdkDragConstrainPosition]="computeDragRenderPos"

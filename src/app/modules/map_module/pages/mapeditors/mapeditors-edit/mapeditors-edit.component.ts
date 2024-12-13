@@ -43,9 +43,10 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { FormsModule } from '@angular/forms';
 import { MapItemComponent } from '../../../components/map-item/map-item.component';
 import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.component';
-import { Mapitem } from '../../../components/map-item/map-item.interface';
+import { ContextAction, Mapitem } from '../../../components/map-item/map-item.interface';
 import { MapItemLabelComponent } from '../../../components/map-item-label/map-item-label.component';
 import { MapItemContentComponent } from '../../../components/map-item-content/map-item-content.component';
+import { parseInt } from 'lodash';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
@@ -116,16 +117,32 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     };
 
-    public helplines = {
-        enabled: true,
-        size: 15
-    };
+    public MapItems: Mapitem[] = [
+        {
+            id: 1,
+            map_id: 1,
+            x: 24,
+            y: 24,
+            z_index: "1",
+            label_possition: 2,
+            show_label: true,
+        },
+        {
+            id: 2,
+            map_id: 1,
+            x: 900,
+            y: 24,
+            z_index: "2",
+            label_possition: 2,
+            show_label: true,
+        }
+    ];
 
     private route = inject(ActivatedRoute);
 
     protected mapId: number = 0;
     private readonly HistoryService: HistoryService = inject(HistoryService);
-    protected cdr = inject(ChangeDetectorRef);
+    private cdr = inject(ChangeDetectorRef);
 
     public gridSize: { x: number, y: number } = {x: 25, y: 25};
 
@@ -139,14 +156,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
-    }
-
-    public onHelplinesEnabled(event: Event) {
-        this.Mapeditor.helplines.enabled = !this.Mapeditor.helplines.enabled;
-    }
-
-    public onGridEnabled(event: Event) {
-        this.Mapeditor.grid.enabled = !this.Mapeditor.grid.enabled;
     }
 
     public onDropItem(mapItem: Mapitem) {
@@ -173,6 +182,36 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 this.changeGridSize(this.Mapeditor.helplines.size);
             }
         }
+        this.onHelplinesChange();
     }
 
+    public onHelplinesChange() {
+        this.Mapeditor.helplines = {...this.Mapeditor.helplines};
+        this.cdr.markForCheck();
+    }
+
+    public onContextAction($event: ContextAction) {
+        const type = $event.type;
+        let index;
+        console.error('ContextAction', $event);
+        if (type === 'labelPosition') {
+            for (let i = 0; i < this.MapItems.length; i++) {
+                if (this.MapItems[i].id === $event.data.id) {
+                    this.MapItems[i].label_possition = $event.data.label_possition!;
+                    index = i;
+                    break;
+                }
+            }
+        }
+        if (type === 'Edit') {
+            console.error('Edit');
+        }
+        if (type === 'Delete') {
+            console.error('Delete');
+        }
+        if (index) {
+            this.MapItems[index] = {...this.MapItems[index]};
+            this.cdr.markForCheck();
+        }
+    }
 }

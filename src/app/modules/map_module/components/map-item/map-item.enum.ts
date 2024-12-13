@@ -1,6 +1,6 @@
 export enum LabelPosition {
-    LEFT = 'left',
-    TOP = 'top',
-    BOTTOM = 'bottom',
-    RIGHT = 'right',
+    LEFT = 4,
+    TOP = 1,
+    BOTTOM = 2,
+    RIGHT = 3,
 }

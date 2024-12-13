@@ -46,6 +46,7 @@
                                 name="checkbox"
                                 checked="checked"
                                 [(ngModel)]="Mapeditor.helplines.enabled"
+                                (ngModelChange)="onHelplinesChange()"
                             />
                             <label
                                 cFormCheckLabel
@@ -168,9 +169,9 @@
 
 
             <oitc-map-canvas [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
-                             [helplinesEnabled]="Mapeditor.helplines.enabled"
-                             [helplinesSize]="Mapeditor.helplines.size">
-                <oitc-map-item [position]="{ x: 24, y: 24 }" [itemId]="0" [mapId]="'1'"
+                             [helplines]="Mapeditor.helplines">
+                <oitc-map-item [mapItem]="MapItems[0]"
+                               (contextActionEvent)="onContextAction($event)"
                                (dropItemEvent)="onDropItem($event)">
                     <oitc-map-item-content>
                         <img src="./assets/images/docs/browser_notification_bg.png" height="200px" width="200px"
@@ -180,7 +181,8 @@
                         I'm a node Layer 0
                     </oitc-map-item-label>
                 </oitc-map-item>
-                <oitc-map-item [position]="{ x: 900, y: 24 }" [itemId]="1" [mapId]="'1'"
+                <oitc-map-item [mapItem]="MapItems[1]"
+                               (contextActionEvent)="onContextAction($event)"
                                (dropItemEvent)="onDropItem($event)">
                     <oitc-map-item-content>
                         <img src="./assets/images/docs/browser_notification_bg.png" height="200px" width="200px"

@@ -5,16 +5,16 @@ import {
     ChangeDetectorRef,
     Component,
     ContentChildren,
+    effect,
     ElementRef,
     inject,
-    Input,
-    OnChanges,
+    input,
     QueryList,
-    SimpleChanges,
     ViewChild
 } from '@angular/core';
 import { MapItemComponent } from '../map-item/map-item.component';
 import { NgClass } from '@angular/common';
+import { Helplines } from './map-canvas.interface';
 
 @Component({
     selector: 'oitc-map-canvas',
@@ -26,19 +26,22 @@ import { NgClass } from '@angular/common';
     styleUrl: './map-canvas.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapCanvasComponent implements AfterViewInit, AfterContentInit, OnChanges {
+export class MapCanvasComponent implements AfterViewInit, AfterContentInit {
     @ViewChild('mapCanvasContainer', {static: true}) canvasContainerRef!: ElementRef<HTMLDivElement>;
 
     private cdr = inject(ChangeDetectorRef);
 
-    @Input({required: true}) gridSize: { x: number, y: number } = {x: 25, y: 25}; // Grid size for snapping
-    @Input({required: true}) gridEnabled: boolean = true;
-    @Input({required: true}) helplinesSize: number = 15;
-    @Input({required: true}) helplinesEnabled: boolean = true;
+    public helplines = input<Helplines>({enabled: true, size: 15});
+    public gridSize = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
+    public gridEnabled = input<boolean>(true);
+    public isViewMode = input<boolean>(false);
 
     @ContentChildren(MapItemComponent) mapItemChildrens!: QueryList<MapItemComponent>;
 
     constructor() {
+        effect(() => {
+            this.updateValuesForChildren()
+        });
     }
 
     public ngAfterViewInit(): void {
@@ -48,25 +51,20 @@ export class MapCanvasComponent implements AfterViewInit, AfterContentInit, OnCh
         this.updateValuesForChildren()
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes['gridSize'] || changes['gridEnabled']) {
-            this.updateValuesForChildren()
-        }
-    }
-
     private updateValuesForChildren(): void {
         if (this.mapItemChildrens) {
             this.mapItemChildrens.forEach(child => {
-                child.gridEnabled = this.gridEnabled;
-                child.gridSize = this.gridSize;
+                child.gridEnabled = this.gridEnabled();
+                child.gridSize = this.gridSize();
+                child.isViewMode = this.isViewMode();
             });
         }
         this.cdr.markForCheck();
     }
 
     public getHelplinesClass(): string {
-        if (this.helplinesEnabled) {
-            return 'helplines' + this.helplinesSize;
+        if (this.helplines().enabled) {
+            return 'helplines' + this.helplines().size;
         }
         return '';
     };

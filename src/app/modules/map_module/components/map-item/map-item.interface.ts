@@ -5,12 +5,20 @@ export interface MapItemPosition {
 
 export interface Mapitem {
     id: number
+    map_id: number
     x: number
     y: number
-    map_id: string
+    limit?: any
+    iconset?: string
+    type?: string
+    object_id?: number
+    z_index?: string
+    show_label?: boolean
+    label_possition?: number
+    display?: boolean
 }
 
 export interface ContextAction {
     type: string
-    data: any
+    data: Mapitem
 }
