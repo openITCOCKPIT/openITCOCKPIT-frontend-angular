@@ -7,7 +7,6 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
-import 'flag-icons';
 import { HistoryService } from './history.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { NgSelectConfig } from '@ng-select/ng-select';
@@ -20,11 +19,13 @@ import { AsyncPipe, DOCUMENT, NgClass, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { LayoutOptions, LayoutService } from './layouts/coreui/layout.service';
-import { MessageOfTheDayButtonComponent } from './components/message-of-the-day-button/message-of-the-day-button.component';
+import {
+    MessageOfTheDayButtonComponent
+} from './components/message-of-the-day-button/message-of-the-day-button.component';
 import {
     MessageOfTheDayModalComponent
 } from './components/message-of-the-day-modal/message-of-the-day-modal.component';
-import { CurrentMessageOfTheDay, MessageOfTheDay } from './pages/messagesotd/messagesotd.interface';
+import { CurrentMessageOfTheDay } from './pages/messagesotd/messagesotd.interface';
 import { MessagesOfTheDayService } from './pages/messagesotd/messagesotd.service';
 
 @Component({
