@@ -96,7 +96,7 @@ export interface EvcTreeItem {
     parent_id: null | number | string // string in editCorrelation for new items "ui-id-f9fbdaab-70d1-4af1-a571-14d20b5657f"
     host_id: number
     service_id: number | string // new created vServices "ui-id-780d1d4d-e90d-4cf4-aa09-e344bdaa04d5_vService"
-    operator: EventcorrelationOperators | null,
+    operator: EventcorrelationOperators | string | null, // min1, min10, min300
     service: EvcService,
     usedBy?: string[], //editCorrelation only
 }
@@ -289,6 +289,19 @@ export interface EvcAddVServiceValidationResult {
 
 }
 
+export interface EvcEditVServiceValidationResult {
+    success: boolean,
+    // updates."0".uu-id."0" = EvcTreeItem
+    services: {
+        id: number | string,
+        parent_id: number | string,
+        host_id: number,
+        service_id: number | string,
+        operator: EventcorrelationOperators | string | null,
+        service: EvcService,
+    }[]
+
+}
 
 export interface EvcDeleteNodeDetails {
     id: string,

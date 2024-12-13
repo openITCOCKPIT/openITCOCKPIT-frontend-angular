@@ -3,6 +3,7 @@ import {
     EvcAddVServiceValidationResult,
     EvcDeleteNode,
     EvcDeleteNodeDetails,
+    EvcEditVServiceValidationResult,
     EvcModalService,
     EvcServiceSelect,
     EvcToggleModal,
@@ -57,7 +58,7 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { GenericValidationError } from '../../../../../generic-responses';
+import { GenericSuccessResponse, GenericValidationError } from '../../../../../generic-responses';
 import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
@@ -68,6 +69,7 @@ import _ from 'lodash';
 import { SelectItem } from 'primeng/api/selectitem';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EvcTreeValidationErrors } from '../eventcorrelations-view/evc-tree/evc-tree.interface';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-eventcorrelations-edit-correlation',
@@ -168,6 +170,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private cdr = inject(ChangeDetectorRef);
+    private readonly notyService = inject(NotyService);
 
     public ngOnInit(): void {
         this.route.queryParams.subscribe(params => {
@@ -441,6 +444,21 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
         }
     }
 
+    private getOperatorString(operator: EventcorrelationOperators | null, modifier: number): null | string {
+        if (!operator) {
+            return null;
+        }
+
+        switch (operator) {
+            case EventcorrelationOperators.MIN:
+                //min1, min 10, min300
+                return 'min' + modifier;
+            default:
+                //AND, OR, EQ
+                return operator;
+        }
+    }
+
     public onToggleVServiceModal(event: EvcToggleModal) {
         if (event.mode === 'add') {
             this.showAddVServiceModal(event.layerIndex);
@@ -521,8 +539,10 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     public validateModalForm() {
         if (this.modalVService?.current_evc.mode === 'add') {
             this.validateModalAddVServices();
-        } else {
-            console.log('IMPLEMENT EDIT VALIDATION')
+        }
+
+        if (this.modalVService?.current_evc.mode === 'edit') {
+            this.validateModalEditVServices();
         }
     }
 
@@ -644,6 +664,147 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
     }
 
+    private validateModalEditVServices(): void {
+        this.errors = null;
+        if (!this.modalVService || !this.modalVService.current_evc) {
+            return;
+        }
+
+        this.showSpinner = true;
+        this.cdr.markForCheck();
+
+        const sub = this.EventcorrelationsService.validateModalEditVServices(this.modalVService).subscribe({
+            next: (value: any) => {
+                //console.log(value); // Serve result with the new copied host templates
+                // 200 ok
+
+                if (!this.modalVService || !this.modalVService.current_evc) {
+                    return;
+                }
+
+                const result = value as EvcEditVServiceValidationResult;
+
+                //Update parent service (operator string, servicetemplate_id, service name)
+                let evcNode: null | EvcTreeItem = null;
+
+                find_evc_node:
+                    for (let services in this.evcTree[this.modalVService.current_evc.layerIndex]) {
+                        for (let eventCorrelation in this.evcTree[this.modalVService.current_evc.layerIndex][services]) {
+                            evcNode = this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation];
+
+                            //Find the vService node that was edited
+                            if (evcNode.id === this.modalVService.current_evc.evc_node_id) {
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator = this.getOperatorString(this.modalVService.operator, this.modalVService.operator_modifier);
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].service.servicename = this.modalVService.servicename;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].service.name = this.modalVService.servicename;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].service.servicetemplate_id = this.modalVService.servicetemplate_id;
+
+                                break find_evc_node;
+                            }
+                        }
+                    }
+
+                if (evcNode === null) {
+                    this.notyService.genericError(this.TranslocoService.translate('Error: Could not find parent node!'));
+                    return;
+                }
+
+                if (this.modalVService.current_evc.layerIndex === 1) {
+                    //Server returned all 1st layer services - simply replace the old services in the json with the new one
+                    //layerIndexToUpdate = 0;
+                    if (typeof this.evcTree[0][evcNode.id] !== "undefined") {
+                        this.evcTree[0][evcNode.id] = result.services;
+                    }
+                }
+
+                if (this.modalVService.current_evc.layerIndex > 1) {
+                    if (!this.modalVService.current_evc.old_service_ids) {
+                        this.modalVService.current_evc.old_service_ids = [];
+                    }
+
+                    let servicesToAdd = _.difference(this.modalVService.service_ids, this.modalVService.current_evc.old_service_ids);
+                    let servicesToDelete = _.difference(this.modalVService.current_evc.old_service_ids, this.modalVService.service_ids);
+                    let previousLayerIndex = this.modalVService.current_evc.layerIndex - 1;
+
+                    if (!_.isEmpty(servicesToAdd)) {
+                        for (let i in servicesToAdd) {
+                            // servicesToAdd can only contain vServices where parent_id === null
+                            // so the jsonKey has an _vService suffix.
+
+                            let jsonKey = servicesToAdd[i];
+                            let evcNodeToAdd = this.evcTree[previousLayerIndex][jsonKey][0];
+
+                            //Delete old node
+                            delete this.evcTree[previousLayerIndex][jsonKey];
+
+                            //Move evd node to new parent
+                            evcNodeToAdd.parent_id = evcNode.id;
+
+                            this.evcTree[previousLayerIndex][evcNode.id].push(evcNodeToAdd);
+                        }
+                    }
+
+                    if (!_.isEmpty(servicesToDelete)) {
+                        let evcsToKeep: EvcTreeItem[] = [];
+                        for (let index in this.evcTree[previousLayerIndex][evcNode.id]) {
+                            // The value of the select box has the _vService suffix!
+
+                            let idToCheck = this.evcTree[previousLayerIndex][evcNode.id][index].id + '_vService';
+                            if (!servicesToDelete.some(item => item == idToCheck)) {
+                                //Keep this service in current evc node
+                                evcsToKeep.push(this.evcTree[previousLayerIndex][evcNode.id][index]);
+                            } else {
+                                //This service got removed from current evc node
+                                //Set parent_id to null and create new _vService record in json.
+
+                                let evcServiceToMove = this.evcTree[previousLayerIndex][evcNode.id][index];
+
+                                let vServiceJsonKey = evcServiceToMove.id + '_vService';
+                                evcServiceToMove.parent_id = null;
+
+                                this.evcTree[previousLayerIndex][vServiceJsonKey] = [
+                                    evcServiceToMove
+                                ];
+                            }
+                        }
+
+                        this.evcTree[previousLayerIndex][evcNode.id] = evcsToKeep;
+                    }
+                }
+
+
+                // Important for the Angular Change Detection
+                // Signals Need to be Immutable
+                // https://www.angulararchitects.io/blog/angular-signals/
+                // evcTree is now a new object, so the reference changes
+                // do not use _.cloneDeep() as it reverses the evcTree for some reason
+                this.evcTree = [...this.evcTree];
+
+                this.modalService.toggle({
+                    show: false,
+                    id: 'evcVServicesModal'
+                });
+                this.showSpinner = false;
+
+                // Mark the EVC as changed
+                this.hasUnsavedChanges = true;
+
+                // All done trigger change detection
+                this.cdr.markForCheck();
+            },
+            error: (error: HttpErrorResponse) => {
+                // We run into a validation error.
+                this.errors = error.error.error as GenericValidationError;
+                this.showSpinner = false;
+
+                this.cdr.markForCheck();
+            }
+        });
+
+        this.subscriptions.add(sub);
+
+    }
+
     private validateEvcTreeBeforeSave(): boolean {
         const layerWithErrors: EvcTreeValidationErrors = {};
         const evcNodeWithErrors: EvcTreeValidationErrors = {};
@@ -695,7 +856,40 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
     public saveEventcorrelation() {
         const result = this.validateEvcTreeBeforeSave();
+
         this.cdr.markForCheck();
+
+        if (!result) {
+            this.notyService.genericError();
+            return;
+        }
+
+        this.subscriptions.add(this.EventcorrelationsService.saveCorrelation(this.id, this.evcTree)
+            .subscribe((result) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+
+                    const response = result.data as GenericSuccessResponse;
+
+                    const title = this.TranslocoService.translate('Event Correlation');
+                    const msg = this.TranslocoService.translate('saved successfully');
+                    const url = ['eventcorrelation_module', 'eventcorrelations', 'editCorrelation', this.id];
+
+
+                    this.notyService.genericSuccess(msg, title, url);
+                    this.notyService.scrollContentDivToTop();
+
+                    this.router.navigate(['/eventcorrelation_module/eventcorrelations/index']);
+
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+            }));
+
+
     }
 
     public onDeleteEvcNode(event: EvcDeleteNode) {

@@ -57,7 +57,7 @@ interface EvcGraphNode {
     id: string
     parentId: string | null
     service?: EvcService
-    operator?: EventcorrelationOperators | null,
+    operator?: EventcorrelationOperators | string | null,
     type: 'service' | 'operator'
 }
 

@@ -7,6 +7,7 @@ import {
     EvcHostUsedBy,
     EvcModalService,
     EvcServiceSelect,
+    EvcTree,
     EventcorrelationsEditCorrelationRoot,
     EventcorrelationsIndexParams,
     EventcorrelationsIndexRoot,
@@ -14,7 +15,7 @@ import {
 } from './eventcorrelations.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { HostAddEditSuccessResponse, HostPost } from '../../../../pages/hosts/hosts.interface';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { GenericResponseWrapper, GenericSuccessResponse, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -152,6 +153,36 @@ export class EventcorrelationsService {
     public validateModalAddVServices(vService: EvcModalService): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/eventcorrelation_module/eventcorrelations/validateModalAddVServices.json?angular=true`, vService);
+    }
+
+    public validateModalEditVServices(vService: EvcModalService): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/eventcorrelation_module/eventcorrelations/validateModalEditVServices.json?angular=true`, vService);
+    }
+
+    public saveCorrelation(evcId: number, evcTree: EvcTree[]): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/eventcorrelation_module/eventcorrelations/editCorrelation/${evcId}.json?angular=true`, {
+            evcTree: evcTree,
+            evcId: evcId
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
 }
