@@ -8,10 +8,9 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                    {{ t('Wizards') }}
-                </a></li>
+                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                {{ t('Wizards') }}
+            </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'chain']"></fa-icon>
                 {{ t('Assignments') }}
@@ -22,7 +21,12 @@
 
     <c-card>
         <c-card-header>
-            <h5 class="card-title">{{ t('Configuration Wizards') }}</h5>
+            <h5 cCardTitle class="card-title">
+                {{ t('Assignments') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
                     <c-button-group>
@@ -123,8 +127,8 @@
                         {{ wizard.value.description }}
                     </td>
                     <td>
-                        <c-badge color="danger"  *ngIf="! wizard.value.necessity_of_assignment">{{t('No')}}</c-badge>
-                        <c-badge color="success" *ngIf="  wizard.value.necessity_of_assignment">{{t('Yes')}}</c-badge>
+                        <c-badge color="danger" *ngIf="! wizard.value.necessity_of_assignment">{{ t('No') }}</c-badge>
+                        <c-badge color="success" *ngIf="  wizard.value.necessity_of_assignment">{{ t('Yes') }}</c-badge>
                     </td>
                     <td class="width-50">
                         <oitc-actions-button [permission]="'wizards.edit'"

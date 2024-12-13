@@ -3,14 +3,14 @@ import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    BadgeComponent,
+    BadgeComponent, ButtonCloseDirective,
     ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
-    CardHeaderComponent,
+    CardHeaderComponent, CardTitleDirective,
     ColComponent,
     ContainerComponent,
-    DropdownDividerDirective,
+    DropdownDividerDirective, ModalHeaderComponent, ModalTitleDirective,
     NavComponent,
     NavItemComponent,
     RowComponent,
@@ -70,7 +70,11 @@ import { WizardsIndex } from '../wizards.interface';
         TableDirective,
         TableLoaderComponent,
         KeyValuePipe,
-        BadgeComponent
+        BadgeComponent,
+        CardTitleDirective,
+        ButtonCloseDirective,
+        ModalHeaderComponent,
+        ModalTitleDirective
     ],
     templateUrl: './wizard-assignments.component.html',
     styleUrl: './wizard-assignments.component.css',
