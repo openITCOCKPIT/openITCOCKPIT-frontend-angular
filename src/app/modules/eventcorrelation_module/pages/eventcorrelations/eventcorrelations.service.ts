@@ -4,13 +4,18 @@ import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
+    EvcHostUsedBy,
+    EvcModalService,
+    EvcServiceSelect,
+    EvcTree,
+    EventcorrelationsEditCorrelationRoot,
     EventcorrelationsIndexParams,
     EventcorrelationsIndexRoot,
     EventcorrelationsViewRoot
 } from './eventcorrelations.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { HostAddEditSuccessResponse, HostPost } from '../../../../pages/hosts/hosts.interface';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { GenericResponseWrapper, GenericSuccessResponse, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -71,6 +76,103 @@ export class EventcorrelationsService {
                     return {
                         success: true,
                         data: data as HostAddEditSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    /**********************
+     *  Usedby action     *
+     **********************/
+    public usedBy(id: number): Observable<EvcHostUsedBy> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            usedBy:
+                EvcHostUsedBy
+        }>(`${proxyPath}/eventcorrelation_module/eventcorrelations/usedBy/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.usedBy;
+            })
+        )
+    }
+
+    /*******************************
+     *  editCorrelation action     *
+     *******************************/
+    public getEventcorrelationEditCorrelation(id: number): Observable<EventcorrelationsEditCorrelationRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<EventcorrelationsEditCorrelationRoot>(`${proxyPath}/eventcorrelation_module/eventcorrelations/editCorrelation/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    public loadServices(searchString: string, evcId: number, selected: (number | string)[] = []): Observable<EvcServiceSelect[]> {
+        const proxyPath = this.proxyPath;
+
+        // ITC-2712 Change load function to use POST
+        const data = {
+            filter: {
+                servicename: searchString
+            },
+            selected: selected,
+            notServiceId: evcId
+        }
+
+        return this.http.post<{
+            services: EvcServiceSelect[]
+        }>(`${proxyPath}/eventcorrelation_module/eventcorrelations/loadServicesByString.json`, data, {
+            params: {
+                angular: true
+            }
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return data.services
+                })
+            );
+    }
+
+    public validateModalAddVServices(vService: EvcModalService): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/eventcorrelation_module/eventcorrelations/validateModalAddVServices.json?angular=true`, vService);
+    }
+
+    public validateModalEditVServices(vService: EvcModalService): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/eventcorrelation_module/eventcorrelations/validateModalEditVServices.json?angular=true`, vService);
+    }
+
+    public saveCorrelation(evcId: number, evcTree: EvcTree[]): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/eventcorrelation_module/eventcorrelations/editCorrelation/${evcId}.json?angular=true`, {
+            evcTree: evcTree,
+            evcId: evcId
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericSuccessResponse
                     };
                 }),
                 catchError((error: any) => {

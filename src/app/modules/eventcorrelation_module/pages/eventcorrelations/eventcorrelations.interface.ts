@@ -1,7 +1,8 @@
 import { ServiceObject, ServicestatusObject } from '../../../../pages/services/services.interface';
 import { EventcorrelationOperators } from './eventcorrelations.enum';
-import { HostObject, HoststatusObject } from '../../../../pages/hosts/hosts.interface';
+import { HostEntity, HostObject, HoststatusObject } from '../../../../pages/hosts/hosts.interface';
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 
 /**********************
@@ -79,19 +80,25 @@ export interface EventcorrelationsViewRoot {
     disabledServices: number
     downtimedServices: number
     hasWritePermission: boolean
+    animated: number
+    connectionLine: string
     _csrfToken: string | null
 }
 
 
 export interface EvcTree {
-    [key: string]: {
-        id: number
-        parent_id: number
-        host_id: number
-        service_id: number
-        operator: EventcorrelationOperators | null,
-        service: EvcService
-    }[]
+    // Hashmap of EvcTreeItem arrays
+    [key: string]: EvcTreeItem[]
+}
+
+export interface EvcTreeItem {
+    id: number | string // string in editCorrelation for new items "ui-id-f9fbdaab-70d1-4af1-a571-14d20b5657fa_1"
+    parent_id: null | number | string // string in editCorrelation for new items "ui-id-f9fbdaab-70d1-4af1-a571-14d20b5657f"
+    host_id: number
+    service_id: number | string // new created vServices "ui-id-780d1d4d-e90d-4cf4-aa09-e344bdaa04d5_vService"
+    operator: EventcorrelationOperators | string | null, // min1, min10, min300
+    service: EvcService,
+    usedBy?: string[], //editCorrelation only
 }
 
 export interface EventcorrelationRootElement {
@@ -111,19 +118,19 @@ export interface EventcorrelationRootElement {
 }
 
 export interface EvcService {
-    id: number
+    id: number | string // new created vServices "ui-id-780d1d4d-e90d-4cf4-aa09-e344bdaa04d5_vService"
     servicetemplate_id: number
     host_id: number
-    name?: string
+    name?: string | null
     description: any
     service_type: number
-    uuid: string
+    uuid: string | null // null for new created vServices
     disabled: number
     host: {
         id: number
         name: string
     }
-    servicetemplate: {
+    servicetemplate?: {
         id: number
         name: string
         description: string
@@ -154,3 +161,151 @@ export interface EvcSummaryService {
     modified_state?: number
 }
 
+export interface EvcHostUsedBy extends HostEntity {
+    usedBy: {
+        // Hashmap ob objects
+        [key: number]: EvcUsedByEntity
+    }
+}
+
+export interface EvcUsedByEntity {
+    id: number
+    name: string
+    description?: string,
+    Services: {
+        id: number
+        name: string
+        service_type: number
+        host_id: number
+    },
+    Eventcorrelations: {
+        service_id: number
+        host_id: number
+    },
+    EvcHosts: {
+        id: number
+        name: string
+        description?: string
+        container_id: number
+        hasViewPermission: boolean
+        hasWritePermission: boolean
+    }
+}
+
+/*********************************
+ *    editCorrelation action     *
+ ********************************/
+export interface EventcorrelationsEditCorrelationRoot {
+    evcTree: EvcTree[] // Used to render the tree chart
+    rootElement: EventcorrelationRootElement,
+    servicetemplates: SelectKeyValue[],
+    stateForDisabledService: number,
+    stateForDowntimedService: number,
+    showInfoForDisabledService: number,
+    animated: number,
+    connectionLine: string,
+    disabledServices: number,
+    downtimedServices: number,
+    _csrfToken: string | null
+}
+
+
+export interface EvcModalService {
+    servicename: string,
+    servicetemplate_id: number,
+    service_ids: (number | string)[], // 1 or 2_vService
+    operator: EventcorrelationOperators | null,
+    operator_modifier: number,
+    current_evc: {
+        id: number,
+        layerIndex: number,
+        mode: EvcVServiceModalMode,
+        evc_node_id?: string | number, // edit only
+        old_service_ids?: (number | string)[] // edit only // 1 or 2_vService
+    }
+}
+
+export function getDefaultEvcModalService(evcId: number, layerIndex: number): EvcModalService {
+    return {
+        servicename: '',
+        servicetemplate_id: 0,
+        service_ids: [],
+        operator: null,
+        operator_modifier: 0,
+        current_evc: {
+            id: evcId,
+            layerIndex: layerIndex,
+            mode: 'add'
+        }
+    }
+}
+
+export interface EvcServiceSelect {
+    key: number | string,
+    value: {
+        Service: {
+            id: number | string
+            name?: string | null
+            servicename: string
+            disabled?: number
+        }
+        Host: {
+            id: number,
+            name: string
+        }
+        Servicetemplate?: {
+            name: string
+        }
+    },
+    vServiceInUse?: boolean
+}
+
+export type EvcVServiceModalMode = 'add' | 'edit';
+
+export interface EvcToggleModal {
+    layerIndex: number,
+    mode: EvcVServiceModalMode
+    eventCorrelation?: EvcTreeItem
+}
+
+export interface EvcDeleteNode {
+    layerIndex: number,
+    evcNodeId: number | string
+}
+
+export interface EvcAddVServiceValidationResult {
+    success: boolean,
+    // updates."0".uu-id."0" = EvcTreeItem
+    updates: {
+        // layerIndexToUpdate (0,1,2,etc)
+        [key: string]: {
+            // newParentIdvService (ui-id-f9fbdaab-70d1-4af1-a571-14d20b5657fa)
+            [key: string]: {
+                // 0, 1 (just a number)
+                [key: string]: EvcTreeItem
+            }
+        }
+    }
+
+}
+
+export interface EvcEditVServiceValidationResult {
+    success: boolean,
+    // updates."0".uu-id."0" = EvcTreeItem
+    services: {
+        id: number | string,
+        parent_id: number | string,
+        host_id: number,
+        service_id: number | string,
+        operator: EventcorrelationOperators | string | null,
+        service: EvcService,
+    }[]
+
+}
+
+export interface EvcDeleteNodeDetails {
+    id: string,
+    parent_id: null | string,
+    serviceIndex: null | number,
+    parentEvcId: null | string
+}

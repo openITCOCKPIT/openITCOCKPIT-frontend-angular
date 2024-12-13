@@ -793,3 +793,21 @@ export interface ServiceBrowserResult {
 export interface ServiceBrowserSlaOverview extends HostBrowserSlaOverview {
 
 }
+
+
+/**********************
+ *    Used By action  *
+ **********************/
+export interface ServiceUsedByRoot {
+    service: ServiceEntity
+    objects: ServiceUsedByObjects
+    total: number
+}
+
+export interface ServiceUsedByObjects {
+    Servicegroups: GenericIdAndName[]
+    Instantreports: GenericIdAndName[]
+    Autoreports: GenericIdAndName[]
+    Eventcorrelations: GenericIdAndName[]
+    Maps: GenericIdAndName[]
+}

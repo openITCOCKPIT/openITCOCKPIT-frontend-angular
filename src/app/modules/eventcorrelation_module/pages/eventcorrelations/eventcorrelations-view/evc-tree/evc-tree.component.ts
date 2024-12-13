@@ -8,7 +8,7 @@ import {
     input,
     ViewChild
 } from '@angular/core';
-import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
+import { EFConnectableSide, EFMarkerType, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
 import * as dagre from "@dagrejs/dagre"
 import { IPoint, PointExtensions } from '@foblex/2d';
 import { generateGuid } from '@foblex/utils';
@@ -57,7 +57,7 @@ interface EvcGraphNode {
     id: string
     parentId: string | null
     service?: EvcService
-    operator?: EventcorrelationOperators | null,
+    operator?: EventcorrelationOperators | string | null,
     type: 'service' | 'operator'
 }
 
@@ -91,6 +91,9 @@ const CONFIGURATION = {
 const SERVICE_WIDTH = 150;
 const OPERATOR_WIDTH = 100;
 
+/******************************
+ * ⚠️ If you make changes to this file, make sure to update the EvcTreeEditComponent in the eventcorrelations-edit-correlation folder as well
+ ******************************/
 @Component({
     selector: 'oitc-evc-tree',
     standalone: true,
@@ -132,6 +135,8 @@ export class EvcTreeComponent implements AfterViewInit {
     public downtimedServices = input<number>(0);
     public stateForDowntimedService = input<number>(3);
     public stateForDisabledService = input<number>(3);
+    public connectionLine = input<string>('bezier');
+    public animated = input<number>(0);
 
     public downtimeStateTitle: string = '';
     public disabledStateTitle: string = '';
@@ -289,6 +294,7 @@ export class EvcTreeComponent implements AfterViewInit {
     private getNodes(graph: dagre.graphlib.Graph): INodeViewModel[] {
         return graph.nodes().map((x: any) => {
             let node = graph.node(x);
+            // x = node.id (15, 15_operator, 16, 16_operator etc)
 
             // Cast the dagre.Node to EvcNode
             const evcNode = node as EvcNode;
@@ -417,4 +423,5 @@ export class EvcTreeComponent implements AfterViewInit {
     protected readonly Number = Number;
     protected readonly AcknowledgementTypes = AcknowledgementTypes;
     protected readonly EvcTreeDirection = EvcTreeDirection;
+    protected readonly EFMarkerType = EFMarkerType;
 }

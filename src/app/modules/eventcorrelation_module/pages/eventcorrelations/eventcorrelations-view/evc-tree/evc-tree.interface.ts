@@ -3,3 +3,7 @@ export interface ConnectionOperator {
     from: string
     to: string
 }
+
+export interface EvcTreeValidationErrors {
+    [key: string | number]: boolean
+}

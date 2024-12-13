@@ -34,7 +34,6 @@ import { EvcTree, EventcorrelationRootElement } from '../eventcorrelations.inter
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { EvcTreeComponent } from './evc-tree/evc-tree.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import { AgentHttpClientErrors } from '../../../../../pages/agentconnector/agentconnector.enums';
 
 @Component({
     selector: 'oitc-eventcorrelations-view',
@@ -88,6 +87,8 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
     public showInfoForDisabledService: number = 0;
     public disabledServices: number = 0; //number of disabled services in the EVC
     public stateForDisabledService: number = 3; // Unknown
+    public animated: number = 0; // not animated
+    public connectionLine: string = 'bezier'; // bezier, straight, segment
 
     public downtimedServices: number = 0; //number of services in a downtime in the EVC
     public stateForDowntimedService: number = 3; // Unknown
@@ -119,12 +120,12 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
             this.showInfoForDisabledService = result.showInfoForDisabledService;
             this.stateForDisabledService = result.stateForDisabledService;
             this.disabledServices = result.disabledServices;
+            this.animated = result.animated;
+            this.connectionLine = result.connectionLine;
 
             this.downtimedServices = result.downtimedServices;
             this.stateForDowntimedService = result.stateForDowntimedService;
 
         }));
     }
-
-    protected readonly AgentHttpClientErrors = AgentHttpClientErrors;
 }

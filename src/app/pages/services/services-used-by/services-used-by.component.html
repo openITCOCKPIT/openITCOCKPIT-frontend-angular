@@ -7,9 +7,9 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['hosts', 'index']" [routerLink]="['/', 'hosts', 'index']">
-                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                    {{ t('Hosts') }}
+                <a *oitcPermission="['services', 'index']" [routerLink]="['/', 'services', 'index']">
+                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                    {{ t('Services') }}
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
@@ -19,14 +19,14 @@
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="!host"></oitc-form-loader>
-    <c-card class="mb-3" *ngIf="host">
+    <oitc-form-loader *ngIf="!service"></oitc-form-loader>
+    <c-card class="mb-3" *ngIf="service">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Host') }}
+            <h5 cCardTitle>{{ t('Service') }}
                 <small class="fw-300">
                     <i>
                         <strong>
-                            »{{ host.name }}«
+                            »{{ service.name }}«
                         </strong>
                         {{ t('is used by') }}
                         {{ total }}
@@ -112,13 +112,13 @@
                             <tr *ngFor="let evc of objects.Eventcorrelations">
                                 <td colspan="2">
                                     <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'editCorrelation']"
-                                       [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', evc.host_id]"
-                                       [queryParams]="{'highlightHostId': evc.FilterHost.id}">
-                                        {{ evc.Hosts.name }}
+                                       [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', evc.id]"
+                                       [queryParams]="{'highlightServiceId': service.id}">
+                                        {{ evc.name }}
                                     </a>
                                     <span
                                         *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'editCorrelation']; negate: true">
-                                        {{ evc.Hosts.name }}
+                                        {{ evc.name }}
                                     </span>
                                 </td>
                             </tr>
@@ -149,21 +149,21 @@
                             </tr>
                         }
 
-                    <!-- Hostgroups -->
-                    <tr *ngIf="objects.Hostgroups.length > 0">
+                    <!-- Servicegroups -->
+                    <tr *ngIf="objects.Servicegroups.length > 0">
                         <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                            {{ t('Host Groups') }} ({{ objects.Hostgroups.length }})
+                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                            {{ t('Service Groups') }} ({{ objects.Servicegroups.length }})
                         </th>
                     </tr>
-                    <tr *ngFor="let hostgroup of objects.Hostgroups">
+                    <tr *ngFor="let servicegroup of objects.Servicegroups">
                         <td>
-                            <a *oitcPermission="['hostgroups', 'edit']"
-                               [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
-                                {{ hostgroup.name }}
+                            <a *oitcPermission="['servicegroups', 'edit']"
+                               [routerLink]="['/', 'servicegroups', 'edit', servicegroup.id]">
+                                {{ servicegroup.name }}
                             </a>
-                            <span *oitcPermission="['hostgroups', 'edit']; negate: true">
-                                {{ hostgroup.name }}
+                            <span *oitcPermission="['servicegroups', 'edit']; negate: true">
+                                {{ servicegroup.name }}
                             </span>
                         </td>
                     </tr>
@@ -171,7 +171,7 @@
                     </tbody>
                 </table>
                 <oitc-not-used-by-object *ngIf="total === 0">
-                    {{ t('This host is not used by any object') }}
+                    {{ t('This service is not used by any object') }}
                 </oitc-not-used-by-object>
             </c-container>
         </c-card-body>

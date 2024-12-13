@@ -62,9 +62,9 @@
     }
 
     .f-connection-path {
-        fill: none;
+        stroke-width: 1px;
         stroke: var(--connection-color);
-        stroke-width: 2;
+        fill: none;
     }
 
     .f-connection-text, .f-connection-center {
@@ -133,6 +133,13 @@
     }
 }
 
+.evc-error {
+    color: var(--cui-danger-text-emphasis) !important;
+    background: var(--cui-danger-bg-subtle) !important;
+    border-color: var(--cui-danger-border-subtle) !important;
+    box-shadow: var(--cui-danger-border-subtle) 5px 0px 10px 0px !important;
+}
+
 @mixin connectors {
     position: absolute;
     width: 16px;
@@ -194,5 +201,23 @@
         border-radius: 2px;
         padding: 4px 8px;
         line-height: normal;
+    }
+}
+
+.animated :not(circle) {
+    stroke-dashoffset: 0;
+    stroke-dasharray: 5, 5;
+    animation: dash 5s linear infinite;
+}
+
+circle{
+    stroke-dashoffset: 0;
+    stroke-dasharray: 0, 0;
+    fill: var(--connection-color);
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 50;
     }
 }

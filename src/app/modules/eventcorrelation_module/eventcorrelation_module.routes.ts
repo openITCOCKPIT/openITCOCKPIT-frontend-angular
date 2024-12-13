@@ -18,7 +18,15 @@ export const eventcorrelationModuleRoutes: Routes = [
         loadComponent: () => import('./pages/eventcorrelations/eventcorrelations-summary-view/eventcorrelations-summary-view.component').then(m => m.EventcorrelationsSummaryViewComponent)
     },
     {
+        path: 'eventcorrelation_module/eventcorrelations/usedBy/:id',
+        loadComponent: () => import('./pages/eventcorrelations/eventcorrelations-used-by/eventcorrelations-used-by.component').then(m => m.EventcorrelationsUsedByComponent)
+    },
+    {
         path: 'eventcorrelation_module/eventcorrelations/editCorrelation/:id',
         loadComponent: () => import('./pages/eventcorrelations/eventcorrelations-edit-correlation/eventcorrelations-edit-correlation.component').then(m => m.EventcorrelationsEditCorrelationComponent)
     },
+    {
+        path: 'eventcorrelation_module/eventcorrelation_settings/index',
+        loadComponent: () => import('./pages/eventcorrelation-settings/eventcorrelation-settings-index/eventcorrelation-settings-index.component').then(m => m.EventcorrelationSettingsIndexComponent)
+    }
 ];

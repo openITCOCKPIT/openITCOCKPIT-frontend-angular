@@ -23,20 +23,21 @@
  *     confirmation.
  */
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { AsyncPipe, DOCUMENT, JsonPipe, NgClass, NgIf } from "@angular/common";
-import { Subscription } from "rxjs";
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterModule } from "@angular/router";
+import { AsyncPipe, JsonPipe, NgClass, NgIf } from "@angular/common";
 import { PermissionDirective } from "../../permissions/permission.directive";
-import { faAsterisk, faCircleInfo, faCoffee, faCog, faMouse } from "@fortawesome/free-solid-svg-icons";
 import {
     ButtonToolbarComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
+    CardImgDirective,
     CardSubtitleDirective,
+    CardTextDirective,
     CardTitleDirective,
+    ColComponent,
     DropdownDividerDirective,
     FormCheckComponent,
     FormCheckInputDirective,
@@ -51,7 +52,8 @@ import {
     ListGroupItemDirective,
     NavComponent,
     NavItemComponent,
-    NavLinkDirective
+    NavLinkDirective,
+    RowComponent
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
@@ -112,54 +114,16 @@ import { ProgressBarModule } from 'primeng/progressbar';
         MessageOfTheDayButtonComponent,
         OitcAlertComponent,
         NgClass,
-        ProgressBarModule
+        ProgressBarModule,
+        RowComponent,
+        ColComponent,
+        CardImgDirective,
+        CardTextDirective
     ],
     templateUrl: './start-page.component.html',
     styleUrl: './start-page.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StartPageComponent implements OnDestroy {
-    public readonly route = inject(ActivatedRoute);
-    public readonly router = inject(Router);
-    public readonly routeParams$ = this.route.params;
-    public readonly queryParams$ = this.route.queryParams;
-    public allowEdit = true;
-    protected readonly faCoffee = faCoffee;
-    protected readonly faCircleInfo = faCircleInfo;
-    protected readonly faAsterisk = faAsterisk;
-    protected readonly faCog = faCog;
-    protected readonly faMouse = faMouse;
-    private readonly subscription = new Subscription();
-    private readonly document = inject(DOCUMENT);
-    private cdr = inject(ChangeDetectorRef);
-
-    public constructor() {
-        this.route.queryParams.subscribe({
-            next: console.info,
-        });
-    }
-
-    public addRandomQueryParam() {
-        const key = Math.random();
-        const value = Math.random();
-        this.router.navigate([], {
-            queryParams: {[key]: value},
-            queryParamsHandling: "merge",
-        })
-    }
-
-    public ngOnDestroy() {
-        this.subscription.unsubscribe();
-    }
-
-    public clickTest() {
-        alert("Clicked!!!");
-    }
-
-    public switchAllowEdit() {
-        this.allowEdit = !this.allowEdit;
-        this.cdr.markForCheck();
-
-    }
+export class StartPageComponent {
 
 }

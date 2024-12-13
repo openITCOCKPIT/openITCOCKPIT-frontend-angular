@@ -28,10 +28,19 @@
             <f-connection [fOffset]="8" [fOutputId]="connection.from" [fInputId]="connection.to"
                           [fSelectionDisabled]="true"
                           [fReassignDisabled]="true"
-                          fType="segment"
+                          [ngClass]="{'animated':animated() > 0}"
+                          [fType]="connectionLine()"
                           fBehavior="fixed">
-
-
+                <svg viewBox="0 0 12 12" fMarker [type]="EFMarkerType.START" [height]="12" [width]="12" [refX]="5"
+                     [refY]="5">
+                    <circle cx="4" cy="6" r="4" stroke="#5856d6" fill="var(--connection-color)"
+                            stroke-width="2"></circle>
+                </svg>
+                <svg viewBox="0 0 12 12" fMarker [type]="EFMarkerType.END" [height]="12" [width]="12" [refX]="5"
+                     [refY]="5">
+                    <circle cx="6" cy="5" r="4" stroke="#5856d6" fill="var(--connection-color)"
+                            stroke-width="2"></circle>
+                </svg>
             </f-connection>
         }
         @for (node of nodes; track node.id) {
@@ -48,7 +57,7 @@
 
                 @if (node.evcNode.type === 'service') {
                     <div class="service-node"
-                         (mouseenter)="toggleToaster(node.evcNode.service?.id)"
+                         (mouseenter)="toggleToaster(Number(node.evcNode.service?.id))"
                          (mouseleave)="cancelToaster()">
                         <!-- vService container -->
 
@@ -82,7 +91,7 @@
                                     <oitc-downtime-icon
                                         *oitcPermission="['services', 'browser']"
                                         type="services"
-                                        [objectId]="node.evcNode.service?.id">
+                                        [objectId]="Number(node.evcNode.service?.id)">
                                     </oitc-downtime-icon>
                                     <fa-icon [icon]="['fas', 'power-off']" size="lg"
                                              *oitcPermission="['services', 'browser'];negate:true"></fa-icon>
@@ -93,7 +102,7 @@
                                         <oitc-acknowledgement-icon
                                             *ngIf="node.evcNode.service?.servicestatus"
                                             type="services"
-                                            [objectId]="node.evcNode.service?.id"
+                                            [objectId]="Number(node.evcNode.service?.id)"
                                             [acknowledgement_type]="node.evcNode.service?.servicestatus?.acknowledgement_type"></oitc-acknowledgement-icon>
                                     } @else {
                                         <fa-icon [icon]="['far', 'user']"
@@ -166,4 +175,3 @@
 </f-flow>
 
 <oitc-evc-servicestatus-toaster></oitc-evc-servicestatus-toaster>
-

@@ -28,7 +28,7 @@ import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.
 import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { SelectItemOptionGroup, SelectKeyValue } from '../../layouts/primeng/select.interface';
 import {
     ServiceBrowserMenu,
     ServiceBrowserResult,
@@ -49,7 +49,8 @@ import {
     ServicesIndexRoot,
     ServicesLoadServicesByStringParams,
     ServicesNotMonitoredParams,
-    ServicesNotMonitoredRoot
+    ServicesNotMonitoredRoot,
+    ServiceUsedByRoot
 } from './services.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import { ServiceTypesEnum } from './services.enum';
@@ -356,12 +357,12 @@ export class ServicesService {
         });
     }
 
-    public loadServicesByString(params: ServicesLoadServicesByStringParams): Observable<SelectKeyValue[]> {
+    public loadServicesByString(params: ServicesLoadServicesByStringParams): Observable<SelectItemOptionGroup[]> {
         const proxyPath = this.proxyPath;
 
         let url = `${proxyPath}/services/loadServicesByStringForOptionGroup.json`;
 
-        return this.http.get<{ services: SelectKeyValue[] }>(url, {
+        return this.http.get<{ services: SelectItemOptionGroup[] }>(url, {
             params: params as {}
         }).pipe(
             map(data => {
@@ -509,6 +510,20 @@ export class ServicesService {
                     end: Math.floor(endTimetamp)
                 }
             })
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
+    }
+
+    /**********************
+     *   Used By action   *
+     **********************/
+    public usedBy(id: number): Observable<ServiceUsedByRoot> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<ServiceUsedByRoot>(`${proxyPath}/services/usedBy/${id}.json?angular=true`)
             .pipe(
                 map(data => {
                     return data;
