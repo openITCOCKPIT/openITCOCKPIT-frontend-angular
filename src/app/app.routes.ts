@@ -644,6 +644,9 @@ const coreRoutes: Routes = [{
     path: 'wizards/index',
     loadComponent: () => import('./pages/wizards/wizards-index/wizards-index.component').then(m => m.WizardsIndexComponent)
 }, {
+    path: 'wizards/assignments',
+    loadComponent: () => import('./pages/wizards/wizards-assignments/wizard-assignments.component').then(m => m.WizardAssignmentsComponent)
+}, {
     path: 'wizards/wizardHostConfiguration/:typeId/:title/:hostId/:state/:selectedOs',
     loadComponent: () => import('./pages/wizards/wizards-wizard-host-configuration/wizards-wizard-host-configuration.component').then(m => m.WizardsWizardHostConfigurationComponent)
 }, {

@@ -1,0 +1,161 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    {{ t('Wizards') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'chain']"></fa-icon>
+                {{ t('Assignments') }}
+            </li>
+        </ol>
+    </nav>
+
+
+    <c-card>
+        <c-card-header>
+            <h5 class="card-title">{{ t('Configuration Wizards') }}</h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <c-button-group>
+                        <button cButton color="primary" size="xs"
+                                [ngClass]="{'btn-primary': filter.Category.linux, 'btn-default': !filter.Category.linux}"
+                                (click)="filter.Category.linux=!filter.Category.linux">
+                            <fa-icon [icon]="['fab', 'linux']"></fa-icon>
+                            {{ t('Linux') }}
+                        </button>
+                        <button cButton color="primary" size="xs"
+                                [ngClass]="{'btn-primary': filter.Category.windows, 'btn-default': !filter.Category.windows}"
+                                (click)="filter.Category.windows=!filter.Category.windows">
+                            <fa-icon [icon]="['fab', 'windows']"></fa-icon>
+                            {{ t('Windows') }}
+                        </button>
+                        <button cButton color="primary" size="xs"
+                                [ngClass]="{'btn-primary': filter.Category.database, 'btn-default': !filter.Category.database}"
+                                (click)="filter.Category.database=!filter.Category.database">
+                            <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                            {{ t('Database') }}
+                        </button>
+                        <button cButton color="primary" size="xs"
+                                [ngClass]="{'btn-primary': filter.Category.mail, 'btn-default': !filter.Category.mail}"
+                                (click)="filter.Category.mail=!filter.Category.mail">
+                            <fa-icon [icon]="['fas', 'envelopes-bulk']"></fa-icon>
+                            {{ t('Email') }}
+                        </button>
+                        <button cButton color="primary" size="xs"
+                                [ngClass]="{'btn-primary': filter.Category.network, 'btn-default': !filter.Category.network}"
+                                (click)="filter.Category.network=!filter.Category.network">
+                            <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                            {{ t('Network') }}
+                        </button>
+                        <button cButton color="primary" size="xs"
+                                [ngClass]="{'btn-primary': filter.Category.docker, 'btn-default': !filter.Category.docker}"
+                                (click)="filter.Category.docker=!filter.Category.docker">
+                            <fa-icon [icon]="['fab', 'docker']"></fa-icon>
+                            {{ t('Docker') }}
+                        </button>
+                        <button cButton color="primary" size="xs"
+                                [ngClass]="{'btn-primary': filter.Category.macos, 'btn-default': !filter.Category.macos}"
+                                (click)="filter.Category.macos=!filter.Category.macos">
+                            <fa-icon [icon]="['fab', 'apple']"></fa-icon>
+                            {{ t('macOS') }}
+                        </button>
+                        <button cButton color="primary" size="xs"
+                                [ngClass]="{'btn-primary': filter.Category.virtualization, 'btn-default': !filter.Category.virtualization}"
+                                (click)="filter.Category.virtualization=!filter.Category.virtualization">
+                            <fa-icon [icon]="['fas', 'cloud']"></fa-icon>
+                            {{ t('Virtualization') }}
+                        </button>
+                        <button cButton color="primary" size="xs"
+                                [ngClass]="{'btn-primary': filter.Category.hardware, 'btn-default': !filter.Category.hardware}"
+                                (click)="filter.Category.hardware=!filter.Category.hardware">
+                            <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                            {{ t('Hardware') }}
+                        </button>
+
+                    </c-button-group>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <oitc-table-loader *ngIf="! result"></oitc-table-loader>
+
+            <table bordered cTable class="mt-2 mb-0" hover striped>
+                <thead>
+                <tr>
+                    <th class="text-center col-1" scope="col" style="width: 5px;">
+                    </th>
+                    <th scope="col">
+                        {{ t('Wizard title') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Description') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Assignments necessary') }}
+                    </th>
+                    <th class="text-center col-1 width-50" scope="col">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    </th>
+                </tr>
+                </thead>
+                <tbody *ngIf="result">
+                <tr *ngFor="let wizard of result.wizards | keyvalue"
+                    [hidden]="! filterByCategory(wizard.value.category)">
+                    <td class="text-center">
+                        <div class="wizard-logo-image-small">
+                            <img [src]="'./assets/images/wizards/'+wizard.value.image" [alt]="wizard.value.title">
+                        </div>
+                    </td>
+                    <td>
+                        {{ wizard.value.title }}
+                    </td>
+                    <td>
+                        {{ wizard.value.description }}
+                    </td>
+                    <td>
+                        <c-badge color="danger"  *ngIf="! wizard.value.necessity_of_assignment">{{t('No')}}</c-badge>
+                        <c-badge color="success" *ngIf="  wizard.value.necessity_of_assignment">{{t('Yes')}}</c-badge>
+                    </td>
+                    <td class="width-50">
+                        <oitc-actions-button [permission]="'wizards.edit'"
+                                             [url]="'/wizards/edit/' + wizard.value.uuid + '/' + wizard.value.title">
+                            <oitc-actions-button-element [permission]="'wizards.edit'"
+                                                         [url]="'/wizards/edit/' + wizard.value.uuid + '/' + wizard.value.title">
+                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                {{ t('Edit') }}
+                            </oitc-actions-button-element>
+                        </oitc-actions-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <oitc-no-records
+                    *ngIf="result && Object.keys(result.wizards).length === 0"></oitc-no-records>
+
+
+            <ng-container *ngIf="result && result.wizards">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                    [itemsCount]="Object.keys(result.wizards).length"></oitc-select-all>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </ng-container>
+
+        </c-card-body>
+    </c-card>
+</ng-container>
