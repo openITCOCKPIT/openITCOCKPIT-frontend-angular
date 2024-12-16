@@ -200,20 +200,17 @@
 
 
             <div>
-                <b>Alert with custom templates and controls</b>
-
                 <ng-template #contentTemplate let-data>
-                    <span class="h5" *ngIf="data">
+                    <span class="h5 text-info" *ngIf="data">
                         {{ t('Discovering Interfaces for SNMP Services') }}
                     </span>
                     <br>
-                    {{t(' Scan this device and locate all of the interfaces that reside on the device. Only possible with valid SNMP configuration')}}
-                    Lot of space for custom elements or text
+                    {{t('Scan this device and locate all of the interfaces that reside on the device. Only possible with valid SNMP configuration')}}
                 </ng-template>
 
                 <ng-template #buttonTemplate let-data>
                     <div class="ms-2">
-                        <button class="btn btn-sm ripple" (click)="runSnmpDiscovery()">
+                        <button class="ripple" (click)="runSnmpDiscovery()" cButton color="info">
                             {{ t('Start SNMP interface discovery') }}
                         </button>
                     </div>
@@ -229,13 +226,9 @@
 
             </div>
 
-
-            <hr />
-            <h1>Hier du sau!</h1>
-
             <oitc-wizards-dynamicfields
                     [post]="post.interfaces"
-                    [title]="'Printer services'|transloco"
+                    [title]="'SNMP Interfaces'|transloco"
             />
 
 

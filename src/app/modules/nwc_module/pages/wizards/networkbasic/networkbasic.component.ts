@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { NetworkbasicWizardService } from './networkbasic-wizard.service';
@@ -29,6 +29,7 @@ import {
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-networkbasic',
@@ -51,13 +52,15 @@ import { ProgressBarModule } from 'primeng/progressbar';
         WizardsDynamicfieldsComponent,
         TranslocoDirective,
         OitcAlertComponent,
-        ProgressBarModule
+        ProgressBarModule,
+        XsButtonDirective
     ],
     templateUrl: './networkbasic.component.html',
     styleUrl: './networkbasic.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NetworkbasicComponent extends WizardsAbstractComponent {
+    @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
     protected override WizardService: NetworkbasicWizardService = inject(NetworkbasicWizardService);
 
     protected override post: NetworkbasicWizardPost = {
@@ -107,7 +110,6 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
     protected runSnmpDiscovery(): void {
         this.WizardService.executeSNMPDiscovery(this.post).subscribe((data: SnmpDiscovery) => {
             for (let key in data.interfaces) {
-                console.debug(data.interfaces[key]);
                 let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.interfaceServicetemplate.servicetemplatecommandargumentvalues));
                 servicetemplatecommandargumentvalues[0].value = data.interfaces[key].value.name;
                 this.post.interfaces.push(
@@ -119,9 +121,9 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
                         'servicecommandargumentvalues': servicetemplatecommandargumentvalues,
                         'createService': false
                     });
-                console.debug(this.post.interfaces);
             }
 
+            this.childComponentLocal.cdr.markForCheck();
             this.childComponent.cdr.markForCheck();
         });
     }
