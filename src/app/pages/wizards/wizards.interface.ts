@@ -133,4 +133,18 @@ export interface CheckCommand {
     commandarguments: Commandargument[]
 }
 
+// WIZARD EDIT
+export interface WizardGetAssignments {
+    wizardAssignments: WizardAssignments
+    servicetemplates: SelectKeyValue[]
+    _csrfToken: string
+}
+
+// WIZARD EDIT POST
+export interface WizardAssignments {
+    uuid: string
+    servicetemplates: {
+        _ids: number[]
+    }
+}
 
