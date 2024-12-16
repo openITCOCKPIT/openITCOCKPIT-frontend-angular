@@ -164,7 +164,7 @@ GRANT SELECT, SHOW VIEW ON *.* TO 'monitoring'&#64;'{{ serverAddr }}';</pre>
             </fieldset>
 
             <oitc-wizards-dynamicfields
-                    [post]="post"
+                    [post]="post.services"
                     [title]="'MySQL services'|transloco"
             />
 
