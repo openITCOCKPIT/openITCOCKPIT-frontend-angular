@@ -142,9 +142,18 @@ export interface WizardGetAssignments {
 
 // WIZARD EDIT POST
 export interface WizardAssignments {
+    image: string
+    title: string
+    category: string[]
+    description: string
+    directive: string
+    necessity_of_assignment: boolean
     uuid: string
+    id: number
+    selected_os: any
+    state: string
+    type_id: string
     servicetemplates: {
         _ids: number[]
     }
 }
-

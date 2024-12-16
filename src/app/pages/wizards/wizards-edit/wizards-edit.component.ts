@@ -5,9 +5,13 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    FormLabelDirective
+    ColComponent,
+    FormDirective,
+    FormLabelDirective,
+    RowComponent
 } from '@coreui/angular';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
@@ -20,6 +24,10 @@ import { WizardAssignments, WizardGetAssignments } from '../wizards.interface';
 import { HistoryService } from '../../../history.service';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-wizards-edit',
@@ -36,7 +44,16 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
         FormLabelDirective,
         MultiSelectComponent,
         FormErrorDirective,
-        FormFeedbackComponent
+        FormFeedbackComponent,
+        RowComponent,
+        ColComponent,
+        BackButtonDirective,
+        CardFooterComponent,
+        XsButtonDirective,
+        FormDirective,
+        FormsModule,
+        NgIf,
+        ReactiveFormsModule
     ],
     templateUrl: './wizards-edit.component.html',
     styleUrl: './wizards-edit.component.css',
@@ -65,9 +82,9 @@ export class WizardsEditComponent implements OnDestroy, OnInit {
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
                 if (result.success) {
-                    const title: string = this.TranslocoService.translate('User');
+                    const title: string = this.TranslocoService.translate('Wizard assignments');
                     const msg: string = this.TranslocoService.translate('updated successfully');
-                    const url: (string | number)[] = ['wizards', 'edit'];
+                    const url: (string | number)[] = ['wizards', 'edit', this.post.uuid, String(this.route.snapshot.paramMap.get('title'))];
 
                     this.notyService.genericSuccess(msg, title, url);
                     this.HistoryService.navigateWithFallback(['/wizards/assignments']);
@@ -78,8 +95,6 @@ export class WizardsEditComponent implements OnDestroy, OnInit {
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
-
-                    console.warn(this.errors);
                 }
             })
         );
@@ -91,14 +106,7 @@ export class WizardsEditComponent implements OnDestroy, OnInit {
             .subscribe((result: WizardGetAssignments) => {
                 this.cdr.markForCheck();
                 this.serviceTemplates = result.servicetemplates;
-                this.post = {
-                    uuid: uuid,
-                    servicetemplates: {
-                        _ids: result.wizardAssignments.servicetemplates._ids
-                    }
-                } as WizardAssignments;
-                console.warn(result.wizardAssignments.servicetemplates._ids);
-                console.warn(this.post);
+                this.post = result.wizardAssignments;
                 this.cdr.markForCheck();
             }));
 

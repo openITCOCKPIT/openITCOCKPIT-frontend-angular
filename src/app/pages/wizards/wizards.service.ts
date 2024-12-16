@@ -1,10 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
-import { LoadHostsByStringRoot, WizardGet, WizardGetAssignments, WizardPost, WizardsIndex } from './wizards.interface';
+import { catchError, map, Observable, of } from 'rxjs';
+import {
+    LoadHostsByStringRoot,
+    WizardAssignments,
+    WizardGet,
+    WizardGetAssignments,
+    WizardPost,
+    WizardsIndex
+} from './wizards.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
-import { GenericResponseWrapper } from '../../generic-responses';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -36,6 +43,27 @@ export abstract class WizardsService {
                 return data;
             })
         );
+    }
+
+    public setAssignments(post: WizardAssignments): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/wizards/edit/${post.uuid}.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data.user as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+
     }
 
     abstract fetch(hostId: number): Observable<WizardGet>;
