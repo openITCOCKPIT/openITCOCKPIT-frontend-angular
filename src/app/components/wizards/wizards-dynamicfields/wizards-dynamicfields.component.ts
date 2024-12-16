@@ -47,7 +47,7 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
     public cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     protected searchedTags: string[] = [];
 
-    public post = input.required<WizardPost>();
+    public post = input.required<Service[]>();
     public title = input.required<string>();
 
     constructor() {
@@ -67,7 +67,7 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
 
     protected toggleCheck(theService: Service | undefined): void {
         if (theService) {
-            this.post().services.forEach((service: Service) => {
+            this.post().forEach((service: Service) => {
                 if (service.servicetemplate_id === theService.servicetemplate_id) {
                     service.createService = !service.createService;
                 }
@@ -75,7 +75,7 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
             this.cdr.markForCheck();
             return;
         }
-        this.post().services.forEach((service: Service) => {
+        this.post().forEach((service: Service) => {
             if (!this.hasName(service.name)) {
                 return;
             }
