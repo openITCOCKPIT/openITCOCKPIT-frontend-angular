@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
-import { LoadHostsByStringRoot, WizardGet, WizardPost, WizardsIndex } from './wizards.interface';
+import { LoadHostsByStringRoot, WizardGet, WizardGetAssignments, WizardPost, WizardsIndex } from './wizards.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericResponseWrapper } from '../../generic-responses';
 
@@ -26,6 +26,14 @@ export abstract class WizardsService {
         return this.http.get<LoadHostsByStringRoot>(`${this.proxyPath}/wizards/loadHostsByString.json?angular=true`).pipe(
             map((data: LoadHostsByStringRoot): SelectKeyValue[] => {
                 return data.hosts;
+            })
+        );
+    }
+
+    public getAssignments(uuid: string): Observable<WizardGetAssignments> {
+        return this.http.get<WizardGetAssignments>(`${this.proxyPath}/wizards/edit/${uuid}.json?angular=true`).pipe(
+            map((data: WizardGetAssignments): WizardGetAssignments => {
+                return data;
             })
         );
     }
