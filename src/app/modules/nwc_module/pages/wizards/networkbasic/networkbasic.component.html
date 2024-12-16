@@ -193,11 +193,52 @@
                 </div>
             </fieldset>
 
-
             <oitc-wizards-dynamicfields
-                    [post]="post"
+                    [post]="post.services"
                     [title]="'Printer services'|transloco"
             />
+
+
+            <div>
+                <b>Alert with custom templates and controls</b>
+
+                <ng-template #contentTemplate let-data>
+                    <span class="h5" *ngIf="data">
+                        {{ t('Discovering Interfaces for SNMP Services') }}
+                    </span>
+                    <br>
+                    {{t(' Scan this device and locate all of the interfaces that reside on the device. Only possible with valid SNMP configuration')}}
+                    Lot of space for custom elements or text
+                </ng-template>
+
+                <ng-template #buttonTemplate let-data>
+                    <div class="ms-2">
+                        <button class="btn btn-sm ripple" (click)="runSnmpDiscovery()">
+                            {{ t('Start SNMP interface discovery') }}
+                        </button>
+                    </div>
+
+                </ng-template>
+
+                <oitc-alert
+                        baseIcon="circle"
+                        color="info"
+                        [icon]="['fas', 'info']"
+                        [contentTemplate]="contentTemplate"
+                        [buttonTemplate]="buttonTemplate"></oitc-alert>
+
+            </div>
+
+
+            <hr />
+            <h1>Hier du sau!</h1>
+
+            <oitc-wizards-dynamicfields
+                    [post]="post.interfaces"
+                    [title]="'Printer services'|transloco"
+            />
+
+
 
         </c-card-body>
     </c-card>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { WizardsService } from '../../../../../pages/wizards/wizards.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { NetworkbasicWizardGet, NetworkbasicWizardPost } from './networkbasic-wizard.interface';
+import { NetworkbasicWizardGet, NetworkbasicWizardPost, SnmpDiscovery } from './networkbasic-wizard.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -33,6 +33,16 @@ export class NetworkbasicWizardService extends WizardsService {
                         data: err
                     });
                 })
+            );
+
+    }
+
+    public executeSNMPDiscovery(post: NetworkbasicWizardPost): Observable<SnmpDiscovery> {
+        return this.http.post<SnmpDiscovery>(`${this.proxyPath}/nwc_module/wizards/executeSNMPDiscovery/${post.host_id}.json?angular=true`, post)
+            .pipe(
+                map((data: SnmpDiscovery) => {
+                    return data
+                }),
             );
 
     }

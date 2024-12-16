@@ -1,9 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { NetworkbasicWizardService } from './networkbasic-wizard.service';
-import { NetworkbasicWizardGet, NetworkbasicWizardPost } from './networkbasic-wizard.interface';
+import {
+    InterfaceServicetemplate,
+    NetworkbasicWizardGet,
+    NetworkbasicWizardPost,
+    SnmpDiscovery
+} from './networkbasic-wizard.interface';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -23,6 +27,8 @@ import { NgIf } from '@angular/common';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
+import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     selector: 'oitc-networkbasic',
@@ -43,7 +49,9 @@ import {
         FormsModule,
         NgIf,
         WizardsDynamicfieldsComponent,
-        TranslocoDirective
+        TranslocoDirective,
+        OitcAlertComponent,
+        ProgressBarModule
     ],
     templateUrl: './networkbasic.component.html',
     styleUrl: './networkbasic.component.css',
@@ -88,5 +96,33 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         {key: '3DES', value: '3des'},
         {key: '3DESDE', value: '3desde'},
     ];
+    protected interfaceServicetemplate: InterfaceServicetemplate = {} as InterfaceServicetemplate;
 
+    protected override wizardLoad(result: NetworkbasicWizardGet): void {
+        this.interfaceServicetemplate = result.interfaceServicetemplate;
+
+        super.wizardLoad(result);
+    }
+
+    protected runSnmpDiscovery(): void {
+        this.WizardService.executeSNMPDiscovery(this.post).subscribe((data: SnmpDiscovery) => {
+            for (let key in data.interfaces) {
+                console.debug(data.interfaces[key]);
+                let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.interfaceServicetemplate.servicetemplatecommandargumentvalues));
+                servicetemplatecommandargumentvalues[0].value = data.interfaces[key].value.name;
+                this.post.interfaces.push(
+                    {
+                        'host_id': this.post.host_id,
+                        'servicetemplate_id': this.interfaceServicetemplate.id,
+                        'name': data.interfaces[key].value.name,
+                        'description': data.interfaces[key].value.number,
+                        'servicecommandargumentvalues': servicetemplatecommandargumentvalues,
+                        'createService': false
+                    });
+                console.debug(this.post.interfaces);
+            }
+
+            this.childComponent.cdr.markForCheck();
+        });
+    }
 }
