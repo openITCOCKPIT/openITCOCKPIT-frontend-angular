@@ -641,11 +641,14 @@ const coreRoutes: Routes = [{
     path: 'statuspages/edit/:id',
     loadComponent: () => import('./pages/statuspages/statuspages-edit/statuspages-edit.component').then(m => m.StatuspagesEditComponent)
 }, {
-    path: 'wizards/index',
-    loadComponent: () => import('./pages/wizards/wizards-index/wizards-index.component').then(m => m.WizardsIndexComponent)
-}, {
     path: 'wizards/assignments',
     loadComponent: () => import('./pages/wizards/wizards-assignments/wizard-assignments.component').then(m => m.WizardAssignmentsComponent)
+}, {
+    path: 'wizards/edit/:uuid/:title',
+    loadComponent: () => import('./pages/wizards/wizards-edit/wizards-edit.component').then(m => m.WizardsEditComponent)
+}, {
+    path: 'wizards/index',
+    loadComponent: () => import('./pages/wizards/wizards-index/wizards-index.component').then(m => m.WizardsIndexComponent)
 }, {
     path: 'wizards/wizardHostConfiguration/:typeId/:title/:hostId/:state/:selectedOs',
     loadComponent: () => import('./pages/wizards/wizards-wizard-host-configuration/wizards-wizard-host-configuration.component').then(m => m.WizardsWizardHostConfigurationComponent)
