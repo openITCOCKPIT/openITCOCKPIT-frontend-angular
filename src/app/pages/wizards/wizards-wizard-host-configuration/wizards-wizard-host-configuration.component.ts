@@ -33,6 +33,7 @@ import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-lin
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { AnimateCssService } from '../../../services/animate-css.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { WizardElement, WizardsIndex } from '../wizards.interface';
 
 @Component({
     selector: 'oitc-wizards-wizard-host-configuration',
@@ -80,6 +81,7 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     private readonly router = inject(Router);
 
     protected readonly PermissionsService: PermissionsService = inject(PermissionsService);
+    protected WizardElement: WizardElement = {} as WizardElement;
     protected hosttemplates: SelectKeyValue[] = [];
     protected hostgroups: SelectKeyValue[] = [];
     protected satellites: SelectKeyValue[] = [];
@@ -107,10 +109,9 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     };
 
     public submit() {
-
         if (this.useExistingHost) {
             let sgmts: string[] = this.state.split(/(?=[A-Z])/).map(segment => segment.toLowerCase());
-            let url: string = `/${this.typeId.replaceAll('-', '')}_module/wizards/${this.state.toLowerCase().replaceAll('wizards', '')}/${this.hostId}`;
+            let url: string = this.WizardElement.second_url.replaceAll(':hostId', this.hostId.toString());
             console.warn(sgmts);
             console.warn(url);
             this.router.navigate([url]);
@@ -257,8 +258,17 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
         console.warn('state', this.state);
         console.warn('selectedOs', this.selectedOs);
 
+        this.loadWizardElement();
         this.loadContainers();
         this.loadHosts();
+    }
+
+    protected loadWizardElement(): void {
+        // Fetch containers on load.
+        this.Subscriptions.add(this.WizardsService.getIndex().subscribe((wizards: WizardsIndex) => {
+            this.WizardElement = wizards.wizards[this.typeId];
+            this.cdr.markForCheck();
+        }));
     }
 
     protected loadContainers(): void {
