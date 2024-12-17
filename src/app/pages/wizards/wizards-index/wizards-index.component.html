@@ -58,8 +58,7 @@
                        *ngFor="let wizard of result.wizards | keyvalue" [hidden]="! filterByCategory(wizard.value.category)">
                     <c-card class="mb-3">
                         <c-card-body class="wizard-card-body cursor-pointer"
-                             [routerLink]="['/', 'wizards', 'wizardHostConfiguration', wizard.value.type_id, wizard.value.title, 0, wizard.value.state, wizard.value.selected_os]"
-                             [queryParams]="{'typeId': wizard.value.type_id, 'title' : wizard.value.title, 'state' : wizard.value.state, 'selectedOs': wizard.value.selected_os}">
+                             [routerLink]="['/', 'wizards', 'wizardHostConfiguration', wizard.value.type_id, wizard.value.title, 0, wizard.value.state, wizard.value.selected_os]">
                             <div class="d-flex align-items-center">
                                 <div class="wizard-logo-image">
                                     <img [src]="'./assets/images/wizards/'+wizard.value.image" [alt]="wizard.value.title">
