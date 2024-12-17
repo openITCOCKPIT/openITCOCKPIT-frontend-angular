@@ -16,6 +16,7 @@ export interface WizardElement {
     state: string
     category: string[]
     necessity_of_assignment: boolean
+    second_url: string
     selected_os: undefined | string
 }
 
