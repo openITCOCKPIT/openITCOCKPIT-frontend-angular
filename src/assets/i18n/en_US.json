@@ -1,5 +1,6 @@
 {
     "Start Page": "",
+    "A host with the name {0} already exists. Duplicate host names could lead to confusion.": "A host with the name {{0}} already exists. Duplicate host names could lead to confusion.",
     "{0} metrics": "{{hostname}} metrics",
     "Prometheus metrics export of {0} internal metrics" : "Prometheus metrics export of {{hostname}} internal metrics",
     "To enable external databases access you have to change the {0} of your MySQL server.": "To enable external databases access you have to change the <code>bind-address</code> of your MySQL server.",

@@ -110,10 +110,7 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
 
     public submit() {
         if (this.useExistingHost) {
-            let sgmts: string[] = this.state.split(/(?=[A-Z])/).map(segment => segment.toLowerCase());
             let url: string = this.WizardElement.second_url.replaceAll(':hostId', this.hostId.toString());
-            console.warn(sgmts);
-            console.warn(url);
             this.router.navigate([url]);
             return;
         }
@@ -132,7 +129,10 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
 
                     this.notyService.genericSuccess(msg, title, url);
 
-                    this.ngOnInit();
+                    let nextStep: string = this.WizardElement.second_url.replaceAll(':hostId', result.data.id.toString());
+                    console.warn(nextStep);
+                    this.router.navigate([nextStep]);
+
                     return;
                 }
 
@@ -267,6 +267,9 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
         // Fetch containers on load.
         this.Subscriptions.add(this.WizardsService.getIndex().subscribe((wizards: WizardsIndex) => {
             this.WizardElement = wizards.wizards[this.typeId];
+            console.warn(wizards.wizards);
+            console.warn(this.typeId);
+            console.warn(this.WizardElement);
             this.cdr.markForCheck();
         }));
     }
