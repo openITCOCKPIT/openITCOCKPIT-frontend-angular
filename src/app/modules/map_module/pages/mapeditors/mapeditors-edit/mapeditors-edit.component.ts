@@ -10,7 +10,6 @@ import {
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { GenericValidationError } from '../../../../../generic-responses';
-import { MapPost } from '../../maps/Maps.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { MapeditorsService } from '../Mapeditors.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -38,7 +37,7 @@ import {
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FCanvasComponent, FFlowModule } from '@foblex/flow';
-import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MapItemComponent } from '../../../components/map-item/map-item.component';
@@ -46,7 +45,9 @@ import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.co
 import { ContextAction, Mapitem } from '../../../components/map-item/map-item.interface';
 import { MapItemLabelComponent } from '../../../components/map-item-label/map-item-label.component';
 import { MapItemContentComponent } from '../../../components/map-item-content/map-item-content.component';
-import { parseInt } from 'lodash';
+import { filter, parseInt } from 'lodash';
+import { Background, Mapeditor, MapRoot, MaxUploadLimit, VisibleLayers } from '../Mapeditors.interface';
+import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
@@ -82,7 +83,10 @@ import { parseInt } from 'lodash';
         MapItemComponent,
         MapCanvasComponent,
         MapItemLabelComponent,
-        MapItemContentComponent
+        MapItemContentComponent,
+        NgClass,
+        CdkDrag,
+        CdkDragHandle
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',
@@ -98,13 +102,34 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
+    private route = inject(ActivatedRoute);
     public errors: GenericValidationError = {} as GenericValidationError;
+    private cdr = inject(ChangeDetectorRef);
 
-    public map!: MapPost;
+    public init = true;
+    protected mapId: number = 0;
+    public map!: MapRoot;
     protected helplineSizes: number[] = [5, 10, 15, 20, 25, 30, 50, 80];
     protected gridSizes = [5, 10, 15, 20, 25, 30, 50, 80];
+    public gridSize: { x: number, y: number } = {x: 25, y: 25};
 
-    public Mapeditor = {
+    public backgrounds: Background[] = [];
+    public lastBackgroundImageToDeletePreventForSave = null;
+
+    public layers: string[] = [];
+    public currentBackground: string = '';
+
+    public addNewObject = false;
+    public action: string | null = null;
+
+    public currentItem = {};
+    public maxZIndex = 0;
+    public clickCount = 1;
+
+    public brokenImageDetected = false;
+
+    public Mapeditor: Mapeditor = {
         grid: {
             enabled: true,
             size: 15
@@ -117,11 +142,21 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     };
 
+    public addLink = false;
+
+    public uploadIconSet = false;
+
+    public defaultLayer = '0';
+
+    public visibleLayers: VisibleLayers = {};
+
+    public maxUploadLimit!: MaxUploadLimit;
+
     public MapItems: Mapitem[] = [
         {
             id: 1,
             map_id: 1,
-            x: 24,
+            x: 100,
             y: 24,
             z_index: "1",
             label_possition: 2,
@@ -138,24 +173,40 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         }
     ];
 
-    private route = inject(ActivatedRoute);
-
-    protected mapId: number = 0;
-    private readonly HistoryService: HistoryService = inject(HistoryService);
-    private cdr = inject(ChangeDetectorRef);
-
-    public gridSize: { x: number, y: number } = {x: 25, y: 25};
-
     public ngOnInit(): void {
         this.mapId = Number(this.route.snapshot.paramMap.get('id'));
-        /*this.subscriptions.add(this.MapeditorsService.getEdit(this.mapId)
-            .subscribe((result) => {
-                this.cdr.markForCheck();
-            }));*/
+        this.load();
     }
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    public load(): void {
+        this.subscriptions.add(this.MapeditorsService.getEdit(this.mapId)
+            .subscribe((result) => {
+                this.map = result.map;
+                this.Mapeditor = result.config.Mapeditor;
+                this.maxUploadLimit = result.maxUploadLimit;
+                this.maxZIndex = result.max_z_index;
+                this.layers = result.layers;
+
+                for (var k in this.layers) {
+                    this.visibleLayers['layer_' + k] = true;
+                }
+
+                this.currentBackground = this.map.Map.background;
+
+                if (this.init) {
+                    /*createDropzones();
+                    loadBackgroundImages();
+
+                    setTimeout(makeDraggable, 250);*/
+                }
+
+                this.init = false;
+                this.cdr.markForCheck();
+            }));
     }
 
     public onDropItem(mapItem: Mapitem) {
@@ -190,6 +241,58 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     }
 
+    public setDefaultLayer(layerNo: number) {
+        this.defaultLayer = layerNo.toString();
+    }
+
+    public hideLayer(key: number) {
+        let keyAsString = key.toString();
+        this.visibleLayers['layer_' + keyAsString] = false;
+
+        let objectsToHide = [
+            'Mapitems',
+            'Maplines',
+            'Mapgadgets',
+            'Mapicons',
+            'Maptexts',
+            'Mapsummaryitems'
+        ];
+        for (let arrayKey in objectsToHide) {
+            let objectName = objectsToHide[arrayKey];
+            if (this.map.hasOwnProperty(objectName)) {
+                for (let i in this.map[objectName as keyof MapRoot]) {
+                    if (this.map[objectName as keyof MapRoot][i].z_index === keyAsString) {
+                        this.map[objectName as keyof MapRoot][i].display = false;
+                    }
+                }
+            }
+        }
+    }
+
+    public showLayer(key: number) {
+        let keyAsString = key.toString();
+        this.visibleLayers['layer_' + keyAsString] = true;
+
+        let objectsToHide = [
+            'Mapitems',
+            'Maplines',
+            'Mapgadgets',
+            'Mapicons',
+            'Maptexts',
+            'Mapsummaryitems'
+        ];
+        for (let arrayKey in objectsToHide) {
+            let objectName = objectsToHide[arrayKey];
+            if (this.map.hasOwnProperty(objectName)) {
+                for (let i in this.map[objectName as keyof MapRoot]) {
+                    if (this.map[objectName as keyof MapRoot][i].z_index === keyAsString) {
+                        this.map[objectName as keyof MapRoot][i].display = true;
+                    }
+                }
+            }
+        }
+    };
+
     public onContextAction($event: ContextAction) {
         const type = $event.type;
         let index;
@@ -214,4 +317,101 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
         }
     }
+
+    public addItem() {
+
+        const options = {
+            timeOut: 3500,
+            progressBar: true,
+            enableHtml: true,
+            positionClass: 'toast-top-center'
+        }
+        this.notyService.noty('Click at the position on the map, where you want to create a new object.', 'info', options, '');
+        //$('#map-editor').css('cursor', 'crosshair');
+        this.addNewObject = true;
+        this.action = 'item';
+    };
+
+    public addLine() {
+        const options = {
+            timeOut: 3500,
+            progressBar: true,
+            enableHtml: true,
+            positionClass: 'toast-top-center'
+        }
+        this.notyService.noty('Click at the position on the map, where the line should start.', 'info', options, '');
+        this.clickCount = 1;
+        //$('#map-editor').css('cursor', 'crosshair');
+        this.addNewObject = true;
+        this.action = 'line';
+    };
+
+    public addSummaryItem() {
+        const options = {
+            timeOut: 3500,
+            progressBar: true,
+            enableHtml: true,
+            positionClass: 'toast-top-center'
+        }
+        this.notyService.noty('Click at the position on the map, where you want to create a new status summary icon', 'info', options, '');
+        //$('#map-editor').css('cursor', 'crosshair');
+        this.addNewObject = true;
+        this.action = 'summaryItem';
+    };
+
+    public addGadget() {
+        const options = {
+            timeOut: 3500,
+            progressBar: true,
+            enableHtml: true,
+            positionClass: 'toast-top-center'
+        }
+        this.notyService.noty('Click at the position on the map, where you want to place the new Gadget.', 'info', options, '');
+        //$('#map-editor').css('cursor', 'crosshair');
+        this.addNewObject = true;
+        this.action = 'gadget';
+    };
+
+    public openChangeMapBackgroundModal() {
+        if (this.map.Map.background !== null && this.map.Map.background.length > 0) {
+            if (this.backgrounds.length === 0) {
+                this.brokenImageDetected = true;
+            } else {
+                this.brokenImageDetected = filter(
+                    this.backgrounds, (background) => background.image === this.map.Map.background).length === 0;
+            }
+        }
+
+        //$('#changeBackgroundModal').modal('show');
+    };
+
+    public addText() {
+        const options = {
+            timeOut: 3500,
+            progressBar: true,
+            enableHtml: true,
+            positionClass: 'toast-top-center'
+        }
+        this.notyService.noty('Click at the position on the map, where you want to create new text', 'info', options, '');
+        //$('#map-editor').css('cursor', 'crosshair');
+        this.addNewObject = true;
+        this.action = 'text';
+        this.addLink = false;
+        //$('#docuText').val('');
+    };
+
+    public addIcon() {
+        const options = {
+            timeOut: 3500,
+            progressBar: true,
+            enableHtml: true,
+            positionClass: 'toast-top-center'
+        }
+        this.notyService.noty('Click at the position on the map, where you want to create a new icon', 'info', options, '');
+        //$('#map-editor').css('cursor', 'crosshair');
+        this.addNewObject = true;
+        this.action = 'icon';
+    };
+
+    protected readonly parseInt = parseInt;
 }

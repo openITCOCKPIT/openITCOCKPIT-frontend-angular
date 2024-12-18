@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { ActiveToast, ToastrService } from 'ngx-toastr';
 import { TranslocoService } from '@jsverse/transloco';
 import { DOCUMENT, LocationStrategy } from '@angular/common';
 import { Router } from '@angular/router';
@@ -116,6 +116,40 @@ export class NotyService {
 
     scrollTop() {
         window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    noty(message: string, type: string, options: any, title?: string, url?: any[]) {
+
+        let toast!: ActiveToast<any>;
+        if (!title) {
+            title = '';
+        }
+
+        switch (type) {
+            case 'success':
+                toast = this.toastr.success(message, title, options);
+                break;
+            case 'error':
+                toast = this.toastr.error(message, title, options);
+                break;
+            case 'info':
+                toast = this.toastr.info(message, title, options);
+                break;
+            case 'warning':
+                toast = this.toastr.warning(message, title, options);
+                break;
+            default:
+                toast = this.toastr.show(message, title, options);
+        }
+
+        if (url) {
+            toast
+                .onTap
+                .pipe(take(1)) // auto unsubscribe
+                .subscribe(() => {
+                    this.router.navigate(url);
+                });
+        }
     }
 
     //scrollToTop() {

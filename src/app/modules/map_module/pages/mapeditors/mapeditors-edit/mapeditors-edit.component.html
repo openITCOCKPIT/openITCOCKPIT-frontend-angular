@@ -149,17 +149,11 @@
 
                 <c-nav-item class="px-1">
                     <button *oitcPermission="['mapmodule', 'mapeditors', 'view']"
-                            [routerLink]="['/', 'map_module', 'mapeditors', 'view']" cButton class="ripple"
+                            [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id]" cButton class="ripple"
                             color="default" size="xs" class="me-1">
                         <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                         {{ t('View') }}
                     </button>
-                    <!--<button *oitcPermission="['mapmodule', 'mapeditors', 'view']"
-                            [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id]" cButton class="ripple"
-                            color="default" size="xs" class="me-1">
-                        <fa-icon [icon]="['fas', 'fa-eye']"></fa-icon>
-                        {{ t('View') }}
-                    </button>-->
                 </c-nav-item>
 
             </c-nav>
@@ -192,6 +186,69 @@
                         I'm a node Layer 1
                     </oitc-map-item-label>
                 </oitc-map-item>
+                <!-- start mapToolbar -->
+                <div id="mapToolbar" cdkDrag cdkDragBoundary=".map-canvas">
+                    <div id="mapToolsDragger" cdkDragHandle></div>
+
+                    <div class="mapToolbarTool" title="{{ t('Add item') }}" (click)="addItem()">
+                        <fa-icon [icon]="['fas', 'desktop']" size="lg"></fa-icon>
+                    </div>
+
+                    <div class="mapToolbarTool" title="{{ t('Add line') }}" (click)="addLine()">
+                        <fa-icon [icon]="['fas', 'pencil-alt']" size="lg"></fa-icon>
+                    </div>
+
+                    <div class="mapToolbarTool" title="{{ t('Add summary status item') }}"
+                         (click)="addSummaryItem()">
+                        <fa-icon [icon]="['fas', 'dot-circle']" size="lg"></fa-icon>
+                    </div>
+
+                    <div class="mapToolbarLine"></div>
+
+                    <div class="mapToolbarTool" title="{{ t('Add gadget') }}" (click)="addGadget()">
+                        <fa-icon [icon]="['fas', 'tachometer-alt']" size="lg"></fa-icon>
+                    </div>
+
+                    <div class="mapToolbarLine"></div>
+
+                    <div class="mapToolbarTool" title="{{ t('Change background image') }}"
+                         (click)="openChangeMapBackgroundModal()">
+                        <fa-icon [icon]="['fas', 'image']" size="lg"></fa-icon>
+                    </div>
+
+                    <div class="mapToolbarLine"></div>
+
+                    <div class="mapToolbarTool" title="{{ t('Add stateless text') }}"
+                         (click)="addText()">
+                        <fa-icon [icon]="['fas', 'font']" size="lg"></fa-icon>
+                    </div>
+
+                    <div class="mapToolbarTool" title="{{ t('Add stateless icon') }}"
+                         (click)="addIcon()">
+                        <fa-icon [icon]="['fas', 'object-ungroup']" size="lg"></fa-icon>
+                    </div>
+                </div>
+                <!-- end mapToolbar -->
+                <!-- start layersBox -->
+                <div id="layersBox" cdkDrag cdkDragBoundary=".map-canvas">
+                    <div id="layersBoxDragger" cdkDragHandle></div>
+                    <div class="layersContainer">
+                        <div class="mapLayer" *ngFor="let value of layers; let key = index"
+                             [ngClass]="{ 'selectedLayer': key == parseInt(defaultLayer) }">
+                            <span class="cursor-pointer"
+                                  (click)="setDefaultLayer(key)">
+                                {{ value }}
+                            </span>
+                            <fa-icon [icon]="['fas', 'eye']" class="pull-right padding-right-5 cursor-pointer"
+                                     [hidden]="!visibleLayers['layer_'+key]" (click)="hideLayer(key)"
+                                     title="{{t('Click to hide layer')}}"></fa-icon>
+                            <fa-icon [icon]="['fas', 'eye-slash']" class="pull-right padding-right-5 cursor-pointer"
+                                     [hidden]="visibleLayers['layer_'+key]" (click)="showLayer(key)"
+                                     title="{{t('Click to show layer')}}"></fa-icon>
+                        </div>
+                    </div>
+                </div>
+                <!-- end layersBox -->
             </oitc-map-canvas>
 
         </c-card-body>
