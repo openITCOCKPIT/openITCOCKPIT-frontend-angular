@@ -18,6 +18,10 @@
         <c-card-header>
             <h5 class="card-title">{{t('Configuration Wizards')}}</h5>
             <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item>
+                    <fa-icon [icon]="['fas', 'filter']" class="text-info"></fa-icon>
+                    {{ t('Filter') }}
+                </c-nav-item>
                 <c-nav-item class="px-1">
                     <c-button-group>
                         <button cButton color="primary" size="xs" [ngClass]="{'btn-primary': filter.Category.linux, 'btn-default': !filter.Category.linux}" (click)="filter.Category.linux=!filter.Category.linux">
