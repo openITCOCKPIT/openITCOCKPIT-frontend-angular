@@ -13,6 +13,18 @@ import { customalertModuleRoutes } from './modules/customalert_module/customaler
 import { checkmkModuleRoutes } from './modules/checkmk_module/checkmk_module.routes';
 import { mapModuleRoutes } from './modules/map_module/map_module.routes';
 import { eventcorrelationModuleRoutes } from './modules/eventcorrelation_module/eventcorrelation_module.routes';
+import { printerModuleRoutes } from './modules/printer_module/printer_module.routes';
+import { vmwaresnapshotModuleRoutes } from './modules/vmwaresnapshot_module/vmwaresnapshot_module.routes';
+import { db2ModuleRoutes } from './modules/db2_module/db2_module.routes';
+import { vmwarehorizonModuleRoutes } from './modules/vmwarehorizon_module/vmwarehorizon_module.routes';
+import { mssqlModuleRoutes } from './modules/mssql_module/mssql_module.routes';
+import { nwcModuleRoutes } from './modules/nwc_module/nwc_module.routes';
+import { vmwareModuleRoutes } from './modules/vmware_module/vmware_module.routes';
+import { hanaModuleRoutes } from './modules/hana_module/hana_module.routes';
+import { hpserverhardwareModuleRoutes } from './modules/hpserverhardware_module/hpserverhardware_module.routes';
+import { oracleModuleRoutes } from './modules/oracle_module/oracle_module.routes';
+import { sapModuleRoutes } from './modules/sap_module/sap_module.routes';
+import { upsModuleRoutes } from './modules/ups_module/ups_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -39,6 +51,17 @@ class LegacyUrlComponent {
 /***    Routes for modules   ***/
 const moduleRoutes: Routes = [
     ...snmpTrapModuleRoutes,
+    ...printerModuleRoutes,
+    ...vmwaresnapshotModuleRoutes,
+    ...db2ModuleRoutes,
+    ...upsModuleRoutes,
+    ...vmwarehorizonModuleRoutes,
+    ...mssqlModuleRoutes,
+    ...nwcModuleRoutes,
+    ...oracleModuleRoutes,
+    ...vmwareModuleRoutes,
+    ...sapModuleRoutes,
+    ...hanaModuleRoutes,
     ...customalertModuleRoutes,
     ...distributeModuleRoutes,
     ...msteamsModuleRoutes,
@@ -47,6 +70,7 @@ const moduleRoutes: Routes = [
     ...slaModuleRoutes,
     ...importModuleRoutes,
     ...checkmkModuleRoutes,
+    ...hpserverhardwareModuleRoutes,
     ...mapModuleRoutes,
     ...eventcorrelationModuleRoutes
 ];
@@ -616,6 +640,21 @@ const coreRoutes: Routes = [{
 }, {
     path: 'statuspages/edit/:id',
     loadComponent: () => import('./pages/statuspages/statuspages-edit/statuspages-edit.component').then(m => m.StatuspagesEditComponent)
+}, {
+    path: 'wizards/assignments',
+    loadComponent: () => import('./pages/wizards/wizards-assignments/wizard-assignments.component').then(m => m.WizardAssignmentsComponent)
+}, {
+    path: 'wizards/edit/:uuid/:title',
+    loadComponent: () => import('./pages/wizards/wizards-edit/wizards-edit.component').then(m => m.WizardsEditComponent)
+}, {
+    path: 'wizards/index',
+    loadComponent: () => import('./pages/wizards/wizards-index/wizards-index.component').then(m => m.WizardsIndexComponent)
+}, {
+    path: 'wizards/wizardHostConfiguration/:typeId/:title/:hostId/:state/:selectedOs',
+    loadComponent: () => import('./pages/wizards/wizards-wizard-host-configuration/wizards-wizard-host-configuration.component').then(m => m.WizardsWizardHostConfigurationComponent)
+}, {
+    path: 'wizards/mysqlserver/:hostId',
+    loadComponent: () => import('./pages/wizards/mysqlserver/mysqlserver.component').then(m => m.MysqlserverComponent)
 }, {
     path: 'ConfigurationFiles/index',
     loadComponent: () => import('./pages/configurationfiles/configuration-files-index/configuration-files-index.component').then(m => m.ConfigurationFilesIndexComponent)
