@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
-import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
+import * as echarts from 'echarts/core';
 import 'echarts/theme/dark.js';
 import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
@@ -14,7 +15,7 @@ import { Sla } from '../../../pages/slas/Slas.interface';
         NgxEchartsDirective
     ],
     providers: [
-        provideEcharts(),
+        provideEchartsCore({echarts}),
     ],
     templateUrl: './sla-hosts-overview-bar-echart.component.html',
     styleUrl: './sla-hosts-overview-bar-echart.component.css',

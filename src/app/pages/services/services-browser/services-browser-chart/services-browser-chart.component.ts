@@ -17,8 +17,9 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import { PopoverGraphService } from '../../../../components/popover-graph/popover-graph.service';
 import { TimezoneObject } from '../../timezone.interface';
-import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import { EChartsOption, VisualMapComponentOption } from 'echarts';
+import * as echarts from 'echarts/core';
 import { BackButtonDirective } from '../../../../directives/back-button.directive';
 import {
     AlertComponent,
@@ -89,7 +90,7 @@ interface ServiceBrowserChartConfig {
     templateUrl: './services-browser-chart.component.html',
     styleUrl: './services-browser-chart.component.css',
     providers: [
-        provideEcharts(),
+        provideEchartsCore({echarts}),
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

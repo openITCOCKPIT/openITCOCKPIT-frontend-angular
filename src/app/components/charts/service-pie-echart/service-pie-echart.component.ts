@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
-import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
+import * as echarts from 'echarts/core';
 import { PieChartMetric } from '../charts.interface';
 import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
@@ -12,7 +13,7 @@ import { TranslocoService } from '@jsverse/transloco';
         NgxEchartsDirective
     ],
     providers: [
-        provideEcharts(),
+        provideEchartsCore({echarts}),
     ],
     templateUrl: './service-pie-echart.component.html',
     styleUrl: './service-pie-echart.component.css',

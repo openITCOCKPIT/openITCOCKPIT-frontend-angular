@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
-import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
+import * as echarts from 'echarts/core';
 import 'echarts/theme/dark.js';
 import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
@@ -13,7 +14,7 @@ import { LayoutService } from '../../../layouts/coreui/layout.service';
         NgxEchartsDirective
     ],
     providers: [
-        provideEcharts(),
+        provideEchartsCore({echarts}),
     ],
     templateUrl: './host-pie-echart.component.html',
     styleUrl: './host-pie-echart.component.css',

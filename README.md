@@ -124,6 +124,22 @@ This document describes how to upgrade the underlying Angular version.
    npm i --save @fortawesome/angular-fontawesome@latest @fullcalendar/angular@latest @ng-select/ng-select@latest @ng-select/ng-option-highlight@latest
     ````
 
+4. Update all dependencies from `package.json`
+
+    ```
+    npm install -g npm-check-updates
+    ncu
+    ncu --upgrade
+    npm install
+    ```
+
+   Angular is very picky when it comes to TypeScript versions, so make sure to keep the currently used TypeScript
+   version.
+
+   ```
+   npm install --save typescript@~5.5.3
+   ```
+
 ---
 
 # FrontendAngular
