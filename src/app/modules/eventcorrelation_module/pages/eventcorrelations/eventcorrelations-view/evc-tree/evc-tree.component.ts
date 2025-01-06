@@ -72,19 +72,23 @@ interface INodeViewModel {
 const CONFIGURATION = {
     [EvcTreeDirection.LEFT_TO_RIGHT]: {
         outputSide: EFConnectableSide.RIGHT,
-        inputSide: EFConnectableSide.LEFT
+        inputSide: EFConnectableSide.LEFT,
+        nodeSep: 10
     },
     [EvcTreeDirection.TOP_TO_BOTTOM]: {
         outputSide: EFConnectableSide.BOTTOM,
-        inputSide: EFConnectableSide.TOP
+        inputSide: EFConnectableSide.TOP,
+        nodeSep: 30
     },
     [EvcTreeDirection.RIGHT_TO_LEFT]: {
         outputSide: EFConnectableSide.LEFT,
-        inputSide: EFConnectableSide.RIGHT
+        inputSide: EFConnectableSide.RIGHT,
+        nodeSep: 10
     },
     [EvcTreeDirection.BOTTOM_TO_TOP]: {
         outputSide: EFConnectableSide.TOP,
-        inputSide: EFConnectableSide.BOTTOM
+        inputSide: EFConnectableSide.BOTTOM,
+        nodeSep: 30
     }
 };
 
@@ -257,7 +261,8 @@ export class EvcTreeComponent implements AfterViewInit {
             // +--------------+
             // |    Node 2    |
             // +--------------+
-            nodesep: 10, // vertical distance between nodes
+            //nodesep: 10, // vertical distance between nodes
+            nodesep: this.configuration.nodeSep, // vertical distance between nodes - dynamic based on direction
 
             // ranksep is the distance between the different layers of the graph
             // --------------------------
