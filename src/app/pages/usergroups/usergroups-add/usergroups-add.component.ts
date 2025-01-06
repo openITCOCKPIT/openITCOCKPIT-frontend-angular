@@ -58,7 +58,6 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 
 @Component({
     selector: 'oitc-usergroups-add',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -66,7 +65,6 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,

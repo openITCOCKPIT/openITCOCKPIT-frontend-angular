@@ -35,7 +35,6 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 
 @Component({
     selector: 'oitc-agentchecks-add',
-    standalone: true,
     imports: [
         FaIconComponent,
         PermissionDirective,

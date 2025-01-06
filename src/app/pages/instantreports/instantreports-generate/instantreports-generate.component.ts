@@ -55,14 +55,12 @@ import { InstantreportViewerComponent } from './instantreport-viewer/instantrepo
 
 @Component({
     selector: 'oitc-instantreports-generate',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormDirective,
         FormLoaderComponent,

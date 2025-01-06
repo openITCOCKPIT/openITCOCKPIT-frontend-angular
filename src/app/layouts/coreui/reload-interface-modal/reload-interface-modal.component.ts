@@ -27,7 +27,6 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-reload-interface-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         ColComponent,

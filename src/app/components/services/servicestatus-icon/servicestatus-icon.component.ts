@@ -8,7 +8,6 @@ import { ServicestatusObject } from '../../../pages/services/services.interface'
 
 @Component({
     selector: 'oitc-servicestatus-icon',
-    standalone: true,
     imports: [NgClass, NgIf, TooltipDirective, FaIconComponent],
     templateUrl: './servicestatus-icon.component.html',
     styleUrl: './servicestatus-icon.component.css',

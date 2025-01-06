@@ -56,8 +56,7 @@ import { MessagesOfTheDayService } from '../messagesotd.service';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 
 @Component({
-  selector: 'oitc-messagesotd-index',
-  standalone: true,
+    selector: 'oitc-messagesotd-index',
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -97,10 +96,10 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         XsButtonDirective,
         RouterLink
     ],
-  templateUrl: './messagesotd-index.component.html',
-  styleUrl: './messagesotd-index.component.css',
+    templateUrl: './messagesotd-index.component.html',
+    styleUrl: './messagesotd-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: MessagesOfTheDayService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: MessagesOfTheDayService } // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
     ]
 })
 export class MessagesotdIndexComponent implements IndexPage, OnInit, OnDestroy {

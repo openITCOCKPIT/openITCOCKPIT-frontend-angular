@@ -57,7 +57,6 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-agentconnector-wizard',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,

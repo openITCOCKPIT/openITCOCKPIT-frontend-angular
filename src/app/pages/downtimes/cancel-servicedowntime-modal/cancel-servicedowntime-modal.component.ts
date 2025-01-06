@@ -41,7 +41,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-cancel-servicedowntime-modal',
-    standalone: true,
     imports: [
         ModalComponent,
         ModalHeaderComponent,
@@ -67,7 +66,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
     templateUrl: './cancel-servicedowntime-modal.component.html',
     styleUrl: './cancel-servicedowntime-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
-
 })
 export class CancelServicedowntimeModalComponent implements OnInit, OnDestroy {
 

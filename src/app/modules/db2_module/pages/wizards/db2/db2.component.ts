@@ -27,7 +27,6 @@ import { Db2WizardService } from './db2-wizard.service';
 
 @Component({
     selector: 'oitc-db2',
-    standalone: true,
     imports: [
         AccordionButtonDirective,
         AccordionComponent,

@@ -10,7 +10,6 @@ import { Sla } from '../../../pages/slas/Slas.interface';
 
 @Component({
     selector: 'oitc-sla-hosts-overview-bar-echart',
-    standalone: true,
     imports: [
         NgxEchartsDirective
     ],

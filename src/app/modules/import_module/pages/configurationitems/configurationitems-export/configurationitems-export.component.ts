@@ -44,7 +44,6 @@ import { DateTime } from 'luxon';
 
 @Component({
     selector: 'oitc-configurationitems-export',
-    standalone: true,
     imports: [
         FaIconComponent,
         PermissionDirective,

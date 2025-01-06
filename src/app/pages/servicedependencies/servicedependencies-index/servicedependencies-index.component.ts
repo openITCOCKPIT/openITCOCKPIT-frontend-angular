@@ -61,13 +61,11 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-servicedependencies-index',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         NavComponent,
         NavItemComponent,
@@ -111,7 +109,7 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './servicedependencies-index.component.html',
     styleUrl: './servicedependencies-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicedependenciesService} // Inject the ServicedependenciesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicedependenciesService } // Inject the ServicedependenciesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

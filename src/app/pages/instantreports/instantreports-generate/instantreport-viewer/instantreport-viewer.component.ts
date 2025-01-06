@@ -39,7 +39,6 @@ import {
 
 @Component({
     selector: 'oitc-instantreport-viewer',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,

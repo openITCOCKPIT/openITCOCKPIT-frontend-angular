@@ -32,7 +32,6 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-servicenow-host-browser-tab',
-    standalone: true,
     imports: [
         CardComponent,
         CardHeaderComponent,

@@ -52,12 +52,10 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-instantreports-add',
-    standalone: true,
     imports: [
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

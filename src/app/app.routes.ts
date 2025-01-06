@@ -28,7 +28,6 @@ import { upsModuleRoutes } from './modules/ups_module/ups_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
-    standalone: true,
     template: `If you can read this, something has to be fixed ;)`,
     imports: [RouterModule]
 })

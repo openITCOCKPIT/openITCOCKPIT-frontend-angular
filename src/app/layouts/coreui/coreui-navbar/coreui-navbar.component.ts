@@ -26,7 +26,6 @@ import { SystemnameService } from '../../../services/systemname.service';
 
 @Component({
     selector: 'oitc-coreui-navbar',
-    standalone: true,
     imports: [
         RouterLink,
         JsonPipe,

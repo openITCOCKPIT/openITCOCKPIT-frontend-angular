@@ -26,9 +26,7 @@ import { MetricsInfoResponse } from '../metrics.interface';
 
 @Component({
     selector: 'oitc-metrics-info',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

@@ -41,9 +41,7 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
 
 @Component({
     selector: 'oitc-settings-edit',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

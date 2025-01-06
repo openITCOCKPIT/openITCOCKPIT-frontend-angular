@@ -62,7 +62,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 
 @Component({
     selector: 'oitc-agentconnector-push-satellite',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -111,7 +110,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     templateUrl: './agentconnector-push-satellite.component.html',
     styleUrl: './agentconnector-push-satellite.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: AgentconnectorPushSatelliteService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: AgentconnectorPushSatelliteService } // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

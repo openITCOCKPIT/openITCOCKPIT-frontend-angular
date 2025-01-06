@@ -58,7 +58,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
 
 @Component({
     selector: 'oitc-mkagents-index',
-    standalone: true,
     imports: [
         TranslocoDirective,
         RouterLink,
@@ -103,7 +102,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
     templateUrl: './mkagents-index.component.html',
     styleUrl: './mkagents-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: MkagentsService} // Inject the CommandsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: MkagentsService } // Inject the CommandsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

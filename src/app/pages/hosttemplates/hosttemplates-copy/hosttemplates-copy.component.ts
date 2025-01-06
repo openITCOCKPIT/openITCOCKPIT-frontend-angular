@@ -34,7 +34,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosttemplates-copy',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -42,7 +41,6 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,

@@ -52,7 +52,6 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-messagesotd-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         BbCodeEditorComponent,

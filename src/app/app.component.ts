@@ -30,7 +30,6 @@ import { MessagesOfTheDayService } from './pages/messagesotd/messagesotd.service
 
 @Component({
     selector: 'oitc-root',
-    standalone: true,
     imports: [
         RouterOutlet,
         FontAwesomeModule,

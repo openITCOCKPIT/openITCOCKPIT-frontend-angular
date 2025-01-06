@@ -29,6 +29,7 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { FormsModule } from '@angular/forms';
 
 /**
  * This component will just loop through all configuration fields and will create an input according to the field type.
@@ -39,7 +40,6 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
  */
 @Component({
     selector: 'oitc-dynamic-configuration-file',
-    standalone: true,
     imports: [
         FormControlDirective,
         FormErrorDirective,
@@ -52,7 +52,8 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         FormCheckInputDirective,
         FormCheckLabelDirective,
         PermissionDirective,
-        TrueFalseDirective
+        TrueFalseDirective,
+        FormsModule
     ],
     templateUrl: './dynamic-configuration-file.component.html',
     styleUrl: './dynamic-configuration-file.component.css',

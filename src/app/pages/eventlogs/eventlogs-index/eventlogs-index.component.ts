@@ -47,7 +47,6 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-eventlogs-index',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -55,7 +54,6 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         FaIconComponent,
         FormControlDirective,

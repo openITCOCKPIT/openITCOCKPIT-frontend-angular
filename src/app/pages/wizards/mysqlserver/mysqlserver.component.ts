@@ -36,7 +36,6 @@ import { WizardsAbstractComponent } from '../wizards-abstract/wizards-abstract.c
 
 @Component({
     selector: 'oitc-mysqlserver',
-    standalone: true,
     imports: [
         FaIconComponent,
         TranslocoDirective,

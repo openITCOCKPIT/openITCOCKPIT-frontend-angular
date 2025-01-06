@@ -67,9 +67,7 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-hostgroups-index',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         DeleteAllModalComponent,
         FaIconComponent,
@@ -120,7 +118,7 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './hostgroups-index.component.html',
     styleUrl: './hostgroups-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostgroupsService} // Inject the HostgroupsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: HostgroupsService } // Inject the HostgroupsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -22,7 +22,6 @@ import { DependencyTreeComponent } from '../../../dependency-tree/dependency-tre
 
 @Component({
     selector: 'oitc-idoit-overview',
-    standalone: true,
     imports: [
         TranslocoDirective,
         ColComponent,

@@ -58,7 +58,6 @@ import { HostSummaryStatusmapComponent } from './host-summary-statusmap/host-sum
 
 @Component({
     selector: 'oitc-statusmaps-index',
-    standalone: true,
     imports: [
         BackButtonDirective,
         BlockLoaderComponent,
@@ -67,7 +66,6 @@ import { HostSummaryStatusmapComponent } from './host-summary-statusmap/host-sum
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-
         DecimalPipe,
         FaIconComponent,
         InputGroupComponent,

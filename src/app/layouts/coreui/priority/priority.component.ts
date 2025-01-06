@@ -4,7 +4,6 @@ import { NgClass, NgForOf } from '@angular/common';
 
 @Component({
     selector: 'oitc-priority',
-    standalone: true,
     imports: [
         FaIconComponent,
         NgClass,

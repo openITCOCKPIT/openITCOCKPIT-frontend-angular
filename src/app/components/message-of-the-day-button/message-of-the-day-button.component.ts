@@ -53,7 +53,6 @@ type NewBookmark = {
 
 @Component({
     selector: 'oitc-message-of-the-day-button',
-    standalone: true,
     imports: [
         TranslocoDirective,
         ModalComponent,

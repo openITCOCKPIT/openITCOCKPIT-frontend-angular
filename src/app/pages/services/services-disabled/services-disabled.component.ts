@@ -72,7 +72,6 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
 
 @Component({
     selector: 'oitc-services-disabled',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -84,7 +83,6 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DisableModalComponent,
@@ -123,8 +121,8 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
     templateUrl: './services-disabled.component.html',
     styleUrl: './services-disabled.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService}, // Inject the ServicesService into the DeleteAllModalComponent
-        {provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService},
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService }, // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService },
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

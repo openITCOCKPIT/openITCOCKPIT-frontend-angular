@@ -65,13 +65,11 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-hosttemplates-index',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         NavComponent,
         NavItemComponent,
@@ -119,7 +117,7 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './hosttemplates-index.component.html',
     styleUrl: './hosttemplates-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: HosttemplatesService} // Inject the HosttemplatesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: HosttemplatesService } // Inject the HosttemplatesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

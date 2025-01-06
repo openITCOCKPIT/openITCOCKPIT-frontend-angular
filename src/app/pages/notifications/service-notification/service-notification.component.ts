@@ -63,13 +63,11 @@ import {
 
 @Component({
     selector: 'oitc-service-notification',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         NavComponent,
         NavItemComponent,

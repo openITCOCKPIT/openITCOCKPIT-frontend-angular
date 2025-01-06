@@ -45,10 +45,8 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-add-containerdowntime',
-    standalone: true,
     imports: [
         CardComponent,
-
         FaIconComponent,
         FormDirective,
         FormsModule,

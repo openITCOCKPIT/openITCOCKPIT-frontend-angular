@@ -50,13 +50,12 @@ import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-sel
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
     selector: 'oitc-exports-index',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         QueryHandlerCheckerComponent,
@@ -90,7 +89,8 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
         DropdownToggleDirective,
         SelectAllComponent,
         UiBlockerComponent,
-        BadgeComponent
+        BadgeComponent,
+        FormsModule
     ],
     templateUrl: './exports-index.component.html',
     styleUrl: './exports-index.component.css',

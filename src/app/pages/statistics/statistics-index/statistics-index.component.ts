@@ -35,9 +35,7 @@ import { LayoutService } from '../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-statistics-index',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         FaIconComponent,
         PermissionDirective,

@@ -39,7 +39,6 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
     selector: 'oitc-actions-button',
-    standalone: true,
     imports: [
         ButtonGroupComponent,
         DropdownComponent,

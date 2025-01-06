@@ -40,7 +40,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-hosts-add-to-hostgroup-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         XsButtonDirective,

@@ -6,7 +6,6 @@ import { TableDirective } from '@coreui/angular';
 
 @Component({
     selector: 'oitc-table-loader',
-    standalone: true,
     imports: [
         TableModule,
         SkeletonModule,

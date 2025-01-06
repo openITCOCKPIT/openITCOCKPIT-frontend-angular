@@ -39,6 +39,9 @@ import { DropdownService } from '@coreui/angular';
 import { loaderInterceptor } from './interceptors/loader.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideToastr } from 'ngx-toastr';
+import { providePrimeNG } from 'primeng/config';
+
+import Lara from '@primeng/themes/lara';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -73,7 +76,18 @@ export const appConfig: ApplicationConfig = {
                 prodMode: !isDevMode(),
             },
             loader: TranslocoHttpLoader
-        }), provideAnimationsAsync(),
-        DropdownService
+        }),
+        provideAnimationsAsync(),
+        DropdownService,
+        providePrimeNG({
+            theme: {
+                preset: Lara,
+                options: {
+                    prefix: 'p',
+                    darkModeSelector: 'system',
+                    cssLayer: false
+                }
+            }
+        })
     ]
 };

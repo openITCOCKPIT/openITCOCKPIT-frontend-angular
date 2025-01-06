@@ -60,7 +60,6 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
 
 @Component({
     selector: 'oitc-agentconnector-pull',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -107,7 +106,7 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
     templateUrl: './agentconnector-pull.component.html',
     styleUrl: './agentconnector-pull.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: AgentconnectorPullService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: AgentconnectorPullService } // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

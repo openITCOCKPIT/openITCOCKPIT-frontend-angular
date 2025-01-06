@@ -48,10 +48,10 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { AgentHttpClientErrors } from '../../../../../pages/agentconnector/agentconnector.enums';
 import { ServicetemplateTypesEnum } from '../../../../../pages/servicetemplates/servicetemplate-types.enum';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-scans-index',
-    standalone: true,
     imports: [
         RouterLink,
         FaIconComponent,
@@ -83,7 +83,8 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
         ProgressBarModule,
         TableDirective,
         NgForOf,
-        MultiSelectComponent
+        MultiSelectComponent,
+        FormsModule
     ],
     templateUrl: './scans-index.component.html',
     styleUrl: './scans-index.component.css',

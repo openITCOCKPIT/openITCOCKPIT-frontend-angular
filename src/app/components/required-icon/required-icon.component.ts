@@ -3,7 +3,6 @@ import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 
 @Component({
     selector: 'oitc-required-icon',
-    standalone: true,
     imports: [
         FaIconComponent
     ],

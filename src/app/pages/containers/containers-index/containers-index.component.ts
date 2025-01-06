@@ -36,7 +36,6 @@ import { EditContainerModalComponent } from './edit-container-modal/edit-contain
 
 @Component({
     selector: 'oitc-containers-index',
-    standalone: true,
     imports: [
         CardComponent,
         CardHeaderComponent,
@@ -69,7 +68,7 @@ import { EditContainerModalComponent } from './edit-container-modal/edit-contain
     templateUrl: './containers-index.component.html',
     styleUrl: './containers-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ContainersService} // Inject the ContainersService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ContainersService } // Inject the ContainersService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

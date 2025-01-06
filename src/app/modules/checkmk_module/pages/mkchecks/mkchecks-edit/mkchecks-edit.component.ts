@@ -33,10 +33,10 @@ import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/lab
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-mkchecks-edit',
-    standalone: true,
     imports: [
         TranslocoDirective,
         RouterLink,
@@ -62,7 +62,8 @@ import { NgIf } from '@angular/common';
         FormCheckInputDirective,
         FormDirective,
         FormLoaderComponent,
-        NgIf
+        NgIf,
+        FormsModule
     ],
     templateUrl: './mkchecks-edit.component.html',
     styleUrl: './mkchecks-edit.component.css',

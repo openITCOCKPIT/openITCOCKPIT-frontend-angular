@@ -67,7 +67,6 @@ import {intersection} from 'lodash';
 
 @Component({
     selector: 'oitc-statuspages-edit',
-    standalone: true,
     imports: [
         TranslocoDirective,
         FaIconComponent,

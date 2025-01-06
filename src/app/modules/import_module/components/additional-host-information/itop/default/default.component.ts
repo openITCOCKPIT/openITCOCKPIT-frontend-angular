@@ -13,7 +13,6 @@ import {
 
 @Component({
     selector: 'oitc-default',
-    standalone: true,
     imports: [
         TranslocoDirective,
         TableDirective,

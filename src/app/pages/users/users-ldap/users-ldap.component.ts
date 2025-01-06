@@ -67,7 +67,6 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 
 @Component({
     selector: 'oitc-users-ldap',
-    standalone: true,
     imports: [
         FaIconComponent,
         PermissionDirective,

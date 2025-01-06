@@ -72,7 +72,6 @@ type NewBookmark = {
 
 @Component({
     selector: 'oitc-filter-bookmark-save-modal',
-    standalone: true,
     imports: [
         TranslocoDirective,
         ModalComponent,

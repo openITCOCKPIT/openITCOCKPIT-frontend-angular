@@ -59,7 +59,6 @@ import {
 
 @Component({
     selector: 'oitc-configuration-files-edit',
-    standalone: true,
     imports: [
         CardComponent,
         CardHeaderComponent,

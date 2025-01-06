@@ -38,7 +38,6 @@ import { WizardsIndex } from '../wizards.interface';
 
 @Component({
     selector: 'oitc-wizard-assignments',
-    standalone: true,
     imports: [
         RouterLink,
         TranslocoDirective,

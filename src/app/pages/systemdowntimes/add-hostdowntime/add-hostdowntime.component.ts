@@ -44,10 +44,8 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-add-hostdowntime',
-    standalone: true,
     imports: [
         CardComponent,
-
         FaIconComponent,
         FormDirective,
         FormsModule,

@@ -8,7 +8,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-currentstatereport-perfdata-gauges',
-    standalone: true,
     imports: [
         CurrentstatereportPerfdataGaugeComponent,
         NgIf,

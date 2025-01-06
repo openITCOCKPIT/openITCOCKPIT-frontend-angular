@@ -4,7 +4,6 @@ import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
     selector: 'oitc-browser-menu-loader',
-    standalone: true,
     imports: [
         RowComponent,
         ColComponent,

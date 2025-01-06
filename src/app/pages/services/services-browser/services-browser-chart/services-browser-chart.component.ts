@@ -60,7 +60,6 @@ interface ServiceBrowserChartConfig {
 
 @Component({
     selector: 'oitc-services-browser-chart',
-    standalone: true,
     imports: [
         NgxEchartsDirective,
         BackButtonDirective,

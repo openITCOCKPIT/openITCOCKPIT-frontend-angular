@@ -5,7 +5,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-online-offline',
-    standalone: true,
     imports: [
         NgIf,
         BadgeComponent,

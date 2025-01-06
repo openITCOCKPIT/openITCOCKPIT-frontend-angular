@@ -52,7 +52,6 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-columns-config-import-modal',
-    standalone: true,
     imports: [
         TranslocoDirective,
         ModalComponent,

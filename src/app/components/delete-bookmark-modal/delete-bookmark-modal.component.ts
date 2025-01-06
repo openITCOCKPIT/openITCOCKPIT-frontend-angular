@@ -34,7 +34,6 @@ import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbut
 
 @Component({
     selector: 'oitc-delete-bookmark-modal',
-    standalone: true,
     imports: [
         ModalComponent,
         ModalHeaderComponent,

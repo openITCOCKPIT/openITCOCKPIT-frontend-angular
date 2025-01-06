@@ -61,13 +61,11 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-serviceescalations-index',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         NavComponent,
         NavItemComponent,
@@ -111,7 +109,7 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './serviceescalations-index.component.html',
     styleUrl: './serviceescalations-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServiceescalationsService} // Inject the ServiceescalationsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServiceescalationsService } // Inject the ServiceescalationsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

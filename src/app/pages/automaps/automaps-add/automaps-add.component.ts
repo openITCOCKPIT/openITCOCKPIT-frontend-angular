@@ -45,9 +45,7 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-automaps-add',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

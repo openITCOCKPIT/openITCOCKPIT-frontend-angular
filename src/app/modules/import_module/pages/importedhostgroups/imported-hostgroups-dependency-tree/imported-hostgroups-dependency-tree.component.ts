@@ -32,9 +32,7 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 
 @Component({
     selector: 'oitc-imported-hostgroups-dependency-tree',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         CardComponent,
         CardHeaderComponent,

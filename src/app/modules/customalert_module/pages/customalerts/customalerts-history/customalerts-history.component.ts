@@ -22,7 +22,6 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 
 @Component({
     selector: 'oitc-customalerts-history',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,

@@ -44,7 +44,6 @@ import { ClusterOptions } from 'vis-network/declarations/network/Network';
 
 @Component({
     selector: 'oitc-containers-map',
-    standalone: true,
     imports: [
         BackButtonDirective,
         BlockLoaderComponent,
@@ -53,7 +52,6 @@ import { ClusterOptions } from 'vis-network/declarations/network/Network';
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-
         FaIconComponent,
         InputGroupComponent,
         InputGroupTextDirective,

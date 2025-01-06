@@ -32,7 +32,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosts-copy',
-    standalone: true,
     imports: [
         AlertComponent,
         BackButtonDirective,
@@ -41,7 +40,6 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,

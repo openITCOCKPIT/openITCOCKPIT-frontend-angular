@@ -59,9 +59,7 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-calendars-index',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -105,7 +103,7 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './calendars-index.component.html',
     styleUrl: './calendars-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: CalendarsService} // Inject the CalendarsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: CalendarsService } // Inject the CalendarsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

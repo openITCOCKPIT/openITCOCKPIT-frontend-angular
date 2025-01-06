@@ -57,7 +57,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-contacts-add',
-    standalone: true,
     imports: [
         AlertComponent,
         AlertHeadingDirective,
@@ -68,7 +67,6 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

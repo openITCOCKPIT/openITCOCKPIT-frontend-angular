@@ -70,7 +70,6 @@ import { ExternalSystemsService } from '../../externalsystems/external-systems.s
 
 @Component({
     selector: 'oitc-imported-hostgroups-index',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -81,7 +80,6 @@ import { ExternalSystemsService } from '../../externalsystems/external-systems.s
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -127,7 +125,7 @@ import { ExternalSystemsService } from '../../externalsystems/external-systems.s
         ImportITopDataComponent
     ],
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostgroupsService} // Inject the ImportedhostgroupsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostgroupsService } // Inject the ImportedhostgroupsService into the DeleteAllModalComponent
     ],
     templateUrl: './imported-hostgroups-index.component.html',
     styleUrl: './imported-hostgroups-index.component.css',

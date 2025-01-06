@@ -21,10 +21,10 @@ import { NgClass, NgForOf } from '@angular/common';
 import { FormErrorDirective } from '../form-error.directive';
 import { PaginatorModule } from 'primeng/paginator';
 import { HumanTimeComponent } from './human-time/human-time.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-interval-input',
-    standalone: true,
     imports: [
         TranslocoPipe,
         TranslocoDirective,
@@ -38,7 +38,8 @@ import { HumanTimeComponent } from './human-time/human-time.component';
         PaginatorModule,
         HumanTimeComponent,
         NgForOf,
-        InputGroupComponent
+        InputGroupComponent,
+        FormsModule
     ],
     templateUrl: './interval-input.component.html',
     styleUrl: './interval-input.component.css',

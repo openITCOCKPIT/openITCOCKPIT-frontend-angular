@@ -34,7 +34,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-tenants-add',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -42,7 +41,6 @@ import { RouterLink } from '@angular/router';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,

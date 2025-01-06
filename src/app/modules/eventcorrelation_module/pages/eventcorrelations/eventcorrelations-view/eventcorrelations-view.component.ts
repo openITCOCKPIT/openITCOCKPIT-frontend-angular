@@ -37,7 +37,6 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
 
 @Component({
     selector: 'oitc-eventcorrelations-view',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,

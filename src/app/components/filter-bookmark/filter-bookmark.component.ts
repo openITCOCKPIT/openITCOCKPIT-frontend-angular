@@ -88,7 +88,6 @@ import {
 
 @Component({
     selector: 'oitc-filter-bookmark',
-    standalone: true,
     imports: [
         TranslocoDirective,
         FaIconComponent,
@@ -124,7 +123,7 @@ import {
     templateUrl: './filter-bookmark.component.html',
     styleUrl: './filter-bookmark.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: BookmarksService}
+        { provide: DELETE_SERVICE_TOKEN, useClass: BookmarksService }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

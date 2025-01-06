@@ -64,10 +64,8 @@ import { SystemdowntimesService } from '../../../../../pages/systemdowntimes/sys
 
 @Component({
     selector: 'oitc-satellite-downtime',
-    standalone: true,
     imports: [
         CardComponent,
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -116,7 +114,7 @@ import { SystemdowntimesService } from '../../../../../pages/systemdowntimes/sys
     templateUrl: './satellites-downtime.component.html',
     styleUrl: './satellites-downtime.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService}
+        { provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

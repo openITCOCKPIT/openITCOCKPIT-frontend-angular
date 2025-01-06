@@ -56,13 +56,11 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
 
 @Component({
     selector: 'oitc-slas-generate',
-    standalone: true,
     imports: [
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,

@@ -10,7 +10,6 @@ import { IconDirective } from '@coreui/icons-angular';
 
 @Component({
     selector: 'oitc-change-language',
-    standalone: true,
     imports: [
         DropdownComponent,
         DropdownItemDirective,

@@ -38,10 +38,10 @@ import {
     CodeMirrorContainerComponent
 } from '../../../../../components/code-mirror-container/code-mirror-container.component';
 import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enum';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-mkagents-add',
-    standalone: true,
     imports: [
         RouterLink,
         FaIconComponent,
@@ -69,7 +69,8 @@ import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enu
         CodeMirrorContainerComponent,
         AlertComponent,
         AlertHeadingDirective,
-        FormDirective
+        FormDirective,
+        FormsModule
     ],
     templateUrl: './mkagents-add.component.html',
     styleUrl: './mkagents-add.component.css',

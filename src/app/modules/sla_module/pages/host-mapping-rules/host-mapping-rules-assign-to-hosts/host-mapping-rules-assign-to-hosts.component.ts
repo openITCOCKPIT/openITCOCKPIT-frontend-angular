@@ -73,13 +73,11 @@ import {
 
 @Component({
     selector: 'oitc-host-mapping-rules-assign-to-hosts',
-    standalone: true,
     imports: [
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,

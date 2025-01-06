@@ -30,7 +30,6 @@ import { UsersService } from '../../pages/users/users.service';
 
 @Component({
     selector: 'oitc-reset-password-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         ColComponent,

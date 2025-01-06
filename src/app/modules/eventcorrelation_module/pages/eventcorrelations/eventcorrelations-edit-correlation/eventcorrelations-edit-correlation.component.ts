@@ -70,10 +70,10 @@ import { SelectItem } from 'primeng/api/selectitem';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EvcTreeValidationErrors } from '../eventcorrelations-view/evc-tree/evc-tree.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-eventcorrelations-edit-correlation',
-    standalone: true,
     imports: [
         BackButtonDirective,
         BlockLoaderComponent,
@@ -116,7 +116,8 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         LabelLinkComponent,
         SelectComponent,
         MultiSelectOptgroupComponent,
-        BadgeComponent
+        BadgeComponent,
+        FormsModule
     ],
     templateUrl: './eventcorrelations-edit-correlation.component.html',
     styleUrl: './eventcorrelations-edit-correlation.component.css',

@@ -39,9 +39,7 @@ import {
 
 @Component({
     selector: 'oitc-documentations-view',
-    standalone: true,
     imports: [
-
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,

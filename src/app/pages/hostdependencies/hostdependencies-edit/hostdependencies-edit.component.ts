@@ -53,9 +53,7 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
 
 @Component({
     selector: 'oitc-hostdependencies-edit',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

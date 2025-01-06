@@ -60,7 +60,6 @@ import { EventcorrelationsService } from '../eventcorrelations.service';
 
 @Component({
     selector: 'oitc-eventcorrelations-add',
-    standalone: true,
     imports: [
         AlertComponent,
         BackButtonDirective,
@@ -70,7 +69,6 @@ import { EventcorrelationsService } from '../eventcorrelations.service';
         CardHeaderComponent,
         CardTitleDirective,
         CheckAttemptsInputComponent,
-
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

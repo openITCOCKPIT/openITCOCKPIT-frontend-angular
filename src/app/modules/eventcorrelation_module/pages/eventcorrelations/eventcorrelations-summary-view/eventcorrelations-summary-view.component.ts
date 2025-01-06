@@ -27,7 +27,6 @@ import { EvcTableComponent } from '../eventcorrelations-view/evc-table/evc-table
 
 @Component({
     selector: 'oitc-eventcorrelations-summary-view',
-    standalone: true,
     imports: [
         BackButtonDirective,
         BlockLoaderComponent,

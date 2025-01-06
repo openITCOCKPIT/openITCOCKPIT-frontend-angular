@@ -136,7 +136,6 @@ import {
 
 @Component({
     selector: 'oitc-services-browser',
-    standalone: true,
     imports: [
         BrowserLoaderComponent,
         BorderDirective,
@@ -145,7 +144,6 @@ import {
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         HostsBrowserMenuComponent,
         NgIf,
         QueryHandlerCheckerComponent,
@@ -210,8 +208,8 @@ import {
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService}, // Inject the DowntimesService into the CancelAllModalComponent
-        {provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService} // Inject the DowntimesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService }, // Inject the DowntimesService into the CancelAllModalComponent
+        { provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService } // Inject the DowntimesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

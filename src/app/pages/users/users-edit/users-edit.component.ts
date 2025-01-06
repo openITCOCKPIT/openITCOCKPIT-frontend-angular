@@ -71,7 +71,6 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
 
 @Component({
     selector: 'oitc-users-edit',
-    standalone: true,
     imports: [
         AlertComponent,
         AlertHeadingDirective,

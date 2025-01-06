@@ -50,7 +50,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'oitc-configurationitems-import',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,

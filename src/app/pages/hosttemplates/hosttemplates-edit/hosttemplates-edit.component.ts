@@ -57,9 +57,7 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosttemplates-edit',
-    standalone: true,
     imports: [
-
         BackButtonDirective,
         CardBodyComponent,
         CardComponent,

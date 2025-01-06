@@ -68,12 +68,10 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
 
 @Component({
     selector: 'oitc-instantreports-index',
-    standalone: true,
     imports: [
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -117,7 +115,7 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
     templateUrl: './instantreports-index.component.html',
     styleUrl: './instantreports-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: InstantreportsService} // Inject the CommandsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: InstantreportsService } // Inject the CommandsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

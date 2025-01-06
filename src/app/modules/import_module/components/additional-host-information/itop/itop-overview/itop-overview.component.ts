@@ -25,7 +25,6 @@ import { DependencyTreeComponent } from '../../../dependency-tree/dependency-tre
 
 @Component({
     selector: 'oitc-itop-overview',
-    standalone: true,
     imports: [
         ColComponent,
         OnlineOfflineComponent,

@@ -42,13 +42,11 @@ import { GenericKeyValue } from '../../../generic.interfaces';
 
 @Component({
     selector: 'oitc-containers-show-details',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

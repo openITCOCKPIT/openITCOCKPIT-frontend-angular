@@ -58,7 +58,6 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
 
 @Component({
     selector: 'oitc-customalert-rules-index',
-    standalone: true,
     imports: [
         CardComponent,
         CardHeaderComponent,
@@ -106,7 +105,7 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
     templateUrl: './customalert-rules-index.component.html',
     styleUrl: './customalert-rules-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: CustomalertRulesService}
+        { provide: DELETE_SERVICE_TOKEN, useClass: CustomalertRulesService }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

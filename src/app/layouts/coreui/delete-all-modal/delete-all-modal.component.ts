@@ -33,7 +33,6 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-delete-all-modal',
-    standalone: true,
     imports: [
         ModalComponent,
         ModalHeaderComponent,

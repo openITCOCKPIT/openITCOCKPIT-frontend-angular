@@ -5,7 +5,6 @@ import { ColComponent, RowComponent } from '@coreui/angular';
 
 @Component({
     selector: 'oitc-host-timeline-legend',
-    standalone: true,
     imports: [
         TranslocoDirective,
         FaIconComponent,

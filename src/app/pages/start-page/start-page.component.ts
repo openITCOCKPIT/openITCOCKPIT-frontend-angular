@@ -74,9 +74,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     selector: 'app-start-page',
-    standalone: true,
     imports: [
-
         RouterModule,
         AsyncPipe,
         JsonPipe,

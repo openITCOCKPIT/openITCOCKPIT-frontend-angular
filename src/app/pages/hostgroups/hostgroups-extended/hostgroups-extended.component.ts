@@ -127,7 +127,6 @@ import { ServicesService } from '../../services/services.service';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -135,7 +134,6 @@ import { ServicesService } from '../../services/services.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormDirective,
@@ -200,8 +198,8 @@ import { ServicesService } from '../../services/services.service';
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService}
+        { provide: DISABLE_SERVICE_TOKEN, useClass: HostsService },
+        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

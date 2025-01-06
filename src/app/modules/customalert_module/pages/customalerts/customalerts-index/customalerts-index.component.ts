@@ -92,7 +92,6 @@ import { IntervalPickerComponent } from '../../../../../components/interval-pick
 
 @Component({
     selector: 'oitc-customalerts-index',
-    standalone: true,
     imports: [
         TranslocoDirective,
         FaIconComponent,

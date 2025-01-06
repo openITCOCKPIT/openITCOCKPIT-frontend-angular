@@ -9,7 +9,6 @@ import { CustomClassInformationComponent } from './custom-class-information/cust
 
 @Component({
     selector: 'oitc-custom-class',
-    standalone: true,
     imports: [
         FaIconComponent,
         FaLayersComponent,

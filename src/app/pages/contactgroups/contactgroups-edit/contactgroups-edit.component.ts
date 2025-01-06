@@ -47,7 +47,6 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 
 @Component({
     selector: 'oitc-contactgroups-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         BadgeComponent,
@@ -56,7 +55,6 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

@@ -46,7 +46,6 @@ import { Sort } from '@angular/material/sort';
 
 @Component({
     selector: 'oitc-changelogs-index',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -55,7 +54,6 @@ import { Sort } from '@angular/material/sort';
         ChangelogsEntryComponent,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,

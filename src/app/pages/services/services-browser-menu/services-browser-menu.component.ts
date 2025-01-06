@@ -51,7 +51,6 @@ export interface ServiceBrowserMenuConfig {
 
 @Component({
     selector: 'oitc-services-browser-menu',
-    standalone: true,
     imports: [
         BadgeComponent,
         BrowserMenuLoaderComponent,

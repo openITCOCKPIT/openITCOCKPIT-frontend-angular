@@ -39,7 +39,6 @@ export type ChartOptions = {
 
 @Component({
     selector: 'oitc-host-pie-chart',
-    standalone: true,
     imports: [
         NgIf,
         NgApexchartsModule

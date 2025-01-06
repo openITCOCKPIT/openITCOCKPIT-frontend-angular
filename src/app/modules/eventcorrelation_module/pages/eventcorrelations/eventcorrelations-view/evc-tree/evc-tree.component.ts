@@ -100,7 +100,6 @@ const OPERATOR_WIDTH = 100;
  ******************************/
 @Component({
     selector: 'oitc-evc-tree',
-    standalone: true,
     imports: [
         FFlowModule,
         NgClass,

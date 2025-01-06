@@ -36,13 +36,11 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-system-health-users-add',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         NavComponent,
         NavItemComponent,

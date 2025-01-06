@@ -68,7 +68,6 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 
 @Component({
     selector: 'oitc-users-add',
-    standalone: true,
     imports: [
         FaIconComponent,
         PermissionDirective,

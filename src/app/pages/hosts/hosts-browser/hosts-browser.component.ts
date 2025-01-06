@@ -119,9 +119,7 @@ import {
 
 @Component({
     selector: 'oitc-hosts-browser',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         QueryHandlerCheckerComponent,
         FaIconComponent,
@@ -185,8 +183,8 @@ import {
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService}, // Inject the DowntimesService into the CancelAllModalComponent
-        {provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService} // Inject the DowntimesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService }, // Inject the DowntimesService into the CancelAllModalComponent
+        { provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService } // Inject the DowntimesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -31,7 +31,6 @@ import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-printer',
-    standalone: true,
     imports: [
         FaIconComponent,
         TranslocoDirective,

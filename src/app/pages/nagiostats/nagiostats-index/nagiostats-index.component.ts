@@ -25,12 +25,10 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 
 @Component({
     selector: 'oitc-nagiostats-index',
-    standalone: true,
     imports: [
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

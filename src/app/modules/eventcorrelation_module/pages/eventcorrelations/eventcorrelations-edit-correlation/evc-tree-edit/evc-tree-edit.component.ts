@@ -116,7 +116,6 @@ const GROUP_HEIGHT = 50;
  ******************************/
 @Component({
     selector: 'oitc-evc-tree-edit',
-    standalone: true,
     imports: [
         FFlowModule,
         NgClass,

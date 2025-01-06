@@ -41,7 +41,6 @@ import { getDefaultImportChangelogsEntityParams, ImportChangelogsEntityParams } 
 
 @Component({
     selector: 'oitc-import-changelogs-entity',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -51,7 +50,6 @@ import { getDefaultImportChangelogsEntityParams, ImportChangelogsEntityParams } 
         ChangelogsEntryComponent,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,

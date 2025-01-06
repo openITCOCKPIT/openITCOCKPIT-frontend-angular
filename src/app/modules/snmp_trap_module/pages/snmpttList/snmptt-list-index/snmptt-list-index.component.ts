@@ -63,12 +63,11 @@ import { IndexPage } from '../../../../../pages.interface';
 
 @Component({
     selector: 'oitc-snmptt-list-index',
-    standalone: true,
     imports: [RouterModule, CardComponent, FaIconComponent, PermissionDirective, TranslocoDirective, CardHeaderComponent, CardTitleDirective, NavComponent, NavItemComponent, XsButtonDirective, CardBodyComponent, ColComponent, ContainerComponent, DebounceDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormControlDirective, FormDirective, FormsModule, InputGroupComponent, InputGroupTextDirective, PaginatorModule, RowComponent, TranslocoPipe, TrueFalseDirective, HoststatusSimpleIconComponent, MatSort, MatSortHeader, NgForOf, NgIf, NoRecordsComponent, PaginateOrScrollComponent, TableDirective, ItemSelectComponent, ActionsButtonComponent, ActionsButtonElementComponent, DropdownDividerDirective, SelectAllComponent, DeleteAllModalComponent, NgClass, CardFooterComponent],
     templateUrl: './snmptt-list-index.component.html',
     styleUrl: './snmptt-list-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: SnmpttService} // Inject the CommandsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: SnmpttService } // Inject the CommandsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

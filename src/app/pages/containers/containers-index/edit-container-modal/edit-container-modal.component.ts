@@ -38,7 +38,6 @@ import { ContainersService } from '../../containers.service';
 
 @Component({
     selector: 'oitc-edit-container-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         FaIconComponent,

@@ -34,7 +34,6 @@ import { Customalert } from '../../pages/customalerts/customalerts.interface';
 
 @Component({
     selector: 'oitc-customalerts-close-modal',
-    standalone: true,
     imports: [
         ModalComponent,
         TranslocoDirective,

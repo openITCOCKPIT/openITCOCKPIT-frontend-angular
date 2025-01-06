@@ -74,7 +74,6 @@ import {
 
 @Component({
     selector: 'oitc-automap-viewer',
-    standalone: true,
     imports: [
         ColComponent,
         ContainerComponent,

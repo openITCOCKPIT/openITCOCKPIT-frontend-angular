@@ -35,7 +35,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-calendars-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CalendarComponent,
@@ -44,7 +43,6 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,

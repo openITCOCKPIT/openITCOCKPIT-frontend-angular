@@ -40,7 +40,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-service-add-to-servicegroup-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         XsButtonDirective,

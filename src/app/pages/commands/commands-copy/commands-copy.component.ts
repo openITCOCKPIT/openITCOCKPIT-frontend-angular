@@ -33,9 +33,7 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-commands-copy',
-    standalone: true,
     imports: [
-
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,

@@ -100,7 +100,6 @@ import {
 
 @Component({
     selector: 'oitc-service-browser-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         ButtonGroupComponent,
@@ -150,8 +149,8 @@ import {
     templateUrl: './service-browser-modal.component.html',
     styleUrl: './service-browser-modal.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService}, // Inject the DowntimesService into the CancelAllModalComponent
-        {provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService} // Inject the DowntimesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService }, // Inject the DowntimesService into the CancelAllModalComponent
+        { provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService } // Inject the DowntimesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

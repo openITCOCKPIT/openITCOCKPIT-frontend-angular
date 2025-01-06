@@ -15,7 +15,6 @@ import { ContainersService } from '../../containers.service';
 
 @Component({
     selector: 'oitc-container-nest',
-    standalone: true,
     imports: [
         NgForOf,
         NgIf,

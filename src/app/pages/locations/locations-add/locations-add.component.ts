@@ -57,7 +57,6 @@ import { VectormapMarker } from '../../../components/vectormap/vactormap.interfa
 
 @Component({
     selector: 'oitc-locations-add',
-    standalone: true,
     imports: [
         AlertComponent,
         AlertHeadingDirective,
@@ -69,7 +68,6 @@ import { VectormapMarker } from '../../../components/vectormap/vactormap.interfa
         CardHeaderComponent,
         CardTitleDirective,
         CodeMirrorContainerComponent,
-
         FaIconComponent,
         FormCheckComponent,
         FormControlDirective,

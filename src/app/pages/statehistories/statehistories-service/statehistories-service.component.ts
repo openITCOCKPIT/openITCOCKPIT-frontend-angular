@@ -56,7 +56,6 @@ import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../no
 
 @Component({
     selector: 'oitc-statehistories-service',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -64,7 +63,6 @@ import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../no
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,

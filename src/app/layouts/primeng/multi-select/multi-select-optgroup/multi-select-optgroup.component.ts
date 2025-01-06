@@ -25,7 +25,6 @@ import _ from 'lodash';
 
 @Component({
     selector: 'oitc-multi-select-optgroup',
-    standalone: true,
     imports: [
         HighlightSearchPipe,
         MultiSelectModule,

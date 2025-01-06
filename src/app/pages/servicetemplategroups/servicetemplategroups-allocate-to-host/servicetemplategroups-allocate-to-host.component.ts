@@ -52,7 +52,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-servicetemplategroups-allocate-to-host',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,

@@ -29,7 +29,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-customalerts-service-history',
-    standalone: true,
     imports: [
         TranslocoDirective,
         CardComponent,

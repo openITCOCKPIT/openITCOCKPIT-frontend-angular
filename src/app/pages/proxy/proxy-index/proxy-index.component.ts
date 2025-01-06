@@ -33,9 +33,7 @@ import { ProxyService } from '../proxy.service';
 
 @Component({
     selector: 'oitc-proxy-index',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

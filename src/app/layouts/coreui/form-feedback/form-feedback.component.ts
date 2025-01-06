@@ -5,7 +5,6 @@ import _ from 'lodash';
 
 @Component({
     selector: 'oitc-form-feedback',
-    standalone: true,
     imports: [
         NgIf,
         NgForOf

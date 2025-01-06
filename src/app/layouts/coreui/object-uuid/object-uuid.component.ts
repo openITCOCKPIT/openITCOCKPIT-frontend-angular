@@ -5,7 +5,6 @@ import { PopoverDirective, TooltipDirective } from '@coreui/angular';
 
 @Component({
     selector: 'oitc-object-uuid',
-    standalone: true,
     imports: [
         XsButtonDirective,
         TranslocoDirective,

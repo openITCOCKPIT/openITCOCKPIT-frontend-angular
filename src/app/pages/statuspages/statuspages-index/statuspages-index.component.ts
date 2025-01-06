@@ -88,8 +88,7 @@ import {DELETE_SERVICE_TOKEN} from '../../../tokens/delete-injection.token';
 
 
 @Component({
-  selector: 'oitc-statuspages-index',
-  standalone: true,
+    selector: 'oitc-statuspages-index',
     imports: [
         TranslocoDirective,
         FaIconComponent,
@@ -139,13 +138,12 @@ import {DELETE_SERVICE_TOKEN} from '../../../tokens/delete-injection.token';
         DeleteAllModalComponent,
         DisableModalComponent,
     ],
-  templateUrl: './statuspages-index.component.html',
-  styleUrl: './statuspages-index.component.css',
+    templateUrl: './statuspages-index.component.html',
+    styleUrl: './statuspages-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: StatuspagesService}
+        { provide: DELETE_SERVICE_TOKEN, useClass: StatuspagesService }
     ],
-  changeDetection: ChangeDetectionStrategy.OnPush
-
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
     public hideFilter: boolean = true;

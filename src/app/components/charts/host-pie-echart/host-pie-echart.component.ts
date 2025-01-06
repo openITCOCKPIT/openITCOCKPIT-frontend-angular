@@ -9,7 +9,6 @@ import { LayoutService } from '../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-host-pie-echart',
-    standalone: true,
     imports: [
         NgxEchartsDirective
     ],

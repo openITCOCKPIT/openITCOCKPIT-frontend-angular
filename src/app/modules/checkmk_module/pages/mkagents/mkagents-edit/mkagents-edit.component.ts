@@ -39,11 +39,11 @@ import {
 } from '../../../../../components/code-mirror-container/code-mirror-container.component';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enum';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
     selector: 'oitc-mkagents-edit',
-    standalone: true,
     imports: [
         TranslocoDirective,
         RouterLink,
@@ -73,7 +73,8 @@ import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enu
         AlertComponent,
         AlertHeadingDirective,
         FormDirective,
-        FormLoaderComponent
+        FormLoaderComponent,
+        FormsModule
     ],
     templateUrl: './mkagents-edit.component.html',
     styleUrl: './mkagents-edit.component.css',

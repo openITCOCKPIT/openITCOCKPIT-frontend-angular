@@ -32,7 +32,6 @@ import { BbCodeEditorComponent } from '../bb-code-editor/bb-code-editor.componen
 
 @Component({
     selector: 'oitc-documentations-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -40,7 +39,6 @@ import { BbCodeEditorComponent } from '../bb-code-editor/bb-code-editor.componen
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-
         FaIconComponent,
         NavComponent,
         NavItemComponent,

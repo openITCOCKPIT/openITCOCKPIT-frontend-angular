@@ -65,7 +65,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-services-add',
-    standalone: true,
     imports: [
         AlertComponent,
         BackButtonDirective,
@@ -75,7 +74,6 @@ import { HistoryService } from '../../../history.service';
         CardHeaderComponent,
         CardTitleDirective,
         CheckAttemptsInputComponent,
-
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

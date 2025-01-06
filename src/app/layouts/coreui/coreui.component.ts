@@ -28,7 +28,6 @@ import { CoreuiNavbarComponent } from './coreui-navbar/coreui-navbar.component';
 
 @Component({
     selector: 'oitc-coreui',
-    standalone: true,
     imports: [
         ContainerComponent,
         IconComponent,

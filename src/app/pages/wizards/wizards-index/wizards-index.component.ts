@@ -27,7 +27,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-wizards-index',
-    standalone: true,
     imports: [
         RowComponent,
         ColComponent,

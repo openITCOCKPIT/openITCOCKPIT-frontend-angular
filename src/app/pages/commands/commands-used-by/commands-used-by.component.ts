@@ -27,9 +27,7 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 
 @Component({
     selector: 'oitc-commands-used-by',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

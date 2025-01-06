@@ -33,7 +33,6 @@ import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-tenants-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -41,7 +40,6 @@ import { NgIf } from '@angular/common';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,

@@ -60,9 +60,7 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
 
 @Component({
     selector: 'oitc-servicedependencies-edit',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

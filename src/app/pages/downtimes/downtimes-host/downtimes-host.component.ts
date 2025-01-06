@@ -65,10 +65,8 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 
 @Component({
     selector: 'oitc-downtimes-host',
-    standalone: true,
     imports: [
         CardComponent,
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -118,7 +116,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
     templateUrl: './downtimes-host.component.html',
     styleUrl: './downtimes-host.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService} // Inject the DowntimesService into the CancelAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService } // Inject the DowntimesService into the CancelAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

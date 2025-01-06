@@ -10,7 +10,6 @@ import { LayoutService } from '../../../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-sla-availability-overview-pie-echart',
-    standalone: true,
     imports: [
         NgxEchartsDirective
     ],

@@ -69,13 +69,11 @@ import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'oitc-currentstatereports-index',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         NavComponent,
         NavItemComponent,

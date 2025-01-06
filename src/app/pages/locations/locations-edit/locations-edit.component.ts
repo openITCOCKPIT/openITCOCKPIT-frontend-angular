@@ -42,7 +42,6 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 
 @Component({
     selector: 'oitc-locations-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -50,7 +49,6 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,

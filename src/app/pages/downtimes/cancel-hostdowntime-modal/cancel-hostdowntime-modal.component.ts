@@ -41,7 +41,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-cancel-hostdowntime-modal',
-    standalone: true,
     imports: [
         ModalComponent,
         ModalHeaderComponent,

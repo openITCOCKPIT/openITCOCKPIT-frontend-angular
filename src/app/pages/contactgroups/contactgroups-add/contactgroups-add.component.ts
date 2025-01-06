@@ -43,7 +43,6 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 
 @Component({
     selector: 'oitc-contactgroups-add',
-    standalone: true,
     imports: [
         BackButtonDirective,
         BadgeComponent,
@@ -52,7 +51,6 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

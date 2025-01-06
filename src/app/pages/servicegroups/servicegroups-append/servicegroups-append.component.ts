@@ -38,7 +38,6 @@ import { GenericResponseWrapper } from '../../../generic-responses';
 
 @Component({
     selector: 'oitc-servicegroups-append',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -46,7 +45,6 @@ import { GenericResponseWrapper } from '../../../generic-responses';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,

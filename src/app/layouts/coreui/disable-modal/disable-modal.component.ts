@@ -34,7 +34,6 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-disable-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         ColComponent,

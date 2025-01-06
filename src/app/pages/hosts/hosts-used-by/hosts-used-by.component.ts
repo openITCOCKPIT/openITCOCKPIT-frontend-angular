@@ -26,7 +26,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-hosts-used-by',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -34,7 +33,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         CardHeaderComponent,
         CardTitleDirective,
         ContainerComponent,
-
         FaIconComponent,
         NavComponent,
         NavItemComponent,

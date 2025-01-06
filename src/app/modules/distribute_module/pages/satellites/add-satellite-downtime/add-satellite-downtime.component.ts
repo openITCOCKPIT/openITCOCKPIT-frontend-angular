@@ -47,10 +47,8 @@ import { HistoryService } from '../../../../../history.service';
 
 @Component({
     selector: 'oitc-add-satellite-downtime',
-    standalone: true,
     imports: [
         CardComponent,
-
         FaIconComponent,
         FormDirective,
         FormsModule,

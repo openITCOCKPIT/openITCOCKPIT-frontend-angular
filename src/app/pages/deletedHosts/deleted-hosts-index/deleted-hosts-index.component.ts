@@ -55,7 +55,6 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-deleted-hosts-index',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -66,7 +65,6 @@ import { IndexPage } from '../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,

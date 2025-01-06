@@ -51,7 +51,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-servicegroups-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         BadgeComponent,

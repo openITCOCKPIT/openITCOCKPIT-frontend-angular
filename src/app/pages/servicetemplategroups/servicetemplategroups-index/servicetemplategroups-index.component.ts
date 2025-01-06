@@ -61,9 +61,7 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-servicetemplategroups-index',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         DeleteAllModalComponent,
         FaIconComponent,
@@ -109,7 +107,7 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './servicetemplategroups-index.component.html',
     styleUrl: './servicetemplategroups-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicetemplategroupsService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicetemplategroupsService } // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

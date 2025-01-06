@@ -58,9 +58,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-systemsettings-index',
-    standalone: true,
     imports: [
-
         ActionsButtonComponent,
         ActionsButtonElementComponent,
         CardBodyComponent,

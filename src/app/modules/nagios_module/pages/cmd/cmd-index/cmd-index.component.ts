@@ -91,7 +91,6 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
 
 @Component({
     selector: 'oitc-cmd-index',
-    standalone: true,
     imports: [
         AcknowledgementIconComponent,
         ActionsButtonComponent,
@@ -104,7 +103,6 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DisableModalComponent,

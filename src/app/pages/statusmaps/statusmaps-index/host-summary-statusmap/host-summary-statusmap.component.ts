@@ -10,7 +10,6 @@ import { HostEntity } from '../../../hosts/hosts.interface';
 
 @Component({
     selector: 'oitc-host-summary-statusmap',
-    standalone: true,
     imports: [
         BadgeComponent,
         FaIconComponent,

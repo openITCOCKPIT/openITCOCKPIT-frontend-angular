@@ -31,7 +31,6 @@ import { SelectComponent } from '../../layouts/primeng/select/select/select.comp
 
 @Component({
     selector: 'oitc-dynamical-form-fields',
-    standalone: true,
     imports: [
         DebounceDirective,
         FormCheckComponent,

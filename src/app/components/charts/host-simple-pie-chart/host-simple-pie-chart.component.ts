@@ -21,7 +21,6 @@ export interface SimplePieGauge {
 
 @Component({
     selector: 'oitc-host-simple-pie-chart',
-    standalone: true,
     imports: [],
     templateUrl: './host-simple-pie-chart.component.html',
     styleUrl: './host-simple-pie-chart.component.css',

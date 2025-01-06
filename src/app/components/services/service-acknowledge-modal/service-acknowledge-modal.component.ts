@@ -63,7 +63,6 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 
 @Component({
     selector: 'oitc-service-acknowledge-modal',
-    standalone: true,
     imports: [
         TranslocoDirective,
         ModalComponent,

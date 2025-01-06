@@ -5,11 +5,9 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-error403',
-    standalone: true,
     imports: [
         ColComponent,
         ContainerComponent,
-
         RowComponent,
         TranslocoDirective
     ],

@@ -43,7 +43,6 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 
 @Component({
     selector: 'oitc-bb-code-editor',
-    standalone: true,
     imports: [
         DropdownColorpickerComponent,
         FormControlDirective,

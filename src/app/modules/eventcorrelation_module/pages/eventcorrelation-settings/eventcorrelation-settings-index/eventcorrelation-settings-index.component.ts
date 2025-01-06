@@ -36,7 +36,6 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 
 @Component({
     selector: 'oitc-eventcorrelation-settings-index',
-    standalone: true,
     imports: [
         AlertComponent,
         CardBodyComponent,

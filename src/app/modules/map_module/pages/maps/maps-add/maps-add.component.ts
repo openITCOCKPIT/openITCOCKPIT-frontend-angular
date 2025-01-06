@@ -45,13 +45,11 @@ import { MapsService } from '../Maps.service';
 
 @Component({
     selector: 'oitc-maps-add',
-    standalone: true,
     imports: [
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,

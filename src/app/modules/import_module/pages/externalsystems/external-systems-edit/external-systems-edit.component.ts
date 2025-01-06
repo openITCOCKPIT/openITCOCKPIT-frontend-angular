@@ -68,7 +68,6 @@ import {
 
 @Component({
     selector: 'oitc-external-systems-edit',
-    standalone: true,
     imports: [
         AlertComponent,
         AlertHeadingDirective,
@@ -81,7 +80,6 @@ import {
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         DropdownComponent,
         DropdownItemDirective,

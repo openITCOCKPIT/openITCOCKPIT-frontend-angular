@@ -22,10 +22,10 @@ import { RequiredIconComponent } from '../../../../../../components/required-ico
 import { NgIf } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ConfigurationFilesService } from '../../../../configuration-files.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-configuration-file-perfdata-backend',
-    standalone: true,
     imports: [
         FormControlDirective,
         FormErrorDirective,
@@ -35,7 +35,8 @@ import { ConfigurationFilesService } from '../../../../configuration-files.servi
         RequiredIconComponent,
         NgIf,
         FormSelectDirective,
-        TranslocoDirective
+        TranslocoDirective,
+        FormsModule
     ],
     templateUrl: './configuration-file-perfdata-backend.component.html',
     styleUrl: './configuration-file-perfdata-backend.component.css',

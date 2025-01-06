@@ -41,10 +41,8 @@ import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-lin
 
 @Component({
     selector: 'oitc-systemfailures-add',
-    standalone: true,
     imports: [
         CardComponent,
-
         FaIconComponent,
         FormDirective,
         FormsModule,

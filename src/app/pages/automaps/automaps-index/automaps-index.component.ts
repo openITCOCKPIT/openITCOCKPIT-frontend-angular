@@ -68,9 +68,7 @@ import {
 
 @Component({
     selector: 'oitc-automaps-index',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -121,7 +119,7 @@ import {
     templateUrl: './automaps-index.component.html',
     styleUrl: './automaps-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: AutomapsService} // Inject the AutomapsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: AutomapsService } // Inject the AutomapsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

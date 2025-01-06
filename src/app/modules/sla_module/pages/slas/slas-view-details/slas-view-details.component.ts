@@ -64,7 +64,6 @@ import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
     selector: 'oitc-slas-view-details',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -76,7 +75,6 @@ import { SkeletonModule } from 'primeng/skeleton';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,

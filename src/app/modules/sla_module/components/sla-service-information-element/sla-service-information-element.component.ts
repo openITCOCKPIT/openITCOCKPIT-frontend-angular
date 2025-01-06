@@ -55,7 +55,6 @@ import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-
 
 @Component({
     selector: 'oitc-sla-service-information-element',
-    standalone: true,
     imports: [
         TranslocoDirective,
         SkeletonModule,

@@ -25,7 +25,6 @@ import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mss
 
 @Component({
     selector: 'oitc-sap-hana-system',
-    standalone: true,
     imports: [
         TranslocoDirective,
         RouterLink,

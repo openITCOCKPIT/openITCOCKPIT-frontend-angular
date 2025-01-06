@@ -24,7 +24,6 @@ import { Service, WizardPost } from '../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-wizards-dynamicfields',
-    standalone: true,
     imports: [
         ColComponent,
         FaIconComponent,

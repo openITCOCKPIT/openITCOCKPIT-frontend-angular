@@ -120,7 +120,6 @@ import {
 
 @Component({
     selector: 'oitc-services-service-list',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -132,7 +131,6 @@ import {
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DisableModalComponent,
@@ -195,9 +193,9 @@ import {
     templateUrl: './services-service-list.component.html',
     styleUrl: './services-service-list.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService},
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService},
-        {provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService},
+        { provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService },
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService },
+        { provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService },
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

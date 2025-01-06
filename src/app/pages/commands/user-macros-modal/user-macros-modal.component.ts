@@ -21,7 +21,6 @@ import { MacrosService } from '../../macros/macros.service';
 
 @Component({
     selector: 'oitc-user-macros-modal',
-    standalone: true,
     imports: [
         ModalToggleDirective,
         ModalComponent,

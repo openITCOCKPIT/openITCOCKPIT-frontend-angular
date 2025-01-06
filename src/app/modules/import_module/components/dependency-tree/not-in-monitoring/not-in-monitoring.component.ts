@@ -9,7 +9,6 @@ import { SystemnameService } from '../../../../../services/systemname.service';
 
 @Component({
     selector: 'oitc-not-in-monitoring',
-    standalone: true,
     imports: [
         BadgeComponent,
         FaIconComponent,

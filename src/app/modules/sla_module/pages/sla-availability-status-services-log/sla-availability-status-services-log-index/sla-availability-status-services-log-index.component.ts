@@ -52,7 +52,6 @@ import { FilterPipe } from '../../../../../pipes/filter.pipe';
 
 @Component({
     selector: 'oitc-sla-availability-status-services-log-index',
-    standalone: true,
     imports: [
         BadgeComponent,
         CardBodyComponent,

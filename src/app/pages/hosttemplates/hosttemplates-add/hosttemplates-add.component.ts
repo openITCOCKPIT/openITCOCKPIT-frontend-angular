@@ -54,9 +54,7 @@ import { HostOrServiceType } from '../../hosts/hosts.interface';
 
 @Component({
     selector: 'oitc-hosttemplates-add',
-    standalone: true,
     imports: [
-
         BackButtonDirective,
         CardBodyComponent,
         CardComponent,

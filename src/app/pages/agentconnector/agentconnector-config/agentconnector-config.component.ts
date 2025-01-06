@@ -46,10 +46,10 @@ import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { ApikeyDocModalComponent } from '../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-agentconnector-config',
-    standalone: true,
     imports: [
         AgentconnectorWizardProgressbarComponent,
         CardBodyComponent,
@@ -83,7 +83,8 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         ApikeyDocModalComponent,
         JsonPipe,
         RowComponent,
-        ColComponent
+        ColComponent,
+        FormsModule
     ],
     templateUrl: './agentconnector-config.component.html',
     styleUrl: './agentconnector-config.component.css',

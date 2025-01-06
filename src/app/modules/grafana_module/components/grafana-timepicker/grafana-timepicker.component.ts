@@ -25,7 +25,6 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-grafana-timepicker',
-    standalone: true,
     imports: [
         TranslocoDirective,
         FaIconComponent,

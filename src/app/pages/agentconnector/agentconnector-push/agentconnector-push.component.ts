@@ -63,7 +63,6 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-agentconnector-push',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -113,7 +112,7 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
     templateUrl: './agentconnector-push.component.html',
     styleUrl: './agentconnector-push.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: AgentconnectorPushService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: AgentconnectorPushService } // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

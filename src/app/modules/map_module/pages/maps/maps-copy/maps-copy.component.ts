@@ -33,7 +33,6 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
 
 @Component({
     selector: 'oitc-maps-copy',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -41,7 +40,6 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,

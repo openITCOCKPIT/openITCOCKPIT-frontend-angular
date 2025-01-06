@@ -101,7 +101,6 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-hosts-not-monitored',
-    standalone: true,
     imports: [
         AcknowledgementIconComponent,
         ActionsButtonComponent,
@@ -114,7 +113,6 @@ import { IndexPage } from '../../../pages.interface';
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DowntimeIconComponent,
@@ -173,8 +171,8 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './hosts-not-monitored.component.html',
     styleUrl: './hosts-not-monitored.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService}, // Inject the ServicesService into the DisableAllModalComponent
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DISABLE_SERVICE_TOKEN, useClass: HostsService }, // Inject the ServicesService into the DisableAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService } // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

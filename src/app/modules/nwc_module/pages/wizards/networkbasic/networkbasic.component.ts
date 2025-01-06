@@ -33,7 +33,6 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 
 @Component({
     selector: 'oitc-networkbasic',
-    standalone: true,
     imports: [
         RouterLink,
         FaIconComponent,

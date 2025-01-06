@@ -52,7 +52,6 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 
 @Component({
     selector: 'oitc-maps-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         BadgeComponent,
@@ -61,7 +60,6 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

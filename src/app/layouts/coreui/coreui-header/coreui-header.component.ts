@@ -42,7 +42,6 @@ import { CurrentMessageOfTheDay } from '../../../pages/messagesotd/messagesotd.i
 
 @Component({
     selector: 'oitc-coreui-header',
-    standalone: true,
     imports: [
         ContainerComponent,
         HeaderNavComponent,

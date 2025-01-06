@@ -60,7 +60,6 @@ import { ServicetemplateTypesEnum } from '../../servicetemplates/servicetemplate
 
 @Component({
     selector: 'oitc-agentchecks-index',
-    standalone: true,
     imports: [
         FaIconComponent,
         PermissionDirective,
@@ -105,7 +104,7 @@ import { ServicetemplateTypesEnum } from '../../servicetemplates/servicetemplate
     templateUrl: './agentchecks-index.component.html',
     styleUrl: './agentchecks-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: AgentchecksService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: AgentchecksService } // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

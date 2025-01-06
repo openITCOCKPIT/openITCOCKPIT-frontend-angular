@@ -23,7 +23,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-changelogs-entry',
-    standalone: true,
     imports: [
         NgIf,
         NgClass,

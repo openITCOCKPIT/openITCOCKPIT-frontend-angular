@@ -48,7 +48,6 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-import-itop-data',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         ColComponent,

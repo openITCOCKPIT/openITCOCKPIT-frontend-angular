@@ -23,7 +23,6 @@ import { JsonPipe } from '@angular/common';
 
 @Component({
     selector: 'oitc-select',
-    standalone: true,
     imports: [
         DropdownModule,
         MultiSelectModule,

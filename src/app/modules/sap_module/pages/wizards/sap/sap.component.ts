@@ -24,7 +24,6 @@ import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mss
 
 @Component({
     selector: 'oitc-sap',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,

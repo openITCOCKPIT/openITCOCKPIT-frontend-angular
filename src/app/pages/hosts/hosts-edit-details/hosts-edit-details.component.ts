@@ -46,7 +46,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosts-edit-details',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -54,7 +53,6 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormDirective,
         FormErrorDirective,

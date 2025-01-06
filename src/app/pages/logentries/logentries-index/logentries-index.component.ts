@@ -58,13 +58,11 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-logentries-index',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         NavComponent,
         NavItemComponent,

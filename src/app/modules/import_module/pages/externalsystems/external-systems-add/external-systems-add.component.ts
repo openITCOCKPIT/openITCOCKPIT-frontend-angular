@@ -68,7 +68,6 @@ import {
 
 @Component({
     selector: 'oitc-external-systems-add',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -76,7 +75,6 @@ import {
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,

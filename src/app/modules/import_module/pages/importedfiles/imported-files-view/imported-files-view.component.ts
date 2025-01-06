@@ -50,7 +50,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'oitc-imported-files-view',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,

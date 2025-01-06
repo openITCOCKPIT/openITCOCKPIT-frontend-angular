@@ -22,7 +22,6 @@ import { NgClass, NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-navbar-group',
-    standalone: true,
     imports: [
         FaIconComponent,
         RouterLink,

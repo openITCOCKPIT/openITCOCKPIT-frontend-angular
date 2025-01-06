@@ -6,7 +6,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-servicestatus-simple-icon',
-    standalone: true,
     imports: [
         NgIf,
         NgClass,

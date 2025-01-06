@@ -60,13 +60,11 @@ import {
 
 @Component({
     selector: 'oitc-host-notification',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         NavComponent,
         NavItemComponent,

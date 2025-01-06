@@ -64,7 +64,6 @@ import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 
 @Component({
     selector: 'oitc-macro-index',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -75,7 +74,6 @@ import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,

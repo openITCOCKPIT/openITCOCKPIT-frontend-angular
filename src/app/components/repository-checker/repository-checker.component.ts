@@ -9,9 +9,7 @@ import { NgClass, NgForOf, NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-repository-checker',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         AlertComponent,
         FaIconComponent,

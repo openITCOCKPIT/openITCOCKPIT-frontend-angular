@@ -27,7 +27,6 @@ import { VmwarehorizonWizardGet, VmwarehorizonWizardPost } from './vmwarehorizon
 
 @Component({
     selector: 'oitc-vmwarehorizon',
-    standalone: true,
     imports: [
         RouterLink,
         FaIconComponent,

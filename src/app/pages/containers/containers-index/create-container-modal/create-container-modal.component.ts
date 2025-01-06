@@ -51,10 +51,10 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { NodePost } from '../../containers.interface';
 import { ContainersService } from '../../containers.service';
 import { UserTimezonesSelect } from '../../../users/users.interface';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-create-container-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         ColComponent,
@@ -83,7 +83,8 @@ import { UserTimezonesSelect } from '../../../users/users.interface';
         NgOptionTemplateDirective,
         NgSelectComponent,
         NgOptionHighlightDirective,
-        JsonPipe
+        JsonPipe,
+        FormsModule
     ],
     templateUrl: './create-container-modal.component.html',
     styleUrl: './create-container-modal.component.css',

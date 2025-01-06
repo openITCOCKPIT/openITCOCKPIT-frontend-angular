@@ -41,7 +41,6 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
 
 @Component({
     selector: 'oitc-timeperiods-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -49,7 +48,6 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormDirective,

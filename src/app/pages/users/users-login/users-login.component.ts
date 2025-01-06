@@ -34,7 +34,6 @@ import { LoginResponse } from '../../../auth/auth.interface';
 
 @Component({
     selector: 'oitc-users-login',
-    standalone: true,
     imports: [
         FaIconComponent,
         AlertComponent,

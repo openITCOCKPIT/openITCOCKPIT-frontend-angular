@@ -38,13 +38,11 @@ import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-system-health-users-edit',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         NavComponent,
         NavItemComponent,

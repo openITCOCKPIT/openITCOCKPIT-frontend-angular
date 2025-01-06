@@ -120,9 +120,7 @@ import { HoststatusObject } from '../hosts.interface';
 
 @Component({
     selector: 'oitc-hosts-browser-services-list',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         CardBodyComponent,
         CardComponent,
@@ -185,9 +183,9 @@ import { HoststatusObject } from '../hosts.interface';
     templateUrl: './hosts-browser-services-list.component.html',
     styleUrl: './hosts-browser-services-list.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService},
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService},
-        {provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService},
+        { provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService },
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService },
+        { provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService },
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -78,9 +78,7 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-commands-edit',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         CardBodyComponent,
         CardComponent,

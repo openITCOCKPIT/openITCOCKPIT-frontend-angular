@@ -60,9 +60,7 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-contactgroups-index',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         DeleteAllModalComponent,
         FaIconComponent,
@@ -108,7 +106,7 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './contactgroups-index.component.html',
     styleUrl: './contactgroups-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ContactgroupsService} // Inject the ContactgroupsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ContactgroupsService } // Inject the ContactgroupsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

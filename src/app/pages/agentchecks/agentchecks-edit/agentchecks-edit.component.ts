@@ -36,7 +36,6 @@ import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-agentchecks-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,

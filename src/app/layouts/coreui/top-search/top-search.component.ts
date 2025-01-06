@@ -25,7 +25,6 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-top-search',
-    standalone: true,
     imports: [
         TranslocoDirective,
         InputGroupComponent,

@@ -59,7 +59,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
 
 @Component({
     selector: 'oitc-imported-files-index',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -106,7 +105,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
     templateUrl: './imported-files-index.component.html',
     styleUrl: './imported-files-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ImportedFilesService} // Inject the ImportedFilesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ImportedFilesService } // Inject the ImportedFilesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

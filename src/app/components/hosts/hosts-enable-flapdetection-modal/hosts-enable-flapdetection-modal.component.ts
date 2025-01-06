@@ -38,7 +38,6 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-hosts-enable-flapdetection-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         CardBodyComponent,

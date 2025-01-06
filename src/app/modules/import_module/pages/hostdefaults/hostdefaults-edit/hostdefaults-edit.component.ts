@@ -54,7 +54,6 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
 
 @Component({
     selector: 'oitc-hostdefaults-edit',
-    standalone: true,
     imports: [
         AsyncPipe,
         BackButtonDirective,

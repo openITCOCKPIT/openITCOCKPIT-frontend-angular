@@ -26,7 +26,6 @@ import { GenericUnixtimerange } from '../../../generic.interfaces';
 
 @Component({
     selector: 'oitc-browser-timeline',
-    standalone: true,
     imports: [
         TranslocoDirective,
         SkeletonModule,

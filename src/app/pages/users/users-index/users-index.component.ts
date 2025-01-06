@@ -66,7 +66,6 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
 
 @Component({
     selector: 'oitc-users-index',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -118,7 +117,7 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
     templateUrl: './users-index.component.html',
     styleUrl: './users-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: UsersService} // Inject the ServicegroupsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: UsersService } // Inject the ServicegroupsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

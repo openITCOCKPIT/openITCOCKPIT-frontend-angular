@@ -44,8 +44,7 @@ import { IndexPage } from '../../../../../pages.interface';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'oitc-customalert-rules-services',
-  standalone: true,
+    selector: 'oitc-customalert-rules-services',
     imports: [
         FaIconComponent,
         PermissionDirective,
@@ -81,9 +80,9 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
         RouterLink,
         AlertComponent
     ],
-  templateUrl: './customalert-rules-services.component.html',
-  styleUrl: './customalert-rules-services.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './customalert-rules-services.component.html',
+    styleUrl: './customalert-rules-services.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomalertRulesServicesComponent implements OnInit, OnDestroy, IndexPage {
     private readonly subscriptions: Subscription = new Subscription();

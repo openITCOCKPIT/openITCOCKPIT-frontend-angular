@@ -95,9 +95,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 
 @Component({
     selector: 'oitc-commands-index',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         CardBodyComponent,
         CardComponent,
@@ -150,7 +148,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
     templateUrl: './commands-index.component.html',
     styleUrl: './commands-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: CommandsService} // Inject the CommandsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: CommandsService } // Inject the CommandsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

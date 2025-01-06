@@ -54,7 +54,6 @@ import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/
 
 @Component({
     selector: 'oitc-messagesotd-add',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,

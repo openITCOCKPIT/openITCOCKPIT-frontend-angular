@@ -11,7 +11,6 @@ import { GetKeys } from '../../../../../classes/GetKeys';
 
 @Component({
     selector: 'oitc-host-group-summary',
-    standalone: true,
     imports: [
         FaIconComponent,
         PermissionDirective,

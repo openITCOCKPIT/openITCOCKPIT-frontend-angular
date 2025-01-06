@@ -24,7 +24,6 @@ import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/blo
 
 @Component({
     selector: 'oitc-mkagents-download',
-    standalone: true,
     imports: [
         CardComponent,
         CardHeaderComponent,

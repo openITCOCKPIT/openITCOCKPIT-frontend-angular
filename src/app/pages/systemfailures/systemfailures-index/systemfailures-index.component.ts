@@ -66,10 +66,8 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-systemfailures-index',
-    standalone: true,
     imports: [
         CardComponent,
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -118,7 +116,7 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './systemfailures-index.component.html',
     styleUrl: './systemfailures-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: SystemfailuresService}
+        { provide: DELETE_SERVICE_TOKEN, useClass: SystemfailuresService }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

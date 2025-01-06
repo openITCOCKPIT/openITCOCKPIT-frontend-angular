@@ -7,7 +7,6 @@ import { NgForOf, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 
 @Component({
     selector: 'oitc-virtual-machine',
-    standalone: true,
     imports: [
         FaIconComponent,
         FaLayersComponent,

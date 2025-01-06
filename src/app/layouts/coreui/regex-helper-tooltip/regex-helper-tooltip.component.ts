@@ -31,7 +31,6 @@ import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-regex-helper-tooltip',
-    standalone: true,
     imports: [
         FaIconComponent,
         PopoverDirective,
@@ -40,7 +39,6 @@ import { NgClass } from '@angular/common';
         ColComponent,
         ContainerComponent,
         NgClass,
-
     ],
     templateUrl: './regex-helper-tooltip.component.html',
     styleUrl: './regex-helper-tooltip.component.css',

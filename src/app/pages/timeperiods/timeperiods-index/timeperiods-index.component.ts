@@ -63,7 +63,6 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-timeperiods-index',
-    standalone: true,
     imports: [
         ActionsButtonElementComponent,
         CardBodyComponent,
@@ -73,7 +72,6 @@ import { IndexPage } from '../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -113,7 +111,7 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './timeperiods-index.component.html',
     styleUrl: './timeperiods-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: TimeperiodsService} // Inject the CommandsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: TimeperiodsService } // Inject the CommandsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

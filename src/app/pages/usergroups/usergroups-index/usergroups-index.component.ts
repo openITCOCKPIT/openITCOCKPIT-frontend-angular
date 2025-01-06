@@ -55,7 +55,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 
 @Component({
     selector: 'oitc-usergroups-index',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -98,7 +97,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     templateUrl: './usergroups-index.component.html',
     styleUrl: './usergroups-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: UsergroupsService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: UsergroupsService } // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

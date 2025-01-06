@@ -58,13 +58,11 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 
 @Component({
     selector: 'oitc-slas-add',
-    standalone: true,
     imports: [
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,

@@ -36,7 +36,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'oitc-agentconnector-auto-tls',
-    standalone: true,
     imports: [
         AgentconnectorWizardProgressbarComponent,
         BlockLoaderComponent,

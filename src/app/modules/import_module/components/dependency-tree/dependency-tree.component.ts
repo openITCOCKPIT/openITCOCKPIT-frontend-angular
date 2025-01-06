@@ -72,7 +72,6 @@ export interface NodeExtended extends Node {
 
 @Component({
     selector: 'oitc-dependency-tree',
-    standalone: true,
     imports: [
         ColComponent,
         OnlineOfflineComponent,

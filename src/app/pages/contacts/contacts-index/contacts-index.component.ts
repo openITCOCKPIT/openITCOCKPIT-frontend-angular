@@ -60,9 +60,7 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-contacts-index',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         DeleteAllModalComponent,
         FaIconComponent,
@@ -108,7 +106,7 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './contacts-index.component.html',
     styleUrl: './contacts-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ContactsService} // Inject the ContactsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ContactsService } // Inject the ContactsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

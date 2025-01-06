@@ -13,13 +13,11 @@ import { ObjectTypesEnum } from '../../pages/changelogs/object-types.enum';
 
 @Component({
     selector: 'oitc-macros',
-    standalone: true,
     imports: [
         FaIconComponent,
         FormsModule,
         NgIf,
         TranslocoPipe,
-
         TranslocoDirective,
         FormErrorDirective,
         NgSelectModule,

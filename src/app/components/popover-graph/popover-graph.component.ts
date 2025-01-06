@@ -36,7 +36,6 @@ type PerfParams = {
 
 @Component({
     selector: 'oitc-popover-graph',
-    standalone: true,
     imports: [
         TranslocoDirective,
         FaIconComponent,

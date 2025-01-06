@@ -61,12 +61,10 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-locations-index',
-    standalone: true,
     imports: [
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         PermissionDirective,
         QueryHandlerCheckerComponent,
@@ -106,7 +104,7 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './locations-index.component.html',
     styleUrl: './locations-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: LocationsService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: LocationsService } // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

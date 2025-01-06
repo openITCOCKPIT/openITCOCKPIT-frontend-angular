@@ -20,7 +20,6 @@ import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-timeperiod-details-tooltip',
-    standalone: true,
     imports: [
         FaIconComponent,
         TranslocoDirective,

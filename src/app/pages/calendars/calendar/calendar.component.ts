@@ -55,7 +55,6 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 
 @Component({
     selector: 'oitc-calendar',
-    standalone: true,
     imports: [
         ColComponent,
         TranslocoDirective,

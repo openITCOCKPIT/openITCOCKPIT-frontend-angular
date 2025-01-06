@@ -47,8 +47,7 @@ import {
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 
 @Component({
-  selector: 'oitc-customalert-rules-add',
-  standalone: true,
+    selector: 'oitc-customalert-rules-add',
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -85,9 +84,9 @@ import {
         NgIf,
         RegexHelperTooltipComponent
     ],
-  templateUrl: './customalert-rules-add.component.html',
-  styleUrl: './customalert-rules-add.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './customalert-rules-add.component.html',
+    styleUrl: './customalert-rules-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomalertRulesAddComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();

@@ -63,12 +63,10 @@ import { IndexPage } from '../../../../../pages.interface';
 
 @Component({
     selector: 'oitc-external-systems-index',
-    standalone: true,
     imports: [
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         TranslocoDirective,
         RouterLink,
@@ -112,7 +110,7 @@ import { IndexPage } from '../../../../../pages.interface';
         DeleteAllModalComponent
     ],
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ExternalSystemsService} // Inject the ExternalSystemsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ExternalSystemsService } // Inject the ExternalSystemsService into the DeleteAllModalComponent
     ],
     templateUrl: './external-systems-index.component.html',
     styleUrl: './external-systems-index.component.css',

@@ -37,7 +37,6 @@ import { WizardElement, WizardsIndex } from '../wizards.interface';
 
 @Component({
     selector: 'oitc-wizards-wizard-host-configuration',
-    standalone: true,
     imports: [
         FaIconComponent,
         TranslocoDirective,

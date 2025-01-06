@@ -7,7 +7,6 @@ import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
     selector: 'oitc-satellite-name',
-    standalone: true,
     imports: [
         NgIf,
         SkeletonModule

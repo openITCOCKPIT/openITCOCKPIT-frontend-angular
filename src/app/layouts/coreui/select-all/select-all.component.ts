@@ -39,7 +39,6 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-select-all',
-    standalone: true,
     imports: [
         ColComponent,
         ContainerComponent,

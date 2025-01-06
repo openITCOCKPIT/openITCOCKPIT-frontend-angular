@@ -18,7 +18,6 @@ import {
 
 @Component({
     selector: 'oitc-evc-table',
-    standalone: true,
     imports: [
         ColComponent,
         NgIf,

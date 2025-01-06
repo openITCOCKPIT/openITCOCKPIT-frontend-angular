@@ -94,7 +94,6 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
 
 @Component({
     selector: 'oitc-hosts-disabled',
-    standalone: true,
     imports: [
         AcknowledgementIconComponent,
         ActionsButtonComponent,
@@ -107,7 +106,6 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DowntimeIconComponent,
@@ -165,8 +163,8 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
     templateUrl: './hosts-disabled.component.html',
     styleUrl: './hosts-disabled.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService}, // Inject the ServicesService into the DeleteAllModalComponent
-        {provide: ENABLE_SERVICE_TOKEN, useClass: HostsService},
+        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService }, // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: ENABLE_SERVICE_TOKEN, useClass: HostsService },
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

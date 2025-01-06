@@ -21,7 +21,6 @@ import {
 
 @Component({
     selector: 'oitc-wizards-abstract',
-    standalone: true,
     imports: [],
     templateUrl: './wizards-abstract.component.html',
     styleUrl: './wizards-abstract.component.css',

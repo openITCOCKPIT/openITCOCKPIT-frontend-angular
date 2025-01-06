@@ -11,7 +11,6 @@ import { BadgeComponent, TableDirective } from '@coreui/angular';
 
 @Component({
     selector: 'oitc-host-summary',
-    standalone: true,
     imports: [
         FaIconComponent,
         PermissionDirective,

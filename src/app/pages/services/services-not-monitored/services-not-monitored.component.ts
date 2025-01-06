@@ -39,7 +39,6 @@ import {
     ColumnsConfigImportModalComponent
 } from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
@@ -97,10 +96,10 @@ import {
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-services-not-monitored',
-    standalone: true,
     imports: [
         AcknowledgementIconComponent,
         ActionsButtonComponent,
@@ -115,7 +114,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         ColumnsConfigImportModalComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DisableModalComponent,
@@ -167,7 +165,8 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         FormDirective,
         HoststatusSimpleIconComponent,
         QueryHandlerCheckerComponent,
-        AsyncPipe
+        AsyncPipe,
+        FormsModule
     ],
     templateUrl: './services-not-monitored.component.html',
     styleUrl: './services-not-monitored.component.css',

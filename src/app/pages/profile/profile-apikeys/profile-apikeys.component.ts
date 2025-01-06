@@ -48,7 +48,6 @@ import { UsersService } from '../../users/users.service';
 
 @Component({
     selector: 'oitc-profile-apikeys',
-    standalone: true,
     imports: [
         BackButtonDirective,
         ButtonCloseDirective,
@@ -58,7 +57,6 @@ import { UsersService } from '../../users/users.service';
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

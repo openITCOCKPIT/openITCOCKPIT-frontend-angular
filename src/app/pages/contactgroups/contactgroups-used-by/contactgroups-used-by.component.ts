@@ -30,7 +30,6 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 
 @Component({
     selector: 'oitc-contactgroups-used-by',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -38,7 +37,6 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         CardHeaderComponent,
         CardTitleDirective,
         ContainerComponent,
-
         FaIconComponent,
         NavComponent,
         NgForOf,

@@ -52,7 +52,6 @@ import { IndexPage } from '../../../../../pages.interface';
 
 @Component({
     selector: 'oitc-slas-index',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -64,7 +63,6 @@ import { IndexPage } from '../../../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -100,7 +98,7 @@ import { IndexPage } from '../../../../../pages.interface';
     templateUrl: './slas-index.component.html',
     styleUrl: './slas-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: SlasService} // Inject the ContactsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: SlasService } // Inject the ContactsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -42,7 +42,6 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 
 @Component({
     selector: 'oitc-hosts-enable-notifications-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         ColComponent,

@@ -55,9 +55,7 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 
 @Component({
     selector: 'oitc-maps-index',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         DeleteAllModalComponent,
         FaIconComponent,
@@ -104,7 +102,7 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
     templateUrl: './maps-index.component.html',
     styleUrl: './maps-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: MapsService}
+        { provide: DELETE_SERVICE_TOKEN, useClass: MapsService }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

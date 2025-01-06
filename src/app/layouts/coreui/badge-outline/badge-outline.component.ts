@@ -3,7 +3,6 @@ import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-badge-outline',
-    standalone: true,
     imports: [
         NgClass
     ],

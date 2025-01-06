@@ -45,7 +45,6 @@ import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbut
 
 @Component({
     selector: 'oitc-filter-bookmark-export-modal',
-    standalone: true,
     imports: [
         TranslocoDirective,
         ModalComponent,

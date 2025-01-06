@@ -7,7 +7,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-hoststatus-icon',
-    standalone: true,
     imports: [
         NgIf,
         NgClass,

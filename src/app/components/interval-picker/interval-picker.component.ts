@@ -23,7 +23,6 @@ import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-interval-picker',
-    standalone: true,
     imports: [
         DropdownComponent,
         FaIconComponent,

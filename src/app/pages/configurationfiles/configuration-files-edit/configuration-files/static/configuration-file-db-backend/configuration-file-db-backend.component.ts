@@ -22,10 +22,10 @@ import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../../components/required-icon/required-icon.component';
 import { NgIf } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-configuration-file-db-backend',
-    standalone: true,
     imports: [
         FormControlDirective,
         FormErrorDirective,
@@ -35,7 +35,8 @@ import { TranslocoDirective } from '@jsverse/transloco';
         RequiredIconComponent,
         NgIf,
         FormSelectDirective,
-        TranslocoDirective
+        TranslocoDirective,
+        FormsModule
     ],
     templateUrl: './configuration-file-db-backend.component.html',
     styleUrl: './configuration-file-db-backend.component.css',

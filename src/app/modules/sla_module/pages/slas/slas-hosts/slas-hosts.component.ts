@@ -51,7 +51,6 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 
 @Component({
     selector: 'oitc-slas-hosts',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -63,7 +62,6 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -102,7 +100,7 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
     templateUrl: './slas-hosts.component.html',
     styleUrl: './slas-hosts.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: SlasService} // Inject the ContactsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: SlasService } // Inject the ContactsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

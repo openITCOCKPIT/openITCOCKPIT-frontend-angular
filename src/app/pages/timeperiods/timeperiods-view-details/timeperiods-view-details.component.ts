@@ -26,7 +26,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-timeperiods-view-details',
-    standalone: true,
     imports: [
         XsButtonDirective,
         RouterLink,
@@ -34,7 +33,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
         ColComponent,
         FullCalendarModule,
         ObjectUuidComponent,
-
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,

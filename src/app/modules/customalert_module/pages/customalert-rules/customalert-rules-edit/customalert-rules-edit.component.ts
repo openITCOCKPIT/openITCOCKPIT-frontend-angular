@@ -46,8 +46,7 @@ import { HistoryService } from '../../../../../history.service';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
-  selector: 'oitc-customalert-rules-edit',
-  standalone: true,
+    selector: 'oitc-customalert-rules-edit',
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -81,9 +80,9 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         FormLoaderComponent,
         RouterLink
     ],
-  templateUrl: './customalert-rules-edit.component.html',
-  styleUrl: './customalert-rules-edit.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './customalert-rules-edit.component.html',
+    styleUrl: './customalert-rules-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomalertRulesEditComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();

@@ -66,7 +66,6 @@ import {
 
 @Component({
     selector: 'oitc-agentconnector-show-output',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,

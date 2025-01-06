@@ -51,7 +51,6 @@ declare global {
 
 @Component({
     selector: 'oitc-sparkline-stats',
-    standalone: true,
     imports: [
         NgApexchartsModule,
         NgIf

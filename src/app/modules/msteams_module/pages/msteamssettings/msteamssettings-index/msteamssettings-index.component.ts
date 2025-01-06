@@ -30,7 +30,6 @@ import { GenericValidationError } from '../../../../../generic-responses';
 
 @Component({
     selector: 'oitc-msteamssettings-index',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -38,7 +37,6 @@ import { GenericValidationError } from '../../../../../generic-responses';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

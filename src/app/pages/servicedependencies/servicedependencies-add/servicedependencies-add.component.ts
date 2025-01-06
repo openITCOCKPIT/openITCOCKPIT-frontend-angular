@@ -57,9 +57,7 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-servicedependencies-add',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

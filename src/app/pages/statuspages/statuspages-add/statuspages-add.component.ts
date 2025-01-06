@@ -64,8 +64,7 @@ import {intersection} from 'lodash';
 
 
 @Component({
-  selector: 'oitc-statuspages-add',
-  standalone: true,
+    selector: 'oitc-statuspages-add',
     imports: [
         TranslocoDirective,
         FaIconComponent,
@@ -102,9 +101,9 @@ import {intersection} from 'lodash';
         ColComponent,
         InputGroupTextDirective
     ],
-  templateUrl: './statuspages-add.component.html',
-  styleUrl: './statuspages-add.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './statuspages-add.component.html',
+    styleUrl: './statuspages-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatuspagesAddComponent implements OnInit, OnDestroy {
 

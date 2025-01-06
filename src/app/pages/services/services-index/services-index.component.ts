@@ -145,9 +145,7 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-services-index',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         FaIconComponent,
         PermissionDirective,
@@ -219,8 +217,8 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './services-index.component.html',
     styleUrl: './services-index.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService},
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService}
+        { provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService },
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

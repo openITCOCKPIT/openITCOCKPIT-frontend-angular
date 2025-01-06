@@ -32,9 +32,7 @@ import { CreditsComponent } from '../credits/credits.component';
 
 @Component({
     selector: 'oitc-registers-index',
-    standalone: true,
     imports: [
-
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,

@@ -39,7 +39,6 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-hosts-send-custom-notification-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         ColComponent,

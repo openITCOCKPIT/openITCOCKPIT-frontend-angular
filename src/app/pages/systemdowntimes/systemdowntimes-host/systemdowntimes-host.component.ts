@@ -64,10 +64,8 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
 
 @Component({
     selector: 'oitc-systemdowntimes-host',
-    standalone: true,
     imports: [
         CardComponent,
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -116,7 +114,7 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
     templateUrl: './systemdowntimes-host.component.html',
     styleUrl: './systemdowntimes-host.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService}
+        { provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

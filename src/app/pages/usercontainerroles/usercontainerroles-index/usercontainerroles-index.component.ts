@@ -55,7 +55,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 
 @Component({
     selector: 'oitc-usercontainerroles-index',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -99,8 +98,8 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     styleUrl: './usercontainerroles-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: UsercontainerrolesService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
-    ],
+        { provide: DELETE_SERVICE_TOKEN, useClass: UsercontainerrolesService } // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
+    ]
 })
 export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy{
     private readonly modalService: ModalService = inject(ModalService);

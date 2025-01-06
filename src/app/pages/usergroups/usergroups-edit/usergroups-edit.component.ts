@@ -61,7 +61,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-usergroups-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,

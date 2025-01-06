@@ -51,7 +51,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'oitc-agentconnector-create-services',
-    standalone: true,
     imports: [
         AgentconnectorWizardProgressbarComponent,
         CardBodyComponent,

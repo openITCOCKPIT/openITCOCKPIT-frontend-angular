@@ -23,10 +23,10 @@ import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-vmware-through-vcenter',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -42,7 +42,8 @@ import { RouterLink } from '@angular/router';
         TranslocoDirective,
         TranslocoPipe,
         WizardsDynamicfieldsComponent,
-        RouterLink
+        RouterLink,
+        FormsModule
     ],
     templateUrl: './vmware-through-vcenter.component.html',
     styleUrl: './vmware-through-vcenter.component.css',

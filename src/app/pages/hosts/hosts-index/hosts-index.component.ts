@@ -132,7 +132,6 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-hosts-index',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -143,7 +142,6 @@ import { IndexPage } from '../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -213,8 +211,8 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DISABLE_SERVICE_TOKEN, useClass: HostsService },
+        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService } // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

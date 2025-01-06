@@ -51,13 +51,11 @@ import { MatSort } from '@angular/material/sort';
 
 @Component({
     selector: 'oitc-sla-settings-index',
-    standalone: true,
     imports: [
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,

@@ -69,7 +69,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosts-edit',
-    standalone: true,
     imports: [
         AlertComponent,
         AlertHeadingDirective,
@@ -80,7 +79,6 @@ import { HistoryService } from '../../../history.service';
         CardHeaderComponent,
         CardTitleDirective,
         CheckAttemptsInputComponent,
-
         DropdownComponent,
         DropdownItemDirective,
         DropdownMenuDirective,

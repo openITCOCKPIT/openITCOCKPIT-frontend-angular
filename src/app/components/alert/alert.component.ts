@@ -16,7 +16,6 @@ import { IconLookup } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-alert',
-    standalone: true,
     imports: [
         NgClass,
         NgTemplateOutlet,

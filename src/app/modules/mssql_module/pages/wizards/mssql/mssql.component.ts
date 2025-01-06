@@ -23,7 +23,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-mssql',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,

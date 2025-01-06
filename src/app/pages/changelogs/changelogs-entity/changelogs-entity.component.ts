@@ -40,9 +40,7 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
 
 @Component({
     selector: 'oitc-changelogs-entity',
-    standalone: true,
     imports: [
-
         TranslocoDirective,
         RouterLink,
         FaIconComponent,

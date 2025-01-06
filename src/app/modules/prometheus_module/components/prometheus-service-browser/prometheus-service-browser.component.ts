@@ -19,7 +19,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-prometheus-service-browser',
-    standalone: true,
     imports: [
         RowComponent,
         ColComponent,

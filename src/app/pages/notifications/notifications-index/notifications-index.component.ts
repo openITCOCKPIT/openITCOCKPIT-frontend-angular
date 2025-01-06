@@ -57,13 +57,11 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-notifications-index',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         NavComponent,
         NavItemComponent,

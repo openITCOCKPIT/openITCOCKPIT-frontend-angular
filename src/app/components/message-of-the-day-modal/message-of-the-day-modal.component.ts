@@ -17,7 +17,6 @@ import { NgClass, NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-message-of-the-day-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         ColComponent,

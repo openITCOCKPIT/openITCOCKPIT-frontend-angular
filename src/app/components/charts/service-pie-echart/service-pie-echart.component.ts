@@ -8,7 +8,6 @@ import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-service-pie-echart',
-    standalone: true,
     imports: [
         NgxEchartsDirective
     ],

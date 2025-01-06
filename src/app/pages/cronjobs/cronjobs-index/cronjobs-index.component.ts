@@ -58,7 +58,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-cronjobs-index',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -66,7 +65,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-
         CreditsComponent,
         FaIconComponent,
         FormControlDirective,

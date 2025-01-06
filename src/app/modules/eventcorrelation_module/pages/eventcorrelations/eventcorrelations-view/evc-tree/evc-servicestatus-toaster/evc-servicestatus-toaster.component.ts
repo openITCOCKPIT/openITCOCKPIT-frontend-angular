@@ -35,7 +35,6 @@ import { TrustAsHtmlPipe } from '../../../../../../../pipes/trust-as-html.pipe';
 
 @Component({
     selector: 'oitc-evc-servicestatus-toaster',
-    standalone: true,
     imports: [
         HostSummaryStatusmapComponent,
         NgIf,

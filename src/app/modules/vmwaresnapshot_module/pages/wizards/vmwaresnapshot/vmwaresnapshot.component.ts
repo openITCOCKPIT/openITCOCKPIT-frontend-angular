@@ -29,7 +29,6 @@ import { MysqlWizardGet } from '../../../../../pages/wizards/mysqlserver/mysqlse
 
 @Component({
     selector: 'oitc-vmwaresnapshot',
-    standalone: true,
     imports: [
         RouterLink,
         FaIconComponent,

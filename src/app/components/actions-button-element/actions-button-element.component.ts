@@ -32,7 +32,6 @@ import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
     selector: 'oitc-actions-button-element',
-    standalone: true,
     imports: [
         RouterLink,
         PermissionDirective,

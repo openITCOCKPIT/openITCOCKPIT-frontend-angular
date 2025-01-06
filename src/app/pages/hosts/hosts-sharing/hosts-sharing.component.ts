@@ -52,7 +52,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosts-sharing',
-    standalone: true,
     imports: [
         AlertComponent,
         AlertHeadingDirective,
@@ -64,7 +63,6 @@ import { HistoryService } from '../../../history.service';
         CardHeaderComponent,
         CardTitleDirective,
         CodeMirrorContainerComponent,
-
         FaIconComponent,
         FormCheckComponent,
         FormControlDirective,

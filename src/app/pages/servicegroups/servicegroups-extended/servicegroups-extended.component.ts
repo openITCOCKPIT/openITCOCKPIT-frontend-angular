@@ -108,7 +108,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 
 @Component({
     selector: 'oitc-servicegroups-extended',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -177,8 +176,8 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     templateUrl: './servicegroups-extended.component.html',
     styleUrl: './servicegroups-extended.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService},
-        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService}
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService },
+        { provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -59,7 +59,6 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 
 @Component({
     selector: 'oitc-eventcorrelations-index',
-    standalone: true,
     imports: [
         FaIconComponent,
         PermissionDirective,
@@ -105,7 +104,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
     templateUrl: './eventcorrelations-index.component.html',
     styleUrl: './eventcorrelations-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: EventcorrelationsService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: EventcorrelationsService } // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
