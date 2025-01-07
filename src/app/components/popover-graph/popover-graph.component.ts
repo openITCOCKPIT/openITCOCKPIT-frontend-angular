@@ -16,10 +16,10 @@ import { PerformanceData } from './popover-graph.interface';
 import { NgClass, NgForOf, NgIf, NgStyle } from '@angular/common';
 import { PopoverConfigBuilder } from './popover-config-builder';
 import * as _uPlot from 'uplot';
-import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 import { debounce } from '../debounce.decorator';
 import { ChartLoaderComponent } from './chart-loader/chart-loader.component';
 import { TimezoneObject } from '../../pages/services/timezone.interface';
+import { Popover, PopoverModule } from 'primeng/popover';
 
 const uPlot: any = (_uPlot as any)?.default;
 
@@ -46,8 +46,9 @@ type PerfParams = {
         RowComponent,
         NgIf,
         ContainerComponent,
-        OverlayPanelModule,
-        ChartLoaderComponent
+        ChartLoaderComponent,
+        Popover,
+        PopoverModule
     ],
     templateUrl: './popover-graph.component.html',
     styleUrl: './popover-graph.component.css',
@@ -79,7 +80,7 @@ export class PopoverGraphComponent implements OnDestroy {
     private timer: ReturnType<typeof setTimeout> | null = null;
     private startTimestamp: number = new Date().getTime();
 
-    @ViewChild('graphOverlayPanel') graphOverlayPanel!: OverlayPanel;
+    @ViewChild('graphOverlayPanel') graphOverlayPanel!: Popover;
 
     private cdr = inject(ChangeDetectorRef);
 

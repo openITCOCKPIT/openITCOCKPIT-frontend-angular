@@ -41,7 +41,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideToastr } from 'ngx-toastr';
 import { providePrimeNG } from 'primeng/config';
 
-import Lara from '@primeng/themes/lara';
+//import Aura from '@primeng/themes/aura';
+import OItcPrimeNGPreset from './layouts/primeng/primeng.preset';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -81,10 +82,10 @@ export const appConfig: ApplicationConfig = {
         DropdownService,
         providePrimeNG({
             theme: {
-                preset: Lara,
+                preset: OItcPrimeNGPreset,
                 options: {
                     prefix: 'p',
-                    darkModeSelector: 'system',
+                    darkModeSelector: '.dark-theme',
                     cssLayer: false
                 }
             }

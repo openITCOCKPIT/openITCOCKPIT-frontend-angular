@@ -92,6 +92,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
             // theme can be one of 'light', 'dark', 'auto'
             if (theme === 'dark') {
                 this.document.body.classList.add('dark-theme');
+                this.document.querySelector("html")!.classList.add("dark-theme"); // PrimeNG needs this
                 this.LayoutService.setTheme('dark');
             } else if (theme === 'auto') {
                 const osSystemDarkModeEnabled = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -102,6 +103,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
                 }
             } else {
                 this.document.body.classList.remove('dark-theme');
+                this.document.querySelector("html")!.classList.remove("dark-theme"); // PrimeNG needs this
                 this.LayoutService.setTheme('light');
             }
         }));
