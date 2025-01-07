@@ -9,6 +9,11 @@ import { Availability } from '../../../pages/slas/Slas.interface';
 import { PieChartMetric } from '../../../../../components/charts/charts.interface';
 import { LayoutService } from '../../../../../layouts/coreui/layout.service';
 
+import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+import { PieChart } from 'echarts/charts';
+
+echarts.use([PieChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent]);
+
 @Component({
     selector: 'oitc-sla-availability-overview-pie-echart',
     imports: [

@@ -57,7 +57,7 @@
                 </c-row>
 
                 <c-row *ngIf="valid && LicenseResponse">
-                    <c-col xs="12">
+                    <c-col xs="12" *ngIf="LicenseResponse.license">
 
                         <c-row>
                             <c-col xs="12" lg="6" class="img-cert"

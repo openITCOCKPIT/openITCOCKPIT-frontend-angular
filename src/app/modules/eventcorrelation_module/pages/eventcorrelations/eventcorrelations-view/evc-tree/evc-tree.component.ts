@@ -216,11 +216,13 @@ export class EvcTreeComponent implements AfterViewInit {
     }
 
     public ngAfterViewInit() {
+        console.log('ngAfterViewInit');
         this.isInitialized = true;
         this.updateGraph(new dagre.graphlib.Graph(), this.direction);
     }
 
     public onLoaded(): void {
+        console.log('onLoaded');
         this.fitToScreen();
     }
 

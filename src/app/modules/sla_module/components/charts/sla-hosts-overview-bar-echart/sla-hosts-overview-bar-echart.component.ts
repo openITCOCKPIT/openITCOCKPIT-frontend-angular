@@ -8,6 +8,10 @@ import { TranslocoService } from '@jsverse/transloco';
 import { LayoutService } from '../../../../../layouts/coreui/layout.service';
 import { Sla } from '../../../pages/slas/Slas.interface';
 
+import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+import { BarChart, LineChart } from 'echarts/charts';
+
+echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent]);
 
 @Component({
     selector: 'oitc-sla-hosts-overview-bar-echart',

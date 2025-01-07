@@ -7,6 +7,11 @@ import { Subscription } from 'rxjs';
 import { LayoutService } from '../../../layouts/coreui/layout.service';
 import { TranslocoService } from '@jsverse/transloco';
 
+import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+import { PieChart } from 'echarts/charts';
+
+echarts.use([PieChart, LegendComponent, TitleComponent, TooltipComponent]);
+
 @Component({
     selector: 'oitc-service-pie-echart',
     imports: [

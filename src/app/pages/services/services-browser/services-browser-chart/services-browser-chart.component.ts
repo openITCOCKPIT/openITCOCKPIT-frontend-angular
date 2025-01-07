@@ -53,6 +53,18 @@ import { LocalStorageService } from '../../../../services/local-storage.service'
 import { GenericUnixtimerange } from '../../../../generic.interfaces';
 import { LayoutService } from '../../../../layouts/coreui/layout.service';
 
+import {
+    GridComponent,
+    LegendComponent,
+    TitleComponent,
+    ToolboxComponent,
+    TooltipComponent,
+    VisualMapComponent
+} from 'echarts/components';
+import { BarChart, LineChart } from 'echarts/charts';
+
+echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent]);
+
 interface ServiceBrowserChartConfig {
     showDataPoint: boolean,
     smooth: boolean,

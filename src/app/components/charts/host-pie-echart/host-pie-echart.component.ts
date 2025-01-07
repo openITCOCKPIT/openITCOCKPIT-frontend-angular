@@ -8,6 +8,11 @@ import { PieChartMetric } from '../charts.interface';
 import { TranslocoService } from '@jsverse/transloco';
 import { LayoutService } from '../../../layouts/coreui/layout.service';
 
+import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+import { PieChart } from 'echarts/charts';
+
+echarts.use([PieChart, LegendComponent, TitleComponent, TooltipComponent]);
+
 @Component({
     selector: 'oitc-host-pie-echart',
     imports: [

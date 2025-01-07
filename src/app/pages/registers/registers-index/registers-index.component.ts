@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import {
     CardBodyComponent,
     CardComponent,
@@ -26,7 +25,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { RegistersService } from '../registers.service';
-import { NgIf } from '@angular/common';
+import { JsonPipe, NgIf } from '@angular/common';
 import { LicenseResponse } from '../registers.interface';
 import { CreditsComponent } from '../credits/credits.component';
 
@@ -56,7 +55,8 @@ import { CreditsComponent } from '../credits/credits.component';
         RowComponent,
         ColComponent,
         NgIf,
-        CreditsComponent
+        CreditsComponent,
+        JsonPipe
     ],
     templateUrl: './registers-index.component.html',
     styleUrl: './registers-index.component.css',
