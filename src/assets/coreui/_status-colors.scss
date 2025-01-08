@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .bg-up,
 .bg-ok {
     background: $success !important;
@@ -99,19 +101,19 @@
 }
 
 .ok-soft, .up-soft {
-    color: lighten($success, 40%) !important;
+    color: color.adjust($success, $lightness: 40%, $space: hsl) !important;
 }
 
 .warning-soft {
-    color: lighten($warning, 20%) !important;;
+    color: color.adjust($warning, $lightness: 20%, $space: hsl) !important;;
 }
 
 .critical-soft, .down-soft {
-    color: lighten($danger, 40%) !important;
+    color: color.adjust($danger, $lightness: 40%, $space: hsl) !important;
 }
 
 .unknown-soft, .unreachable-soft {
-    color: lighten($secondary, 40%) !important;
+    color: color.adjust($secondary, $lightness: 40%, $space: hsl) !important;
 }
 
 .txt-ack {

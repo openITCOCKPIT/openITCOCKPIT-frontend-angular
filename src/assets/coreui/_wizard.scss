@@ -1,5 +1,7 @@
+@use "sass:color";
+
 .wizard-bg-inactive {
-    background: darken($light-bg-subtle, 5%)
+    background: color.adjust($light-bg-subtle, $lightness: -5%, $space: hsl)
 }
 
 body.dark-theme .wizard-bg-inactive {
