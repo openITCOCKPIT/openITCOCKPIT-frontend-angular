@@ -1,5 +1,7 @@
 # openITCOCKPIT Frontend Angular
 
+![openITCOCKPIT goes Angular](src/assets/images/logos/openitcockpit_gradient_bg.png)
+
 **THIS IS WORK IN PROGRESS!** Do not use for production! You have been warned.
 
 ![screenshot](src/assets/docs/angular-frontend.jpg)
@@ -29,7 +31,7 @@ eintragen
 ```
 # Proxy for /a/ Angular frontend
 location ^~ /a/ {
-    proxy_pass http://localhost:4200/a/;
+    proxy_pass http://127.0.0.1:4200/a/;
 
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
@@ -97,6 +99,26 @@ exportfs -a
 
 Unter Windows, bzw. wenn die Samba-Freigabe genutzt wird, sind keine Anpassungen erforderlich.
 
+# Build Angular Frontend for Production
+
+```
+npm install
+ng build
+```
+
+Nginx configuration
+
+```
+# Proxy for /a/ Angular frontend
+location ^~ /a/ {
+    root /opt/openitc/frontend-angular/dist/frontend-angular/browser/;
+    index index.html;
+    try_files $uri /a/index.html;
+}
+```
+
+---
+
 Original Angular Readme (unten)
 
 # How to Upgrade Angular
@@ -137,7 +159,9 @@ This document describes how to upgrade the underlying Angular version.
    version.
 
    ```
-   npm install --save typescript@~5.5.3
+
+npm install --save typescript@~5.5.3
+
    ```
 
 ---
