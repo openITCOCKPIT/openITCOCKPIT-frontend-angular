@@ -1,5 +1,5 @@
 import {
-    AfterViewInit,
+    afterRenderEffect,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
@@ -132,7 +132,7 @@ const OPERATOR_WIDTH = 100;
     styleUrl: './evc-tree.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EvcTreeComponent implements AfterViewInit {
+export class EvcTreeComponent {
     public evcId = input<number>(0);
     public evcTree = input<EvcTree[]>([]);
     public downtimedServices = input<number>(0);
@@ -213,16 +213,17 @@ export class EvcTreeComponent implements AfterViewInit {
             }
 
         });
+
+        afterRenderEffect(() => {
+            // DOM rendering completed for this component
+            this.isInitialized = true;
+            this.updateGraph(new dagre.graphlib.Graph(), this.direction);
+            this.cdr.markForCheck();
+        });
     }
 
-    public ngAfterViewInit() {
-        console.log('ngAfterViewInit');
-        this.isInitialized = true;
-        this.updateGraph(new dagre.graphlib.Graph(), this.direction);
-    }
 
     public onLoaded(): void {
-        console.log('onLoaded');
         this.fitToScreen();
     }
 

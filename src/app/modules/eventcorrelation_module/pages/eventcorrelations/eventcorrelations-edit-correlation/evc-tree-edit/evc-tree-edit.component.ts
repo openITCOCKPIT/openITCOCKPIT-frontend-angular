@@ -1,5 +1,5 @@
 import {
-    AfterViewInit,
+    afterRenderEffect,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
@@ -138,7 +138,7 @@ const GROUP_HEIGHT = 50;
     styleUrl: './evc-tree-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
+export class EvcTreeEditComponent implements OnDestroy {
     public evcId = input<number>(0);
     public evcTree = input<EvcTree[]>([]);
     public stateForDisabledService = input<number>(3);
@@ -213,11 +213,12 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
             }
 
         });
-    }
 
-    public ngAfterViewInit(): void {
-        this.isInitialized = true;
-        this.updateGraph();
+        afterRenderEffect(() => {
+            // DOM rendering completed for this component
+            this.isInitialized = true;
+            this.updateGraph();
+        });
     }
 
     public ngOnDestroy(): void {
