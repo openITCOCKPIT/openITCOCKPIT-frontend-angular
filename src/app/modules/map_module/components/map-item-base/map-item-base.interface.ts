@@ -8,12 +8,12 @@ export interface MapitemBase {
     map_id: number
     x: number
     y: number
-    limit?: any
-    iconset?: string
-    type?: string
-    object_id?: number
     z_index?: string
     display?: boolean
+    startX?: number
+    startY?: number
+    endX?: number
+    endY?: number
 }
 
 export interface ContextAction {

@@ -8,6 +8,7 @@ import {
     EventEmitter,
     inject,
     input,
+    InputSignal,
     Output,
     ViewChild
 } from '@angular/core';
@@ -17,6 +18,7 @@ import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
+import { Mapline } from '../../pages/mapeditors/Mapeditors.interface';
 
 @Component({
     selector: 'oitc-map-item-base',
@@ -29,7 +31,7 @@ import { TranslocoService } from '@jsverse/transloco';
 export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewInit {
     @ViewChild('container', {static: true}) containerRef!: ElementRef<HTMLDivElement>;
 
-    public item = input<T>();
+    public item: InputSignal<T | undefined> = input<T | undefined>();
 
     protected position: MapItemPosition = {x: 0, y: 0};
 
@@ -38,6 +40,10 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     protected x: number = 0;
     protected y: number = 0;
     protected zIndex: string = "0";
+    protected startX?: number;
+    protected startY?: number;
+    protected endX?: number;
+    protected endY?: number;
 
     public gridSize: { x: number, y: number } = {x: 25, y: 25}; // Grid size for snapping
     public gridEnabled: boolean = true;
@@ -59,8 +65,15 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         effect(() => {
             this.id = this.item()!.id;
             this.mapId = this.item()!.map_id;
-            this.x = this.item()!.x;
-            this.y = this.item()!.y;
+            if (this.isMapline(this.item())) {
+                this.startX = this.item()!.startX;
+                this.startY = this.item()!.startY;
+                this.endX = this.item()!.endX;
+                this.endY = this.item()!.endY;
+            } else {
+                this.x = this.item()!.x;
+                this.y = this.item()!.y;
+            }
             this.zIndex = this.item()!.z_index!;
             this.setPosition();
             this.setLayer(this.zIndex);
@@ -73,7 +86,11 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     }
 
     public setPosition(): void {
-        this.position = {x: this.x, y: this.y};
+        if (this.isMapline(this.item())) {
+            this.position = {x: this.startX!, y: this.startY!};
+        } else {
+            this.position = {x: this.x, y: this.y};
+        }
         this.containerRef.nativeElement.style.left = `${this.position.x}px`;
         this.containerRef.nativeElement.style.top = `${this.position.y}px`;
         this.cdr.markForCheck();
@@ -85,6 +102,11 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         this.setPosition();
     }
 
+    public isMapline(item: any): item is Mapline {
+        return item && item.startX !== undefined && item.startY !== undefined && item.endX !== undefined && item.endY !== undefined;
+    }
+
+    // sets initial offset when dragging starts needed to prevent bouncing after start dragging)
     public onDragStart(cdkEvent: CdkDragStart<any>) {
         cdkEvent.event.preventDefault();
 
@@ -107,6 +129,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         console.error("drag start", this.initialOffset.x, this.initialOffset.y);
     }
 
+    // fires drag end event
     public onDragEnd(cdkEvent: CdkDragEnd<any>) {
 
         console.error("drag end");
@@ -117,11 +140,22 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         const posX = mapItem.x - mapCanvas.x;
         const posY = mapItem.y - mapCanvas.y;
 
-        this.dropItemEvent.emit({id: this.id, x: posX, y: posY, map_id: this.mapId});
+        this.dropItemEvent.emit({
+            id: this.id,
+            x: posX,
+            y: posY,
+            map_id: this.mapId,
+            startX: this.startX,
+            startY: this.startY,
+            endX: this.endX,
+            endY: this.endY,
+        })
+        ;
 
         this.cdr.markForCheck();
     }
 
+    //grid snapping logic
     public computeDragRenderPos = (pos: { x: number, y: number }) => {
         let posX;
         let posY;

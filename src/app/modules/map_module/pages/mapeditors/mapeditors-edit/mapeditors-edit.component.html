@@ -175,6 +175,16 @@
                                    (dropItemEvent)="onDropItem($event)"
                                    [hidden]="!textItem.display">
                     </oitc-map-text>
+                    <oitc-map-line *ngFor="let lineItem of map.Maplines" [item]="lineItem" [refreshInterval]="0"
+                                   (contextActionEvent)="onContextAction($event)"
+                                   (dropItemEvent)="onDropItem($event)"
+                                   [hidden]="!lineItem.display">
+                    </oitc-map-line>
+                    <oitc-map-icon *ngFor="let iconItem of map.Mapicons" [item]="iconItem"
+                                   (contextActionEvent)="onContextAction($event)"
+                                   (dropItemEvent)="onDropItem($event)"
+                                   [hidden]="!iconItem.display">
+                    </oitc-map-icon>
                 }
                 <!-- start mapToolbar -->
                 <div id="mapToolbar" cdkDrag cdkDragBoundary=".map-canvas">

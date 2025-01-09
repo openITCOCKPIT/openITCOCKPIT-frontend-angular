@@ -14,6 +14,7 @@ export interface MapRoot {
     Mapitems: Mapitem[]
     Maplines: Mapline[]
     Mapgadgets: Mapgadget[]
+    Mapicons: Mapicon[]
     Maptexts: Maptext[]
     Mapsummaryitems: Mapsummaryitem[]
 
@@ -29,42 +30,24 @@ export interface Map {
     json_data: string
 }
 
-export interface Mapitem {
-    id: number
-    map_id: number
-    x: number
-    y: number
+export interface Mapitem extends MapitemBase {
     limit?: number
     iconset: string
     type: string
     object_id: number
-    z_index: string
     show_label: boolean
     label_possition: number
-    display: boolean
 }
 
-export interface Mapline {
-    id: number
-    map_id: number
-    startX: number
-    startY: number
-    endX: number
-    endY: number
+export interface Mapline extends MapitemBase {
     limit: any
     iconset: any
     type: string
     object_id: number
-    z_index: string
     show_label: boolean
-    display: boolean
 }
 
 export interface Mapgadget {
-    id: number
-    map_id: number
-    x: number
-    y: number
     size_x: number
     size_y: number
     limit: number
@@ -74,11 +57,13 @@ export interface Mapgadget {
     transparent_background: boolean
     show_label: boolean
     font_size: number
-    z_index: string
     metric: any
     output_type: any
-    display: boolean
     label_possition: any
+}
+
+export interface Mapicon extends MapitemBase {
+    icon: string
 }
 
 export interface Maptext extends MapitemBase {

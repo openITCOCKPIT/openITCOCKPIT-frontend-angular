@@ -1,28 +1,23 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, InputSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, InputSignal } from '@angular/core';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { NgClass, NgIf, NgStyle } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Maptext } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapicon } from '../../pages/mapeditors/Mapeditors.interface';
 import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
-import { BbCodeParserService } from '../../../../services/bb-code-parser.service';
 
 @Component({
-    selector: 'oitc-map-text',
+    selector: 'oitc-map-icon',
     standalone: true,
     imports: [CdkDrag, NgClass, ContextMenuModule, NgIf, NgStyle, TrustAsHtmlPipe],
-    templateUrl: './map-text.component.html',
-    styleUrl: './map-text.component.css',
+    templateUrl: './map-icon.component.html',
+    styleUrl: './map-icon.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapTextComponent extends MapItemBaseComponent<Maptext> {
+export class MapIconComponent extends MapItemBaseComponent<Mapicon> {
 
-    public override item: InputSignal<Maptext | undefined> = input<Maptext>();
-
-    private readonly BBParserService = inject(BbCodeParserService);
-
-    protected bbhtml: string = '';
+    public override item: InputSignal<Mapicon | undefined> = input<Mapicon>();
 
     constructor(parent: MapCanvasComponent) {
         super(parent);
@@ -34,15 +29,7 @@ export class MapTextComponent extends MapItemBaseComponent<Maptext> {
             this.zIndex = this.item()!.z_index!;
             this.setPosition();
             this.setLayer(this.zIndex);
-            this.onItemTextChange();
         });
-    }
-
-    private onItemTextChange() {
-        if (this.item()?.text !== null && typeof this.item()?.text !== 'undefined') {
-            this.bbhtml = this.BBParserService.parse(this.item()!.text);
-            this.cdr.markForCheck();
-        }
     }
 
 }

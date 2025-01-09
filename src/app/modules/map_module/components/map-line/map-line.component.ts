@@ -8,7 +8,7 @@ import {
     OnDestroy,
     OnInit
 } from '@angular/core';
-import { Data, MapItemRoot, MapItemRootParams } from './map-item.interface';
+import { Data, Mapitem, MapLineRoot, MapLineRootParams } from './map-line.interface';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { NgClass, NgIf } from '@angular/common';
@@ -16,91 +16,118 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { interval, Subscription } from 'rxjs';
-import { MapItemService } from './map-item.service';
-import { Mapitem } from '../../pages/mapeditors/Mapeditors.interface';
+import { MapLineService } from './map-line.service';
 import { LabelPosition } from '../map-item-base/map-item-base.enum';
+import { Mapline } from '../../pages/mapeditors/Mapeditors.interface';
 
 @Component({
-    selector: 'oitc-map-item',
+    selector: 'oitc-map-line',
     standalone: true,
     imports: [CdkDrag, NgClass, ContextMenuModule, NgIf],
-    templateUrl: './map-item.component.html',
-    styleUrl: './map-item.component.css',
+    templateUrl: './map-line.component.html',
+    styleUrl: './map-line.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements OnInit, OnDestroy {
+export class MapLineComponent extends MapItemBaseComponent<Mapline> implements OnInit, OnDestroy {
 
-    public override item: InputSignal<Mapitem | undefined> = input<Mapitem>();
-    public refreshInterval = input<number>();
+    public override item: InputSignal<Mapline | undefined> = input<Mapline>();
+    public refreshInterval = input<number>(0);
 
     private subscriptions: Subscription = new Subscription();
-    private readonly MapItemService = inject(MapItemService);
-    private blinkSubscription: Subscription = new Subscription();
+    private readonly MapLineService = inject(MapLineService);
+    private statusUpdateInterval: Subscription = new Subscription();
 
-    private uuidForServices: string | null = null;
-    private interval: number | null = null;
-    protected icon: string = "";
-    protected currentIcon: string = "";
-    protected icon_property: string = "";
     protected allowView: boolean = false;
     protected label: string = "";
+    protected width: number = 0;
+    protected top: number = 0;
+    protected left: number = 0;
+    protected origin: string = "";
+    protected arctan: number = 0;
+    protected background: string = "";
+    protected init: boolean = true;
 
     constructor(parent: MapCanvasComponent) {
         super(parent);
         effect(() => {
             this.id = this.item()!.id;
             this.mapId = this.item()!.map_id;
-            this.x = this.item()!.x;
-            this.y = this.item()!.y;
+            if (this.isMapline(this.item())) {
+                this.startX = this.item()!.startX;
+                this.startY = this.item()!.startY;
+                this.endX = this.item()!.endX;
+                this.endY = this.item()!.endY;
+            } else {
+                this.x = this.item()!.x;
+                this.y = this.item()!.y;
+            }
             this.zIndex = this.item()!.z_index!;
             this.setPosition();
             this.setLayer(this.zIndex);
-            this.onItemObjectIdChange();
+            this.onItemChange();
         });
     }
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
-        this.stopBlink();
         this.stop();
     }
 
     public ngOnInit(): void {
-        this.load();
-        if (this.refreshInterval()! > 0) {
-            /*MapItemReloadService.setRefreshInterval(this.refreshInterval());
-            MapItemReloadService.registerNewItem(uuidForServices, this.mapItem(), updateCallback);*/
+        this.initLine();
+
+        if (this.item()!.type === 'stateless') {
+            this.background = 'bg-color-black';
+            this.allowView = true;
+            this.init = false;
+        } else {
+            this.load();
         }
     }
 
-    public updateCallback(result: MapItemRoot) {
-        if (!result.allowView) {
-            this.allowView = false;
+    private initLine() {
+
+        let startX = this.item()?.startX;
+        let startY = this.item()?.startY;
+        let endX = this.item()?.endX;
+        let endY = this.item()?.endY;
+
+        if (!startY || !startX || !endY || !endX) {
             return;
         }
 
-        this.icon = result.data.icon;
-        this.icon_property = result.data.icon_property;
-        this.allowView = result.allowView;
+        this.item()!.startX = parseInt(startX.toString(), 10);
+        this.item()!.startY = parseInt(startY.toString(), 10);
+        this.item()!.endX = parseInt(endX.toString(), 10);
+        this.item()!.endY = parseInt(endY.toString(), 10);
 
-        this.getLabel(result.data);
+        this.zIndex = parseInt(this.item()!.z_index!.toString(), 10).toString();
 
-        this.currentIcon = this.icon;
+        let distance = Math.sqrt(
+            Math.pow((endX - startX), 2) + Math.pow((endY - startY), 2)
+        );
 
-        /*if (result.data.data.isAcknowledged === true || result.data.data.isInDowntime === true) {
-            BlinkService.registerNewObject(this.uuidForServices, $scope.blinkServiceCallback);
-        } else {
-            BlinkService.unregisterObject(this.uuidForServices);
-        }*/
+        this.width = parseInt(distance.toString(), 10);
+
+        this.top = startY;
+        if (startX > endX) {
+            this.left = startX;
+            this.origin = 'top right';
+        }
+
+        if (endX > startX) {
+            this.left = startX;
+            this.origin = 'top left';
+        }
+
+        let tan = (endY - startY) / (endX - startX);
+        let atan = Math.atan((endY - startY) / (endX - startX)); //tan / Math.PI * 180;
+        this.arctan = atan * 180 / Math.PI;
         this.cdr.markForCheck();
     };
 
     private load() {
-        if (this.uuidForServices === null) {
-            //this.uuidForServices = UuidService.v4();
-        }
-
-        const params: MapItemRootParams = {
+        const params: MapLineRootParams = {
             'angular': true,
             'disableGlobalLoader': true,
             'objectId': this.item()!.object_id as number,
@@ -108,13 +135,20 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
             'type': this.item()!.type as string
         };
 
-        this.subscriptions.add(this.MapItemService.getMapItem(params)
-            .subscribe((result: MapItemRoot) => {
-                this.updateCallback(result);
+        this.subscriptions.add(this.MapLineService.getMapLine(params)
+            .subscribe((result: MapLineRoot) => {
+                this.background = result.data.background;
+                this.allowView = result.allowView;
+                this.init = false;
+                if (this.allowView) {
+                    this.getLabel(result.data);
+                }
+                this.initRefreshTimer();
+                this.cdr.markForCheck();
             }));
     };
 
-    private getLabel(data: Data) {
+    protected getLabel(data: Data) {
         this.label = '';
         switch (this.item()!.type) {
             case 'host':
@@ -140,47 +174,36 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         this.cdr.markForCheck();
     };
 
-    private startBlink() {
-        this.blinkSubscription = interval(5000).subscribe(() => {
-            if (this.currentIcon === this.icon) {
-                this.currentIcon = this.icon_property;
-            } else {
-                this.currentIcon = this.icon;
+    private initRefreshTimer() {
+        if (this.item()!.type !== 'stateless') {
+            if (this.refreshInterval() > 0 && !this.statusUpdateInterval) {
+                this.statusUpdateInterval = interval(this.refreshInterval()).subscribe(() => {
+                    this.load();
+                });
             }
-            this.cdr.markForCheck();
-        });
-    };
-
-    private stopBlink() {
-        if (this.blinkSubscription) {
-            this.blinkSubscription.unsubscribe();
-            this.cdr.markForCheck();
         }
-    };
-
-    private blinkServiceCallback() {
-        if (this.currentIcon === this.icon) {
-            this.currentIcon = this.icon_property;
-        } else {
-            this.currentIcon = this.icon;
-        }
-        this.cdr.markForCheck();
     };
 
     private stop() {
-        /*BlinkService.unregisterObject(uuidForServices);
-        MapItemReloadService.unregisterItem(uuidForServices);*/
+        if (this.statusUpdateInterval) {
+            this.statusUpdateInterval.unsubscribe();
+            this.cdr.markForCheck();
+        }
     };
 
-    private onItemObjectIdChange() {
-        //if(this.init || $scope.item.object_id === null){
-        if (this.item()!.object_id === null) {
-            //Avoid ajax error if user search a object in item config modal
-            return;
+    private onItemChange() {
+        if (this.init || this.item()!.object_id === null) {
+            if (this.item()!.type !== 'stateless') {
+                //Avoid ajax error if user search a object in line config modal
+                return;
+            }
         }
 
-        this.load();
-    };
+        this.initLine();
+        if (this.item()!.type !== 'stateless') {
+            this.load();
+        }
+    }
 
     protected override getDefaultContextMenuItems(): MenuItem[] {
         return [

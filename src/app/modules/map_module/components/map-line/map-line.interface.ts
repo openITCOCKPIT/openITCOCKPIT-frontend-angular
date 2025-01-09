@@ -1,4 +1,11 @@
-export interface MapItemRootParams {
+import { MapitemBase } from '../map-item-base/map-item-base.interface';
+
+export interface Mapitem extends MapitemBase {
+    show_label?: boolean
+    label_possition?: number
+}
+
+export interface MapLineRootParams {
     angular: true,
     disableGlobalLoader: true,
     objectId: number,
@@ -6,7 +13,7 @@ export interface MapItemRootParams {
     type: string
 }
 
-export interface MapItemRoot {
+export interface MapLineRoot {
     type: string
     allowView: boolean
     data: Data
@@ -97,16 +104,17 @@ export interface Service {
 }
 
 export interface Perfdata {
-    "/": GeneratedType
+    rta: Rta
+    pl: Pl
 }
 
-export interface GeneratedType {
+export interface Rta {
     current: string
     unit: string
     warning: string
     critical: string
     min: string
-    max: string
+    max: any
     metric: string
     datasource: Datasource
 }
@@ -142,6 +150,17 @@ export interface Warn {
 export interface Crit {
     low: number
     high: any
+}
+
+export interface Pl {
+    current: string
+    unit: string
+    warning: string
+    critical: string
+    min: string
+    max: any
+    metric: string
+    datasource: Datasource
 }
 
 export interface Servicestatus {

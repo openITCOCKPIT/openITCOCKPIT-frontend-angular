@@ -42,12 +42,13 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { FormsModule } from '@angular/forms';
 import { MapItemComponent } from '../../../components/map-item/map-item.component';
 import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.component';
-import { Mapitem } from '../../../components/map-item/map-item.interface';
 import { filter, parseInt } from 'lodash';
 import { Background, Mapeditor, MapRoot, MaxUploadLimit, VisibleLayers } from '../Mapeditors.interface';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
-import { ContextAction } from '../../../components/map-item-base/map-item-base.interface';
+import { ContextAction, MapitemBase } from '../../../components/map-item-base/map-item-base.interface';
 import { MapTextComponent } from '../../../components/map-text/map-text.component';
+import { MapIconComponent } from '../../../components/map-icon/map-icon.component';
+import { MapLineComponent } from '../../../components/map-line/map-line.component';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
@@ -85,7 +86,9 @@ import { MapTextComponent } from '../../../components/map-text/map-text.componen
         NgClass,
         CdkDrag,
         CdkDragHandle,
-        MapTextComponent
+        MapTextComponent,
+        MapIconComponent,
+        MapLineComponent
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',
@@ -187,7 +190,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     }
 
-    public onDropItem(mapItem: Mapitem) {
+    public onDropItem(mapItem: MapitemBase) {
         console.error("Item dropped", mapItem);
     }
 
