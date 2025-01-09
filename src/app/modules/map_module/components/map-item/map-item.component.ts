@@ -1,151 +1,178 @@
-import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    effect,
-    ElementRef,
-    EventEmitter,
-    inject,
-    input,
-    Output,
-    ViewChild
-} from '@angular/core';
-import { ContextAction, Mapitem, MapItemPosition } from './map-item.interface';
+import { ChangeDetectionStrategy, Component, effect, inject, input, OnDestroy, OnInit } from '@angular/core';
+import { Data, Mapitem, MapItemRoot, MapItemRootParams } from './map-item.interface';
 import { LabelPosition } from './map-item.enum';
-import { CdkDrag, CdkDragEnd, CdkDragStart } from '@angular/cdk/drag-drop';
+import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { NgClass } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
-import { TranslocoService } from '@jsverse/transloco';
+import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
+import { interval, Subscription } from 'rxjs';
+import { MapItemService } from './map-item.service';
 
 @Component({
     selector: 'oitc-map-item',
     standalone: true,
-    imports: [CdkDrag, NgClass, ContextMenuModule],
+    imports: [CdkDrag, NgClass, ContextMenuModule, NgIf],
     templateUrl: './map-item.component.html',
     styleUrl: './map-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapItemComponent implements AfterViewInit {
-    @ViewChild('container', {static: true}) containerRef!: ElementRef<HTMLDivElement>;
+export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements OnInit, OnDestroy {
 
-    public mapItem = input<Mapitem>();
+    public override item = input<Mapitem>();
+    public refreshInterval = input<number>();
 
-    private position: MapItemPosition = {x: 0, y: 0};
+    private subscriptions: Subscription = new Subscription();
+    private readonly MapItemService = inject(MapItemService);
+    private blinkSubscription: Subscription = new Subscription();
 
-    private _id!: number;
-    private _mapId!: number;
-    private _x: number = 0;
-    private _y: number = 0;
-    private _zIndex: string = "0";
-    private _labelPosition: number = LabelPosition.BOTTOM;
-    protected showLabel: boolean = true;
+    private uuidForServices: string | null = null;
+    private interval: number | null = null;
+    protected icon: string = "";
+    protected currentIcon: string = "";
+    protected icon_property: string = "";
+    protected allowView: boolean = false;
+    protected label: string = "";
 
-    public gridSize: { x: number, y: number } = {x: 25, y: 25}; // Grid size for snapping
-    public gridEnabled: boolean = true;
-    public isViewMode: boolean = true;
-
-    @Output() dropItemEvent = new EventEmitter<Mapitem>();
-    @Output() contextActionEvent = new EventEmitter<ContextAction>();
-
-    private readonly TranslocoService = inject(TranslocoService);
-
-    private cdr = inject(ChangeDetectorRef);
-    private initialOffset: { x: number, y: number } = {x: 0, y: 0}; // Initial offset when dragging (needed to prevent bouncing after start dragging)
-    private mapCanvasComponent: MapCanvasComponent;
-
-    protected contextMenuItems: MenuItem[] = this.getDefaultContextMenuItems();
-
-    constructor(private parent: MapCanvasComponent) {
-        this.mapCanvasComponent = parent;
+    constructor(parent: MapCanvasComponent) {
+        super(parent);
         effect(() => {
-            this._id = this.mapItem()!.id;
-            this._mapId = this.mapItem()!.map_id;
-            this._x = this.mapItem()!.x;
-            this._y = this.mapItem()!.y;
-            this._zIndex = this.mapItem()!.z_index!;
-            this._labelPosition = this.mapItem()!.label_possition!;
-            this.showLabel = this.mapItem()!.show_label!;
+            this.id = this.item()!.id;
+            this.mapId = this.item()!.map_id;
+            this.x = this.item()!.x;
+            this.y = this.item()!.y;
+            this.zIndex = this.item()!.z_index!;
             this.setPosition();
-            this.setLayer(this._zIndex);
+            this.setLayer(this.zIndex);
+            this.onItemObjectIdChange();
         });
     }
 
-    public setLayer(layer: string): void {
-        this.containerRef.nativeElement.style.zIndex = layer;
-        this.cdr.markForCheck();
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+        this.stopBlink();
+        this.stop();
     }
 
-    public setPosition(): void {
-        this.position = {x: this._x, y: this._y};
-        this.containerRef.nativeElement.style.left = `${this.position.x}px`;
-        this.containerRef.nativeElement.style.top = `${this.position.y}px`;
-        this.cdr.markForCheck();
+    public ngOnInit(): void {
+        this.load();
+        if (this.refreshInterval()! > 0) {
+            /*MapItemReloadService.setRefreshInterval(this.refreshInterval());
+            MapItemReloadService.registerNewItem(uuidForServices, this.mapItem(), updateCallback);*/
+        }
     }
 
-    ngAfterViewInit() {
-        this.cdr.markForCheck();
-        this.setLayer(this._zIndex);
-        this.setPosition();
-    }
-
-    public onDragStart(cdkEvent: CdkDragStart<any>) {
-        cdkEvent.event.preventDefault();
-
-        let clientX: number = 0;
-        let clientY: number = 0;
-
-        if (typeof TouchEvent !== 'undefined' && cdkEvent.event instanceof TouchEvent) {
-            let event = cdkEvent.event as TouchEvent;
-            clientX = event.touches[0].clientX;
-            clientY = event.touches[0].clientY;
-        } else {
-            let event = cdkEvent.event as MouseEvent;
-            clientX = event.clientX;
-            clientY = event.clientY;
+    public updateCallback(result: MapItemRoot) {
+        if (!result.allowView) {
+            this.allowView = false;
+            return;
         }
 
-        const rect = this.containerRef.nativeElement.getBoundingClientRect();
-        this.initialOffset = {x: clientX - rect.left, y: clientY - rect.top};
-        this.cdr.markForCheck();
-        console.error("drag start", this.initialOffset.x, this.initialOffset.y);
-    }
+        this.icon = result.data.icon;
+        this.icon_property = result.data.icon_property;
+        this.allowView = result.allowView;
 
-    public onDragEnd(cdkEvent: CdkDragEnd<any>) {
+        this.getLabel(result.data);
 
-        console.error("drag end");
+        this.currentIcon = this.icon;
 
-        const mapCanvas = this.mapCanvasComponent.canvasContainerRef.nativeElement.getBoundingClientRect();
-        const mapItem = cdkEvent.source.element.nativeElement.getBoundingClientRect();
-
-        const posX = mapItem.x - mapCanvas.x;
-        const posY = mapItem.y - mapCanvas.y;
-
-        this.dropItemEvent.emit({id: this._id, x: posX, y: posY, map_id: this._mapId});
-
-        this.cdr.markForCheck();
-    }
-
-    public computeDragRenderPos = (pos: { x: number, y: number }) => {
-        let posX;
-        let posY;
-        if (!this.gridEnabled) {
-            posX = pos.x - this.initialOffset.x;
-            posY = pos.y - this.initialOffset.y;
+        /*if (result.data.data.isAcknowledged === true || result.data.data.isInDowntime === true) {
+            BlinkService.registerNewObject(this.uuidForServices, $scope.blinkServiceCallback);
         } else {
-            posX = Math.round((pos.x - this.initialOffset.x) / this.gridSize.x) * this.gridSize.x;
-            posY = Math.round((pos.y - this.initialOffset.y) / this.gridSize.y) * this.gridSize.y;
+            BlinkService.unregisterObject(this.uuidForServices);
+        }*/
+        this.cdr.markForCheck();
+    };
+
+    private load() {
+        if (this.uuidForServices === null) {
+            //this.uuidForServices = UuidService.v4();
         }
-        return {x: posX, y: posY};
-    }
 
-    public getLabelPositionClass(): string {
-        return 'map-element-label-' + LabelPosition[this._labelPosition].toLowerCase();
-    }
+        const params: MapItemRootParams = {
+            'angular': true,
+            'disableGlobalLoader': true,
+            'objectId': this.item()!.object_id as number,
+            'mapId': this.item()!.map_id as number,
+            'type': this.item()!.type as string
+        };
 
-    private getDefaultContextMenuItems(): MenuItem[] {
+        this.subscriptions.add(this.MapItemService.getMapItem(params)
+            .subscribe((result: MapItemRoot) => {
+                this.updateCallback(result);
+            }));
+    };
+
+    private getLabel(data: Data) {
+        this.label = '';
+        switch (this.item()!.type) {
+            case 'host':
+                this.label = data.Host.hostname;
+                break;
+
+            case 'service':
+                this.label = data.Host.hostname + '/' + data.Service.servicename;
+                break;
+
+            case 'hostgroup':
+                this.label = data.Hostgroup.name;
+                break;
+
+            case 'servicegroup':
+                this.label = data.Servicegroup.name;
+                break;
+
+            case 'map':
+                this.label = data.Map.name;
+                break;
+        }
+        this.cdr.markForCheck();
+    };
+
+    private startBlink() {
+        this.blinkSubscription = interval(5000).subscribe(() => {
+            if (this.currentIcon === this.icon) {
+                this.currentIcon = this.icon_property;
+            } else {
+                this.currentIcon = this.icon;
+            }
+            this.cdr.markForCheck();
+        });
+    };
+
+    private stopBlink() {
+        if (this.blinkSubscription) {
+            this.blinkSubscription.unsubscribe();
+        }
+        this.cdr.markForCheck();
+    };
+
+    private blinkServiceCallback() {
+        if (this.currentIcon === this.icon) {
+            this.currentIcon = this.icon_property;
+        } else {
+            this.currentIcon = this.icon;
+        }
+        this.cdr.markForCheck();
+    };
+
+    private stop() {
+        /*BlinkService.unregisterObject(uuidForServices);
+        MapItemReloadService.unregisterItem(uuidForServices);*/
+    };
+
+    private onItemObjectIdChange() {
+        //if(this.init || $scope.item.object_id === null){
+        if (this.item()!.object_id === null) {
+            //Avoid ajax error if user search a object in item config modal
+            return;
+        }
+
+        this.load();
+    };
+
+    protected override getDefaultContextMenuItems(): MenuItem[] {
         return [
             {
                 label: this.TranslocoService.translate('Edit'),
@@ -168,12 +195,12 @@ export class MapItemComponent implements AfterViewInit {
                             this.contextActionEvent.emit({
                                 type: 'labelPosition',
                                 data: {
-                                    id: this._id,
-                                    x: this._x,
-                                    y: this._y,
-                                    map_id: this._mapId,
+                                    id: this.id,
+                                    x: this.x,
+                                    y: this.y,
+                                    map_id: this.mapId,
                                     label_possition: LabelPosition.TOP
-                                }
+                                } as Mapitem
                             });
                             this.cdr.markForCheck();
                         }
@@ -185,12 +212,12 @@ export class MapItemComponent implements AfterViewInit {
                             this.contextActionEvent.emit({
                                 type: 'labelPosition',
                                 data: {
-                                    id: this._id,
-                                    x: this._x,
-                                    y: this._y,
-                                    map_id: this._mapId,
+                                    id: this.id,
+                                    x: this.x,
+                                    y: this.y,
+                                    map_id: this.mapId,
                                     label_possition: LabelPosition.RIGHT
-                                }
+                                } as Mapitem
                             });
                             this.cdr.markForCheck();
                         }
@@ -202,12 +229,12 @@ export class MapItemComponent implements AfterViewInit {
                             this.contextActionEvent.emit({
                                 type: 'labelPosition',
                                 data: {
-                                    id: this._id,
-                                    x: this._x,
-                                    y: this._y,
-                                    map_id: this._mapId,
+                                    id: this.id,
+                                    x: this.x,
+                                    y: this.y,
+                                    map_id: this.mapId,
                                     label_possition: LabelPosition.BOTTOM
-                                }
+                                } as Mapitem
                             });
                             this.cdr.markForCheck();
                         }
@@ -219,12 +246,12 @@ export class MapItemComponent implements AfterViewInit {
                             this.contextActionEvent.emit({
                                 type: 'labelPosition',
                                 data: {
-                                    id: this._id,
-                                    x: this._x,
-                                    y: this._y,
-                                    map_id: this._mapId,
+                                    id: this.id,
+                                    x: this.x,
+                                    y: this.y,
+                                    map_id: this.mapId,
                                     label_possition: LabelPosition.LEFT
-                                }
+                                } as Mapitem
                             });
                             this.cdr.markForCheck();
                         }
@@ -241,10 +268,10 @@ export class MapItemComponent implements AfterViewInit {
                 command: () => {
                     this.contextActionEvent.emit({
                         type: 'delete', data: {
-                            id: this._id,
-                            x: this._x,
-                            y: this._y,
-                            map_id: this._mapId,
+                            id: this.id,
+                            x: this.x,
+                            y: this.y,
+                            map_id: this.mapId,
                         }
                     });
                     this.cdr.markForCheck();

@@ -1,3 +1,5 @@
+import { MapitemBase } from '../../components/map-item-base/map-item-base.interface';
+
 export interface MapeditorsEditRoot {
     map: MapRoot
     maxUploadLimit: MaxUploadLimit
@@ -79,15 +81,9 @@ export interface Mapgadget {
     label_possition: any
 }
 
-export interface Maptext {
-    id: number
-    map_id: number
-    x: number
-    y: number
+export interface Maptext extends MapitemBase {
     text: string
     font_size: number
-    z_index: string
-    display: boolean
 }
 
 export interface Mapsummaryitem {

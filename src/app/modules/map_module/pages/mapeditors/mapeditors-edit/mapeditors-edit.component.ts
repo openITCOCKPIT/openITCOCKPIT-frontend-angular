@@ -42,12 +42,12 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { FormsModule } from '@angular/forms';
 import { MapItemComponent } from '../../../components/map-item/map-item.component';
 import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.component';
-import { ContextAction, Mapitem } from '../../../components/map-item/map-item.interface';
-import { MapItemLabelComponent } from '../../../components/map-item-label/map-item-label.component';
-import { MapItemContentComponent } from '../../../components/map-item-content/map-item-content.component';
+import { Mapitem } from '../../../components/map-item/map-item.interface';
 import { filter, parseInt } from 'lodash';
 import { Background, Mapeditor, MapRoot, MaxUploadLimit, VisibleLayers } from '../Mapeditors.interface';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
+import { ContextAction } from '../../../components/map-item-base/map-item-base.interface';
+import { MapTextComponent } from '../../../components/map-text/map-text.component';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
@@ -82,11 +82,10 @@ import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
         NgIf,
         MapItemComponent,
         MapCanvasComponent,
-        MapItemLabelComponent,
-        MapItemContentComponent,
         NgClass,
         CdkDrag,
-        CdkDragHandle
+        CdkDragHandle,
+        MapTextComponent
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',
@@ -151,27 +150,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     public visibleLayers: VisibleLayers = {};
 
     public maxUploadLimit!: MaxUploadLimit;
-
-    public MapItems: Mapitem[] = [
-        {
-            id: 1,
-            map_id: 1,
-            x: 100,
-            y: 24,
-            z_index: "1",
-            label_possition: 2,
-            show_label: true,
-        },
-        {
-            id: 2,
-            map_id: 1,
-            x: 900,
-            y: 24,
-            z_index: "2",
-            label_possition: 2,
-            show_label: true,
-        }
-    ];
 
     public ngOnInit(): void {
         this.mapId = Number(this.route.snapshot.paramMap.get('id'));
@@ -241,8 +219,14 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     }
 
+    public onItemChange(objectName: keyof MapRoot) {
+        this.map[objectName] = [...this.map[objectName]];
+        this.cdr.markForCheck();
+    }
+
     public setDefaultLayer(layerNo: number) {
         this.defaultLayer = layerNo.toString();
+        this.cdr.markForCheck();
     }
 
     public hideLayer(key: number) {
@@ -263,6 +247,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 for (let i in this.map[objectName as keyof MapRoot]) {
                     if (this.map[objectName as keyof MapRoot][i].z_index === keyAsString) {
                         this.map[objectName as keyof MapRoot][i].display = false;
+                        this.onItemChange(objectName);
                     }
                 }
             }
@@ -287,6 +272,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 for (let i in this.map[objectName as keyof MapRoot]) {
                     if (this.map[objectName as keyof MapRoot][i].z_index === keyAsString) {
                         this.map[objectName as keyof MapRoot][i].display = true;
+                        this.onItemChange(objectName);
                     }
                 }
             }
@@ -298,9 +284,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         let index;
         console.error('ContextAction', $event);
         if (type === 'labelPosition') {
-            for (let i = 0; i < this.MapItems.length; i++) {
-                if (this.MapItems[i].id === $event.data.id) {
-                    this.MapItems[i].label_possition = $event.data.label_possition!;
+            for (let i = 0; i < this.map.Mapitems.length; i++) {
+                if (this.map.Mapitems[i].id === $event.data.id) {
+                    let data = $event.data as any;
+                    this.map.Mapitems[i].label_possition = data.label_possition!;
                     index = i;
                     break;
                 }
@@ -312,8 +299,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         if (type === 'Delete') {
             console.error('Delete');
         }
-        if (index) {
-            this.MapItems[index] = {...this.MapItems[index]};
+        if (index !== undefined) {
+            this.map.Mapitems[index] = {...this.map.Mapitems[index]};
             this.cdr.markForCheck();
         }
     }
@@ -330,6 +317,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         //$('#map-editor').css('cursor', 'crosshair');
         this.addNewObject = true;
         this.action = 'item';
+        this.cdr.markForCheck();
     };
 
     public addLine() {
@@ -344,6 +332,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         //$('#map-editor').css('cursor', 'crosshair');
         this.addNewObject = true;
         this.action = 'line';
+        this.cdr.markForCheck();
     };
 
     public addSummaryItem() {
@@ -357,6 +346,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         //$('#map-editor').css('cursor', 'crosshair');
         this.addNewObject = true;
         this.action = 'summaryItem';
+        this.cdr.markForCheck();
     };
 
     public addGadget() {
@@ -370,6 +360,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         //$('#map-editor').css('cursor', 'crosshair');
         this.addNewObject = true;
         this.action = 'gadget';
+        this.cdr.markForCheck();
     };
 
     public openChangeMapBackgroundModal() {
@@ -383,6 +374,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         }
 
         //$('#changeBackgroundModal').modal('show');
+        this.cdr.markForCheck();
     };
 
     public addText() {
@@ -398,6 +390,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.action = 'text';
         this.addLink = false;
         //$('#docuText').val('');
+        this.cdr.markForCheck();
     };
 
     public addIcon() {
@@ -411,6 +404,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         //$('#map-editor').css('cursor', 'crosshair');
         this.addNewObject = true;
         this.action = 'icon';
+        this.cdr.markForCheck();
     };
 
     protected readonly parseInt = parseInt;

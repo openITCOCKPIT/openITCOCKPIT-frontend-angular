@@ -164,28 +164,18 @@
 
             <oitc-map-canvas [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
                              [helplines]="Mapeditor.helplines">
-                <oitc-map-item [mapItem]="MapItems[0]"
-                               (contextActionEvent)="onContextAction($event)"
-                               (dropItemEvent)="onDropItem($event)">
-                    <oitc-map-item-content>
-                        <img src="./assets/images/docs/browser_notification_bg.png" height="200px" width="200px"
-                             draggable="false">
-                    </oitc-map-item-content>
-                    <oitc-map-item-label>
-                        I'm a node Layer 0
-                    </oitc-map-item-label>
-                </oitc-map-item>
-                <oitc-map-item [mapItem]="MapItems[1]"
-                               (contextActionEvent)="onContextAction($event)"
-                               (dropItemEvent)="onDropItem($event)">
-                    <oitc-map-item-content>
-                        <img src="./assets/images/docs/browser_notification_bg.png" height="200px" width="200px"
-                             draggable="false">
-                    </oitc-map-item-content>
-                    <oitc-map-item-label>
-                        I'm a node Layer 1
-                    </oitc-map-item-label>
-                </oitc-map-item>
+                @if (map) {
+                    <oitc-map-item *ngFor="let item of map.Mapitems" [item]="item" [refreshInterval]="0"
+                                   (contextActionEvent)="onContextAction($event)"
+                                   (dropItemEvent)="onDropItem($event)"
+                                   [hidden]="!item.display">
+                    </oitc-map-item>
+                    <oitc-map-text *ngFor="let textItem of map.Maptexts" [item]="textItem"
+                                   (contextActionEvent)="onContextAction($event)"
+                                   (dropItemEvent)="onDropItem($event)"
+                                   [hidden]="!textItem.display">
+                    </oitc-map-text>
+                }
                 <!-- start mapToolbar -->
                 <div id="mapToolbar" cdkDrag cdkDragBoundary=".map-canvas">
                     <div id="mapToolsDragger" cdkDragHandle></div>

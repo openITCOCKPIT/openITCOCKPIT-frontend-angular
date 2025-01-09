@@ -15,6 +15,7 @@ import {
 import { MapItemComponent } from '../map-item/map-item.component';
 import { NgClass } from '@angular/common';
 import { Helplines } from './map-canvas.interface';
+import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 
 @Component({
     selector: 'oitc-map-canvas',
@@ -36,7 +37,7 @@ export class MapCanvasComponent implements AfterViewInit, AfterContentInit {
     public gridEnabled = input<boolean>(true);
     public isViewMode = input<boolean>(false);
 
-    @ContentChildren(MapItemComponent) mapItemChildrens!: QueryList<MapItemComponent>;
+    @ContentChildren(MapItemComponent) mapItemChildrens!: QueryList<MapItemBaseComponent<any>>;
 
     constructor() {
         effect(() => {
