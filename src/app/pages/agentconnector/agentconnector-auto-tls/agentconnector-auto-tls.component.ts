@@ -7,7 +7,7 @@ import {
 import {
     AgentconnectorWizardProgressbarComponent
 } from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
-import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
+
 import {
     CardBodyComponent,
     CardComponent,
@@ -37,21 +37,20 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
     selector: 'oitc-agentconnector-auto-tls',
     imports: [
-        AgentconnectorWizardProgressbarComponent,
-        BlockLoaderComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        NgIf,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        ColComponent,
-        RowComponent,
-        ProgressBarModule
-    ],
+    AgentconnectorWizardProgressbarComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NgIf,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    ColComponent,
+    RowComponent,
+    ProgressBarModule
+],
     templateUrl: './agentconnector-auto-tls.component.html',
     styleUrl: './agentconnector-auto-tls.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

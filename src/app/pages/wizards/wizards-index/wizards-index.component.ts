@@ -1,57 +1,50 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {
-    AlertComponent,
-    ButtonGroupComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    ColComponent,
-    ModalService,
-    NavComponent,
-    NavItemComponent,
-    RowComponent
+  ButtonGroupComponent,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  ColComponent,
+  ModalService,
+  NavComponent,
+  NavItemComponent,
+  RowComponent
 } from '@coreui/angular';
 import { WizardsService } from '../wizards.service';
 import { WizardElement, WizardsIndex } from '../wizards.interface';
-import { KeyValuePipe, NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+
+
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Router, RouterLink } from '@angular/router';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
+
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-wizards-index',
     imports: [
-        RowComponent,
-        ColComponent,
-        NgIf,
-        NgForOf,
-        KeyValuePipe,
-        CardComponent,
-        CardBodyComponent,
-        NgOptimizedImage,
-        CardFooterComponent,
-        FaIconComponent,
-        BadgeOutlineComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        CardHeaderComponent,
-        BackButtonDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        ButtonGroupComponent,
-        TranslocoPipe,
-        NgClass,
-        AlertComponent
-    ],
+    RowComponent,
+    ColComponent,
+    NgIf,
+    NgForOf,
+    KeyValuePipe,
+    CardComponent,
+    CardBodyComponent,
+    CardFooterComponent,
+    FaIconComponent,
+    TranslocoDirective,
+    RouterLink,
+    CardHeaderComponent,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    ButtonGroupComponent,
+    NgClass
+],
     templateUrl: './wizards-index.component.html',
     styleUrl: './wizards-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -12,44 +12,32 @@ import { AgentconnectorShowOutputParams, AgentconnectorShowOutputRoot, AgentMode
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AgentconnectorPullService } from '../agentconnector-pull.service';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
+
+
 import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
-import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownDividerDirective,
-    FormControlDirective,
-    FormDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  NavComponent,
+  NavItemComponent,
+  RowComponent
 } from '@coreui/angular';
-import { DebounceDirective } from '../../../directives/debounce.directive';
-import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
-import { MatSort, MatSortHeader } from '@angular/material/sort';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
-import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+
+
+
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+
+
+import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
@@ -67,49 +55,27 @@ import {
 @Component({
     selector: 'oitc-agentconnector-show-output',
     imports: [
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        DeleteAllModalComponent,
-        DropdownDividerDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ItemSelectComponent,
-        LabelLinkComponent,
-        MatSort,
-        MatSortHeader,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RowComponent,
-        SelectAllComponent,
-        TableDirective,
-        TableLoaderComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        BackButtonDirective,
-        BlockLoaderComponent,
-        AsyncPipe,
-        NgClass
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FaIconComponent,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    BackButtonDirective,
+    BlockLoaderComponent,
+    AsyncPipe,
+    NgClass
+],
     templateUrl: './agentconnector-show-output.component.html',
     styleUrl: './agentconnector-show-output.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

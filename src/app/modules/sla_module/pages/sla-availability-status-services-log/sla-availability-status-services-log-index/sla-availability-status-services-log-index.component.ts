@@ -3,13 +3,55 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import {
     getDefaultSlaAvailabilityStatusServicesLogIndexParams,
     SlaAvailabilityStatusServicesLogIndexParams,
     SlaAvailabilityStatusServicesLogIndexRoot
 } from '../SlaAvailabilityStatusServicesLog.interface';
 import {
+  BadgeComponent,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  FormControlDirective,
+  FormDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
+} from '@coreui/angular';
+
+import { DebounceDirective } from '../../../../../directives/debounce.directive';
+
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { AsyncPipe, DecimalPipe, formatDate, NgForOf, NgIf } from '@angular/common';
+import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PermissionDirective } from '../../../../../permissions/permission.directive';
+
+import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { IndexPage } from '../../../../../pages.interface';
+import { SlaAvailabilityStatusServicesLogService } from '../SlaAvailabilityStatusServicesLog.service';
+import { SkeletonModule } from 'primeng/skeleton';
+
+import { PermissionsService } from '../../../../../permissions/permissions.service';
+import { FilterPipe } from '../../../../../pipes/filter.pipe';
+
+@Component({
+    selector: 'oitc-sla-availability-status-services-log-index',
+    imports: [
     BadgeComponent,
     CardBodyComponent,
     CardComponent,
@@ -18,87 +60,34 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
-    DropdownDividerDirective,
+    DebounceDirective,
+    FaIconComponent,
     FormControlDirective,
     FormDirective,
+    FormsModule,
     InputGroupComponent,
     InputGroupTextDirective,
+    MatSort,
     NavComponent,
     NavItemComponent,
+    NgForOf,
+    NgIf,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
     RowComponent,
-    TableDirective
-} from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
-import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { AsyncPipe, DecimalPipe, formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
-import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
-import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { IndexPage } from '../../../../../pages.interface';
-import { SlaAvailabilityStatusServicesLogService } from '../SlaAvailabilityStatusServicesLog.service';
-import { SkeletonModule } from 'primeng/skeleton';
-import { CopyToClipboardComponent } from '../../../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
-import { PermissionsService } from '../../../../../permissions/permissions.service';
-import { FilterPipe } from '../../../../../pipes/filter.pipe';
-
-@Component({
-    selector: 'oitc-sla-availability-status-services-log-index',
-    imports: [
-        BadgeComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        ContainerComponent,
-        CoreuiComponent,
-        DebounceDirective,
-        DeleteAllModalComponent,
-        DropdownDividerDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ItemSelectComponent,
-        MatSort,
-        MatSortHeader,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RowComponent,
-        SelectAllComponent,
-        TableDirective,
-        TableLoaderComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        NgClass,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        SkeletonModule,
-        CopyToClipboardComponent,
-        FilterPipe,
-        DecimalPipe,
-        AsyncPipe
-    ],
+    TableDirective,
+    TableLoaderComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    RouterLink,
+    SkeletonModule,
+    FilterPipe,
+    DecimalPipe,
+    AsyncPipe
+],
     templateUrl: './sla-availability-status-services-log-index.component.html',
     styleUrl: './sla-availability-status-services-log-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

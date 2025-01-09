@@ -7,29 +7,25 @@ import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ConfigurationitemsService } from '../configurationitems.service';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
+
 import { NgClass, NgIf } from '@angular/common';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
+
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import {
@@ -45,37 +41,28 @@ import { DateTime } from 'luxon';
 @Component({
     selector: 'oitc-configurationitems-export',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        BlockLoaderComponent,
-        NgIf,
-        FormLoaderComponent,
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FormCheckInputDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        XsButtonDirective,
-        ColComponent,
-        RowComponent,
-        MultiSelectComponent,
-        NgClass,
-        UiBlockerComponent
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    NgIf,
+    FormLoaderComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormDirective,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    ReactiveFormsModule,
+    XsButtonDirective,
+    MultiSelectComponent,
+    NgClass,
+    UiBlockerComponent
+],
     templateUrl: './configurationitems-export.component.html',
     styleUrl: './configurationitems-export.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,41 +1,38 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
+
+
 import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
-import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownDividerDirective,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  FormCheckInputDirective,
+  FormControlDirective,
+  FormDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { DebounceDirective } from '../../../directives/debounce.directive';
-import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+
 import { NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -56,47 +53,40 @@ import { IndexPage } from '../../../pages.interface';
 @Component({
     selector: 'oitc-deleted-hosts-index',
     imports: [
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        DeleteAllModalComponent,
-        DropdownDividerDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ItemSelectComponent,
-        MatSort,
-        MatSortHeader,
-        MultiSelectComponent,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RowComponent,
-        SelectAllComponent,
-        TableDirective,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        TableLoaderComponent,
-        RegexHelperTooltipComponent,
-        FormCheckInputDirective
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DebounceDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    MatSort,
+    MatSortHeader,
+    NavComponent,
+    NavItemComponent,
+    NgForOf,
+    NgIf,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RowComponent,
+    TableDirective,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    RouterLink,
+    TableLoaderComponent,
+    RegexHelperTooltipComponent,
+    FormCheckInputDirective
+],
     templateUrl: './deleted-hosts-index.component.html',
     styleUrl: './deleted-hosts-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

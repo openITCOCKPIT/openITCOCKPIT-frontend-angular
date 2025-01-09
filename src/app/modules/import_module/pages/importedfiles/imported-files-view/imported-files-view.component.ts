@@ -1,43 +1,29 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
+
+
 import {
-    ActionsButtonElementComponent
-} from '../../../../../components/actions-button-element/actions-button-element.component';
-import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownDividerDirective,
-    DropdownItemDirective,
-    FormControlDirective,
-    FormDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  NavComponent,
+  NavItemComponent,
+  TableDirective
 } from '@coreui/angular';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
-import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
-import { MatSort, MatSortHeader } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
-import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+
+
+
+import { NgIf } from '@angular/common';
+
+
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
-import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+
+
+import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ImportedFilesViewRoot } from '../imported-files.interface';
@@ -51,48 +37,24 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
     selector: 'oitc-imported-files-view',
     imports: [
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        DeleteAllModalComponent,
-        DropdownDividerDirective,
-        DropdownItemDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ItemSelectComponent,
-        LabelLinkComponent,
-        MatSort,
-        MatSortHeader,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RowComponent,
-        SelectAllComponent,
-        TableDirective,
-        TableLoaderComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        BlockLoaderComponent,
-        BackButtonDirective
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PermissionDirective,
+    ReactiveFormsModule,
+    TableDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    BlockLoaderComponent,
+    BackButtonDirective
+],
     templateUrl: './imported-files-view.component.html',
     styleUrl: './imported-files-view.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

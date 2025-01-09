@@ -6,41 +6,38 @@ import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownComponent,
-    DropdownDividerDirective,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalService,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective,
-    TooltipDirective
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  DropdownComponent,
+  DropdownDividerDirective,
+  DropdownItemDirective,
+  DropdownMenuDirective,
+  DropdownToggleDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  ModalService,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective,
+  TooltipDirective
 } from '@coreui/angular';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { DebounceDirective } from '../../../directives/debounce.directive';
+
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
+
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { AsyncPipe, JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -50,16 +47,14 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
-import {
-    RegexHelperTooltipComponent
-} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { ServicestatusSimpleIconComponent } from '../servicestatus-simple-icon/servicestatus-simple-icon.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+
+
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HostEntityWithContainers, HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
@@ -97,14 +92,10 @@ import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-a
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+
 import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
-import {
-    ColumnsConfigExportModalComponent
-} from '../../../layouts/coreui/columns-config-export-modal/columns-config-export-modal.component';
-import {
-    ColumnsConfigImportModalComponent
-} from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
+
+
 import {
     ServiceAcknowledgeModalComponent
 } from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
@@ -121,75 +112,63 @@ import {
 @Component({
     selector: 'oitc-services-service-list',
     imports: [
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        ContainerComponent,
-        CopyToClipboardComponent,
-        DebounceDirective,
-        DeleteAllModalComponent,
-        DisableModalComponent,
-        DropdownDividerDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        HoststatusIconComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ItemSelectComponent,
-        MatSort,
-        MatSortHeader,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        PaginatorModule,
-        PermissionDirective,
-        QueryHandlerCheckerComponent,
-        RegexHelperTooltipComponent,
-        RowComponent,
-        SelectAllComponent,
-        ServicestatusSimpleIconComponent,
-        TableDirective,
-        TableLoaderComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        NgClass,
-        FormErrorDirective,
-        FormLabelDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        TooltipDirective,
-        ServicestatusIconComponent,
-        AcknowledgementIconComponent,
-        DowntimeIconComponent,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        PopoverGraphComponent,
-        MultiSelectComponent,
-        JsonPipe,
-        NgForOf,
-        ColumnsConfigExportModalComponent,
-        ColumnsConfigImportModalComponent,
-        ServiceAcknowledgeModalComponent,
-        ServiceMaintenanceModalComponent,
-        EnableModalComponent,
-        ServiceAddToServicegroupModalComponent,
-        AsyncPipe
-    ],
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    CopyToClipboardComponent,
+    DeleteAllModalComponent,
+    DisableModalComponent,
+    DropdownDividerDirective,
+    FaIconComponent,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ItemSelectComponent,
+    MatSort,
+    MatSortHeader,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    PaginatorModule,
+    PermissionDirective,
+    QueryHandlerCheckerComponent,
+    RowComponent,
+    SelectAllComponent,
+    ServicestatusSimpleIconComponent,
+    TableDirective,
+    TableLoaderComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    RouterLink,
+    NgClass,
+    SelectComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    TooltipDirective,
+    ServicestatusIconComponent,
+    AcknowledgementIconComponent,
+    DowntimeIconComponent,
+    FaStackComponent,
+    FaStackItemSizeDirective,
+    PopoverGraphComponent,
+    NgForOf,
+    ServiceAcknowledgeModalComponent,
+    ServiceMaintenanceModalComponent,
+    EnableModalComponent,
+    ServiceAddToServicegroupModalComponent,
+    AsyncPipe
+],
     templateUrl: './services-service-list.component.html',
     styleUrl: './services-service-list.component.css',
     providers: [

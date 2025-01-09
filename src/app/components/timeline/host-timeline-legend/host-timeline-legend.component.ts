@@ -1,16 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ColComponent, RowComponent } from '@coreui/angular';
+
 
 @Component({
     selector: 'oitc-host-timeline-legend',
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        RowComponent,
-        ColComponent
-    ],
+    TranslocoDirective,
+    FaIconComponent
+],
     templateUrl: './host-timeline-legend.component.html',
     styleUrl: './host-timeline-legend.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -21,34 +21,33 @@ import { ContactUsedByContact, ContactUsedByObjects } from '../contacts.interfac
 import { ContactsService } from '../contacts.service';
 import { Subscription } from 'rxjs';
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-contacts-used-by',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ContainerComponent,
-        FaIconComponent,
-        NavComponent,
-        NgForOf,
-        NgIf,
-        PermissionDirective,
-        TableDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        NotUsedByObjectComponent,
-        NavItemComponent,
-        TableLoaderComponent,
-        FormLoaderComponent
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ContainerComponent,
+    FaIconComponent,
+    NavComponent,
+    NgForOf,
+    NgIf,
+    PermissionDirective,
+    TableDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FaStackComponent,
+    FaStackItemSizeDirective,
+    NotUsedByObjectComponent,
+    NavItemComponent,
+    FormLoaderComponent
+],
     templateUrl: './contacts-used-by.component.html',
     styleUrl: './contacts-used-by.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

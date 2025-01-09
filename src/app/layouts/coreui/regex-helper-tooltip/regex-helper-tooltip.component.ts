@@ -25,21 +25,20 @@
 
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ColComponent, ContainerComponent, PopoverDirective, RowComponent } from '@coreui/angular';
+import { ContainerComponent, PopoverDirective, RowComponent } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-regex-helper-tooltip',
     imports: [
-        FaIconComponent,
-        PopoverDirective,
-        TranslocoDirective,
-        RowComponent,
-        ColComponent,
-        ContainerComponent,
-        NgClass,
-    ],
+    FaIconComponent,
+    PopoverDirective,
+    TranslocoDirective,
+    RowComponent,
+    ContainerComponent,
+    NgClass
+],
     templateUrl: './regex-helper-tooltip.component.html',
     styleUrl: './regex-helper-tooltip.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

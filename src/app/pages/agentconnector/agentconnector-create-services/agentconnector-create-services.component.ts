@@ -15,17 +15,16 @@ import {
     AgentconnectorWizardProgressbarComponent
 } from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
 import {
-    BadgeComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormLabelDirective,
-    RowComponent
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormLabelDirective,
+  RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgIf } from '@angular/common';
@@ -40,46 +39,40 @@ import { AgentconnectorService } from '../agentconnector.service';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { DividerModule } from 'primeng/divider';
 import { FormsModule } from '@angular/forms';
-import { DebounceDirective } from '../../../directives/debounce.directive';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+
+
+
+
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+
 import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'oitc-agentconnector-create-services',
     imports: [
-        AgentconnectorWizardProgressbarComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        FaIconComponent,
-        NgIf,
-        PermissionDirective,
-        RowComponent,
-        TranslocoDirective,
-        RouterLink,
-        ProgressBarModule,
-        DividerModule,
-        BadgeComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormsModule,
-        DebounceDirective,
-        TrueFalseDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        MultiSelectComponent,
-        RequiredIconComponent,
-        UiBlockerComponent
-    ],
+    AgentconnectorWizardProgressbarComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FaIconComponent,
+    NgIf,
+    PermissionDirective,
+    RowComponent,
+    TranslocoDirective,
+    RouterLink,
+    ProgressBarModule,
+    DividerModule,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormsModule,
+    FormLabelDirective,
+    MultiSelectComponent,
+    UiBlockerComponent
+],
     templateUrl: './agentconnector-create-services.component.html',
     styleUrl: './agentconnector-create-services.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

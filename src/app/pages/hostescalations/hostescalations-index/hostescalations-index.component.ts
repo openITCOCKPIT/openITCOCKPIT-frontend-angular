@@ -40,13 +40,13 @@ import { HostescalationsService } from '../hostescalations.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { Sort } from '@angular/material/sort';
 import { NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -62,50 +62,47 @@ import { IndexPage } from '../../../pages.interface';
 @Component({
     selector: 'oitc-hostescalations-index',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        MultiSelectComponent,
-        RowComponent,
-        TranslocoPipe,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        DropdownDividerDirective,
-        ItemSelectComponent,
-        MatSort,
-        MatSortHeader,
-        NgForOf,
-        NgIf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        SelectAllComponent,
-        TableDirective,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        DeleteAllModalComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        TableLoaderComponent,
-        CardFooterComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    ColComponent,
+    ContainerComponent,
+    DebounceDirective,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    RowComponent,
+    TranslocoPipe,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    DropdownDividerDirective,
+    ItemSelectComponent,
+    NgForOf,
+    NgIf,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    SelectAllComponent,
+    TableDirective,
+    FaStackComponent,
+    FaStackItemSizeDirective,
+    DeleteAllModalComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TrueFalseDirective,
+    TableLoaderComponent,
+    CardFooterComponent
+],
     templateUrl: './hostescalations-index.component.html',
     styleUrl: './hostescalations-index.component.css',
     providers: [

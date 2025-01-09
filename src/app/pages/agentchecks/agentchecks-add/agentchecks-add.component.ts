@@ -30,37 +30,36 @@ import { FormsModule } from '@angular/forms';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
-import { NgIf } from '@angular/common';
+
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 
 @Component({
     selector: 'oitc-agentchecks-add',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        FormDirective,
-        CardComponent,
-        CardTitleDirective,
-        NavComponent,
-        CardHeaderComponent,
-        TranslocoDirective,
-        NavItemComponent,
-        BackButtonDirective,
-        CardBodyComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormsModule,
-        FormFeedbackComponent,
-        FormCheckInputDirective,
-        CardFooterComponent,
-        XsButtonDirective,
-        LabelLinkComponent,
-        NgIf,
-        SelectComponent
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    RouterLink,
+    FormDirective,
+    CardComponent,
+    CardTitleDirective,
+    NavComponent,
+    CardHeaderComponent,
+    TranslocoDirective,
+    NavItemComponent,
+    BackButtonDirective,
+    CardBodyComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormsModule,
+    FormFeedbackComponent,
+    FormCheckInputDirective,
+    CardFooterComponent,
+    XsButtonDirective,
+    LabelLinkComponent,
+    SelectComponent
+],
     templateUrl: './agentchecks-add.component.html',
     styleUrl: './agentchecks-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -13,19 +13,18 @@ import {
     SimpleChanges
 } from '@angular/core';
 import {
-    ButtonCloseDirective,
-    ColComponent,
-    ProgressBarComponent,
-    ProgressComponent,
-    RowComponent,
-    ToastBodyComponent,
-    ToastComponent,
-    ToasterComponent,
-    ToastHeaderComponent
+  ColComponent,
+  ProgressBarComponent,
+  ProgressComponent,
+  RowComponent,
+  ToastBodyComponent,
+  ToastComponent,
+  ToasterComponent,
+  ToastHeaderComponent
 } from '@coreui/angular';
 import { OnlineOfflineComponent } from '../additional-host-information/online-offline/online-offline.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { DecimalPipe, DOCUMENT, JsonPipe, NgIf } from '@angular/common';
+import { DecimalPipe, DOCUMENT, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ExternalSystemsService } from '../../pages/externalsystems/external-systems.service';
 import {
@@ -35,7 +34,7 @@ import {
     VisRelation
 } from '../../pages/externalsystems/external-systems.interface';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { BackButtonDirective } from '../../../../directives/back-button.directive';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data/peer';
@@ -73,28 +72,25 @@ export interface NodeExtended extends Node {
 @Component({
     selector: 'oitc-dependency-tree',
     imports: [
-        ColComponent,
-        OnlineOfflineComponent,
-        RowComponent,
-        TranslocoDirective,
-        NgIf,
-        XsButtonDirective,
-        BackButtonDirective,
-        FaIconComponent,
-        TranslocoPipe,
-        ProgressComponent,
-        DecimalPipe,
-        ToastComponent,
-        ButtonCloseDirective,
-        ToastBodyComponent,
-        ToasterComponent,
-        ToastHeaderComponent,
-        ProgressBarComponent,
-        JsonPipe,
-        HostSummaryComponent,
-        NotInMonitoringComponent,
-        HostGroupSummaryComponent
-    ],
+    ColComponent,
+    OnlineOfflineComponent,
+    RowComponent,
+    TranslocoDirective,
+    NgIf,
+    XsButtonDirective,
+    FaIconComponent,
+    TranslocoPipe,
+    ProgressComponent,
+    DecimalPipe,
+    ToastComponent,
+    ToastBodyComponent,
+    ToasterComponent,
+    ToastHeaderComponent,
+    ProgressBarComponent,
+    HostSummaryComponent,
+    NotInMonitoringComponent,
+    HostGroupSummaryComponent
+],
     templateUrl: './dependency-tree.component.html',
     styleUrl: './dependency-tree.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

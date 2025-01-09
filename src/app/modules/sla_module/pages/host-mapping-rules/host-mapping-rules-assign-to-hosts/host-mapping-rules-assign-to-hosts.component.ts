@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -8,34 +8,33 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { HistoryService } from '../../../../../history.service';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    AlertComponent,
-    BadgeComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownComponent,
-    DropdownDividerDirective,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  AlertComponent,
+  BadgeComponent,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  DropdownComponent,
+  DropdownItemDirective,
+  DropdownMenuDirective,
+  DropdownToggleDirective,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { HostMappingRulesService } from '../HostMappingRules.service';
@@ -61,12 +60,10 @@ import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
-import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../../../components/actions-button-element/actions-button-element.component';
-import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
+
+
+
+
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
@@ -74,60 +71,52 @@ import {
 @Component({
     selector: 'oitc-host-mapping-rules-assign-to-hosts',
     imports: [
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        FaIconComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        BackButtonDirective,
-        CardBodyComponent,
-        PermissionDirective,
-        FormDirective,
-        FormsModule,
-        CardFooterComponent,
-        DropdownComponent,
-        DropdownToggleDirective,
-        DropdownMenuDirective,
-        DropdownItemDirective,
-        AlertComponent,
-        NgIf,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        DebounceDirective,
-        FormControlDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        NgSelectComponent,
-        RegexHelperTooltipComponent,
-        FormCheckComponent,
-        TrueFalseDirective,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        RowComponent,
-        ColComponent,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        BadgeComponent,
-        DropdownDividerDirective,
-        ItemSelectComponent,
-        MatSort,
-        MatSortHeader,
-        NgForOf,
-        TableDirective,
-        TableLoaderComponent,
-        NgClass,
-        PaginateOrScrollComponent,
-        ContainerComponent,
-        AsyncPipe,
-    ],
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FaIconComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    BackButtonDirective,
+    CardBodyComponent,
+    PermissionDirective,
+    FormDirective,
+    FormsModule,
+    CardFooterComponent,
+    DropdownComponent,
+    DropdownToggleDirective,
+    DropdownMenuDirective,
+    DropdownItemDirective,
+    AlertComponent,
+    NgIf,
+    DebounceDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    NgSelectComponent,
+    RegexHelperTooltipComponent,
+    FormCheckComponent,
+    TrueFalseDirective,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    RowComponent,
+    ColComponent,
+    BadgeComponent,
+    MatSort,
+    MatSortHeader,
+    NgForOf,
+    TableDirective,
+    NgClass,
+    PaginateOrScrollComponent,
+    ContainerComponent,
+    AsyncPipe
+],
     templateUrl: './host-mapping-rules-assign-to-hosts.component.html',
     styleUrl: './host-mapping-rules-assign-to-hosts.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

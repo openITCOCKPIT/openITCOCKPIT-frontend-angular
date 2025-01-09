@@ -20,7 +20,7 @@ import {
     ChartComponent,
     NgApexchartsModule
 } from 'ng-apexcharts';
-import { NgIf } from '@angular/common';
+
 
 import { TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
@@ -40,9 +40,8 @@ export type ChartOptions = {
 @Component({
     selector: 'oitc-host-pie-chart',
     imports: [
-        NgIf,
-        NgApexchartsModule
-    ],
+    NgApexchartsModule
+],
     templateUrl: './host-pie-chart.component.html',
     styleUrl: './host-pie-chart.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

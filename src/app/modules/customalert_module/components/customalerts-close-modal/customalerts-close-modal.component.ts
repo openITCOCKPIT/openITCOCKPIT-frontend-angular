@@ -8,22 +8,21 @@ import {
     Output
 } from '@angular/core';
 import {
-    AlertComponent,
-    BadgeComponent,
-    ButtonCloseDirective,
-    ColComponent,
-    FormControlDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    RowComponent
+  AlertComponent,
+  ButtonCloseDirective,
+  ColComponent,
+  FormControlDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalService,
+  ModalTitleDirective,
+  RowComponent
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -35,26 +34,24 @@ import { Customalert } from '../../pages/customalerts/customalerts.interface';
 @Component({
     selector: 'oitc-customalerts-close-modal',
     imports: [
-        ModalComponent,
-        TranslocoDirective,
-        ButtonCloseDirective,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        FaIconComponent,
-        ModalBodyComponent,
-        AlertComponent,
-        NgIf,
-        ColComponent,
-        NgForOf,
-        RowComponent,
-        FormControlDirective,
-        BadgeComponent,
-        FormsModule,
-        ModalFooterComponent,
-        XsButtonDirective,
-        FormFeedbackComponent,
-        NgClass
-    ],
+    ModalComponent,
+    TranslocoDirective,
+    ButtonCloseDirective,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    FaIconComponent,
+    ModalBodyComponent,
+    AlertComponent,
+    ColComponent,
+    NgForOf,
+    RowComponent,
+    FormControlDirective,
+    FormsModule,
+    ModalFooterComponent,
+    XsButtonDirective,
+    FormFeedbackComponent,
+    NgClass
+],
     templateUrl: './customalerts-close-modal.component.html',
     styleUrl: './customalerts-close-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

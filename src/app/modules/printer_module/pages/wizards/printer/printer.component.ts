@@ -3,16 +3,12 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
-    AccordionButtonDirective,
-    AccordionComponent,
-    AccordionItemComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    TemplateIdDirective
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormControlDirective,
+  FormLabelDirective
 } from '@coreui/angular';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import {
@@ -32,28 +28,24 @@ import { NgIf } from '@angular/common';
 @Component({
     selector: 'oitc-printer',
     imports: [
-        FaIconComponent,
-        TranslocoDirective,
-        RouterLink,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        TranslocoPipe,
-        WizardsDynamicfieldsComponent,
-        AccordionButtonDirective,
-        AccordionComponent,
-        AccordionItemComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        RequiredIconComponent,
-        TemplateIdDirective,
-        SelectComponent,
-        NgIf
-    ],
+    FaIconComponent,
+    TranslocoDirective,
+    RouterLink,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    TranslocoPipe,
+    WizardsDynamicfieldsComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    RequiredIconComponent,
+    SelectComponent,
+    NgIf
+],
     templateUrl: './printer.component.html',
     styleUrl: './printer.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

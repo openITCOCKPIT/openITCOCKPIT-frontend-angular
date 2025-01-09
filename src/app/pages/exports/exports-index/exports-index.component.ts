@@ -7,27 +7,22 @@ import {
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
-    AlertComponent,
-    BadgeComponent,
-    BorderDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    RowComponent,
-    TableDirective
+  AlertComponent,
+  BadgeComponent,
+  BorderDirective,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  FormCheckInputDirective,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { NgForOf, NgIf } from '@angular/common';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
+
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
 import { PaginatorModule } from 'primeng/paginator';
@@ -44,8 +39,8 @@ import {
     SatelliteEntityWithSatelliteStatus
 } from '../../../modules/distribute_module/pages/satellites/satellites.interface';
 import { GenericResponseWrapper } from '../../../generic-responses';
-import { MatSort } from '@angular/material/sort';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
+
+
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
@@ -56,42 +51,34 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-exports-index',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        QueryHandlerCheckerComponent,
-        TranslocoDirective,
-        RouterLink,
-        AlertComponent,
-        NgIf,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        CardBodyComponent,
-        BackButtonDirective,
-        CardFooterComponent,
-        XsButtonDirective,
-        FormCheckInputDirective,
-        PaginatorModule,
-        FormLoaderComponent,
-        RowComponent,
-        ColComponent,
-        BorderDirective,
-        NgForOf,
-        MatSort,
-        TableDirective,
-        FormCheckComponent,
-        TrueFalseDirective,
-        ItemSelectComponent,
-        ContainerComponent,
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        SelectAllComponent,
-        UiBlockerComponent,
-        BadgeComponent,
-        FormsModule
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    QueryHandlerCheckerComponent,
+    TranslocoDirective,
+    RouterLink,
+    AlertComponent,
+    NgIf,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    CardBodyComponent,
+    CardFooterComponent,
+    XsButtonDirective,
+    FormCheckInputDirective,
+    PaginatorModule,
+    FormLoaderComponent,
+    RowComponent,
+    ColComponent,
+    BorderDirective,
+    NgForOf,
+    TableDirective,
+    ItemSelectComponent,
+    ContainerComponent,
+    SelectAllComponent,
+    UiBlockerComponent,
+    BadgeComponent,
+    FormsModule
+],
     templateUrl: './exports-index.component.html',
     styleUrl: './exports-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

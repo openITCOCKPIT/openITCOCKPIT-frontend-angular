@@ -11,7 +11,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ChangelogsEntryComponent } from '../../../../../pages/changelogs/changelogs-entry/changelogs-entry.component';
+
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import { Subscription } from 'rxjs';
@@ -23,24 +23,23 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 @Component({
     selector: 'oitc-customalerts-history',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        ChangelogsEntryComponent,
-        ContainerComponent,
-        NgForOf,
-        NgIf,
-        NoRecordsComponent,
-        PermissionDirective,
-        RouterLink,
-        NgClass
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    ContainerComponent,
+    NgForOf,
+    NgIf,
+    NoRecordsComponent,
+    PermissionDirective,
+    RouterLink,
+    NgClass
+],
     templateUrl: './customalerts-history.component.html',
     styleUrl: './customalerts-history.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

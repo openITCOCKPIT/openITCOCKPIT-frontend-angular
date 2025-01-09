@@ -2,16 +2,15 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input } 
 import { AdditionalHostInformationResult } from '../../../../pages/externalsystems/external-systems.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
-    BadgeComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
@@ -23,25 +22,24 @@ import { DependencyTreeComponent } from '../../../dependency-tree/dependency-tre
 @Component({
     selector: 'oitc-idoit-overview',
     imports: [
-        TranslocoDirective,
-        ColComponent,
-        RowComponent,
-        BadgeComponent,
-        FaIconComponent,
-        NgIf,
-        OnlineOfflineComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        CardBodyComponent,
-        TableDirective,
-        NgForOf,
-        DependencyTreeComponent,
-        NgClass
-    ],
+    TranslocoDirective,
+    ColComponent,
+    RowComponent,
+    FaIconComponent,
+    NgIf,
+    OnlineOfflineComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    CardBodyComponent,
+    TableDirective,
+    NgForOf,
+    DependencyTreeComponent,
+    NgClass
+],
     templateUrl: './idoit-overview.component.html',
     styleUrl: './idoit-overview.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

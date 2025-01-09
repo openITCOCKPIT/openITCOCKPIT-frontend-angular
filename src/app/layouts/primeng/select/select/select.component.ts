@@ -18,18 +18,17 @@ import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } fro
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { TranslocoService } from '@jsverse/transloco';
 import { debounceTime } from 'rxjs/operators';
-import { JsonPipe } from '@angular/common';
+
 import { Select } from 'primeng/select';
 
 @Component({
     selector: 'oitc-select',
     imports: [
-        MultiSelectModule,
-        FormsModule,
-        HighlightSearchPipe,
-        JsonPipe,
-        Select
-    ],
+    MultiSelectModule,
+    FormsModule,
+    HighlightSearchPipe,
+    Select
+],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

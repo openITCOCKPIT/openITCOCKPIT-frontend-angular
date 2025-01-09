@@ -11,16 +11,15 @@ import {
 } from '@angular/core';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { OitcColors, OitcIconBases } from '../../oitc.types';
-import { JsonPipe, NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { IconLookup } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-alert',
     imports: [
-        NgClass,
-        NgTemplateOutlet,
-        JsonPipe
-    ],
+    NgClass,
+    NgTemplateOutlet
+],
     templateUrl: './alert.component.html',
     styleUrl: './alert.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

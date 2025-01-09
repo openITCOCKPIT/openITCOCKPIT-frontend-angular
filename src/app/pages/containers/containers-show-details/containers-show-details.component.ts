@@ -1,19 +1,18 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    BorderDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTextDirective,
-    CardTitleDirective,
-    ColComponent,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalService,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  BorderDirective,
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  ModalService,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -21,7 +20,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
+
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -43,32 +42,30 @@ import { GenericKeyValue } from '../../../generic.interfaces';
 @Component({
     selector: 'oitc-containers-show-details',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        BackButtonDirective,
-        NavComponent,
-        NavItemComponent,
-        UserMacrosModalComponent,
-        XsButtonDirective,
-        ColComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        RowComponent,
-        SelectComponent,
-        BlockLoaderComponent,
-        NgIf,
-        BorderDirective,
-        CardTextDirective,
-        NgForOf,
-        TableDirective,
-        AsyncPipe,
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    BackButtonDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    ColComponent,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    RowComponent,
+    SelectComponent,
+    BlockLoaderComponent,
+    NgIf,
+    BorderDirective,
+    NgForOf,
+    TableDirective,
+    AsyncPipe
+],
     templateUrl: './containers-show-details.component.html',
     styleUrl: './containers-show-details.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

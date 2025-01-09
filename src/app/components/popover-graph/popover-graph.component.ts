@@ -9,11 +9,11 @@ import {
 } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ContainerComponent, PopoverDirective, RowComponent } from '@coreui/angular';
+
 import { PopoverGraphService } from './popover-graph.service';
 import { Subscription } from 'rxjs';
 import { PerformanceData } from './popover-graph.interface';
-import { NgClass, NgForOf, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { PopoverConfigBuilder } from './popover-config-builder';
 import * as _uPlot from 'uplot';
 import { debounce } from '../debounce.decorator';
@@ -37,19 +37,14 @@ type PerfParams = {
 @Component({
     selector: 'oitc-popover-graph',
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        PopoverDirective,
-        NgStyle,
-        NgForOf,
-        NgClass,
-        RowComponent,
-        NgIf,
-        ContainerComponent,
-        ChartLoaderComponent,
-        Popover,
-        PopoverModule
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    NgClass,
+    NgIf,
+    ChartLoaderComponent,
+    Popover,
+    PopoverModule
+],
     templateUrl: './popover-graph.component.html',
     styleUrl: './popover-graph.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

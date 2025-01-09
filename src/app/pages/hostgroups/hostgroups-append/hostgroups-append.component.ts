@@ -2,26 +2,24 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { HistoryService } from '../../../history.service';
 import {
-    AlertComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    NavComponent,
-    NavItemComponent
+  AlertComponent,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+
+
 import { FormsModule } from '@angular/forms';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgIf } from '@angular/common';
+
+
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -39,33 +37,27 @@ import { GenericResponseWrapper } from '../../../generic-responses';
 @Component({
     selector: 'oitc-hostgroups-append',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormCheckInputDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        MultiSelectComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PaginatorModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        AlertComponent,
-        RouterLink
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormDirective,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    PaginatorModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    SelectComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    AlertComponent,
+    RouterLink
+],
     templateUrl: './hostgroups-append.component.html',
     styleUrl: './hostgroups-append.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

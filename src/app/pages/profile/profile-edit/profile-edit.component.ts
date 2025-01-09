@@ -1,34 +1,22 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    ButtonCloseDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    ModalToggleDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  ModalService,
+  RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
+
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
@@ -37,11 +25,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { GenericValidationError } from '../../../generic-responses';
 import { ProfileMaxUploadLimit, ProfileUser } from '../profile.interface';
-import { DOCUMENT, NgForOf, NgIf } from '@angular/common';
+import { DOCUMENT, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../profile.service';
-import { DebounceDirective } from '../../../directives/debounce.directive';
+
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { UsersService } from '../../users/users.service';
 import { UserDateformat, UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
@@ -52,64 +40,45 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import Dropzone from 'dropzone';
 import { AuthService } from '../../../auth/auth.service';
-import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
-import { MatSort, MatSortHeader } from '@angular/material/sort';
-import { InputCopyComponent } from '../../../layouts/coreui/input-copy/input-copy.component';
+
+
+
 import { ProfileApikeysComponent } from '../profile-apikeys/profile-apikeys.component';
 import { ProfileChangePasswordComponent } from '../profile-change-password/profile-change-password.component';
 
 @Component({
     selector: 'oitc-profile-edit',
     imports: [
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        CardBodyComponent,
-        CardFooterComponent,
-        RouterLink,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        NgIf,
-        FormsModule,
-        DebounceDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        NgForOf,
-        NgSelectModule,
-        NgOptionHighlightModule,
-        FormDirective,
-        XsButtonDirective,
-        BackButtonDirective,
-        ColComponent,
-        RowComponent,
-        NavComponent,
-        NavItemComponent,
-        UserMacrosModalComponent,
-        MatSort,
-        MatSortHeader,
-        TableDirective,
-        ButtonCloseDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        ModalToggleDirective,
-        InputCopyComponent,
-        ProfileApikeysComponent,
-        ProfileChangePasswordComponent
-    ],
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    TranslocoDirective,
+    CardBodyComponent,
+    CardFooterComponent,
+    RouterLink,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    NgIf,
+    FormsModule,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TrueFalseDirective,
+    NgSelectModule,
+    NgOptionHighlightModule,
+    FormDirective,
+    XsButtonDirective,
+    BackButtonDirective,
+    ColComponent,
+    RowComponent,
+    ProfileApikeysComponent,
+    ProfileChangePasswordComponent
+],
     templateUrl: './profile-edit.component.html',
     styleUrl: './profile-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

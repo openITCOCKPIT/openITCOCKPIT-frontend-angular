@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+
 import {
     CardBodyComponent,
     CardComponent,
@@ -31,28 +31,27 @@ import { GenericValidationError } from '../../../../../generic-responses';
 @Component({
     selector: 'oitc-msteamssettings-index',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink
+],
     templateUrl: './msteamssettings-index.component.html',
     styleUrl: './msteamssettings-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

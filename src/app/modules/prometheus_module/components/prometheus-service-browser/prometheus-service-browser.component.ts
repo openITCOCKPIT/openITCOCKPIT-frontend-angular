@@ -13,21 +13,20 @@ import { Subscription } from 'rxjs';
 import { PrometheusAlertRule, PrometheusMetricDetails } from '../../pages/PrometheusQuery/prometheus-query.interface';
 import { ColComponent, RowComponent, TableDirective } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { KeyValuePipe, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { PrometheusQueryService } from '../../pages/PrometheusQuery/prometheus-query.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-prometheus-service-browser',
     imports: [
-        RowComponent,
-        ColComponent,
-        TranslocoDirective,
-        TableDirective,
-        NgIf,
-        KeyValuePipe,
-        FaIconComponent
-    ],
+    RowComponent,
+    ColComponent,
+    TranslocoDirective,
+    TableDirective,
+    NgIf,
+    FaIconComponent
+],
     templateUrl: './prometheus-service-browser.component.html',
     styleUrl: './prometheus-service-browser.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

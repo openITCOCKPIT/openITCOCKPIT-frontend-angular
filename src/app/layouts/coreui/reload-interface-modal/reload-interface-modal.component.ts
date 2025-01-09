@@ -8,41 +8,36 @@ import {
     ViewChild
 } from '@angular/core';
 import {
-    ButtonCloseDirective,
-    ColComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    ProgressComponent,
-    RowComponent,
+  ColComponent,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalService,
+  ModalTitleDirective,
+  ProgressComponent,
+  RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
-import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
+
 
 @Component({
     selector: 'oitc-reload-interface-modal',
     imports: [
-        ButtonCloseDirective,
-        ColComponent,
-        FaIconComponent,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgForOf,
-        NgIf,
-        ProgressComponent,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective
-    ],
+    ColComponent,
+    FaIconComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ProgressComponent,
+    RowComponent,
+    TranslocoDirective
+],
     templateUrl: './reload-interface-modal.component.html',
     styleUrl: './reload-interface-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

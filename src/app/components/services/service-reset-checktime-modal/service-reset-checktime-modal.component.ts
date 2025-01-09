@@ -10,30 +10,26 @@ import {
     Output
 } from '@angular/core';
 import {
-    ButtonCloseDirective,
-    ColComponent,
-    FormControlDirective,
-    FormLabelDirective,
-    FormSelectDirective,
-    FormTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    ProgressComponent,
-    RowComponent,
+  ButtonCloseDirective,
+  ColComponent,
+  FormSelectDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalService,
+  ModalTitleDirective,
+  RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ValidationErrors } from '../../../services/downtimes-defaults.service';
 import { ExternalCommandsService, HostRescheduleItem, } from '../../../services/external-commands.service';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -42,29 +38,22 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 @Component({
     selector: 'oitc-service-reset-checktime-modal',
     imports: [
-        ButtonCloseDirective,
-        ColComponent,
-        FaIconComponent,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgForOf,
-        NgIf,
-        ProgressComponent,
-        RowComponent,
-        TranslocoDirective,
-        FormTextDirective,
-        FormControlDirective,
-        FormLabelDirective,
-        FormsModule,
-        SelectComponent,
-        NgSelectModule,
-        RequiredIconComponent,
-        FormSelectDirective,
-        XsButtonDirective
-    ],
+    ButtonCloseDirective,
+    ColComponent,
+    FaIconComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    RowComponent,
+    TranslocoDirective,
+    FormsModule,
+    NgSelectModule,
+    RequiredIconComponent,
+    FormSelectDirective,
+    XsButtonDirective
+],
     templateUrl: './service-reset-checktime-modal.component.html',
     styleUrl: './service-reset-checktime-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

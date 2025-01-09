@@ -10,95 +10,56 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { AsyncPipe, DecimalPipe, KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle, SlicePipe } from '@angular/common';
+import { AsyncPipe, DecimalPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { SkeletonModule } from 'primeng/skeleton';
 import { SlaServiceInformationElementService } from './sla-service-information-element.service';
 import { PermissionsService } from '../../../../permissions/permissions.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Response, SlaServiceInformationElementRoot } from './sla-service-information-element.interface';
 import {
-    AlertComponent,
-    BadgeComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormControlDirective,
-    FormDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  AlertComponent,
+  BadgeComponent,
+  ColComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
-import { DebounceDirective } from '../../../../directives/debounce.directive';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-records.component';
-import { PermissionDirective } from '../../../../permissions/permission.directive';
-import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+
+
+
+
 import { FormsModule } from '@angular/forms';
 import { Sla } from '../../pages/slas/Slas.interface';
 import { WeekDays } from '../timeperiod-details-tooltip/timeperiod-details-tooltip.interface';
-import { MatSort } from '@angular/material/sort';
+
 import { BadgeOutlineComponent } from '../../../../layouts/coreui/badge-outline/badge-outline.component';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-sla-service-information-element',
     imports: [
-        TranslocoDirective,
-        SkeletonModule,
-        NgIf,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        FaIconComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NoRecordsComponent,
-        PermissionDirective,
-        RowComponent,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        MultiSelectComponent,
-        NgStyle,
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        FormDirective,
-        FormControlDirective,
-        FormsModule,
-        AsyncPipe,
-        NgClass,
-        SlicePipe,
-        MatSort,
-        TableDirective,
-        BadgeOutlineComponent,
-        KeyValuePipe,
-        BadgeComponent,
-        AlertComponent,
-        TableLoaderComponent,
-        DecimalPipe
-    ],
+    TranslocoDirective,
+    SkeletonModule,
+    NgIf,
+    ColComponent,
+    FaIconComponent,
+    NgForOf,
+    RowComponent,
+    RouterLink,
+    FormsModule,
+    AsyncPipe,
+    NgClass,
+    TableDirective,
+    BadgeOutlineComponent,
+    KeyValuePipe,
+    BadgeComponent,
+    AlertComponent,
+    TableLoaderComponent,
+    DecimalPipe
+],
     templateUrl: './sla-service-information-element.component.html',
     styleUrl: './sla-service-information-element.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

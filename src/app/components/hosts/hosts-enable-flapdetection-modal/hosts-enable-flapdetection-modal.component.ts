@@ -11,24 +11,22 @@ import {
     ViewChild
 } from '@angular/core';
 import {
-    ButtonCloseDirective,
-    CardBodyComponent,
-    CardComponent,
-    ColComponent,
-    FormSelectDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    ProgressComponent,
-    RowComponent
+  ButtonCloseDirective,
+  CardBodyComponent,
+  CardComponent,
+  ColComponent,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalService,
+  ModalTitleDirective,
+  RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { ReactiveFormsModule } from '@angular/forms';
-import { RequiredIconComponent } from '../../required-icon/required-icon.component';
+
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { EnableOrDisableFlapDetectionItem, ExternalCommandsService } from '../../../services/external-commands.service';
@@ -39,25 +37,21 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'oitc-hosts-enable-flapdetection-modal',
     imports: [
-        ButtonCloseDirective,
-        CardBodyComponent,
-        CardComponent,
-        ColComponent,
-        FaIconComponent,
-        FormSelectDirective,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgIf,
-        ProgressComponent,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective
-    ],
+    ButtonCloseDirective,
+    CardBodyComponent,
+    CardComponent,
+    ColComponent,
+    FaIconComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ReactiveFormsModule,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective
+],
     templateUrl: './hosts-enable-flapdetection-modal.component.html',
     styleUrl: './hosts-enable-flapdetection-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

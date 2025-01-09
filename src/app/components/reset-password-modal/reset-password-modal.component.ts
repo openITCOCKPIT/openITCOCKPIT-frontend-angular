@@ -21,7 +21,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { User } from '../../pages/users/users.interface';
@@ -31,19 +31,18 @@ import { UsersService } from '../../pages/users/users.service';
 @Component({
     selector: 'oitc-reset-password-modal',
     imports: [
-        ButtonCloseDirective,
-        ColComponent,
-        FaIconComponent,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgIf,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective
-    ],
+    ButtonCloseDirective,
+    ColComponent,
+    FaIconComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective
+],
     templateUrl: './reset-password-modal.component.html',
     styleUrl: './reset-password-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

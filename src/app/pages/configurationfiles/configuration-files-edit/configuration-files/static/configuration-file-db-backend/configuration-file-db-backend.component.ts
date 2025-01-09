@@ -15,7 +15,7 @@ import { ConfigurationEditorConfig, ConfigurationEditorField } from '../../../..
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
 import { ConfigurationFilesService } from '../../../../configuration-files.service';
-import { FormControlDirective, FormLabelDirective, FormSelectDirective } from '@coreui/angular';
+import { FormSelectDirective } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { PaginatorModule } from 'primeng/paginator';
@@ -27,17 +27,15 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-configuration-file-db-backend',
     imports: [
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        PaginatorModule,
-        RequiredIconComponent,
-        NgIf,
-        FormSelectDirective,
-        TranslocoDirective,
-        FormsModule
-    ],
+    FormErrorDirective,
+    FormFeedbackComponent,
+    PaginatorModule,
+    RequiredIconComponent,
+    NgIf,
+    FormSelectDirective,
+    TranslocoDirective,
+    FormsModule
+],
     templateUrl: './configuration-file-db-backend.component.html',
     styleUrl: './configuration-file-db-backend.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

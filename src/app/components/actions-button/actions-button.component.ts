@@ -32,7 +32,7 @@ import {
 } from '@coreui/angular';
 import { PermissionDirective } from '../../permissions/permission.directive';
 import { Params, Router, RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
+
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -40,16 +40,15 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 @Component({
     selector: 'oitc-actions-button',
     imports: [
-        ButtonGroupComponent,
-        DropdownComponent,
-        PermissionDirective,
-        NgIf,
-        FaIconComponent,
-        XsButtonDirective,
-        DropdownToggleDirective,
-        DropdownMenuDirective,
-        RouterLink
-    ],
+    ButtonGroupComponent,
+    DropdownComponent,
+    PermissionDirective,
+    FaIconComponent,
+    XsButtonDirective,
+    DropdownToggleDirective,
+    DropdownMenuDirective,
+    RouterLink
+],
     templateUrl: './actions-button.component.html',
     styleUrl: './actions-button.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

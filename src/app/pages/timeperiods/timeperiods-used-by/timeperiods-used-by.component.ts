@@ -5,16 +5,14 @@ import { TimeperiodsService } from '../timeperiods.service';
 import { TimeperiodUsedByObjects, TimeperiodUsedByTimeperiod } from '../timeperiods.interface';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ContainerComponent,
+  NavComponent,
+  NavItemComponent,
+  TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -23,34 +21,31 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-timeperiods-used-by',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ContainerComponent,
-        FaIconComponent,
-        NavComponent,
-        NgForOf,
-        NgIf,
-        PermissionDirective,
-        TableDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        RowComponent,
-        ColComponent,
-        NotUsedByObjectComponent,
-        NavItemComponent,
-        TableLoaderComponent,
-        FormLoaderComponent
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ContainerComponent,
+    FaIconComponent,
+    NavComponent,
+    NgForOf,
+    NgIf,
+    PermissionDirective,
+    TableDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    NotUsedByObjectComponent,
+    NavItemComponent,
+    FormLoaderComponent
+],
     templateUrl: './timeperiods-used-by.component.html',
     styleUrl: './timeperiods-used-by.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

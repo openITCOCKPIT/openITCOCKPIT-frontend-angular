@@ -38,17 +38,16 @@ import {
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { NotyService } from '../../layouts/coreui/noty.service';
 import {
-    ButtonCloseDirective,
-    FormControlDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    RowComponent,
+  ButtonCloseDirective,
+  FormControlDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalService,
+  ModalTitleDirective
 } from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+
 import { FormsModule } from '@angular/forms';
 import { NgClass, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -73,21 +72,19 @@ type NewBookmark = {
 @Component({
     selector: 'oitc-filter-bookmark-save-modal',
     imports: [
-        TranslocoDirective,
-        ModalComponent,
-        ButtonCloseDirective,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        XsButtonDirective,
-        FaIconComponent,
-        ModalFooterComponent,
-        ModalBodyComponent,
-        RowComponent,
-        FormsModule,
-        NgIf,
-        FormControlDirective,
-        NgClass
-    ],
+    TranslocoDirective,
+    ModalComponent,
+    ButtonCloseDirective,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    XsButtonDirective,
+    ModalFooterComponent,
+    ModalBodyComponent,
+    FormsModule,
+    NgIf,
+    FormControlDirective,
+    NgClass
+],
     templateUrl: './filter-bookmark-save-modal.component.html',
     styleUrl: './filter-bookmark-save-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

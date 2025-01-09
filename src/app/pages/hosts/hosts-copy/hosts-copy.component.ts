@@ -18,7 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -33,30 +33,29 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-hosts-copy',
     imports: [
-        AlertComponent,
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NavComponent,
-        NgForOf,
-        PermissionDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        NgIf,
-        FormLoaderComponent
-    ],
+    AlertComponent,
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NgForOf,
+    PermissionDirective,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    NgIf,
+    FormLoaderComponent
+],
     templateUrl: './hosts-copy.component.html',
     styleUrl: './hosts-copy.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

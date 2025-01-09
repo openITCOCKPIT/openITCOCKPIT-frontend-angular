@@ -16,12 +16,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
 import { ConfigurationFilesService } from '../../../../configuration-files.service';
 import {
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    FormSelectDirective
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormLabelDirective
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -35,21 +34,20 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-configuration-file-nsta-master',
     imports: [
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        PaginatorModule,
-        RequiredIconComponent,
-        NgIf,
-        FormSelectDirective,
-        TranslocoDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        FormsModule
-    ],
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    PaginatorModule,
+    RequiredIconComponent,
+    NgIf,
+    TranslocoDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TrueFalseDirective,
+    FormsModule
+],
     templateUrl: './configuration-file-nsta-master.component.html',
     styleUrl: './configuration-file-nsta-master.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

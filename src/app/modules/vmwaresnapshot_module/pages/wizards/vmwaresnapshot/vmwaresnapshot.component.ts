@@ -3,16 +3,12 @@ import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-a
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    AccordionButtonDirective,
-    AccordionComponent,
-    AccordionItemComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    TemplateIdDirective
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormControlDirective,
+  FormLabelDirective
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
@@ -30,26 +26,22 @@ import { MysqlWizardGet } from '../../../../../pages/wizards/mysqlserver/mysqlse
 @Component({
     selector: 'oitc-vmwaresnapshot',
     imports: [
-        RouterLink,
-        FaIconComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        TranslocoPipe,
-        WizardsDynamicfieldsComponent,
-        AccordionButtonDirective,
-        AccordionComponent,
-        AccordionItemComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        RequiredIconComponent,
-        TemplateIdDirective,
-        TranslocoDirective
-    ],
+    RouterLink,
+    FaIconComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    TranslocoPipe,
+    WizardsDynamicfieldsComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    RequiredIconComponent,
+    TranslocoDirective
+],
     templateUrl: './vmwaresnapshot.component.html',
     styleUrl: './vmwaresnapshot.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

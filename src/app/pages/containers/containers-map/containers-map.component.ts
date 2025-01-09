@@ -10,23 +10,22 @@ import {
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalService,
-    NavComponent,
-    NavItemComponent,
-    ProgressComponent,
-    RowComponent,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  ModalService,
+  NavComponent,
+  NavItemComponent,
+  ProgressComponent,
+  RowComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { DecimalPipe, DOCUMENT, NgForOf, NgIf } from '@angular/common';
+import { DecimalPipe, DOCUMENT, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -45,31 +44,29 @@ import { ClusterOptions } from 'vis-network/declarations/network/Network';
 @Component({
     selector: 'oitc-containers-map',
     imports: [
-        BackButtonDirective,
-        BlockLoaderComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        FaIconComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        PermissionDirective,
-        RowComponent,
-        SelectComponent,
-        TableDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        DecimalPipe,
-        ProgressComponent,
-        TranslocoPipe
-    ],
+    BackButtonDirective,
+    BlockLoaderComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FaIconComponent,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PermissionDirective,
+    RowComponent,
+    SelectComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    DecimalPipe,
+    ProgressComponent,
+    TranslocoPipe
+],
     templateUrl: './containers-map.component.html',
     styleUrl: './containers-map.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

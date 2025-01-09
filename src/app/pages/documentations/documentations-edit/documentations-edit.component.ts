@@ -1,24 +1,20 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  NavComponent,
+  NavItemComponent,
+  RowComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf, NgStyle, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
+
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DocumentationView } from '../documentations.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -26,40 +22,32 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BbCodeParserService } from '../../../services/bb-code-parser.service';
 import { DocumentationsService } from '../documentations.service';
-import { DropdownColorpickerComponent } from '../dropdown-colorpicker/dropdown-colorpicker.component';
+
 import { BbCodeEditorComponent } from '../bb-code-editor/bb-code-editor.component';
 
 
 @Component({
     selector: 'oitc-documentations-edit',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        NgSwitchCase,
-        RowComponent,
-        TranslocoDirective,
-        TrustAsHtmlPipe,
-        XsButtonDirective,
-        NgSwitch,
-        RouterLink,
-        DropdownComponent,
-        DropdownToggleDirective,
-        DropdownMenuDirective,
-        DropdownItemDirective,
-        NgForOf,
-        NgStyle,
-        DropdownColorpickerComponent,
-        BbCodeEditorComponent,
-        NgSwitchDefault
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    NgSwitchCase,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    NgSwitch,
+    RouterLink,
+    BbCodeEditorComponent,
+    NgSwitchDefault
+],
     templateUrl: './documentations-edit.component.html',
     styleUrl: './documentations-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -8,31 +8,28 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { NgIf } from '@angular/common';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    ModalComponent,
-    NavComponent,
-    NavItemComponent
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { ObjectUuidComponent } from '../../../../../layouts/coreui/object-uuid/object-uuid.component';
+
+
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
+
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
@@ -42,39 +39,32 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
 @Component({
     selector: 'oitc-settings-edit',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        FormLoaderComponent,
-        NgIf,
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        MultiSelectComponent,
-        NavComponent,
-        NavItemComponent,
-        ObjectUuidComponent,
-        PaginatorModule,
-        RequiredIconComponent,
-        SelectComponent,
-        XsButtonDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        ModalComponent,
-        ApikeyDocModalComponent
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    FormLoaderComponent,
+    NgIf,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    PaginatorModule,
+    RequiredIconComponent,
+    XsButtonDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TrueFalseDirective,
+    ApikeyDocModalComponent
+],
     templateUrl: './settings-edit.component.html',
     styleUrl: './settings-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

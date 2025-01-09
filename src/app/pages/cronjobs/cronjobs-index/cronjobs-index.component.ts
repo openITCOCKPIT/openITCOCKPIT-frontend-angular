@@ -1,35 +1,30 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    ButtonCloseDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    DropdownDividerDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    ModalToggleDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  ButtonCloseDirective,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalService,
+  ModalTitleDirective,
+  ModalToggleDirective,
+  NavComponent,
+  NavItemComponent,
+  TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { CreditsComponent } from '../../registers/credits/credits.component';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
@@ -38,12 +33,10 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
-import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { MatSort, MatSortHeader } from '@angular/material/sort';
+
+
+
+
 import { Subscription } from 'rxjs';
 import { CronjobsService } from '../cronjobs.service';
 import { Cronjob, CronjobPost, CronjobsIndex } from '../cronjob.interface';
@@ -51,7 +44,7 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
+
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -59,54 +52,42 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 @Component({
     selector: 'oitc-cronjobs-index',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        CreditsComponent,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormLabelDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PermissionDirective,
-        RequiredIconComponent,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        DropdownDividerDirective,
-        ItemSelectComponent,
-        MatSort,
-        MatSortHeader,
-        NgForOf,
-        TableDirective,
-        NoRecordsComponent,
-        ButtonCloseDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgSelectModule,
-        TrueFalseDirective,
-        ModalToggleDirective,
-        NgOptionHighlightModule
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PermissionDirective,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    NgForOf,
+    TableDirective,
+    NoRecordsComponent,
+    ButtonCloseDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    NgSelectModule,
+    ModalToggleDirective,
+    NgOptionHighlightModule
+],
     templateUrl: './cronjobs-index.component.html',
     styleUrl: './cronjobs-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

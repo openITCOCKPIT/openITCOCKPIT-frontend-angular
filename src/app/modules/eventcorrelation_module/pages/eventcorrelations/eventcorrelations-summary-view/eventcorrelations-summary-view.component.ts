@@ -2,18 +2,17 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  NavComponent,
+  NavItemComponent,
+  RowComponent
 } from '@coreui/angular';
-import { EvcTreeComponent } from '../eventcorrelations-view/evc-tree/evc-tree.component';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgClass, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -28,28 +27,26 @@ import { EvcTableComponent } from '../eventcorrelations-view/evc-table/evc-table
 @Component({
     selector: 'oitc-eventcorrelations-summary-view',
     imports: [
-        BackButtonDirective,
-        BlockLoaderComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        EvcTreeComponent,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PermissionDirective,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        TableDirective,
-        NgClass,
-        EvcTableComponent
-    ],
+    BackButtonDirective,
+    BlockLoaderComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PermissionDirective,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    NgClass,
+    EvcTableComponent
+],
     templateUrl: './eventcorrelations-summary-view.component.html',
     styleUrl: './eventcorrelations-summary-view.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

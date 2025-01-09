@@ -6,18 +6,17 @@ import {
     DropdownMenuDirective,
     DropdownToggleDirective
 } from '@coreui/angular';
-import { IconDirective } from '@coreui/icons-angular';
+
 
 @Component({
     selector: 'oitc-change-language',
     imports: [
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        IconDirective,
-        TranslocoDirective
-    ],
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    TranslocoDirective
+],
     templateUrl: './change-language.component.html',
     styleUrl: './change-language.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,13 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
-import { ColComponent, RowComponent, TableDirective, TooltipDirective } from '@coreui/angular';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { TooltipDirective } from '@coreui/angular';
+import { NgClass, NgIf } from '@angular/common';
 import { EvcSummaryService } from '../../eventcorrelations.interface';
-import {
-    ServicestatusSimpleIconComponent
-} from '../../../../../../pages/services/servicestatus-simple-icon/servicestatus-simple-icon.component';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoService } from '@jsverse/transloco';
-import { PermissionDirective } from '../../../../../../permissions/permission.directive';
+
 import { AcknowledgementTypes } from '../../../../../../pages/acknowledgements/acknowledgement-types.enum';
 import {
     EvcServicestatusToasterComponent
@@ -19,18 +17,12 @@ import {
 @Component({
     selector: 'oitc-evc-table',
     imports: [
-        ColComponent,
-        NgIf,
-        RowComponent,
-        TableDirective,
-        NgClass,
-        NgForOf,
-        ServicestatusSimpleIconComponent,
-        FaIconComponent,
-        TooltipDirective,
-        PermissionDirective,
-        EvcServicestatusToasterComponent
-    ],
+    NgIf,
+    NgClass,
+    FaIconComponent,
+    TooltipDirective,
+    EvcServicestatusToasterComponent
+],
     templateUrl: './evc-table.component.html',
     styleUrl: './evc-table.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -30,52 +30,48 @@ import {
     ModalToggleDirective,
     RowComponent
 } from '@coreui/angular';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf } from '@angular/common';
+
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { DocumentationLink } from '../documentations.interface';
-import { DebounceDirective } from '../../../directives/debounce.directive';
+
 
 @Component({
     selector: 'oitc-bb-code-editor',
     imports: [
-        DropdownColorpickerComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        ReactiveFormsModule,
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        FaIconComponent,
-        NgForOf,
-        XsButtonDirective,
-        TranslocoDirective,
-        FormsModule,
-        ModalToggleDirective,
-        ModalComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        ButtonCloseDirective,
-        ModalBodyComponent,
-        RowComponent,
-        ColComponent,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        DebounceDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        ModalFooterComponent,
-        InputGroupComponent,
-        InputGroupTextDirective
-    ],
+    DropdownColorpickerComponent,
+    FormControlDirective,
+    ReactiveFormsModule,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FaIconComponent,
+    XsButtonDirective,
+    TranslocoDirective,
+    FormsModule,
+    ModalToggleDirective,
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ButtonCloseDirective,
+    ModalBodyComponent,
+    RowComponent,
+    ColComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    ModalFooterComponent,
+    InputGroupComponent,
+    InputGroupTextDirective
+],
     templateUrl: './bb-code-editor.component.html',
     styleUrl: './bb-code-editor.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

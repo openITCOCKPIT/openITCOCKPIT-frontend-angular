@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, output } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-priority',
     imports: [
-        FaIconComponent,
-        NgClass,
-        NgForOf
-    ],
+    FaIconComponent,
+    NgClass
+],
     templateUrl: './priority.component.html',
     styleUrl: './priority.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

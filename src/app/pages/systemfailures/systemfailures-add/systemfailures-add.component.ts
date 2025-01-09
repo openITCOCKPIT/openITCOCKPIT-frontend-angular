@@ -1,22 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    AlertComponent,
-    AlertHeadingDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    NavComponent,
-    NavItemComponent
+  AlertComponent,
+  AlertHeadingDirective,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  FormCheckInputDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -34,45 +31,40 @@ import { SystemfailuresGet, SystemfailuresPost } from '../systemfailures.interfa
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { SystemfailuresService } from '../systemfailures.service';
-import { NgIf } from '@angular/common';
+
 import { HistoryService } from '../../../history.service';
 import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
-import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
+
 
 @Component({
     selector: 'oitc-systemfailures-add',
     imports: [
-        CardComponent,
-        FaIconComponent,
-        FormDirective,
-        FormsModule,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        BackButtonDirective,
-        CardBodyComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        InputGroupComponent,
-        RequiredIconComponent,
-        FormCheckComponent,
-        FormCheckLabelDirective,
-        FormCheckInputDirective,
-        FormControlDirective,
-        CardFooterComponent,
-        NgIf,
-        FakeSelectComponent,
-        LabelLinkComponent,
-        AlertComponent,
-        ColComponent,
-        AlertHeadingDirective
-    ],
+    CardComponent,
+    FaIconComponent,
+    FormDirective,
+    FormsModule,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    BackButtonDirective,
+    CardBodyComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    CardFooterComponent,
+    FakeSelectComponent,
+    AlertComponent,
+    ColComponent,
+    AlertHeadingDirective
+],
     templateUrl: './systemfailures-add.component.html',
     styleUrl: './systemfailures-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

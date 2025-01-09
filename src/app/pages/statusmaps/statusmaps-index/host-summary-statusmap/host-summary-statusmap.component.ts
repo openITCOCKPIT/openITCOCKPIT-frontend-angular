@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core
 import { SummaryState } from '../../../hosts/summary_state.interface';
 import { BadgeComponent, TableDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf } from '@angular/common';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
@@ -11,15 +11,14 @@ import { HostEntity } from '../../../hosts/hosts.interface';
 @Component({
     selector: 'oitc-host-summary-statusmap',
     imports: [
-        BadgeComponent,
-        FaIconComponent,
-        NgForOf,
-        NgIf,
-        PermissionDirective,
-        TableDirective,
-        TranslocoDirective,
-        RouterLink
-    ],
+    BadgeComponent,
+    FaIconComponent,
+    NgForOf,
+    PermissionDirective,
+    TableDirective,
+    TranslocoDirective,
+    RouterLink
+],
     templateUrl: './host-summary-statusmap.component.html',
     styleUrl: './host-summary-statusmap.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

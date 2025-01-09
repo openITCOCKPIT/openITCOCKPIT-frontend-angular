@@ -14,18 +14,12 @@ import { IPoint, PointExtensions } from '@foblex/2d';
 import { generateGuid } from '@foblex/utils';
 import { EvcTreeDirection } from './evc-tree.enum';
 import { EvcService, EvcTree } from '../../eventcorrelations.interface';
-import { AsyncPipe, JsonPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import {
-    ButtonGroupComponent,
-    ColComponent,
-    ProgressBarComponent,
-    ProgressComponent,
-    RowComponent,
-    ToastBodyComponent,
-    ToastComponent,
-    ToasterComponent,
-    ToastHeaderComponent,
-    TooltipDirective
+  ButtonGroupComponent,
+  ColComponent,
+  RowComponent,
+  TooltipDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum';
@@ -36,15 +30,13 @@ import {
     AcknowledgementIconComponent
 } from '../../../../../../pages/acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
 import { AcknowledgementTypes } from '../../../../../../pages/acknowledgements/acknowledgement-types.enum';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { EvcOperatorComponent } from './evc-operator/evc-operator.component';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+
 import { ConnectionOperator } from './evc-tree.interface'
 import { EventcorrelationOperators } from '../../eventcorrelations.enum';
 import { RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {
-    HostSummaryStatusmapComponent
-} from '../../../../../../pages/statusmaps/statusmaps-index/host-summary-statusmap/host-summary-statusmap.component';
+
 import { EvcServicestatusToasterService } from './evc-servicestatus-toaster/evc-servicestatus-toaster.service';
 import { EvcServicestatusToasterComponent } from './evc-servicestatus-toaster/evc-servicestatus-toaster.component';
 
@@ -101,33 +93,23 @@ const OPERATOR_WIDTH = 100;
 @Component({
     selector: 'oitc-evc-tree',
     imports: [
-        FFlowModule,
-        NgClass,
-        JsonPipe,
-        RowComponent,
-        ColComponent,
-        NgIf,
-        TooltipDirective,
-        FaIconComponent,
-        DowntimeIconComponent,
-        PermissionDirective,
-        AsyncPipe,
-        AcknowledgementIconComponent,
-        TranslocoDirective,
-        EvcOperatorComponent,
-        TranslocoPipe,
-        RouterLink,
-        XsButtonDirective,
-        ButtonGroupComponent,
-        HostSummaryStatusmapComponent,
-        ProgressBarComponent,
-        ProgressComponent,
-        ToastBodyComponent,
-        ToastComponent,
-        ToastHeaderComponent,
-        ToasterComponent,
-        EvcServicestatusToasterComponent
-    ],
+    FFlowModule,
+    NgClass,
+    RowComponent,
+    ColComponent,
+    NgIf,
+    TooltipDirective,
+    FaIconComponent,
+    DowntimeIconComponent,
+    PermissionDirective,
+    AsyncPipe,
+    AcknowledgementIconComponent,
+    TranslocoPipe,
+    RouterLink,
+    XsButtonDirective,
+    ButtonGroupComponent,
+    EvcServicestatusToasterComponent
+],
     templateUrl: './evc-tree.component.html',
     styleUrl: './evc-tree.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

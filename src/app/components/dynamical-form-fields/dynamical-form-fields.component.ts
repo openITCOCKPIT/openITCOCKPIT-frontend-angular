@@ -9,7 +9,7 @@ import {
     Output
 } from '@angular/core';
 import { DynamicalFormField } from './dynamical-form-fields.interface';
-import { DebounceDirective } from '../../directives/debounce.directive';
+
 import {
     FormCheckComponent,
     FormCheckInputDirective,
@@ -19,7 +19,7 @@ import {
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../layouts/coreui/form-feedback/form-feedback.component';
-import { JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../required-icon/required-icon.component';
 import { TrueFalseDirective } from '../../directives/true-false.directive';
@@ -32,25 +32,23 @@ import { SelectComponent } from '../../layouts/primeng/select/select/select.comp
 @Component({
     selector: 'oitc-dynamical-form-fields',
     imports: [
-        DebounceDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        NgForOf,
-        NgIf,
-        PaginatorModule,
-        RequiredIconComponent,
-        TrueFalseDirective,
-        TranslocoDirective,
-        NgSelectComponent,
-        SelectComponent,
-        JsonPipe,
-        FormsModule
-    ],
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    NgForOf,
+    NgIf,
+    PaginatorModule,
+    RequiredIconComponent,
+    TrueFalseDirective,
+    TranslocoDirective,
+    NgSelectComponent,
+    SelectComponent,
+    FormsModule
+],
     templateUrl: './dynamical-form-fields.component.html',
     styleUrl: './dynamical-form-fields.component.css',
     providers: [

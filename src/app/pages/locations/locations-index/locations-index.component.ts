@@ -21,9 +21,7 @@ import {
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import {
-    QueryHandlerCheckerComponent
-} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -50,7 +48,7 @@ import {
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
+
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
@@ -62,45 +60,43 @@ import { IndexPage } from '../../../pages.interface';
 @Component({
     selector: 'oitc-locations-index',
     imports: [
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        PermissionDirective,
-        QueryHandlerCheckerComponent,
-        TranslocoDirective,
-        RouterLink,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        RowComponent,
-        TranslocoPipe,
-        MatSort,
-        TableDirective,
-        MatSortHeader,
-        NgIf,
-        TableLoaderComponent,
-        NgForOf,
-        ItemSelectComponent,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        DropdownDividerDirective,
-        DeleteAllModalComponent,
-        DisableModalComponent,
-        NoRecordsComponent,
-        SelectAllComponent,
-        PaginateOrScrollComponent,
-        CardFooterComponent
-    ],
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    ColComponent,
+    ContainerComponent,
+    DebounceDirective,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    RowComponent,
+    TranslocoPipe,
+    MatSort,
+    TableDirective,
+    MatSortHeader,
+    NgIf,
+    TableLoaderComponent,
+    NgForOf,
+    ItemSelectComponent,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    DropdownDividerDirective,
+    DeleteAllModalComponent,
+    NoRecordsComponent,
+    SelectAllComponent,
+    PaginateOrScrollComponent,
+    CardFooterComponent
+],
     templateUrl: './locations-index.component.html',
     styleUrl: './locations-index.component.css',
     providers: [

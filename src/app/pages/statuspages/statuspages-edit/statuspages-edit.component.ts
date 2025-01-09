@@ -30,22 +30,20 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective, ColComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective, ColComponent,
+  FormCheckInputDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  NavComponent,
+  NavItemComponent,
+  RowComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -59,7 +57,7 @@ import { SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit } from 
 import { GenericValidationError } from '../../../generic-responses';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import {NotyService} from '../../../layouts/coreui/noty.service';
@@ -68,40 +66,37 @@ import {intersection} from 'lodash';
 @Component({
     selector: 'oitc-statuspages-edit',
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        BackButtonDirective,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        FormErrorDirective,
-        SelectComponent,
-        FormDirective,
-        FormsModule,
-        PaginatorModule,
-        NgIf,
-        FormFeedbackComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        MultiSelectComponent,
-        NgForOf,
-        CardFooterComponent,
-        RowComponent,
-        InputGroupComponent,
-        AsyncPipe,
-        InputGroupTextDirective,
-        ColComponent
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    PermissionDirective,
+    RouterLink,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    BackButtonDirective,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormErrorDirective,
+    SelectComponent,
+    FormDirective,
+    FormsModule,
+    PaginatorModule,
+    NgIf,
+    FormFeedbackComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    MultiSelectComponent,
+    CardFooterComponent,
+    RowComponent,
+    InputGroupComponent,
+    AsyncPipe,
+    InputGroupTextDirective,
+    ColComponent
+],
     templateUrl: './statuspages-edit.component.html',
     styleUrl: './statuspages-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

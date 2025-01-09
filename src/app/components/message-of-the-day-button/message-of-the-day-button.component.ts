@@ -24,25 +24,16 @@
  */
 
 import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
-import { TranslocoDirective } from '@jsverse/transloco';
+
 import {
-    ButtonCloseDirective,
-    ColComponent,
-    FormControlDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    RowComponent,
+  ModalService
 } from '@coreui/angular';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { CurrentMessageOfTheDay } from '../../pages/messagesotd/messagesotd.interface';
-import { TrustAsHtmlPipe } from '../../pipes/trust-as-html.pipe';
+
 
 
 type NewBookmark = {
@@ -54,25 +45,11 @@ type NewBookmark = {
 @Component({
     selector: 'oitc-message-of-the-day-button',
     imports: [
-        TranslocoDirective,
-        ModalComponent,
-        ButtonCloseDirective,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        XsButtonDirective,
-        FaIconComponent,
-        ModalFooterComponent,
-        ModalBodyComponent,
-        RowComponent,
-        FormsModule,
-        NgIf,
-        FormControlDirective,
-        NgClass,
-        ColComponent,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        TrustAsHtmlPipe
-    ],
+    XsButtonDirective,
+    FaIconComponent,
+    FormsModule,
+    NgIf
+],
     templateUrl: './message-of-the-day-button.component.html',
     styleUrl: './message-of-the-day-button.component.css'
 })

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { Subscription } from 'rxjs';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
     BadgeComponent,
@@ -24,7 +24,7 @@ import {
 } from '@coreui/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
+
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -32,58 +32,51 @@ import { AutomapsService } from '../automaps.service';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf, NgIf } from '@angular/common';
-import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { AutomapEntity, AutomapsMatchingHostAndServiceCounts } from '../automaps.interface';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/template-diff-btn.component';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
+
+
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-automaps-add',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        ReactiveFormsModule,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        BackButtonDirective,
-        NavComponent,
-        NavItemComponent,
-        UserMacrosModalComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        CardFooterComponent,
-        FormCheckInputDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        NgForOf,
-        NgIf,
-        NgOptionComponent,
-        NgSelectComponent,
-        RequiredIconComponent,
-        SelectComponent,
-        FormControlDirective,
-        FormCheckComponent,
-        FormCheckLabelDirective,
-        TemplateDiffBtnComponent,
-        TrueFalseDirective,
-        DebounceDirective,
-        RowComponent,
-        ColComponent,
-        BadgeComponent,
-        TranslocoPipe
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    FormDirective,
+    FormsModule,
+    ReactiveFormsModule,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    BackButtonDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    CardFooterComponent,
+    FormCheckInputDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    NgIf,
+    RequiredIconComponent,
+    SelectComponent,
+    FormControlDirective,
+    FormCheckComponent,
+    FormCheckLabelDirective,
+    DebounceDirective,
+    RowComponent,
+    ColComponent,
+    BadgeComponent
+],
     templateUrl: './automaps-add.component.html',
     styleUrl: './automaps-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -3,43 +3,38 @@ import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-    ButtonGroupComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownComponent,
-    DropdownDividerDirective,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalService,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    RowDirective,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  DropdownComponent,
+  DropdownDividerDirective,
+  DropdownItemDirective,
+  DropdownMenuDirective,
+  DropdownToggleDirective,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  ModalService,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+
+
+
 import { FormsModule } from '@angular/forms';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -63,9 +58,7 @@ import { ActionsButtonComponent } from '../../../components/actions-button/actio
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
-import {
-    ServiceMaintenanceModalComponent
-} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
+
 import {
     ServiceResetChecktimeModalComponent
 } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
@@ -88,7 +81,7 @@ import {
     HostsEnableNotificationsModalComponent
 } from '../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
-import { MatSort } from '@angular/material/sort';
+
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 import { HostObject } from '../../hosts/hosts.interface';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -104,7 +97,7 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
 import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
@@ -128,73 +121,60 @@ import { ServicesService } from '../../services/services.service';
 @Component({
     selector: 'oitc-hostgroups-extended',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormLoaderComponent,
-        FormsModule,
-        MultiSelectComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PaginatorModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        DropdownDividerDirective,
-        ServiceMaintenanceModalComponent,
-        ServiceResetChecktimeModalComponent,
-        DisableModalComponent,
-        HostsMaintenanceModalComponent,
-        HostsDisableNotificationsModalComponent,
-        HostsEnableNotificationsModalComponent,
-        DebounceDirective,
-        MatSort,
-        TableDirective,
-        NgForOf,
-        HoststatusIconComponent,
-        TranslocoPipe,
-        ButtonGroupComponent,
-        ServiceCumulatedStatusIconComponent,
-        RowComponent,
-        ColComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ServicestatusIconComponent,
-        PopoverGraphComponent,
-        DropdownComponent,
-        DropdownToggleDirective,
-        DropdownMenuDirective,
-        DropdownItemDirective,
-        ContainerComponent,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        SelectAllComponent,
-        HostAcknowledgeModalComponent,
-        TableLoaderComponent,
-        ObjectUuidComponent,
-        RowDirective,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        NgClass,
-        SlaHostgroupHostsStatusOverviewComponent,
-        DeleteAllModalComponent,
-        AsyncPipe
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PaginatorModule,
+    PermissionDirective,
+    SelectComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    DropdownDividerDirective,
+    ServiceResetChecktimeModalComponent,
+    DisableModalComponent,
+    HostsMaintenanceModalComponent,
+    HostsDisableNotificationsModalComponent,
+    HostsEnableNotificationsModalComponent,
+    DebounceDirective,
+    TableDirective,
+    NgForOf,
+    HoststatusIconComponent,
+    TranslocoPipe,
+    ServiceCumulatedStatusIconComponent,
+    RowComponent,
+    ColComponent,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ServicestatusIconComponent,
+    PopoverGraphComponent,
+    DropdownComponent,
+    DropdownToggleDirective,
+    DropdownMenuDirective,
+    DropdownItemDirective,
+    ContainerComponent,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    HostAcknowledgeModalComponent,
+    TableLoaderComponent,
+    ObjectUuidComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    NgClass,
+    SlaHostgroupHostsStatusOverviewComponent,
+    DeleteAllModalComponent,
+    AsyncPipe
+],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css',
     providers: [

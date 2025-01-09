@@ -7,15 +7,14 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { GenericValidationError } from '../../../generic-responses';
 import { CommandCopyPost } from '../commands.interface';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    NavComponent,
-    NavItemComponent
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormControlDirective,
+  FormLabelDirective,
+  NavComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -34,29 +33,28 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-commands-copy',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        XsButtonDirective,
-        BackButtonDirective,
-        RouterLink,
-        TranslocoDirective,
-        NgForOf,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        RequiredIconComponent,
-        CardFooterComponent,
-        FormLoaderComponent,
-        NgIf
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    PermissionDirective,
+    XsButtonDirective,
+    BackButtonDirective,
+    RouterLink,
+    TranslocoDirective,
+    NgForOf,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    RequiredIconComponent,
+    CardFooterComponent,
+    FormLoaderComponent,
+    NgIf
+],
     templateUrl: './commands-copy.component.html',
     styleUrl: './commands-copy.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

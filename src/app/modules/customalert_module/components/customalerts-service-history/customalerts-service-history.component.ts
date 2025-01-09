@@ -15,13 +15,11 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActionsButtonComponent } from '../../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../../components/actions-button-element/actions-button-element.component';
-import { BadgeOutlineComponent } from '../../../../layouts/coreui/badge-outline/badge-outline.component';
-import { ItemSelectComponent } from '../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { MatSort, MatSortHeader } from '@angular/material/sort';
+
+
+
+
+
 import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -30,29 +28,23 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'oitc-customalerts-service-history',
     imports: [
-        TranslocoDirective,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        BadgeOutlineComponent,
-        ItemSelectComponent,
-        MatSort,
-        MatSortHeader,
-        NgForOf,
-        NgIf,
-        PermissionDirective,
-        TableDirective,
-        TextColorDirective,
-        TableLoaderComponent,
-        RouterLink
-    ],
+    TranslocoDirective,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    NgForOf,
+    NgIf,
+    PermissionDirective,
+    TableDirective,
+    TextColorDirective,
+    TableLoaderComponent,
+    RouterLink
+],
     templateUrl: './customalerts-service-history.component.html',
     styleUrl: './customalerts-service-history.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -3,30 +3,24 @@ import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
-    AccordionButtonDirective,
-    AccordionComponent,
-    AccordionItemComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    RowComponent,
-    TemplateIdDirective
+  AccordionButtonDirective,
+  AccordionComponent,
+  AccordionItemComponent,
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormControlDirective,
+  FormLabelDirective,
+  TemplateIdDirective
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { NgForOf, NgIf } from '@angular/common';
-import { DebounceDirective } from '../../../directives/debounce.directive';
-import { NgSelectComponent } from '@ng-select/ng-select';
+
+
+
 import {
     WizardsDynamicfieldsComponent
 } from '../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
@@ -37,36 +31,26 @@ import { WizardsAbstractComponent } from '../wizards-abstract/wizards-abstract.c
 @Component({
     selector: 'oitc-mysqlserver',
     imports: [
-        FaIconComponent,
-        TranslocoDirective,
-        RouterLink,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        CardBodyComponent,
-        FormsModule,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormControlDirective,
-        RequiredIconComponent,
-        NgForOf,
-        AccordionComponent,
-        AccordionItemComponent,
-        AccordionButtonDirective,
-        TemplateIdDirective,
-        RowComponent,
-        ColComponent,
-        DebounceDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TranslocoPipe,
-        NgSelectComponent,
-        FormCheckInputDirective,
-        FormCheckComponent,
-        NgIf,
-        FormLabelDirective,
-        WizardsDynamicfieldsComponent
-    ],
+    FaIconComponent,
+    TranslocoDirective,
+    RouterLink,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    CardBodyComponent,
+    FormsModule,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormControlDirective,
+    RequiredIconComponent,
+    AccordionComponent,
+    AccordionItemComponent,
+    AccordionButtonDirective,
+    TemplateIdDirective,
+    TranslocoPipe,
+    FormLabelDirective,
+    WizardsDynamicfieldsComponent
+],
     templateUrl: './mysqlserver.component.html',
     styleUrl: './mysqlserver.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

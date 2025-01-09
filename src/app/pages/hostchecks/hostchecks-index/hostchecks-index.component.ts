@@ -35,65 +35,62 @@ import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PaginatorModule } from 'primeng/paginator';
-import { PermissionDirective } from '../../../permissions/permission.directive';
+
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { getHostStateForApi, HostNotificationsStateFilter } from '../../notifications/notifications.interface';
 import { Subscription } from 'rxjs';
 import { HostchecksService } from '../hostchecks.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { getDefaultHostchecksIndexParams, HostchecksIndexParams, HostchecksIndexRoot } from '../hostchecks.interface';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
-import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
+
 import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-hostchecks-index',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        HostsBrowserMenuComponent,
-        HoststatusSimpleIconComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        MatSort,
-        MatSortHeader,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        PaginatorModule,
-        PermissionDirective,
-        RowComponent,
-        TableDirective,
-        TableLoaderComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        TrueFalseDirective,
-        XsButtonDirective,
-        RouterLink,
-        TrustAsHtmlPipe,
-        NgClass,
-        FakeSelectComponent,
-        CardFooterComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DebounceDirective,
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    HostsBrowserMenuComponent,
+    HoststatusSimpleIconComponent,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    MatSort,
+    MatSortHeader,
+    NavComponent,
+    NavItemComponent,
+    NgForOf,
+    NgIf,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    PaginatorModule,
+    RowComponent,
+    TableDirective,
+    TableLoaderComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    TrueFalseDirective,
+    XsButtonDirective,
+    TrustAsHtmlPipe,
+    NgClass,
+    CardFooterComponent
+],
     templateUrl: './hostchecks-index.component.html',
     styleUrl: './hostchecks-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

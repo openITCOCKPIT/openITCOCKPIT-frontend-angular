@@ -37,7 +37,7 @@ import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, JsonPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -75,7 +75,7 @@ import {
 import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
@@ -106,13 +106,9 @@ import {
 import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
 import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
-import {
-    ServiceMaintenanceModalComponent
-} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
+
 import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
-import {
-    ServiceAcknowledgeModalComponent
-} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
+
 import {
     HostAcknowledgeModalComponent
 } from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
@@ -133,81 +129,76 @@ import { IndexPage } from '../../../pages.interface';
 @Component({
     selector: 'oitc-hosts-index',
     imports: [
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        DeleteAllModalComponent,
-        DropdownDividerDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ItemSelectComponent,
-        MatSort,
-        MatSortHeader,
-        MultiSelectComponent,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        PaginatorModule,
-        PermissionDirective,
-        RowComponent,
-        SelectAllComponent,
-        TableDirective,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        NgClass,
-        QueryHandlerCheckerComponent,
-        TooltipDirective,
-        HoststatusIconComponent,
-        AcknowledgementIconComponent,
-        DowntimeIconComponent,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        CopyToClipboardComponent,
-        TrustAsHtmlPipe,
-        FormErrorDirective,
-        NgSelectModule,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        RegexHelperTooltipComponent,
-        TableLoaderComponent,
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        ServiceResetChecktimeModalComponent,
-        HostsMaintenanceModalComponent,
-        HostsEnableNotificationsModalComponent,
-        HostsDisableNotificationsModalComponent,
-        DisableModalComponent,
-        ServiceMaintenanceModalComponent,
-        JsonPipe,
-        ServiceAcknowledgeModalComponent,
-        HostAcknowledgeModalComponent,
-        HostsAddToHostgroupComponent,
-        NgTemplateOutlet,
-        FilterBookmarkComponent,
-        ColumnsConfigExportModalComponent,
-        ColumnsConfigImportModalComponent,
-        AsyncPipe
-    ],
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DebounceDirective,
+    DeleteAllModalComponent,
+    DropdownDividerDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ItemSelectComponent,
+    MatSort,
+    MatSortHeader,
+    MultiSelectComponent,
+    NavComponent,
+    NavItemComponent,
+    NgForOf,
+    NgIf,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    PaginatorModule,
+    PermissionDirective,
+    RowComponent,
+    SelectAllComponent,
+    TableDirective,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    RouterLink,
+    NgClass,
+    QueryHandlerCheckerComponent,
+    TooltipDirective,
+    HoststatusIconComponent,
+    AcknowledgementIconComponent,
+    DowntimeIconComponent,
+    FaStackComponent,
+    FaStackItemSizeDirective,
+    CopyToClipboardComponent,
+    TrustAsHtmlPipe,
+    NgSelectModule,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TrueFalseDirective,
+    RegexHelperTooltipComponent,
+    TableLoaderComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    ServiceResetChecktimeModalComponent,
+    HostsMaintenanceModalComponent,
+    HostsEnableNotificationsModalComponent,
+    HostsDisableNotificationsModalComponent,
+    DisableModalComponent,
+    HostAcknowledgeModalComponent,
+    HostsAddToHostgroupComponent,
+    FilterBookmarkComponent,
+    ColumnsConfigExportModalComponent,
+    ColumnsConfigImportModalComponent,
+    AsyncPipe
+],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
     providers: [

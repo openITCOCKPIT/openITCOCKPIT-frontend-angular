@@ -1,30 +1,23 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
+
+
 import {
-    ActionsButtonElementComponent
-} from '../../../../../components/actions-button-element/actions-button-element.component';
-import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    FormControlDirective,
-    FormDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  NavComponent,
+  NavItemComponent,
+  RowComponent
 } from '@coreui/angular';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
@@ -33,44 +26,33 @@ import { EventcorrelationsService } from '../eventcorrelations.service';
 import { EvcTree, EventcorrelationRootElement } from '../eventcorrelations.interface';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { EvcTreeComponent } from './evc-tree/evc-tree.component';
-import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
+
 
 @Component({
     selector: 'oitc-eventcorrelations-view',
     imports: [
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RowComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        BackButtonDirective,
-        BlockLoaderComponent,
-        EvcTreeComponent,
-        NoRecordsComponent,
-        NgClass
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FaIconComponent,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    BackButtonDirective,
+    BlockLoaderComponent,
+    EvcTreeComponent,
+    NgClass
+],
     templateUrl: './eventcorrelations-view.component.html',
     styleUrl: './eventcorrelations-view.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
