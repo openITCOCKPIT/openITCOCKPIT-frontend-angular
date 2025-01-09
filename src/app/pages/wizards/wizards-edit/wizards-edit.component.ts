@@ -31,7 +31,6 @@ import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-wizards-edit',
-    standalone: true,
     imports: [
         TranslocoDirective,
         RouterLink,

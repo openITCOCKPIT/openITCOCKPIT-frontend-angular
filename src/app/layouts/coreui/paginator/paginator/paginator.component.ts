@@ -8,7 +8,6 @@ import { faAngleLeft, faAngleRight, faAnglesLeft, faAnglesRight } from '@fortawe
 
 @Component({
     selector: 'oitc-paginator',
-    standalone: true,
     imports: [
         ColComponent,
         FaIconComponent,

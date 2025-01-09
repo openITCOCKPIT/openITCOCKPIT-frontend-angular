@@ -13,7 +13,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -29,40 +29,36 @@ import { HistoryService } from '../../../../../history.service';
 import { MapsService } from '../Maps.service';
 import { MapCopyPost } from '../Maps.interface';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+
 
 @Component({
     selector: 'oitc-maps-copy',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        NavComponent,
-        NgForOf,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        FormsModule,
-        FormLoaderComponent,
-        NgIf,
-        BackButtonDirective,
-        NavItemComponent,
-        AsyncPipe,
-        MultiSelectComponent
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    NavComponent,
+    NgForOf,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FormsModule,
+    FormLoaderComponent,
+    NgIf,
+    BackButtonDirective,
+    NavItemComponent
+],
     templateUrl: './maps-copy.component.html',
     styleUrl: './maps-copy.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

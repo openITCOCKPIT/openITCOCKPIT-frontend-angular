@@ -1,29 +1,25 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-    AlertComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    NavComponent,
-    NavItemComponent,
-    ProgressBarComponent,
-    RowComponent
+  AlertComponent,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormCheckInputDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent,
+  ProgressBarComponent,
+  RowComponent
 } from '@coreui/angular';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -46,54 +42,44 @@ import { ServicetemplategroupsService } from '../servicetemplategroups.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { NotyService } from "../../../layouts/coreui/noty.service";
-import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+
 import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-servicetemplategroups-allocate-to-hostgroup',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NgSelectModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        AlertComponent,
-        FaStackComponent,
-        RowComponent,
-        ColComponent,
-        MatTooltip,
-        TranslocoPipe,
-        ProgressBarComponent,
-        RouterLink,
-        JsonPipe,
-        MultiSelectComponent,
-        SelectComponent,
-        FaStackItemSizeDirective
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormCheckInputDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgForOf,
+    NgIf,
+    NgSelectModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    AlertComponent,
+    RowComponent,
+    MatTooltip,
+    TranslocoPipe,
+    ProgressBarComponent,
+    RouterLink,
+    SelectComponent
+],
     templateUrl: './servicetemplategroups-allocate-to-hostgroup.component.html',
     styleUrl: './servicetemplategroups-allocate-to-hostgroup.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

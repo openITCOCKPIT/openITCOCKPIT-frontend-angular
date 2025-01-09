@@ -12,7 +12,6 @@ import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
     selector: 'oitc-acknowledgement-icon',
-    standalone: true,
     imports: [
         FaIconComponent,
         NgIf,

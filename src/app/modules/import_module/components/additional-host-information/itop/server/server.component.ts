@@ -7,7 +7,6 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-server',
-    standalone: true,
     imports: [
         FaIconComponent,
         FaLayersComponent,
@@ -22,7 +21,6 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
     templateUrl: './server.component.html',
     styleUrl: './server.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
-
 })
 export class ServerComponent {
     @Input() result!: AdditionalHostInformationResult;

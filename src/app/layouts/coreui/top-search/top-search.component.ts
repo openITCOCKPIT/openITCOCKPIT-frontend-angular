@@ -1,18 +1,16 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
-    DropdownComponent,
-    DropdownDividerDirective,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormControlDirective,
-    FormDirective,
-    InputGroupComponent,
-    InputGroupTextDirective
+  DropdownComponent,
+  DropdownItemDirective,
+  DropdownMenuDirective,
+  DropdownToggleDirective,
+  FormControlDirective,
+  FormDirective,
+  InputGroupComponent
 } from '@coreui/angular';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
@@ -25,28 +23,24 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-top-search',
-    standalone: true,
     imports: [
-        TranslocoDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        FormControlDirective,
-        FormDirective,
-        DropdownComponent,
-        DropdownToggleDirective,
-        DropdownMenuDirective,
-        DropdownItemDirective,
-        DropdownDividerDirective,
-        XsButtonDirective,
-        RouterLink,
-        TranslocoPipe,
-        PermissionDirective,
-        NgClass,
-        FaIconComponent,
-        NgIf,
-        FormsModule,
-        AsyncPipe
-    ],
+    TranslocoDirective,
+    InputGroupComponent,
+    FormControlDirective,
+    FormDirective,
+    DropdownComponent,
+    DropdownToggleDirective,
+    DropdownMenuDirective,
+    DropdownItemDirective,
+    XsButtonDirective,
+    TranslocoPipe,
+    PermissionDirective,
+    NgClass,
+    FaIconComponent,
+    NgIf,
+    FormsModule,
+    AsyncPipe
+],
     templateUrl: './top-search.component.html',
     styleUrl: './top-search.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

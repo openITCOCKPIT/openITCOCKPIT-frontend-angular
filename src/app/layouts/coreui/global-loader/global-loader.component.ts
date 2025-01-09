@@ -5,17 +5,17 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-global-loader',
-    standalone: true,
     imports: [],
     templateUrl: './global-loader.component.html',
     styleUrl: './global-loader.component.css',
     animations: [
         trigger('fade', [
-            state('visible', style({opacity: 1, display: 'block'})),
-            state('hidden', style({opacity: 0, display: 'none'})),
+            state('visible', style({ opacity: 1, display: 'block' })),
+            state('hidden', style({ opacity: 0, display: 'none' })),
             transition('visible => hidden', animate('0.6s ease-out')),
             transition('hidden => visible', style('*')),
-        ])],
+        ])
+    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GlobalLoaderComponent implements OnInit, OnDestroy {

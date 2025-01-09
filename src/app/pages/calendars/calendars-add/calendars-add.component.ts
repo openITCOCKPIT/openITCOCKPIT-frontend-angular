@@ -2,116 +2,71 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
-    ButtonCloseDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ModalToggleDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormCheckInputDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
+
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { CalendarContainer, CalendarEvent, CalendarPost, Countries } from '../calendars.interface';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { AsyncPipe, JsonPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { forkJoin, Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { CalendarsService } from '../calendars.service';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
+
 import { CalendarComponent } from '../calendar/calendar.component';
 import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-calendars-add',
-    standalone: true,
     imports: [
-
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FormDirective,
-        FormsModule,
-        ReactiveFormsModule,
-        BackButtonDirective,
-        NavComponent,
-        NavItemComponent,
-        UserMacrosModalComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        CardFooterComponent,
-        NgSelectModule,
-        NgForOf,
-        NgOptionHighlightModule,
-        AsyncPipe,
-        JsonPipe,
-        NgIf,
-        RowComponent,
-        ColComponent,
-        FullCalendarModule,
-        DropdownComponent,
-        DropdownToggleDirective,
-        DropdownMenuDirective,
-        KeyValuePipe,
-        DropdownItemDirective,
-        NgClass,
-        ButtonCloseDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        TrueFalseDirective,
-        ModalToggleDirective,
-        TranslocoPipe,
-        CalendarComponent
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormDirective,
+    FormsModule,
+    ReactiveFormsModule,
+    BackButtonDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    CardFooterComponent,
+    NgSelectModule,
+    NgOptionHighlightModule,
+    FullCalendarModule,
+    FormCheckInputDirective,
+    CalendarComponent
+],
     templateUrl: './calendars-add.component.html',
     styleUrl: './calendars-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

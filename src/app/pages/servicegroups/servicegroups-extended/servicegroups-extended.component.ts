@@ -3,42 +3,37 @@ import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-    ButtonGroupComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownComponent,
-    DropdownDividerDirective,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalService,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    RowDirective,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  DropdownComponent,
+  DropdownDividerDirective,
+  DropdownItemDirective,
+  DropdownMenuDirective,
+  DropdownToggleDirective,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  ModalService,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+
+
+
 import { FormsModule } from '@angular/forms';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -71,22 +66,18 @@ import {
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { DebounceDirective } from '../../../directives/debounce.directive';
-import { MatSort } from '@angular/material/sort';
+
 import { ServiceObject } from '../../services/services.interface';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import {
-    ServiceCumulatedStatusIconComponent
-} from '../../../components/services/service-cumulated-status-icon/service-cumulated-status-icon.component';
-import {
-    ServicestatusIconComponent
-} from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
+
+
 import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
 import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../services/timezone.service';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
 import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
@@ -95,7 +86,7 @@ import {
 } from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
-import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
+
 import {
     ServicestatusSimpleIconComponent
 } from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
@@ -108,77 +99,60 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 
 @Component({
     selector: 'oitc-servicegroups-extended',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormLoaderComponent,
-        FormsModule,
-        MultiSelectComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PaginatorModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        DropdownDividerDirective,
-        ServiceMaintenanceModalComponent,
-        ServiceResetChecktimeModalComponent,
-        DebounceDirective,
-        MatSort,
-        TableDirective,
-        NgForOf,
-        ServicestatusIconComponent,
-        TranslocoPipe,
-        ButtonGroupComponent,
-        ServiceCumulatedStatusIconComponent,
-        RowComponent,
-        ColComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ServicestatusIconComponent,
-        PopoverGraphComponent,
-        DropdownComponent,
-        DropdownToggleDirective,
-        DropdownMenuDirective,
-        DropdownItemDirective,
-        ContainerComponent,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        SelectAllComponent,
-        ServiceAcknowledgeModalComponent,
-        TableLoaderComponent,
-        ObjectUuidComponent,
-        RowDirective,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        HoststatusIconComponent,
-        ServicestatusSimpleIconComponent,
-        DisableModalComponent,
-        DeleteAllModalComponent,
-        NgClass
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PaginatorModule,
+    PermissionDirective,
+    SelectComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    DropdownDividerDirective,
+    ServiceMaintenanceModalComponent,
+    ServiceResetChecktimeModalComponent,
+    DebounceDirective,
+    TableDirective,
+    NgForOf,
+    TranslocoPipe,
+    RowComponent,
+    ColComponent,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    PopoverGraphComponent,
+    DropdownComponent,
+    DropdownToggleDirective,
+    DropdownMenuDirective,
+    DropdownItemDirective,
+    ContainerComponent,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    ServiceAcknowledgeModalComponent,
+    TableLoaderComponent,
+    ObjectUuidComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    ServicestatusSimpleIconComponent,
+    DisableModalComponent,
+    DeleteAllModalComponent,
+    NgClass
+],
     templateUrl: './servicegroups-extended.component.html',
     styleUrl: './servicegroups-extended.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService},
-        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService}
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService },
+        { provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

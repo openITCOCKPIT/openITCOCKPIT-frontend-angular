@@ -31,10 +31,10 @@ import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-mkchecks-add',
-    standalone: true,
     imports: [
         TranslocoDirective,
         RouterLink,
@@ -58,7 +58,8 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
         SelectComponent,
         CardFooterComponent,
         FormCheckInputDirective,
-        FormDirective
+        FormDirective,
+        FormsModule
     ],
     templateUrl: './mkchecks-add.component.html',
     styleUrl: './mkchecks-add.component.css',

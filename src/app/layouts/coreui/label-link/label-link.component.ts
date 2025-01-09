@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 
 @Component({
     selector: 'oitc-label-link',
-    standalone: true,
     imports: [
         RouterLink,
         NgTemplateOutlet,

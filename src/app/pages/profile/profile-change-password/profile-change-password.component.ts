@@ -29,7 +29,6 @@ import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-profile-change-password',
-    standalone: true,
     imports: [
         TranslocoDirective,
         FormsModule,

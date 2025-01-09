@@ -56,7 +56,6 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-servicechecks-index',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -64,7 +63,6 @@ import { IndexPage } from '../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,

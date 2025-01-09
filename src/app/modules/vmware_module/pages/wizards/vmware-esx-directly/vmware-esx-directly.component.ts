@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { VmwareEsxDirectlyWizardGet, VmwareEsxDirectlyWizardPost } from './vmware-esx-directly-wizard.interface';
 import { VmwareEsxDirectlyWizardService } from './vmware-esx-directly-wizard.service';
 import {
@@ -21,11 +20,10 @@ import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
-import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mssql-wizard.interface';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-vmware-esx-directly',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -41,7 +39,8 @@ import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mss
         TranslocoDirective,
         TranslocoPipe,
         WizardsDynamicfieldsComponent,
-        RouterLink
+        RouterLink,
+        FormsModule
     ],
     templateUrl: './vmware-esx-directly.component.html',
     styleUrl: './vmware-esx-directly.component.css',

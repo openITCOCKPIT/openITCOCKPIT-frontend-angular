@@ -41,7 +41,6 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 
 @Component({
     selector: 'oitc-host-acknowledge-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         ColComponent,

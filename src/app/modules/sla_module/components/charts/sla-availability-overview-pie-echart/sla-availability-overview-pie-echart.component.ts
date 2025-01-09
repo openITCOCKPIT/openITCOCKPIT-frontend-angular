@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
-import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
+import * as echarts from 'echarts/core';
 import 'echarts/theme/dark.js';
 import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
@@ -8,14 +9,18 @@ import { Availability } from '../../../pages/slas/Slas.interface';
 import { PieChartMetric } from '../../../../../components/charts/charts.interface';
 import { LayoutService } from '../../../../../layouts/coreui/layout.service';
 
+import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+import { PieChart } from 'echarts/charts';
+
+echarts.use([PieChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent]);
+
 @Component({
     selector: 'oitc-sla-availability-overview-pie-echart',
-    standalone: true,
     imports: [
         NgxEchartsDirective
     ],
     providers: [
-        provideEcharts(),
+        provideEchartsCore({echarts}),
     ],
     templateUrl: './sla-availability-overview-pie-echart.component.html',
     styleUrl: './sla-availability-overview-pie-echart.component.css',

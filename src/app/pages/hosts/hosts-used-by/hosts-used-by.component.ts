@@ -17,7 +17,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { Subscription } from 'rxjs';
 import { HostEntity, HostUsedByObjects } from '../hosts.interface';
@@ -26,30 +26,27 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-hosts-used-by',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ContainerComponent,
-
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NotUsedByObjectComponent,
-        PermissionDirective,
-        TableDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        TableLoaderComponent,
-        FormLoaderComponent,
-        AsyncPipe
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ContainerComponent,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    NgForOf,
+    NgIf,
+    NotUsedByObjectComponent,
+    PermissionDirective,
+    TableDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FormLoaderComponent,
+    AsyncPipe
+],
     templateUrl: './hosts-used-by.component.html',
     styleUrl: './hosts-used-by.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

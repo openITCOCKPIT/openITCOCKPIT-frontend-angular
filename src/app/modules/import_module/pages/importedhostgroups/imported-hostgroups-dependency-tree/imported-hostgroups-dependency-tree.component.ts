@@ -12,8 +12,8 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { NgIf } from '@angular/common';
-import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+
+
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
@@ -32,30 +32,26 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 
 @Component({
     selector: 'oitc-imported-hostgroups-dependency-tree',
-    standalone: true,
     imports: [
-
-        TranslocoDirective,
-        CardComponent,
-        CardHeaderComponent,
-        NgIf,
-        TableLoaderComponent,
-        FormLoaderComponent,
-        BlockLoaderComponent,
-        CardBodyComponent,
-        DependencyTreeComponent,
-        CardTitleDirective,
-        BackButtonDirective,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        ColComponent,
-        OnlineOfflineComponent,
-        RowComponent,
-        PermissionDirective,
-        RouterLink
-    ],
+    TranslocoDirective,
+    CardComponent,
+    CardHeaderComponent,
+    NgIf,
+    BlockLoaderComponent,
+    CardBodyComponent,
+    DependencyTreeComponent,
+    CardTitleDirective,
+    BackButtonDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    ColComponent,
+    OnlineOfflineComponent,
+    RowComponent,
+    PermissionDirective,
+    RouterLink
+],
     templateUrl: './imported-hostgroups-dependency-tree.component.html',
     styleUrl: './imported-hostgroups-dependency-tree.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

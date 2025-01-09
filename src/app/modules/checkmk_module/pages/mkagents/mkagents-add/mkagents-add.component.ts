@@ -18,7 +18,7 @@ import {
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { UserMacrosModalComponent } from '../../../../../pages/commands/user-macros-modal/user-macros-modal.component';
+
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { PaginatorModule } from 'primeng/paginator';
@@ -34,43 +34,40 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { MkagentsService } from '../mkagents.service';
 import { HistoryService } from '../../../../../history.service';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import {
-    CodeMirrorContainerComponent
-} from '../../../../../components/code-mirror-container/code-mirror-container.component';
+
 import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enum';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-mkagents-add',
-    standalone: true,
     imports: [
-        RouterLink,
-        FaIconComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        BackButtonDirective,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        UserMacrosModalComponent,
-        XsButtonDirective,
-        TranslocoDirective,
-        CardBodyComponent,
-        CardFooterComponent,
-        FormCheckInputDirective,
-        PaginatorModule,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        NgIf,
-        RequiredIconComponent,
-        SelectComponent,
-        FormControlDirective,
-        CodeMirrorContainerComponent,
-        AlertComponent,
-        AlertHeadingDirective,
-        FormDirective
-    ],
+    RouterLink,
+    FaIconComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    BackButtonDirective,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    XsButtonDirective,
+    TranslocoDirective,
+    CardBodyComponent,
+    CardFooterComponent,
+    FormCheckInputDirective,
+    PaginatorModule,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    NgIf,
+    RequiredIconComponent,
+    SelectComponent,
+    FormControlDirective,
+    AlertComponent,
+    AlertHeadingDirective,
+    FormDirective,
+    FormsModule
+],
     templateUrl: './mkagents-add.component.html',
     styleUrl: './mkagents-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

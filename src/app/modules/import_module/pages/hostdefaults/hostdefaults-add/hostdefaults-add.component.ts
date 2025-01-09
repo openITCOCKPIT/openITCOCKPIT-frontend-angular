@@ -53,7 +53,6 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 
 @Component({
     selector: 'oitc-hostdefaults-add',
-    standalone: true,
     imports: [
         AsyncPipe,
         BackButtonDirective,

@@ -27,7 +27,6 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-agentconnector-install',
-    standalone: true,
     imports: [
         AgentconnectorWizardProgressbarComponent,
         BlockLoaderComponent,

@@ -15,7 +15,7 @@ import {
     ChangelogIndex,
     DataUnserializedRaw
 } from '../changelogs.interface';
-import { JsonPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -23,18 +23,15 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-changelogs-entry',
-    standalone: true,
     imports: [
-        NgIf,
-        NgClass,
-        KeyValuePipe,
-        PermissionDirective,
-        TranslocoDirective,
-        JsonPipe,
-        FaIconComponent,
-        NgForOf,
-        RouterLink
-    ],
+    NgIf,
+    NgClass,
+    PermissionDirective,
+    TranslocoDirective,
+    FaIconComponent,
+    NgForOf,
+    RouterLink
+],
     templateUrl: './changelogs-entry.component.html',
     styleUrl: './changelogs-entry.component.css',
     encapsulation: ViewEncapsulation.None, //https://angular.io/guide/view-encapsulation

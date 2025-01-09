@@ -22,7 +22,7 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -56,51 +56,49 @@ import { MessagesOfTheDayService } from '../messagesotd.service';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 
 @Component({
-  selector: 'oitc-messagesotd-index',
-  standalone: true,
+    selector: 'oitc-messagesotd-index',
     imports: [
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        ContainerComponent,
-        CoreuiComponent,
-        DebounceDirective,
-        DeleteAllModalComponent,
-        DropdownDividerDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ItemSelectComponent,
-        MatSort,
-        MatSortHeader,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        PermissionDirective,
-        RowComponent,
-        SelectAllComponent,
-        TableDirective,
-        TableLoaderComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink
-    ],
-  templateUrl: './messagesotd-index.component.html',
-  styleUrl: './messagesotd-index.component.css',
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DebounceDirective,
+    DeleteAllModalComponent,
+    DropdownDividerDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ItemSelectComponent,
+    MatSort,
+    MatSortHeader,
+    NavComponent,
+    NavItemComponent,
+    NgForOf,
+    NgIf,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    PermissionDirective,
+    RowComponent,
+    SelectAllComponent,
+    TableDirective,
+    TableLoaderComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    RouterLink
+],
+    templateUrl: './messagesotd-index.component.html',
+    styleUrl: './messagesotd-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: MessagesOfTheDayService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: MessagesOfTheDayService } // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
     ]
 })
 export class MessagesotdIndexComponent implements IndexPage, OnInit, OnDestroy {

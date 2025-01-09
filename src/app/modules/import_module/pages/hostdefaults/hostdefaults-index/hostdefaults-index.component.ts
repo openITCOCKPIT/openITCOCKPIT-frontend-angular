@@ -54,7 +54,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
 
 @Component({
     selector: 'oitc-hostdefaults-index',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -94,7 +93,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
         RouterLink
     ],
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostdefaultsService} // Inject the HostdefaultsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: HostdefaultsService } // Inject the HostdefaultsService into the DeleteAllModalComponent
     ],
     templateUrl: './hostdefaults-index.component.html',
     styleUrl: './hostdefaults-index.component.css',

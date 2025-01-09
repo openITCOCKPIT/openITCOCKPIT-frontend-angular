@@ -21,7 +21,6 @@ import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-vectormap',
-    standalone: true,
     imports: [],
     templateUrl: './vectormap.component.html',
     styleUrl: './vectormap.component.css',

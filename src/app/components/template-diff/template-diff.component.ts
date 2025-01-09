@@ -17,7 +17,6 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-template-diff',
-    standalone: true,
     imports: [
         FaIconComponent,
         NgClass,

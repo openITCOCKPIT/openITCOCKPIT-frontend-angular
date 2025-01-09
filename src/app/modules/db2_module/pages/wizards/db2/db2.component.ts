@@ -1,16 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import {
-    AccordionButtonDirective,
-    AccordionComponent,
-    AccordionItemComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    TemplateIdDirective
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormControlDirective,
+  FormLabelDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -27,28 +23,23 @@ import { Db2WizardService } from './db2-wizard.service';
 
 @Component({
     selector: 'oitc-db2',
-    standalone: true,
     imports: [
-        AccordionButtonDirective,
-        AccordionComponent,
-        AccordionItemComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        RequiredIconComponent,
-        TemplateIdDirective,
-        TranslocoDirective,
-        TranslocoPipe,
-        WizardsDynamicfieldsComponent,
-        RouterLink
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    RequiredIconComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    WizardsDynamicfieldsComponent,
+    RouterLink
+],
     templateUrl: './db2.component.html',
     styleUrl: './db2.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

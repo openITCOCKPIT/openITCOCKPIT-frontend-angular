@@ -26,9 +26,7 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
 
 @Component({
     selector: 'oitc-automaps-view',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         QueryHandlerCheckerComponent,

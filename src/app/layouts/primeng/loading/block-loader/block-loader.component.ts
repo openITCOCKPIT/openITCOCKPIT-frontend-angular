@@ -3,7 +3,6 @@ import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
     selector: 'oitc-block-loader',
-    standalone: true,
     imports: [
         SkeletonModule
     ],

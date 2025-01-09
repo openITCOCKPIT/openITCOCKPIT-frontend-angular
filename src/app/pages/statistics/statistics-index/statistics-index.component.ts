@@ -17,14 +17,13 @@ import { createJSONEditor, Mode } from 'vanilla-jsoneditor'
 
 
 import {
-    AlertComponent,
-    AlertHeadingDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    RowComponent
+  AlertComponent,
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  RowComponent
 } from '@coreui/angular';
 import { AsyncPipe, DOCUMENT, NgClass, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -35,25 +34,22 @@ import { LayoutService } from '../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-statistics-index',
-    standalone: true,
     imports: [
-
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        AlertComponent,
-        AlertHeadingDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        RowComponent,
-        ColComponent,
-        NgIf,
-        NgClass,
-        AsyncPipe
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    PermissionDirective,
+    RouterLink,
+    AlertComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    RowComponent,
+    ColComponent,
+    NgIf,
+    NgClass,
+    AsyncPipe
+],
     templateUrl: './statistics-index.component.html',
     styleUrl: './statistics-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

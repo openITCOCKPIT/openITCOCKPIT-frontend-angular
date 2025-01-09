@@ -30,7 +30,7 @@ import {
 } from '../../../layouts/primeng/loading/browser-menu-loader/browser-menu-loader.component';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
+
 import { AsyncPipe, NgClass, NgIf, TitleCasePipe } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -38,7 +38,7 @@ import {
     ServicestatusIconComponent
 } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { RouterLink } from '@angular/router';
-import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
+
 
 
 export interface ServiceBrowserMenuConfig {
@@ -51,32 +51,29 @@ export interface ServiceBrowserMenuConfig {
 
 @Component({
     selector: 'oitc-services-browser-menu',
-    standalone: true,
     imports: [
-        BadgeComponent,
-        BrowserMenuLoaderComponent,
-        ColComponent,
-        CopyToClipboardComponent,
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        FaIconComponent,
-        HoststatusIconComponent,
-        NgIf,
-        PermissionDirective,
-        RowComponent,
-        TitleCasePipe,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        ServicestatusIconComponent,
-        NgClass,
-        RouterLink,
-        TooltipDirective,
-        HoststatusSimpleIconComponent,
-        AsyncPipe
-    ],
+    BadgeComponent,
+    BrowserMenuLoaderComponent,
+    ColComponent,
+    CopyToClipboardComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FaIconComponent,
+    NgIf,
+    PermissionDirective,
+    RowComponent,
+    TitleCasePipe,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    ServicestatusIconComponent,
+    NgClass,
+    RouterLink,
+    TooltipDirective,
+    AsyncPipe
+],
     templateUrl: './services-browser-menu.component.html',
     styleUrl: './services-browser-menu.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

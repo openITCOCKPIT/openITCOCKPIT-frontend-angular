@@ -7,7 +7,6 @@ import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-servicestatus-icon-automap',
-    standalone: true,
     imports: [
         FaIconComponent,
         NgClass

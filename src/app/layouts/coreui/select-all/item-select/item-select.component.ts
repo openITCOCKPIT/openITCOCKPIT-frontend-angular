@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-item-select',
-    standalone: true,
     imports: [
         FormCheckInputDirective,
         FormCheckComponent,

@@ -13,7 +13,6 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-navbar-search',
-    standalone: true,
     imports: [
         FaIconComponent,
         TranslocoPipe,

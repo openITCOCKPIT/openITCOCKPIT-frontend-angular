@@ -18,34 +18,32 @@ import { EventcorrelationsService } from '../eventcorrelations.service';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
-    BadgeComponent,
-    ButtonCloseDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FormControlDirective,
-    FormLabelDirective,
-    FormSelectDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent
+  BadgeComponent,
+  ButtonCloseDirective,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  FormControlDirective,
+  FormLabelDirective,
+  InputGroupComponent,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalService,
+  ModalTitleDirective,
+  NavComponent,
+  NavItemComponent,
+  RowComponent
 } from '@coreui/angular';
-import { EvcTreeComponent } from '../eventcorrelations-view/evc-tree/evc-tree.component';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { EvcTreeEditComponent } from './evc-tree-edit/evc-tree-edit.component';
 import {
@@ -59,8 +57,8 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { GenericSuccessResponse, GenericValidationError } from '../../../../../generic-responses';
-import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
-import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
+
+
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import {
     MultiSelectOptgroupComponent
@@ -70,54 +68,47 @@ import { SelectItem } from 'primeng/api/selectitem';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EvcTreeValidationErrors } from '../eventcorrelations-view/evc-tree/evc-tree.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-eventcorrelations-edit-correlation',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        BlockLoaderComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        EvcTreeComponent,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PermissionDirective,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        EvcTreeEditComponent,
-        NgClass,
-        RouterLink,
-        ButtonCloseDirective,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        ModalFooterComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        PaginatorModule,
-        RequiredIconComponent,
-        TranslocoPipe,
-        NgOptionTemplateDirective,
-        NgSelectComponent,
-        FormSelectDirective,
-        LabelLinkComponent,
-        SelectComponent,
-        MultiSelectOptgroupComponent,
-        BadgeComponent
-    ],
+    BackButtonDirective,
+    BlockLoaderComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PermissionDirective,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    EvcTreeEditComponent,
+    RouterLink,
+    ButtonCloseDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ModalFooterComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    InputGroupComponent,
+    PaginatorModule,
+    RequiredIconComponent,
+    SelectComponent,
+    MultiSelectOptgroupComponent,
+    BadgeComponent,
+    FormsModule
+],
     templateUrl: './eventcorrelations-edit-correlation.component.html',
     styleUrl: './eventcorrelations-edit-correlation.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -35,39 +35,35 @@ import {
 } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
-    ButtonCloseDirective,
-    FormControlDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    RowComponent,
+  ButtonCloseDirective,
+  FormControlDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalService,
+  ModalTitleDirective
 } from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-columns-config-import-modal',
-    standalone: true,
     imports: [
-        TranslocoDirective,
-        ModalComponent,
-        ButtonCloseDirective,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        FaIconComponent,
-        ModalFooterComponent,
-        ModalBodyComponent,
-        RowComponent,
-        FormsModule,
-        NgIf,
-        FormControlDirective,
-        XsButtonDirective
-    ],
+    TranslocoDirective,
+    ModalComponent,
+    ButtonCloseDirective,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ModalFooterComponent,
+    ModalBodyComponent,
+    FormsModule,
+    NgIf,
+    FormControlDirective,
+    XsButtonDirective
+],
     templateUrl: './columns-config-import-modal.component.html',
     styleUrl: './columns-config-import-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,29 +1,25 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-    BadgeComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    NavComponent,
-    NavItemComponent,
-    TooltipDirective
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormCheckInputDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { MacrosComponent } from '../../../components/macros/macros.component';
-import { NgForOf, NgIf } from '@angular/common';
+
+import { NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -33,7 +29,7 @@ import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } fro
 import { Subscription } from 'rxjs';
 import { Router, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+
 import { ContactgroupsService } from '../contactgroups.service';
 import { ContactgroupAddPostContactgroup, LoadContainersRoot } from '../contactgroups.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
@@ -43,42 +39,33 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 
 @Component({
     selector: 'oitc-contactgroups-add',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        BadgeComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        MacrosComponent,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NgSelectModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        TooltipDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        ObjectUuidComponent,
-        MultiSelectComponent,
-        SelectComponent
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    NgSelectModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    MultiSelectComponent,
+    SelectComponent
+],
     templateUrl: './contactgroups-add.component.html',
     styleUrl: './contactgroups-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

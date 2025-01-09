@@ -18,13 +18,11 @@ import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-supports-issue',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

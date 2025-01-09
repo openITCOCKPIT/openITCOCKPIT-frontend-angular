@@ -15,7 +15,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
-import { MatSort } from '@angular/material/sort';
+
 import { interval, startWith, Subscription, switchMap } from 'rxjs';
 import { NagiostatsService } from '../nagiostats.service';
 import { Nagiostats } from '../nagiostats.interface';
@@ -25,28 +25,25 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 
 @Component({
     selector: 'oitc-nagiostats-index',
-    standalone: true,
     imports: [
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        CardBodyComponent,
-        RowComponent,
-        ColComponent,
-        MatSort,
-        TableDirective,
-        NgClass,
-        NgIf,
-        SparklineStatsComponent,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective
-    ],
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    CardBodyComponent,
+    RowComponent,
+    ColComponent,
+    TableDirective,
+    NgClass,
+    NgIf,
+    SparklineStatsComponent,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective
+],
     templateUrl: './nagiostats-index.component.html',
     styleUrl: './nagiostats-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

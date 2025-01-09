@@ -41,7 +41,6 @@ import { ContainersService } from '../../containers/containers.service';
 
 @Component({
     selector: 'oitc-usercontainerroles-add',
-    standalone: true,
     imports: [
         TranslocoDirective,
         FaIconComponent,

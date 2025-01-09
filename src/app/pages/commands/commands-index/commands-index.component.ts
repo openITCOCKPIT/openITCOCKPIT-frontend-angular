@@ -27,32 +27,26 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardSubtitleDirective,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownDividerDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ListGroupDirective,
-    ListGroupItemDirective,
-    ModalService,
-    NavComponent,
-    NavItemComponent,
-    PlaceholderDirective,
-    RowComponent,
-    TableColorDirective,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  DropdownDividerDirective,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  ModalService,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
 } from "@coreui/angular";
 import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
@@ -69,13 +63,13 @@ import { NgForOf, NgIf } from '@angular/common';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
+
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { PermissionDirective } from "../../../permissions/permission.directive";
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
+
 import { CommandTypesEnum } from '../command-types.enum';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -95,62 +89,52 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 
 @Component({
     selector: 'oitc-commands-index',
-    standalone: true,
     imports: [
-
-        TranslocoDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardSubtitleDirective,
-        CardTitleDirective,
-        ListGroupDirective,
-        ListGroupItemDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        FaIconComponent,
-        PaginateOrScrollComponent,
-        NgIf,
-        TableDirective,
-        TableColorDirective,
-        ContainerComponent,
-        RowComponent,
-        ColComponent,
-        FormDirective,
-        FormControlDirective,
-        FormLabelDirective,
-        RequiredIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        PlaceholderDirective,
-        TranslocoPipe,
-        RouterLink,
-        FormsModule,
-        DebounceDirective,
-        NgForOf,
-        PermissionDirective,
-        TrueFalseDirective,
-        NoRecordsComponent,
-        MatCheckboxModule,
-        SelectAllComponent,
-        ItemSelectComponent,
-        DeleteAllModalComponent,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        DropdownDividerDirective,
-        MatSort,
-        MatSortHeader,
-        TableLoaderComponent,
-    ],
+    TranslocoDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    FaIconComponent,
+    PaginateOrScrollComponent,
+    NgIf,
+    TableDirective,
+    ContainerComponent,
+    RowComponent,
+    ColComponent,
+    FormDirective,
+    FormControlDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    TranslocoPipe,
+    RouterLink,
+    FormsModule,
+    DebounceDirective,
+    NgForOf,
+    PermissionDirective,
+    NoRecordsComponent,
+    MatCheckboxModule,
+    SelectAllComponent,
+    ItemSelectComponent,
+    DeleteAllModalComponent,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    DropdownDividerDirective,
+    MatSort,
+    MatSortHeader,
+    TableLoaderComponent
+],
     templateUrl: './commands-index.component.html',
     styleUrl: './commands-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: CommandsService} // Inject the CommandsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: CommandsService } // Inject the CommandsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

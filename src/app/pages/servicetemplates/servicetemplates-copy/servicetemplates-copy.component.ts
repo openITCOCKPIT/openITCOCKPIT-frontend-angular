@@ -11,7 +11,6 @@ import {
     NavComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -34,10 +33,10 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ServicetemplatesService } from '../servicetemplates.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-servicetemplates-copy',
-    standalone: true,
     imports: [
         AlertComponent,
         BackButtonDirective,
@@ -46,7 +45,6 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,
@@ -62,7 +60,8 @@ import { HistoryService } from '../../../history.service';
         XsButtonDirective,
         RouterLink,
         FormLoaderComponent,
-        NgIf
+        NgIf,
+        FormsModule
     ],
     templateUrl: './servicetemplates-copy.component.html',
     styleUrl: './servicetemplates-copy.component.css',

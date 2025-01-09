@@ -20,7 +20,6 @@ import { ItopOverviewComponent } from './itop/itop-overview/itop-overview.compon
 
 @Component({
     selector: 'oitc-additional-host-information',
-    standalone: true,
     imports: [
         TranslocoDirective,
         TableLoaderComponent,

@@ -10,29 +10,28 @@ import {
     ViewChild
 } from '@angular/core';
 import {
-    AlertComponent,
-    AlertHeadingDirective,
-    ButtonCloseDirective,
-    ColComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    ProgressComponent,
-    RowComponent,
-    TableDirective
+  AlertComponent,
+  AlertHeadingDirective,
+  ButtonCloseDirective,
+  ColComponent,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalService,
+  ModalTitleDirective,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { JsonPipe, NgForOf, NgIf } from '@angular/common';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { NgForOf, NgIf } from '@angular/common';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
-import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
+
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { Router, RouterLink } from '@angular/router';
 import {
@@ -48,39 +47,34 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-import-itop-data',
-    standalone: true,
     imports: [
-        ButtonCloseDirective,
-        ColComponent,
-        FaIconComponent,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgForOf,
-        NgIf,
-        ProgressComponent,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        TranslocoPipe,
-        LabelLinkComponent,
-        PermissionDirective,
-        RouterLink,
-        JsonPipe,
-        AlertComponent,
-        AlertHeadingDirective,
-        TableLoaderComponent,
-        TableDirective,
-        DebounceDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormsModule
-    ],
+    ButtonCloseDirective,
+    ColComponent,
+    FaIconComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    NgForOf,
+    NgIf,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    FaStackComponent,
+    FaStackItemSizeDirective,
+    PermissionDirective,
+    RouterLink,
+    AlertComponent,
+    AlertHeadingDirective,
+    TableLoaderComponent,
+    TableDirective,
+    DebounceDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormsModule
+],
     templateUrl: './import-itop-data.component.html',
     styleUrl: './import-itop-data.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

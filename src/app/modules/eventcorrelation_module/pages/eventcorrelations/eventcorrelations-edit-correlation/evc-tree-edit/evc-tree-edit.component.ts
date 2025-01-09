@@ -1,5 +1,5 @@
 import {
-    AfterViewInit,
+    afterRenderEffect,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
@@ -22,13 +22,13 @@ import { ConnectionOperator, EvcTreeValidationErrors } from '../../eventcorrelat
 import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
 import { generateGuid } from '@foblex/utils';
 import { IPoint, PointExtensions } from '@foblex/2d';
-import { AsyncPipe, JsonPipe, NgClass, NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { ButtonGroupComponent, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../../../../permissions/permission.directive';
+
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { EvcOperatorComponent } from '../../eventcorrelations-view/evc-tree/evc-operator/evc-operator.component';
-import { RouterLink } from '@angular/router';
+
+
 import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PermissionsService } from '../../../../../../permissions/permissions.service';
 import { EventcorrelationOperators } from '../../eventcorrelations.enum';
@@ -116,30 +116,24 @@ const GROUP_HEIGHT = 50;
  ******************************/
 @Component({
     selector: 'oitc-evc-tree-edit',
-    standalone: true,
     imports: [
-        FFlowModule,
-        NgClass,
-        JsonPipe,
-        RowComponent,
-        ColComponent,
-        NgIf,
-        TooltipDirective,
-        FaIconComponent,
-        PermissionDirective,
-        AsyncPipe,
-        TranslocoDirective,
-        EvcOperatorComponent,
-        TranslocoPipe,
-        RouterLink,
-        XsButtonDirective,
-        ButtonGroupComponent,
-    ],
+    FFlowModule,
+    NgClass,
+    RowComponent,
+    ColComponent,
+    NgIf,
+    TooltipDirective,
+    FaIconComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    ButtonGroupComponent
+],
     templateUrl: './evc-tree-edit.component.html',
     styleUrl: './evc-tree-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
+export class EvcTreeEditComponent implements OnDestroy {
     public evcId = input<number>(0);
     public evcTree = input<EvcTree[]>([]);
     public stateForDisabledService = input<number>(3);
@@ -214,11 +208,12 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
             }
 
         });
-    }
 
-    public ngAfterViewInit(): void {
-        this.isInitialized = true;
-        this.updateGraph();
+        afterRenderEffect(() => {
+            // DOM rendering completed for this component
+            this.isInitialized = true;
+            this.updateGraph();
+        });
     }
 
     public ngOnDestroy(): void {

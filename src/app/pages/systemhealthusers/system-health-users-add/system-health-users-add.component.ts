@@ -22,7 +22,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
+
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -36,35 +36,32 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-system-health-users-add',
-    standalone: true,
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        BackButtonDirective,
-        FakeSelectComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        MultiSelectComponent,
-        BadgeComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        CardFooterComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FormDirective,
+    FormsModule,
+    BackButtonDirective,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    MultiSelectComponent,
+    BadgeComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    CardFooterComponent
+],
     templateUrl: './system-health-users-add.component.html',
     styleUrl: './system-health-users-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

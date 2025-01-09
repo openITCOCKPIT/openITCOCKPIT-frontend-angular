@@ -46,7 +46,6 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-customalerts-annotate-modal',
-    standalone: true,
     imports: [
         ModalComponent,
         TranslocoDirective,

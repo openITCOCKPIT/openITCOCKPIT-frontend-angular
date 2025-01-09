@@ -26,7 +26,7 @@ export interface LicenseResponseRoot {
 export interface LicenseResponse {
     success: boolean
     error: any
-    license: License
+    license: License | null
 }
 
 export interface License {

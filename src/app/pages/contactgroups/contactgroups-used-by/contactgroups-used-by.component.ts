@@ -25,34 +25,31 @@ import {
 import { ContactgroupsService } from '../contactgroups.service';
 import { Subscription } from 'rxjs';
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-contactgroups-used-by',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ContainerComponent,
-
-        FaIconComponent,
-        NavComponent,
-        NgForOf,
-        NgIf,
-        PermissionDirective,
-        TableDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        NavItemComponent,
-        NotUsedByObjectComponent,
-        TableLoaderComponent,
-        FormLoaderComponent
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ContainerComponent,
+    FaIconComponent,
+    NavComponent,
+    NgForOf,
+    NgIf,
+    PermissionDirective,
+    TableDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    NavItemComponent,
+    NotUsedByObjectComponent,
+    FormLoaderComponent
+],
     templateUrl: './contactgroups-used-by.component.html',
     styleUrl: './contactgroups-used-by.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

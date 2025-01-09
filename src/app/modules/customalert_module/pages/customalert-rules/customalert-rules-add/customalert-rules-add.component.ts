@@ -1,31 +1,30 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
-    CardBodyComponent,
-    CardComponent, CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent
+  CardBodyComponent,
+  CardComponent, CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { CustomAlertRule, CustomAlertRulesIndex } from '../customalert-rules.interface';
 import { Subscription } from 'rxjs';
@@ -38,7 +37,7 @@ import { HistoryService } from '../../../../../history.service';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
+
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { NgIf } from '@angular/common';
@@ -47,47 +46,42 @@ import {
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 
 @Component({
-  selector: 'oitc-customalert-rules-add',
-  standalone: true,
+    selector: 'oitc-customalert-rules-add',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        MultiSelectComponent,
-        RequiredIconComponent,
-        FormCheckComponent,
-        TrueFalseDirective,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        ColComponent,
-        DebounceDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        NgSelectComponent,
-        TranslocoPipe,
-        FormControlDirective,
-        CardFooterComponent,
-        SelectComponent,
-        NgIf,
-        RegexHelperTooltipComponent
-    ],
-  templateUrl: './customalert-rules-add.component.html',
-  styleUrl: './customalert-rules-add.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormCheckComponent,
+    TrueFalseDirective,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NgSelectComponent,
+    FormControlDirective,
+    CardFooterComponent,
+    SelectComponent,
+    NgIf,
+    RegexHelperTooltipComponent
+],
+    templateUrl: './customalert-rules-add.component.html',
+    styleUrl: './customalert-rules-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomalertRulesAddComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();

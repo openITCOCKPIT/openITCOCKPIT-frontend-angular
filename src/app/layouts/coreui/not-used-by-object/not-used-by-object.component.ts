@@ -3,7 +3,6 @@ import { ColComponent, ContainerComponent, RowComponent } from '@coreui/angular'
 
 @Component({
     selector: 'oitc-not-used-by-object',
-    standalone: true,
     imports: [
         ColComponent,
         RowComponent,

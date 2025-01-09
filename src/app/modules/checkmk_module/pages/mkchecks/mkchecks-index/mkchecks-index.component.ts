@@ -53,7 +53,6 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 
 @Component({
     selector: 'oitc-mkchecks-index',
-    standalone: true,
     imports: [
         TranslocoDirective,
         RouterLink,
@@ -96,7 +95,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
     templateUrl: './mkchecks-index.component.html',
     styleUrl: './mkchecks-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: MkchecksService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: MkchecksService } // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

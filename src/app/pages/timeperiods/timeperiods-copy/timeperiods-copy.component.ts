@@ -32,7 +32,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-timeperiods-copy',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -40,7 +39,6 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,

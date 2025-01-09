@@ -26,7 +26,7 @@ import { FormErrorDirective } from '../../../../layouts/coreui/form-error.direct
 import { FormFeedbackComponent } from '../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
-import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -38,31 +38,28 @@ import { ContainersService } from '../../containers.service';
 
 @Component({
     selector: 'oitc-edit-container-modal',
-    standalone: true,
     imports: [
-        ButtonCloseDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgIf,
-        NgOptionTemplateDirective,
-        NgSelectComponent,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective
-    ],
+    ButtonCloseDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    NgIf,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective
+],
     templateUrl: './edit-container-modal.component.html',
     styleUrl: './edit-container-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

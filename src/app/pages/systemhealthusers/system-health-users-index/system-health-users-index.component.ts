@@ -58,7 +58,6 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-system-health-users-index',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -66,7 +65,6 @@ import { IndexPage } from '../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         FaIconComponent,
@@ -102,7 +100,7 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './system-health-users-index.component.html',
     styleUrl: './system-health-users-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: SystemHealthUsersService}
+        { provide: DELETE_SERVICE_TOKEN, useClass: SystemHealthUsersService }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

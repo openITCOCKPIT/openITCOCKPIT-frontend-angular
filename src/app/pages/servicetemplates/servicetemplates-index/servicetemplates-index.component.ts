@@ -56,7 +56,6 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-servicetemplates-index',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -67,7 +66,6 @@ import { IndexPage } from '../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -101,7 +99,7 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './servicetemplates-index.component.html',
     styleUrl: './servicetemplates-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicetemplatesService} // Inject the ServicetemplatesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicetemplatesService } // Inject the ServicetemplatesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

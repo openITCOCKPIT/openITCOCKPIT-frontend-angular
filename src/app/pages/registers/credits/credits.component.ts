@@ -16,7 +16,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-credits',
-    standalone: true,
     imports: [
         FaIconComponent,
         XsButtonDirective,

@@ -10,27 +10,25 @@ import {
     ViewChild
 } from '@angular/core';
 import {
-    ButtonCloseDirective,
-    ColComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    FormSelectDirective,
-    FormTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    RowComponent
+  ButtonCloseDirective,
+  ColComponent,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormLabelDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalService,
+  ModalTitleDirective,
+  RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RequiredIconComponent } from '../../required-icon/required-icon.component';
+
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ExternalCommandsService, SendCustomNotificationItem } from '../../../services/external-commands.service';
@@ -39,32 +37,27 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-hosts-send-custom-notification-modal',
-    standalone: true,
     imports: [
-        ButtonCloseDirective,
-        ColComponent,
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormLabelDirective,
-        FormSelectDirective,
-        FormTextDirective,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgIf,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        RowComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        FormsModule
-    ],
+    ButtonCloseDirective,
+    ColComponent,
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ReactiveFormsModule,
+    RowComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    FormsModule
+],
     templateUrl: './hosts-send-custom-notification-modal.component.html',
     styleUrl: './hosts-send-custom-notification-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

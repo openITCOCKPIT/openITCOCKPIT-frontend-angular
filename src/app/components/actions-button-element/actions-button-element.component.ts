@@ -26,20 +26,18 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 import { PermissionDirective } from '../../permissions/permission.directive';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+
 import { DropdownItemDirective } from '@coreui/angular';
 import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
     selector: 'oitc-actions-button-element',
-    standalone: true,
     imports: [
-        RouterLink,
-        PermissionDirective,
-        FaIconComponent,
-        DropdownItemDirective,
-        NgTemplateOutlet
-    ],
+    RouterLink,
+    PermissionDirective,
+    DropdownItemDirective,
+    NgTemplateOutlet
+],
     templateUrl: './actions-button-element.component.html',
     styleUrl: './actions-button-element.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

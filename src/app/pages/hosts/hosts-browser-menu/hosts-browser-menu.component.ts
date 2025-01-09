@@ -45,7 +45,6 @@ export interface HostBrowserMenuConfig {
 
 @Component({
     selector: 'oitc-hosts-browser-menu',
-    standalone: true,
     imports: [
         ColComponent,
         RowComponent,

@@ -1,37 +1,26 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
-    BadgeComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    TooltipDirective
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -43,62 +32,40 @@ import { SelectKeyValue } from "../../../../../layouts/primeng/select.interface"
 import { HistoryService } from '../../../../../history.service';
 import { MapsService } from '../Maps.service';
 import { LoadContainersRoot, LoadSatellitesRoot, MapPost } from '../Maps.interface';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import {
-    TimeperiodDetailsTooltipComponent
-} from '../../../../sla_module/components/timeperiod-details-tooltip/timeperiod-details-tooltip.component';
-import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
+
+
+
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-maps-edit',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        BadgeComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NgSelectModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        RouterLink,
-        TooltipDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        MultiSelectComponent,
-        FormLoaderComponent,
-        AsyncPipe,
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        SelectComponent,
-        TimeperiodDetailsTooltipComponent,
-        TranslocoPipe,
-        TrueFalseDirective
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    NgSelectModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    RouterLink,
+    TranslocoDirective,
+    XsButtonDirective,
+    MultiSelectComponent,
+    FormLoaderComponent,
+    AsyncPipe
+],
     templateUrl: './maps-edit.component.html',
     styleUrl: './maps-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -35,6 +35,7 @@ import { UsersService } from '../../../../../users/users.service';
 import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { TimezoneConfiguration, TimezoneService } from '../../../../../../services/timezone.service';
+import { FormsModule } from '@angular/forms';
 
 // This view defines each input manually to keep an order that makes sense for the user.
 // To not have to work against TypeScript, we define all possible fields in the interface.
@@ -67,7 +68,6 @@ export interface GraphingDockerConfig extends ConfigurationEditorConfig {
 
 @Component({
     selector: 'oitc-configuration-file-graphing-docker',
-    standalone: true,
     imports: [
         FormControlDirective,
         FormErrorDirective,
@@ -84,7 +84,8 @@ export interface GraphingDockerConfig extends ConfigurationEditorConfig {
         TrueFalseDirective,
         NgOptionTemplateDirective,
         NgSelectComponent,
-        NgOptionHighlightDirective
+        NgOptionHighlightDirective,
+        FormsModule
     ],
     templateUrl: './configuration-file-graphing-docker.component.html',
     styleUrl: './configuration-file-graphing-docker.component.css',

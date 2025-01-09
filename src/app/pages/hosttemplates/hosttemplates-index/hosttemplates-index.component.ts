@@ -1,25 +1,22 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownDividerDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalService,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  DropdownDividerDirective,
+  FormControlDirective,
+  FormDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  ModalService,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -36,12 +33,12 @@ import {
     HosttemplateIndexRoot,
     HosttemplatesIndexParams
 } from '../hosttemplates.interface';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { HosttemplateTypesEnum } from '../hosttemplate-types.enum';
 import { HosttemplatesService } from '../hosttemplates.service';
-import { JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -65,61 +62,54 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-hosttemplates-index',
-    standalone: true,
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ReactiveFormsModule,
-        RowComponent,
-        TranslocoPipe,
-        FormErrorDirective,
-        NgSelectModule,
-        NgOptionHighlightModule,
-        JsonPipe,
-        CardFooterComponent,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        DropdownDividerDirective,
-        ItemSelectComponent,
-        MatSort,
-        MatSortHeader,
-        NgForOf,
-        NgIf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        SelectAllComponent,
-        TableDirective,
-        NgClass,
-        DeleteAllModalComponent,
-        MultiSelectModule,
-        MultiSelectComponent,
-        TableLoaderComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    ColComponent,
+    ContainerComponent,
+    DebounceDirective,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ReactiveFormsModule,
+    RowComponent,
+    TranslocoPipe,
+    NgSelectModule,
+    NgOptionHighlightModule,
+    CardFooterComponent,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    DropdownDividerDirective,
+    ItemSelectComponent,
+    MatSort,
+    MatSortHeader,
+    NgForOf,
+    NgIf,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    SelectAllComponent,
+    TableDirective,
+    NgClass,
+    DeleteAllModalComponent,
+    MultiSelectModule,
+    MultiSelectComponent,
+    TableLoaderComponent
+],
     templateUrl: './hosttemplates-index.component.html',
     styleUrl: './hosttemplates-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: HosttemplatesService} // Inject the HosttemplatesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: HosttemplatesService } // Inject the HosttemplatesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -6,31 +6,27 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
-    BadgeComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    FormSelectDirective,
-    NavComponent,
-    NavItemComponent
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  FormSelectDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
-import { MacrosComponent } from '../../../../../components/macros/macros.component';
+
+
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
+
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
 import { ImportedhostgroupsService } from '../importedhostgroups.service';
@@ -39,42 +35,31 @@ import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface'
 
 @Component({
     selector: 'oitc-imported-hostgroups-view',
-    standalone: true,
     imports: [
-
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        BackButtonDirective,
-        BadgeComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        LabelLinkComponent,
-        MacrosComponent,
-        MultiSelectComponent,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        SelectComponent,
-        XsButtonDirective,
-        FormSelectDirective
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormLabelDirective,
+    FormsModule,
+    MultiSelectComponent,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    XsButtonDirective,
+    FormSelectDirective
+],
     templateUrl: './imported-hostgroups-view.component.html',
     styleUrl: './imported-hostgroups-view.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -53,7 +53,6 @@ import {
 
 @Component({
     selector: 'oitc-statehistories-host',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -61,7 +60,6 @@ import {
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,

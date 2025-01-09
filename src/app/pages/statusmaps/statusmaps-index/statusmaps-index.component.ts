@@ -1,108 +1,89 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
+
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    ProgressBarComponent,
-    ProgressComponent,
-    RowComponent,
-    ToastBodyComponent,
-    ToastComponent,
-    ToasterComponent,
-    ToastHeaderComponent
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  FormCheckInputDirective,
+  FormControlDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  NavComponent,
+  NavItemComponent,
+  ProgressBarComponent,
+  ProgressComponent,
+  RowComponent,
+  ToastBodyComponent,
+  ToastComponent,
+  ToasterComponent,
+  ToastHeaderComponent
 } from '@coreui/angular';
 import { DecimalPipe, DOCUMENT, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { StatusmapService } from '../statusmap.service';
 import { getDefaultStatusmapsIndexParams, StatusmapExtendedNode, StatusmapsIndexParmas } from '../statusmap.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
-import {
-    RegexHelperTooltipComponent
-} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data/peer';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import {
-    HostGroupSummaryComponent
-} from '../../../modules/import_module/components/dependency-tree/host-group-summary/host-group-summary.component';
-import {
-    HostSummaryComponent
-} from '../../../modules/import_module/components/dependency-tree/host-summary/host-summary.component';
-import {
-    NotInMonitoringComponent
-} from '../../../modules/import_module/components/dependency-tree/not-in-monitoring/not-in-monitoring.component';
+
+
+
 import { SummaryState } from '../../hosts/summary_state.interface';
 import { HostEntity } from '../../hosts/hosts.interface';
 import { HostSummaryStatusmapComponent } from './host-summary-statusmap/host-summary-statusmap.component';
 
 @Component({
     selector: 'oitc-statusmaps-index',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        BlockLoaderComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-
-        DecimalPipe,
-        FaIconComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PermissionDirective,
-        ProgressComponent,
-        RowComponent,
-        SelectComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        FormControlDirective,
-        FormErrorDirective,
-        FormLabelDirective,
-        ReactiveFormsModule,
-        FormsModule,
-        DebounceDirective,
-        RegexHelperTooltipComponent,
-        NoRecordsComponent,
-        FaIconComponent,
-        HostGroupSummaryComponent,
-        HostSummaryComponent,
-        NotInMonitoringComponent,
-        ProgressBarComponent,
-        ToastBodyComponent,
-        ToastComponent,
-        ToastHeaderComponent,
-        ToasterComponent,
-        HostSummaryStatusmapComponent,
-        FormCheckInputDirective
-    ],
+    BlockLoaderComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    DecimalPipe,
+    FaIconComponent,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PermissionDirective,
+    ProgressComponent,
+    RowComponent,
+    SelectComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    RouterLink,
+    FormControlDirective,
+    ReactiveFormsModule,
+    FormsModule,
+    DebounceDirective,
+    NoRecordsComponent,
+    FaIconComponent,
+    ProgressBarComponent,
+    ToastBodyComponent,
+    ToastComponent,
+    ToastHeaderComponent,
+    ToasterComponent,
+    HostSummaryStatusmapComponent,
+    FormCheckInputDirective
+],
     templateUrl: './statusmaps-index.component.html',
     styleUrl: './statusmaps-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
