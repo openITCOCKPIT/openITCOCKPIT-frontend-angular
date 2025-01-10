@@ -1,0 +1,222 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['PrometheusModule', 'PrometheusQuery', 'index']"
+                   [routerLink]="['/', 'prometheus_module', 'PrometheusQuery', 'index']">
+                    <fa-icon [icon]="['fas', 'burn']"></fa-icon>
+                    {{ t('Prometheus Module') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'broadcast-tower']"></fa-icon>
+                {{ t('Exporters Overview') }}
+            </li>
+        </ol>
+    </nav>
+
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Prometheus exporters') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button  *oitcPermission="['PrometheusModule', 'PrometheusExporters', 'add']" [routerLink]="['/', 'prometheus_module', 'PrometheusExporters', 'add']"
+                            cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row class="mb-3">
+
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'broadcast-tower']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[PrometheusExporters.name]']"
+                                       [placeholder]="'Filter by exporter name' | transloco"
+                                       aria-label="Filter by exporter name"
+                                       cFormControl
+                                       name="params['filter[PrometheusExporters.name]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[PrometheusExporters.service]']"
+                                       [placeholder]="'Filter by exporter service' | transloco"
+                                       aria-label="Filter by exporter service"
+                                       cFormControl
+                                       name="params['filter[PrometheusExporters.service]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col [xs]="6" [lg]="6" class="ui-fluid">
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+
+                                <oitc-multi-select
+                                        name="params['filter[PrometheusExporters.scrape_interval][]']"
+                                        id="params['filter[PrometheusExporters.scrape_interval][]']"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        aria-label="Filter by scrape interval"
+                                        [(ngModel)]="params['filter[PrometheusExporters.scrape_interval][]']"
+                                        [options]="intervals"
+                                        [debounce]="true"
+                                        [placeholder]="'Filter by scrape interval' | transloco"
+                                        (onChange)="onFilterChange(true)"
+                                >
+                                </oitc-multi-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset Filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+
+
+            <oitc-table-loader *ngIf="! result"></oitc-table-loader>
+
+
+            <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th scope="col" mat-sort-header="PrometheusExporters.name">
+                        {{ t('Name') }}
+                    </th>
+                    <th scope="col" mat-sort-header="PrometheusExporters.service">
+                        {{ t('Service') }}
+                    </th>
+                    <th scope="col" mat-sort-header="PrometheusExporters.scrape_interval">
+                        {{ t('Scrape interval') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Container') }}
+                    </th>
+                    <th class="text-center col-1 width-50" scope="col">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    </th>
+                </tr>
+                </thead>
+                <tbody *ngIf="result.all_exporters.length">
+                <tr *ngFor="let exporter of result.all_exporters">
+                    <td>
+                        {{ exporter.name }}
+                    </td>
+                    <td>
+                        {{ exporter.service }}
+                    </td>
+                    <td>
+                        {{ exporter.scrape_interval }}
+                    </td>
+                    <td>
+                        {{ exporter.container }}
+                    </td>
+                    <td class="width-50">
+                        <oitc-actions-button [permission]="'PrometheusModule.PrometheusExporters.edit'"
+                                             [url]="'/prometheus_module/PrometheusExporters/edit/' + exporter.id">
+                            <oitc-actions-button-element [permission]="'PrometheusModule.PrometheusExporters.edit'"
+                                                         [url]="'/prometheus_module/PrometheusExporters/edit/' + exporter.id"
+                                                         *ngIf="exporter.allow_edit">
+                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                {{ t('Edit') }}
+                            </oitc-actions-button-element>
+                            <li cDropdownDivider
+                                *ngIf="exporter.allow_edit"></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(exporter)"
+                                                         *ngIf="exporter.allow_edit"
+                                                         [permission]="'PrometheusModule.PrometheusExporters.delete'">
+                                <span class="text-danger">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete') }}
+                                </span>
+                            </oitc-actions-button-element>
+                        </oitc-actions-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <oitc-no-records
+                    *ngIf="result && result.all_exporters.length === 0"></oitc-no-records>
+
+
+            <c-container
+                    [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="result"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+    </c-card>
+
+    <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+</ng-container>
