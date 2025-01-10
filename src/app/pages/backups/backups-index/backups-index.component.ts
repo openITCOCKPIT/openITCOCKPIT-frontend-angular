@@ -7,11 +7,7 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
     FormControlDirective,
-    FormDirective,
     FormLabelDirective,
     NavComponent,
     NavItemComponent,
@@ -32,7 +28,6 @@ import { Subscription } from 'rxjs';
 import { BackupsService } from '../backups.service';
 import { StartBackupResponse } from '../backups.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { NgClass, NgIf } from '@angular/common';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
 import { ProgressBar } from 'primeng/progressbar';
@@ -55,11 +50,7 @@ import { ProgressBar } from 'primeng/progressbar';
         AlertComponent,
         RowComponent,
         ColComponent,
-        FormDirective,
         FormsModule,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
         FormControlDirective,
         FormErrorDirective,
         FormFeedbackComponent,
@@ -67,7 +58,6 @@ import { ProgressBar } from 'primeng/progressbar';
         RequiredIconComponent,
         TranslocoPipe,
         CardFooterComponent,
-        SelectComponent,
         NgIf,
         OitcAlertComponent,
         NgClass,
@@ -107,10 +97,6 @@ export class BackupsIndexComponent implements OnInit, OnDestroy {
         }
     }
 
-    public loadBackups(): void {
-
-    }
-
     public startBackup(): void {
         this.subscriptions.add(this.BackupsService.createBackup(this.filename)
             .subscribe((result) => {
@@ -147,18 +133,22 @@ export class BackupsIndexComponent implements OnInit, OnDestroy {
             this.BackupsService.checkBackupFinished().subscribe(data => {
                 this.cdr.markForCheck();
 
-                this.backupIsRunning = data.backupFinished.backupFinished;
+                if (data.backupFinished.finished) {
+                    this.backupIsRunning = false;
+                }
 
                 if (!this.backupIsRunning) {
                     clearInterval(this.checkIntervalId);
                     this.checkIntervalId = null;
                 }
 
-                if (data.backupFinished.error) {
-                    this.notyService.genericError();
-                } else {
-                    const msg = this.TranslocoService.translate('Backup created successfully');
-                    this.notyService.genericSuccess(msg);
+                if (!this.backupIsRunning) {
+                    if (data.backupFinished.error) {
+                        this.notyService.genericError();
+                    } else {
+                        const msg = this.TranslocoService.translate('Backup created successfully');
+                        this.notyService.genericSuccess(msg);
+                    }
                 }
             });
         }, 1000);

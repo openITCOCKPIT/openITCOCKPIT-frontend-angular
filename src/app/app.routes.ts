@@ -664,6 +664,9 @@ const coreRoutes: Routes = [{
     path: 'backups/index',
     loadComponent: () => import('./pages/backups/backups-index/backups-index.component').then(m => m.BackupsIndexComponent)
 }, {
+    path: 'backups/restore',
+    loadComponent: () => import('./pages/backups/backups-restore/backups-restore.component').then(m => m.BackupsRestoreComponent)
+}, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)
 }, {
