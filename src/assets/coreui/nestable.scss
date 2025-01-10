@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Credit: https://github.com/dbushell/Nestable/blob/9132dea0d69b280178522668c78193a72c1bb5e9/jquery.nestable.js#L2-L3
 // Many thanks
 
@@ -59,7 +61,7 @@
 
 .dd-collapse-button:hover {
     border-radius: 50%;
-    background: transparentize($primary, 0.5) !important;
+    background: color.adjust($primary, $alpha: -0.5) !important;
 }
 
 /*
@@ -242,7 +244,7 @@
 .dd-handle:hover,
 .dd-handle:hover .dd-list .dd-handle,
 .dd-handle:hover + oitc-container-nest .dd-list .dd-handle {
-    background: transparentize($primary, 0.9) !important;
+    background: color.adjust($primary, $alpha: -0.9) !important;
     border: 1px solid $primary;
 }
 

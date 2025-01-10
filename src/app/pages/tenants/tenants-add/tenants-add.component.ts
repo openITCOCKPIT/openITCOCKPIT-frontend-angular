@@ -24,46 +24,40 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { VectormapComponent } from '../../../components/vectormap/vectormap.component';
+
+
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-tenants-add',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        FormCheckInputDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        NgOptionTemplateDirective,
-        NgSelectComponent,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        VectormapComponent,
-        XsButtonDirective,
-        RouterLink
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink
+],
     templateUrl: './tenants-add.component.html',
     styleUrl: './tenants-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

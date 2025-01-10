@@ -22,11 +22,11 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
+
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+
 import { SystemHealthUserEditGet, SystemHealthUserEditPost } from '../systemhealthusers.interface';
 import { SystemHealthUsersService } from '../systemhealthusers.service';
 import { Subscription } from 'rxjs';
@@ -38,37 +38,32 @@ import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-system-health-users-edit',
-    standalone: true,
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        BackButtonDirective,
-        FakeSelectComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        MultiSelectComponent,
-        BadgeComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        CardFooterComponent,
-        FormLoaderComponent,
-        NgIf
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FormDirective,
+    FormsModule,
+    BackButtonDirective,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormFeedbackComponent,
+    BadgeComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    CardFooterComponent,
+    FormLoaderComponent,
+    NgIf
+],
     templateUrl: './system-health-users-edit.component.html',
     styleUrl: './system-health-users-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

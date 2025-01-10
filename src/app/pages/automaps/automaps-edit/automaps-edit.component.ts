@@ -42,7 +42,6 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 
 @Component({
     selector: 'oitc-automaps-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         BadgeComponent,
@@ -52,7 +51,6 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,

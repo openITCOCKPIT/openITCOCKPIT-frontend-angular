@@ -39,7 +39,6 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 
 @Component({
     selector: 'oitc-services-process-checkresult-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         ColComponent,

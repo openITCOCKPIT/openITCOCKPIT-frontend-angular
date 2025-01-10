@@ -7,7 +7,6 @@ import { NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 
 @Component({
     selector: 'oitc-wan-line',
-    standalone: true,
     imports: [
         FaIconComponent,
         FaLayersComponent,

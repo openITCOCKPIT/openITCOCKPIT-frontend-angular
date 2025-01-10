@@ -1,23 +1,20 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  FormControlDirective,
+  FormDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -35,20 +32,18 @@ import { PaginatorModule } from 'primeng/paginator';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { NgForOf, NgIf } from '@angular/common';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
-import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+
+
+
+
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
-import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
+
+
 import { ServerLinkComponent } from '../server-link/server-link.component';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HostsService } from '../../hosts/hosts.service';
@@ -58,52 +53,40 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-logentries-index',
-    standalone: true,
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        ColComponent,
-        DebounceDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        PaginatorModule,
-        RowComponent,
-        TranslocoPipe,
-        TrueFalseDirective,
-        MatSort,
-        MatSortHeader,
-        NgIf,
-        TableDirective,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        ItemSelectComponent,
-        NgForOf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        ContainerComponent,
-        HoststatusSimpleIconComponent,
-        TrustAsHtmlPipe,
-        ServerLinkComponent,
-        FormErrorDirective,
-        MultiSelectComponent,
-        CardFooterComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    ColComponent,
+    DebounceDirective,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    PaginatorModule,
+    RowComponent,
+    TranslocoPipe,
+    MatSort,
+    MatSortHeader,
+    NgIf,
+    TableDirective,
+    NgForOf,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    ContainerComponent,
+    ServerLinkComponent,
+    MultiSelectComponent,
+    CardFooterComponent
+],
     templateUrl: './logentries-index.component.html',
     styleUrl: './logentries-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

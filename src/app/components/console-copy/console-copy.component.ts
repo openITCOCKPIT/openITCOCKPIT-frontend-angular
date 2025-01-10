@@ -7,11 +7,9 @@ import { ButtonDirective } from '@coreui/angular';
 
 @Component({
     selector: 'oitc-console-copy',
-    standalone: true,
     imports: [
         FaIconComponent,
         TrustAsHtmlPipe,
-
         TranslocoDirective,
         MatTooltip,
         TranslocoPipe,

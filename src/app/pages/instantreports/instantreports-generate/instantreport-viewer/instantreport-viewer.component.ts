@@ -14,13 +14,9 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import {
-    HostRadialbarChartComponent
-} from '../../../../components/charts/host-radialbar-chart/host-radialbar-chart.component';
-import { NgForOf, NgIf } from '@angular/common';
-import {
-    ServiceRadialbarChartComponent
-} from '../../../../components/charts/service-radialbar-chart/service-radialbar-chart.component';
+
+import { NgIf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ChartAbsolutValue, PieChartMetric } from '../../../../components/charts/charts.interface';
 import { HostPieEchartComponent } from '../../../../components/charts/host-pie-echart/host-pie-echart.component';
@@ -39,28 +35,24 @@ import {
 
 @Component({
     selector: 'oitc-instantreport-viewer',
-    standalone: true,
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        FaIconComponent,
-        HostRadialbarChartComponent,
-        NgIf,
-        RowComponent,
-        ServiceRadialbarChartComponent,
-        TranslocoDirective,
-        HostPieEchartComponent,
-        LabelLinkComponent,
-        NgForOf,
-        ServicePieEchartComponent,
-        PermissionDirective,
-        RouterLink,
-        ServiceProgressbarComponent,
-        HostSimplePieChartComponent,
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FaIconComponent,
+    NgIf,
+    RowComponent,
+    TranslocoDirective,
+    HostPieEchartComponent,
+    LabelLinkComponent,
+    ServicePieEchartComponent,
+    PermissionDirective,
+    RouterLink,
+    ServiceProgressbarComponent,
+    HostSimplePieChartComponent
+],
     templateUrl: './instantreport-viewer.component.html',
     styleUrl: './instantreport-viewer.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -42,7 +42,6 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 
 @Component({
     selector: 'oitc-usercontainerroles-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,

@@ -3,35 +3,34 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
-    AlertComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    FormControlDirective,
-    FormDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  FormControlDirective,
+  FormDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { NgForOf, NgIf } from '@angular/common';
-import { NgSelectComponent } from '@ng-select/ng-select';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
+
 import { Subscription } from 'rxjs';
 import { CustomalertRulesService } from '../customalert-rules.service';
 import {
@@ -44,46 +43,42 @@ import { IndexPage } from '../../../../../pages.interface';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'oitc-customalert-rules-services',
-  standalone: true,
+    selector: 'oitc-customalert-rules-services',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        MatSort,
-        NgIf,
-        NgSelectComponent,
-        PaginatorModule,
-        RowComponent,
-        TableDirective,
-        TableLoaderComponent,
-        TranslocoPipe,
-        MatSortHeader,
-        NgForOf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        SelectAllComponent,
-        RouterLink,
-        AlertComponent
-    ],
-  templateUrl: './customalert-rules-services.component.html',
-  styleUrl: './customalert-rules-services.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    ColComponent,
+    ContainerComponent,
+    DebounceDirective,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    MatSort,
+    NgIf,
+    PaginatorModule,
+    RowComponent,
+    TableDirective,
+    TableLoaderComponent,
+    TranslocoPipe,
+    MatSortHeader,
+    NgForOf,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    RouterLink
+],
+    templateUrl: './customalert-rules-services.component.html',
+    styleUrl: './customalert-rules-services.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomalertRulesServicesComponent implements OnInit, OnDestroy, IndexPage {
     private readonly subscriptions: Subscription = new Subscription();

@@ -11,7 +11,6 @@ import { DowntimesService } from '../downtimes.service';
 
 @Component({
     selector: 'oitc-downtime-icon',
-    standalone: true,
     imports: [
         FaIconComponent,
         PopoverDirective,

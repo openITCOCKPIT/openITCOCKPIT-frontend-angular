@@ -52,9 +52,7 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-serviceescalations-add',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

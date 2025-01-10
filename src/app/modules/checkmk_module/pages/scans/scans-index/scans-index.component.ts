@@ -39,7 +39,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { CheckmkAddressFamily } from '../../../checkmk.enums';
-import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component';
+
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
@@ -48,43 +48,43 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { AgentHttpClientErrors } from '../../../../../pages/agentconnector/agentconnector.enums';
 import { ServicetemplateTypesEnum } from '../../../../../pages/servicetemplates/servicetemplate-types.enum';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-scans-index',
-    standalone: true,
     imports: [
-        RouterLink,
-        FaIconComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        ObjectUuidComponent,
-        CardBodyComponent,
-        TranslocoDirective,
-        PermissionDirective,
-        NgIf,
-        ColComponent,
-        RowComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        PaginatorModule,
-        FormLabelDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        CardFooterComponent,
-        FormSelectDirective,
-        ApikeyDocModalComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        XsButtonDirective,
-        ProgressBarModule,
-        TableDirective,
-        NgForOf,
-        MultiSelectComponent
-    ],
+    RouterLink,
+    FaIconComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    ObjectUuidComponent,
+    CardBodyComponent,
+    TranslocoDirective,
+    PermissionDirective,
+    NgIf,
+    ColComponent,
+    RowComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    PaginatorModule,
+    FormLabelDirective,
+    RequiredIconComponent,
+    SelectComponent,
+    CardFooterComponent,
+    FormSelectDirective,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    XsButtonDirective,
+    ProgressBarModule,
+    TableDirective,
+    NgForOf,
+    MultiSelectComponent,
+    FormsModule
+],
     templateUrl: './scans-index.component.html',
     styleUrl: './scans-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

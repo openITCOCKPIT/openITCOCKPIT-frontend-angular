@@ -4,7 +4,6 @@ import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-currentstatereport-perfdata-gauge',
-    standalone: true,
     imports: [
         NgClass
     ],

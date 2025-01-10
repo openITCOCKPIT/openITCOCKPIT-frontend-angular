@@ -7,9 +7,6 @@
 @import "ng-select-dark";
 @import "dropzone/dist/dropzone.css";
 
-@import "primeng/resources/themes/lara-light-blue/theme.css";
-@import "primeng/resources/primeng.css";
-
 @import "animate.css";
 
 @import "uplot/dist/uPlot.min.css";
@@ -26,6 +23,8 @@
  * Importing FontAwesome globally that we can Web Fonts which support gradients
  * and can also be used within libraries like Vis-Timeline
  * and CSS referenced by its unique unicode
+ *
+ * https://github.com/visjs/vis-network/issues/1967#issuecomment-2382457086
  *
  * Use the Angular-FontAwesome <fa-icon> component whenever possible
  * https://docs.fontawesome.com/web/dig-deeper/webfont-vs-svg
@@ -47,6 +46,17 @@
 @import "@fortawesome/fontawesome-free/scss/screen-reader";
 @import "@fortawesome/fontawesome-free/scss/solid";
 @import "@fortawesome/fontawesome-free/scss/regular";
+
+// Add 'Font Awesome 6 Free Solid' for vis-network
+@font-face {
+    font-family: 'Font Awesome 6 Free Solid';
+    font-style: normal;
+    font-weight: 900;
+    font-display: block;
+    src: url("../../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2") format("woff2"), url("../../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf") format("truetype");
+}
+
+@import "flag-icons/css/flag-icons.min.css";
 
 @import "theme";
 @import "card";

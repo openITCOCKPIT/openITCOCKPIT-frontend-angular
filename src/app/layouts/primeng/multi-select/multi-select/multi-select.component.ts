@@ -15,7 +15,7 @@ import {
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
 import { SharedModule } from 'primeng/api';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -24,14 +24,12 @@ import _ from 'lodash';
 
 @Component({
     selector: 'oitc-multi-select',
-    standalone: true,
     imports: [
-        HighlightSearchPipe,
-        MultiSelectModule,
-        SharedModule,
-        TranslocoPipe,
-        FormsModule
-    ],
+    HighlightSearchPipe,
+    MultiSelectModule,
+    SharedModule,
+    FormsModule
+],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

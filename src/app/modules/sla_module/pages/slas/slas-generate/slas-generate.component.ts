@@ -11,32 +11,26 @@ import { Report, ReportError, Sla, SlasGeneratePost, SlasGeneratePostResponse } 
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { SlasGenerateReportFormatEnum, SlasGenerateTabs } from '../slas.enum';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    AlertComponent,
-    BadgeComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  AlertComponent,
+  BadgeComponent,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -44,70 +38,53 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import {
-    TimeperiodDetailsTooltipComponent
-} from '../../../components/timeperiod-details-tooltip/timeperiod-details-tooltip.component';
-import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+
+
+
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { saveAs } from 'file-saver';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { MatSort, MatSortHeader } from '@angular/material/sort';
+
 
 @Component({
     selector: 'oitc-slas-generate',
-    standalone: true,
     imports: [
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-
-        FaIconComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        BackButtonDirective,
-        CardBodyComponent,
-        RequiredIconComponent,
-        SelectComponent,
-        FormErrorDirective,
-        NgIf,
-        FormFeedbackComponent,
-        FormsModule,
-        FormDirective,
-        FormLabelDirective,
-        FormControlDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TimeperiodDetailsTooltipComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        TrueFalseDirective,
-        FormCheckLabelDirective,
-        MultiSelectComponent,
-        CardFooterComponent,
-        DropdownComponent,
-        DropdownToggleDirective,
-        DropdownMenuDirective,
-        DropdownItemDirective,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        PermissionDirective,
-        NgClass,
-        NgForOf,
-        AlertComponent,
-        RowComponent,
-        ColComponent,
-        TableLoaderComponent,
-        MatSort,
-        MatSortHeader,
-        TableDirective,
-        BadgeComponent,
-        AsyncPipe,
-    ],
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    RouterLink,
+    FaIconComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    BackButtonDirective,
+    CardBodyComponent,
+    RequiredIconComponent,
+    SelectComponent,
+    FormErrorDirective,
+    NgIf,
+    FormFeedbackComponent,
+    FormsModule,
+    FormDirective,
+    FormLabelDirective,
+    FormControlDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    CardFooterComponent,
+    PermissionDirective,
+    NgClass,
+    NgForOf,
+    AlertComponent,
+    RowComponent,
+    ColComponent,
+    TableLoaderComponent,
+    TableDirective,
+    BadgeComponent,
+    AsyncPipe
+],
     templateUrl: './slas-generate.component.html',
     styleUrl: './slas-generate.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

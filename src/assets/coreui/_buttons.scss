@@ -1,3 +1,5 @@
+@use "sass:color";
+
 /* bring back good old .btn-xs */
 
 .btn-group-xs > .btn, .btn-xs {
@@ -12,7 +14,7 @@
 @each $color-name, $color-value in $theme-colors {
     .btn-#{$color-name} {
         //box-shadow: 0 2px 6px 0 rgba(var(--#{$prefix}#{$state}), 0.5);
-        box-shadow: 0 2px 6px 0 transparentize($color-value, 0.5);
+        box-shadow: 0 2px 6px 0 color.adjust($color-value, $alpha: -0.5);
     }
 }
 

@@ -34,16 +34,16 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { AcoRoot, LoadLdapgroups, UsergroupsEditGetRoot, UsergroupsEditPostRoot } from '../usergroups.interface';
@@ -55,62 +55,56 @@ import { UsergroupsService } from '../usergroups.service';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { DebounceDirective } from '../../../directives/debounce.directive';
+
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-usergroups-edit',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormCheckInputDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        MultiSelectComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PaginatorModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RowComponent,
-        ColComponent,
-        FormCheckComponent,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        RouterLink,
-        NgForOf,
-        NgClass,
-        DebounceDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TranslocoPipe,
-        KeyValuePipe,
-        DropdownComponent,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        DropdownItemDirective,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        DropdownDividerDirective,
-        FormLoaderComponent,
-        AlertComponent,
-        AsyncPipe
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    MultiSelectComponent,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PaginatorModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RowComponent,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckLabelDirective,
+    TrueFalseDirective,
+    RouterLink,
+    NgForOf,
+    NgClass,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    TranslocoPipe,
+    KeyValuePipe,
+    DropdownComponent,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    DropdownItemDirective,
+    DropdownDividerDirective,
+    FormLoaderComponent,
+    AlertComponent
+],
     templateUrl: './usergroups-edit.component.html',
     styleUrl: './usergroups-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,18 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { TooltipDirective } from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+
 
 @Component({
     selector: 'oitc-hoststatus-simple-icon',
-    standalone: true,
     imports: [
-        NgIf,
-        NgClass,
-        TooltipDirective,
-        FaIconComponent
-    ],
+    NgClass,
+    TooltipDirective
+],
     templateUrl: './hoststatus-simple-icon.component.html',
     styleUrl: './hoststatus-simple-icon.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

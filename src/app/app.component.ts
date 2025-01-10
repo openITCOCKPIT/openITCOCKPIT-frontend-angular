@@ -7,12 +7,11 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
-import 'flag-icons';
 import { HistoryService } from './history.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { NgSelectConfig } from '@ng-select/ng-select';
 import { ColorModeService, ContainerComponent, ShadowOnScrollDirective } from '@coreui/angular';
-import { CoreuiFooterComponent } from './layouts/coreui/coreui-footer/coreui-footer.component';
+
 import { CoreuiHeaderComponent } from './layouts/coreui/coreui-header/coreui-header.component';
 import { CoreuiNavbarComponent } from './layouts/coreui/coreui-navbar/coreui-navbar.component';
 import { GlobalLoaderComponent } from './layouts/coreui/global-loader/global-loader.component';
@@ -20,31 +19,28 @@ import { AsyncPipe, DOCUMENT, NgClass, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { LayoutOptions, LayoutService } from './layouts/coreui/layout.service';
-import { MessageOfTheDayButtonComponent } from './components/message-of-the-day-button/message-of-the-day-button.component';
+
 import {
     MessageOfTheDayModalComponent
 } from './components/message-of-the-day-modal/message-of-the-day-modal.component';
-import { CurrentMessageOfTheDay, MessageOfTheDay } from './pages/messagesotd/messagesotd.interface';
+import { CurrentMessageOfTheDay } from './pages/messagesotd/messagesotd.interface';
 import { MessagesOfTheDayService } from './pages/messagesotd/messagesotd.service';
 
 @Component({
     selector: 'oitc-root',
-    standalone: true,
     imports: [
-        RouterOutlet,
-        FontAwesomeModule,
-        ContainerComponent,
-        CoreuiFooterComponent,
-        CoreuiHeaderComponent,
-        CoreuiNavbarComponent,
-        GlobalLoaderComponent,
-        ShadowOnScrollDirective,
-        NgIf,
-        AsyncPipe,
-        NgClass,
-        MessageOfTheDayButtonComponent,
-        MessageOfTheDayModalComponent
-    ],
+    RouterOutlet,
+    FontAwesomeModule,
+    ContainerComponent,
+    CoreuiHeaderComponent,
+    CoreuiNavbarComponent,
+    GlobalLoaderComponent,
+    ShadowOnScrollDirective,
+    NgIf,
+    AsyncPipe,
+    NgClass,
+    MessageOfTheDayModalComponent
+],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -92,6 +88,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
             // theme can be one of 'light', 'dark', 'auto'
             if (theme === 'dark') {
                 this.document.body.classList.add('dark-theme');
+                this.document.querySelector("html")!.classList.add("dark-theme"); // PrimeNG needs this
                 this.LayoutService.setTheme('dark');
             } else if (theme === 'auto') {
                 const osSystemDarkModeEnabled = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -102,6 +99,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
                 }
             } else {
                 this.document.body.classList.remove('dark-theme');
+                this.document.querySelector("html")!.classList.remove("dark-theme"); // PrimeNG needs this
                 this.LayoutService.setTheme('light');
             }
         }));

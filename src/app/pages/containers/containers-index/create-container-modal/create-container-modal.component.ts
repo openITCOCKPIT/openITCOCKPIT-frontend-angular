@@ -13,23 +13,20 @@ import {
 } from '@angular/core';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 import {
-    ButtonCloseDirective,
-    ColComponent,
-    FormControlDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    ProgressComponent,
-    RowComponent
+  ButtonCloseDirective,
+  FormControlDirective,
+  FormLabelDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalService,
+  ModalTitleDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { LocationPost } from '../../../locations/locations.interface';
@@ -45,46 +42,41 @@ import { GenericIdResponse, GenericValidationError } from '../../../../generic-r
 import { TenantsService } from '../../../tenants/tenants.service';
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
-import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
+
 import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { NodePost } from '../../containers.interface';
 import { ContainersService } from '../../containers.service';
 import { UserTimezonesSelect } from '../../../users/users.interface';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-create-container-modal',
-    standalone: true,
     imports: [
-        ButtonCloseDirective,
-        ColComponent,
-        FaIconComponent,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgForOf,
-        NgIf,
-        ProgressComponent,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        PaginatorModule,
-        TranslocoPipe,
-        FormLabelDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        NgOptionTemplateDirective,
-        NgSelectComponent,
-        NgOptionHighlightDirective,
-        JsonPipe
-    ],
+    ButtonCloseDirective,
+    FaIconComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    NgIf,
+    TranslocoDirective,
+    XsButtonDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    PaginatorModule,
+    TranslocoPipe,
+    FormLabelDirective,
+    RequiredIconComponent,
+    NgOptionTemplateDirective,
+    NgSelectComponent,
+    NgOptionHighlightDirective,
+    FormsModule
+],
     templateUrl: './create-container-modal.component.html',
     styleUrl: './create-container-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

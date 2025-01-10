@@ -40,7 +40,6 @@ import { SelectionServiceService } from '../../../../../layouts/coreui/select-al
 
 @Component({
     selector: 'oitc-eventcorrelations-used-by',
-    standalone: true,
     imports: [
         AsyncPipe,
         BackButtonDirective,
@@ -72,7 +71,7 @@ import { SelectionServiceService } from '../../../../../layouts/coreui/select-al
     templateUrl: './eventcorrelations-used-by.component.html',
     styleUrl: './eventcorrelations-used-by.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: EventcorrelationsService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: EventcorrelationsService } // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

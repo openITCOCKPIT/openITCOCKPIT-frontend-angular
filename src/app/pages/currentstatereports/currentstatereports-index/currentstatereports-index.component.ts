@@ -1,25 +1,21 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    AlertComponent,
-    BadgeComponent,
-    BorderDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTextDirective,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  AlertComponent,
+  BorderDirective,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormLabelDirective,
+  InputGroupComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -39,7 +35,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { ServicesCurrentStateFilter, ServicesLoadServicesByStringParams } from '../../services/services.interface';
 import { Subscription } from 'rxjs';
 import { ServicesService } from '../../services/services.service';
-import { DebounceDirective } from '../../../directives/debounce.directive';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GenericValidationError } from '../../../generic-responses';
 import { SelectItemOptionGroup, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
@@ -59,7 +55,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import {
     AcknowledgementIconComponent
 } from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
-import { MatSort } from '@angular/material/sort';
+
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import {
@@ -69,56 +65,48 @@ import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'oitc-currentstatereports-index',
-    standalone: true,
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        QueryHandlerCheckerComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        CardFooterComponent,
-        NgIf,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        InputGroupComponent,
-        MultiSelectOptgroupComponent,
-        RequiredIconComponent,
-        RowComponent,
-        ColComponent,
-        DebounceDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        ReactiveFormsModule,
-        FormsModule,
-        SelectComponent,
-        CardTextDirective,
-        BorderDirective,
-        NgForOf,
-        NgClass,
-        TranslocoPipe,
-        LabelLinkComponent,
-        DowntimeIconComponent,
-        AcknowledgementIconComponent,
-        MatSort,
-        TableDirective,
-        BadgeComponent,
-        FaLayersComponent,
-        BadgeOutlineComponent,
-        ContainerComponent,
-        TrustAsHtmlPipe,
-        CurrentstatereportPerfdataGaugesComponent,
-        AlertComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    PermissionDirective,
+    QueryHandlerCheckerComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    CardFooterComponent,
+    NgIf,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    InputGroupComponent,
+    MultiSelectOptgroupComponent,
+    RequiredIconComponent,
+    RowComponent,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    ReactiveFormsModule,
+    FormsModule,
+    SelectComponent,
+    BorderDirective,
+    NgForOf,
+    NgClass,
+    TranslocoPipe,
+    LabelLinkComponent,
+    DowntimeIconComponent,
+    AcknowledgementIconComponent,
+    TableDirective,
+    FaLayersComponent,
+    BadgeOutlineComponent,
+    ContainerComponent,
+    TrustAsHtmlPipe,
+    CurrentstatereportPerfdataGaugesComponent,
+    AlertComponent
+],
     templateUrl: './currentstatereports-index.component.html',
     styleUrl: './currentstatereports-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

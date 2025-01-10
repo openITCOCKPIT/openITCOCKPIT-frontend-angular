@@ -17,9 +17,10 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import { PopoverGraphService } from '../../../../components/popover-graph/popover-graph.service';
 import { TimezoneObject } from '../../timezone.interface';
-import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import { EChartsOption, VisualMapComponentOption } from 'echarts';
-import { BackButtonDirective } from '../../../../directives/back-button.directive';
+import * as echarts from 'echarts/core';
+
 import {
     AlertComponent,
     CardBodyComponent,
@@ -37,11 +38,11 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { DebounceDirective } from '../../../../directives/debounce.directive';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+
 import { FormsModule } from '@angular/forms';
-import { TrueFalseDirective } from '../../../../directives/true-false.directive';
-import { FormErrorDirective } from '../../../../layouts/coreui/form-error.directive';
+
+
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../layouts/primeng/select.interface';
 
@@ -52,6 +53,18 @@ import { LocalStorageService } from '../../../../services/local-storage.service'
 import { GenericUnixtimerange } from '../../../../generic.interfaces';
 import { LayoutService } from '../../../../layouts/coreui/layout.service';
 
+import {
+    GridComponent,
+    LegendComponent,
+    TitleComponent,
+    ToolboxComponent,
+    TooltipComponent,
+    VisualMapComponent
+} from 'echarts/components';
+import { BarChart, LineChart } from 'echarts/charts';
+
+echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent]);
+
 interface ServiceBrowserChartConfig {
     showDataPoint: boolean,
     smooth: boolean,
@@ -60,37 +73,31 @@ interface ServiceBrowserChartConfig {
 
 @Component({
     selector: 'oitc-services-browser-chart',
-    standalone: true,
     imports: [
-        NgxEchartsDirective,
-        BackButtonDirective,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        XsButtonDirective,
-        TranslocoDirective,
-        DebounceDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormsModule,
-        TrueFalseDirective,
-        FormErrorDirective,
-        SelectComponent,
-        CardBodyComponent,
-        TranslocoPipe,
-        RowComponent,
-        ColComponent,
-        AlertComponent
-    ],
+    NgxEchartsDirective,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    XsButtonDirective,
+    TranslocoDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormsModule,
+    SelectComponent,
+    CardBodyComponent,
+    RowComponent,
+    ColComponent,
+    AlertComponent
+],
     templateUrl: './services-browser-chart.component.html',
     styleUrl: './services-browser-chart.component.css',
     providers: [
-        provideEcharts(),
+        provideEchartsCore({echarts}),
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

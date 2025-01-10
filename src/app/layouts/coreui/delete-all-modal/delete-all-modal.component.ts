@@ -25,7 +25,7 @@ import {
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { DeleteAllItem, DeleteAllResponse } from './delete-all.interface';
-import { JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -33,24 +33,22 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-delete-all-modal',
-    standalone: true,
     imports: [
-        ModalComponent,
-        ModalHeaderComponent,
-        ModalBodyComponent,
-        ModalTitleDirective,
-        ButtonCloseDirective,
-        ModalFooterComponent,
-        TranslocoDirective,
-        RowComponent,
-        ColComponent,
-        NgForOf,
-        FaIconComponent,
-        ProgressComponent,
-        NgIf,
-        JsonPipe,
-        XsButtonDirective
-    ],
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalBodyComponent,
+    ModalTitleDirective,
+    ButtonCloseDirective,
+    ModalFooterComponent,
+    TranslocoDirective,
+    RowComponent,
+    ColComponent,
+    NgForOf,
+    FaIconComponent,
+    ProgressComponent,
+    NgIf,
+    XsButtonDirective
+],
     templateUrl: './delete-all-modal.component.html',
     styleUrl: './delete-all-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

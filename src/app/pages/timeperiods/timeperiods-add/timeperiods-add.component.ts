@@ -40,7 +40,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-timeperiods-add',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -48,7 +47,6 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormDirective,

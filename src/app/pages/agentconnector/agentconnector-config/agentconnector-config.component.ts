@@ -10,21 +10,18 @@ import {
     AgentconnectorWizardProgressbarComponent
 } from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTextDirective,
-    CardTitleDirective,
-    ColComponent,
-    DropdownItemDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    FormSelectDirective,
-    RowComponent
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormLabelDirective,
+  FormSelectDirective,
+  RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -34,57 +31,51 @@ import { Subscription } from 'rxjs';
 import { AgentconnectorService } from '../agentconnector.service';
 import { AgentConfig } from '../agentconfig.interface';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { JsonPipe, NgClass, NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { HostEntity } from '../../hosts/hosts.interface';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/template-diff-btn.component';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
+
+
 import { ApikeyDocModalComponent } from '../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-agentconnector-config',
-    standalone: true,
     imports: [
-        AgentconnectorWizardProgressbarComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        BlockLoaderComponent,
-        NgIf,
-        CardFooterComponent,
-        CardTextDirective,
-        XsButtonDirective,
-        NgClass,
-        FormSelectDirective,
-        PaginatorModule,
-        RequiredIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        TranslocoPipe,
-        TemplateDiffBtnComponent,
-        TrueFalseDirective,
-        DropdownItemDirective,
-        ApikeyDocModalComponent,
-        JsonPipe,
-        RowComponent,
-        ColComponent
-    ],
+    AgentconnectorWizardProgressbarComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    BlockLoaderComponent,
+    NgIf,
+    NgClass,
+    FormSelectDirective,
+    PaginatorModule,
+    RequiredIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    TranslocoPipe,
+    ApikeyDocModalComponent,
+    RowComponent,
+    ColComponent,
+    FormsModule
+],
     templateUrl: './agentconnector-config.component.html',
     styleUrl: './agentconnector-config.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

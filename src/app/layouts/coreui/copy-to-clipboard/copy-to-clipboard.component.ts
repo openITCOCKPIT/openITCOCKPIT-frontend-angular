@@ -4,7 +4,6 @@ import { TooltipDirective } from '@coreui/angular';
 
 @Component({
     selector: 'oitc-copy-to-clipboard',
-    standalone: true,
     imports: [
         TranslocoDirective,
         TooltipDirective

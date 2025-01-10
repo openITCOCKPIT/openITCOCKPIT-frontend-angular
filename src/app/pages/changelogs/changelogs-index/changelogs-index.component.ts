@@ -22,7 +22,7 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AsyncPipe, formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, formatDate, NgForOf, NgIf } from '@angular/common';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
@@ -37,52 +37,46 @@ import { ChangelogsService } from '../changelogs.service';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { HostgroupExtendedTabs } from '../../hostgroups/hostgroups.enum';
 import { PermissionsService } from '../../../permissions/permissions.service';
-import {
-    SlaHostgroupHostsStatusOverviewComponent
-} from '../../../modules/sla_module/components/sla-hostgroup-hosts-status-overview/sla-hostgroup-hosts-status-overview.component';
+
 import { IndexPage } from '../../../pages.interface';
 import { Sort } from '@angular/material/sort';
 
 
 @Component({
     selector: 'oitc-changelogs-index',
-    standalone: true,
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ChangelogsEntryComponent,
-        ColComponent,
-        ContainerComponent,
-
-        DebounceDirective,
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        PaginateOrScrollComponent,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RowComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        NoRecordsComponent,
-        NgClass,
-        SlaHostgroupHostsStatusOverviewComponent,
-        AsyncPipe
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ChangelogsEntryComponent,
+    ColComponent,
+    ContainerComponent,
+    DebounceDirective,
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    NgForOf,
+    NgIf,
+    PaginateOrScrollComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RowComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    RouterLink,
+    NoRecordsComponent,
+    AsyncPipe
+],
     templateUrl: './changelogs-index.component.html',
     styleUrl: './changelogs-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

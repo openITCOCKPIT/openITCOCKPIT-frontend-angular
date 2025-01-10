@@ -36,7 +36,6 @@ import { DeleteAcknowledgementItem } from '../../../pages/acknowledgements/ackno
 
 @Component({
     selector: 'oitc-delete-acknowledgements-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         ColComponent,

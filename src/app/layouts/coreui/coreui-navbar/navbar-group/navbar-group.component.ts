@@ -17,18 +17,16 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MenuLink } from '../../../../components/navigation/navigation.interface';
 import { filter } from 'rxjs/operators';
 import { NavbarGroupService } from './navbar-group.service';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 
 @Component({
     selector: 'oitc-navbar-group',
-    standalone: true,
     imports: [
-        FaIconComponent,
-        RouterLink,
-        NgClass,
-        NgIf
-    ],
+    FaIconComponent,
+    RouterLink,
+    NgClass
+],
     templateUrl: './navbar-group.component.html',
     styleUrl: './navbar-group.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

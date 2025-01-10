@@ -7,7 +7,6 @@ import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-downtime-simple-icon',
-    standalone: true,
     imports: [
         FaIconComponent,
         TranslocoDirective,

@@ -21,7 +21,6 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-check-attempts-input',
-    standalone: true,
     imports: [
         FormsModule,
         RowComponent,

@@ -7,7 +7,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-agentconnector-wizard-progressbar',
-    standalone: true,
     imports: [
         TranslocoDirective,
         NgClass,

@@ -23,7 +23,7 @@ import {
     ChartComponent,
     NgApexchartsModule
 } from "ng-apexcharts";
-import { NgIf } from '@angular/common';
+
 
 export type ChartOptions = {
     series: ApexAxisChartSeries;
@@ -51,11 +51,9 @@ declare global {
 
 @Component({
     selector: 'oitc-sparkline-stats',
-    standalone: true,
     imports: [
-        NgApexchartsModule,
-        NgIf
-    ],
+    NgApexchartsModule
+],
     templateUrl: './sparkline-stats.component.html',
     styleUrl: './sparkline-stats.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

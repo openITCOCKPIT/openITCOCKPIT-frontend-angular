@@ -1,29 +1,28 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BrowserLoaderComponent } from '../../../layouts/primeng/loading/browser-loader/browser-loader.component';
 import {
-    AlertComponent,
-    BadgeComponent,
-    BorderDirective,
-    ButtonGroupComponent,
-    ButtonToolbarComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTextDirective,
-    CardTitleDirective,
-    ColComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    ModalService,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective,
-    TooltipDirective
+  AlertComponent,
+  BadgeComponent,
+  BorderDirective,
+  ButtonGroupComponent,
+  ButtonToolbarComponent,
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTextDirective,
+  CardTitleDirective,
+  ColComponent,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  ModalService,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective,
+  TooltipDirective
 } from '@coreui/angular';
-import { HostsBrowserMenuComponent } from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
+
 import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import {
     QueryHandlerCheckerComponent
@@ -50,7 +49,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { ServiceBrowserTabs, ServiceTypesEnum } from '../services.enum';
 import { PermissionsService } from '../../../permissions/permissions.service';
-import { HostStatusNamePipe } from '../../../pipes/host-status-name.pipe';
+
 import { ServiceStatusNamePipe } from '../../../pipes/service-status-name.pipe';
 import { HostObjectCake2 } from '../../hosts/hosts.interface';
 import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
@@ -68,8 +67,8 @@ import { DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN } from '../../../tokens/delete-ack
 import { DowntimesService } from '../../downtimes/downtimes.service';
 import { AcknowledgementsService } from '../../acknowledgements/acknowledgements.service';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
-import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enable-modal.component';
+
+
 import {
     ServiceAcknowledgeModalComponent
 } from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
@@ -103,16 +102,12 @@ import {
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { HostBrowserTabs } from '../../hosts/hosts.enum';
 import { BrowserTimelineComponent } from '../../../components/timeline/browser-timeline/browser-timeline.component';
-import {
-    HostTimelineLegendComponent
-} from '../../../components/timeline/host-timeline-legend/host-timeline-legend.component';
-import {
-    ServicenowHostBrowserTabComponent
-} from '../../../modules/servicenow_module/components/servicenow-host-browser-tab/servicenow-host-browser-tab.component';
+
+
 import {
     ServiceTimelineLegendComponent
 } from '../../../components/timeline/service-timeline-legend/service-timeline-legend.component';
-import { DebounceDirective } from '../../../directives/debounce.directive';
+
 import { FormsModule } from '@angular/forms';
 import { GenericUnixtimerange } from '../../../generic.interfaces';
 import {
@@ -136,82 +131,72 @@ import {
 
 @Component({
     selector: 'oitc-services-browser',
-    standalone: true,
     imports: [
-        BrowserLoaderComponent,
-        BorderDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        HostsBrowserMenuComponent,
-        NgIf,
-        QueryHandlerCheckerComponent,
-        TranslocoDirective,
-        ServicesBrowserMenuComponent,
-        ServicesBrowserChartComponent,
-        BackButtonDirective,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        PermissionDirective,
-        NgClass,
-        ButtonGroupComponent,
-        ButtonToolbarComponent,
-        ColComponent,
-        HostStatusNamePipe,
-        RowComponent,
-        TranslocoPipe,
-        ServiceStatusNamePipe,
-        TooltipDirective,
-        DeleteAllModalComponent,
-        DisableModalComponent,
-        EnableModalComponent,
-        ServiceAcknowledgeModalComponent,
-        ServiceMaintenanceModalComponent,
-        ServiceResetChecktimeModalComponent,
-        HostsDisableFlapdetectionModalComponent,
-        HostsEnableFlapdetectionModalComponent,
-        HostsSendCustomNotificationModalComponent,
-        DeleteAcknowledgementsModalComponent,
-        ServicesProcessCheckresultModalComponent,
-        CardTextDirective,
-        TrustAsHtmlPipe,
-        AlertComponent,
-        RouterLink,
-        BadgeComponent,
-        CopyToClipboardComponent,
-        LabelLinkComponent,
-        TableDirective,
-        PrometheusServiceBrowserComponent,
-        HoststatusSimpleIconComponent,
-        NgForOf,
-        BrowserTimelineComponent,
-        HostTimelineLegendComponent,
-        ServicenowHostBrowserTabComponent,
-        ServiceTimelineLegendComponent,
-        DebounceDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormsModule,
-        KeyValuePipe,
-        SatelliteNameComponent,
-        ServicenowServiceBrowserTabComponent,
-        CancelHostdowntimeModalComponent,
-        CancelServicedowntimeModalComponent,
-        AsyncPipe,
-        SlaServiceInformationElementComponent,
-        CustomalertsServiceHistoryComponent
-    ],
+    BrowserLoaderComponent,
+    BorderDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NgIf,
+    QueryHandlerCheckerComponent,
+    TranslocoDirective,
+    ServicesBrowserMenuComponent,
+    ServicesBrowserChartComponent,
+    BackButtonDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    PermissionDirective,
+    NgClass,
+    ButtonGroupComponent,
+    ButtonToolbarComponent,
+    ColComponent,
+    RowComponent,
+    TranslocoPipe,
+    ServiceStatusNamePipe,
+    TooltipDirective,
+    DeleteAllModalComponent,
+    ServiceAcknowledgeModalComponent,
+    ServiceMaintenanceModalComponent,
+    ServiceResetChecktimeModalComponent,
+    HostsDisableFlapdetectionModalComponent,
+    HostsEnableFlapdetectionModalComponent,
+    HostsSendCustomNotificationModalComponent,
+    DeleteAcknowledgementsModalComponent,
+    ServicesProcessCheckresultModalComponent,
+    CardTextDirective,
+    TrustAsHtmlPipe,
+    AlertComponent,
+    RouterLink,
+    BadgeComponent,
+    CopyToClipboardComponent,
+    LabelLinkComponent,
+    TableDirective,
+    PrometheusServiceBrowserComponent,
+    HoststatusSimpleIconComponent,
+    NgForOf,
+    BrowserTimelineComponent,
+    ServiceTimelineLegendComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormsModule,
+    KeyValuePipe,
+    SatelliteNameComponent,
+    ServicenowServiceBrowserTabComponent,
+    CancelHostdowntimeModalComponent,
+    CancelServicedowntimeModalComponent,
+    AsyncPipe,
+    SlaServiceInformationElementComponent,
+    CustomalertsServiceHistoryComponent
+],
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService}, // Inject the DowntimesService into the CancelAllModalComponent
-        {provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService} // Inject the DowntimesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService }, // Inject the DowntimesService into the CancelAllModalComponent
+        { provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService } // Inject the DowntimesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

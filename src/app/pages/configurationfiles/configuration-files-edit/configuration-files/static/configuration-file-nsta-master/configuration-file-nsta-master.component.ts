@@ -16,12 +16,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
 import { ConfigurationFilesService } from '../../../../configuration-files.service';
 import {
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    FormSelectDirective
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormLabelDirective
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -30,25 +29,25 @@ import { RequiredIconComponent } from '../../../../../../components/required-ico
 import { NgIf } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../../../../directives/true-false.directive';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-configuration-file-nsta-master',
-    standalone: true,
     imports: [
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        PaginatorModule,
-        RequiredIconComponent,
-        NgIf,
-        FormSelectDirective,
-        TranslocoDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective
-    ],
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    PaginatorModule,
+    RequiredIconComponent,
+    NgIf,
+    TranslocoDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TrueFalseDirective,
+    FormsModule
+],
     templateUrl: './configuration-file-nsta-master.component.html',
     styleUrl: './configuration-file-nsta-master.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

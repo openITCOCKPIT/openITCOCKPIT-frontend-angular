@@ -8,7 +8,6 @@ import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-scroll-index',
-    standalone: true,
     imports: [
         PaginationComponent,
         PageItemDirective,

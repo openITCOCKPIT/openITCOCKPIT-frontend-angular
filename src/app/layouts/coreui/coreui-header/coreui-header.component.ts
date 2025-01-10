@@ -9,25 +9,23 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
-    AvatarComponent,
-    BadgeComponent,
-    BreadcrumbRouterComponent,
-    ColorModeService,
-    ContainerComponent,
-    DropdownComponent,
-    DropdownDividerDirective,
-    DropdownHeaderDirective,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    HeaderComponent,
-    HeaderNavComponent,
-    NavItemComponent,
-    SidebarToggleDirective
+  AvatarComponent,
+  BadgeComponent,
+  ColorModeService,
+  ContainerComponent,
+  DropdownComponent,
+  DropdownDividerDirective,
+  DropdownHeaderDirective,
+  DropdownItemDirective,
+  DropdownMenuDirective,
+  DropdownToggleDirective,
+  HeaderComponent,
+  HeaderNavComponent,
+  NavItemComponent
 } from '@coreui/angular';
 import { delay, filter, map, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NgStyle, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { IconDirective } from '@coreui/icons-angular';
 import { ChangeLanguageComponent } from '../change-language/change-language.component';
 import { SidebarService } from '../coreui-navbar/sidebar.service';
@@ -36,39 +34,34 @@ import { TopSearchComponent } from '../top-search/top-search.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
+
 import { MessageOfTheDayButtonComponent } from '../../../components/message-of-the-day-button/message-of-the-day-button.component';
 import { CurrentMessageOfTheDay } from '../../../pages/messagesotd/messagesotd.interface';
 
 @Component({
     selector: 'oitc-coreui-header',
-    standalone: true,
     imports: [
-        ContainerComponent,
-        HeaderNavComponent,
-        NavItemComponent,
-        BreadcrumbRouterComponent,
-        AvatarComponent,
-        BadgeComponent,
-        RouterLink,
-        SidebarToggleDirective,
-        NgTemplateOutlet,
-        NgStyle,
-        DropdownComponent,
-        DropdownDividerDirective,
-        DropdownHeaderDirective,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        IconDirective,
-        ChangeLanguageComponent,
-        TopSearchComponent,
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        XsButtonDirective,
-        MessageOfTheDayButtonComponent
-    ],
+    ContainerComponent,
+    HeaderNavComponent,
+    NavItemComponent,
+    AvatarComponent,
+    BadgeComponent,
+    RouterLink,
+    NgTemplateOutlet,
+    DropdownComponent,
+    DropdownDividerDirective,
+    DropdownHeaderDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    IconDirective,
+    ChangeLanguageComponent,
+    TopSearchComponent,
+    TranslocoDirective,
+    FaIconComponent,
+    PermissionDirective,
+    MessageOfTheDayButtonComponent
+],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

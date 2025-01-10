@@ -2,23 +2,22 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    AlertComponent,
-    AlertHeadingDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    NavComponent,
-    NavItemComponent
+  AlertComponent,
+  AlertHeadingDirective,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { UserMacrosModalComponent } from '../../../../../pages/commands/user-macros-modal/user-macros-modal.component';
+
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { PaginatorModule } from 'primeng/paginator';
@@ -34,47 +33,43 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { MkagentsService } from '../mkagents.service';
 import { HistoryService } from '../../../../../history.service';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import {
-    CodeMirrorContainerComponent
-} from '../../../../../components/code-mirror-container/code-mirror-container.component';
+
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enum';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
     selector: 'oitc-mkagents-edit',
-    standalone: true,
     imports: [
-        TranslocoDirective,
-        RouterLink,
-        FaIconComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        BackButtonDirective,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        UserMacrosModalComponent,
-        XsButtonDirective,
-        TranslocoDirective,
-        CardBodyComponent,
-        CardFooterComponent,
-        FormCheckInputDirective,
-        PaginatorModule,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        NgIf,
-        RequiredIconComponent,
-        SelectComponent,
-        FormControlDirective,
-        CodeMirrorContainerComponent,
-        AlertComponent,
-        AlertHeadingDirective,
-        FormDirective,
-        FormLoaderComponent
-    ],
+    TranslocoDirective,
+    RouterLink,
+    FaIconComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    BackButtonDirective,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    XsButtonDirective,
+    TranslocoDirective,
+    CardBodyComponent,
+    CardFooterComponent,
+    PaginatorModule,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    NgIf,
+    RequiredIconComponent,
+    SelectComponent,
+    FormControlDirective,
+    AlertComponent,
+    AlertHeadingDirective,
+    FormDirective,
+    FormLoaderComponent,
+    FormsModule
+],
     templateUrl: './mkagents-edit.component.html',
     styleUrl: './mkagents-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,39 +1,25 @@
 import { ChangeDetectionStrategy, Component, inject, input, TemplateRef } from '@angular/core';
 import { ContainersIndexNested } from '../../containers.interface';
-import { CommonModule, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { CommonModule, NgIf } from '@angular/common';
+
+
+import { TranslocoDirective } from '@jsverse/transloco';
 import { PermissionsService } from '../../../../permissions/permissions.service';
-import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
-import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
-import { RouterLink } from '@angular/router';
-import { TooltipDirective } from '@coreui/angular';
-import { DeleteAllModalComponent } from '../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { DisableModalComponent } from '../../../../layouts/coreui/disable-modal/disable-modal.component';
+
+
+
+
+
+
 import { ContainersService } from '../../containers.service';
 
 @Component({
     selector: 'oitc-container-nest',
-    standalone: true,
     imports: [
-        NgForOf,
-        NgIf,
-        FaIconComponent,
-        XsButtonDirective,
-        TranslocoDirective,
-        NgSwitchCase,
-        LabelLinkComponent,
-        RequiredIconComponent,
-        NgSwitch,
-        NgSwitchDefault,
-        RouterLink,
-        TooltipDirective,
-        TranslocoPipe,
-        DeleteAllModalComponent,
-        DisableModalComponent,
-        CommonModule
-    ],
+    NgIf,
+    TranslocoDirective,
+    CommonModule
+],
     templateUrl: './container-nest.component.html',
     styleUrl: './container-nest.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

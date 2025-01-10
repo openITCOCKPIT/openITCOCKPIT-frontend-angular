@@ -1,21 +1,21 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    BadgeComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownDividerDirective,
-    FormControlDirective,
-    FormDirective, FormLabelDirective,
-    InputGroupComponent, InputGroupTextDirective,
-    ModalService,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  BadgeComponent,
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  DropdownDividerDirective,
+  FormControlDirective,
+  FormDirective,
+  InputGroupComponent, InputGroupTextDirective,
+  ModalService,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -45,10 +45,10 @@ import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+
+
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { TemplateDiffComponent } from '../../../../../components/template-diff/template-diff.component';
+
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -58,55 +58,50 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
 
 @Component({
     selector: 'oitc-customalert-rules-index',
-    standalone: true,
     imports: [
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        ContainerComponent,
-        ColComponent,
-        RowComponent,
-        FormDirective,
-        FormsModule,
-        ReactiveFormsModule,
-        NgIf,
-        TableLoaderComponent,
-        MatSort,
-        MatSortHeader,
-        TableDirective,
-        ItemSelectComponent,
-        BadgeComponent,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        DropdownDividerDirective,
-        NgForOf,
-        DebounceDirective,
-        FormControlDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TranslocoPipe,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        NgSelectComponent,
-        TemplateDiffComponent,
-        DeleteAllModalComponent,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        SelectAllComponent
-    ],
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    ContainerComponent,
+    ColComponent,
+    RowComponent,
+    FormDirective,
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    TableLoaderComponent,
+    MatSort,
+    MatSortHeader,
+    TableDirective,
+    ItemSelectComponent,
+    BadgeComponent,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    DropdownDividerDirective,
+    NgForOf,
+    DebounceDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    TranslocoPipe,
+    NgSelectComponent,
+    DeleteAllModalComponent,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    SelectAllComponent
+],
     templateUrl: './customalert-rules-index.component.html',
     styleUrl: './customalert-rules-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: CustomalertRulesService}
+        { provide: DELETE_SERVICE_TOKEN, useClass: CustomalertRulesService }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

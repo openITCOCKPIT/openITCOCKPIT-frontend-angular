@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
-import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
+import * as echarts from 'echarts/core';
 import 'echarts/theme/dark.js';
 import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
@@ -7,15 +8,18 @@ import { TranslocoService } from '@jsverse/transloco';
 import { LayoutService } from '../../../../../layouts/coreui/layout.service';
 import { Sla } from '../../../pages/slas/Slas.interface';
 
+import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+import { BarChart, LineChart } from 'echarts/charts';
+
+echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent]);
 
 @Component({
     selector: 'oitc-sla-hosts-overview-bar-echart',
-    standalone: true,
     imports: [
         NgxEchartsDirective
     ],
     providers: [
-        provideEcharts(),
+        provideEchartsCore({echarts}),
     ],
     templateUrl: './sla-hosts-overview-bar-echart.component.html',
     styleUrl: './sla-hosts-overview-bar-echart.component.css',

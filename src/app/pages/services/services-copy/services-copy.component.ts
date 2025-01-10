@@ -11,7 +11,6 @@ import {
     NavComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -33,10 +32,10 @@ import { HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
 import { HostsService } from '../../hosts/hosts.service';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { HistoryService } from '../../../history.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-services-copy',
-    standalone: true,
     imports: [
         AlertComponent,
         BackButtonDirective,
@@ -45,7 +44,6 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,
@@ -61,7 +59,8 @@ import { HistoryService } from '../../../history.service';
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        SelectComponent
+        SelectComponent,
+        FormsModule
     ],
     templateUrl: './services-copy.component.html',
     styleUrl: './services-copy.component.css',

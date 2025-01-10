@@ -4,40 +4,33 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
+
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import {
-    AlertComponent,
-    BadgeComponent,
-    ButtonGroupComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalToggleDirective,
-    NavComponent,
-    RowComponent
+  AlertComponent,
+  BadgeComponent,
+  ButtonGroupComponent,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  FormCheckInputDirective,
+  InputGroupTextDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalService,
+  ModalToggleDirective,
+  RowComponent
 } from '@coreui/angular';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+
+
 import { FormsModule } from '@angular/forms';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PacketmanagerIndexRoot, PacketmanagerModule } from '../packetmanager.interface';
 import { Subscription } from 'rxjs';
@@ -48,52 +41,39 @@ import { ConsoleCopyComponent } from '../../../components/console-copy/console-c
 
 @Component({
     selector: 'oitc-packetmanager-index',
-    standalone: true,
     imports: [
-
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        RequiredIconComponent,
-        XsButtonDirective,
-        ModalComponent,
-        ModalHeaderComponent,
-        ModalFooterComponent,
-        ModalToggleDirective,
-        ModalBodyComponent,
-        AlertComponent,
-        NgIf,
-        NgForOf,
-        TranslocoPipe,
-        ColComponent,
-        BadgeComponent,
-        RowComponent,
-        NgClass,
-        NavComponent,
-        ContainerComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TrustAsHtmlPipe,
-        ButtonGroupComponent,
-        RepositoryCheckerComponent,
-        ConsoleCopyComponent
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckInputDirective,
+    FormsModule,
+    XsButtonDirective,
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalFooterComponent,
+    ModalToggleDirective,
+    ModalBodyComponent,
+    AlertComponent,
+    NgIf,
+    NgForOf,
+    TranslocoPipe,
+    ColComponent,
+    BadgeComponent,
+    RowComponent,
+    NgClass,
+    ContainerComponent,
+    InputGroupTextDirective,
+    TrustAsHtmlPipe,
+    ButtonGroupComponent,
+    RepositoryCheckerComponent,
+    ConsoleCopyComponent
+],
     templateUrl: './packetmanager-index.component.html',
     styleUrl: './packetmanager-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

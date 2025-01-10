@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 
 @Component({
     selector: 'oitc-server-link',
-    standalone: true,
     imports: [],
     templateUrl: './server-link.component.html',
     styleUrl: './server-link.component.css',

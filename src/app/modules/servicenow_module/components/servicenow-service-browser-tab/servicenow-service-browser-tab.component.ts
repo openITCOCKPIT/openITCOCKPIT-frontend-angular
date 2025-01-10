@@ -27,7 +27,6 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 
 @Component({
     selector: 'oitc-servicenow-service-browser-tab',
-    standalone: true,
     imports: [
         BlockLoaderComponent,
         CardBodyComponent,

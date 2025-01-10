@@ -8,7 +8,6 @@ import { NgClass, NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-service-progressbar',
-    standalone: true,
     imports: [
         RowComponent,
         ColComponent,

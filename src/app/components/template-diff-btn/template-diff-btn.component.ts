@@ -17,7 +17,6 @@ import { PopoverDirective } from '@coreui/angular';
 
 @Component({
     selector: 'oitc-template-diff-btn',
-    standalone: true,
     imports: [
         FaIconComponent,
         TranslocoDirective,

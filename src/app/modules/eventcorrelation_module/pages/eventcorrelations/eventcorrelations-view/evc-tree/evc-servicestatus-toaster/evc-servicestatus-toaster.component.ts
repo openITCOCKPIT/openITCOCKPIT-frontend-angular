@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, ViewChild } from '@angular/core';
-import {
-    HostSummaryStatusmapComponent
-} from '../../../../../../../pages/statusmaps/statusmaps-index/host-summary-statusmap/host-summary-statusmap.component';
+
 import { NgIf, TitleCasePipe } from '@angular/common';
 import {
     ColComponent,
@@ -17,8 +15,8 @@ import {
 import { Subscription } from 'rxjs';
 import { EvcServicestatusToasterService } from './evc-servicestatus-toaster.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../../../../../permissions/permission.directive';
-import { RouterLink } from '@angular/router';
+
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { SkeletonModule } from 'primeng/skeleton';
 import {
@@ -26,7 +24,7 @@ import {
 } from '../../../../../../../layouts/primeng/loading/toaster-loader/toaster-loader.component';
 import { EvcServicestatusToast } from '../../../eventcorrelations.interface';
 import { LabelLinkComponent } from '../../../../../../../layouts/coreui/label-link/label-link.component';
-import { RequiredIconComponent } from '../../../../../../../components/required-icon/required-icon.component';
+
 import { HoststatusIconComponent } from '../../../../../../../pages/hosts/hoststatus-icon/hoststatus-icon.component';
 import {
     ServicestatusIconComponent
@@ -35,32 +33,27 @@ import { TrustAsHtmlPipe } from '../../../../../../../pipes/trust-as-html.pipe';
 
 @Component({
     selector: 'oitc-evc-servicestatus-toaster',
-    standalone: true,
     imports: [
-        HostSummaryStatusmapComponent,
-        NgIf,
-        ProgressBarComponent,
-        ProgressComponent,
-        ToastBodyComponent,
-        ToastComponent,
-        ToastHeaderComponent,
-        ToasterComponent,
-        TableDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        TranslocoDirective,
-        SkeletonModule,
-        ToasterLoaderComponent,
-        RowComponent,
-        ColComponent,
-        LabelLinkComponent,
-        RequiredIconComponent,
-        HoststatusIconComponent,
-        TitleCasePipe,
-        ServicestatusIconComponent,
-        TrustAsHtmlPipe
-    ],
+    NgIf,
+    ProgressBarComponent,
+    ProgressComponent,
+    ToastBodyComponent,
+    ToastComponent,
+    ToastHeaderComponent,
+    ToasterComponent,
+    TableDirective,
+    FaIconComponent,
+    TranslocoDirective,
+    SkeletonModule,
+    ToasterLoaderComponent,
+    RowComponent,
+    ColComponent,
+    LabelLinkComponent,
+    HoststatusIconComponent,
+    TitleCasePipe,
+    ServicestatusIconComponent,
+    TrustAsHtmlPipe
+],
     templateUrl: './evc-servicestatus-toaster.component.html',
     styleUrl: './evc-servicestatus-toaster.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

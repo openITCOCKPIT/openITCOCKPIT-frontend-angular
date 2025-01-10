@@ -55,7 +55,6 @@ import {
 
 @Component({
     selector: 'oitc-acknowledgements-service',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -63,7 +62,6 @@ import {
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,

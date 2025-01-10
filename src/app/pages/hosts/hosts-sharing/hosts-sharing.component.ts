@@ -1,40 +1,26 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    AlertComponent,
-    AlertHeadingDirective,
-    ButtonCloseDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormCheckComponent,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    FormSelectDirective,
-    FormTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    NavComponent,
-    NavItemComponent
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import {
-    CodeMirrorContainerComponent
-} from '../../../components/code-mirror-container/code-mirror-container.component';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
@@ -52,50 +38,32 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosts-sharing',
-    standalone: true,
     imports: [
-        AlertComponent,
-        AlertHeadingDirective,
-        BackButtonDirective,
-        ButtonCloseDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        CodeMirrorContainerComponent,
-
-        FaIconComponent,
-        FormCheckComponent,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormSelectDirective,
-        FormTextDirective,
-        FormsModule,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        PermissionDirective,
-        RequiredIconComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        UserMacrosModalComponent,
-        XsButtonDirective,
-        RouterLink,
-        ObjectUuidComponent,
-        SelectComponent,
-        MultiSelectComponent,
-        FormLoaderComponent
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PermissionDirective,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    ObjectUuidComponent,
+    SelectComponent,
+    MultiSelectComponent,
+    FormLoaderComponent
+],
     templateUrl: './hosts-sharing.component.html',
     styleUrl: './hosts-sharing.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

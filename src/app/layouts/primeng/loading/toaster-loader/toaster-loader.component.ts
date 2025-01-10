@@ -4,7 +4,6 @@ import { TableDirective } from '@coreui/angular';
 
 @Component({
     selector: 'oitc-toaster-loader',
-    standalone: true,
     imports: [
         SkeletonModule,
         TableDirective

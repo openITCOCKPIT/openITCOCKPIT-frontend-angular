@@ -11,17 +11,16 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    NavComponent,
-    NavItemComponent
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -33,37 +32,37 @@ import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/lab
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-mkchecks-edit',
-    standalone: true,
     imports: [
-        TranslocoDirective,
-        RouterLink,
-        FaIconComponent,
-        PermissionDirective,
-        CardComponent,
-        CardHeaderComponent,
-        BackButtonDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardTitleDirective,
-        CardBodyComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        PaginatorModule,
-        RequiredIconComponent,
-        LabelLinkComponent,
-        SelectComponent,
-        CardFooterComponent,
-        FormCheckInputDirective,
-        FormDirective,
-        FormLoaderComponent,
-        NgIf
-    ],
+    TranslocoDirective,
+    RouterLink,
+    FaIconComponent,
+    PermissionDirective,
+    CardComponent,
+    CardHeaderComponent,
+    BackButtonDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    CardTitleDirective,
+    CardBodyComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    PaginatorModule,
+    RequiredIconComponent,
+    LabelLinkComponent,
+    SelectComponent,
+    CardFooterComponent,
+    FormDirective,
+    FormLoaderComponent,
+    NgIf,
+    FormsModule
+],
     templateUrl: './mkchecks-edit.component.html',
     styleUrl: './mkchecks-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

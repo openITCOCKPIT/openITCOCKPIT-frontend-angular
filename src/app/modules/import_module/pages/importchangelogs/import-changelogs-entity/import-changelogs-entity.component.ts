@@ -28,7 +28,7 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
+
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -41,41 +41,38 @@ import { getDefaultImportChangelogsEntityParams, ImportChangelogsEntityParams } 
 
 @Component({
     selector: 'oitc-import-changelogs-entity',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ChangelogsEntryComponent,
-        ColComponent,
-        ContainerComponent,
-
-        DebounceDirective,
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RowComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ChangelogsEntryComponent,
+    ColComponent,
+    ContainerComponent,
+    DebounceDirective,
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    NgForOf,
+    NgIf,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    ReactiveFormsModule,
+    RowComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    RouterLink
+],
     templateUrl: './import-changelogs-entity.component.html',
     styleUrl: './import-changelogs-entity.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

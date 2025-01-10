@@ -9,11 +9,11 @@ import {
     ModalToggleDirective,
     TableDirective
 } from '@coreui/angular';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { MatSort, MatSortHeader } from '@angular/material/sort';
+
 import { Subscription } from 'rxjs';
 import { MacroIndex } from '../../macros/macros.interface';
 import { NgClass, NgFor, NgIf } from '@angular/common';
@@ -21,27 +21,23 @@ import { MacrosService } from '../../macros/macros.service';
 
 @Component({
     selector: 'oitc-user-macros-modal',
-    standalone: true,
     imports: [
-        ModalToggleDirective,
-        ModalComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        ModalBodyComponent,
-        BackButtonDirective,
-        FaIconComponent,
-        XsButtonDirective,
-        ButtonCloseDirective,
-        TranslocoDirective,
-        MatSort,
-        MatSortHeader,
-        TableDirective,
-        NgIf,
-        TranslocoPipe,
-        NgFor,
-        NgClass,
-        ModalFooterComponent
-    ],
+    ModalToggleDirective,
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ModalBodyComponent,
+    FaIconComponent,
+    XsButtonDirective,
+    ButtonCloseDirective,
+    TranslocoDirective,
+    TableDirective,
+    NgIf,
+    TranslocoPipe,
+    NgFor,
+    NgClass,
+    ModalFooterComponent
+],
     templateUrl: './user-macros-modal.component.html',
     styleUrl: './user-macros-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
