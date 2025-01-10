@@ -1,1 +1,117 @@
-<p>backups-index works!</p>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['backups', 'index']" [routerLink]="['/', 'backups', 'index']">
+                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                    {{ t('Backups') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['far', 'file-code']"></fa-icon>
+                {{ t('Backup / Restore') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Backup management') }}</h5>
+
+            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                <c-nav-item
+                        class="nav-link active">
+                    <fa-icon [icon]="['far', 'floppy-disk']"></fa-icon>
+                    {{ t('Create Backup') }}
+                </c-nav-item>
+                <c-nav-item class="nav-link">
+                    <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                    {{ t('Restore backup') }}
+                </c-nav-item>
+            </c-nav>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadBackups()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <c-row>
+                <c-col [xs]="12">
+                    <c-alert color="info">
+                        <p>
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('The Backup / Restore feature allows you to create backups of the database, focusing on configuration-relevant tables. This approach ensures that backups remain compact and efficient in terms of file size.') }}
+                        </p>
+                        <p>
+                            {{ t('Please note that historical status information (such as logs or historical monitoring data) is not included in these backups. If you wish to preserve this data, you will need to back it up manually using external tools or processes.') }}
+                        </p>
+                    </c-alert>
+                </c-col>
+            </c-row>
+
+            <c-row>
+                <c-col [xs]="12">
+
+                    <div class="mb-3">
+                        <label cLabel for="filename">
+                            {{ t('Filename for Backup') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="filename" required type="text"
+                               name="filename"
+                               [placeholder]="'mysql_oitc_bkp' | transloco"
+                               [(ngModel)]="filename"
+                               [disabled]="backupIsRunning"
+                               oitcFormError [errors]="errors" errorField="filename">
+                        <oitc-form-feedback [errors]="errors" errorField="filename"></oitc-form-feedback>
+                    </div>
+                    <div class="help-block">
+                        {{ t('The current date and time will be added to the file name automatically.') }}
+                        ({{ filename }}{{ filenameDataExample }})
+                    </div>
+
+                </c-col>
+
+                <c-col [xs]="12" *ngIf="backupIsRunning">
+                    <ng-template #contentTemplate let-data>
+                        <span class="h5" [ngClass]="['text-'+data.color]" *ngIf="data">
+                            {{ t('Backup in progress...') }}
+                        </span>
+                        <div class="mt-2">
+                            <p-progressBar mode="indeterminate"
+                                           [style]="{ height: '6px' }"/>
+                        </div>
+
+                    </ng-template>
+
+                    <oitc-alert
+                            baseIcon="circle"
+                            color="primary"
+                            [icon]="['fas', 'hourglass']"
+                            [contentTemplate]="contentTemplate"></oitc-alert>
+                </c-col>
+            </c-row>
+        </c-card-body>
+
+        <c-card-footer class="text-end">
+            <button cButton class="ripple" color="primary" type="button"
+                    (click)="startBackup()"
+                    [disabled]="backupIsRunning">
+                <fa-icon [hidden]="!backupIsRunning" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Start Backup') }}
+            </button>
+        </c-card-footer>
+
+    </c-card>
+</ng-container>
