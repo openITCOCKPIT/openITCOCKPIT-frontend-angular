@@ -26,7 +26,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-ups',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,

@@ -3,7 +3,6 @@ import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-ui-blocker',
-    standalone: true,
     imports: [
         NgIf
     ],

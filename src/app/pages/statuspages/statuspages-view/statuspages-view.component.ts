@@ -24,8 +24,7 @@ import {toString} from 'lodash';
 
 
 @Component({
-  selector: 'oitc-statuspages-view',
-  standalone: true,
+    selector: 'oitc-statuspages-view',
     imports: [
         TranslocoDirective,
         FaIconComponent,
@@ -44,9 +43,9 @@ import {toString} from 'lodash';
         AsyncPipe,
         RowComponent,
     ],
-  templateUrl: './statuspages-view.component.html',
-  styleUrl: './statuspages-view.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './statuspages-view.component.html',
+    styleUrl: './statuspages-view.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatuspagesViewComponent implements OnInit, OnDestroy {
 

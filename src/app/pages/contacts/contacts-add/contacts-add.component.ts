@@ -45,7 +45,7 @@ import {
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
@@ -54,44 +54,41 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-contacts-add',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        BadgeComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        MacrosComponent,
-        MultiSelectComponent,
-        MultiSelectModule,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NgSelectModule,
-        ObjectUuidComponent,
-        PermissionDirective,
-        RequiredIconComponent,
-        RouterLink,
-        TooltipDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        SelectComponent,
-        LabelLinkComponent
-    ],
+    BackButtonDirective,
+    BadgeComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    MacrosComponent,
+    MultiSelectComponent,
+    MultiSelectModule,
+    NavComponent,
+    NavItemComponent,
+    NgForOf,
+    NgIf,
+    NgSelectModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    RouterLink,
+    TooltipDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    SelectComponent,
+    LabelLinkComponent
+],
     templateUrl: './contacts-add.component.html',
     styleUrl: './contacts-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

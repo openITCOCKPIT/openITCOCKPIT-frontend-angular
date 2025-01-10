@@ -25,10 +25,11 @@ import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { ConfigurationEditorConfig, ConfigurationEditorField } from '../../../configuration-files.interface';
 import { NgIf } from '@angular/common';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
+
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { FormsModule } from '@angular/forms';
 
 /**
  * This component will just loop through all configuration fields and will create an input according to the field type.
@@ -39,21 +40,20 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
  */
 @Component({
     selector: 'oitc-dynamic-configuration-file',
-    standalone: true,
     imports: [
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        PaginatorModule,
-        RequiredIconComponent,
-        NgIf,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        PermissionDirective,
-        TrueFalseDirective
-    ],
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    PaginatorModule,
+    RequiredIconComponent,
+    NgIf,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TrueFalseDirective,
+    FormsModule
+],
     templateUrl: './dynamic-configuration-file.component.html',
     styleUrl: './dynamic-configuration-file.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

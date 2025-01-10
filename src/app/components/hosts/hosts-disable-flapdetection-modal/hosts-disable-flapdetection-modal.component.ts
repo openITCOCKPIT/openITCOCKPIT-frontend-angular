@@ -33,7 +33,6 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 
 @Component({
     selector: 'oitc-hosts-disable-flapdetection-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         CardBodyComponent,

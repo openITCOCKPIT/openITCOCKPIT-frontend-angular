@@ -25,7 +25,6 @@ import { ServiceEntity, ServiceUsedByObjects } from '../services.interface';
 
 @Component({
     selector: 'oitc-services-used-by',
-    standalone: true,
     imports: [
         AsyncPipe,
         BackButtonDirective,

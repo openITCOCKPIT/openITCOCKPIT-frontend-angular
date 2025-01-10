@@ -27,7 +27,6 @@ import { LayoutService } from '../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-code-mirror-container',
-    standalone: true,
     imports: [],
     templateUrl: './code-mirror-container.component.html',
     styleUrl: './code-mirror-container.component.css',

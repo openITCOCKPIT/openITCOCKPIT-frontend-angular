@@ -25,12 +25,9 @@
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import {
-    ColComponent,
-    ContainerComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    RowComponent
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective
 } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
@@ -39,17 +36,13 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-select-all',
-    standalone: true,
     imports: [
-        ColComponent,
-        ContainerComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        RowComponent,
-        TranslocoDirective,
-        FormsModule
-    ],
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TranslocoDirective,
+    FormsModule
+],
     templateUrl: './select-all.component.html',
     styleUrl: './select-all.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

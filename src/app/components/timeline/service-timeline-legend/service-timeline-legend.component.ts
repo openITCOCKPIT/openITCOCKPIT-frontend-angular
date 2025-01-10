@@ -4,7 +4,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-service-timeline-legend',
-    standalone: true,
     imports: [
         FaIconComponent,
         TranslocoDirective

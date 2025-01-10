@@ -1,26 +1,22 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownDividerDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalService,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  FormControlDirective,
+  FormDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  ModalService,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -37,12 +33,10 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
-import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
+
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import {
-    HoststatusSimpleIconComponent
-} from '../../../../../pages/hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
+
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -63,12 +57,11 @@ import { IndexPage } from '../../../../../pages.interface';
 
 @Component({
     selector: 'oitc-snmptt-list-index',
-    standalone: true,
-    imports: [RouterModule, CardComponent, FaIconComponent, PermissionDirective, TranslocoDirective, CardHeaderComponent, CardTitleDirective, NavComponent, NavItemComponent, XsButtonDirective, CardBodyComponent, ColComponent, ContainerComponent, DebounceDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormControlDirective, FormDirective, FormsModule, InputGroupComponent, InputGroupTextDirective, PaginatorModule, RowComponent, TranslocoPipe, TrueFalseDirective, HoststatusSimpleIconComponent, MatSort, MatSortHeader, NgForOf, NgIf, NoRecordsComponent, PaginateOrScrollComponent, TableDirective, ItemSelectComponent, ActionsButtonComponent, ActionsButtonElementComponent, DropdownDividerDirective, SelectAllComponent, DeleteAllModalComponent, NgClass, CardFooterComponent],
+    imports: [RouterModule, CardComponent, FaIconComponent, PermissionDirective, TranslocoDirective, CardHeaderComponent, CardTitleDirective, NavComponent, NavItemComponent, XsButtonDirective, CardBodyComponent, ColComponent, ContainerComponent, DebounceDirective, FormControlDirective, FormDirective, FormsModule, InputGroupComponent, InputGroupTextDirective, PaginatorModule, RowComponent, TranslocoPipe, MatSort, MatSortHeader, NgForOf, NgIf, NoRecordsComponent, PaginateOrScrollComponent, TableDirective, ItemSelectComponent, ActionsButtonComponent, ActionsButtonElementComponent, SelectAllComponent, DeleteAllModalComponent, NgClass, CardFooterComponent],
     templateUrl: './snmptt-list-index.component.html',
     styleUrl: './snmptt-list-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: SnmpttService} // Inject the CommandsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: SnmpttService } // Inject the CommandsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

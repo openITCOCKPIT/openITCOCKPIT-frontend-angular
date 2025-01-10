@@ -4,29 +4,22 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { TableDirective } from '@coreui/angular';
 import { NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import {
-    FaIconComponent,
-    FaLayersComponent,
-    FaLayersTextComponent,
-    FaStackComponent,
-    FaStackItemSizeDirective
+  FaIconComponent,
+  FaLayersComponent
 } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-default',
-    standalone: true,
     imports: [
-        TranslocoDirective,
-        TableDirective,
-        NgIf,
-        NgSwitch,
-        FaIconComponent,
-        NgSwitchCase,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        FaLayersComponent,
-        FaLayersTextComponent,
-        TranslocoPipe
-    ],
+    TranslocoDirective,
+    TableDirective,
+    NgIf,
+    NgSwitch,
+    FaIconComponent,
+    NgSwitchCase,
+    FaLayersComponent,
+    TranslocoPipe
+],
     templateUrl: './default.component.html',
     styleUrl: './default.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

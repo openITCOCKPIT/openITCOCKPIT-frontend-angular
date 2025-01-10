@@ -19,38 +19,34 @@ import { Subscription } from 'rxjs';
 import { CommandsService } from '../commands.service';
 import { CommandUsedByCommand, CommandUsedByObjects } from '../commands.interface';
 import { NgForOf, NgIf } from '@angular/common';
-import { MatSort } from '@angular/material/sort';
+
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 
 @Component({
     selector: 'oitc-commands-used-by',
-    standalone: true,
     imports: [
-
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        BackButtonDirective,
-        NavComponent,
-        XsButtonDirective,
-        NgIf,
-        CardBodyComponent,
-        ContainerComponent,
-        MatSort,
-        TableDirective,
-        NgForOf,
-        NotUsedByObjectComponent,
-        NavItemComponent,
-        TableLoaderComponent,
-        FormLoaderComponent
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    BackButtonDirective,
+    NavComponent,
+    XsButtonDirective,
+    NgIf,
+    CardBodyComponent,
+    ContainerComponent,
+    TableDirective,
+    NgForOf,
+    NotUsedByObjectComponent,
+    NavItemComponent,
+    FormLoaderComponent
+],
     templateUrl: './commands-used-by.component.html',
     styleUrl: './commands-used-by.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

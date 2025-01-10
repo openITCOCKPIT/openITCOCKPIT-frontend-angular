@@ -58,13 +58,11 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
 
 @Component({
     selector: 'oitc-slas-edit',
-    standalone: true,
     imports: [
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,

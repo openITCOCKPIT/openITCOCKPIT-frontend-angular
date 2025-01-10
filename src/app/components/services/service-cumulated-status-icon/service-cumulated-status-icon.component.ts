@@ -4,7 +4,6 @@ import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-service-cumulated-status-icon',
-    standalone: true,
     imports: [
         FaIconComponent,
         NgClass

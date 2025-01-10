@@ -55,7 +55,6 @@ import { IndexPage } from '../../../../../pages.interface';
 
 @Component({
     selector: 'oitc-external-monitorings-index',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -63,7 +62,6 @@ import { IndexPage } from '../../../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         FaIconComponent,
         FormControlDirective,
@@ -96,12 +94,11 @@ import { IndexPage } from '../../../../../pages.interface';
         TableDirective
     ],
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ExternalMonitoringsService} // Inject the ExternalMonitoringsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ExternalMonitoringsService } // Inject the ExternalMonitoringsService into the DeleteAllModalComponent
     ],
     templateUrl: './external-monitorings-index.component.html',
     styleUrl: './external-monitorings-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
-
 })
 export class ExternalMonitoringsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);

@@ -18,13 +18,13 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
+
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { InstantreportPost } from '../instantreports.interface';
@@ -52,42 +52,38 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-instantreports-add',
-    standalone: true,
     imports: [
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        BackButtonDirective,
-        NavComponent,
-        NavItemComponent,
-        UserMacrosModalComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        FormDirective,
-        FormsModule,
-        PaginatorModule,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        NgIf,
-        RequiredIconComponent,
-        SelectComponent,
-        FormControlDirective,
-        RouterLink,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        NgForOf,
-        LabelLinkComponent,
-        TrueFalseDirective,
-        MultiSelectComponent,
-        MultiSelectOptgroupComponent,
-        CardFooterComponent
-    ],
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    BackButtonDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    FormDirective,
+    FormsModule,
+    PaginatorModule,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    NgIf,
+    RequiredIconComponent,
+    SelectComponent,
+    FormControlDirective,
+    RouterLink,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    LabelLinkComponent,
+    TrueFalseDirective,
+    MultiSelectComponent,
+    MultiSelectOptgroupComponent,
+    CardFooterComponent
+],
     templateUrl: './instantreports-add.component.html',
     styleUrl: './instantreports-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

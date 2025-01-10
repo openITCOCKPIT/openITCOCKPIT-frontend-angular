@@ -9,17 +9,17 @@ import {
 } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ContainerComponent, PopoverDirective, RowComponent } from '@coreui/angular';
+
 import { PopoverGraphService } from './popover-graph.service';
 import { Subscription } from 'rxjs';
 import { PerformanceData } from './popover-graph.interface';
-import { NgClass, NgForOf, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { PopoverConfigBuilder } from './popover-config-builder';
 import * as _uPlot from 'uplot';
-import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 import { debounce } from '../debounce.decorator';
 import { ChartLoaderComponent } from './chart-loader/chart-loader.component';
 import { TimezoneObject } from '../../pages/services/timezone.interface';
+import { Popover, PopoverModule } from 'primeng/popover';
 
 const uPlot: any = (_uPlot as any)?.default;
 
@@ -36,20 +36,15 @@ type PerfParams = {
 
 @Component({
     selector: 'oitc-popover-graph',
-    standalone: true,
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        PopoverDirective,
-        NgStyle,
-        NgForOf,
-        NgClass,
-        RowComponent,
-        NgIf,
-        ContainerComponent,
-        OverlayPanelModule,
-        ChartLoaderComponent
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    NgClass,
+    NgIf,
+    ChartLoaderComponent,
+    Popover,
+    PopoverModule
+],
     templateUrl: './popover-graph.component.html',
     styleUrl: './popover-graph.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -80,7 +75,7 @@ export class PopoverGraphComponent implements OnDestroy {
     private timer: ReturnType<typeof setTimeout> | null = null;
     private startTimestamp: number = new Date().getTime();
 
-    @ViewChild('graphOverlayPanel') graphOverlayPanel!: OverlayPanel;
+    @ViewChild('graphOverlayPanel') graphOverlayPanel!: Popover;
 
     private cdr = inject(ChangeDetectorRef);
 

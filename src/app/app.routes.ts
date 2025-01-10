@@ -29,7 +29,6 @@ import { prometheusModuleRoutes } from './modules/prometheus_module/prometheus_m
 
 @Component({
     selector: 'legacy-redirect',
-    standalone: true,
     template: `If you can read this, something has to be fixed ;)`,
     imports: [RouterModule]
 })

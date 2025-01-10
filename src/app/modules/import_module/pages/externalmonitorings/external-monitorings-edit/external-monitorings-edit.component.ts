@@ -46,7 +46,6 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
 
 @Component({
     selector: 'oitc-external-monitorings-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -55,7 +54,6 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         CardHeaderComponent,
         CardTitleDirective,
         ContainerComponent,
-
         DynamicalFormFieldsComponent,
         FaIconComponent,
         FormControlDirective,

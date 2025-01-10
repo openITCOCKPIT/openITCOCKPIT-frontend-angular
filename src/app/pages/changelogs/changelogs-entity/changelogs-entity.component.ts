@@ -29,7 +29,7 @@ import { ChangelogIndexRoot, ChangelogsEntityParams, getDefaultChangelogsEntityP
 import { Subscription } from 'rxjs';
 import { ChangelogsService } from '../changelogs.service';
 import { ObjectTypesEnum } from '../object-types.enum';
-import { DatePipe, DecimalPipe, formatDate, JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { formatDate, NgForOf, NgIf } from '@angular/common';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
@@ -40,44 +40,39 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
 
 @Component({
     selector: 'oitc-changelogs-entity',
-    standalone: true,
     imports: [
-
-        TranslocoDirective,
-        RouterLink,
-        FaIconComponent,
-        PermissionDirective,
-        CardComponent,
-        CardHeaderComponent,
-        NavComponent,
-        NavItemComponent,
-        CardTitleDirective,
-        XsButtonDirective,
-        CardBodyComponent,
-        ColComponent,
-        ContainerComponent,
-        FormDirective,
-        FormsModule,
-        ReactiveFormsModule,
-        RowComponent,
-        DebounceDirective,
-        FormControlDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TranslocoPipe,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        DatePipe,
-        NgIf,
-        JsonPipe,
-        DecimalPipe,
-        PaginateOrScrollComponent,
-        ChangelogsEntryComponent,
-        NgForOf,
-        BackButtonDirective,
-        NoRecordsComponent
-    ],
+    TranslocoDirective,
+    RouterLink,
+    FaIconComponent,
+    PermissionDirective,
+    CardComponent,
+    CardHeaderComponent,
+    NavComponent,
+    NavItemComponent,
+    CardTitleDirective,
+    XsButtonDirective,
+    CardBodyComponent,
+    ColComponent,
+    ContainerComponent,
+    FormDirective,
+    FormsModule,
+    ReactiveFormsModule,
+    RowComponent,
+    DebounceDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    TranslocoPipe,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    NgIf,
+    PaginateOrScrollComponent,
+    ChangelogsEntryComponent,
+    NgForOf,
+    BackButtonDirective,
+    NoRecordsComponent
+],
     templateUrl: './changelogs-entity.component.html',
     styleUrl: './changelogs-entity.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

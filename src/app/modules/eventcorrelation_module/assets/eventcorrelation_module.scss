@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .evc-service-container {
     border: 2px solid var(--cui-primary);
     border-radius: var(--cui-border-radius);
@@ -12,7 +14,7 @@
     top: 0;
     left: 0;
     //background: var(--cui-card-cap-bg);
-    background: transparentize($secondary, 0.2);
+    background: color.adjust($secondary, $alpha: -0.2);
     color: $white;
     opacity: 0;
     display: flex;

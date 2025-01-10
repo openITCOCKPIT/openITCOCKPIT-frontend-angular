@@ -3,7 +3,6 @@ import { ConnectionOperator } from '../evc-tree.interface'
 
 @Component({
     selector: 'oitc-evc-operator',
-    standalone: true,
     imports: [],
     templateUrl: './evc-operator.component.html',
     styleUrl: './evc-operator.component.css',

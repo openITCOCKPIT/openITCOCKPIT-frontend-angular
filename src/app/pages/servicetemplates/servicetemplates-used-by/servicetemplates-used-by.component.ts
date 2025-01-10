@@ -21,7 +21,6 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
@@ -49,10 +48,10 @@ import { ServicesService } from '../../services/services.service';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { PaginatorModule } from 'primeng/paginator';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-servicetemplates-used-by',
-    standalone: true,
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -63,7 +62,6 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DeleteAllModalComponent,
         DropdownDividerDirective,
         FaIconComponent,
@@ -87,7 +85,8 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         FormCheckLabelDirective,
         PaginatorModule,
         FormLoaderComponent,
-        AsyncPipe
+        AsyncPipe,
+        FormsModule
     ],
     templateUrl: './servicetemplates-used-by.component.html',
     styleUrl: './servicetemplates-used-by.component.css',

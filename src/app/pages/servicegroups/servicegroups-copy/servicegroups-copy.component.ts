@@ -32,7 +32,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-servicegroups-copy',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,

@@ -27,7 +27,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-configuration-files-index',
-    standalone: true,
     imports: [
         FaIconComponent,
         PermissionDirective,

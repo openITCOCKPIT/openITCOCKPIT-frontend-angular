@@ -16,22 +16,20 @@ import { Timeperiod, TimeperiodRoot, WeekDays } from './timeperiod-details-toolt
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { BadgeComponent, PopoverDirective, TableDirective } from '@coreui/angular';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-timeperiod-details-tooltip',
-    standalone: true,
     imports: [
-        FaIconComponent,
-        TranslocoDirective,
-        PopoverDirective,
-        TableDirective,
-        BadgeComponent,
-        NgIf,
-        NgForOf,
-        KeyValuePipe,
-        NgClass
-    ],
+    FaIconComponent,
+    TranslocoDirective,
+    PopoverDirective,
+    TableDirective,
+    BadgeComponent,
+    NgIf,
+    NgForOf,
+    KeyValuePipe
+],
     templateUrl: './timeperiod-details-tooltip.component.html',
     styleUrl: './timeperiod-details-tooltip.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

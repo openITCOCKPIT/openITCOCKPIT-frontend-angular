@@ -16,15 +16,15 @@ import {
     NavItemComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+
+
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
-import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -46,46 +46,40 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosts-edit-details',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        MultiSelectComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        ObjectUuidComponent,
-        PaginatorModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        FormLoaderComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TranslocoPipe,
-        NgClass,
-        FormControlDirective,
-        NgSelectModule,
-        PriorityComponent,
-        IntervalInputComponent,
-        CheckAttemptsInputComponent,
-        AsyncPipe
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormDirective,
+    FormLabelDirective,
+    FormsModule,
+    MultiSelectComponent,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PaginatorModule,
+    PermissionDirective,
+    SelectComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FormLoaderComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TranslocoPipe,
+    NgClass,
+    FormControlDirective,
+    NgSelectModule,
+    PriorityComponent,
+    IntervalInputComponent,
+    CheckAttemptsInputComponent,
+    AsyncPipe
+],
     templateUrl: './hosts-edit-details.component.html',
     styleUrl: './hosts-edit-details.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -9,7 +9,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-paginate-or-scroll',
-    standalone: true,
     imports: [
         PaginatorComponent,
         ScrollIndexComponent,

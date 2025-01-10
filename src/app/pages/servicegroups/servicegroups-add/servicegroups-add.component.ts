@@ -1,28 +1,24 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-    BadgeComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    NavComponent,
-    NavItemComponent,
-    TooltipDirective
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormCheckInputDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { MacrosComponent } from '../../../components/macros/macros.component';
-import { NgForOf, NgIf } from '@angular/common';
+
+import { NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -32,7 +28,7 @@ import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } fro
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+
 import { ServicegroupsService } from '../servicegroups.service';
 import {
     LoadContainersRoot,
@@ -48,41 +44,33 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-servicegroups-add',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        BadgeComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        MacrosComponent,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NgSelectModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        TooltipDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        ObjectUuidComponent,
-        SelectComponent,
-        MultiSelectComponent
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    NgSelectModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    SelectComponent,
+    MultiSelectComponent
+],
     templateUrl: './servicegroups-add.component.html',
     styleUrl: './servicegroups-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -9,7 +9,6 @@ import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-query-handler-checker',
-    standalone: true,
     imports: [
         AlertComponent,
         TranslocoDirective,

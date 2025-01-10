@@ -14,7 +14,7 @@ import { GenericValidationError } from '../../../../../../generic-responses';
 import { ConfigurationEditorConfig, ConfigurationEditorField } from '../../../../configuration-files.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
-import { FormControlDirective, FormLabelDirective, FormSelectDirective } from '@coreui/angular';
+import { FormSelectDirective } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { PaginatorModule } from 'primeng/paginator';
@@ -22,21 +22,20 @@ import { RequiredIconComponent } from '../../../../../../components/required-ico
 import { NgIf } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ConfigurationFilesService } from '../../../../configuration-files.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-configuration-file-perfdata-backend',
-    standalone: true,
     imports: [
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        PaginatorModule,
-        RequiredIconComponent,
-        NgIf,
-        FormSelectDirective,
-        TranslocoDirective
-    ],
+    FormErrorDirective,
+    FormFeedbackComponent,
+    PaginatorModule,
+    RequiredIconComponent,
+    NgIf,
+    FormSelectDirective,
+    TranslocoDirective,
+    FormsModule
+],
     templateUrl: './configuration-file-perfdata-backend.component.html',
     styleUrl: './configuration-file-perfdata-backend.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -19,7 +19,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-dropdown-colorpicker',
-    standalone: true,
     imports: [
         DropdownComponent,
         DropdownItemDirective,

@@ -42,14 +42,12 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 
 @Component({
     selector: 'oitc-hosttemplates-used-by',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         NavComponent,
         PermissionDirective,
@@ -77,7 +75,7 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
     templateUrl: './hosttemplates-used-by.component.html',
     styleUrl: './hosttemplates-used-by.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ContactsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService } // Inject the ContactsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -4,7 +4,6 @@ import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-human-time',
-    standalone: true,
     imports: [],
     templateUrl: './human-time.component.html',
     styleUrl: './human-time.component.css',

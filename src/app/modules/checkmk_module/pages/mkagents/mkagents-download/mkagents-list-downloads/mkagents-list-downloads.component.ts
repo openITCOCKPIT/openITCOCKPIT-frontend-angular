@@ -5,7 +5,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-mkagents-list-downloads',
-    standalone: true,
     imports: [
         RowComponent,
         ColComponent,

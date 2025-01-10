@@ -2,43 +2,30 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
-    AlertComponent,
-    AlertHeadingDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ContainerComponent,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AsyncPipe, JsonPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
@@ -50,27 +37,19 @@ import {
     ExternalMonitoringConfigPrtg,
     ExternalMonitoringPost
 } from '../external-monitorings.interface';
-import {
-    IdoitOverviewComponent
-} from '../../../components/additional-host-information/idoit/idoit-overview/idoit-overview.component';
-import {
-    ItopOverviewComponent
-} from '../../../components/additional-host-information/itop/itop-overview/itop-overview.component';
+
+
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
+
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { ExternalMonitoringsService } from '../external-monitorings.service';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import {
-    MultiSelectOptgroupComponent
-} from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+
+
 import { SystemnameService } from '../../../../../services/systemname.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
+
 import { HistoryService } from '../../../../../history.service';
-import {
-    RegexHelperTooltipComponent
-} from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+
 import { DynamicalFormFields } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 import {
     DynamicalFormFieldsComponent
@@ -78,62 +57,34 @@ import {
 
 @Component({
     selector: 'oitc-external-monitorings-add',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        FormCheckInputDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        NgOptionTemplateDirective,
-        NgSelectComponent,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        NgIf,
-        SelectComponent,
-        IdoitOverviewComponent,
-        ItopOverviewComponent,
-        ColComponent,
-        RowComponent,
-        ContainerComponent,
-        InputGroupComponent,
-        DropdownComponent,
-        DropdownToggleDirective,
-        DropdownMenuDirective,
-        DropdownItemDirective,
-        InputGroupTextDirective,
-        DebounceDirective,
-        FormCheckComponent,
-        FormCheckLabelDirective,
-        AlertComponent,
-        AlertHeadingDirective,
-        MultiSelectComponent,
-        MultiSelectOptgroupComponent,
-        AsyncPipe,
-        JsonPipe,
-        NgForOf,
-        TrueFalseDirective,
-        RegexHelperTooltipComponent,
-        KeyValuePipe,
-        NgClass,
-        DynamicalFormFieldsComponent
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    NgIf,
+    SelectComponent,
+    ContainerComponent,
+    NgForOf,
+    DynamicalFormFieldsComponent
+],
     templateUrl: './external-monitorings-add.component.html',
     styleUrl: './external-monitorings-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

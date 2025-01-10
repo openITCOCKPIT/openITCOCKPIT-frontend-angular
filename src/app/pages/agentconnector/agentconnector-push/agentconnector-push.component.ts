@@ -4,7 +4,7 @@ import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
-import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
+
 import {
     CardBodyComponent,
     CardComponent,
@@ -59,61 +59,58 @@ import { AgentconnectorPushService } from '../agentconnector-push.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
+
 
 @Component({
     selector: 'oitc-agentconnector-push',
-    standalone: true,
     imports: [
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        AsyncPipe,
-        BadgeOutlineComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        DeleteAllModalComponent,
-        DropdownDividerDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ItemSelectComponent,
-        LabelLinkComponent,
-        MatSort,
-        MatSortHeader,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RowComponent,
-        SelectAllComponent,
-        TableDirective,
-        TableLoaderComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective
-    ],
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    AsyncPipe,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DebounceDirective,
+    DeleteAllModalComponent,
+    DropdownDividerDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ItemSelectComponent,
+    LabelLinkComponent,
+    MatSort,
+    MatSortHeader,
+    NavComponent,
+    NavItemComponent,
+    NgForOf,
+    NgIf,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RowComponent,
+    SelectAllComponent,
+    TableDirective,
+    TableLoaderComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    RouterLink,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective
+],
     templateUrl: './agentconnector-push.component.html',
     styleUrl: './agentconnector-push.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: AgentconnectorPushService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: AgentconnectorPushService } // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

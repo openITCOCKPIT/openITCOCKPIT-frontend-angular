@@ -1,28 +1,23 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-    BadgeComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    NavComponent,
-    NavItemComponent,
-    TooltipDirective
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  NavComponent,
+  NavItemComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { MacrosComponent } from '../../../components/macros/macros.component';
+
 import { NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -47,42 +42,34 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 
 @Component({
     selector: 'oitc-contactgroups-edit',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        BadgeComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        MacrosComponent,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NgSelectModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        TooltipDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        ObjectUuidComponent,
-        FormLoaderComponent,
-        MultiSelectComponent
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgForOf,
+    NgIf,
+    NgSelectModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    ObjectUuidComponent,
+    FormLoaderComponent,
+    MultiSelectComponent
+],
     templateUrl: './contactgroups-edit.component.html',
     styleUrl: './contactgroups-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

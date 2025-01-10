@@ -131,7 +131,6 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-browsers-index',
-    standalone: true,
     imports: [
         AcknowledgementIconComponent,
         ActionsButtonComponent,
@@ -144,7 +143,6 @@ import { IndexPage } from '../../../pages.interface';
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DisableModalComponent,
@@ -209,8 +207,8 @@ import { IndexPage } from '../../../pages.interface';
     templateUrl: './browsers-index.component.html',
     styleUrl: './browsers-index.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DISABLE_SERVICE_TOKEN, useClass: HostsService },
+        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService } // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -4,7 +4,6 @@ import { ColComponent, ContainerComponent, RowComponent } from '@coreui/angular'
 
 @Component({
     selector: 'oitc-no-records',
-    standalone: true,
     imports: [
         TranslocoDirective,
         ContainerComponent,

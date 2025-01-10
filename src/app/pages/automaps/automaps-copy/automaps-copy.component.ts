@@ -28,12 +28,11 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-automaps-copy',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -54,7 +53,8 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
         NgForOf,
         PaginatorModule,
         RequiredIconComponent,
-        CardFooterComponent
+        CardFooterComponent,
+        FormsModule
     ],
     templateUrl: './automaps-copy.component.html',
     styleUrl: './automaps-copy.component.css',

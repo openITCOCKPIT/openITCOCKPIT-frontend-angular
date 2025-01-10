@@ -10,7 +10,6 @@ import {
     FormLabelDirective,
     NavComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -28,10 +27,10 @@ import { UsergroupsService } from '../usergroups.service';
 import { HistoryService } from '../../../history.service';
 import { UsergroupsCopyGetRoot, UsergroupsCopyPostRoot } from '../usergroups.interface';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-usergroups-copy',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -53,7 +52,8 @@ import { HttpErrorResponse } from '@angular/common/http';
         RequiredIconComponent,
         TranslocoDirective,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        FormsModule
     ],
     templateUrl: './usergroups-copy.component.html',
     styleUrl: './usergroups-copy.component.css',

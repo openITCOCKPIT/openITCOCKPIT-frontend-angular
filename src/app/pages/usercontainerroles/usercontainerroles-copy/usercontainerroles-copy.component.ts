@@ -31,7 +31,6 @@ import { CopyUserContainerRoleDatum, CopyUserContainerRolesRequest } from '../us
 
 @Component({
     selector: 'oitc-usercontainerroles-copy',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -39,7 +38,6 @@ import { CopyUserContainerRoleDatum, CopyUserContainerRolesRequest } from '../us
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,

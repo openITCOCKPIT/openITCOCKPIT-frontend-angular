@@ -48,7 +48,6 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-sla-hostgroup-hosts-status-overview',
-    standalone: true,
     imports: [
         TranslocoDirective,
         SkeletonModule,

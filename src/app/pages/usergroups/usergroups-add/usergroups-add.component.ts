@@ -33,7 +33,7 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
@@ -42,7 +42,7 @@ import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { AcoRoot, LoadLdapgroups, UsergroupsAddRoot } from '../usergroups.interface';
@@ -53,59 +53,52 @@ import { HistoryService } from '../../../history.service';
 import { UsergroupsService } from '../usergroups.service';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { DebounceDirective } from '../../../directives/debounce.directive';
+
+
 
 @Component({
     selector: 'oitc-usergroups-add',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        FormCheckInputDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        MultiSelectComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PaginatorModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RowComponent,
-        ColComponent,
-        FormCheckComponent,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        RouterLink,
-        NgForOf,
-        NgClass,
-        DebounceDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TranslocoPipe,
-        KeyValuePipe,
-        DropdownComponent,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        DropdownItemDirective,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        DropdownDividerDirective
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    MultiSelectComponent,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PaginatorModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RowComponent,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckLabelDirective,
+    RouterLink,
+    NgForOf,
+    NgClass,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    TranslocoPipe,
+    KeyValuePipe,
+    DropdownComponent,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    DropdownItemDirective,
+    DropdownDividerDirective
+],
     templateUrl: './usergroups-add.component.html',
     styleUrl: './usergroups-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

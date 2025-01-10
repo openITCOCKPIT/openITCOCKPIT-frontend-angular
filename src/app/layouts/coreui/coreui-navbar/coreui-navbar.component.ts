@@ -14,31 +14,27 @@ import { SidebarService } from './sidebar.service';
 import { NavigationService } from '../../../components/navigation/navigation.service';
 import { Subscription } from 'rxjs';
 import { MenuHeadline, NavigationInterface } from '../../../components/navigation/navigation.interface';
-import { AsyncPipe, JsonPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NavbarGroupComponent } from './navbar-group/navbar-group.component';
 import { SidebarAction } from './sidebar.interface';
-import { NgScrollbar } from 'ngx-scrollbar';
+
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { TranslocoPipe } from '@jsverse/transloco';
+
 import { NavbarSearchComponent } from './navbar-search/navbar-search.component';
 import { SystemnameService } from '../../../services/systemname.service';
 
 @Component({
     selector: 'oitc-coreui-navbar',
-    standalone: true,
     imports: [
-        RouterLink,
-        JsonPipe,
-        FaIconComponent,
-        NavbarGroupComponent,
-        NgClass,
-        NgScrollbar,
-        NgIf,
-        TranslocoPipe,
-        NavbarSearchComponent,
-        AsyncPipe
-    ],
+    RouterLink,
+    FaIconComponent,
+    NavbarGroupComponent,
+    NgClass,
+    NgIf,
+    NavbarSearchComponent,
+    AsyncPipe
+],
     templateUrl: './coreui-navbar.component.html',
     styleUrl: './coreui-navbar.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

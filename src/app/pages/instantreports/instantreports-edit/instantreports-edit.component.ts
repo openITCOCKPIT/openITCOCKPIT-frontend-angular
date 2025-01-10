@@ -51,7 +51,6 @@ import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-instantreports-edit',
-    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -59,7 +58,6 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

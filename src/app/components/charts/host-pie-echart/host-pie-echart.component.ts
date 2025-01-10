@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
-import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
+import * as echarts from 'echarts/core';
 import 'echarts/theme/dark.js';
 import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
@@ -7,14 +8,18 @@ import { PieChartMetric } from '../charts.interface';
 import { TranslocoService } from '@jsverse/transloco';
 import { LayoutService } from '../../../layouts/coreui/layout.service';
 
+import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+import { PieChart } from 'echarts/charts';
+
+echarts.use([PieChart, LegendComponent, TitleComponent, TooltipComponent]);
+
 @Component({
     selector: 'oitc-host-pie-echart',
-    standalone: true,
     imports: [
         NgxEchartsDirective
     ],
     providers: [
-        provideEcharts(),
+        provideEchartsCore({echarts}),
     ],
     templateUrl: './host-pie-echart.component.html',
     styleUrl: './host-pie-echart.component.css',

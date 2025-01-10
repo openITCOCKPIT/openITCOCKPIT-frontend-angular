@@ -40,7 +40,6 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-hosts-process-checkresult-modal',
-    standalone: true,
     imports: [
         ButtonCloseDirective,
         ColComponent,

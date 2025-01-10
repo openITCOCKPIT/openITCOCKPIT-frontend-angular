@@ -58,9 +58,7 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
 
 @Component({
     selector: 'oitc-serviceescalations-edit',
-    standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

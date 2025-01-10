@@ -26,7 +26,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-hpserverhardware',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,

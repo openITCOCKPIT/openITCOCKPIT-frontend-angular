@@ -4,7 +4,6 @@ import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-iframe',
-    standalone: true,
     imports: [
         NgIf
     ],

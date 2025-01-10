@@ -42,11 +42,9 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { formatDate, NgForOf, NgIf } from '@angular/common';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
-import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+
+
+
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -59,49 +57,44 @@ import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-notifications-index',
-    standalone: true,
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        ColComponent,
-        DebounceDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        PaginatorModule,
-        RowComponent,
-        TranslocoPipe,
-        TrueFalseDirective,
-        MatSort,
-        MatSortHeader,
-        NgIf,
-        TableDirective,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        ItemSelectComponent,
-        NgForOf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        ServicestatusSimpleIconComponent,
-        ContainerComponent,
-        TableLoaderComponent,
-        CardFooterComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    ColComponent,
+    DebounceDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    PaginatorModule,
+    RowComponent,
+    TranslocoPipe,
+    TrueFalseDirective,
+    MatSort,
+    MatSortHeader,
+    NgIf,
+    TableDirective,
+    NgForOf,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    ServicestatusSimpleIconComponent,
+    ContainerComponent,
+    TableLoaderComponent,
+    CardFooterComponent
+],
     templateUrl: './notifications-services.component.html',
     styleUrl: './notifications-services.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

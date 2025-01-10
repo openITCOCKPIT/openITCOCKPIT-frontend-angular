@@ -30,10 +30,10 @@ import { NgIf } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ConfigurationFilesService } from '../../../../configuration-files.service';
 import { TrueFalseDirective } from '../../../../../../directives/true-false.directive';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-configuration-file-nagios-cfg',
-    standalone: true,
     imports: [
         FormControlDirective,
         FormErrorDirective,
@@ -47,7 +47,8 @@ import { TrueFalseDirective } from '../../../../../../directives/true-false.dire
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        TrueFalseDirective
+        TrueFalseDirective,
+        FormsModule
     ],
     templateUrl: './configuration-file-nagios-cfg.component.html',
     styleUrl: './configuration-file-nagios-cfg.component.css',

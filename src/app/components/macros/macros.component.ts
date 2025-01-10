@@ -3,8 +3,8 @@ import { Customvariable } from '../../pages/contacts/contacts.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { FormErrorDirective } from '../../layouts/coreui/form-error.directive';
+import { TranslocoDirective } from '@jsverse/transloco';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { GenericValidationError } from '../../generic-responses';
 import { FormFeedbackComponent } from '../../layouts/coreui/form-feedback/form-feedback.component';
@@ -13,19 +13,15 @@ import { ObjectTypesEnum } from '../../pages/changelogs/object-types.enum';
 
 @Component({
     selector: 'oitc-macros',
-    standalone: true,
     imports: [
-        FaIconComponent,
-        FormsModule,
-        NgIf,
-        TranslocoPipe,
-
-        TranslocoDirective,
-        FormErrorDirective,
-        NgSelectModule,
-        FormFeedbackComponent,
-        RequiredIconComponent
-    ],
+    FaIconComponent,
+    FormsModule,
+    NgIf,
+    TranslocoDirective,
+    NgSelectModule,
+    FormFeedbackComponent,
+    RequiredIconComponent
+],
     templateUrl: './macros.component.html',
     styleUrl: './macros.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

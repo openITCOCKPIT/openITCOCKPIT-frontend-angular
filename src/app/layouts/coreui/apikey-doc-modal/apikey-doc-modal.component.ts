@@ -18,7 +18,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-apikey-doc-modal',
-    standalone: true,
     imports: [
         ModalComponent,
         ModalHeaderComponent,
@@ -28,7 +27,6 @@ import { RouterLink } from '@angular/router';
         ButtonCloseDirective,
         ModalTitleDirective,
         FaIconComponent,
-
         TranslocoDirective,
         ModalToggleDirective,
         RouterLink,

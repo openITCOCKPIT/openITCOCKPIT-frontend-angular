@@ -19,7 +19,6 @@ import { LayoutService } from '../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-host-radialbar-chart',
-    standalone: true,
     imports: [
         ChartComponent
     ],

@@ -1,32 +1,28 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
+
 import {
-    BorderDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    NavComponent,
-    NavItemComponent,
-    RowComponent
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  FormControlDirective,
+  FormLabelDirective,
+  InputGroupComponent,
+  NavComponent,
+  NavItemComponent,
+  RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import {
-    HostRadialbarChartComponent
-} from '../../../components/charts/host-radialbar-chart/host-radialbar-chart.component';
+
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { GenericValidationError } from '../../../generic-responses';
@@ -46,53 +42,40 @@ import { Subscription } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { PieChartMetric } from '../../../components/charts/charts.interface';
-import {
-    ServiceRadialbarChartComponent
-} from '../../../components/charts/service-radialbar-chart/service-radialbar-chart.component';
-import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
-import { HostPieEchartComponent } from '../../../components/charts/host-pie-echart/host-pie-echart.component';
+
+
+
 import { InstantreportViewerComponent } from './instantreport-viewer/instantreport-viewer.component';
 
 @Component({
     selector: 'oitc-instantreports-generate',
-    standalone: true,
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-
-        FaIconComponent,
-        FormDirective,
-        FormLoaderComponent,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PermissionDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        CardFooterComponent,
-        RouterLink,
-        NgClass,
-        HostRadialbarChartComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        InputGroupComponent,
-        RequiredIconComponent,
-        SelectComponent,
-        RowComponent,
-        ColComponent,
-        BorderDirective,
-        ServiceRadialbarChartComponent,
-        NgForOf,
-        LabelLinkComponent,
-        HostPieEchartComponent,
-        InstantreportViewerComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgIf,
+    PermissionDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    CardFooterComponent,
+    RouterLink,
+    NgClass,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    InputGroupComponent,
+    RequiredIconComponent,
+    SelectComponent,
+    RowComponent,
+    ColComponent,
+    InstantreportViewerComponent
+],
     templateUrl: './instantreports-generate.component.html',
     styleUrl: './instantreports-generate.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

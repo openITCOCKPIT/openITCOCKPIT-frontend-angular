@@ -23,7 +23,6 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-duration-input',
-    standalone: true,
     imports: [
         ButtonGroupComponent,
         ColComponent,

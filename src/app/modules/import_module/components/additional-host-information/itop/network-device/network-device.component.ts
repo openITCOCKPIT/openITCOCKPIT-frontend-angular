@@ -7,7 +7,6 @@ import { TableDirective } from '@coreui/angular';
 
 @Component({
     selector: 'oitc-network-device',
-    standalone: true,
     imports: [
         FaIconComponent,
         TranslocoPipe,
@@ -21,7 +20,6 @@ import { TableDirective } from '@coreui/angular';
     templateUrl: './network-device.component.html',
     styleUrl: './network-device.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
-
 })
 export class NetworkDeviceComponent {
     @Input() result!: AdditionalHostInformationResult;

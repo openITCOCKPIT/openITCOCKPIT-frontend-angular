@@ -13,29 +13,26 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
 import {
-    BadgeComponent,
-    ButtonGroupComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownDividerDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalService,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective,
-    TextColorDirective
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  ModalService,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableDirective,
+  TextColorDirective
 } from '@coreui/angular';
 import { IndexPage } from '../../../../../pages.interface';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
@@ -59,7 +56,7 @@ import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -69,13 +66,13 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
 import { FilterBookmarkComponent } from '../../../../../components/filter-bookmark/filter-bookmark.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
-import { NgSelectComponent } from '@ng-select/ng-select';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { LoadContainersRoot } from '../../../../../pages/contactgroups/contactgroups.interface';
-import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+
 import {
     CustomalertsAnnotateModalComponent
 } from '../../../components/customalerts-annotate-modal/customalerts-annotate-modal.component';
@@ -83,73 +80,61 @@ import {
     CustomalertsCloseModalComponent
 } from '../../../components/customalerts-close-modal/customalerts-close-modal.component';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
+
 import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
-import {
-    GrafanaTimepickerComponent
-} from '../../../../grafana_module/components/grafana-timepicker/grafana-timepicker.component';
+
 import { IntervalPickerComponent } from '../../../../../components/interval-picker/interval-picker.component';
 
 @Component({
     selector: 'oitc-customalerts-index',
-    standalone: true,
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        CardHeaderComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardTitleDirective,
-        RowComponent,
-        ColComponent,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        BadgeComponent,
-        DropdownDividerDirective,
-        ItemSelectComponent,
-        MatSort,
-        MatSortHeader,
-        NgForOf,
-        NgIf,
-        TableDirective,
-        TableLoaderComponent,
-        TextColorDirective,
-        ContainerComponent,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        SelectAllComponent,
-        FilterBookmarkComponent,
-        DebounceDirective,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        NgSelectComponent,
-        PaginatorModule,
-        TranslocoPipe,
-        XsButtonDirective,
-        MultiSelectComponent,
-        FormCheckInputDirective,
-        NavComponent,
-        NavItemComponent,
-        FormCheckComponent,
-        FormCheckLabelDirective,
-        DeleteAllModalComponent,
-        CustomalertsAnnotateModalComponent,
-        CustomalertsCloseModalComponent,
-        DatePipe,
-        LabelLinkComponent,
-        KeyValuePipe,
-        BadgeOutlineComponent,
-        NgClass,
-        CardFooterComponent,
-        ButtonGroupComponent,
-        GrafanaTimepickerComponent,
-        IntervalPickerComponent
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    PermissionDirective,
+    RouterLink,
+    CardHeaderComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardTitleDirective,
+    RowComponent,
+    ColComponent,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    ItemSelectComponent,
+    MatSort,
+    MatSortHeader,
+    NgForOf,
+    NgIf,
+    TableDirective,
+    TableLoaderComponent,
+    TextColorDirective,
+    ContainerComponent,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    SelectAllComponent,
+    FilterBookmarkComponent,
+    DebounceDirective,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    PaginatorModule,
+    TranslocoPipe,
+    XsButtonDirective,
+    MultiSelectComponent,
+    FormCheckInputDirective,
+    NavComponent,
+    NavItemComponent,
+    FormCheckComponent,
+    FormCheckLabelDirective,
+    CustomalertsAnnotateModalComponent,
+    CustomalertsCloseModalComponent,
+    BadgeOutlineComponent,
+    NgClass,
+    CardFooterComponent,
+    IntervalPickerComponent
+],
     templateUrl: './customalerts-index.component.html',
     styleUrl: './customalerts-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

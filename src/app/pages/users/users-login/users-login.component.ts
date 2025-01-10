@@ -1,22 +1,21 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    AlertComponent,
-    ColComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    RowComponent
+  AlertComponent,
+  ColComponent,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormLabelDirective,
+  RowComponent
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgForOf, NgIf, NgStyle } from '@angular/common';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { NgForOf, NgIf } from '@angular/common';
+
+
+
 import { UsersService } from '../users.service';
 import { Subscription } from 'rxjs';
 import { LoginImage } from '../users.interface';
@@ -34,28 +33,22 @@ import { LoginResponse } from '../../../auth/auth.interface';
 
 @Component({
     selector: 'oitc-users-login',
-    standalone: true,
     imports: [
-        FaIconComponent,
-        AlertComponent,
-        FormsModule,
-        TranslocoDirective,
-        NgIf,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        FormCheckComponent,
-        RowComponent,
-        ColComponent,
-        InputGroupComponent,
-        NgxParticlesModule,
-        NgForOf,
-        NgStyle,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-    ],
+    FaIconComponent,
+    AlertComponent,
+    FormsModule,
+    TranslocoDirective,
+    NgIf,
+    FormControlDirective,
+    FormLabelDirective,
+    FormCheckComponent,
+    RowComponent,
+    ColComponent,
+    NgxParticlesModule,
+    NgForOf,
+    FormCheckInputDirective,
+    FormCheckLabelDirective
+],
     templateUrl: './users-login.component.html',
     styleUrl: './users-login.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

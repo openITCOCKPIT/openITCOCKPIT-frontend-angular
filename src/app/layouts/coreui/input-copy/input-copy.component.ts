@@ -5,7 +5,6 @@ import { InputGroupTextDirective, TooltipDirective } from '@coreui/angular';
 
 @Component({
     selector: 'oitc-input-copy',
-    standalone: true,
     imports: [
         TranslocoDirective,
         FaIconComponent,
@@ -15,7 +14,6 @@ import { InputGroupTextDirective, TooltipDirective } from '@coreui/angular';
     templateUrl: './input-copy.component.html',
     styleUrl: './input-copy.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
-
 })
 export class InputCopyComponent implements OnInit {
     @Input() copyText: string | undefined; // Text that should be copyable

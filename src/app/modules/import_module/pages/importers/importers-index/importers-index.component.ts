@@ -55,7 +55,6 @@ import { Hostdefault } from '../../hostdefaults/hostdefaults.interface';
 
 @Component({
     selector: 'oitc-importers-index',
-    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -63,7 +62,6 @@ import { Hostdefault } from '../../hostdefaults/hostdefaults.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         FaIconComponent,
         FormControlDirective,
@@ -96,12 +94,11 @@ import { Hostdefault } from '../../hostdefaults/hostdefaults.interface';
         TableDirective
     ],
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ImportersService} // Inject the ImportersService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ImportersService } // Inject the ImportersService into the DeleteAllModalComponent
     ],
     templateUrl: './importers-index.component.html',
     styleUrl: './importers-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
-
 })
 export class ImportersIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);

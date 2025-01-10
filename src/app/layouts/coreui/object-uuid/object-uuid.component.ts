@@ -1,18 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
-import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { PopoverDirective, TooltipDirective } from '@coreui/angular';
+
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TooltipDirective } from '@coreui/angular';
 
 @Component({
     selector: 'oitc-object-uuid',
-    standalone: true,
     imports: [
-        XsButtonDirective,
-        TranslocoDirective,
-        TooltipDirective,
-        TranslocoPipe,
-        PopoverDirective
-    ],
+    TranslocoDirective,
+    TooltipDirective
+],
     templateUrl: './object-uuid.component.html',
     styleUrl: './object-uuid.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

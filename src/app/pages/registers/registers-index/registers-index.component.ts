@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import {
     CardBodyComponent,
     CardComponent,
@@ -20,8 +19,8 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+
+
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -32,34 +31,30 @@ import { CreditsComponent } from '../credits/credits.component';
 
 @Component({
     selector: 'oitc-registers-index',
-    standalone: true,
     imports: [
-
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        FormDirective,
-        FormsModule,
-        ReactiveFormsModule,
-        CardBodyComponent,
-        CardFooterComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        RowComponent,
-        ColComponent,
-        NgIf,
-        CreditsComponent
-    ],
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    FormDirective,
+    FormsModule,
+    ReactiveFormsModule,
+    CardBodyComponent,
+    CardFooterComponent,
+    FormControlDirective,
+    FormLabelDirective,
+    RequiredIconComponent,
+    RowComponent,
+    ColComponent,
+    NgIf,
+    CreditsComponent
+],
     templateUrl: './registers-index.component.html',
     styleUrl: './registers-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -31,7 +31,6 @@ import { GenericValidationError } from '../../../generic-responses';
 
 @Component({
     selector: 'oitc-agentconnector-select-agent',
-    standalone: true,
     imports: [
         AgentconnectorWizardProgressbarComponent,
         CardBodyComponent,

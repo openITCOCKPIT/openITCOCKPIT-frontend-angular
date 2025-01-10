@@ -3,7 +3,6 @@ import { NgClass, NgForOf, NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-custom-class-information',
-    standalone: true,
     imports: [
         NgIf,
         NgForOf,

@@ -39,34 +39,22 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgIf } from '@angular/common';
 import {
-    ButtonGroupComponent,
-    CardHeaderComponent,
-    ColComponent,
-    ContainerComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    ModalService,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
+  ButtonGroupComponent,
+  CardHeaderComponent,
+  ColComponent,
+  ContainerComponent,
+  ModalService,
+  RowComponent
 } from '@coreui/angular';
 import { DELETE_SERVICE_TOKEN } from '../../tokens/delete-injection.token';
 import { DeleteBookmarkModalComponent } from '../delete-bookmark-modal/delete-bookmark-modal.component';
 import { ServiceIndexFilter } from "../../pages/services/services.interface";
 import { HostsIndexFilter } from "../../pages/hosts/hosts.interface";
-import { SelectComponent } from '../../layouts/primeng/select/select/select.component';
+
 import { BookmarksObject, BookmarksParams } from './bookmarks.interface';
 import { Subscription } from 'rxjs';
 import { BookmarksService } from './bookmarks.service';
-import { FormErrorDirective } from '../../layouts/coreui/form-error.directive';
+
 import { GenericValidationError } from '../../generic-responses';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FilterBookmarkSaveModalComponent } from '../filter-bookmark-save-modal/filter-bookmark-save-modal.component';
@@ -88,43 +76,28 @@ import {
 
 @Component({
     selector: 'oitc-filter-bookmark',
-    standalone: true,
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        NgIf,
-        RowComponent,
-        ColComponent,
-        SelectComponent,
-        FormErrorDirective,
-        CardHeaderComponent,
-        MultiSelectModule,
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormLabelDirective,
-        FilterBookmarkSaveModalComponent,
-        XsButtonDirective,
-        NavComponent,
-        NavItemComponent,
-        ButtonGroupComponent,
-        DeleteBookmarkModalComponent,
-        FilterBookmarkExportModalComponent,
-        NgSelectModule,
-        FormsModule,
-        NgOptionHighlightModule,
-        ContainerComponent
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    NgIf,
+    RowComponent,
+    ColComponent,
+    CardHeaderComponent,
+    MultiSelectModule,
+    FilterBookmarkSaveModalComponent,
+    XsButtonDirective,
+    ButtonGroupComponent,
+    DeleteBookmarkModalComponent,
+    FilterBookmarkExportModalComponent,
+    NgSelectModule,
+    FormsModule,
+    NgOptionHighlightModule,
+    ContainerComponent
+],
     templateUrl: './filter-bookmark.component.html',
     styleUrl: './filter-bookmark.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: BookmarksService}
+        { provide: DELETE_SERVICE_TOKEN, useClass: BookmarksService }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
