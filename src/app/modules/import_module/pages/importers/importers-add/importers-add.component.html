@@ -1,0 +1,361 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Import Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['importmodule','Importers', 'index']"
+                   [routerLink]="['/', 'import_module', 'importers', 'index']">
+                    <fa-icon [icon]="['fas', 'clipboard-list']"></fa-icon>
+                    {{ t('Importers') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                {{ t('Add importers') }}
+            </li>
+        </ol>
+    </nav>
+    <form cForm (ngSubmit)="submit()" autocomplete="off">
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Create new importer') }}</h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['import_module', 'Importers', 'index']" cButton class="ripple"
+                                color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <div class="mb-3">
+                    <label cLabel for="container">
+                        {{ t('Container') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-select
+                        name="container"
+                        id="container"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="containers"
+                        [(ngModel)]="post.container_id"
+                        [debounce]="true"
+                        (onChange)="onContainerChange()">
+                    </oitc-select>
+                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
+                        {{ t('Please select a container.') }}
+                    </div>
+                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="ImporterName">
+                        {{ t('Importer name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="ImporterName" required type="text"
+                           name="name"
+                           [(ngModel)]="post.name"
+                           oitcFormError errorField="name">
+                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="ImporterDescription">
+                        {{ t('Description') }}
+                    </label>
+                    <input cFormControl id="ImporterDescription" required type="text"
+                           name="description"
+                           [(ngModel)]="post.description"
+                           oitcFormError errorField="description">
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="DataSource">
+                        {{ t('Data source') }}
+                    </label>
+                    <oitc-select
+                        name="DataSource"
+                        id="DataSource"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="DataSourceTypes"
+                        [(ngModel)]="post.data_source"
+                        (onChange)="loadConfigFieldsByDataSource()"
+                        [showClear]="false">
+                    </oitc-select>
+                    <div class="help-block text-info">
+                        @switch (post.data_source) {
+                            @case ('csv_with_header') {
+                                {{ t('The first row of the CSV file will be treated as column names') }}
+                            }
+                            @case ('csv_without_header') {
+                                {{ t('The CSV file consists only data sets without column names as header') }}
+                            }
+                            @case ('json') {
+                                {{ t('Importing Data from JSON Files') }}
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="ExternalSystems">
+                        {{ t('External system') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-select
+                        name="ExternalSystems"
+                        id="ExternalSystems"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="externalsystems"
+                        [(ngModel)]="post.external_system_id"
+                        [debounce]="true">
+                    </oitc-select>
+                    <div class="help-block text-info">
+                        {{ t('Use external system for showing additional host information') }}
+                    </div>
+
+                    <oitc-form-feedback [errors]="errors" errorField="external_system_id"></oitc-form-feedback>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="ExternalMonitorings">
+                        {{ t('External monitoring system') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-multi-select
+                        name="ExternalMonitorings"
+                        id="ExternalMonitorings"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="externalmonitorings"
+                        [(ngModel)]="post.external_monitorings._ids"
+                        [debounce]="true">
+                    </oitc-multi-select>
+                    <div class="help-block text-info">
+                        {{ t('openITCOCKPIT will query the selected external monitoring to import devices monitored by the remote system. openITCOCKPIT will synchronize  the status. The monitoring itself is still done by the external monitoring system.') }}
+                    </div>
+                    <oitc-form-feedback [errors]="errors" errorField="external_monitorings"></oitc-form-feedback>
+                </div>
+                <div class="mb-3">
+                    <c-form-check>
+                        <input
+                            [(ngModel)]="post.allow_empty_hosts" cFormCheckInput
+                            id="allow_empty_hosts"
+                            class="checkbox-lg me-2 mt-0"
+                            name="allow_empty_hosts"
+                            trueFalseValue
+                            [trueValue]="1"
+                            [falseValue]="0"
+                            oitcDebounce
+                            type="checkbox"/>
+                        <label cFormCheckLabel
+                               for="allow_empty_hosts">{{ t('Import empty hosts') }}</label>
+                    </c-form-check>
+                    <div class="help-block" [ngClass]="{'text-danger': post.allow_empty_hosts}">
+                        <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
+                        {{ t('If enabled, all hosts will be imported even without at least one match') }}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <c-form-check>
+                        <input
+                            [(ngModel)]="post.disable_updates" cFormCheckInput
+                            id="disable_updates"
+                            class="checkbox-lg me-2 mt-0"
+                            name="disable_updates"
+                            trueFalseValue
+                            [falseValue]="0"
+                            [trueValue]="1"
+                            oitcDebounce
+                            type="checkbox"/>
+                        <label cFormCheckLabel
+                               for="disable_updates">{{ t('Disable updates') }}</label>
+                    </c-form-check>
+                    <div class="help-block" [ngClass]="{'text-danger': post.disable_updates}">
+                        <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
+                        {{ t('If enabled, only new hosts will be imported. Already synchronized hosts are not changed') }}
+                    </div>
+                </div>
+                <div [ngClass]="{'border-start border-danger border-3 rounded-start px-2':post.disable_updates}">
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input
+                                [(ngModel)]="post.force_disable_hosts" cFormCheckInput
+                                id="force_disable_hosts"
+                                class="checkbox-lg me-2 mt-0"
+                                name="force_disable_hosts"
+                                trueFalseValue
+                                [disabled]="post.disable_updates==1"
+                                [trueValue]="1"
+                                [falseValue]="0"
+                                oitcDebounce
+                                type="checkbox"/>
+                            <label cFormCheckLabel
+                                   for="force_disable_hosts">{{ t('Force disable hosts if they are not present in the imported data') }}</label>
+                        </c-form-check>
+                        <div class="help-block" [ngClass]="{'text-danger': post.force_disable_hosts}">
+                            <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
+                            {{ t('If enabled all hosts outside of import data will get disabled automatically') }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input
+                                [(ngModel)]="post.force_disable_hosts" cFormCheckInput
+                                id="re_enable_hosts"
+                                class="checkbox-lg me-2 mt-0"
+                                name="re_enable_hosts"
+                                trueFalseValue
+                                [disabled]="post.disable_updates==1"
+                                [trueValue]="1"
+                                [falseValue]="0"
+                                oitcDebounce
+                                type="checkbox"/>
+                            <label cFormCheckLabel
+                                   for="re_enable_hosts">{{ t('Re-enable hosts if present in the imported data') }}</label>
+                        </c-form-check>
+                        <div class="help-block">
+                            {{ t('If this option is enabled, disabled hosts will be enabled automatically') }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input
+                                [(ngModel)]="post.force_delete" cFormCheckInput
+                                id="force_delete"
+                                class="checkbox-lg me-2 mt-0"
+                                name="force_delete"
+                                trueFalseValue
+                                [disabled]="post.disable_updates==1"
+                                [trueValue]="1"
+                                [falseValue]="0"
+                                oitcDebounce
+                                type="checkbox"/>
+                            <label cFormCheckLabel
+                                   for="force_delete">{{ t('Force delete services if not in mapping') }}</label>
+                        </c-form-check>
+                        <div class="help-block" [ngClass]="{'text-danger': post.force_delete}">
+                            <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
+                            {{ t('If enabled all services outside of the service template group assignment will get deleted automatically') }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input
+                                [(ngModel)]="post.keep_container_settings" cFormCheckInput
+                                id="keep_container_settings"
+                                class="checkbox-lg me-2 mt-0"
+                                name="keep_container_settings"
+                                trueFalseValue
+                                [disabled]="post.disable_updates==1"
+                                [trueValue]="1"
+                                [falseValue]="0"
+                                oitcDebounce
+                                type="checkbox"/>
+                            <label cFormCheckLabel
+                                   for="keep_container_settings">{{ t('Keep container settings') }}</label>
+                        </c-form-check>
+                        <div class="help-block">
+                            {{ t('Keep container settings for hosts that have already been synchronized') }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input
+                                [(ngModel)]="post.keep_satellite_settings" cFormCheckInput
+                                id="keep_satellite_settings"
+                                class="checkbox-lg me-2 mt-0"
+                                name="keep_satellite_settings"
+                                trueFalseValue
+                                [disabled]="post.disable_updates==1"
+                                [trueValue]="1"
+                                [falseValue]="0"
+                                oitcDebounce
+                                type="checkbox"/>
+                            <label cFormCheckLabel
+                                   for="keep_satellite_settings">{{ t('Keep satellite settings') }}</label>
+                        </c-form-check>
+                        <div class="help-block">
+                            {{ t('Keep satellite settings for hosts that have already been synchronized') }}
+                        </div>
+                    </div>
+                </div>
+
+                <c-container
+                    [fluid]="true" class="shadow-sm px-2 pb-4 my-4 bg-body rounded">
+                    <fieldset>
+                        <legend class="small fieldset-legend-border-bottom">
+                            <h4>
+                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                {{ t('Data source mapping configuration for:') }}
+                                <span class="text-info">
+                                    @switch (post.data_source) {
+                                        @case ('csv_with_header') {
+                                            {{ t('CSV with header') }}
+                                        }
+                                        @case ('csv_without_header') {
+                                            {{ t('CSV without header') }}
+                                        }
+                                        @case ('json') {
+                                            {{ t('JSON') }}
+                                        }
+                                        @case ('idoit') {
+                                            {{ t('i-doit') }}
+                                        }
+                                        @case ('openitcockpit_agent') {
+                                            {{ t('openITCOCKPIT Agent') }}
+                                        }
+                                        @case ('itop') {
+                                            {{ t('iTop') }}
+                                        }
+                                        @case ('external_monitoring') {
+                                            {{ t('External Monitoring') }}
+                                        }
+                                    }
+                                </span>
+                            </h4>
+                        </legend>
+                        @if (formFields) {
+                            <div *ngFor="let formField of Object.values(formFields)">
+                                <oitc-dynamical-form-fields
+                                    [formField]="formField"
+                                    [errors]="errors"
+                                    [name]="formField['ngModel']"
+                                    [(ngModel)]="formField['ngModel']"
+                                >
+                                </oitc-dynamical-form-fields>
+                            </div>
+                        }
+                    </fieldset>
+                </c-container>
+
+
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Create importer') }}
+                </button>
+                <button [fallbackUrl]="['import_module','Importers', 'index']" cButton class="ms-1 ripple"
+                        color="default" oitcBackButton type="button">
+                    {{ t('Cancel') }}
+                </button>
+            </c-card-footer>
+        </c-card>
+    </form>
+</ng-container>
