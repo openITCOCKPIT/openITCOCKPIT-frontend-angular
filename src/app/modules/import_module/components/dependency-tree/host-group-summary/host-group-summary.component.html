@@ -15,12 +15,12 @@
     <h5 class="pt-1" *ngIf="selectedNode.hostgroup">
         <fa-icon [icon]="['fas', 'server']" class="ps-1"></fa-icon>
         <span *oitcPermission="['hostgroups', 'extended']">
-            <a [routerLink]="['/', 'hostgroups', 'extended',selectedNode.hostgroup.Hostgroups?.id]">
-                {{ selectedNode.hostgroup.Containers?.name }}
+            <a [routerLink]="['/', 'hostgroups', 'extended',selectedNode.hostgroup.Hostgroups.id]">
+                {{ selectedNode.hostgroup.Containers.name }}
             </a>
         </span>
         <span *oitcPermission="['hostgroups', 'extended']; negate: true">
-            {{ selectedNode.hostgroup.Containers?.name }}
+            {{ selectedNode.hostgroup.Containers.name }}
         </span>
     </h5>
     <table cTable bordered hover small [striped]="true" class="small">
