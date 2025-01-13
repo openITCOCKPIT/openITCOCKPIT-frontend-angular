@@ -162,24 +162,32 @@
 
 
             <div class="mb-3">
-                <label cLabel for="post.User.usergroup_id">
+                <label cLabel for="thresholdType">
                     {{ t(' Threshold type') }}
                     <oitc-required-icon/>
                 </label>
                 <oitc-select
-                        name="post.User.usergroup_id"
-                        id="post.User.usergroup_id"
+                        name="thresholdType"
+                        id="thresholdType"
                         optionValue="key"
                         optionLabel="value"
-                        [options]="thresholdTypes"
-                        oitcFormError [errors]="errors" errorField="usergroup_id">
+                        [(ngModel)]="thresholdType"
+                        [options]="thresholdTypes">
                 </oitc-select>
             </div>
 
             <c-row>
+                <c-row>
+                    <c-col>
+                        <h5 class="text-warning">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                            {{ t('Warning') }}
+                        </h5>
+                    </c-col>
+                </c-row>
                 <c-col>
                     <div class="mb-3">
-                        <label cLabel for="post.User.usergroup_id">
+                        <label cLabel for="post.User.usergroup_id" class="text-warning">
                             {{ t('Operator') }}
                             <oitc-required-icon/>
                         </label>
@@ -195,7 +203,7 @@
                 </c-col>
                 <c-col>
                     <div class="mb-3">
-                        <label cLabel for="post.title">
+                        <label cLabel for="post.title" class="text-warning">
                             {{ t('Warning') }}
                             <oitc-required-icon/>
                         </label>
@@ -209,25 +217,33 @@
                 </c-col>
                 <c-col>
                     <div class="mb-3">
-                        <label cLabel for="post.User.usergroup_id">
+                        <label cLabel for="intervalWarn" class="text-warning">
                             {{ t('Longer than...') }}
                             <oitc-required-icon/>
                         </label>
                         <oitc-select
-                                name="post.User.usergroup_id"
-                                id="post.User.usergroup_id"
+                                name="intervalWarn"
+                                id="intervalWarn"
                                 optionValue="key"
                                 optionLabel="value"
-                                [options]="longerThanValues"
-                                oitcFormError [errors]="errors" errorField="usergroup_id">
+                                [(ngModel)]="intervalWarn"
+                                [options]="longerThanValues">
                         </oitc-select>
                     </div>
                 </c-col>
             </c-row>
             <c-row>
                 <c-col>
+                    <h5 class="text-danger">
+                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                        {{ t('Critical') }}
+                    </h5>
+                </c-col>
+            </c-row>
+            <c-row class="text-critical">
+                <c-col>
                     <div class="mb-3">
-                        <label cLabel for="post.User.usergroup_id">
+                        <label cLabel for="post.User.usergroup_id" class="text-critical">
                             {{ t('Operator') }}
                             <oitc-required-icon/>
                         </label>
@@ -243,7 +259,7 @@
                 </c-col>
                 <c-col>
                     <div class="mb-3">
-                        <label cLabel for="post.title">
+                        <label cLabel for="post.title" class="text-critical">
                             {{ t('Critical') }}
                             <oitc-required-icon/>
                         </label>
@@ -257,17 +273,17 @@
                 </c-col>
                 <c-col>
                     <div class="mb-3">
-                        <label cLabel for="post.User.usergroup_id">
+                        <label cLabel for="intervalCrit" class="text-critical">
                             {{ t('Longer than...') }}
                             <oitc-required-icon/>
                         </label>
                         <oitc-select
-                                name="post.User.usergroup_id"
-                                id="post.User.usergroup_id"
+                                name="intervalCrit"
+                                id="intervalCrit"
                                 optionValue="key"
                                 optionLabel="value"
-                                [options]="longerThanValues"
-                                oitcFormError [errors]="errors" errorField="usergroup_id">
+                                [(ngModel)]="intervalCrit"
+                                [options]="longerThanValues">
                         </oitc-select>
                     </div>
                 </c-col>
@@ -287,9 +303,6 @@
                         [options]="serviceTemplates"
                         oitcFormError [errors]="errors" errorField="usergroup_id">
                 </oitc-select>
-                <div class="help-block">
-                    {{ t('Container Roles are handy to grant the same permissions to multiple users.') }}
-                </div>
             </div>
 
             <div class="mb-3">
@@ -303,9 +316,6 @@
                        name="post.title"
                        oitcFormError [errors]="errors" errorField="title"
                 >
-                <div class="help-block">
-                    {{ t('Container Roles are handy to grant the same permissions to multiple users.') }}
-                </div>
             </div>
 
             <div class="mb-3">
@@ -320,7 +330,14 @@
                        oitcFormError [errors]="errors" errorField="title"
                 >
                 <div class="help-block">
-                    {{ t('Container Roles are handy to grant the same permissions to multiple users.') }}
+                    Unit of the metric.                                <br>
+                    Examples:                                <ul>
+                    <li>"b" for bytes.</li>
+                    <li>"KB" for kilobytes.</li>
+                    <li>"s" for seconds.</li>
+                    <li>"Mbps" or "Mbit/s"</li>
+                    <li>"MB/s" for megabytes per second</li>
+                </ul>
                 </div>
             </div>
 

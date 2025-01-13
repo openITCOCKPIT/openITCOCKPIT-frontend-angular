@@ -4,7 +4,8 @@ import {
     LoadServicetemplates,
     LoadValueByMetricRoot,
     PrometheusQueryIndexParams,
-    PrometheusQueryIndexRoot, PrometheusQueryIndexTargetDatum
+    PrometheusQueryIndexRoot,
+    PrometheusQueryIndexTargetDatum
 } from '../prometheus-query.interface';
 import { Subscription } from 'rxjs';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
@@ -117,6 +118,9 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     private readonly route = inject(ActivatedRoute);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
+    protected thresholdType: string = 'scalar';
+    protected intervalWarn: string = '1m';
+    protected intervalCrit: string = '2m';
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected selectedMetrics: string[] = [];
     protected index: PrometheusQueryIndexRoot = {targets: {data: [] as PrometheusQueryIndexTargetDatum[]}} as PrometheusQueryIndexRoot;
@@ -135,16 +139,16 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
         {key: "<=", value: '<= (less-or-equal)'},
     ];
     protected longerThanValues: SelectKeyValueString[] = [
-        {key:  "5s", value: '5 seconds'},
+        {key: "5s", value: '5 seconds'},
         {key: "10s", value: '10 seconds'},
         {key: "15s", value: '15 seconds'},
         {key: "30s", value: '30 seconds'},
-        {key:  "1m", value: '1 minute'},
+        {key: "1m", value: '1 minute'},
         {key: "90s", value: '1 minute 30 seconds'},
-        {key:  "2m", value: '2 minutes'},
-        {key:  "3m", value: '3 minutes'},
-        {key:  "4m", value: '4 minutes'},
-        {key:  "5m", value: '5 minutes'},
+        {key: "2m", value: '2 minutes'},
+        {key: "3m", value: '3 minutes'},
+        {key: "4m", value: '4 minutes'},
+        {key: "5m", value: '5 minutes'},
         {key: "10m", value: '10 minutes'},
         {key: "15m", value: '15 minutes'},
         {key: "20m", value: '20 minutes'},
@@ -152,15 +156,15 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
         {key: "30m", value: '30 minutes'},
         {key: "40m", value: '40 minutes'},
         {key: "50m", value: '50 minutes'},
-        {key:  "1h", value: '1 hour'},
+        {key: "1h", value: '1 hour'},
         {key: "90m", value: '1 hour 30 minutes'},
-        {key:  "2h", value: '2 hours'},
-        {key:  "3h", value: '3 hours'},
-        {key:  "4h", value: '4 hours'},
-        {key:  "5h", value: '5 hours'},
-        {key:  "6h", value: '6 hours'},
+        {key: "2h", value: '2 hours'},
+        {key: "3h", value: '3 hours'},
+        {key: "4h", value: '4 hours'},
+        {key: "5h", value: '5 hours'},
+        {key: "6h", value: '6 hours'},
         {key: "12h", value: '12 hours'},
-        {key:  "1d", value: '1 day'}
+        {key: "1d", value: '1 day'}
     ];
     protected thresholdTypes: SelectKeyValueString[] = [
         {key: "scalar", value: 'Scalar'},
