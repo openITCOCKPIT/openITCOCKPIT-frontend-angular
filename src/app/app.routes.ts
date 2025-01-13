@@ -663,6 +663,12 @@ const coreRoutes: Routes = [{
     path: 'ConfigurationFiles/edit/:dbKey',
     loadComponent: () => import('./pages/configurationfiles/configuration-files-edit/configuration-files-edit.component').then(m => m.ConfigurationFilesEditComponent)
 }, {
+    path: 'backups/index',
+    loadComponent: () => import('./pages/backups/backups-index/backups-index.component').then(m => m.BackupsIndexComponent)
+}, {
+    path: 'backups/restore',
+    loadComponent: () => import('./pages/backups/backups-restore/backups-restore.component').then(m => m.BackupsRestoreComponent)
+}, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)
 }, {
