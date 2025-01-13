@@ -101,7 +101,7 @@ export class PrometheusPopoverGraphComponent {
     private perfParams: PrometheusPerformanceDataParams = {
         angular: true,
         end: 0,
-        host_uuid: 'cb27ec71-4c97-47fc-a94f-6853a35fc3f7',
+        host_uuid: '',
         jsTimestamp: 0,
         metric: 'process_cpu_seconds_total',
         start: 0

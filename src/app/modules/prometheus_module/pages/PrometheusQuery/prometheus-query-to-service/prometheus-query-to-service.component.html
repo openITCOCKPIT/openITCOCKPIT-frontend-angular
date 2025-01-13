@@ -1,0 +1,389 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['PrometheusModule', 'PrometheusQuery', 'index']"
+                   [routerLink]="['/', 'prometheus_module', 'PrometheusQuery', 'index']">
+                    <fa-icon [icon]="['fas', 'burn']"></fa-icon>
+                    {{ t('Prometheus Module') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                {{ t('Add metric to monitoring') }}
+            </li>
+        </ol>
+    </nav>
+
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Prometheus metrics') }}</h5>
+        </c-card-header>
+        <c-card-body>
+            <div class="mb-3">
+                <label cLabel for="post.User.usergroup_id">
+                    {{ t('Metrics') }}
+                    <oitc-required-icon/>
+                </label>
+                <oitc-multi-select
+                        name="post.User.usergroup_id"
+                        id="post.User.usergroup_id"
+                        optionValue="metric"
+                        optionLabel="metric"
+                        [(ngModel)]="selectedMetrics"
+                        [options]="index.targets.data"
+                        oitcFormError [errors]="errors" errorField="usergroup_id">
+                </oitc-multi-select>
+            </div>
+
+            <fieldset>
+                <h5>{{ t('Available metrics') }}</h5>
+                <button ng-repeat="metricSelected in metricsSelected"
+                        class="margin-5 btn btn-primary btn-md ng-binding ng-scope"
+                        ng-click="addMetricString(metricSelected)">
+                    node_netstat_Udp6_SndbufErrors
+                </button>
+            </fieldset>
+            <c-row>
+                <c-col md="1">
+                    <fieldset>
+                        <h5>{{ t('Brackets') }}</h5>
+                        <button class="margin-5 btn btn-info btn-xs" ng-click="addToString('(')">
+                            (
+                        </button>
+                        <button class="margin-5 btn btn-info btn-xs" ng-click="addToString(')')">
+                            )
+                        </button>
+                    </fieldset>
+                </c-col>
+                <c-col>
+                    <fieldset>
+                        <h5>{{ t('Arithmetic binary operators') }}</h5>
+                        <button class="margin-5 btn btn-success btn-xs" title="addition" ng-click="addToString('+')">
+                            +
+                        </button>
+                        <button class="margin-5 btn btn-success btn-xs" title="subtraction" ng-click="addToString('-')">
+                            -
+                        </button>
+                        <button class="margin-5 btn btn-success btn-xs" title="multiplication"
+                                ng-click="addToString('*')">
+                            *
+                        </button>
+                        <button class="margin-5 btn btn-success btn-xs" title="division" ng-click="addToString('/')">
+                            /
+                        </button>
+                        <button class="margin-5 btn btn-success btn-xs" title="modulo" ng-click="addToString('%')">
+                            %
+                        </button>
+                        <button class="margin-5 btn btn-success btn-xs" title="power/exponentiation"
+                                ng-click="addToString('^')">
+                            ^
+                        </button>
+                    </fieldset>
+                </c-col>
+                <c-col>
+                    <fieldset>
+                        <h5>{{ t('Aggregation operators') }}</h5>
+                        <button class="margin-5 btn btn-default btn-xs" title="calculate sum over dimensions"
+                                ng-click="addAggregationToString('sum')">
+                            sum
+                        </button>
+                        <button class="margin-5 btn btn-default btn-xs" title="select minimum over dimensions"
+                                ng-click="addAggregationToString('min')">
+                            min
+                        </button>
+                        <button class="margin-5 btn btn-default btn-xs" title="select maximum over dimensions"
+                                ng-click="addAggregationToString('max')">
+                            max
+                        </button>
+                        <button class="margin-5 btn btn-default btn-xs" title="calculate the average over dimensions"
+                                ng-click="addAggregationToString('avg')">
+                            avg
+                        </button>
+                        <button class="margin-5 btn btn-default btn-xs"
+                                title="calculate population standard deviation over dimensions"
+                                ng-click="addAggregationToString('stddev')">
+                            stddev
+                        </button>
+                        <button class="margin-5 btn btn-default btn-xs"
+                                title="calculate population standard variance over dimensions"
+                                ng-click="addAggregationToString('stdvar')">
+                            stdvar
+                        </button>
+                        <button class="margin-5 btn btn-default btn-xs" title="count number of elements in the vector"
+                                ng-click="addAggregationToString('count')">
+                            count
+                        </button>
+                        <button class="margin-5 btn btn-default btn-xs"
+                                title="count number of elements with the same value"
+                                ng-click="addAggregationToString('count_values')">
+                            count_values
+                        </button>
+                        <button class="margin-5 btn btn-default btn-xs" title="smallest k elements by sample value"
+                                ng-click="addAggregationToString('bottomk')">
+                            bottomk
+                        </button>
+                        <button class="margin-5 btn btn-default btn-xs" title="largest k elements by sample value"
+                                ng-click="addAggregationToString('topk')">
+                            topk
+                        </button>
+                        <button class="margin-5 btn btn-default btn-xs"
+                                title="calculate φ-quantile (0 ≤ φ ≤ 1) over dimensions"
+                                ng-click="addAggregationToString('quantile')">
+                            quantile
+                        </button>
+                    </fieldset>
+                </c-col>
+            </c-row>
+
+            PromQL query
+            <oitc-required-icon/>
+
+            <div class="col col-9 font-md text-info">
+                {{ 'Query result:' }}
+                <span ng-show="currentServiceStringValue" class="ng-binding ng-hide">
+
+                </span>
+                <span class="italic" ng-show="currentServiceStringValue === null">
+                    no data
+                </span>
+            </div>
+
+
+            Service and alert def
+
+
+            <div class="mb-3">
+                <label cLabel for="post.User.usergroup_id">
+                    {{ t(' Threshold type') }}
+                    <oitc-required-icon/>
+                </label>
+                <oitc-select
+                        name="post.User.usergroup_id"
+                        id="post.User.usergroup_id"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="thresholdTypes"
+                        oitcFormError [errors]="errors" errorField="usergroup_id">
+                </oitc-select>
+            </div>
+
+            <c-row>
+                <c-col>
+                    <div class="mb-3">
+                        <label cLabel for="post.User.usergroup_id">
+                            {{ t('Operator') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <oitc-select
+                                name="post.User.usergroup_id"
+                                id="post.User.usergroup_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="operators"
+                                oitcFormError [errors]="errors" errorField="usergroup_id">
+                        </oitc-select>
+                    </div>
+                </c-col>
+                <c-col>
+                    <div class="mb-3">
+                        <label cLabel for="post.title">
+                            {{ t('Warning') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <input cFormControl
+                               id="post.title"
+                               type="text"
+                               name="post.title"
+                               oitcFormError [errors]="errors" errorField="title"
+                        >
+                    </div>
+                </c-col>
+                <c-col>
+                    <div class="mb-3">
+                        <label cLabel for="post.User.usergroup_id">
+                            {{ t('Longer than...') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <oitc-select
+                                name="post.User.usergroup_id"
+                                id="post.User.usergroup_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="longerThanValues"
+                                oitcFormError [errors]="errors" errorField="usergroup_id">
+                        </oitc-select>
+                    </div>
+                </c-col>
+            </c-row>
+            <c-row>
+                <c-col>
+                    <div class="mb-3">
+                        <label cLabel for="post.User.usergroup_id">
+                            {{ t('Operator') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <oitc-select
+                                name="post.User.usergroup_id"
+                                id="post.User.usergroup_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="operators"
+                                oitcFormError [errors]="errors" errorField="usergroup_id">
+                        </oitc-select>
+                    </div>
+                </c-col>
+                <c-col>
+                    <div class="mb-3">
+                        <label cLabel for="post.title">
+                            {{ t('Critical') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <input cFormControl
+                               id="post.title"
+                               type="text"
+                               name="post.title"
+                               oitcFormError [errors]="errors" errorField="title"
+                        >
+                    </div>
+                </c-col>
+                <c-col>
+                    <div class="mb-3">
+                        <label cLabel for="post.User.usergroup_id">
+                            {{ t('Longer than...') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <oitc-select
+                                name="post.User.usergroup_id"
+                                id="post.User.usergroup_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="longerThanValues"
+                                oitcFormError [errors]="errors" errorField="usergroup_id">
+                        </oitc-select>
+                    </div>
+                </c-col>
+            </c-row>
+
+
+            <div class="mb-3">
+                <label cLabel for="post.User.usergroup_id">
+                    {{ t('Service template') }} mit link
+                    <oitc-required-icon/>
+                </label>
+                <oitc-select
+                        name="post.User.usergroup_id"
+                        id="post.User.usergroup_id"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="serviceTemplates"
+                        oitcFormError [errors]="errors" errorField="usergroup_id">
+                </oitc-select>
+                <div class="help-block">
+                    {{ t('Container Roles are handy to grant the same permissions to multiple users.') }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel for="post.title">
+                    {{ t('Service name') }}
+                    <oitc-required-icon/>
+                </label>
+                <input cFormControl
+                       id="post.title"
+                       type="text"
+                       name="post.title"
+                       oitcFormError [errors]="errors" errorField="title"
+                >
+                <div class="help-block">
+                    {{ t('Container Roles are handy to grant the same permissions to multiple users.') }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel for="post.title">
+                    {{ t('Metric unit') }}
+                    <oitc-required-icon/>
+                </label>
+                <input cFormControl
+                       id="post.title"
+                       type="text"
+                       name="post.title"
+                       oitcFormError [errors]="errors" errorField="title"
+                >
+                <div class="help-block">
+                    {{ t('Container Roles are handy to grant the same permissions to multiple users.') }}
+                </div>
+            </div>
+
+            Add to service button
+
+            INFO BOX
+
+            <h5>{{ t('Services') }}</h5>
+            <table>
+                <thead>
+                <tr>
+                    <th>{{ t('Name') }}</th>
+                    <th>{{ t('PromQL Query') }}</th>
+                    <th>{{ t('Unit') }}</th>
+                    <th colspan="2">{{ t('Warning') }}</th>
+                    <th colspan="2">{{ t('Critical') }}</th>
+                    <th>{{ t('Remove') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>NAME</td>
+                    <td>Query</td>
+                    <td>Unit</td>
+                    <td>Warn Min</td>
+                    <td>Warn Max</td>
+                    <td>Crit Min</td>
+                    <td>Crit Max</td>
+                    <td>
+                        <button cButton type="button" color="danger" size="xs">
+                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                            {{ t('Remove') }}
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button cButton type="button" color="success">
+                {{ t('Create services') }}
+            </button>
+
+
+            <h5>{{ t('Current values') }}</h5>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>{{ t('Element') }}</th>
+                    <th>{{ t('Value') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let metric of selectedMetrics">
+                    <td>
+                        <span class="no-padding bold ng-binding">node_netstat_Udp6_SndbufErrors</span>
+                        <code for... class="no-padding ng-binding ng-scope">
+                            instance="prometheus",
+                        </code>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </c-card-body>
+    </c-card>
+</ng-container>

@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import {
+    LoadServicetemplates,
+    LoadValueByMetricRoot,
     PrometheusPerformanceDataParams,
     PrometheusPerformanceDataRoot,
     PrometheusQueryApiResult,
@@ -60,7 +62,26 @@ export class PrometheusQueryService {
         )
     }
 
+    public loadServiceTemplates(hostId: number): Observable<LoadServicetemplates> {
+        return this.http.get<LoadServicetemplates>(`${this.proxyPath}/prometheus_module/PrometheusQuery/loadServicetemplates/${hostId}.json?angular=true`, {}).pipe(
+            map((data: LoadServicetemplates) => {
+                return data;
+            })
+        )
+    }
 
+    public loadValueByMetric(hostUuid: string, metric: string): Observable<LoadValueByMetricRoot> {
+        return this.http.get<LoadValueByMetricRoot>(`${this.proxyPath}/prometheus_module/PrometheusQuery/loadCurrentValueByMetric.json?angular=true`, {
+            params: {
+                metric: metric,
+                hostUuid: hostUuid
+            }
+        }).pipe(
+            map((data: LoadValueByMetricRoot) => {
+                return data;
+            })
+        )
+    }
     /*********************************
      *    Services Browser action    *
      *********************************/

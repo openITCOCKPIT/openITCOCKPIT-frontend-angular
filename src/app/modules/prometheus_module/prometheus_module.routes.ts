@@ -16,5 +16,9 @@ export const prometheusModuleRoutes: Routes = [
     {
         path: 'prometheus_module/PrometheusQuery/index',
         loadComponent: () => import('./pages/PrometheusQuery/prometheus-query-index/prometheus-query-index.component').then(m => m.PrometheusQueryIndexComponent)
+    },
+    {
+        path: 'prometheus_module/PrometheusQuery/toService/:hostId',
+        loadComponent: () => import('./pages/PrometheusQuery/prometheus-query-to-service/prometheus-query-to-service.component').then(m => m.PrometheusQueryToServiceComponent)
     }
 ];

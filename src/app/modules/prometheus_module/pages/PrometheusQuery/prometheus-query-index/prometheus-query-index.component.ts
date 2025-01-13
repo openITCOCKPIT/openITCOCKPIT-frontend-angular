@@ -36,7 +36,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
 import {
@@ -48,6 +48,9 @@ import {
     PrometheusPopoverGraphComponent
 } from '../../../components/prometheus-popover-graph/prometheus-popover-graph.component';
 import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../../../services/timezone.service';
+import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
+import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
+import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 
 @Component({
     selector: 'oitc-prometheus-query-index',
@@ -90,7 +93,11 @@ import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../
         NoRecordsComponent,
         PrometheusPopoverGraphComponent,
         FaStackComponent,
-        FaStackItemSizeDirective
+        FaStackItemSizeDirective,
+        NgClass,
+        OitcAlertComponent,
+        ItemSelectComponent,
+        SelectAllComponent
     ],
     templateUrl: './prometheus-query-index.component.html',
     styleUrl: './prometheus-query-index.component.css',

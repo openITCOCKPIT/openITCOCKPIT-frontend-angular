@@ -1,5 +1,6 @@
 import { ServiceEntity } from '../../../../pages/services/services.interface';
 import { Datasource } from '../../../../components/popover-graph/popover-graph.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 export interface PrometheusQueryApiResult {
     metricValue: {
@@ -72,6 +73,35 @@ export interface PrometheusPerformanceDataRoot {
 }
 
 
+// LOAD SERVICETEMPLATES RESPONSE
+export interface LoadServicetemplates {
+    servicetemplates: SelectKeyValue[]
+    _csrfToken: string
+}
+
+// LOAD VALUE BY METRIC
+export interface LoadValueByMetricRoot {
+    metricDetails: {
+        status: string
+        data: {
+            resultType: string
+            result: {
+                metric: {
+                    __name__: string
+                    device: string
+                    fstype: string
+                    instance: string
+                    job: string
+                    mountpoint: string
+                    service: string
+                    uuid: string
+                }
+                value: [number, string]
+            }[]
+        }
+    }
+    _csrfToken: any
+}
 
 
 // prometheus_module/PrometheusQuery/index
