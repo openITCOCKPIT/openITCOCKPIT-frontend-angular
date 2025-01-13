@@ -158,11 +158,9 @@ This document describes how to upgrade the underlying Angular version.
    Angular is very picky when it comes to TypeScript versions, so make sure to keep the currently used TypeScript
    version.
 
-   ```
-
+```
 npm install --save typescript@~5.5.3
-
-   ```
+```
 
 ---
 
