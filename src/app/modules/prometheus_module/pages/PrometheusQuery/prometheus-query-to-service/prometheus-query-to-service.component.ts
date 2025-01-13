@@ -40,7 +40,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
 import {
@@ -102,7 +102,8 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
         ItemSelectComponent,
         SelectAllComponent,
         RequiredIconComponent,
-        FormErrorDirective
+        FormErrorDirective,
+        KeyValuePipe
     ],
     templateUrl: './prometheus-query-to-service.component.html',
     styleUrl: './prometheus-query-to-service.component.css',
@@ -124,6 +125,7 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     protected hosts: SelectKeyValue[] = [];
     protected params: PrometheusQueryIndexParams = getDefaultPrometheusQueryIndexParams();
     protected timezone!: TimezoneObject;
+    protected metrics: { [key: string]: LoadValueByMetricRoot } = {};
     protected operators: SelectKeyValueString[] = [
         {key: "==", value: '== (equal)'},
         {key: "!=", value: '!= (not equal)'},
@@ -184,13 +186,14 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
         this.getUserTimezone();
     }
 
-    protected metrics: { [key: string]: LoadValueByMetricRoot } = {};
 
     protected onMetricsChange(): void {
         this.selectedMetrics.forEach(metric => {
             this.subscriptions.add(this.PrometheusQueryService.loadValueByMetric(this.index.host.uuid, metric)
                 .subscribe((result: LoadValueByMetricRoot) => {
                     this.metrics[metric] = result;
+                    console.warn(this.metrics);
+
                     this.cdr.markForCheck();
                 }));
         });

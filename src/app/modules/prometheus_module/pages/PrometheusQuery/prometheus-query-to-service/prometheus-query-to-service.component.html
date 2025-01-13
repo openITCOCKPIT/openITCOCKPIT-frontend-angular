@@ -39,6 +39,7 @@
                         optionLabel="metric"
                         [(ngModel)]="selectedMetrics"
                         [options]="index.targets.data"
+                        (onChange)="onMetricsChange()"
                         oitcFormError [errors]="errors" errorField="usergroup_id">
                 </oitc-multi-select>
             </div>
@@ -374,12 +375,13 @@
                 <tbody>
                 <tr *ngFor="let metric of selectedMetrics">
                     <td>
-                        <span class="no-padding bold ng-binding">node_netstat_Udp6_SndbufErrors</span>
-                        <code for... class="no-padding ng-binding ng-scope">
-                            instance="prometheus",
-                        </code>
+                        <span class="no-padding bold ng-binding">{{ metrics[metric].metricDetails.data.result[0].metric.__name__ }}</span>
+                        {{ '{' }}
+                        <code *ngFor="let a of metrics[metric].metricDetails.data.result[0].metric | keyvalue" class="no-padding ng-binding ng-scope">{{ a.key }}="{{a.value}}",</code>
+                        {{ '}' }}
                     </td>
                     <td>
+                        {{metrics[metric].metricDetails.data.result[0].value[1]}}
                     </td>
                 </tr>
                 </tbody>
