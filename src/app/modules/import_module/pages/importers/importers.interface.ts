@@ -83,6 +83,7 @@ export interface ImportersPost {
     external_monitorings: {
         _ids: number[]
     }
+    [key: string]:any //dynamic fields
 }
 
 export interface ImporterElements {
@@ -93,7 +94,14 @@ export interface ImporterElements {
 
 export interface ImporterConfig {
     config: {
-        config: {}
+        config: {
+            mapping:{
+                [key: string]: {
+                    key: string
+                    value: string
+                }
+            }
+        }
         formFields: DynamicalFormFields
     }
 }

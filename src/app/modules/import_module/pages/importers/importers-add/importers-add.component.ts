@@ -151,7 +151,7 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.loadContainers();
-        this.loadConfig();
+        this.loadConfigFieldsByDataSource();
     }
 
     public loadContainers = (): void => {
@@ -222,24 +222,12 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.ImportersService.loadConfig(this.post.data_source)
                 .subscribe((result: ImporterConfig) => {
                     this.errors = null;
-                    /*
-                    switch (this.post.system_type) {
-                        case 'icinga2':
-                            const icinga2 = result.config.config as ExternalMonitoringConfigIcinga2;
-                            this.post.json_data = icinga2;
-                            break;
-                        case 'opmanager':
-                            const opmanager = result.config.config as ExternalMonitoringConfigOpmanager;
-                            this.post.json_data = opmanager;
-                            break;
-                        case 'prtg':
-                            const prtg = result.config.config as ExternalMonitoringConfigPrtg;
-                            this.post.json_data = prtg;
-                            break;
-                    }
-
-                     */
-
+                    _.forEach(result.config.formFields, (value, key) => {
+                        _.assign(this.post, {
+                            [
+                                value.ngModel]: result.config.config.mapping[value.ngModel]
+                        });
+                    });
                     this.formFields = result.config.formFields;
                     this.cdr.markForCheck();
                 })
@@ -247,16 +235,6 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
         }
     }
 
-    private loadConfig() {
-        /*
-        this.subscriptions.add(this.ImportersService.loadConfig()
-            .subscribe((result) => {
-                this.cdr.markForCheck();
-            })
-        );
-
-         */
-    }
 
     protected readonly Object = Object;
 }
