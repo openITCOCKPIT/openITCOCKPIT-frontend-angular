@@ -108,85 +108,88 @@
                             {{ t('Host group') }}
                         </span>
 
-                        <oitc-select
-                            class="col-9"
-                            name="hostgroupId"
-                            id="hostgroupId"
-                            [(ngModel)]="hostgroupId"
-                            optionValue="key"
-                            optionLabel="value"
-                            [options]="hostgroups"
-                            [searchCallback]="loadHostgroups"
-                            (onChange)="onHostgroupChange()">
-                        </oitc-select>
-                        <c-dropdown>
-                            <button cButton cDropdownToggle color="default">
-                                {{ t('Actions') }}
-                            </button>
-                            <ul cDropdownMenu>
-                                <li>
-                                    <oitc-actions-button-element [permission]="'hostgroups.edit'"
-                                                                 [url]="'/hostgroups/edit/' + this.hostgroupExtended.Hostgroup.id">
-                                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                        {{ t('Edit') }}
-                                    </oitc-actions-button-element>
-                                </li>
-                                <li>
-                                    <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                                 [url]="'/changelogs/entity/hostgroup/' + this.hostgroupExtended.Hostgroup.id">
-                                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                        {{ t('Changelog') }}
-                                    </oitc-actions-button-element>
-                                </li>
-                                <li cDropdownDivider></li>
-                                <li>
-                                    <oitc-actions-button-element [permission]="'hostgroups.copy'"
-                                                                 [url]="'/hostgroups/copy/' + this.hostgroupExtended.Hostgroup.id">
-                                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                        {{ t('Copy') }}
-                                    </oitc-actions-button-element>
-                                </li>
-                                <li cDropdownDivider></li>
-                                <li>
-                                    <oitc-actions-button-element [permission]="'hostgroups.copy'"
-                                                                 (click)="toggleResetCheckModal()">
-                                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                                        {{ t('Reset check time') }}
-                                    </oitc-actions-button-element>
-                                </li>
-                                <li>
-                                    <oitc-actions-button-element [permission]="'hostgroups.copy'"
-                                                                 (click)="toggleDowntimeModal()">
-                                        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                                        {{ t('Set planned maintenance times') }}
-                                    </oitc-actions-button-element>
-                                </li>
+                        <c-col lg="9">
+                            <oitc-select
+                                name="hostgroupId"
+                                id="hostgroupId"
+                                [(ngModel)]="hostgroupId"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="hostgroups"
+                                [searchCallback]="loadHostgroups"
+                                (onChange)="onHostgroupChange()">
+                            </oitc-select>
+                        </c-col>
+                        <c-col lg="1" class="ms-3">
+                            <c-dropdown>
+                                <button cButton cDropdownToggle color="default">
+                                    {{ t('Actions') }}
+                                </button>
+                                <ul cDropdownMenu>
+                                    <li>
+                                        <oitc-actions-button-element [permission]="'hostgroups.edit'"
+                                                                     [url]="'/hostgroups/edit/' + this.hostgroupExtended.Hostgroup.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                    </li>
+                                    <li>
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/hostgroup/' + this.hostgroupExtended.Hostgroup.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                    </li>
+                                    <li cDropdownDivider></li>
+                                    <li>
+                                        <oitc-actions-button-element [permission]="'hostgroups.copy'"
+                                                                     [url]="'/hostgroups/copy/' + this.hostgroupExtended.Hostgroup.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                    </li>
+                                    <li cDropdownDivider></li>
+                                    <li>
+                                        <oitc-actions-button-element [permission]="'hostgroups.copy'"
+                                                                     (click)="toggleResetCheckModal()">
+                                            <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                            {{ t('Reset check time') }}
+                                        </oitc-actions-button-element>
+                                    </li>
+                                    <li>
+                                        <oitc-actions-button-element [permission]="'hostgroups.copy'"
+                                                                     (click)="toggleDowntimeModal()">
+                                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                            {{ t('Set planned maintenance times') }}
+                                        </oitc-actions-button-element>
+                                    </li>
 
-                                <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                                    <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
 
-                                    <a
-                                        href="javascript:void(0);" cDropdownItem
-                                        (click)="acknowledgeStatus()">
-                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                        {{ t('Acknowledge host status') }}
-                                    </a>
-                                </li>
-                                <li>
-                                    <oitc-actions-button-element [permission]="'hostgroups.copy'"
-                                                                 (click)="disableNotifications()">
-                                        <fa-icon [icon]="['far', 'envelope']"></fa-icon>
-                                        {{ t('Disable notifications') }}
-                                    </oitc-actions-button-element>
-                                </li>
-                                <li>
-                                    <oitc-actions-button-element [permission]="'hostgroups.copy'"
-                                                                 (click)="enableNotifications()">
-                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                        {{ t('Enable notifications') }}
-                                    </oitc-actions-button-element>
-                                </li>
-                            </ul>
-                        </c-dropdown>
+                                        <a
+                                            href="javascript:void(0);" cDropdownItem
+                                            (click)="acknowledgeStatus()">
+                                            <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                            {{ t('Acknowledge host status') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <oitc-actions-button-element [permission]="'hostgroups.copy'"
+                                                                     (click)="disableNotifications()">
+                                            <fa-icon [icon]="['far', 'envelope']"></fa-icon>
+                                            {{ t('Disable notifications') }}
+                                        </oitc-actions-button-element>
+                                    </li>
+                                    <li>
+                                        <oitc-actions-button-element [permission]="'hostgroups.copy'"
+                                                                     (click)="enableNotifications()">
+                                            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                            {{ t('Enable notifications') }}
+                                        </oitc-actions-button-element>
+                                    </li>
+                                </ul>
+                            </c-dropdown>
+                        </c-col>
                     </c-input-group>
                 </c-col>
             </c-row>
