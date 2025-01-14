@@ -390,17 +390,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let metric of selectedMetrics">
-                    <td>
-                        <span class="no-padding bold ng-binding">{{ metrics[metric].metricDetails.data.result[0].metric.__name__ }}</span>
-                        {{ '{' }}
-                        <code *ngFor="let a of metrics[metric].metricDetails.data.result[0].metric | keyvalue" class="no-padding ng-binding ng-scope">{{ a.key }}="{{a.value}}",</code>
-                        {{ '}' }}
-                    </td>
-                    <td>
-                        {{metrics[metric].metricDetails.data.result[0].value[1]}}
-                    </td>
-                </tr>
+                <ng-container *ngFor="let metric of selectedMetrics">
+
+                    <tr *ngFor="let datum of metrics[metric].metricDetails.data.result">
+                        <td>
+                            <span class="no-padding bold ng-binding">{{ datum.metric.__name__ }}</span>
+                            {{ '{' }}
+                            <code *ngFor="let a of datum.metric | keyvalue" class="no-padding ng-binding ng-scope">{{ a.key }}="{{a.value}}",</code>
+                            {{ '}' }}
+                        </td>
+                        <td>
+                            {{datum.value[1]}}
+                        </td>
+                    </tr>
+                </ng-container>
                 </tbody>
             </table>
         </c-card-body>
