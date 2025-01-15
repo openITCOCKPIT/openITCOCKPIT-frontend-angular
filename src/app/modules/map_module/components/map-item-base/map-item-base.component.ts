@@ -32,6 +32,9 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     @ViewChild('container', {static: true}) containerRef!: ElementRef<HTMLDivElement>;
 
     public item: InputSignal<T | undefined> = input<T | undefined>();
+    public gridSize: InputSignal<{ x: number, y: number }> = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
+    public gridEnabled: InputSignal<boolean> = input<boolean>(true);
+    public isViewMode: InputSignal<boolean> = input<boolean>(true);
 
     protected position: MapItemPosition = {x: 0, y: 0};
 
@@ -44,10 +47,6 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     protected startY?: number;
     protected endX?: number;
     protected endY?: number;
-
-    public gridSize: { x: number, y: number } = {x: 25, y: 25}; // Grid size for snapping
-    public gridEnabled: boolean = true;
-    public isViewMode: boolean = true;
 
     @Output() dropItemEvent = new EventEmitter<MapitemBase>();
     @Output() contextActionEvent = new EventEmitter<ContextAction>();
@@ -157,14 +156,15 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
     //grid snapping logic
     public computeDragRenderPos = (pos: { x: number, y: number }) => {
+        console.error("drag render pos", pos);
         let posX;
         let posY;
-        if (!this.gridEnabled) {
+        if (!this.gridEnabled()) {
             posX = pos.x - this.initialOffset.x;
             posY = pos.y - this.initialOffset.y;
         } else {
-            posX = Math.round((pos.x - this.initialOffset.x) / this.gridSize.x) * this.gridSize.x;
-            posY = Math.round((pos.y - this.initialOffset.y) / this.gridSize.y) * this.gridSize.y;
+            posX = Math.round((pos.x - this.initialOffset.x) / this.gridSize().x) * this.gridSize().x;
+            posY = Math.round((pos.y - this.initialOffset.y) / this.gridSize().y) * this.gridSize().y;
         }
         return {x: posX, y: posY};
     }

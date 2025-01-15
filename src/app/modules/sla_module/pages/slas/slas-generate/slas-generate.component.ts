@@ -219,6 +219,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
 
                         if (POSTresult.data.hasOwnProperty('error')) {
                             this.errors = POSTresult.data.error;
+                            this.cdr.markForCheck();
                         }
 
                         if (POSTresult.data.hasOwnProperty('report_error')) {
@@ -263,6 +264,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
 
                         if (result.data.hasOwnProperty('error')) {
                             this.errors = result.data.error;
+                            this.cdr.markForCheck();
                         }
 
                         if (result.data.hasOwnProperty('report_error')) {

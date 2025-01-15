@@ -1,5 +1,5 @@
 <div cdkDrag #container class="map-element-container"
-     [draggable]="isViewMode"
+     [draggable]="isViewMode()"
      (cdkDragStarted)="onDragStart($event)"
      (cdkDragEnded)="onDragEnd($event)"
      [cdkDragConstrainPosition]="computeDragRenderPos"

@@ -1,3 +1,4 @@
+import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -8,17 +9,16 @@ import {
     OnDestroy,
     OnInit
 } from '@angular/core';
-import { Data, Mapitem, MapLineRoot, MapLineRootParams } from './map-line.interface';
+import { Data, MapLineRoot, MapLineRootParams } from './map-line.interface';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { NgClass, NgIf } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
-import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { interval, Subscription } from 'rxjs';
 import { MapLineService } from './map-line.service';
+import { Mapitem, Mapline } from '../../pages/mapeditors/Mapeditors.interface';
 import { LabelPosition } from '../map-item-base/map-item-base.enum';
-import { Mapline } from '../../pages/mapeditors/Mapeditors.interface';
 
 @Component({
     selector: 'oitc-map-line',

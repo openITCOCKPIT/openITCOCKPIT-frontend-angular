@@ -186,6 +186,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 }
 
                 this.init = false;
+                this.changeGridSize(this.Mapeditor.grid.size);
                 this.cdr.markForCheck();
             }));
     }
@@ -201,10 +202,11 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 this.changeHelplinesSize(this.Mapeditor.grid.size);
             }
         }
-        if (this.Mapeditor.grid.enabled) {
-            this.gridSize = {x: size, y: size};
-            //makeDraggable();
-        }
+        //if (this.Mapeditor.grid.enabled) {
+        this.gridSize = {x: size, y: size};
+        this.cdr.markForCheck();
+        //makeDraggable();
+        //}
     }
 
     public changeHelplinesSize(size: number) {
