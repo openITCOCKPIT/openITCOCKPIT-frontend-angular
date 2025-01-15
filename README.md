@@ -117,6 +117,29 @@ location ^~ /a/ {
 }
 ```
 
+# Neues Module erstellen
+
+1. Neuen Ordner unter `src/app/modules` erstellen `jira_module`.
+2. Routes config hinzufügen in `jira_module/jira_module.routes.ts`
+
+```typescript
+import { Routes } from '@angular/router';
+
+export const jiraModuleRoutes: Routes = [];
+```
+
+3. Route laden in `src/app/app.routes.ts`
+
+````typescript
+/***    Routes for modules   ***/
+const moduleRoutes: Routes = [
+        ...eventcorrelationModuleRoutes,
+        ...jiraModuleRoutes // <-- add your module routes
+    ];
+````
+
+4. Unterordner `pages` erstellen, indem alle Seiten des Modules abgelegt werden.
+
 ---
 
 Original Angular Readme (unten)
