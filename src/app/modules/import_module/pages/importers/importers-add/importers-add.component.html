@@ -95,7 +95,7 @@
                         (onChange)="loadConfigFieldsByDataSource()"
                         [showClear]="false">
                     </oitc-select>
-                    <div class="help-block text-info">
+                    <div class="help-block text-info small">
                         @switch (post.data_source) {
                             @case ('csv_with_header') {
                                 {{ t('The first row of the CSV file will be treated as column names') }}
@@ -123,7 +123,7 @@
                         [(ngModel)]="post.external_system_id"
                         [debounce]="true">
                     </oitc-select>
-                    <div class="help-block text-info">
+                    <div class="help-block small">
                         {{ t('Use external system for showing additional host information') }}
                     </div>
 
@@ -143,7 +143,7 @@
                         [(ngModel)]="post.external_monitorings._ids"
                         [debounce]="true">
                     </oitc-multi-select>
-                    <div class="help-block text-info">
+                    <div class="help-block small">
                         {{ t('openITCOCKPIT will query the selected external monitoring to import devices monitored by the remote system. openITCOCKPIT will synchronize  the status. The monitoring itself is still done by the external monitoring system.') }}
                     </div>
                     <oitc-form-feedback [errors]="errors" errorField="external_monitorings"></oitc-form-feedback>
@@ -163,7 +163,7 @@
                         <label cFormCheckLabel
                                for="allow_empty_hosts">{{ t('Import empty hosts') }}</label>
                     </c-form-check>
-                    <div class="help-block" [ngClass]="{'text-danger': post.allow_empty_hosts}">
+                    <div class="help-block small" [ngClass]="{'text-danger': post.allow_empty_hosts}">
                         <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
                         {{ t('If enabled, all hosts will be imported even without at least one match') }}
                     </div>
@@ -183,7 +183,7 @@
                         <label cFormCheckLabel
                                for="disable_updates">{{ t('Disable updates') }}</label>
                     </c-form-check>
-                    <div class="help-block" [ngClass]="{'text-danger': post.disable_updates}">
+                    <div class="help-block small" [ngClass]="{'text-danger': post.disable_updates}">
                         <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
                         {{ t('If enabled, only new hosts will be imported. Already synchronized hosts are not changed') }}
                     </div>
@@ -205,7 +205,7 @@
                             <label cFormCheckLabel
                                    for="force_disable_hosts">{{ t('Force disable hosts if they are not present in the imported data') }}</label>
                         </c-form-check>
-                        <div class="help-block" [ngClass]="{'text-danger': post.force_disable_hosts}">
+                        <div class="help-block small" [ngClass]="{'text-danger': post.force_disable_hosts}">
                             <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
                             {{ t('If enabled all hosts outside of import data will get disabled automatically') }}
                         </div>
@@ -227,7 +227,7 @@
                             <label cFormCheckLabel
                                    for="re_enable_hosts">{{ t('Re-enable hosts if present in the imported data') }}</label>
                         </c-form-check>
-                        <div class="help-block">
+                        <div class="help-block small">
                             {{ t('If this option is enabled, disabled hosts will be enabled automatically') }}
                         </div>
                     </div>
@@ -248,7 +248,7 @@
                             <label cFormCheckLabel
                                    for="force_delete">{{ t('Force delete services if not in mapping') }}</label>
                         </c-form-check>
-                        <div class="help-block" [ngClass]="{'text-danger': post.force_delete}">
+                        <div class="help-block small" [ngClass]="{'text-danger': post.force_delete}">
                             <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
                             {{ t('If enabled all services outside of the service template group assignment will get deleted automatically') }}
                         </div>
@@ -270,7 +270,7 @@
                             <label cFormCheckLabel
                                    for="keep_container_settings">{{ t('Keep container settings') }}</label>
                         </c-form-check>
-                        <div class="help-block">
+                        <div class="help-block small">
                             {{ t('Keep container settings for hosts that have already been synchronized') }}
                         </div>
                     </div>
@@ -291,7 +291,7 @@
                             <label cFormCheckLabel
                                    for="keep_satellite_settings">{{ t('Keep satellite settings') }}</label>
                         </c-form-check>
-                        <div class="help-block">
+                        <div class="help-block small">
                             {{ t('Keep satellite settings for hosts that have already been synchronized') }}
                         </div>
                     </div>
@@ -336,7 +336,9 @@
                                 <oitc-dynamical-form-fields
                                     [formField]="formField"
                                     [errors]="errors"
+                                    [id]="formField['ngModel']"
                                     [name]="formField['ngModel']"
+                                    [identifier]="post['mapping_identifier']"
                                     [(ngModel)]="post[formField['ngModel']]"
                                 >
                                 </oitc-dynamical-form-fields>
@@ -345,6 +347,137 @@
                     </fieldset>
                 </c-container>
 
+                <c-container [fluid]="true" class="shadow-sm px-2 pb-4 my-4 bg-body rounded">
+                    <fieldset>
+                        <legend class="small fieldset-legend-border-bottom">
+                            <h4>
+                                <div class="icon-stack">
+                                    <i class="fa-solid fa-filter"></i>
+                                    <i class="fas fa-font fa-xs text-primary cornered cornered-lr"></i>
+                                </div>
+                                {{ t('Define global filter for import (optional)') }}
+                            </h4>
+                        </legend>
+                        <div class="my-2">
+                            <oitc-alert
+                                color="primary"
+                                baseIcon="shield"
+                                [icon]="['fas', 'exclamation-circle']"
+                                [errorHeadline]="'Hostname RegEx defined!'"
+                                [errorText]="'The regular expression will be applied to all objects. Leave this field blank if you do not want to apply a filter by hostname.'">
+                            </oitc-alert>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="hostname_regex">
+                                {{ t('Hostname RegEx') }}
+                            </label>
+                            <c-input-group>
+                                <input cFormControl id="hostname_regex"
+                                       type="text"
+                                       name="hostname_regex"
+                                       [(ngModel)]="post.hostname_regex"
+                                       oitcFormError
+                                       errorField="hostname_regex">
+                                <span cInputGroupText>
+                                    <oitc-regex-helper-tooltip/>
+                                </span>
+                            </c-input-group>
+                            <div class="help-block small">
+                                {{ t('The defined regular expression get applied to all imported hosts.') }}
+                            </div>
+                            <oitc-form-feedback [errors]="errors" errorField="hostname_regex"></oitc-form-feedback>
+                        </div>
+                    </fieldset>
+                </c-container>
+
+                <c-container [fluid]="true" class="shadow-sm px-2 pb-4 my-4 bg-body rounded">
+                    <fieldset>
+                        <legend class="small fieldset-legend-border-bottom">
+                            <h4>
+                                <div class="icon-stack">
+                                    <i class="fa-solid fa-tasks"></i>
+                                    <i class="fas fa-font fa-xs text-primary cornered cornered-lr"></i>
+                                </div>
+                                {{ t('Host defaults assignments') }}
+                            </h4>
+                            <div class="text-danger" *ngIf="errors && errors['validate_matches']">
+                                {{ t('Do not enter empty matches') }}
+                            </div>
+                        </legend>
+
+                        <div class="alert border-faded bg-transparent text-info"
+                             *ngIf="hostdefaults.length === 0 && post.container_id">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon me-2">
+                                    <span class="icon-stack icon-stack-md">
+                                        <i class="base-circle icon-stack-3x text-info"></i>
+                                        <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="h5 text-info">
+                                        {{ t('No host defaults are defined') }}
+                                    </span>
+                                    <br>
+                                    <div>
+                                        {{ t('Please create at least one "Host defaults"') }}
+                                    </div>
+                                </div>
+                                <div class="ms-2">
+                                    <a *oitcPermission="['importmodule', 'HostDefaults', 'index']"
+                                       [routerLink]="['/', 'import_module', 'HostDefaults', 'index']"
+                                       class="btn btn-outline-info ripple">
+                                        <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                                        {{ t('Go to "Host defaults"') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="ImporterHostdefault">
+                                @if (this.PermissionsService.hasPermissionObservable(['importmodule', 'HostDefaults', 'edit'])|async) {
+                                    <a [routerLink]="['/', 'import_module', 'HostDefaults', 'edit', post.hostdefault_id]"
+                                       *ngIf="post.hostdefault_id > 0">
+                                        {{ t('Host defaults') }}
+                                    </a>
+                                    <span *ngIf="!post.hostdefault_id">
+                                        {{ t('Host defaults') }}
+                                    </span>
+                                } @else {
+                                    {{ t('Host defaults') }}
+                                }
+                                {{ t('assignment') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <oitc-select
+                                name="ImporterHostdefault"
+                                id="ImporterHostdefault"
+                                [placeholder]="'Please choose' | transloco"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="hostdefaults"
+                                [(ngModel)]="post.hostdefault_id"
+                                [debounce]="true">
+                            </oitc-select>
+                            <div class="help-block small">
+                                {{ t('The saved settings get applied to all imported hosts.') }}
+                            </div>
+                            <oitc-form-feedback [errors]="errors" errorField="hostdefault_id"></oitc-form-feedback>
+                        </div>
+                        <hr class="border-dashed mt-3 mb-3"/>
+                        <h5 class="italic text-info">
+                            {{ t('Optional overwrites') }}
+                        </h5>
+                        <div class="help-block pb-2 small">
+                            {{ t('Define exceptions for particular hosts, that should get imported using a different configuration.') }}
+                            <br>
+                            {{ t('Matching is done in the shown order.') }}
+                            <span class="text-info">
+                                {{ t('The last matching overwrite configuration gets used by the Importer.') }}
+                            </span>
+                        </div>
+                    </fieldset>
+                </c-container>
 
             </c-card-body>
             <c-card-footer class="text-end">

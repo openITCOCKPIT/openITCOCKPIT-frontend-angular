@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { HistoryService } from '../../../../../history.service';
@@ -15,6 +15,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -23,7 +24,7 @@ import {
     ColComponent,
     ContainerComponent,
     FormCheckComponent,
-    FormCheckInputDirective,
+    FormCheckInputDirective, FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -34,7 +35,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -97,7 +98,11 @@ import {
         FormCheckComponent,
         NgClass,
         NgForOf,
-        DynamicalFormFieldsComponent
+        DynamicalFormFieldsComponent,
+        AlertComponent,
+        FormCheckLabelDirective,
+        AsyncPipe,
+        TranslocoPipe
     ],
     templateUrl: './importers-add.component.html',
     styleUrl: './importers-add.component.css',

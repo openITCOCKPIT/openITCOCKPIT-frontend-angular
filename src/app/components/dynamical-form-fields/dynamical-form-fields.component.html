@@ -4,6 +4,11 @@
         <div *ngIf="formField['type'] === 'text'" class="mb-3">
             <label cLabel [attr.for]="formField['ngModel']">
                 {{ formField['label'] }}
+                @if (identifier && identifier == ngModel && formField['key'] !== 'identifier') {
+                    <span class="badge border border-info text-info me-1">
+                        ⭐ {{ t('UID') }}
+                    </span>
+                }
                 @if (formField['required']) {
                     <oitc-required-icon></oitc-required-icon>
                 }
@@ -20,7 +25,7 @@
             <oitc-form-feedback [errors]="errors"
                                 errorField="{{formField['ngModel']}}"></oitc-form-feedback>
 
-            <div class="help-block" *ngIf="formField['help']">
+            <div class="help-block small" *ngIf="formField['help']">
                 {{ formField['help'] }}
             </div>
         </div>
@@ -29,6 +34,11 @@
         <div *ngIf="formField['type'] === 'number'" class="mb-3">
             <label cLabel [attr.for]="formField['ngModel']">
                 {{ formField['label'] }}
+                @if (identifier && identifier == ngModel && formField['key'] !== 'identifier') {
+                    <span class="badge border border-info text-info me-1">
+                        ⭐ {{ t('UID') }}
+                    </span>
+                }
                 @if (formField['required']) {
                     <oitc-required-icon></oitc-required-icon>
                 }
@@ -45,7 +55,7 @@
                    oitcFormError errorField="{{formField['ngModel']}}"/>
             <oitc-form-feedback [errors]="errors"
                                 errorField="{{formField['ngModel']}}"></oitc-form-feedback>
-            <div class="help-block" *ngIf="formField['help']">
+            <div class="help-block small" *ngIf="formField['help']">
                 {{ formField['help'] }}
             </div>
         </div>
@@ -68,7 +78,7 @@
                 <label cFormCheckLabel
                        [attr.for]="formField['ngModel']">{{ t(formField['label']) }}</label>
             </c-form-check>
-            <div class="help-block" *ngIf="formField['help']">
+            <div class="help-block small" *ngIf="formField['help']">
                 {{ formField['help'] }}
             </div>
         </div>
@@ -96,7 +106,7 @@
             </ng-select>
             <oitc-form-feedback [errors]="errors"
                                 errorField="{{formField['ngModel']}}"></oitc-form-feedback>
-            <div class="help-block" *ngIf="formField['help']">
+            <div class="help-block small" *ngIf="formField['help']">
                 {{ formField['help'] }}
             </div>
         </div>
@@ -119,7 +129,7 @@
                    oitcFormError errorField="{{formField['ngModel']}}"/>
             <oitc-form-feedback [errors]="errors"
                                 errorField="{{formField['ngModel']}}"></oitc-form-feedback>
-            <div class="help-block" *ngIf="formField['help']">
+            <div class="help-block small" *ngIf="formField['help']">
                 {{ formField['help'] }}
             </div>
         </div>
@@ -140,7 +150,7 @@
                 [ngModelOptions]="{standalone: true}"
                 [showClear]="false">
             </oitc-select>
-            <div class="help-block" *ngIf="formField['help']">
+            <div class="help-block small" *ngIf="formField['help']">
                 {{ formField['help'] }}
             </div>
         </div>
