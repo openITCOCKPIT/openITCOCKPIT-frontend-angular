@@ -151,7 +151,7 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
     }
 
     public onJiraProjectsSelectChange = (event: any): void => {
-
+  
     }
 
     public updateJiraSettings(): void {
