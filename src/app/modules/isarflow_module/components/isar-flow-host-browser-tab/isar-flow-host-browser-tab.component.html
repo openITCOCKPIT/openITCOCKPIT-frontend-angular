@@ -17,7 +17,8 @@
                             optionValue="key"
                             optionLabel="value"
                             [(ngModel)]="interfaceId"
-                            [options]="interfacesSelect">
+                            [options]="interfacesSelect"
+                            (onChange)="onInterfaceChange()">
                     </oitc-select>
                 </div>
 
@@ -54,7 +55,33 @@
                 </c-nav>
             </c-card-header>
             <c-card-body>
-                Content
+
+                <c-row *ngIf="isarFlowInterfaceInformation">
+                    <c-col [xs]="12">
+                        <h5>{{ isarFlowInterfaceInformation.isarFlowInterfaceInformation.interface_name }}
+
+                            <a cButton size="xs" color="primary" class="ms-2"
+                               [href]="isarFlowInterfaceInformation.urls[selectedTab]"
+                               target="_blank">
+                                <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
+                                {{ t('Open in new tab') }}
+                            </a>
+
+                            <!-- pass a default duration -->
+                            <oitc-isar-flow-timepicker
+                                    class="ms-2"
+                                    [selectedDuration]="duration"
+                                    (change)="onIsarFlowTimeDurationChange($event)"></oitc-isar-flow-timepicker>
+                        </h5>
+                    </c-col>
+
+                    <c-col [xs]="12">
+                        <oitc-iframe [url]="isarFlowInterfaceInformation.urls[selectedTab]"></oitc-iframe>
+                    </c-col>
+
+                </c-row>
+
+
             </c-card-body>
         </c-card>
 

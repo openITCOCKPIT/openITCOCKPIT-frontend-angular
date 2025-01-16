@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { IsarFlowTabs } from '../../components/isar-flow-host-browser-tab/isar-flow-tabs.enum';
 
 
 /**********************
@@ -77,4 +78,26 @@ export interface IsarFlowHostInformationResponse {
 
     }
     _csrfToken: null | string
+}
+
+export interface IsarFlowInterfaceInformationResponse {
+    isarFlowInterfaceInformation: {
+        id: number
+        isarflow_host_id: number
+        interface_name: string
+        created: string
+        modified: string
+        isarflow_host: {
+            id: number
+            host_id: number
+            description: string
+            hostname: string
+            ipaddress: string
+            created: string
+            modified: string
+        }
+    },
+    urls: {
+        [key in IsarFlowTabs]: string
+    }
 }
