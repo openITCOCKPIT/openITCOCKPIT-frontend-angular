@@ -10,8 +10,8 @@
     height: 300px;
     border: 1px solid #333;
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: calc(var(--cui-card-spacer-y) + 46px);
+    left: var(--cui-card-spacer-x);
     background-color: #3a3633;
     z-index: 900;
 }
@@ -42,8 +42,8 @@
     height: 200px;
     border: 1px solid #333;
     position: absolute;
-    bottom: 0px;
-    right: 0px;
+    bottom: var(--cui-card-spacer-y);
+    right: var(--cui-card-spacer-x);
     background-color: #3a3633;
     z-index: 900;
 }
