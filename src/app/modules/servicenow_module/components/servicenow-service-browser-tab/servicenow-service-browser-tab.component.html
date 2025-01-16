@@ -13,28 +13,28 @@
                 <tbody>
                 <tr>
                     <td>{{ t('Number') }}</td>
-                    <td>{{ result.incident.ServicenowIncident?.incident_id }}</td>
+                    <td>{{ result.incident.ServicenowIncident.incident_id }}</td>
                 </tr>
                 <tr>
                     <td>{{ t('State') }}</td>
-                    <td>{{ result.incident.ServicenowIncident?.state }}</td>
+                    <td>{{ result.incident.ServicenowIncident.state }}</td>
                 </tr>
                 <tr *ngIf="result.incident.ServicenowIncident?.resolution_code">
                     <td>{{ t('Resolution code') }}</td>
-                    <td>{{ result.incident.ServicenowIncident?.resolution_code }}</td>
+                    <td>{{ result.incident.ServicenowIncident.resolution_code }}</td>
                 </tr>
                 <tr *ngIf="result.incident.ServicenowIncident?.resolution_notes">
                     <td>{{ t('Resolution notes') }}</td>
-                    <td>{{ result.incident.ServicenowIncident?.resolution_notes }}</td>
+                    <td>{{ result.incident.ServicenowIncident.resolution_notes }}</td>
                 </tr>
                 <tr>
                     <td>{{ t('URL') }}</td>
                     <td>
                         <div *ngIf="result.globalsettings.ServicenowSettings.domain">
-                            <a href="{{result.globalsettings.ServicenowSettings.domain}}/nav_to.do?uri=/incident.do?sys_id={{result.incident.ServicenowIncident?.sys_id}}"
+                            <a href="{{result.globalsettings.ServicenowSettings.domain}}/nav_to.do?uri=/incident.do?sys_id={{result.incident.ServicenowIncident.sys_id}}"
                                target="_blank">
                                 <!-- @formatter:off -->
-                                {{ result.globalsettings.ServicenowSettings.domain }}/nav_to.do?uri=/incident.do?sys_id={{ result.incident.ServicenowIncident?.sys_id }}
+                                {{ result.globalsettings.ServicenowSettings.domain }}/nav_to.do?uri=/incident.do?sys_id={{ result.incident.ServicenowIncident.sys_id }}
                                 <!-- @formatter:on -->
                             </a>
                         </div>

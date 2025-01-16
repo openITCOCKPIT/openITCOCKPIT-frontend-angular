@@ -30,7 +30,7 @@
                 </span>
             </td>
         </tr>
-            @if (result.response?.general_information) {
+            @if (result.response.general_information) {
                 <tr *ngFor="let item of result.response.general_information| keyvalue: keepOrder">
                     <th colspan="3">
                         {{ item.key }}

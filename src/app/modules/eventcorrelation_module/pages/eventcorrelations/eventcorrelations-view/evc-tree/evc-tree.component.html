@@ -117,13 +117,13 @@
 
                         <c-row *ngIf="node.evcNode.service" class="m-0">
                             <c-col [xs]="12" class="text-truncate p-0 ps-1 evc-tree-hostname"
-                                   [ngClass]="{'text-muted':node.evcNode.service?.disabled}"
+                                   [ngClass]="{'text-muted':node.evcNode.service.disabled}"
                                    [cTooltip]="node.evcNode.service.host.name" cTooltipPlacement="top">
                                 <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                 @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                     <a [routerLink]="['/', 'hosts', 'browser', node.evcNode.service.host.id]"
                                        class="link-default"
-                                       [ngClass]="{'text-muted':node.evcNode.service?.disabled}">
+                                       [ngClass]="{'text-muted':node.evcNode.service.disabled}">
                                         {{ node.evcNode.service.host.name }}
                                     </a>
                                 } @else {
@@ -132,7 +132,7 @@
                             </c-col>
                             <c-col [xs]="12" class="text-truncate p-0 ps-1"
                                    [cTooltip]="node.evcNode.service.servicename " cTooltipPlacement="top"
-                                   [ngClass]="{'text-muted':node.evcNode.service?.disabled}">
+                                   [ngClass]="{'text-muted':node.evcNode.service.disabled}">
                                 <fa-icon [icon]="['fas', 'cog']"
                                          *ngIf="node.evcNode.service.service_type !== ServiceTypesEnum.EVK_SERVICE"></fa-icon>
                                 <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
@@ -141,7 +141,7 @@
                                 @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
                                     <a [routerLink]="['/', 'services', 'browser', node.evcNode.service.id]"
                                        class="link-default"
-                                       [ngClass]="{'text-muted':node.evcNode.service?.disabled}">
+                                       [ngClass]="{'text-muted':node.evcNode.service.disabled}">
                                         {{ node.evcNode.service.servicename }}
                                     </a>
                                 } @else {

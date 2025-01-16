@@ -25,6 +25,7 @@ import { hpserverhardwareModuleRoutes } from './modules/hpserverhardware_module/
 import { oracleModuleRoutes } from './modules/oracle_module/oracle_module.routes';
 import { sapModuleRoutes } from './modules/sap_module/sap_module.routes';
 import { upsModuleRoutes } from './modules/ups_module/ups_module.routes';
+import { isarFlowModuleRoutes } from './modules/isarflow_module/isarflow_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -71,7 +72,8 @@ const moduleRoutes: Routes = [
     ...checkmkModuleRoutes,
     ...hpserverhardwareModuleRoutes,
     ...mapModuleRoutes,
-    ...eventcorrelationModuleRoutes
+    ...eventcorrelationModuleRoutes,
+    ...isarFlowModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
@@ -660,6 +662,12 @@ const coreRoutes: Routes = [{
 }, {
     path: 'ConfigurationFiles/edit/:dbKey',
     loadComponent: () => import('./pages/configurationfiles/configuration-files-edit/configuration-files-edit.component').then(m => m.ConfigurationFilesEditComponent)
+}, {
+    path: 'backups/index',
+    loadComponent: () => import('./pages/backups/backups-index/backups-index.component').then(m => m.BackupsIndexComponent)
+}, {
+    path: 'backups/restore',
+    loadComponent: () => import('./pages/backups/backups-restore/backups-restore.component').then(m => m.BackupsRestoreComponent)
 }, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)
