@@ -144,7 +144,17 @@
                 </c-col>
             </c-row>
 
+            <c-row>
+                <oitc-prometheus-code-mirror>
+                        <textarea cFormControl id="commandLine"
+                                  name="command_line"
+                                  oitcFormError [errors]="errors" errorField="command_line"
+                        ></textarea>
+                </oitc-prometheus-code-mirror>
+            </c-row>
             PromQL query
+
+
             <oitc-required-icon/>
 
             <div class="col col-9 font-md text-info">
