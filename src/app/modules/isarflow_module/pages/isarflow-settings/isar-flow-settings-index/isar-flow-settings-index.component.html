@@ -1,0 +1,513 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('IsarFlow Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'isarflow_module', 'isarflow_settings', 'index']"
+                   *oitcPermission="['IsarflowModule', 'IsarflowSettings', 'index']">
+                    <fa-icon [icon]="['fas', 'square-poll-horizontal']"></fa-icon>
+                    {{ t('IsarFlow Settings') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
+    </nav>
+    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+
+    <form cForm (ngSubmit)="updateIsarFlowSettings()" *ngIf="post">
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Edit IsarFlow Settings') }}
+                </h5>
+            </c-card-header>
+            <c-card-body>
+
+                <div class="mb-3">
+                    <label cLabel for="ExternalSystems">
+                        {{ t('External system (iTop)') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+
+                    <oitc-multi-select
+                            name="ExternalSystems"
+                            id="ExternalSystems"
+                            optionValue="key"
+                            optionLabel="value"
+                            class="flex-1"
+                            [(ngModel)]="post.external_systems._ids"
+                            [options]="externalSystems"
+                            oitcFormError [errors]="errors" errorField="external_systems">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="external_systems"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('openITCOCKPIT will query the selected external systems to import IsarFlow devices.') }}
+                    </div>
+                </div>
+
+
+                <div class="mb-3">
+                    <label cLabel for="webserver_address">
+                        {{ t('Web Server Address') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <c-input-group>
+                        <c-dropdown variant="btn-group">
+                            <button cButton cDropdownToggle color="primary">
+                                <fa-icon
+                                        [icon]="['fas', post.use_https?'lock':'lock-open']"></fa-icon>
+                                {{ post.use_https ? 'https' : 'http' }}
+                            </button>
+                            <div cDropdownMenu>
+                                <span cDropdownItem (click)="post.use_https = 1">
+                                    <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                                    https
+                                </span>
+                                <span cDropdownItem (click)="post.use_https = 0">
+                                    <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+                                    http
+                                </span>
+                            </div>
+                        </c-dropdown>
+                        <span cInputGroupText>://</span>
+                        <input cFormControl id="webserver_address" required type="text"
+                               name="webserver_address"
+                               [(ngModel)]="post.webserver_address"
+                               oitcFormError errorField="webserver_address">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="webserver_address"></oitc-form-feedback>
+
+                    <div class="help-block">
+                        {{ t('"Connect via HTTPS" to use for reaching IsarFlow webserver. Defaults to *Connect via HTTPS* checked. You may change to http if you are developing locally.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <c-form-check>
+                        <input
+                                [(ngModel)]="post.use_https" cFormCheckInput
+                                id="use_https"
+                                class="checkbox-lg me-2 mt-0"
+                                name="use_https"
+                                trueFalseValue
+                                [falseValue]="0"
+                                [trueValue]="1"
+                                oitcDebounce
+                                type="checkbox"/>
+                        <label cFormCheckLabel
+                               for="use_https">{{ t('Connect via HTTPS') }}</label>
+                    </c-form-check>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="port">
+                        {{ t('Port') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl required type="number"
+                           id="port"
+                           name="port"
+                           min="1"
+                           max="65535"
+                           placeholder="443"
+                           oitcFormError [errors]="errors" errorField="webserver_port"
+                           [(ngModel)]="post.webserver_port">
+                    <oitc-form-feedback [errors]="errors" errorField="webserver_port"></oitc-form-feedback>
+
+                    <div class="help-block">
+                        {{ t('TCP port of IsarFlow webserver. Defaults to *443*. You may change to 8080 if you are developing locally.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="shared_secret_1">
+                        {{ t('Shared Secret 1') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl required type="text"
+                           id="shared_secret_1"
+                           name="shared_secret_1"
+                           oitcFormError [errors]="errors" errorField="shared_secret_1"
+                           [(ngModel)]="post.shared_secret_1">
+                    <oitc-form-feedback [errors]="errors" errorField="shared_secret_1"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="shared_secret_2">
+                        {{ t('Shared Secret 2') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl required type="text"
+                           id="shared_secret_2"
+                           name="shared_secret_2"
+                           oitcFormError [errors]="errors" errorField="shared_secret_2"
+                           [(ngModel)]="post.shared_secret_2">
+                    <oitc-form-feedback [errors]="errors" errorField="shared_secret_2"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="export_deviceip_with_interfaceindex">
+                        {{ t('Exact notation of Export Device') }}
+                    </label>
+                    <input cFormControl required type="text"
+                           id="export_deviceip_with_interfaceindex"
+                           name="export_deviceip_with_interfaceindex"
+                           oitcFormError [errors]="errors" errorField="export_deviceip_with_interfaceindex"
+                           [(ngModel)]="post.export_deviceip_with_interfaceindex">
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="export_deviceip_with_interfaceindex"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Exact notation of ExportDevice IP address in dotted decimal concatenated with interfaceIndex. Example: &lt;10.0.254.1_23&gt;') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="authentication_mode">
+                        {{ t('Authentication Mode') }}
+                    </label>
+
+                    <oitc-select
+                            name="authentication_mode"
+                            id="authentication_mode"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.authentication_mode"
+                            [options]="authenticationMethods"
+                            oitcFormError [errors]="errors" errorField="authentication_mode">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="authentication_mode"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Decides if the returning URL points to the IsarFlow UI where the user has to authenticate via password. Or to the UI where he is authenticated via token. Possible values are &lt;password|token&gt;. Defaults to *token*.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="language_code">
+                        {{ t('Language Code') }}
+                    </label>
+
+                    <oitc-select
+                            name="language_code"
+                            id="language_code"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.language_code"
+                            [options]="languageCodes"
+                            oitcFormError [errors]="errors" errorField="language_code">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="language_code"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Specify the language of the resulting analysis. Possible values are &lt;de|en&gt; Defaults to *en*') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="duration">
+                        {{ t('Duration') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <c-input-group>
+                        <input cFormControl required type="number"
+                               min="1"
+                               step="1"
+                               placeholder="3600"
+                               id="duration"
+                               name="duration"
+                               oitcFormError [errors]="errors" errorField="duration"
+                               [(ngModel)]="post.duration">
+                        <button cButton color="primary"
+                                class="ripple me-2"
+                                type="button">
+                            {{ t('Seconds') }}
+                        </button>
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="duration"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Specify the last desired seconds to be included in analysis result: A value of 3600 will do a report for the last 1 hour. Defaults to *3600*') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="granularity">
+                        {{ t('Granularity') }}
+                    </label>
+
+                    <oitc-select
+                            name="granularity"
+                            id="granularity"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.granularity"
+                            [options]="granularityOptions"
+                            oitcFormError [errors]="errors" errorField="granularity">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="granularity"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Specify the granularity of resulting analysis. Possible values are &lt;60|300|3600|1440|86400&gt; Defaults to *60*') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="if_view">
+                        {{ t('Interface search string') }}
+                    </label>
+                    <input cFormControl required type="text"
+                           id="if_view"
+                           name="if_view"
+                           oitcFormError [errors]="errors" errorField="if_view"
+                           [(ngModel)]="post.if_view">
+                    <oitc-form-feedback [errors]="errors" errorField="if_view"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Interface search string. Might be e.g. "Gi" or "crosslink".') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="ip_network_a_traffic_direction">
+                        {{ t('IP Network A Traffic Direction') }}
+                    </label>
+
+                    <oitc-select
+                            name="ip_network_a_traffic_direction"
+                            id="ip_network_a_traffic_direction"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.ip_network_a_traffic_direction"
+                            [options]="ipNetworkTrafficDirectionOptions"
+                            oitcFormError [errors]="errors" errorField="ip_network_a_traffic_direction">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="ip_network_a_traffic_direction"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Enum value of &lt;internal|external|both&gt;') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="bgp_adjacent_as">
+                        {{ t('Search string for Peer') }}
+                    </label>
+                    <input cFormControl required type="text"
+                           id="bgp_adjacent_as"
+                           name="bgp_adjacent_as"
+                           oitcFormError [errors]="errors" errorField="bgp_adjacent_as"
+                           [(ngModel)]="post.bgp_adjacent_as">
+                    <oitc-form-feedback [errors]="errors" errorField="bgp_adjacent_as"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="bgp_as_number">
+                        {{ t('List of SRC or DST AS Numbers') }}
+                    </label>
+                    <input cFormControl required type="text"
+                           id="bgp_as_number"
+                           name="bgp_as_number"
+                           oitcFormError [errors]="errors" errorField="bgp_as_number"
+                           [(ngModel)]="post.bgp_as_number">
+                    <oitc-form-feedback [errors]="errors" errorField="bgp_as_number"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('List must be separated using comma.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="cb_qos_interface">
+                        {{ t('Search string for cbQos analysis') }}
+                    </label>
+                    <input cFormControl required type="text"
+                           id="cb_qos_interface"
+                           name="cb_qos_interface"
+                           oitcFormError [errors]="errors" errorField="cb_qos_interface"
+                           [(ngModel)]="post.cb_qos_interface">
+                    <oitc-form-feedback [errors]="errors" errorField="cb_qos_interface"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Only relevant for cbQos analysis. Search string that may only have a single search result.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="ip_cos">
+                        {{ t('Search string to define Cos Classes') }}
+                    </label>
+                    <input cFormControl required type="text"
+                           id="ip_cos"
+                           name="ip_cos"
+                           oitcFormError [errors]="errors" errorField="ip_cos"
+                           [(ngModel)]="post.ip_cos">
+                    <oitc-form-feedback [errors]="errors" errorField="ip_cos"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Must be combined with ipCosGroup.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="ip_cos_group">
+                        {{ t('Enum value of &lt;DSCP|Precedence|ToS&gt;') }}
+                    </label>
+                    <input cFormControl required type="text"
+                           id="ip_cos_group"
+                           name="ip_cos_group"
+                           oitcFormError [errors]="errors" errorField="ip_cos_group"
+                           [(ngModel)]="post.ip_cos_group">
+                    <oitc-form-feedback [errors]="errors" errorField="ip_cos_group"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Enum value of &lt;DSCP|Precedence|ToS&gt; - needs to match ipCos search string.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="ip_version">
+                        {{ t('IP Version') }}
+                    </label>
+
+                    <oitc-select
+                            name="ip_version"
+                            id="ip_version"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.ip_version"
+                            [options]="ipVersionOptions"
+                            oitcFormError [errors]="errors" errorField="ip_version">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="ip_version"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Enum value with no *IPv* Prefix. &lt;4|6&gt;') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="ip_view_a">
+                        {{ t('IP View A') }}
+                    </label>
+                    <input cFormControl required type="text"
+                           id="ip_view_a"
+                           name="ip_view_a"
+                           oitcFormError [errors]="errors" errorField="ip_view_a"
+                           [(ngModel)]="post.ip_view_a">
+                    <oitc-form-feedback [errors]="errors" errorField="ip_view_a"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Search string to specify ipViewA. May also be combined with "IP Network A Traffic Direction"') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="ip_view_a_traffic_direction">
+                        {{ t('IP ViewA Traffic Direction') }}
+                    </label>
+
+                    <oitc-select
+                            name="ip_view_a_traffic_direction"
+                            id="ip_view_a_traffic_direction"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.ip_view_a_traffic_direction"
+                            [options]="ipViewATrafficDirectionOptions"
+                            oitcFormError [errors]="errors" errorField="ip_view_a_traffic_direction">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="ip_view_a_traffic_direction"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Enum value &lt;external|internal&gt;') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="ip_view_b">
+                        {{ t('IP View B') }}
+                    </label>
+                    <input cFormControl required type="text"
+                           id="ip_view_b"
+                           name="ip_view_b"
+                           oitcFormError [errors]="errors" errorField="ip_view_b"
+                           [(ngModel)]="post.ip_view_b">
+                    <oitc-form-feedback [errors]="errors" errorField="ip_view_b"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Search string to specify ipViewB.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="snmp_interface">
+                        {{ t('SNMP Interface') }}
+                    </label>
+                    <input cFormControl required type="text"
+                           id="snmp_interface"
+                           name="snmp_interface"
+                           oitcFormError [errors]="errors" errorField="snmp_interface"
+                           [(ngModel)]="post.snmp_interface">
+                    <oitc-form-feedback [errors]="errors" errorField="snmp_interface"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Search string to specify a SNMP interface. Only relevant for TopSnmpInterfaces analysis.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="primary_unit">
+                        {{ t('Primary Unit') }}
+                    </label>
+                    <input cFormControl required type="text"
+                           id="primary_unit"
+                           name="primary_unit"
+                           oitcFormError [errors]="errors" errorField="primary_unit"
+                           [(ngModel)]="post.primary_unit">
+                    <oitc-form-feedback [errors]="errors" errorField="primary_unit"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Enum value &lt;bytes|flows|packets&gt;. Only relevant for NetFlow bases analysis.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="session_type">
+                        {{ t('Session Type') }}
+                    </label>
+                    <input cFormControl required type="text"
+                           id="session_type"
+                           name="session_type"
+                           oitcFormError [errors]="errors" errorField="session_type"
+                           [(ngModel)]="post.session_type">
+                    <oitc-form-feedback [errors]="errors" errorField="session_type"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Enum value &lt;SrcDstProtocol|SrcDstCos|SrcDstProtocolTos&gt;. Only relevant for IP Address based session analysis like TopSessions and TopSessionsMatrix.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="jitter_probe">
+                        {{ t('Jitter Probe') }}
+                    </label>
+                    <input cFormControl required type="text"
+                           id="jitter_probe"
+                           name="jitter_probe"
+                           oitcFormError [errors]="errors" errorField="jitter_probe"
+                           [(ngModel)]="post.jitter_probe">
+                    <oitc-form-feedback [errors]="errors" errorField="jitter_probe"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Search String to specify IPSLA jitter probes. Only relevant for jitter analysis.') }}
+                    </div>
+                </div>
+
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Save') }}
+                </button>
+            </c-card-footer>
+
+        </c-card>
+    </form>
+</ng-container>
