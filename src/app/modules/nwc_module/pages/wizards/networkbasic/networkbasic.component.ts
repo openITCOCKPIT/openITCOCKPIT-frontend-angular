@@ -13,7 +13,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
     CardBodyComponent,
     CardComponent,
-    CardHeaderComponent,
+    CardHeaderComponent, CardTitleDirective,
     FormControlDirective,
     FormLabelDirective
 } from '@coreui/angular';
@@ -52,7 +52,8 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         TranslocoDirective,
         OitcAlertComponent,
         ProgressBarModule,
-        XsButtonDirective
+        XsButtonDirective,
+        CardTitleDirective
     ],
     templateUrl: './networkbasic.component.html',
     styleUrl: './networkbasic.component.css',

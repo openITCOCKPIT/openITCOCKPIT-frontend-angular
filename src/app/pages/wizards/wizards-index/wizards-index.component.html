@@ -82,6 +82,36 @@
                         </c-card-footer>
                     </c-card>
                 </c-col>
+                <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
+                       *ngFor="let wizard of result.possibleWizards | keyvalue"
+                       [hidden]="! filterByCategory(wizard.value.category)">
+                    <c-card class="mb-3">
+                        <c-card-body class="wizard-card-body bg-placeholder-wizard">
+                            <div class="d-flex align-items-center">
+                                <div class="wizard-logo-image">
+                                    <img [src]="'./assets/images/wizards/'+wizard.value.image"
+                                         [alt]="wizard.value.title">
+                                </div>
+                                <div class="pl-10">
+                                    <h5>
+                                        {{ wizard.value.title }}
+                                    </h5>
+                                    <br/>
+                                    {{ wizard.value.description }}
+                                </div>
+                            </div>
+                        </c-card-body>
+                        <c-card-footer>
+                            <div>
+                                <oitc-badge-outline color="warning">{{ t('Requires module') }}</oitc-badge-outline>
+                            </div>
+                            <div class="text-end">
+                                <i class="fas fa-tags wizard-info-tags"></i>
+                                {{ wizard.value.category.join(', ') }}
+                            </div>
+                        </c-card-footer>
+                    </c-card>
+                </c-col>
             </c-row>
         </c-card-body>
     </c-card>
