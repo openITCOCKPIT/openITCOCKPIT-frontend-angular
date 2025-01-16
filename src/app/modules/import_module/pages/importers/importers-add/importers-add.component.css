@@ -1,0 +1,5 @@
+.hostdefaults-item-list:not(:last-child) {
+    border-bottom: 1px solid;
+    border-image-source: linear-gradient(45deg, #6b778550, transparent);
+    border-image-slice: 1;
+}

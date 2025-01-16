@@ -57,5 +57,8 @@ export const importModuleRoutes: Routes = [{
 }, {
     path: 'import_module/importers/index',
     loadComponent: () => import('./pages/importers/importers-index/importers-index.component').then(m => m.ImportersIndexComponent)
+}, {
+    path: 'import_module/importers/add',
+    loadComponent: () => import('./pages/importers/importers-add/importers-add.component').then(m => m.ImportersAddComponent)
 }
 ];

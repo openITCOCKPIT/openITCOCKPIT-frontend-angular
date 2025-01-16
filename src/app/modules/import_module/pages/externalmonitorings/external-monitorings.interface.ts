@@ -1,5 +1,6 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 export interface ExternalMonitoringsIndexRoot extends PaginateOrScroll {
     externalMonitorings: ExternalMonitoring[]
@@ -90,4 +91,8 @@ export interface ExternalMonitoringConfigPrtg {
     ignore_ssl_certificate: number
     polling_interval: number
     include_channels: number
+}
+
+export interface ExternalMonitoringsAsList{
+    externalMonitorings: SelectKeyValue[]
 }
