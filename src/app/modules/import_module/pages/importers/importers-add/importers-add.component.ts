@@ -33,7 +33,7 @@ import {
     InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent
+    RowComponent, TableDirective
 } from '@coreui/angular';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
@@ -102,7 +102,8 @@ import {
         AlertComponent,
         FormCheckLabelDirective,
         AsyncPipe,
-        TranslocoPipe
+        TranslocoPipe,
+        TableDirective
     ],
     templateUrl: './importers-add.component.html',
     styleUrl: './importers-add.component.css',
@@ -294,9 +295,9 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
     protected readonly Object = Object;
 
     public addMatch() {
-        let count = this.post.importers_to_hostdefaults.length +1;
+        let count = this.post.importers_to_hostdefaults.length + 1;
         let highest = 0;
-        if(this.post.importers_to_hostdefaults.length > 0) {
+        if (this.post.importers_to_hostdefaults.length > 0) {
             highest = Math.max.apply(Math, _.map(this.post.importers_to_hostdefaults, 'index')) + 1;
         }
 

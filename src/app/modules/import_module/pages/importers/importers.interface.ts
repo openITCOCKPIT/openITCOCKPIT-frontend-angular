@@ -2,7 +2,6 @@ import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator
 import { ExternalMonitoringsAsList } from '../externalmonitorings/external-monitorings.interface';
 import { ExternalSystemsAsList } from '../externalsystems/external-systems.interface';
 import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
-import { HostDefaultsPost } from '../hostdefaults/hostdefaults.interface';
 
 export interface ImportersIndexRoot extends PaginateOrScroll {
     importers: Importer[]

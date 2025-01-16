@@ -21,7 +21,7 @@
                    (ngModelChange)="ngModelChange.emit($event)"
                    [ngModelOptions]="{standalone: true}"
                    class="{{formField['class']}}"
-                   oitcFormError errorField="{{formField['ngModel']}}"/>
+                   oitcFormError [errors]="errors" errorField="{{formField['ngModel']}}"/>
             <oitc-form-feedback [errors]="errors"
                                 errorField="{{formField['ngModel']}}"></oitc-form-feedback>
 
@@ -52,7 +52,7 @@
                    (ngModelChange)="ngModelChange.emit($event)"
                    [ngModelOptions]="{standalone: true}"
                    class="{{formField['class']}}"
-                   oitcFormError errorField="{{formField['ngModel']}}"/>
+                   oitcFormError [errors]="errors" errorField="{{formField['ngModel']}}"/>
             <oitc-form-feedback [errors]="errors"
                                 errorField="{{formField['ngModel']}}"></oitc-form-feedback>
             <div class="help-block small" *ngIf="formField['help']">
@@ -126,7 +126,7 @@
                    (ngModelChange)="ngModelChange.emit($event)"
                    [ngModelOptions]="{standalone: true}"
                    class="{{formField['class']}}"
-                   oitcFormError errorField="{{formField['ngModel']}}"/>
+                   oitcFormError [errors]="errors" errorField="{{formField['ngModel']}}"/>
             <oitc-form-feedback [errors]="errors"
                                 errorField="{{formField['ngModel']}}"></oitc-form-feedback>
             <div class="help-block small" *ngIf="formField['help']">
