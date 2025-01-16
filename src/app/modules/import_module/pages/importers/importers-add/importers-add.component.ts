@@ -4,11 +4,11 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { HistoryService } from '../../../../../history.service';
-import { ImporterConfig, ImportersPost } from '../importers.interface';
+import { ImporterConfig, ImporterHostDefaultsResponse, ImportersPost } from '../importers.interface';
 import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enum';
-import { GenericValidationError } from '../../../../../generic-responses';
+import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
-import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -24,7 +24,8 @@ import {
     ColComponent,
     ContainerComponent,
     FormCheckComponent,
-    FormCheckInputDirective, FormCheckLabelDirective,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -35,7 +36,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { AsyncPipe, JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -59,7 +60,6 @@ import {
 @Component({
     selector: 'oitc-importers-add',
     imports: [
-        JsonPipe,
         BackButtonDirective,
         CardBodyComponent,
         CardComponent,
@@ -118,7 +118,8 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private ImportersService = inject(ImportersService);
     public containers: SelectKeyValue[] = [];
-    public hostdefaults: SelectKeyValue[] = [];
+    public hostdefaults: { [key: string]: ImporterHostDefaultsResponse } = {};
+    public hostdefaultsAsList: SelectKeyValueString[] = [];
     public externalsystems: SelectKeyValue[] = [];
     public externalmonitorings: SelectKeyValue[] = [];
 
@@ -151,6 +152,25 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
         {
             key: 'external_monitoring',
             value: this.TranslocoService.translate('External Monitoring')
+        }
+    ];
+
+    protected readonly matchFields = [
+        {
+            key: 'hostname',
+            value: this.TranslocoService.translate('Host name')
+        },
+        {
+            key: 'description',
+            value: this.TranslocoService.translate('Description')
+        },
+        {
+            key: 'address',
+            value: this.TranslocoService.translate('Address')
+        },
+        {
+            key: 'software',
+            value: this.TranslocoService.translate('Software')
         }
     ];
 
@@ -189,12 +209,41 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
             external_system_id: null,
             external_monitorings: {
                 _ids: []
-            }
+            },
+            importers_to_hostdefaults: []
         }
     }
 
     public submit() {
+        this.subscriptions.add(this.ImportersService.createImporter(this.post)
+            .subscribe((result) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
 
+                    const title = this.TranslocoService.translate('Importer');
+                    const msg = this.TranslocoService.translate('created successfully');
+                    const url = ['import_module', 'Importers', 'edit', response.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+
+                    // Create another
+                    this.post = this.getClearForm();
+                    this.errors = null;
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
+
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            })
+        );
     }
 
     public onContainerChange() {
@@ -211,9 +260,10 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ImportersService.loadElements(containerId, this.post.data_source)
             .subscribe((result) => {
-                this.hostdefaults = _.map(result.hostdefaults, function (value, key) {
+                this.hostdefaultsAsList = _.map(result.hostdefaults, function (value, key) {
                     return {key: key, value: value.name};
                 });
+                this.hostdefaults = result.hostdefaults;
                 this.externalsystems = result.externalsystems.externalsystems;
                 this.externalmonitorings = result.externalMonitorings.externalMonitorings;
                 this.cdr.markForCheck();
@@ -242,4 +292,57 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
 
 
     protected readonly Object = Object;
+
+    public addMatch() {
+        let count = this.post.importers_to_hostdefaults.length +1;
+        let highest = 0;
+        if(this.post.importers_to_hostdefaults.length > 0) {
+            highest = Math.max.apply(Math, _.map(this.post.importers_to_hostdefaults, 'index')) + 1;
+        }
+
+        this.post.importers_to_hostdefaults.push({
+            id: count,
+            field: 'hostname',
+            regex: '',
+            hostdefault_id: null,
+            index: highest,
+            order: count
+        });
+
+        if (this.errors !== null) {
+            if (!(typeof this.errors['validate_matches'] !== 'undefined' ||
+                typeof this.errors['hostdefault_matches'] !== 'undefined')) {
+                this.post.importers_to_hostdefaults = _(this.post.importers_to_hostdefaults)
+                    .chain()
+                    .flatten()
+                    .sortBy(
+                        function (match) {
+                            return [match.index];
+                        })
+                    .value();
+            }
+        }
+    }
+
+    public removeMatch(index: number | undefined) {
+        let importers_to_hostdefaults = [];
+        for (var i in this.post.importers_to_hostdefaults) {
+            if (this.post.importers_to_hostdefaults[i]['index'] !== index) {
+                importers_to_hostdefaults.push(this.post.importers_to_hostdefaults[i])
+            }
+        }
+        if (this.errors?.hasOwnProperty('validate_matches') && typeof this.errors['validate_matches'] !== 'undefined' ||
+            this.errors?.hasOwnProperty('hostdefault_matches') && typeof this.errors['hostdefault_matches'] !== 'undefined') {
+            this.post.importers_to_hostdefaults = importers_to_hostdefaults;
+        } else {
+            this.post.importers_to_hostdefaults = _(importers_to_hostdefaults)
+                .chain()
+                .flatten()
+                .sortBy(
+                    function (match) {
+                        return [match.field, match.regex];
+                    })
+                .value();
+        }
+    }
 }

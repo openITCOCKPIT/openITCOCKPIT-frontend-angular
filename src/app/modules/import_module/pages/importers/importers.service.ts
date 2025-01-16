@@ -1,12 +1,21 @@
 import { inject, Injectable } from '@angular/core';
-import { forkJoin, map, Observable } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { ImporterConfig, ImporterElements, ImportersIndexParams, ImportersIndexRoot } from './importers.interface';
-import { Hostdefault, HostDefaultsIndexRoot } from '../hostdefaults/hostdefaults.interface';
+import {
+    ImporterConfig,
+    ImporterElements,
+    ImportersGet,
+    ImportersIndexParams,
+    ImportersIndexRoot,
+    ImportersPost,
+    LoadElementsByContainerIdResponse
+} from './importers.interface';
+import { Hostdefault } from '../hostdefaults/hostdefaults.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { ExternalSystemsAsList } from '../externalsystems/external-systems.interface';
 import { ExternalMonitoringsAsList } from '../externalmonitorings/external-monitorings.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -43,7 +52,7 @@ export class ImportersService {
     public loadElements(containerId: number, dataSource: string): Observable<ImporterElements> {
         const proxyPath = this.proxyPath;
         return forkJoin([
-            this.http.get<HostDefaultsIndexRoot>(`${proxyPath}/import_module/importers/loadElementsByContainerId/` + containerId + `.json?angular=true`, {
+            this.http.get<LoadElementsByContainerIdResponse>(`${proxyPath}/import_module/importers/loadElementsByContainerId/` + containerId + `.json?angular=true`, {
                 params: {
                     empty: 'true'
                 }
@@ -59,9 +68,9 @@ export class ImportersService {
                 }
             })
         ]).pipe(
-            map(([hostdefaults, externalsystems, externalMonitorings]) => {
+            map(([hostdefaultsResponse, externalsystems, externalMonitorings]) => {
                 return {
-                    hostdefaults: hostdefaults.hostdefaults,
+                    hostdefaults: hostdefaultsResponse.hostdefaults,
                     externalsystems: externalsystems,
                     externalMonitorings: externalMonitorings
                 }
@@ -72,6 +81,74 @@ export class ImportersService {
     public loadConfig(data_source: string) {
         const proxyPath = this.proxyPath;
         return this.http.post<ImporterConfig>(`${proxyPath}/import_module/importers/loadConfigFieldsByDataSource/${data_source}.json?angular=true`, {});
+    }
+
+
+    /**********************
+     *    Add action    *
+     **********************/
+    public createImporter(importer: ImportersPost) {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/import_module/importers/add.json?angular=true`, {
+            Importer: importer
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.hostdefault as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<ImportersGet> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            importer: ImportersPost
+        }>(`${proxyPath}/import_module/host_defaults/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    /**********************
+     *    Edit action    *
+     **********************/
+    public edit(importer: ImportersPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/import_module/importers/edit/${importer.id}.json?angular=true`, {
+            Importer: importer
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.importers as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
 
