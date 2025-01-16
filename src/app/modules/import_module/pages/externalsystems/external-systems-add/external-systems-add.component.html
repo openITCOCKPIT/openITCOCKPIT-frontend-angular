@@ -68,7 +68,7 @@
                     <input cFormControl id="ExternalSystemName" required type="text"
                            name="name"
                            [(ngModel)]="post.name"
-                           oitcFormError errorField="name">
+                           oitcFormError [errors]="errors" errorField="name">
                     <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                 </div>
                 <div class="mb-3">
@@ -77,8 +77,7 @@
                     </label>
                     <input cFormControl id="ExternalSystemDescription" required type="text"
                            name="description"
-                           [(ngModel)]="post.description"
-                           oitcFormError errorField="description">
+                           [(ngModel)]="post.description">
                 </div>
                 <div class="mb-3">
                     <label cLabel for="SystemType">
@@ -146,7 +145,7 @@
                                                name="Url"
                                                [(ngModel)]="post.api_url"
                                                placeholder="{{post.system_type === 'idoit' ? ExternalSystemTypes[0].placeholder : ExternalSystemTypes[1].placeholder}}"
-                                               oitcFormError errorField="api_url">
+                                               oitcFormError [errors]="errors" errorField="api_url">
                                     </c-input-group>
                                     <oitc-form-feedback [errors]="errors"
                                                         errorField="api_url"></oitc-form-feedback>
@@ -174,7 +173,7 @@
                                            name="api_key"
                                            placeholder="ZXhhbXBsZV9ncmFmYW5hX2FwaV9rZXk="
                                            [(ngModel)]="post.api_key"
-                                           oitcFormError errorField="api_key">
+                                           oitcFormError [errors]="errors" errorField="api_key">
                                     <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
                                 </div>
                                 <div class="mb-3">
@@ -187,7 +186,7 @@
                                            name="oitc_api"
                                            [(ngModel)]="post.api_user"
                                            autocomplete="off"
-                                           oitcFormError errorField="api_user">
+                                           oitcFormError [errors]="errors" errorField="api_user">
                                     <oitc-form-feedback errorField="api_user"></oitc-form-feedback>
                                 </div>
                                 <div>
@@ -199,7 +198,7 @@
                                            [(ngModel)]="post.api_password"
                                            name="api_password"
                                            autocomplete="off"
-                                           oitcFormError errorField="api_password">
+                                           oitcFormError [errors]="errors" errorField="api_password">
                                     <oitc-form-feedback [errors]="errors"
                                                         errorField="api_password"></oitc-form-feedback>
                                 </div>
