@@ -22,4 +22,5 @@ export enum HostBrowserTabs {
     Grafana = 'Grafana',
     CMDB = 'CMDB',
     SLA = 'SLA',
+    IsarFlow = 'IsarFlow',
 }
