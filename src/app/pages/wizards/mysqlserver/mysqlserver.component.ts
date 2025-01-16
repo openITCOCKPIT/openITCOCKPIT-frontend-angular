@@ -63,7 +63,7 @@ export class MysqlserverComponent extends WizardsAbstractComponent {
         host_id: 0,
         services: [],
 // Fields for the wizard
-        database: '',
+        database: 'information_schema',
         password: '',
         username: ''
     } as MysqlWizardPost;

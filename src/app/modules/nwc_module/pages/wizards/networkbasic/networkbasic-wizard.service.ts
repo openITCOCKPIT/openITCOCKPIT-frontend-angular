@@ -37,12 +37,19 @@ export class NetworkbasicWizardService extends WizardsService {
 
     }
 
-    public executeSNMPDiscovery(post: NetworkbasicWizardPost): Observable<SnmpDiscovery> {
+    public executeSNMPDiscovery(post: NetworkbasicWizardPost): Observable<SnmpDiscovery | GenericResponseWrapper> {
         return this.http.post<SnmpDiscovery>(`${this.proxyPath}/nwc_module/wizards/executeSNMPDiscovery/${post.host_id}.json?angular=true`, post)
             .pipe(
                 map((data: SnmpDiscovery) => {
                     return data
                 }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
             );
 
     }
