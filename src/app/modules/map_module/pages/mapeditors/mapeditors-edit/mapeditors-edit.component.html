@@ -1,0 +1,266 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Map Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['mapmodule', 'maps', 'index']"
+                   [routerLink]="['/', 'map_module', 'maps', 'index']">
+                    <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
+                    {{ t('Maps') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Map editor') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Edit map:') }}
+
+                <small class="fw-300">
+                    <!--{{ map.Map.name }}-->
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+
+                <c-nav-item class="px-1">
+                    <div class="checkbox small-checkbox-label me-1 mt-2">
+                        <c-form-check>
+                            <input
+                                type="checkbox"
+                                id="show_helplines"
+                                cFormCheckInput
+                                name="checkbox"
+                                checked="checked"
+                                [(ngModel)]="Mapeditor.helplines.enabled"
+                                (ngModelChange)="onHelplinesChange()"
+                            />
+                            <label
+                                cFormCheckLabel
+                                for="show_helplines">
+                                <i class="checkbox-primary"></i>
+                                {{ t('Show help lines') }}
+                            </label>
+                        </c-form-check>
+                    </div>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <c-dropdown variant="btn-group">
+                        <button cButton cDropdownToggle color="default" class="dropdown-button dropdown-btn ripple me-1"
+                                size="xs" [caret]="true">
+                            <span class="fa-stack helpline-stack-icon">
+                                <i class="fas fa-grip-lines fa-stack-1x"></i>
+                                <i class="fas fa-grip-lines-vertical"></i>
+                            </span>
+                            {{ t('Help lines distance') }} - {{ Mapeditor.helplines.size }}
+                            <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
+                        </button>
+                        <ul cDropdownMenu>
+                            <li *ngFor="let size of helplineSizes" (click)="changeHelplinesSize(size)">
+                                <a cDropdownItem>{{ size }}x{{ size }}px</a>
+                            </li>
+                        </ul>
+                    </c-dropdown>
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <button cButton
+                            class="ripple me-1 shadow-0"
+                            color="danger"
+                            size="xs"
+                            [hidden]="Mapeditor.synchronizeGridAndHelplinesSize"
+                            (click)="Mapeditor.synchronizeGridAndHelplinesSize = true">
+                        <fa-icon [icon]="['fas', 'arrow-left']" class="pe-1"></fa-icon>
+                        <fa-icon [icon]="['fas', 'unlink']"></fa-icon>
+                        {{ t('Change size automatically') }}
+                        <fa-icon [icon]="['fas', 'arrow-right']" class="ps-1"></fa-icon>
+                    </button>
+                    <button cButton
+                            class="ripple me-1 shadow-0"
+                            color="success"
+                            size="xs"
+                            [hidden]="!Mapeditor.synchronizeGridAndHelplinesSize"
+                            (click)="Mapeditor.synchronizeGridAndHelplinesSize = false">
+                        <fa-icon [icon]="['fas', 'arrow-left']" class="pe-1"></fa-icon>
+                        <fa-icon [icon]="['fas', 'unlink']"></fa-icon>
+                        {{ t('Change size automatically') }}
+                        <fa-icon [icon]="['fas', 'arrow-right']" class="ps-1"></fa-icon>
+                    </button>
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <div class="checkbox small-checkbox-label me-1 mt-2">
+                        <c-form-check>
+                            <input
+                                type="checkbox"
+                                id="grid_enabled"
+                                cFormCheckInput
+                                name="checkbox"
+                                checked="checked"
+                                [(ngModel)]="Mapeditor.grid.enabled"
+                            />
+                            <label
+                                cFormCheckLabel
+                                for="grid_enabled">
+                                <i class="checkbox-primary"></i>
+                                {{ t('Enable grid') }}
+                            </label>
+                        </c-form-check>
+                    </div>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <c-dropdown variant="btn-group">
+                        <button cButton cDropdownToggle color="default" class="dropdown-button dropdown-btn ripple me-1"
+                                size="xs" [caret]="true">
+                            <fa-icon [icon]="['fas', 'th']"></fa-icon>
+                            {{ t('Grid size') }} - {{ Mapeditor.grid.size }}
+                            <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
+                        </button>
+                        <ul cDropdownMenu>
+                            <li *ngFor="let size of gridSizes" (click)="changeGridSize(size)">
+                                <a cDropdownItem>{{ size }}x{{ size }}px</a>
+                            </li>
+                        </ul>
+                    </c-dropdown>
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="['map_module', 'maps', 'index']" cButton class="ripple"
+                            color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
+
+                <c-nav-item class="px-1" *ngIf="map">
+                    <button *oitcPermission="['mapmodule', 'mapeditors', 'view']"
+                            [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id]" cButton class="ripple"
+                            color="default" size="xs" class="me-1">
+                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        {{ t('View') }}
+                    </button>
+                </c-nav-item>
+
+            </c-nav>
+
+        </c-card-header>
+        <c-card-body>
+
+
+            @if (map) {
+                <!-- start map-editor -->
+                <div id="map-editor" class="map-editor">
+                    <!-- start mainMapContainer -->
+                    <oitc-map-canvas [helplines]="Mapeditor.helplines" [background]="map.Map.background"
+                                     [isViewMode]="false">
+                        <oitc-map-item *ngFor="let item of map.Mapitems" [item]="item" [refreshInterval]="0"
+                                       [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                       (contextActionEvent)="onContextAction($event)"
+                                       (dropItemEvent)="onDropItem($event)"
+                                       [hidden]="!item.display">
+                        </oitc-map-item>
+                        <oitc-map-text *ngFor="let textItem of map.Maptexts" [item]="textItem"
+                                       [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                       (contextActionEvent)="onContextAction($event)"
+                                       (dropItemEvent)="onDropItem($event)"
+                                       [hidden]="!textItem.display">
+                        </oitc-map-text>
+                        <oitc-map-line *ngFor="let lineItem of map.Maplines" [item]="lineItem" [refreshInterval]="0"
+                                       [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                       (contextActionEvent)="onContextAction($event)"
+                                       (dropItemEvent)="onDropItem($event)"
+                                       [hidden]="!lineItem.display">
+                        </oitc-map-line>
+                        <oitc-map-icon *ngFor="let iconItem of map.Mapicons" [item]="iconItem"
+                                       [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                       (contextActionEvent)="onContextAction($event)"
+                                       (dropItemEvent)="onDropItem($event)"
+                                       [hidden]="!iconItem.display">
+                        </oitc-map-icon>
+                    </oitc-map-canvas>
+                    <!-- end mainMapContainer -->
+                    <!-- start mapToolbar -->
+                    <div id="mapToolbar" cdkDrag cdkDragBoundary=".map-editor">
+                        <div id="mapToolsDragger" cdkDragHandle></div>
+
+                        <div class="mapToolbarTool" title="{{ t('Add item') }}" (click)="addItem()">
+                            <fa-icon [icon]="['fas', 'desktop']" size="lg"></fa-icon>
+                        </div>
+
+                        <div class="mapToolbarTool" title="{{ t('Add line') }}" (click)="addLine()">
+                            <fa-icon [icon]="['fas', 'pencil-alt']" size="lg"></fa-icon>
+                        </div>
+
+                        <div class="mapToolbarTool" title="{{ t('Add summary status item') }}"
+                             (click)="addSummaryItem()">
+                            <fa-icon [icon]="['fas', 'dot-circle']" size="lg"></fa-icon>
+                        </div>
+
+                        <div class="mapToolbarLine"></div>
+
+                        <div class="mapToolbarTool" title="{{ t('Add gadget') }}" (click)="addGadget()">
+                            <fa-icon [icon]="['fas', 'tachometer-alt']" size="lg"></fa-icon>
+                        </div>
+
+                        <div class="mapToolbarLine"></div>
+
+                        <div class="mapToolbarTool" title="{{ t('Change background image') }}"
+                             (click)="openChangeMapBackgroundModal()">
+                            <fa-icon [icon]="['fas', 'image']" size="lg"></fa-icon>
+                        </div>
+
+                        <div class="mapToolbarLine"></div>
+
+                        <div class="mapToolbarTool" title="{{ t('Add stateless text') }}"
+                             (click)="addText()">
+                            <fa-icon [icon]="['fas', 'font']" size="lg"></fa-icon>
+                        </div>
+
+                        <div class="mapToolbarTool" title="{{ t('Add stateless icon') }}"
+                             (click)="addIcon()">
+                            <fa-icon [icon]="['fas', 'object-ungroup']" size="lg"></fa-icon>
+                        </div>
+                    </div>
+                    <!-- end mapToolbar -->
+                    <!-- start layersBox -->
+                    <div id="layersBox" cdkDrag cdkDragBoundary=".map-editor">
+                        <div id="layersBoxDragger" cdkDragHandle></div>
+                        <div class="layersContainer">
+                            <div class="mapLayer" *ngFor="let value of layers; let key = index"
+                                 [ngClass]="{ 'selectedLayer': key == parseInt(defaultLayer) }">
+                                <span class="cursor-pointer"
+                                      (click)="setDefaultLayer(key)">
+                                    {{ value }}
+                                </span>
+                                <fa-icon [icon]="['fas', 'eye']" class="pull-right padding-right-5 cursor-pointer"
+                                         [hidden]="!visibleLayers['layer_'+key]" (click)="hideLayer(key)"
+                                         title="{{t('Click to hide layer')}}"></fa-icon>
+                                <fa-icon [icon]="['fas', 'eye-slash']" class="pull-right padding-right-5 cursor-pointer"
+                                         [hidden]="visibleLayers['layer_'+key]" (click)="showLayer(key)"
+                                         title="{{t('Click to show layer')}}"></fa-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end layersBox -->
+                </div>
+                <!-- end map-editor -->
+            }
+
+        </c-card-body>
+    </c-card>
+</ng-container>

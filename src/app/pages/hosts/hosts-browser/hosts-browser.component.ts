@@ -12,23 +12,23 @@ import { UUID } from '../../../classes/UUID';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import {
-  AlertComponent,
-  BadgeComponent,
-  BorderDirective,
-  ButtonGroupComponent,
-  ButtonToolbarComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTextDirective,
-  CardTitleDirective,
-  ColComponent,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective,
-  TooltipDirective
+    AlertComponent,
+    BadgeComponent,
+    BorderDirective,
+    ButtonGroupComponent,
+    ButtonToolbarComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTextDirective,
+    CardTitleDirective,
+    ColComponent,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
 import { HostBrowserMenuConfig, HostsBrowserMenuComponent } from '../hosts-browser-menu/hosts-browser-menu.component';
 import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
@@ -115,72 +115,76 @@ import {
 import {
     SlaHostInformationElementComponent
 } from '../../../modules/sla_module/components/sla-host-information-element/sla-host-information-element.component';
+import {
+    IsarFlowHostBrowserTabComponent
+} from '../../../modules/isarflow_module/components/isar-flow-host-browser-tab/isar-flow-host-browser-tab.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
     imports: [
-    TranslocoDirective,
-    QueryHandlerCheckerComponent,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    RowComponent,
-    ColComponent,
-    HostsBrowserMenuComponent,
-    NgIf,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    CardBodyComponent,
-    BrowserLoaderComponent,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    BackButtonDirective,
-    NgClass,
-    ButtonGroupComponent,
-    ButtonToolbarComponent,
-    TranslocoPipe,
-    TooltipDirective,
-    HostAcknowledgeModalComponent,
-    HostsDisableNotificationsModalComponent,
-    HostsEnableNotificationsModalComponent,
-    HostsMaintenanceModalComponent,
-    ServiceResetChecktimeModalComponent,
-    HostsProcessCheckresultModalComponent,
-    HostsEnableFlapdetectionModalComponent,
-    HostsDisableFlapdetectionModalComponent,
-    CardTextDirective,
-    BorderDirective,
-    HostStatusNamePipe,
-    AlertComponent,
-    HostsSendCustomNotificationModalComponent,
-    CancelHostdowntimeModalComponent,
-    TrustAsHtmlPipe,
-    DeleteAcknowledgementsModalComponent,
-    TableDirective,
-    CopyToClipboardComponent,
-    BadgeComponent,
-    NgForOf,
-    HoststatusSimpleIconComponent,
-    LabelLinkComponent,
-    KeyValuePipe,
-    SatelliteNameComponent,
-    BrowserTimelineComponent,
-    HostTimelineLegendComponent,
-    HostsBrowserServicesListComponent,
-    IframeComponent,
-    GrafanaTimepickerComponent,
-    ServicenowHostBrowserTabComponent,
-    AdditionalHostInformationComponent,
-    AsyncPipe,
-    SlaHostInformationElementComponent
-],
+        TranslocoDirective,
+        QueryHandlerCheckerComponent,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        RowComponent,
+        ColComponent,
+        HostsBrowserMenuComponent,
+        NgIf,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CardBodyComponent,
+        BrowserLoaderComponent,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        BackButtonDirective,
+        NgClass,
+        ButtonGroupComponent,
+        ButtonToolbarComponent,
+        TranslocoPipe,
+        TooltipDirective,
+        HostAcknowledgeModalComponent,
+        HostsDisableNotificationsModalComponent,
+        HostsEnableNotificationsModalComponent,
+        HostsMaintenanceModalComponent,
+        ServiceResetChecktimeModalComponent,
+        HostsProcessCheckresultModalComponent,
+        HostsEnableFlapdetectionModalComponent,
+        HostsDisableFlapdetectionModalComponent,
+        CardTextDirective,
+        BorderDirective,
+        HostStatusNamePipe,
+        AlertComponent,
+        HostsSendCustomNotificationModalComponent,
+        CancelHostdowntimeModalComponent,
+        TrustAsHtmlPipe,
+        DeleteAcknowledgementsModalComponent,
+        TableDirective,
+        CopyToClipboardComponent,
+        BadgeComponent,
+        NgForOf,
+        HoststatusSimpleIconComponent,
+        LabelLinkComponent,
+        KeyValuePipe,
+        SatelliteNameComponent,
+        BrowserTimelineComponent,
+        HostTimelineLegendComponent,
+        HostsBrowserServicesListComponent,
+        IframeComponent,
+        GrafanaTimepickerComponent,
+        ServicenowHostBrowserTabComponent,
+        AdditionalHostInformationComponent,
+        AsyncPipe,
+        SlaHostInformationElementComponent,
+        IsarFlowHostBrowserTabComponent
+    ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService }, // Inject the DowntimesService into the CancelAllModalComponent
-        { provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService } // Inject the DowntimesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService}, // Inject the DowntimesService into the CancelAllModalComponent
+        {provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService} // Inject the DowntimesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -205,6 +209,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public selectedGrafanaAutorefresh: string = '60s';
 
     public AdditionalInformationExists: boolean = false;
+    public isarFlowInformationExists: boolean = false;
 
     public SlaOverview: false | HostBrowserSlaOverview = false;
 
@@ -285,6 +290,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
 
             this.loadGrafanaIframeUrl();
             this.loadAdditionalInformation();
+            this.loadIsarFlowInformation();
             this.loadSlaInformation();
 
             this.lastUpdated = new Date();
@@ -310,6 +316,15 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         if (this.result?.mergedHost) {
             this.subscriptions.add(this.HostsService.loadAdditionalInformation(this.result.mergedHost.id).subscribe((result) => {
                 this.AdditionalInformationExists = result;
+                this.cdr.markForCheck();
+            }));
+        }
+    }
+
+    public loadIsarFlowInformation(): void {
+        if (this.result?.mergedHost) {
+            this.subscriptions.add(this.HostsService.loadIsarFlowInformation(this.result.mergedHost.id).subscribe((result) => {
+                this.isarFlowInformationExists = result;
                 this.cdr.markForCheck();
             }));
         }

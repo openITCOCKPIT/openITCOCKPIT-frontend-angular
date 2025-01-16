@@ -1,13 +1,9 @@
-/**********************
- *    Index action    *
- **********************/
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 
 
-export interface IsarflowHosts {
-}
-
-
+/**********************
+ *    Index action    *
+ **********************/
 export interface IsarflowHostsIndexParams {
     angular: true,
     scroll: boolean,
@@ -62,4 +58,23 @@ export interface IsarflowInterface {
     interface_name: string
     created: string
     modified: string
+}
+
+/**********************
+ *   Browser action   *
+ **********************/
+
+export interface IsarFlowHostInformationResponse {
+    isarflowHost: {
+        id: number
+        host_id: number
+        description: string
+        hostname: string
+        ipaddress: string
+        created: string
+        modified: string
+        isarflow_interfaces: IsarflowInterface[]
+
+    }
+    _csrfToken: null | string
 }
