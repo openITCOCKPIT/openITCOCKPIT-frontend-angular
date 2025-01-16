@@ -17,4 +17,8 @@ export const mapModuleRoutes: Routes = [
         path: 'map_module/maps/copy/:ids',
         loadComponent: () => import('./pages/maps/maps-copy/maps-copy.component').then(m => m.MapsCopyComponent)
     },
+    {
+        path: 'map_module/mapeditors/edit/:id',
+        loadComponent: () => import('./pages/mapeditors/mapeditors-edit/mapeditors-edit.component').then(m => m.MapeditorsEditComponent)
+    }
 ];
