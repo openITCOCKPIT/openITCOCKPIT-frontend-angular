@@ -170,7 +170,8 @@
                 <tr *ngFor="let isarflowHost of isarflowHosts.isarflowHosts">
                     <td>
                         @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                            <a [routerLink]="['/', 'hosts', 'browser', isarflowHost.host_id]">
+                            <a [routerLink]="['/', 'hosts', 'browser', isarflowHost.host_id]"
+                               [queryParams]="{selectedTab: HostBrowserTabs.IsarFlow}">
                                 {{ isarflowHost.host.name }}
                             </a>
                         } @else {

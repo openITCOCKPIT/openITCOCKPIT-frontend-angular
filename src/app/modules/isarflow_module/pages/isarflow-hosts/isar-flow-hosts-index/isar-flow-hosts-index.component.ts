@@ -50,6 +50,7 @@ import { ActionsButtonComponent } from '../../../../../components/actions-button
 import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
+import { HostBrowserTabs } from '../../../../../pages/hosts/hosts.enum';
 
 @Component({
     selector: 'oitc-isar-flow-hosts-index',
@@ -174,4 +175,5 @@ export class IsarFlowHostsIndexComponent implements OnInit, OnDestroy, IndexPage
         }
     }
 
+    protected readonly HostBrowserTabs = HostBrowserTabs;
 }
