@@ -10,27 +10,26 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { Report, ReportError, Sla, SlasGeneratePost, SlasGeneratePostResponse } from '../Slas.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { SlasGenerateReportFormatEnum, SlasGenerateTabs } from '../slas.enum';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  AlertComponent,
-  BadgeComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    AlertComponent,
+    BadgeComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -38,7 +37,6 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-
 
 
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -49,42 +47,42 @@ import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/tab
 @Component({
     selector: 'oitc-slas-generate',
     imports: [
-    TranslocoDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    RouterLink,
-    FaIconComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    BackButtonDirective,
-    CardBodyComponent,
-    RequiredIconComponent,
-    SelectComponent,
-    FormErrorDirective,
-    NgIf,
-    FormFeedbackComponent,
-    FormsModule,
-    FormDirective,
-    FormLabelDirective,
-    FormControlDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    CardFooterComponent,
-    PermissionDirective,
-    NgClass,
-    NgForOf,
-    AlertComponent,
-    RowComponent,
-    ColComponent,
-    TableLoaderComponent,
-    TableDirective,
-    BadgeComponent,
-    AsyncPipe
-],
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        RouterLink,
+        FaIconComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        BackButtonDirective,
+        CardBodyComponent,
+        RequiredIconComponent,
+        SelectComponent,
+        FormErrorDirective,
+        NgIf,
+        FormFeedbackComponent,
+        FormsModule,
+        FormDirective,
+        FormLabelDirective,
+        FormControlDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        CardFooterComponent,
+        PermissionDirective,
+        NgClass,
+        NgForOf,
+        AlertComponent,
+        RowComponent,
+        ColComponent,
+        TableLoaderComponent,
+        TableDirective,
+        BadgeComponent,
+        AsyncPipe
+    ],
     templateUrl: './slas-generate.component.html',
     styleUrl: './slas-generate.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -218,9 +216,15 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
                     this.notyService.genericError(this.reportMessage.errorMessage);
                     if (POSTresult) {
                         this.isGenerating = false;
-                        this.errors = errorResponse;
+
+                        if (POSTresult.data.hasOwnProperty('error')) {
+                            this.errors = POSTresult.data.error;
+                            this.cdr.markForCheck();
+                        }
+
                         if (POSTresult.data.hasOwnProperty('report_error')) {
                             this.report_error = POSTresult.data.report_error;
+                            this.cdr.markForCheck();
                         }
                     }
                 }));
@@ -257,9 +261,15 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
                     this.notyService.genericError(this.reportMessage.errorMessage);
                     if (result) {
                         this.isGenerating = false;
-                        this.errors = errorResponse;
+
+                        if (result.data.hasOwnProperty('error')) {
+                            this.errors = result.data.error;
+                            this.cdr.markForCheck();
+                        }
+
                         if (result.data.hasOwnProperty('report_error')) {
                             this.report_error = result.data.report_error;
+                            this.cdr.markForCheck();
                         }
                     }
                 }));

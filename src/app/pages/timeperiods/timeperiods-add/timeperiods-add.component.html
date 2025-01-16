@@ -89,7 +89,7 @@
                 <div class="mb-3">
                     <label cLabel for="timeperiodCalendar">
                         <span *oitcPermission="['calendars', 'edit']">
-                            <a href="calendars/edit/{{post.calendar_id}}"
+                            <a [routerLink]="['/', 'calendars', 'edit', post.calendar_id]"
                                *ngIf="post.calendar_id && post.calendar_id > 0">
                                 {{ t('Calendar') }}
                                 <oitc-required-icon></oitc-required-icon>

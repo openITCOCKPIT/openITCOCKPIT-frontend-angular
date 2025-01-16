@@ -225,7 +225,8 @@
                                             @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
                                                 <span class="badge-clickable"
                                                       [hidden]="!(details.sla.hostsOverview!.failed.count>0)"
-                                                      [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.failed.ids]">
+                                                      [routerLink]="['/', 'hosts', 'index']"
+                                                      [queryParams]="{'filter.Hosts.id': details.sla.hostsOverview!.failed.ids}">
                                                     {{ details.sla.hostsOverview!.failed.count }}
                                                 </span>
                                                 <span [hidden]="details.sla.hostsOverview!.failed.count>0">
@@ -252,7 +253,8 @@
                                             @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
                                                 <span class="badge-clickable"
                                                       [hidden]="!(details.sla.hostsOverview!.warning.count>0)"
-                                                      [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.warning.ids]">
+                                                      [routerLink]="['/', 'hosts', 'index']"
+                                                      [queryParams]="{'filter.Hosts.id': details.sla.hostsOverview!.warning.ids}">
                                                     {{ details.sla.hostsOverview!.warning.count }}
                                                 </span>
                                                 <span [hidden]="details.sla.hostsOverview!.warning.count>0">
@@ -280,7 +282,8 @@
                                             @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
                                                 <span class="badge-clickable"
                                                       [hidden]="!(details.sla.hostsOverview!.passed.count>0)"
-                                                      [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.passed.ids]">
+                                                      [routerLink]="['/', 'hosts', 'index']"
+                                                      [queryParams]="{'filter.Hosts.id': details.sla.hostsOverview!.passed.ids}">
                                                     {{ details.sla.hostsOverview!.passed.count }}
                                                 </span>
                                                 <span [hidden]="details.sla.hostsOverview!.passed.count>0">
@@ -308,7 +311,8 @@
                                             @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
                                                 <span class="badge-clickable"
                                                       [hidden]="!(details.sla.hostsOverview!.not_calculated.count>0)"
-                                                      [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.not_calculated.ids]">
+                                                      [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.not_calculated.ids]"
+                                                      [queryParams]="{'filter.Hosts.id': details.sla.hostsOverview!.not_calculated.ids}">
                                                     {{ details.sla.hostsOverview!.not_calculated.count }}
                                                 </span>
                                                 <span [hidden]="details.sla.hostsOverview!.not_calculated.count>0">
