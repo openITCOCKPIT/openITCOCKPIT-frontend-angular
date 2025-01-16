@@ -11,10 +11,6 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
-    DropdownDividerDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -33,7 +29,6 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { IndexPage } from '../../../../../pages.interface';
 import { Subscription } from 'rxjs';
 import { IsarFlowHostsService } from '../isar-flow-hosts.service';
@@ -44,7 +39,6 @@ import {
 } from '../isarflow-hosts.interface';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
 import {
@@ -69,9 +63,6 @@ import { HostBrowserTabs } from '../../../../../pages/hosts/hosts.enum';
         ColComponent,
         ContainerComponent,
         DebounceDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
         FormControlDirective,
         FormDirective,
         FormsModule,
@@ -85,16 +76,13 @@ import { HostBrowserTabs } from '../../../../../pages/hosts/hosts.enum';
         CardFooterComponent,
         NoRecordsComponent,
         PaginateOrScrollComponent,
-        SelectAllComponent,
-        ItemSelectComponent,
         MatSort,
         MatSortHeader,
         NgForOf,
         TableDirective,
         AsyncPipe,
         ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        DropdownDividerDirective
+        ActionsButtonElementComponent
     ],
     templateUrl: './isar-flow-hosts-index.component.html',
     styleUrl: './isar-flow-hosts-index.component.css',
