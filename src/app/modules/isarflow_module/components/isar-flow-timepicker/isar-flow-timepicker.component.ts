@@ -20,7 +20,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf } from '@angular/common';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
@@ -32,7 +32,6 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
         DropdownToggleDirective,
         FaIconComponent,
         NgForOf,
-        NgIf,
         RowComponent,
         TranslocoDirective,
         XsButtonDirective,

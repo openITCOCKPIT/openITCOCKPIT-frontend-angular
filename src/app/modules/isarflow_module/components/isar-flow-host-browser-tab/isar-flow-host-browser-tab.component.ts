@@ -33,7 +33,6 @@ import { IsarFlowTimepickerChange } from '../isar-flow-timepicker.interface';
         NgIf,
         TranslocoDirective,
         RowComponent,
-        BackButtonDirective,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,

@@ -60,5 +60,8 @@ export const importModuleRoutes: Routes = [{
 }, {
     path: 'import_module/importers/add',
     loadComponent: () => import('./pages/importers/importers-add/importers-add.component').then(m => m.ImportersAddComponent)
+}, {
+    path: 'import_module/importers/edit/:id',
+    loadComponent: () => import('./pages/importers/importers-edit/importers-edit.component').then(m => m.ImportersEditComponent)
 }
 ];
