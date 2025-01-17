@@ -85,6 +85,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         {value: '2', key: 'SNMP V 2c'},
         {value: '3', key: 'SNMP V 3'},
     ]
+
     protected securityLevels: SelectKeyValueString[] = [
         {key: 'authPriv', value: '1'},
         {key: 'authNoPriv', value: '2'},

@@ -88,7 +88,7 @@
                     <c-card class="mb-3">
                         <c-card-body class="wizard-card-body bg-placeholder-wizard">
                             <div class="d-flex align-items-center">
-                                <div class="wizard-logo-image">
+                                <div class="wizard-logo-image wizard-logo-image-placeholder">
                                     <img [src]="'./assets/images/wizards/'+wizard.value.image"
                                          [alt]="wizard.value.title">
                                 </div>
@@ -103,7 +103,10 @@
                         </c-card-body>
                         <c-card-footer>
                             <div>
-                                <oitc-badge-outline color="warning">{{ t('Requires module') }}</oitc-badge-outline>
+                                <oitc-badge-outline color="warning">
+                                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                                    {{ t('Requires module') }}
+                                </oitc-badge-outline>
                             </div>
                             <div class="text-end">
                                 <i class="fas fa-tags wizard-info-tags"></i>
