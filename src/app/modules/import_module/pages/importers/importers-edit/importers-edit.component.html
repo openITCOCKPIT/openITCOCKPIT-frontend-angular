@@ -710,7 +710,7 @@
                             </c-row>
                             <c-row>
                                 <c-col [xs]="12" [md]="12" [lg]="10"
-                                       *ngIf="match.hostdefault_id && match.hostdefault_id > 0">
+                                       *ngIf="match.hostdefault_id && match.hostdefault_id > 0 && hostdefaults[match.hostdefault_id]">
                                     <table cTable>
                                         <td>
                                             <b>{{ t('Host template') }}</b>
