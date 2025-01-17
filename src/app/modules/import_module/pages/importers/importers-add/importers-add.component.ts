@@ -222,7 +222,7 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
 
                     const title = this.TranslocoService.translate('Importer');
                     const msg = this.TranslocoService.translate('created successfully');
-                    const url = ['import_module', 'Importers', 'edit', response.id];
+                    const url = ['import_module', 'importers', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 

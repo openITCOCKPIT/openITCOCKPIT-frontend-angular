@@ -8,14 +8,13 @@ import { ImporterConfig, ImporterHostDefaultsResponse, ImportersPost } from '../
 import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enum';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
-import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
+import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import {
-    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -37,7 +36,7 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { AsyncPipe, JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -210,22 +209,18 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
 
 
     public submit() {
-        this.subscriptions.add(this.ImportersService.createImporter(this.post)
+        this.subscriptions.add(this.ImportersService.edit(this.post)
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
-
                     const title = this.TranslocoService.translate('Importer');
-                    const msg = this.TranslocoService.translate('created successfully');
-                    const url = ['import_module', 'Importers', 'edit', response.id];
+                    const msg = this.TranslocoService.translate('updated successfully');
+                    const url = ['import_module', 'importers', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-                    // Create another
-                    this.errors = null;
-                    this.ngOnInit();
+                    this.HistoryService.navigateWithFallback(['/import_module/Importers/index']);
                     this.notyService.scrollContentDivToTop();
-
                     return;
                 }
 
@@ -235,8 +230,7 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
-            })
-        );
+            }));
     }
 
     public onContainerChange() {

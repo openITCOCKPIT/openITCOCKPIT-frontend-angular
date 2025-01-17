@@ -97,7 +97,7 @@ export class ImportersService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data.hostdefault as GenericIdResponse
+                        data: data.importer as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
@@ -138,7 +138,7 @@ export class ImportersService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data.importers as GenericIdResponse
+                        data: data.importer as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
