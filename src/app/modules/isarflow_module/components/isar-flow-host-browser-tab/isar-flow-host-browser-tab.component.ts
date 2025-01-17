@@ -3,13 +3,17 @@ import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { IsarFlowHostsService } from '../../pages/isarflow-hosts/isar-flow-hosts.service';
 import { IsarFlowTabs } from './isar-flow-tabs.enum';
-import { IsarFlowHostInformationResponse } from '../../pages/isarflow-hosts/isarflow-hosts.interface';
+import {
+    IsarFlowHostInformationResponse,
+    IsarFlowInterfaceInformationResponse
+} from '../../pages/isarflow-hosts/isarflow-hosts.interface';
 import { NgClass, NgIf } from '@angular/common';
 import {
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
     NavComponent,
     NavItemComponent,
     RowComponent
@@ -19,6 +23,9 @@ import { BackButtonDirective } from '../../../../directives/back-button.directiv
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
+import { IframeComponent } from '../../../../components/iframe/iframe.component';
+import { IsarFlowTimepickerComponent } from '../isar-flow-timepicker/isar-flow-timepicker.component';
+import { IsarFlowTimepickerChange } from '../isar-flow-timepicker.interface';
 
 @Component({
     selector: 'oitc-isar-flow-host-browser-tab',
@@ -36,7 +43,10 @@ import { SelectComponent } from '../../../../layouts/primeng/select/select/selec
         XsButtonDirective,
         CardBodyComponent,
         SelectComponent,
-        NgClass
+        NgClass,
+        ColComponent,
+        IframeComponent,
+        IsarFlowTimepickerComponent
     ],
     templateUrl: './isar-flow-host-browser-tab.component.html',
     styleUrl: './isar-flow-host-browser-tab.component.css',
@@ -49,6 +59,8 @@ export class IsarFlowHostBrowserTabComponent implements OnDestroy {
     allowEdit = input<boolean>(false);
 
     public isarflowHost?: IsarFlowHostInformationResponse;
+    public isarFlowInterfaceInformation?: IsarFlowInterfaceInformationResponse;
+
     public duration: number = 3600 * 24;
     public interfaceId: number = 0;
     public selectedTab: IsarFlowTabs = IsarFlowTabs.TopProtocols;
@@ -86,7 +98,30 @@ export class IsarFlowHostBrowserTabComponent implements OnDestroy {
                     value: iface.interface_name
                 }
             });
+
+            // Select the first interface
+            if (this.interfacesSelect.length > 0) {
+                this.interfaceId = this.interfacesSelect[0].key;
+                this.loadInterfaceData();
+            }
+
             this.isarflowHost = result;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public onInterfaceChange() {
+        this.loadInterfaceData();
+        this.cdr.markForCheck();
+    }
+
+    public loadInterfaceData(): void {
+        if (this.interfaceId <= 0) {
+            return;
+        }
+
+        this.subscriptions.add(this.IsarFlowHostsService.loadInterfaceInformation(this.interfaceId, this.duration).subscribe(result => {
+            this.isarFlowInterfaceInformation = result;
             this.cdr.markForCheck();
         }));
     }
@@ -95,6 +130,10 @@ export class IsarFlowHostBrowserTabComponent implements OnDestroy {
         this.selectedTab = tab;
     }
 
+    public onIsarFlowTimeDurationChange(event: IsarFlowTimepickerChange): void {
+        this.duration = event.duration;
+        this.loadInterfaceData();
+    }
 
     protected readonly IsarFlowTabs = IsarFlowTabs;
 }
