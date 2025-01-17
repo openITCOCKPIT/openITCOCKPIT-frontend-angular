@@ -19,15 +19,20 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                {{ t('Add importers') }}
+                <fa-icon [icon]="['fas', 'pen']"></fa-icon>
+                {{ t('Edit importer') }}
             </li>
         </ol>
     </nav>
-    <form cForm (ngSubmit)="submit()" autocomplete="off">
+    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <form cForm (ngSubmit)="submit()" autocomplete="off" *ngIf="post">
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Create new importer') }}</h5>
+                <h5 cCardTitle>{{ t('Edit importer') }}
+                    <small class="fw-300">
+                        {{ post.name }}
+                    </small>
+                </h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
                         <button [fallbackUrl]="['import_module', 'Importers', 'index']" cButton class="ripple"
@@ -469,7 +474,7 @@
                             </div>
                             <oitc-form-feedback [errors]="errors" errorField="hostdefault_id"></oitc-form-feedback>
                         </div>
-                        <div *ngIf="post.hostdefault_id > 0">
+                        <div *ngIf="post.hostdefault_id > 0 && hostdefaults[post.hostdefault_id]">
                             <table cTable>
                                 <tr>
                                     <td>
@@ -605,6 +610,7 @@
                                                 </span>
                                             </li>
                                         </ul>
+
                                     </td>
                                 </tr>
                             </table>
@@ -870,7 +876,7 @@
             </c-card-body>
             <c-card-footer class="text-end">
                 <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Create importer') }}
+                    {{ t('Update importer') }}
                 </button>
                 <button [fallbackUrl]="['import_module','Importers', 'index']" cButton class="ms-1 ripple"
                         color="default" oitcBackButton type="button">
