@@ -8,10 +8,16 @@ import { TranslocoService } from '@jsverse/transloco';
 import { LayoutService } from '../../../../../layouts/coreui/layout.service';
 import { Sla } from '../../../pages/slas/Slas.interface';
 
-import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
-import { BarChart, LineChart } from 'echarts/charts';
+import {
+    GridComponent,
+    LegendComponent,
+    MarkLineComponent,
+    TitleComponent,
+    TooltipComponent,
+} from 'echarts/components';
+import { BarChart } from 'echarts/charts';
 
-echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent]);
+echarts.use([BarChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, MarkLineComponent]);
 
 @Component({
     selector: 'oitc-sla-hosts-overview-bar-echart',
@@ -83,7 +89,7 @@ export class SlaHostsOverviewBarEchartComponent implements OnDestroy {
             }
         }
 
-        const markLineData = [
+        let markLineData = [
             {
                 yAxis: this.sla().minimal_availability,
                 name: this.sla().minimal_availability + '%',
@@ -172,10 +178,7 @@ export class SlaHostsOverviewBarEchartComponent implements OnDestroy {
                     emphasis: {
                         disabled: true
                     },
-                    cursor: 'default'
-                },
-                {
-                    type: 'line',
+                    cursor: 'default',
                     markLine: {
                         symbol: 'none',
                         data: markLineData as []

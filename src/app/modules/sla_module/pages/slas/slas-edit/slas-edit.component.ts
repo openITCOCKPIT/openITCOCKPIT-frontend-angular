@@ -170,9 +170,6 @@ export class SlasEditComponent implements OnInit, OnDestroy {
                 if (this.post.report_format & this.filetypes.csv) {
                     this.files.push(this.filetypes.csv);
                 }
-                if (this.post.start_date) {
-                    this.post.start_date = String(new Date(this.post.start_date));
-                }
 
                 this.loadContainers();
                 this.loadTimeperiods();

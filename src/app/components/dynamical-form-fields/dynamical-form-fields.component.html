@@ -4,6 +4,11 @@
         <div *ngIf="formField['type'] === 'text'" class="mb-3">
             <label cLabel [attr.for]="formField['ngModel']">
                 {{ formField['label'] }}
+                @if (identifier && identifier == ngModel && formField['key'] !== 'identifier') {
+                    <span class="badge border border-info text-info me-1">
+                        ⭐ {{ t('UID') }}
+                    </span>
+                }
                 @if (formField['required']) {
                     <oitc-required-icon></oitc-required-icon>
                 }
@@ -16,11 +21,11 @@
                    (ngModelChange)="ngModelChange.emit($event)"
                    [ngModelOptions]="{standalone: true}"
                    class="{{formField['class']}}"
-                   oitcFormError errorField="{{formField['ngModel']}}"/>
+                   oitcFormError [errors]="errors" errorField="{{formField['ngModel']}}"/>
             <oitc-form-feedback [errors]="errors"
                                 errorField="{{formField['ngModel']}}"></oitc-form-feedback>
 
-            <div class="help-block" *ngIf="formField['help']">
+            <div class="help-block small" *ngIf="formField['help']">
                 {{ formField['help'] }}
             </div>
         </div>
@@ -29,6 +34,11 @@
         <div *ngIf="formField['type'] === 'number'" class="mb-3">
             <label cLabel [attr.for]="formField['ngModel']">
                 {{ formField['label'] }}
+                @if (identifier && identifier == ngModel && formField['key'] !== 'identifier') {
+                    <span class="badge border border-info text-info me-1">
+                        ⭐ {{ t('UID') }}
+                    </span>
+                }
                 @if (formField['required']) {
                     <oitc-required-icon></oitc-required-icon>
                 }
@@ -42,10 +52,10 @@
                    (ngModelChange)="ngModelChange.emit($event)"
                    [ngModelOptions]="{standalone: true}"
                    class="{{formField['class']}}"
-                   oitcFormError errorField="{{formField['ngModel']}}"/>
+                   oitcFormError [errors]="errors" errorField="{{formField['ngModel']}}"/>
             <oitc-form-feedback [errors]="errors"
                                 errorField="{{formField['ngModel']}}"></oitc-form-feedback>
-            <div class="help-block" *ngIf="formField['help']">
+            <div class="help-block small" *ngIf="formField['help']">
                 {{ formField['help'] }}
             </div>
         </div>
@@ -53,22 +63,23 @@
         <!-- CHECKBOX FIELDS -->
         <div *ngIf="formField['type'] === 'checkbox'" class="mb-3">
             <c-form-check>
-                <input
-                    [(ngModel)]="ngModel"
-                    (ngModelChange)="ngModelChange.emit($event)"
-                    [ngModelOptions]="{standalone: true}"
-                    cFormCheckInput
-                    [attr.id]="formField['ngModel']"
-                    class="checkbox-lg me-2 mt-0"
-                    [name]="name"
-                    trueFalseValue
-                    [falseValue]="0"
-                    [trueValue]="1"
-                    type="checkbox"/>
-                <label cFormCheckLabel
-                       [attr.for]="formField['ngModel']">{{ t(formField['label']) }}</label>
+                <label>
+                    <input
+                        [(ngModel)]="ngModel"
+                        (ngModelChange)="ngModelChange.emit($event)"
+                        [ngModelOptions]="{standalone: true}"
+                        cFormCheckInput
+                        [attr.id]="formField['ngModel']"
+                        class="checkbox-lg me-2 mt-0"
+                        [name]="name"
+                        trueFalseValue
+                        [falseValue]="0"
+                        [trueValue]="1"
+                        type="checkbox"/>
+                    {{ t(formField['label']) }}
+                </label>
             </c-form-check>
-            <div class="help-block" *ngIf="formField['help']">
+            <div class="help-block small" *ngIf="formField['help']">
                 {{ formField['help'] }}
             </div>
         </div>
@@ -96,7 +107,7 @@
             </ng-select>
             <oitc-form-feedback [errors]="errors"
                                 errorField="{{formField['ngModel']}}"></oitc-form-feedback>
-            <div class="help-block" *ngIf="formField['help']">
+            <div class="help-block small" *ngIf="formField['help']">
                 {{ formField['help'] }}
             </div>
         </div>
@@ -116,10 +127,10 @@
                    (ngModelChange)="ngModelChange.emit($event)"
                    [ngModelOptions]="{standalone: true}"
                    class="{{formField['class']}}"
-                   oitcFormError errorField="{{formField['ngModel']}}"/>
+                   oitcFormError [errors]="errors" errorField="{{formField['ngModel']}}"/>
             <oitc-form-feedback [errors]="errors"
                                 errorField="{{formField['ngModel']}}"></oitc-form-feedback>
-            <div class="help-block" *ngIf="formField['help']">
+            <div class="help-block small" *ngIf="formField['help']">
                 {{ formField['help'] }}
             </div>
         </div>
@@ -140,7 +151,7 @@
                 [ngModelOptions]="{standalone: true}"
                 [showClear]="false">
             </oitc-select>
-            <div class="help-block" *ngIf="formField['help']">
+            <div class="help-block small" *ngIf="formField['help']">
                 {{ formField['help'] }}
             </div>
         </div>

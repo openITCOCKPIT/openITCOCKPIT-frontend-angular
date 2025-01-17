@@ -99,3 +99,8 @@ body.dark-theme .btn-default .btn-default:disabled, body.dark-theme .btn.btn-def
     background: rgba(0, 0, 0, 0.15);
     border-radius: 3px 0 0 3px;
 }
+
+.dropdown-btn {
+    border-top-right-radius: 0.25rem !important;
+    border-bottom-right-radius: 0.25rem !important;
+}

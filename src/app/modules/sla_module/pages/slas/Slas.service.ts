@@ -152,7 +152,7 @@ export class SlasService {
                     };
                 }),
                 catchError((error: any) => {
-                    const err = error.error.error as GenericValidationError;
+                    const err = error.error as GenericValidationError;
                     return of({
                         success: false,
                         data: err

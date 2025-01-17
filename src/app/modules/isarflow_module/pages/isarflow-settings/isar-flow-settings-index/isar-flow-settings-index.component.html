@@ -14,7 +14,7 @@
             </li>
             <li class="breadcrumb-item">
                 <a [routerLink]="['/', 'isarflow_module', 'isarflow_settings', 'index']"
-                   *oitcPermission="['IsarflowModule', 'IsarflowSettings', 'index']">
+                   *oitcPermission="['IsarFlowModule', 'IsarflowSettings', 'index']">
                     <fa-icon [icon]="['fas', 'square-poll-horizontal']"></fa-icon>
                     {{ t('IsarFlow Settings') }}
                 </a>
@@ -86,7 +86,7 @@
                         <input cFormControl id="webserver_address" required type="text"
                                name="webserver_address"
                                [(ngModel)]="post.webserver_address"
-                               oitcFormError errorField="webserver_address">
+                               oitcFormError [errors]="errors" errorField="webserver_address">
                     </c-input-group>
                     <oitc-form-feedback [errors]="errors"
                                         errorField="webserver_address"></oitc-form-feedback>

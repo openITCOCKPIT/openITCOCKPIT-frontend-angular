@@ -144,7 +144,8 @@
                             [item]="map"></oitc-item-select>
 
                     </td>
-                    <td><a [routerLink]="['/', 'map_module', 'maps', 'index', map.id]">{{ map.name }}</a></td>
+                    <td><a [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.id, false]">{{ map.name }}</a>
+                    </td>
                     <td>{{ map.title }}</td>
 
                     <td class="width-50">
