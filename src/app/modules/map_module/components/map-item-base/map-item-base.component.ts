@@ -12,8 +12,8 @@ import {
     Output,
     ViewChild
 } from '@angular/core';
-import { ContextAction, MapitemBase, MapItemPosition } from './map-item-base.interface';
-import { CdkDrag, CdkDragEnd, CdkDragStart } from '@angular/cdk/drag-drop';
+import { ContextAction, MapitemBase } from './map-item-base.interface';
+import { CdkDrag, CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
@@ -36,8 +36,6 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     public gridEnabled: InputSignal<boolean> = input<boolean>(true);
     public isViewMode: InputSignal<boolean> = input<boolean>(true);
 
-    protected position: MapItemPosition = {x: 0, y: 0};
-
     protected id!: number;
     protected mapId!: number;
     protected x: number = 0;
@@ -54,7 +52,6 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     protected readonly TranslocoService = inject(TranslocoService);
 
     protected cdr = inject(ChangeDetectorRef);
-    private initialOffset: { x: number, y: number } = {x: 0, y: 0}; // Initial offset when dragging (needed to prevent bouncing after start dragging)
     private mapCanvasComponent: MapCanvasComponent;
 
     protected contextMenuItems: MenuItem[] = this.getDefaultContextMenuItems();
@@ -85,13 +82,18 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     }
 
     public setPosition(): void {
+        let x;
+        let y;
         if (this.isMapline(this.item())) {
-            this.position = {x: this.startX!, y: this.startY!};
+            x = this.startX!;
+            y = this.startY!;
         } else {
-            this.position = {x: this.x, y: this.y};
+            x = this.x
+            y = this.y;
         }
-        this.containerRef.nativeElement.style.left = `${this.position.x}px`;
-        this.containerRef.nativeElement.style.top = `${this.position.y}px`;
+        this.containerRef.nativeElement.style.left = `${x}px`;
+        this.containerRef.nativeElement.style.top = `${y}px`;
+
         this.cdr.markForCheck();
     }
 
@@ -105,30 +107,27 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         return item && item.startX !== undefined && item.startY !== undefined && item.endX !== undefined && item.endY !== undefined;
     }
 
-    // sets initial offset when dragging starts needed to prevent bouncing after start dragging)
-    public onDragStart(cdkEvent: CdkDragStart<any>) {
-        cdkEvent.event.preventDefault();
+    //grid snapping logic
+    onDragMove(event: CdkDragMove<any>) {
 
-        let clientX: number = 0;
-        let clientY: number = 0;
+        let posX;
+        let posY;
+        const distanceX = event.distance.x;
+        const distanceY = event.distance.y;
 
-        if (typeof TouchEvent !== 'undefined' && cdkEvent.event instanceof TouchEvent) {
-            let event = cdkEvent.event as TouchEvent;
-            clientX = event.touches[0].clientX;
-            clientY = event.touches[0].clientY;
+        if (!this.gridEnabled()) {
+            posX = distanceX;
+            posY = distanceY;
         } else {
-            let event = cdkEvent.event as MouseEvent;
-            clientX = event.clientX;
-            clientY = event.clientY;
+            posX = Math.round(distanceX / this.gridSize().x) * this.gridSize().x;
+            posY = Math.round(distanceY / this.gridSize().y) * this.gridSize().y;
         }
 
-        const rect = this.containerRef.nativeElement.getBoundingClientRect();
-        this.initialOffset = {x: clientX - rect.left, y: clientY - rect.top};
+        event.source.element.nativeElement.style.transform = `translate(${posX}px, ${posY}px)`;
         this.cdr.markForCheck();
-        console.error("drag start", this.initialOffset.x, this.initialOffset.y);
     }
 
-    // fires drag end event
+    // fires drag end event and grid snapping logic
     public onDragEnd(cdkEvent: CdkDragEnd<any>) {
 
         console.error("drag end");
@@ -139,6 +138,19 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         const posX = mapItem.x - mapCanvas.x;
         const posY = mapItem.y - mapCanvas.y;
 
+        if (this.isMapline(this.item())) {
+            this.startX = posX;
+            this.startY = posY;
+            this.endX = this.item()!.endX;
+            this.endY = this.item()!.endY;
+        } else {
+            this.x = posX;
+            this.y = posY;
+        }
+
+        this.setPosition();
+        cdkEvent.source.element.nativeElement.style.transform = 'none';
+
         this.dropItemEvent.emit({
             id: this.id,
             x: posX,
@@ -148,25 +160,9 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
             startY: this.startY,
             endX: this.endX,
             endY: this.endY,
-        })
-        ;
+        });
 
         this.cdr.markForCheck();
-    }
-
-    //grid snapping logic
-    public computeDragRenderPos = (pos: { x: number, y: number }) => {
-        console.error("drag render pos", pos);
-        let posX;
-        let posY;
-        if (!this.gridEnabled()) {
-            posX = pos.x - this.initialOffset.x;
-            posY = pos.y - this.initialOffset.y;
-        } else {
-            posX = Math.round((pos.x - this.initialOffset.x) / this.gridSize().x) * this.gridSize().x;
-            posY = Math.round((pos.y - this.initialOffset.y) / this.gridSize().y) * this.gridSize().y;
-        }
-        return {x: posX, y: posY};
     }
 
     protected getDefaultContextMenuItems(): MenuItem[] {
