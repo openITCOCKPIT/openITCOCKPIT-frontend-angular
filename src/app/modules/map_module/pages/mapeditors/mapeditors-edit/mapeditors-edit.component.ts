@@ -18,10 +18,8 @@ import { HistoryService } from '../../../../../history.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import {
-    BadgeComponent,
     CardBodyComponent,
     CardComponent,
-    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     DropdownComponent,
@@ -37,8 +35,7 @@ import {
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FCanvasComponent, FFlowModule } from '@foblex/flow';
-import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MapItemComponent } from '../../../components/map-item/map-item.component';
 import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.component';
@@ -64,16 +61,12 @@ import { MapLineComponent } from '../../../components/map-line/map-line.componen
         BackButtonDirective,
         XsButtonDirective,
         CardBodyComponent,
-        CardFooterComponent,
         RouterLink,
         TranslocoDirective,
         FFlowModule,
-        NgOptimizedImage,
-        BadgeComponent,
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        FormFeedbackComponent,
         FormsModule,
         DropdownComponent,
         DropdownToggleDirective,

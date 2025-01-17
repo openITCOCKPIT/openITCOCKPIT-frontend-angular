@@ -11,7 +11,7 @@ import {
 import { Data, MapItemRoot, MapItemRootParams } from './map-item.interface';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { NgClass, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
@@ -23,7 +23,7 @@ import { LabelPosition } from '../map-item-base/map-item-base.enum';
 @Component({
     selector: 'oitc-map-item',
     standalone: true,
-    imports: [CdkDrag, NgClass, ContextMenuModule, NgIf],
+    imports: [CdkDrag, ContextMenuModule, NgIf],
     templateUrl: './map-item.component.html',
     styleUrl: './map-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
