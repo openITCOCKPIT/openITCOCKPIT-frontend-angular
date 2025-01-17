@@ -33,14 +33,15 @@ import {
     InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent, TableDirective
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
@@ -56,9 +57,10 @@ import { DynamicalFormFields } from '../../../../../components/dynamical-form-fi
 import {
     DynamicalFormFieldsComponent
 } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
+import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
-    selector: 'oitc-importers-add',
+    selector: 'oitc-importers-edit',
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -101,24 +103,26 @@ import {
         DynamicalFormFieldsComponent,
         FormCheckLabelDirective,
         TranslocoPipe,
-        TableDirective
+        TableDirective,
+        FormLoaderComponent
     ],
-    templateUrl: './importers-add.component.html',
-    styleUrl: './importers-add.component.css',
+    templateUrl: './importers-edit.component.html',
+    styleUrl: './importers-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImportersAddComponent implements OnInit, OnDestroy {
+export class ImportersEditComponent implements OnInit, OnDestroy {
+    private id: number = 0;
     private subscriptions: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
     private readonly ContainersService = inject(ContainersService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
-    public post = this.getClearForm();
+    public post!: ImportersPost;
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private ImportersService = inject(ImportersService);
     public containers: SelectKeyValue[] = [];
     public hostdefaults: { [key: string]: ImporterHostDefaultsResponse } = {};
-    public hostdefaultsAsList: SelectKeyValueString[] = [];
+    public hostdefaultsAsList: SelectKeyValue[] = [];
     public externalsystems: SelectKeyValue[] = [];
     public externalmonitorings: SelectKeyValue[] = [];
 
@@ -173,9 +177,24 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
         }
     ];
 
+    constructor(private route: ActivatedRoute) {
+    }
+
     ngOnInit(): void {
-        this.loadContainers();
-        this.loadConfigFieldsByDataSource();
+        this.id = Number(this.route.snapshot.paramMap.get('id'));
+        this.loadImporter();
+    }
+
+    public loadImporter() {
+        this.subscriptions.add(this.ImportersService.getEdit(this.id)
+            .subscribe((result) => {
+                //Fire on page load
+                this.post = result.importer;
+                this.cdr.markForCheck();
+                this.loadContainers();
+                this.loadElements();
+                this.loadConfigFieldsByDataSource();
+            }));
     }
 
     public loadContainers = (): void => {
@@ -189,29 +208,6 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
     }
 
-    public getClearForm(): ImportersPost {
-        return {
-            container_id: null,
-            name: '',
-            description: '',
-            data_source: 'csv_with_header',
-            hostname_regex: '',
-            allow_empty_hosts: 0,
-            disable_updates: 0,     // only create new hosts
-            force_disable_hosts: 0, // hosts
-            re_enable_hosts: 0, // hosts
-            force_delete: 0,        // services
-            keep_container_settings: 1,
-            keep_satellite_settings: 1,
-            config: {},
-            hostdefault_id: 0,
-            external_system_id: null,
-            external_monitorings: {
-                _ids: []
-            },
-            importers_to_hostdefaults: []
-        }
-    }
 
     public submit() {
         this.subscriptions.add(this.ImportersService.createImporter(this.post)
@@ -225,9 +221,7 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
                     const url = ['import_module', 'Importers', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-
                     // Create another
-                    this.post = this.getClearForm();
                     this.errors = null;
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
@@ -259,9 +253,12 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ImportersService.loadElements(containerId, this.post.data_source)
             .subscribe((result) => {
+
+
                 this.hostdefaultsAsList = _.map(result.hostdefaults, function (value, key) {
-                    return {key: key, value: value.name};
+                    return {key: parseInt(key, 10), value: value.name};
                 });
+
                 this.hostdefaults = result.hostdefaults;
                 this.externalsystems = result.externalsystems.externalsystems;
                 this.externalmonitorings = result.externalMonitorings.externalMonitorings;
