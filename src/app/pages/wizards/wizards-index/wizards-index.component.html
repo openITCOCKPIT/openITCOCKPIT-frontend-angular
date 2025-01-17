@@ -102,16 +102,20 @@
                             </div>
                         </c-card-body>
                         <c-card-footer>
-                            <div>
-                                <oitc-badge-outline color="warning">
-                                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                                    {{ t('Requires module') }}
-                                </oitc-badge-outline>
-                            </div>
-                            <div class="text-end">
-                                <i class="fas fa-tags wizard-info-tags"></i>
-                                {{ wizard.value.category.join(', ') }}
-                            </div>
+                            <c-row>
+                                <c-col>
+
+                                    <oitc-badge-outline color="warning">
+                                        <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                                        {{ t('Requires module') }}
+                                    </oitc-badge-outline>
+                                </c-col>
+                                <c-col class="text-end">
+
+                                    <i class="fas fa-tags wizard-info-tags"></i>
+                                    {{ wizard.value.category.join(', ') }}
+                                </c-col>
+                            </c-row>
                         </c-card-footer>
                     </c-card>
                 </c-col>
