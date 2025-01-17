@@ -5,7 +5,8 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
     IsarFlowHostInformationResponse,
     IsarflowHostsIndexParams,
-    IsarflowHostsIndexRoot
+    IsarflowHostsIndexRoot,
+    IsarFlowInterfaceInformationResponse
 } from './isarflow-hosts.interface';
 
 @Injectable({
@@ -29,11 +30,25 @@ export class IsarFlowHostsService {
         )
     }
 
-    public getIsarFlowHostInformation(hostId: number) {
+    public getIsarFlowHostInformation(hostId: number): Observable<IsarFlowHostInformationResponse> {
         const proxyPath = this.proxyPath;
         return this.http.get<IsarFlowHostInformationResponse>(`${proxyPath}/isarflow_module/isarflow_hosts/isarFlowHostInformation/${hostId}.json`, {
             params: {
                 angular: 'true'
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadInterfaceInformation(interfaceId: number, duration: number): Observable<IsarFlowInterfaceInformationResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<IsarFlowInterfaceInformationResponse>(`${proxyPath}/isarflow_module/isarflow_hosts/loadInterfaceInformation/${interfaceId}.json`, {
+            params: {
+                angular: 'true',
+                duration: duration.toString()
             }
         }).pipe(
             map(data => {

@@ -32,23 +32,23 @@ import { SelectComponent } from '../../layouts/primeng/select/select/select.comp
 @Component({
     selector: 'oitc-dynamical-form-fields',
     imports: [
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    NgForOf,
-    NgIf,
-    PaginatorModule,
-    RequiredIconComponent,
-    TrueFalseDirective,
-    TranslocoDirective,
-    NgSelectComponent,
-    SelectComponent,
-    FormsModule
-],
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        NgForOf,
+        NgIf,
+        PaginatorModule,
+        RequiredIconComponent,
+        TrueFalseDirective,
+        TranslocoDirective,
+        NgSelectComponent,
+        SelectComponent,
+        FormsModule
+    ],
     templateUrl: './dynamical-form-fields.component.html',
     styleUrl: './dynamical-form-fields.component.css',
     providers: [
@@ -64,6 +64,8 @@ export class DynamicalFormFieldsComponent implements ControlValueAccessor {
     @Input() public errors: GenericValidationError | null = null;
     @Input() public formField!: DynamicalFormField;
     @Input() public name: string = '';
+    @Input() public identifier: string | null = null;
+
 
     @Input() disabled: boolean = false;
 
