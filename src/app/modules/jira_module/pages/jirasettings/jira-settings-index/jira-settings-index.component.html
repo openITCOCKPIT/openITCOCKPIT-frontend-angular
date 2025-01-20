@@ -262,6 +262,7 @@
                                                 [(ngModel)]="jira_project.issue_type_id"
                                                 [options]="projectDetails[jira_project.project_key].issueTypes"
                                                 (onChange)="findIssueTypeNameById(i, jira_project.issue_type_id, jira_project.project_key)"
+                                                [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
                                                 oitcFormError [errors]="getJiraProjectErrors(i)"
                                                 errorField="issue_type_id">
                                             </oitc-select>
