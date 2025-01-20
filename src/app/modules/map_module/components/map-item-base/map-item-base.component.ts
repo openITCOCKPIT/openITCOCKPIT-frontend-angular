@@ -12,7 +12,7 @@ import {
     Output,
     ViewChild
 } from '@angular/core';
-import { ContextAction, MapitemBase } from './map-item-base.interface';
+import { ContextAction, MapitemBase, MapitemBaseActionObject } from './map-item-base.interface';
 import { CdkDrag, CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
@@ -45,8 +45,15 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     protected startY?: number;
     protected endX?: number;
     protected endY?: number;
+    protected oldStartX?: number;
+    protected oldStartY?: number;
+    protected oldEndX?: number;
+    protected oldEndY?: number;
 
-    @Output() dropItemEvent = new EventEmitter<MapitemBase>();
+    // will be overridden by child components
+    protected type = "item";
+
+    @Output() dropItemEvent = new EventEmitter<MapitemBaseActionObject>();
     @Output() contextActionEvent = new EventEmitter<ContextAction>();
 
     protected readonly TranslocoService = inject(TranslocoService);
@@ -66,6 +73,10 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                 this.startY = this.item()!.startY;
                 this.endX = this.item()!.endX;
                 this.endY = this.item()!.endY;
+                this.oldStartX = this.startX;
+                this.oldStartY = this.startY;
+                this.oldEndX = this.endX;
+                this.oldEndY = this.endY;
             } else {
                 this.x = this.item()!.x;
                 this.y = this.item()!.y;
@@ -150,10 +161,33 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         }
 
         if (this.isMapline(this.item())) {
+            let oldStartX = this.oldStartX!;
+            let oldStartY = this.oldStartY!;
+            let oldEndX = this.oldEndX!;
+            let oldEndY = this.oldEndY!;
+
+            //Get movement distance
+
+            let distanceX = oldStartX - posX;
+            distanceX = distanceX * -1;
+            let distanceY = oldStartY - posY;
+            distanceY = distanceY * -1;
+
+            let endX = oldEndX + distanceX;
+            let endY = oldEndY + distanceY;
+            this.endX = endX;
+            this.endY = endY;
+
             this.startX = posX;
             this.startY = posY;
             this.endX = this.item()!.endX;
             this.endY = this.item()!.endY;
+
+            /*this.oldStartX = this.startX;
+            this.oldStartY = this.startY;
+            this.oldEndX = this.endX;
+            this.oldEndY = this.endY;*/
+
         } else {
             this.x = posX;
             this.y = posY;
@@ -164,14 +198,18 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
         // emit drop event
         this.dropItemEvent.emit({
-            id: this.id,
-            x: posX,
-            y: posY,
-            map_id: this.mapId,
-            startX: this.startX,
-            startY: this.startY,
-            endX: this.endX,
-            endY: this.endY,
+            data: {
+                id: this.id,
+                x: posX,
+                y: posY,
+                map_id: this.mapId,
+                startX: this.startX,
+                startY: this.startY,
+                endX: this.endX,
+                endY: this.endY
+            },
+            action: 'dragstop',
+            type: this.type
         });
 
         this.cdr.markForCheck();

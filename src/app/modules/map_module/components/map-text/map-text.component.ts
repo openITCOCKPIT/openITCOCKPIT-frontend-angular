@@ -20,6 +20,8 @@ export class MapTextComponent extends MapItemBaseComponent<Maptext> {
 
     public override item: InputSignal<Maptext | undefined> = input<Maptext>();
 
+    protected override type = "text";
+
     private readonly BBParserService = inject(BbCodeParserService);
 
     protected bbhtml: string = '';

@@ -45,6 +45,8 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
     protected allowView: boolean = false;
     protected label: string = "";
 
+    protected override type = "item";
+
     constructor(parent: MapCanvasComponent) {
         super(parent);
         effect(() => {

@@ -47,6 +47,8 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
     protected background: string = "";
     protected init: boolean = true;
 
+    protected override type = "line";
+
     constructor(parent: MapCanvasComponent) {
         super(parent);
         effect(() => {
@@ -57,6 +59,10 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
                 this.startY = this.item()!.startY;
                 this.endX = this.item()!.endX;
                 this.endY = this.item()!.endY;
+                this.oldStartX = this.startX;
+                this.oldStartY = this.startY;
+                this.oldEndX = this.endX;
+                this.oldEndY = this.endY;
             } else {
                 this.x = this.item()!.x;
                 this.y = this.item()!.y;

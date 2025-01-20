@@ -42,7 +42,7 @@ import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.co
 import { filter, parseInt } from 'lodash';
 import { Background, Mapeditor, MapRoot, MaxUploadLimit, VisibleLayers } from '../Mapeditors.interface';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
-import { ContextAction, MapitemBase } from '../../../components/map-item-base/map-item-base.interface';
+import { ContextAction, MapitemBaseActionObject } from '../../../components/map-item-base/map-item-base.interface';
 import { MapTextComponent } from '../../../components/map-text/map-text.component';
 import { MapIconComponent } from '../../../components/map-icon/map-icon.component';
 import { MapLineComponent } from '../../../components/map-line/map-line.component';
@@ -118,7 +118,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     public addNewObject = false;
     public action: string | null = null;
 
-    public currentItem = {};
+    public currentItem: any = {};
     public maxZIndex = 0;
     public clickCount = 1;
 
@@ -184,8 +184,82 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     }
 
-    public onDropItem(mapItem: MapitemBase) {
-        console.error("Item dropped", mapItem);
+    public onDropItem(item: MapitemBaseActionObject) {
+        console.error("Item dropped", item);
+
+        let x = item.data.x;
+        let y = item.data.y;
+        let id = item.data.id;
+        let type = item.type;
+
+        switch (type) {
+            case 'item':
+                this.currentItem = {
+                    id: id,
+                    x: x,
+                    y: y
+                };
+                this.saveItem('dragstop');
+                break;
+
+            case 'line':
+                x = item.data.startX!;
+                y = item.data.startY!;
+
+                let endX = item.data.endX;
+                let endY = item.data.endY;
+
+                this.currentItem = {
+                    id: id,
+                    startX: x,
+                    startY: y,
+                    endX: endX,
+                    endY: endY
+                };
+
+                this.saveLine('dragstop');
+                break;
+
+            case 'gadget':
+                this.currentItem = {
+                    id: id,
+                    x: x,
+                    y: y
+                };
+                //this.saveGadget('dragstop');
+                break;
+
+            case 'text':
+                this.currentItem = {
+                    id: id,
+                    x: x,
+                    y: y
+                };
+                this.saveText('dragstop');
+                break;
+
+            case 'icon':
+                this.currentItem = {
+                    id: id,
+                    x: x,
+                    y: y
+                };
+                this.saveIcon('dragstop');
+                break;
+
+            case 'summaryItem':
+                this.currentItem = {
+                    id: id,
+                    x: x,
+                    y: y
+                };
+                //this.saveSummaryItem('dragstop');
+                break;
+
+            default:
+                console.log('Unknown map object type');
+                this.notyService.genericError();
+        }
     }
 
     public changeGridSize(size: number) {
@@ -318,6 +392,64 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     };
 
+    public editItem(item: any) {
+        this.action = 'item';
+        this.currentItem = item;
+        //$('#addEditMapItemModal').modal('show');
+        this.cdr.markForCheck();
+    };
+
+    public saveItem(action: string) {
+        if (typeof action === 'undefined') {
+            action = 'add_or_edit';
+        }
+
+        this.currentItem.map_id = this.mapId.toString();
+
+        this.subscriptions.add(this.MapeditorsService.saveItem({
+            'Mapitem': this.currentItem,
+            'action': action
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                //Update possition in current scope json data
+                if (this.currentItem.hasOwnProperty('id')) {
+                    for (let i in this.map.Mapitems) {
+                        if (this.map.Mapitems[i].id == this.currentItem.id) {
+                            this.map.Mapitems[i].x = this.currentItem.x;
+                            this.map.Mapitems[i].y = this.currentItem.y;
+
+                            //We are done here
+                            break;
+                        }
+                    }
+                } else {
+                    //New created item
+                    if (typeof this.map.Mapitems === "undefined") {
+                        this.map.Mapitems = [];
+                    }
+                    this.map.Mapitems.push(result.data.Mapitem.Mapitem);
+                    //setTimeout(makeDraggable, 250);
+                }
+
+                //$('#addEditMapItemModal').modal('hide');
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
     public addLine() {
         const options = {
             timeOut: 3500,
@@ -331,6 +463,71 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.addNewObject = true;
         this.action = 'line';
         this.cdr.markForCheck();
+    };
+
+    public editLine(lineItem: any) {
+        this.action = 'line';
+        this.currentItem = lineItem;
+        //$('#addEditMapLineModal').modal('show');
+    };
+
+    public saveLine(action: string) {
+        if (typeof action === 'undefined') {
+            action = 'add_or_edit';
+        }
+
+        this.currentItem.map_id = this.mapId.toString();
+
+        if (this.currentItem.type === 'stateless') {
+            this.currentItem.object_id = null;
+        }
+
+
+        this.subscriptions.add(this.MapeditorsService.saveLine({
+            'Mapline': this.currentItem,
+            'action': action
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                //Update possition in current scope json data
+                if (this.currentItem.hasOwnProperty('id')) {
+                    for (let i in this.map.Maplines) {
+                        if (this.map.Maplines[i].id == this.currentItem.id) {
+                            this.map.Maplines[i].startY = this.currentItem.startY;
+                            this.map.Maplines[i].endX = this.currentItem.endX;
+                            this.map.Maplines[i].endY = this.currentItem.endY;
+                            this.map.Maplines[i].startX = this.currentItem.startX; //Change this last because of $watch in directive
+
+                            //We are done here
+                            break;
+                        }
+                    }
+                } else {
+                    //New created item
+                    if (typeof this.map.Maplines === "undefined") {
+                        this.map.Maplines = [];
+                    }
+
+                    this.map.Maplines.push(result.data.Mapline.Mapline);
+                    //setTimeout(makeDraggable, 250);
+                }
+
+                //$('#addEditMapLineModal').modal('hide');
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
     };
 
     public addSummaryItem() {
@@ -391,6 +588,72 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     };
 
+    public editText(item: any) {
+        this.action = 'text';
+        this.currentItem = item;
+        this.addLink = false;
+        //$('#docuText').val(item.text);
+        //$('#AddEditStatelessTextModal').modal('show');
+    };
+
+    public saveText(action: string) {
+        if (typeof action === 'undefined') {
+            action = 'add_or_edit';
+        }
+
+        this.currentItem.map_id = this.mapId.toString();
+        if (action === 'add_or_edit') {
+            //this.currentItem.text = $('#docuText').val();
+        }
+
+        this.subscriptions.add(this.MapeditorsService.saveText({
+            'Maptext': this.currentItem,
+            'action': action
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                //Update possition in current scope json data
+                if (this.currentItem.hasOwnProperty('id')) {
+                    for (let i in this.map.Maptexts) {
+                        if (this.map.Maptexts[i].id == this.currentItem.id) {
+                            this.map.Maptexts[i].x = this.currentItem.x;
+                            this.map.Maptexts[i].y = this.currentItem.y;
+                            if (action === 'add_or_edit') {
+                                this.map.Maptexts[i].text = this.currentItem.text;
+                            }
+
+                            //We are done here
+                            break;
+                        }
+                    }
+                } else {
+                    //New created item
+                    if (typeof this.map.Maptexts === "undefined") {
+                        this.map.Maptexts = [];
+                    }
+
+                    this.map.Maptexts.push(result.data.Maptext.Maptext);
+                    //setTimeout(makeDraggable, 250);
+                }
+
+                //$('#AddEditStatelessTextModal').modal('hide');
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
     public addIcon() {
         const options = {
             timeOut: 3500,
@@ -403,6 +666,66 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.addNewObject = true;
         this.action = 'icon';
         this.cdr.markForCheck();
+    };
+
+    public editIcon(item: any) {
+        this.action = 'icon';
+        this.currentItem = item;
+        //$('#AddEditStatelessIconModal').modal('show');
+    };
+
+    public saveIcon(action: string) {
+        if (typeof action === 'undefined') {
+            action = 'add_or_edit';
+        }
+
+        this.currentItem.map_id = this.mapId.toString();
+
+
+        this.subscriptions.add(this.MapeditorsService.saveIcon({
+            'Mapicon': this.currentItem,
+            'action': action
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+
+                //Update possition in current scope json data
+                if (this.currentItem.hasOwnProperty('id')) {
+                    for (let i in this.map.Mapicons) {
+                        if (this.map.Mapicons[i].id == this.currentItem.id) {
+                            this.map.Mapicons[i].x = this.currentItem.x;
+                            this.map.Mapicons[i].y = this.currentItem.y;
+
+                            //We are done here
+                            break;
+                        }
+                    }
+                } else {
+                    //New created item
+                    if (typeof this.map.Mapicons === "undefined") {
+                        this.map.Mapicons = [];
+                    }
+
+                    this.map.Mapicons.push(result.data.Mapicon.Mapicon);
+                    //setTimeout(makeDraggable, 250);
+                }
+
+                //$('#AddEditStatelessIconModal').modal('hide');
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
     };
 
     protected readonly parseInt = parseInt;

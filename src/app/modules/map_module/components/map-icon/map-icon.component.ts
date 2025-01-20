@@ -16,6 +16,7 @@ import { Mapicon } from '../../pages/mapeditors/Mapeditors.interface';
 export class MapIconComponent extends MapItemBaseComponent<Mapicon> {
 
     public override item: InputSignal<Mapicon | undefined> = input<Mapicon>();
+    protected override type = "icon";
 
     constructor(parent: MapCanvasComponent) {
         super(parent);

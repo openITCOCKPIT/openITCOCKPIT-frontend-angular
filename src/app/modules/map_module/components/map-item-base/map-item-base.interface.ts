@@ -1,8 +1,3 @@
-export interface MapItemPosition {
-    x: number;
-    y: number;
-}
-
 export interface MapitemBase {
     id: number
     map_id: number
@@ -19,4 +14,10 @@ export interface MapitemBase {
 export interface ContextAction {
     type: string
     data: MapitemBase
+}
+
+export interface MapitemBaseActionObject {
+    data: MapitemBase
+    action: string
+    type: string
 }
