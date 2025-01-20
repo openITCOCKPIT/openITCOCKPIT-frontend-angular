@@ -1,8 +1,7 @@
 <div cdkDrag #container class="map-element-container"
      [draggable]="isViewMode()"
-     (cdkDragStarted)="onDragStart($event)"
      (cdkDragEnded)="onDragEnd($event)"
-     [cdkDragConstrainPosition]="computeDragRenderPos"
+     (cdkDragMoved)="onDragMove($event)"
      cdkDragBoundary=".map-canvas">
     <img [src]="'/map_module/img/icons/' + item()?.icon"/>
 </div>
