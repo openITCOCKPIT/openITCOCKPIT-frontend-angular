@@ -2536,7 +2536,7 @@
     "MySQL Information": "Информация о MySQL",
     "MySQL Server": "Сервер MySQL",
     "MySQL configuration help": "MySQL справка по настройке",
-    "To enable external databases access you have to change the {0} of your MySQL server.": "Чтобы разрешить доступ к внешним базам данных, вам необходимо изменить <code>bind-address</code> вашего сервера MySQL.",
+    "To enable external databases access you have to change the {0} of your MySQL server.": "Чтобы разрешить доступ к внешним базам данных, вам необходимо изменить bind-address вашего сервера MySQL.",
     "Changing the bind address can be a potential security issue!": "Изменение адреса привязки может быть потенциальной проблемой безопасности!",
     "The bind-address is configured in my.cnf. Most likely this file is located at {0} or {1}": "Адрес привязки настраивается в my.cnf. Скорее всего, этот файл находится по адресу <code>/etc/mysql/mysql.conf.d/mysqld.cnf</code> или <code>/etc/mysql/my.cnf</code>",
     "Change the bind-address from 127.0.0.1 to the external address of the system or use 0.0.0.0 to bind to all interfaces.": "Измените адрес привязки с 127.0.0.1 на внешний адрес системы или используйте 0.0.0.0 для привязки ко всем интерфейсам.",

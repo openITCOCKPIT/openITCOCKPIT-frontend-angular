@@ -72,6 +72,95 @@
                     </h4>
                 </legend>
 
+                <c-accordion class="mb-3">
+                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                        <ng-template cTemplateId="accordionHeaderTemplate">
+                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                                {{ t('Oracle configuration help') }}
+                            </button>
+                        </ng-template>
+                        <ng-template cTemplateId="accordionBodyTemplate">
+                            <div class="accordion-body">
+                                {{t('Please replace XXXXX with your version.')}}
+                                <ol>
+                                    <li>
+                                        <div>
+                                            {{ t('Please download a recent version of the following packages from here') }}
+                                            (
+                                            <a href="https://www.oracle.com/de/database/technologies/instant-client/linux-x86-64-downloads.html" target="_blank">
+                                                https://www.oracle.com/de/database/technologies/instant-client/linux-x86-64-downloads.html
+                                            </a>
+                                            )
+                                            <ul>
+                                                <li><code> instantclient-basic </code></li>
+                                                <li><code> instantclient-sdk </code></li>
+                                                <li><code> instantclient-sqlplus </code></li>
+                                                <li><code> instantclient-tools </code></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            {{ t('Extract files')}}
+                                            <ul>
+                                                <li><code> unzip instantclient-sdk-linux.x64-XXXXXXdbru.zip </code></li>
+                                                <li><code> unzip instantclient-basic-linux.x64-XXXXXXdbru.zip </code></li>
+                                                <li><code> unzip instantclient-sqlplus-linux.x64-XXXXXXdbru.zip </code></li>
+                                                <li><code> unzip instantclient-tools-linux.x64-XXXXXXdbru.zip </code></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            {{t('Install')}}
+                                            <pre>mkdir -p /opt/oracle/
+mv instantclient_XX_X /opt/oracle/
+
+sh -c "echo /opt/oracle/instantclient_XX_X > /etc/ld.so.conf.d/oracle-instantclient.conf"
+ldconfig
+
+mkdir -p /opt/oracle/instantclient_XX_X/network/admin
+copy tnsnames.ora into this folder.</pre>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            {{t('Environment Variables')}}
+                                            <br />
+                                            {{t('Add the following to {0}', {"0": "/etc/environment"})}}
+                                            <pre>TNS_ADMIN=/opt/oracle/instantclient_XX_X/network/admin
+ORACLE_HOME=/opt/oracle/instantclient_XX_X
+LD_LIBRARY_PATH=/opt/oracle/instantclient_XX_X/lib</pre>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            {{ t('Create User within Database') }}
+                                        </div>
+                                        <pre>create user nagios identified by oradbmon;
+
+grant create session to nagios;
+grant select any dictionary to nagios;
+grant select on V_$SYSSTAT to nagios;
+grant select on V_$INSTANCE to nagios;
+grant select on V_$LOG to nagios;
+grant select on SYS.DBA_DATA_FILES to nagios;
+grant select on SYS.DBA_FREE_SPACE to nagios;
+--
+-- for Oracle 8.1.7 ...
+grant select on sys.dba_tablespaces to nagios;
+grant select on dba_temp_files to nagios;
+grant select on sys.v_$Temp_extent_pool to nagios;
+grant select on sys.v_$TEMP_SPACE_HEADER to nagios;
+grant select on sys.v_$session to nagios;</pre>
+                                    </li>
+                                </ol>
+                            </div>
+                        </ng-template>
+                    </c-accordion-item>
+                </c-accordion>
+
                 <div class="mb-3">
                     <label cLabel for="post.dbuser">
                         {{ t('Database user') }}

@@ -3,12 +3,16 @@
     "A host with the name {0} already exists. Duplicate host names could lead to confusion.": "A host with the name {{0}} already exists. Duplicate host names could lead to confusion.",
     "{0} metrics": "{{hostname}} metrics",
     "Prometheus metrics export of {0} internal metrics" : "Prometheus metrics export of {{hostname}} internal metrics",
-    "To enable external databases access you have to change the {0} of your MySQL server.": "To enable external databases access you have to change the <code>bind-address</code> of your MySQL server.",
-    "Please replace {0} with the address of the {1} server and set a secure password": "Please replace <i>{0}</i> with the address of the {1} server and set a secure password",
+    "To enable external databases access you have to change the {0} of your MySQL server.": "To enable external databases access you have to change the bind-address of your MySQL server.",
+    "Please replace {0} with the address of the {1} server and set a secure password": "Please replace {{0}} with the address of the {{1}} server and set a secure password",
     "This Prometheus Exporter can be used to monitor internal metrics of {0} with a second instance of {1} or with Prometheus.": "This Prometheus Exporter can be used to monitor internal metrics of {{hostname}} with a second instance of {{hostname}} or with Prometheus.",
     "Installation done. Please reload your {0} web interface.": "Installation done. Please reload your {{systemname}} web interface.",
     "Your installation of {0} is running in a container based environment like Docker.": "Your installation of {{systemname}} is running in a container based environment like Docker.",
     "To install the selected packages, please execute the following command on your {0} system.": "To install the selected packages, please execute the following command on your {{systemname}} system.",
     "Please update your {0} installation to the latest version to get new features and latest security fixes.": "Please update your {{systemname}} installation to the latest version to get new features and latest security fixes.",
-    "Upon every update of {0}, the permissions for both the Administrator and Viewer user roles will automatically revert to their default settings.": "Upon every update of {{systemname}}, the permissions for both the Administrator and Viewer user roles will automatically revert to their default settings."
+    "Upon every update of {0}, the permissions for both the Administrator and Viewer user roles will automatically revert to their default settings.": "Upon every update of {{systemname}}, the permissions for both the Administrator and Viewer user roles will automatically revert to their default settings.",
+    "The bind-address is configured in my.cnf. Most likely this file is located at {0} or {1}": "The bind-address is configured in my.cnf. Most likely this file is located at {{0}} or {{1}}",
+    "Create a new MySQL user for {0}": "Create a new MySQL user for {{0}}",
+    "Maybe there is already a user {0}, wich is beeing used to monitore the operatingsystem.": "Maybe there is already a user {{0}}, wich is beeing used to monitore the operatingsystem.",
+    "Add the following to {0}.": "Add the following to {{0}}."
 }

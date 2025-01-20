@@ -71,6 +71,99 @@
                     </h4>
                 </legend>
 
+
+                <c-accordion class="mb-3">
+                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                        <ng-template cTemplateId="accordionHeaderTemplate">
+                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                                {{ t('DB2 configuration help') }}
+                            </button>
+                        </ng-template>
+                        <ng-template cTemplateId="accordionBodyTemplate">
+                            <div class="accordion-body">
+                                {{t('Please replace XXXXX with your version.')}}
+                                <ol>
+                                    <li>
+                                        <div>
+                                            {{ t('Please download a recent version of the following packages from here') }}
+                                            (
+                                            <a href="https://www.ibm.com/support/pages/download-initial-version-115-clients-and-drivers" target="_blank">
+                                                https://www.ibm.com/support/pages/download-initial-version-115-clients-and-drivers
+                                            </a>
+                                            )
+                                            <ul>
+                                                <li><code>Runtime Client (rtcl)</code></li>
+                                                <li><code>Driver package (DS Driver)</code></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div>
+                                            {{ t('Add the following to {0}.', {"0": "/etc/environment"}) }}
+                                            <pre>LD_LIBRARY_PATH=/opt/ibm/db2/VXX.X/lib64
+DB2DIR=/opt/ibm/db2/VXX.X
+DB2_HOME=/opt/ibm/db2/VXX.X
+DB2LIB=/var/lib/nagios/sqllib/lib
+DB2INSTANCE=nagios</pre>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            {{ t('Installation') }}
+                                            <pre>tar xf vXXXX_linuxx64_rtcl.tar.gz
+cd rtcl/
+./db2_install
+
+tar xf vXXXX_linuxx64_dsdriver.tar.gz
+cd dsdriver
+./installDSDriver
+cp -r include /opt/ibm/db2/VXX.X/
+
+/opt/ibm/db2/VXX.X/instance/db2icrt -a server -u nagios nagios
+
+source /etc/environment
+
+apt-get install libdbi-perl libaio1
+cpan -i DBD::DB2</pre>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div>
+                                            {{ t('Create User within Database.') }}
+                                            <br />
+                                            {{ t('To ensure, that openITCOCKPIT is able to query information from the database, you need to add a operationsystem user called "nagios" (with same group name).')}}
+                                            <br />
+                                            {{ t('Maybe there is already a user {0}, wich is beeing used to monitore the operatingsystem.', {"0": '"nagios"'})}}
+                                            <br />
+                                            {{ t('Afterwords you need to enable the monitoring switches:')}}
+                                        </div>
+                                        <pre>update dbm cfg using dft_mon_bufpool on
+update dbm cfg using dft_mon_lock on
+update dbm cfg using dft_mon_timestamp on</pre>
+                                        <div>
+                                            {{ t('The nagios user (resp. the nagios group) is going to get the needed privileges and after a restart of the database, everything is prepared.')}}
+                                        </div>
+                                        <pre>db2 update dbm cfg using sysmon_group nagios
+db2 grant select,update on table SYSTOOLS.STMG_DBSIZE_INFO to nagios
+db2stop; db2start</pre>
+                                    </li>
+
+                                    <li>
+                                        <div>
+                                            {{ t('Restart the DB2 server to apply the changes.') }}
+                                            <pre>db2stop; db2start</pre>
+                                        </div>
+                                    </li>
+
+                                </ol>
+                            </div>
+                        </ng-template>
+                    </c-accordion-item>
+                </c-accordion>
+
                 <div class="mb-3">
                     <label cLabel for="post.dbuser">
                         {{ t('Database') }}
