@@ -1,4 +1,5 @@
 import { JiraType } from './jira.enums';
+import { SelectKeyValueString } from '../../../../layouts/primeng/select.interface';
 
 export interface JiraSettingsGetResponse {
     settings: {
@@ -15,25 +16,23 @@ export interface JiraSettingsPost {
     ignore_ssl_certificate: boolean
     use_proxy: boolean
     enable_two_way: boolean
-    created: string
-    modified: string
+    created?: string
+    modified?: string
     jira_projects: JiraProject[]
 }
 
 export interface JiraProject {
     id?: number
     jira_settings_id?: number
-    priority_1: string
-    priority_2: string
-    priority_3: string
-    priority_4: string
-    priority_5: string
-    //priority_default: 'ITNPRIO'
-    issue_type: string
+    project_key: string             // PX
+    project_id: string              // 10001
+    is_default: boolean
+    issue_type_id: string              // 10105
+    issue_type_name: string            // Task
     close_transition_name: string
     close_transition_id: string
-    created: string
-    modified: string
+    created?: string
+    modified?: string
 }
 
 export interface LoadJiraProjectParams {
@@ -52,6 +51,20 @@ export interface LoadJiraProjectsResponse {
 export interface JiraProjectSelect {
     key: string     // PX
     id: string      // 10001
-    value: string   // Project X (PX)
+    value: string   // Project X (PX),
+    issue_types: SelectKeyValueString[]
 }
 
+export interface LoadJiraProjectDetailsResponse {
+    details: {
+        issueTypes: SelectKeyValueString[]
+    },
+    error: null | string
+    _csrfToken: null | string
+}
+
+export interface ProjectDetails {
+    [key: string]: {
+        issueTypes: SelectKeyValueString[]
+    }
+}
