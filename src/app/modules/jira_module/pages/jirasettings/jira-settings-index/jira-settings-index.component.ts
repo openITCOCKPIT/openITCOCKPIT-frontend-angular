@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
@@ -71,8 +71,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         ColComponent,
         NgForOf,
         CardTextDirective,
-        TranslocoPipe,
-        JsonPipe
+        TranslocoPipe
     ],
     templateUrl: './jira-settings-index.component.html',
     styleUrl: './jira-settings-index.component.css',
@@ -346,8 +345,28 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
                     if (this.errors['jira_projects'][projectIndex]) {
                         return this.errors['jira_projects'][projectIndex];
                     }
+                }
+
+                // We do NOT get an array from the server, so no projects are selected, or multiple projects are selected
+                // but the one with an error has an index > 0 - so we end up with an objects instead of an array.
 
 
+                // If we have non-numeric keys, we are a "general" project error (no project was selected, or no default project was selected)
+                const keys = Object.keys(this.errors['jira_projects']);
+                let allKeysAreNumeric = true;
+                for (const key of keys) {
+                    if (isNaN(Number(key))) {
+                        allKeysAreNumeric = false;
+                        break;
+                    }
+                }
+
+                if (allKeysAreNumeric) {
+                    // All keys are numeric, so we have an error for a specific project
+                    if (this.errors['jira_projects'][projectIndex]) {
+                        // @ts-ignore
+                        return this.errors['jira_projects'][projectIndex];
+                    }
                 }
             }
         }
