@@ -101,7 +101,7 @@
 
                                     <li>
                                         <div>
-                                            {{ t('Add the following to {0}.', {"0": "/etc/environment"}) }}
+                                            {{ t('Add the following to {0}', {"0": "/etc/environment"}) }}
                                             <pre>LD_LIBRARY_PATH=/opt/ibm/db2/VXX.X/lib64
 DB2DIR=/opt/ibm/db2/VXX.X
 DB2_HOME=/opt/ibm/db2/VXX.X
@@ -132,7 +132,7 @@ cpan -i DBD::DB2</pre>
 
                                     <li>
                                         <div>
-                                            {{ t('Create User within Database.') }}
+                                            {{ t('Create User within Database') }}
                                             <br />
                                             {{ t('To ensure, that openITCOCKPIT is able to query information from the database, you need to add a operationsystem user called "nagios" (with same group name).')}}
                                             <br />
