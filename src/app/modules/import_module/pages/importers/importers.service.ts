@@ -11,7 +11,7 @@ import {
     ImportersPost,
     LoadElementsByContainerIdResponse
 } from './importers.interface';
-import { Hostdefault } from '../hostdefaults/hostdefaults.interface';
+import { Hostdefault, HostDefaultsGet, HostDefaultsPost } from '../hostdefaults/hostdefaults.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { ExternalSystemsAsList } from '../externalsystems/external-systems.interface';
 import { ExternalMonitoringsAsList } from '../externalmonitorings/external-monitorings.interface';
@@ -97,7 +97,7 @@ export class ImportersService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data.hostdefault as GenericIdResponse
+                        data: data.importer as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
@@ -114,7 +114,7 @@ export class ImportersService {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             importer: ImportersPost
-        }>(`${proxyPath}/import_module/host_defaults/edit/${id}.json`, {
+        }>(`${proxyPath}/import_module/importers/edit/${id}.json`, {
             params: {
                 angular: true
             }
@@ -138,7 +138,7 @@ export class ImportersService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data.importers as GenericIdResponse
+                        data: data.importer as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
