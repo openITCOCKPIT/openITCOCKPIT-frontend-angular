@@ -132,11 +132,22 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
         console.error("drag end");
 
+        // grid snapping logic
         const mapCanvas = this.mapCanvasComponent.canvasContainerRef.nativeElement.getBoundingClientRect();
         const mapItem = cdkEvent.source.element.nativeElement.getBoundingClientRect();
 
-        const posX = mapItem.x - mapCanvas.x;
-        const posY = mapItem.y - mapCanvas.y;
+        let posX = mapItem.x - mapCanvas.x;
+        let posY = mapItem.y - mapCanvas.y;
+
+        if (this.gridEnabled()) {
+            const currentLeftOffset = Math.round(posX) % this.gridSize().x;
+            const currentTopOffset = Math.round(posY) % this.gridSize().y;
+
+            if (currentLeftOffset > 0 || currentTopOffset > 0) {
+                posX = Math.round(posX - currentLeftOffset);
+                posY = Math.round(posY - currentTopOffset);
+            }
+        }
 
         if (this.isMapline(this.item())) {
             this.startX = posX;
@@ -151,6 +162,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         this.setPosition();
         cdkEvent.source.element.nativeElement.style.transform = 'none';
 
+        // emit drop event
         this.dropItemEvent.emit({
             id: this.id,
             x: posX,
