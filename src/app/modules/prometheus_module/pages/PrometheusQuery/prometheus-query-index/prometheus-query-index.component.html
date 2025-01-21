@@ -192,9 +192,11 @@
                     </td>
                     <td class="width-50">
                         <oitc-actions-button [permission]="'PrometheusModule.PrometheusQuery.toService'"
-                                             [url]="'/prometheus_module/PrometheusQuery/toService/' + params.hostId">
+                                             [url]="'/prometheus_module/PrometheusQuery/toService/' + params.hostId"
+                                             [queryParams]="{'metrics[]': [datum.metric]}">
                             <oitc-actions-button-element [permission]="'PrometheusModule.PrometheusQuery.toService'"
-                                                         [url]="'/prometheus_module/PrometheusQuery/toService/' + params.hostId">
+                                                         [url]="'/prometheus_module/PrometheusQuery/toService/' + params.hostId"
+                                                         [queryParams]="{'metrics[]': [datum.metric]}">
                                 <fa-stack>
                                     <fa-icon [icon]="['fas', 'gear']" stackItemSize="1x" pull="right"></fa-icon>
                                     <fa-icon [icon]="['fas', 'plus']" class="text-success"

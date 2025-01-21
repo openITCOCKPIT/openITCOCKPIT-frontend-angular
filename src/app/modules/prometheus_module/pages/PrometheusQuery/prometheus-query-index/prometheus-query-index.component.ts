@@ -20,7 +20,7 @@ import {
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { Subscription } from 'rxjs';
@@ -107,6 +107,8 @@ export class PrometheusQueryIndexComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly PrometheusQueryService: PrometheusQueryService = inject(PrometheusQueryService);
     private readonly TimezoneService: TimezoneService = inject(TimezoneService);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly router: Router = inject(Router);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected hostId: number = 0;
@@ -135,6 +137,14 @@ export class PrometheusQueryIndexComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.getUserTimezone();
         this.loadContainers();
+
+        const hostId = Number(this.route.snapshot.paramMap.get('hostId'));
+        if (hostId) {
+            this.hostId = hostId;
+            this.params.hostId = hostId;
+            this.loadIndex();
+            this.cdr.markForCheck();
+        }
     }
 
     private loadContainers(): void {

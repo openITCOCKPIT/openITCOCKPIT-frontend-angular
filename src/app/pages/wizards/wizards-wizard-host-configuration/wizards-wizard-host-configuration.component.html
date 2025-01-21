@@ -72,6 +72,8 @@
                                    name="useExistingHost"
                                    id="useExistingHost"
                                    type="checkbox"
+                                   [disabled]="useExistingHostReadonly"
+                                   [readonly]="useExistingHostReadonly"
                                    [(ngModel)]="useExistingHost"/>
                             <label cFormCheckLabel for="useExistingHost">
                                 {{ t('Use existing Host') }}

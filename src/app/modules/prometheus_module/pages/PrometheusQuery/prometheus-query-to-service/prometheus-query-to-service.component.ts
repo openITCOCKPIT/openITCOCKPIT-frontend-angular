@@ -61,7 +61,7 @@ import {
 } from '../../../../../components/code-mirror-container/code-mirror-container.component';
 import { AutocompleteItem } from '../../../../../components/code-mirror-container/code-mirror-container.interface';
 import { PrometheusAutocompleteService } from '../prometheus-autocomplete.service';
-import { MetadataInfo, MetadataResponseRoot } from '../prometheus-autocomplete.interface';
+import { MetadataResponseRoot } from '../prometheus-autocomplete.interface';
 import {
     PrometheusCodeMirrorComponent
 } from '../../../components/prometheus-code-mirror/prometheus-code-mirror.component';
@@ -211,10 +211,27 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
             .subscribe((result: PrometheusQueryIndexRoot) => {
                 this.index = result;
                 this.cdr.markForCheck();
+                this.route.queryParams.subscribe(params => {
+                    let myMetrix = params['metrics[]'];
+                    if (typeof (myMetrix) === "string") {
+                        this.selectedMetrics = [myMetrix];
+                    } else {
+                        this.selectedMetrics = myMetrix;
+                    }
+                    console.log(this.selectedMetrics);
+                });
+                this.getMetadata();
+                this.getUserTimezone();
+
+                if (this.selectedMetrics.length > 0) {
+                    this.onMetricsChange();
+                }
             }));
 
-        this.getMetadata();
-        this.getUserTimezone();
+    }
+
+    protected execute(): void {
+
     }
 
 
