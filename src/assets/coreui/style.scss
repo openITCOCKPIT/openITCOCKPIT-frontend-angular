@@ -49,11 +49,11 @@
 
 // Add 'Font Awesome 6 Free Solid' for vis-network
 @font-face {
-  font-family: 'Font Awesome 6 Free Solid';
-  font-style: normal;
-  font-weight: 900;
-  font-display: block;
-  src: url("../../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2") format("woff2"), url("../../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf") format("truetype");
+    font-family: 'Font Awesome 6 Free Solid';
+    font-style: normal;
+    font-weight: 900;
+    font-display: block;
+    src: url("../../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2") format("woff2"), url("../../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf") format("truetype");
 }
 
 @import "flag-icons/css/flag-icons.min.css";
@@ -102,3 +102,6 @@
 //  Modules
 @import "../../app/modules/import_module/assets/import_module";
 @import "../../app/modules/eventcorrelation_module/assets/eventcorrelation_module";
+@import "../../app/modules/map_module/assets/map_module";
+
+

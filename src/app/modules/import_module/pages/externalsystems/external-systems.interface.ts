@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 export interface AdditionalHostInformationResult {
 
@@ -499,4 +500,8 @@ export interface HostgroupMapping {
     name_regex: string
     ci_regex: string
     container_id: number
+}
+
+export interface ExternalSystemsAsList{
+    externalsystems: SelectKeyValue[]
 }

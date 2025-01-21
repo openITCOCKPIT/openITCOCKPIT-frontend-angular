@@ -11,6 +11,7 @@ export interface DynamicalFormField {
     required: boolean
     id: string
     ngModel: string
+    key: string
     options?: DynamicalFormFieldOption[]
 }
 

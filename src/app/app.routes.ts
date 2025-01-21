@@ -25,6 +25,7 @@ import { hpserverhardwareModuleRoutes } from './modules/hpserverhardware_module/
 import { oracleModuleRoutes } from './modules/oracle_module/oracle_module.routes';
 import { sapModuleRoutes } from './modules/sap_module/sap_module.routes';
 import { upsModuleRoutes } from './modules/ups_module/ups_module.routes';
+import { isarFlowModuleRoutes } from './modules/isarflow_module/isarflow_module.routes';
 import { prometheusModuleRoutes } from './modules/prometheus_module/prometheus_module.routes';
 
 @Component({
@@ -73,7 +74,8 @@ const moduleRoutes: Routes = [
     ...checkmkModuleRoutes,
     ...hpserverhardwareModuleRoutes,
     ...mapModuleRoutes,
-    ...eventcorrelationModuleRoutes
+    ...eventcorrelationModuleRoutes,
+    ...isarFlowModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
