@@ -72,6 +72,33 @@
                     </h4>
                 </legend>
 
+                <c-accordion class="mb-3">
+                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                        <ng-template cTemplateId="accordionHeaderTemplate">
+                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                                {{ t('VMware Horizon configuration help') }}
+                            </button>
+                        </ng-template>
+                        <ng-template cTemplateId="accordionBodyTemplate">
+                            <div class="accordion-body">
+                                <ol>
+                                    <li>
+                                        <div>
+                                            {{ t('Please create a User within the Connection-Center with Administrator permission on {0}. Because only these Users will have permission to connect to the REST API.', {"0": "/Root"}) }}
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            {{ t('Please ensure to have a recent API version installed, because not all functions are included within old versions.') }}
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </ng-template>
+                    </c-accordion-item>
+                </c-accordion>
+
                 <div class="mb-3">
                     <label cLabel for="post.vmwareuser">
                         {{ t('User') }}

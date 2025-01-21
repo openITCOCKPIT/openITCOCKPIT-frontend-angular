@@ -14,5 +14,6 @@
     "The bind-address is configured in my.cnf. Most likely this file is located at {0} or {1}": "The bind-address is configured in my.cnf. Most likely this file is located at {{0}} or {{1}}",
     "Create a new MySQL user for {0}": "Create a new MySQL user for {{0}}",
     "Maybe there is already a user {0}, wich is beeing used to monitore the operatingsystem.": "Maybe there is already a user {{0}}, wich is beeing used to monitore the operatingsystem.",
-    "Add the following to {0}": "Add the following to {{0}}."
+    "Add the following to {0}": "Add the following to {{0}}.",
+    "Please create a User within the Connection-Center with Administrator permission on {0}. Because only these Users will have permission to connect to the REST API.": "Please create a User within the Connection-Center with Administrator permission on {{0}}. Because only these Users will have permission to connect to the REST API."
 }
