@@ -161,32 +161,23 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         }
 
         if (this.isMapline(this.item())) {
-            let oldStartX = this.oldStartX!;
-            let oldStartY = this.oldStartY!;
-            let oldEndX = this.oldEndX!;
-            let oldEndY = this.oldEndY!;
-
             //Get movement distance
 
-            let distanceX = oldStartX - posX;
+            let distanceX = this.oldStartX! - posX;
             distanceX = distanceX * -1;
-            let distanceY = oldStartY - posY;
+            let distanceY = this.oldStartY! - posY;
             distanceY = distanceY * -1;
 
-            let endX = oldEndX + distanceX;
-            let endY = oldEndY + distanceY;
-            this.endX = endX;
-            this.endY = endY;
+            this.endX = this.oldEndX! + distanceX;
+            this.endY = this.oldEndY! + distanceY;
 
             this.startX = posX;
             this.startY = posY;
-            this.endX = this.item()!.endX;
-            this.endY = this.item()!.endY;
 
-            /*this.oldStartX = this.startX;
+            this.oldStartX = this.startX;
             this.oldStartY = this.startY;
             this.oldEndX = this.endX;
-            this.oldEndY = this.endY;*/
+            this.oldEndY = this.endY;
 
         } else {
             this.x = posX;

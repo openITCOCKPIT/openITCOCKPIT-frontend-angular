@@ -29,13 +29,6 @@ export class MapTextComponent extends MapItemBaseComponent<Maptext> {
     constructor(parent: MapCanvasComponent) {
         super(parent);
         effect(() => {
-            this.id = this.item()!.id;
-            this.mapId = this.item()!.map_id;
-            this.x = this.item()!.x;
-            this.y = this.item()!.y;
-            this.zIndex = this.item()!.z_index!;
-            this.setPosition();
-            this.setLayer(this.zIndex);
             this.onItemTextChange();
         });
     }

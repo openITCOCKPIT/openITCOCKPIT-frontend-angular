@@ -52,24 +52,6 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
     constructor(parent: MapCanvasComponent) {
         super(parent);
         effect(() => {
-            this.id = this.item()!.id;
-            this.mapId = this.item()!.map_id;
-            if (this.isMapline(this.item())) {
-                this.startX = this.item()!.startX;
-                this.startY = this.item()!.startY;
-                this.endX = this.item()!.endX;
-                this.endY = this.item()!.endY;
-                this.oldStartX = this.startX;
-                this.oldStartY = this.startY;
-                this.oldEndX = this.endX;
-                this.oldEndY = this.endY;
-            } else {
-                this.x = this.item()!.x;
-                this.y = this.item()!.y;
-            }
-            this.zIndex = this.item()!.z_index!;
-            this.setPosition();
-            this.setLayer(this.zIndex);
             this.onItemChange();
         });
     }
