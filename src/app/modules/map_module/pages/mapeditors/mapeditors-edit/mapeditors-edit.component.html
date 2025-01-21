@@ -82,7 +82,7 @@
                             color="danger"
                             size="xs"
                             [hidden]="Mapeditor.synchronizeGridAndHelplinesSize"
-                            (click)="Mapeditor.synchronizeGridAndHelplinesSize = true">
+                            (click)="onSynchronizeGridAndHelplinesSize(true)">
                         <fa-icon [icon]="['fas', 'arrow-left']" class="pe-1"></fa-icon>
                         <fa-icon [icon]="['fas', 'unlink']"></fa-icon>
                         {{ t('Change size automatically') }}
@@ -93,7 +93,7 @@
                             color="success"
                             size="xs"
                             [hidden]="!Mapeditor.synchronizeGridAndHelplinesSize"
-                            (click)="Mapeditor.synchronizeGridAndHelplinesSize = false">
+                            (click)="onSynchronizeGridAndHelplinesSize(false)">
                         <fa-icon [icon]="['fas', 'arrow-left']" class="pe-1"></fa-icon>
                         <fa-icon [icon]="['fas', 'unlink']"></fa-icon>
                         {{ t('Change size automatically') }}
@@ -111,6 +111,7 @@
                                 name="checkbox"
                                 checked="checked"
                                 [(ngModel)]="Mapeditor.grid.enabled"
+                                (ngModelChange)="onGridEnabledChange()"
                             />
                             <label
                                 cFormCheckLabel

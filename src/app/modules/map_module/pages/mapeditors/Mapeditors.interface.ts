@@ -123,6 +123,13 @@ export interface Mapeditor {
     helplines: Helplines
 }
 
+export interface MapeditorSettingsPost {
+    Map: {
+        id: string
+    }
+    Mapeditor: Mapeditor
+}
+
 export interface Grid {
     enabled: boolean
     size: number

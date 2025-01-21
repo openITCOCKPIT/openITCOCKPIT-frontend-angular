@@ -271,6 +271,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         }
         //if (this.Mapeditor.grid.enabled) {
         this.gridSize = {x: size, y: size};
+        this.onMapeditorChange();
         this.cdr.markForCheck();
         //makeDraggable();
         //}
@@ -288,12 +289,31 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     public onHelplinesChange() {
         this.Mapeditor.helplines = {...this.Mapeditor.helplines};
+        this.onMapeditorChange();
         this.cdr.markForCheck();
     }
 
     public onItemChange(objectName: keyof MapRoot) {
         this.map[objectName] = [...this.map[objectName]];
         this.cdr.markForCheck();
+    }
+
+    public onSynchronizeGridAndHelplinesSize(isEnabled: boolean) {
+        this.Mapeditor.synchronizeGridAndHelplinesSize = isEnabled;
+        this.onMapeditorChange();
+        this.cdr.markForCheck();
+    }
+
+    public onGridEnabledChange() {
+        this.onMapeditorChange();
+        this.cdr.markForCheck();
+    }
+
+    public onMapeditorChange() {
+        if (this.init) {
+            return;
+        }
+        this.saveMapeditorSettings();
     }
 
     public setDefaultLayer(layerNo: number) {
@@ -714,6 +734,33 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 }
 
                 //$('#AddEditStatelessIconModal').modal('hide');
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
+    public saveMapeditorSettings() {
+
+        this.subscriptions.add(this.MapeditorsService.saveMapeditorSettings({
+            'Map': {
+                id: this.mapId.toString(),
+            },
+            'Mapeditor': this.Mapeditor
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
                 this.notyService.genericSuccess(msg, title);
                 return;
             }

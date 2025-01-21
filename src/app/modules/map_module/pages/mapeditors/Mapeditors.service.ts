@@ -2,7 +2,14 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
-import { MapeditorsEditRoot, MapiconPost, MapitemPost, MaplinePost, MaptextPost } from './Mapeditors.interface';
+import {
+    MapeditorsEditRoot,
+    MapeditorSettingsPost,
+    MapiconPost,
+    MapitemPost,
+    MaplinePost,
+    MaptextPost
+} from './Mapeditors.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
@@ -87,6 +94,27 @@ export class MapeditorsService {
     public saveLine(mapText: MaplinePost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/map_module/mapeditors/saveLine.json?angular=true`, mapText)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public saveMapeditorSettings(settings: MapeditorSettingsPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/mapeditors/saveMapeditorSettings.json?angular=true`, settings)
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
