@@ -18,7 +18,7 @@ import { MenuItem } from 'primeng/api';
 import { interval, Subscription } from 'rxjs';
 import { MapLineService } from './map-line.service';
 import { Mapitem, Mapline } from '../../pages/mapeditors/Mapeditors.interface';
-import { LabelPosition } from '../map-item-base/map-item-base.enum';
+import { ContextActionType, LabelPosition, MapItemType } from '../map-item-base/map-item-base.enum';
 
 @Component({
     selector: 'oitc-map-line',
@@ -47,12 +47,14 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
     protected background: string = "";
     protected init: boolean = true;
 
-    protected override type = "line";
+    protected override type = MapItemType.LINE;
 
     constructor(parent: MapCanvasComponent) {
         super(parent);
         effect(() => {
-            this.onItemChange();
+            if (!this.isItemDeleted(this.type)) {
+                this.onItemChange();
+            }
         });
     }
 
@@ -69,7 +71,9 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
             this.allowView = true;
             this.init = false;
         } else {
-            this.load();
+            if (!this.isItemDeleted(this.type)) {
+                this.load();
+            }
         }
     }
 
@@ -214,14 +218,15 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
                         icon: 'fa fa-up-long',
                         command: () => {
                             this.contextActionEvent.emit({
-                                type: 'labelPosition',
+                                type: ContextActionType.LABEL_POSITION,
                                 data: {
                                     id: this.id,
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
                                     label_possition: LabelPosition.TOP
-                                } as Mapitem
+                                } as Mapitem,
+                                itemType: this.type
                             });
                             this.cdr.markForCheck();
                         }
@@ -231,14 +236,15 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
                         icon: 'fa fa-right-long',
                         command: () => {
                             this.contextActionEvent.emit({
-                                type: 'labelPosition',
+                                type: ContextActionType.LABEL_POSITION,
                                 data: {
                                     id: this.id,
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
                                     label_possition: LabelPosition.RIGHT
-                                } as Mapitem
+                                } as Mapitem,
+                                itemType: this.type
                             });
                             this.cdr.markForCheck();
                         }
@@ -248,14 +254,15 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
                         icon: 'fa fa-down-long',
                         command: () => {
                             this.contextActionEvent.emit({
-                                type: 'labelPosition',
+                                type: ContextActionType.LABEL_POSITION,
                                 data: {
                                     id: this.id,
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
                                     label_possition: LabelPosition.BOTTOM
-                                } as Mapitem
+                                } as Mapitem,
+                                itemType: this.type
                             });
                             this.cdr.markForCheck();
                         }
@@ -265,14 +272,15 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
                         icon: 'fa fa-left-long',
                         command: () => {
                             this.contextActionEvent.emit({
-                                type: 'labelPosition',
+                                type: ContextActionType.LABEL_POSITION,
                                 data: {
                                     id: this.id,
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
                                     label_possition: LabelPosition.LEFT
-                                } as Mapitem
+                                } as Mapitem,
+                                itemType: this.type
                             });
                             this.cdr.markForCheck();
                         }
@@ -288,12 +296,14 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
                 icon: 'fa fa-trash',
                 command: () => {
                     this.contextActionEvent.emit({
-                        type: 'delete', data: {
+                        type: ContextActionType.DELETE,
+                        data: {
                             id: this.id,
                             x: this.x,
                             y: this.y,
                             map_id: this.mapId,
-                        }
+                        },
+                        itemType: this.type
                     });
                     this.cdr.markForCheck();
                 }

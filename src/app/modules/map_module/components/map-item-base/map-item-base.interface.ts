@@ -1,3 +1,5 @@
+import { ContextActionType, MapItemType } from './map-item-base.enum';
+
 export interface MapitemBase {
     id: number
     map_id: number
@@ -12,12 +14,13 @@ export interface MapitemBase {
 }
 
 export interface ContextAction {
-    type: string
+    type: ContextActionType
     data: MapitemBase
+    itemType: MapItemType
 }
 
 export interface MapitemBaseActionObject {
     data: MapitemBase
     action: string
-    type: string
+    type: MapItemType
 }

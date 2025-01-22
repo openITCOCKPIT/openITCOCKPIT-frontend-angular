@@ -4,6 +4,7 @@ import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Mapicon } from '../../pages/mapeditors/Mapeditors.interface';
+import { MapItemType } from '../map-item-base/map-item-base.enum';
 
 @Component({
     selector: 'oitc-map-icon',
@@ -16,7 +17,7 @@ import { Mapicon } from '../../pages/mapeditors/Mapeditors.interface';
 export class MapIconComponent extends MapItemBaseComponent<Mapicon> {
 
     public override item: InputSignal<Mapicon | undefined> = input<Mapicon>();
-    protected override type = "icon";
+    protected override type = MapItemType.ICON;
 
     constructor(parent: MapCanvasComponent) {
         super(parent);

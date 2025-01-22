@@ -19,6 +19,7 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
 import { Mapline } from '../../pages/mapeditors/Mapeditors.interface';
+import { ContextActionType, MapItemType } from './map-item-base.enum';
 
 @Component({
     selector: 'oitc-map-item-base',
@@ -51,7 +52,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     protected oldEndY?: number;
 
     // will be overridden by child components
-    protected type = "item";
+    protected type = MapItemType.ITEM;
 
     @Output() dropItemEvent = new EventEmitter<MapitemBaseActionObject>();
     @Output() contextActionEvent = new EventEmitter<ContextAction>();
@@ -59,7 +60,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     protected readonly TranslocoService = inject(TranslocoService);
 
     protected cdr = inject(ChangeDetectorRef);
-    private mapCanvasComponent: MapCanvasComponent;
+    protected mapCanvasComponent: MapCanvasComponent;
 
     protected contextMenuItems: MenuItem[] = this.getDefaultContextMenuItems();
 
@@ -116,6 +117,10 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
     public isMapline(item: any): item is Mapline {
         return item && item.startX !== undefined && item.startY !== undefined && item.endX !== undefined && item.endY !== undefined;
+    }
+
+    public isItemDeleted(type: MapItemType): boolean {
+        return this.parent.currentDeletedItem()?.id === this.id && this.parent.currentDeletedItem()?.type === type;
     }
 
     //grid snapping logic
@@ -221,12 +226,14 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                 icon: 'fa fa-trash',
                 command: () => {
                     this.contextActionEvent.emit({
-                        type: 'delete', data: {
+                        type: ContextActionType.DELETE,
+                        data: {
                             id: this.id,
                             x: this.x,
                             y: this.y,
                             map_id: this.mapId,
-                        }
+                        },
+                        itemType: this.type
                     });
                     this.cdr.markForCheck();
                 }

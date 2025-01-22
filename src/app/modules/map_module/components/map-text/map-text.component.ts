@@ -7,6 +7,7 @@ import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Maptext } from '../../pages/mapeditors/Mapeditors.interface';
 import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
 import { BbCodeParserService } from '../../../../services/bb-code-parser.service';
+import { MapItemType } from '../map-item-base/map-item-base.enum';
 
 @Component({
     selector: 'oitc-map-text',
@@ -20,7 +21,7 @@ export class MapTextComponent extends MapItemBaseComponent<Maptext> {
 
     public override item: InputSignal<Maptext | undefined> = input<Maptext>();
 
-    protected override type = "text";
+    protected override type = MapItemType.TEXT;
 
     private readonly BBParserService = inject(BbCodeParserService);
 
@@ -29,7 +30,9 @@ export class MapTextComponent extends MapItemBaseComponent<Maptext> {
     constructor(parent: MapCanvasComponent) {
         super(parent);
         effect(() => {
-            this.onItemTextChange();
+            if (!this.isItemDeleted(this.type)) {
+                this.onItemTextChange();
+            }
         });
     }
 
