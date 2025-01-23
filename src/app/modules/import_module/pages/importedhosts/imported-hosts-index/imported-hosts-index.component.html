@@ -1,1 +1,344 @@
-<p>imported-hosts-index works!</p>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Import Module') }}
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                {{ t('Imported Hosts Overview') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Imported Hosts') }}
+                <small class="fw-300">
+                    {{ t('Overview') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <c-dropdown *ngIf="importers.length > 0">
+                        <button *oitcPermission="['ImportModule', 'ImportedHosts', 'add']"
+                                cButton cDropdownToggle
+                                [disabled]="importers.length===0"
+                                color="success"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                            {{ t('Start import') }}
+                        </button>
+                        <ul cDropdownMenu>
+                            <li *ngFor="let importer of importers">
+                                <button (click)="loadImporter(importer.id)"
+                                        cDropdownItem
+                                        class="ripple"
+                                        [disabled]="showSpinner">
+                                    @switch (importer.data_source) {
+                                        @case ("csv_with_header") {
+                                            <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                        }
+                                        @case ("csv_without_header") {
+                                            <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                        }
+                                        @case ("openitcockpit_agent") {
+                                            <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                        }
+                                        @case ("external_monitoring") {
+                                            <fa-icon [icon]="['fas', 'tower-observation']"></fa-icon>
+                                        }
+                                        @default {
+                                            <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                                        }
+                                    }
+                                    {{ importer.name }}
+                                    <sup *ngIf="importer.connected"
+                                         class="badge badge-pill border-success text-success connect-badge">
+                                        {{ t('ONLINE') }}
+                                    </sup>
+                                    <sup *ngIf="!importer.connected"
+                                         class="badge badge-pill border-danger text-danger connect-badge">
+                                        {{ t('OFFLINE') }}
+                                    </sup>
+                                </button>
+                            </li>
+                        </ul>
+                    </c-dropdown>
+                </c-nav-item>
+                <c-nav-item>
+                    <button *oitcPermission="['hosts', 'add']"
+                            cButton
+                            class="ripple me-1"
+                            color="success"
+                            size="xs"
+                            (click)="synchronizeWithMonitoring()"
+                            [disabled]="showSynchronizingSpinner || showSpinner">
+                        <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'" class="pe-1"
+                                 *ngIf="showSynchronizingSpinner"></fa-icon>
+                        <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
+                        {{ t('Synchronize with monitoring') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item>
+                    <div class="pe-2">
+                        <c-badge color="danger" *ngIf="importers.length===0">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                            {{ t('No importers defined') }}
+                        </c-badge>
+                    </div>
+                </c-nav-item>
+                <c-nav-item>
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[ImportedHosts.name]']"
+                                       [placeholder]="'Filter by imported host name' | transloco"
+                                       aria-label="ImportedHostName"
+                                       cFormControl
+                                       name="importedhost.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[ImportedHosts.description]']"
+                                       [placeholder]="'Filter by imported host description' | transloco"
+                                       aria-label="ImportedHostDescription"
+                                       cFormControl
+                                       name="importedhost.description"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="my-3">
+                        <c-col [xs]="12" lg="2">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Already synchronized') }}
+                                </h5>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        name="filter.ImportedHosts.imported"
+                                        id="filter.ImportedHosts.imported"
+                                        class="checkbox-lg checkbox-primary"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="params['filter[imported]']"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="filter.ImportedHosts.imported">
+                                        <c-badge color="info">
+                                            {{ t('In monitoring') }}
+                                        </c-badge>
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        name="filter.ImportedHosts.not_imported"
+                                        id="filter.ImportedHosts.not_imported"
+                                        class="checkbox-lg checkbox-primary"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="params['filter[not_imported]']"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="filter.ImportedHosts.not_imported">
+                                        <c-badge color="success">
+                                            {{ t('NEW') }}
+                                        </c-badge>
+                                    </label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+            <oitc-table-loader *ngIf="!allImportedHosts"></oitc-table-loader>
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th class="width-50 text-center" scope="col">
+                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                    </th>
+                    <th scope="col" mat-sort-header="ImportedHosts.name">
+                        {{ t('Name') }}
+                    </th>
+                    <th scope="col" mat-sort-header="ImportedHosts.description">
+                        {{ t('Description') }}
+                    </th>
+                    <th scope="col" mat-sort-header="ImportedHosts.created">
+                        {{ t('Import date') }}
+                    </th>
+                    <th scope="col" mat-sort-header="ImportedHosts.modified">
+                        {{ t('Last modified') }}
+                    </th>
+                    <th class="text-center width-50" scope="col">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    </th>
+                </tr>
+                </thead>
+                <tbody *ngIf="importedhosts">
+                <tr *ngFor="let importedhost of importedhosts">
+                    <td class="text-center">
+                        <oitc-item-select
+                            *oitcPermission="['ImportModule','importedhosts', 'delete']"
+                            [disabled]="!importedhost.allowEdit"
+                            [item]="importedhost"></oitc-item-select>
+
+                    </td>
+                    <td>
+                        {{ importedhost.name }}
+                        <c-badge color="success" *ngIf="importedhost.imported !== 1">
+                            <fa-icon [icon]="['fas', 'star']"></fa-icon>
+                            {{ t('NEW') }}
+                        </c-badge>
+                        @if (importedhost.imported === 1) {
+                            <c-badge color="info" *oitcPermission="['hostgroups', 'edit']"
+                                     [routerLink]="['/', 'hostgroups', 'edit', importedhost.host_id]"
+                                     class="cursor-pointer">
+                                <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
+                                {{ t('In monitoring') }}
+                            </c-badge>
+                            <span *oitcPermission="['hostgroups', 'edit']; negate: true">
+                                <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
+                                {{ t('In monitoring') }}
+                            </span>
+                        }
+                    </td>
+                    <td>{{ importedhost.description }}</td>
+                    <td>{{ importedhost.created }}</td>
+                    <td>{{ importedhost.modified }}</td>
+
+
+                    <td class="width-50">
+                        <oitc-actions-button [permission]="'ImportModule.importedhosts.view'"
+                                             [icon]="['fas', 'eye']"
+                                             [url]="'/import_module/ImportedHosts/view/' + importedhost.id">
+                            <oitc-actions-button-element [permission]="'ImportModule.importedhosts.view'"
+                                                         *ngIf="importedhost.allowEdit"
+                                                         [url]="'/import_module/ImportedHosts/view/' + importedhost.id">
+                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                {{ t('View') }}
+                            </oitc-actions-button-element>
+                            <oitc-actions-button-element [permission]="'ImportModule.importchangelogs.index'"
+                                                         [url]="'/import_module/import_changelogs/entity/importedHostgroup/' + importedhost.id">
+                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                {{ t('Changelog') }}
+                            </oitc-actions-button-element>
+                            <li cDropdownDivider></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(importedhost)"
+                                                         *ngIf="importedhost.allowEdit"
+                                                         [permission]="'ImportModule.importedhosts.delete'">
+                                <span class="text-danger">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete') }}
+                                </span>
+                            </oitc-actions-button-element>
+                        </oitc-actions-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <oitc-no-records
+                *ngIf="importedhosts && importedhosts.length === 0"></oitc-no-records>
+            <ng-container *ngIf="importedhosts">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="importedhosts.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </ng-container>
+
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            [paginateOrScroll]="allImportedHosts"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
+    </c-card>
+</ng-container>
+<oitc-import-itop-data (completed)="onImportIsCompleted($event)"></oitc-import-itop-data>
+
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

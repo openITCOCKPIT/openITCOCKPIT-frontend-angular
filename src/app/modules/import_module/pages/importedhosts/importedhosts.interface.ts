@@ -3,7 +3,6 @@ import { Importer } from '../importers/importers.interface';
 import { User } from '../../../../pages/users/users.interface';
 import { HosttemplatePost } from '../../../../pages/hosttemplates/hosttemplates.interface';
 import { SatelliteEntity } from '../../../distribute_module/pages/satellites/satellites.interface';
-import { Host } from '@angular/core';
 import { HostEntity } from '../../../../pages/hosts/hosts.interface';
 import { AgentcheckPost } from '../../../../pages/agentchecks/agentchecks.interface';
 import { ContainerEntity } from '../../../../pages/containers/containers.interface';
@@ -164,22 +163,14 @@ export interface ImportedHostsToContainersSharing {
     parent_id: number
     lft: number
     rght: number
-    _joinData: JoinData
+    _joinData: ImportedHostsToContainerJoinData
 }
 
 
-export interface ImportedhostUser {
+export interface ImportedHostsToContainerJoinData {
     id: number
-}
-
-export interface ImportedhostHosttemplate {
-    id: number
-    name: string
-}
-
-export interface ImportedhostSatellite {
-    id: number
-    name: string
+    importedhost_id: number
+    container_id: number
 }
 
 export interface ImportedhostProgress {
@@ -191,4 +182,52 @@ export interface MaxUploadLimit {
     value: number
     unit: string
     string: string
+}
+
+
+export interface ImportedHostIndex {
+    id: number
+    name: string
+    description: string
+    container_id: number
+    allowEdit: boolean
+}
+
+
+export interface ImportedhostsIndexParams {
+    angular: true
+    scroll: boolean
+    sort: string
+    page: number
+    direction: 'asc' | 'desc' | '' // asc or desc
+    'filter[ImportedHosts.id][]': []
+    'filter[ImportedHosts.name]': string
+    'filter[ImportedHosts.address]': string
+    'filter[ImportedHosts.description]': string
+    'filter[ImportedHosts.importer_id][]': []
+    'filter[ImportedHosts.flags]': string | number
+    'filter[imported]': number | string | null
+    'filter[not_imported]': string
+    'filter[ready_for_import]': string
+    'filter[disabled]': string
+}
+
+export function getDefaultImportedHostsIndexParams(): ImportedhostsIndexParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'ImportedHosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[ImportedHosts.id][]': [],
+        'filter[ImportedHosts.name]': '',
+        'filter[ImportedHosts.address]': '',
+        'filter[ImportedHosts.description]': '',
+        'filter[ImportedHosts.importer_id][]': [],
+        'filter[ImportedHosts.flags]': '',
+        'filter[imported]': '',
+        'filter[not_imported]': '',
+        'filter[ready_for_import]': '',
+        'filter[disabled]': ''
+    }
 }
