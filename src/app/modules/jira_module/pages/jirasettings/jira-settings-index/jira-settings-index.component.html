@@ -148,17 +148,33 @@
                 </div>
 
                 <div class="mb-3" *ngIf="post.enable_two_way">
-                    <label cLabel for="webhook_url">
-                        {{ t('Webhook URL') }}
+                    <label cLabel for="webhook_url_acknowledgements">
+                        {{ t('Webhook URL for acknowledgements') }}
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <input cFormControl
-                           name="webhook_url"
-                           id="webhook_url"
-                           [(ngModel)]="webhook_url"
+                           name="webhook_url_acknowledgements"
+                           id="webhook_url_acknowledgements"
+                           [(ngModel)]="webhook_url_acknowledgements"
                            disabled/>
                     <span class="help-block">
-                        {{ t('Webhook URL for Jira. You need to create an openITCOCKPIT user defined API key first.') }}
+                        {{ t('Use this Webhook URL in Jira so that Jira can acknowledgement host and services in openITCOCKPIT. You need to create an openITCOCKPIT user defined API key first.') }}
+                        <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
+                    </span>
+                </div>
+
+                <div class="mb-3" *ngIf="post.enable_two_way">
+                    <label cLabel for="webhook_url_closed">
+                        {{ t('Webhook URL to close issues') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           name="webhook_url_closed"
+                           id="webhook_url_closed"
+                           [(ngModel)]="webhook_url_closed"
+                           disabled/>
+                    <span class="help-block">
+                        {{ t('Webhook URL for Jira to tell openITCOCKPIT when a Issue got closed. You need to create an openITCOCKPIT user defined API key first.') }}
                         <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
                     </span>
                 </div>

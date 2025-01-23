@@ -84,7 +84,8 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
 
     public post?: JiraSettingsPost;
     public errors: GenericValidationError | null = null;
-    public webhook_url: string = '';
+    public webhook_url_acknowledgements: string = '';
+    public webhook_url_closed: string = '';
     public selectedJiraProjects: string[] = [];
     public jiraProjectsForSelect: SelectKeyValueString[] = [];
 
@@ -153,7 +154,8 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
             )
         );
         const API_KEY_TRANSLATION = this.TranslocoService.translate('YOUR_API_KEY_HERE');
-        this.webhook_url = `https://${window.location.hostname}/jira_module/webhook/submit.json?apikey=${API_KEY_TRANSLATION}`;
+        this.webhook_url_acknowledgements = `https://${window.location.hostname}/jira_module/webhooks/acknowledge.json?apikey=${API_KEY_TRANSLATION}`;
+        this.webhook_url_closed = `https://${window.location.hostname}/jira_module/webhooks/close.json?apikey=${API_KEY_TRANSLATION}`;
         this.cdr.markForCheck();
     }
 
@@ -165,6 +167,7 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
         if (!this.post) {
             return;
         }
+
 
         this.isLoadingJiraProjects = true;
 
