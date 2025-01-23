@@ -153,6 +153,17 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     public maxUploadLimit!: MaxUploadLimit;
 
+    constructor() {
+        this.deleteItem = this.deleteItem.bind(this);
+        this.deleteIcon = this.deleteIcon.bind(this);
+        this.deleteLine = this.deleteLine.bind(this);
+        this.deleteText = this.deleteText.bind(this);
+        this.saveItem = this.saveItem.bind(this);
+        this.saveIcon = this.saveIcon.bind(this);
+        this.saveLine = this.saveLine.bind(this);
+        this.saveText = this.saveText.bind(this);
+    }
+
     public ngOnInit(): void {
         this.mapId = Number(this.route.snapshot.paramMap.get('id'));
         this.load();
@@ -191,7 +202,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     }
 
     public onDropItem(item: MapitemBaseActionObject) {
-        console.error("Item dropped", item);
 
         let x = item.data.x;
         let y = item.data.y;
@@ -377,60 +387,69 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     public onContextAction($event: ContextAction) {
         const type = $event.type;
-        let index;
-        console.error('ContextAction', $event);
         if (type === 'labelPosition') {
-            if ($event.itemType === MapItemType.ITEM && this.map.Mapitems && this.map.Mapitems.length > 0) {
-                for (let i = 0; i < this.map.Mapitems.length; i++) {
-                    if (this.map.Mapitems[i].id === $event.data.id) {
-                        let data = $event.data as any;
-                        this.map.Mapitems[i].label_possition = data.label_possition!;
-                        this.map.Mapitems[i] = {...this.map.Mapitems[i]};
-                        this.cdr.markForCheck();
-                        break;
-                    }
-                }
-            }
+            this.changeLabelPositionFromContextMenu($event, MapItemType.ITEM, 'Mapitems', this.saveItem);
         }
         if (type === 'edit') {
             console.error('Edit');
         }
+        if (type === 'layer') {
+            this.changeLayerFromContextMenu($event, MapItemType.ITEM, 'Mapitems', this.saveItem);
+            this.changeLayerFromContextMenu($event, MapItemType.TEXT, 'Maptexts', this.saveText);
+            this.changeLayerFromContextMenu($event, MapItemType.ICON, 'Mapicons', this.saveIcon);
+            this.changeLayerFromContextMenu($event, MapItemType.LINE, 'Maplines', this.saveLine);
+        }
         if (type === 'delete') {
-            console.error('Delete');
-            if ($event.itemType === MapItemType.ITEM && this.map.Mapitems && this.map.Mapitems.length > 0) {
-                for (let i = 0; i < this.map.Mapitems.length; i++) {
-                    if (this.map.Mapitems[i].id === $event.data.id) {
-                        this.currentItem = this.map.Mapitems[i];
-                        this.deleteItem();
-                        break;
-                    }
+            this.deleteFromContextMenu($event, MapItemType.ITEM, 'Mapitems', this.deleteItem);
+            this.deleteFromContextMenu($event, MapItemType.TEXT, 'Maptexts', this.deleteText);
+            this.deleteFromContextMenu($event, MapItemType.ICON, 'Mapicons', this.deleteIcon);
+            this.deleteFromContextMenu($event, MapItemType.LINE, 'Maplines', this.deleteLine);
+        }
+    }
+
+    private changeLabelPositionFromContextMenu(event: ContextAction, itemType: MapItemType, objectName: keyof MapRoot, saveMethod: (action: string) => void) {
+        let items = this.map[objectName];
+        if (event.itemType === itemType && items && Array.isArray(items) && items.length > 0) {
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].id === event.data.id) {
+                    let data = event.data as any;
+                    items[i].label_possition = data.label_possition!;
+                    items[i] = {...items[i]};
+
+                    this.currentItem = items[i];
+                    saveMethod('add_or_edit');
+                    this.cdr.markForCheck();
+                    break;
                 }
             }
-            if ($event.itemType === MapItemType.TEXT && this.map.Maptexts && this.map.Maptexts.length > 0) {
-                for (let i = 0; i < this.map.Maptexts.length; i++) {
-                    if (this.map.Maptexts[i].id === $event.data.id) {
-                        this.currentItem = this.map.Maptexts[i];
-                        this.deleteText();
-                        break;
-                    }
+        }
+    }
+
+    private changeLayerFromContextMenu(event: ContextAction, itemType: MapItemType, objectName: keyof MapRoot, saveMethod: (action: string) => void) {
+        let items = this.map[objectName];
+        if (event.itemType === itemType && items && Array.isArray(items) && items.length > 0) {
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].id === event.data.id) {
+                    let data = event.data as any;
+                    items[i].z_index = data.z_index!;
+                    items[i] = {...items[i]};
+                    this.currentItem = items[i];
+                    saveMethod('add_or_edit');
+                    this.cdr.markForCheck();
+                    break;
                 }
             }
-            if ($event.itemType === MapItemType.ICON && this.map.Mapicons && this.map.Mapicons.length > 0) {
-                for (let i = 0; i < this.map.Mapicons.length; i++) {
-                    if (this.map.Mapicons[i].id === $event.data.id) {
-                        this.currentItem = this.map.Mapicons[i];
-                        this.deleteIcon();
-                        break;
-                    }
-                }
-            }
-            if ($event.itemType === MapItemType.LINE && this.map.Maplines && this.map.Maplines.length > 0) {
-                for (let i = 0; i < this.map.Maplines.length; i++) {
-                    if (this.map.Maplines[i].id === $event.data.id) {
-                        this.currentItem = this.map.Maplines[i];
-                        this.deleteLine();
-                        break;
-                    }
+        }
+    }
+
+    private deleteFromContextMenu(event: ContextAction, itemType: MapItemType, objectName: keyof MapRoot, deleteMethod: () => void) {
+        let items = this.map[objectName];
+        if (event.itemType === itemType && items && Array.isArray(items) && items.length > 0) {
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].id === event.data.id) {
+                    this.currentItem = items[i];
+                    deleteMethod();
+                    break;
                 }
             }
         }

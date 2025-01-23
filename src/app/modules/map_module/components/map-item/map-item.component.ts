@@ -181,18 +181,8 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         this.load();
     };
 
-    protected override getDefaultContextMenuItems(): MenuItem[] {
+    protected override getExtraContextMenuItems(): MenuItem[] {
         return [
-            {
-                label: this.TranslocoService.translate('Edit'),
-                icon: 'fa fa-cog',
-                command: () => {
-                    this.cdr.markForCheck();
-                }
-            },
-            {
-                separator: true
-            },
             {
                 label: this.TranslocoService.translate('Label position'),
                 icon: 'fa fa-font',
@@ -270,27 +260,6 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                         }
                     }
                 ]
-            },
-            {
-                separator: true
-            },
-            {
-                label: this.TranslocoService.translate('Delete'),
-                styleClass: 'text-danger',
-                icon: 'fa fa-trash',
-                command: () => {
-                    this.contextActionEvent.emit({
-                        type: ContextActionType.DELETE,
-                        data: {
-                            id: this.id,
-                            x: this.x,
-                            y: this.y,
-                            map_id: this.mapId,
-                        },
-                        itemType: this.type
-                    });
-                    this.cdr.markForCheck();
-                }
             }
         ]
     }

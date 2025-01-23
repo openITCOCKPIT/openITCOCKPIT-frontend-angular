@@ -18,7 +18,7 @@ import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
-import { Mapline } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapitem, Mapline } from '../../pages/mapeditors/Mapeditors.interface';
 import { ContextActionType, MapItemType } from './map-item-base.enum';
 
 @Component({
@@ -33,6 +33,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     @ViewChild('container', {static: true}) containerRef!: ElementRef<HTMLDivElement>;
 
     public item: InputSignal<T | undefined> = input<T | undefined>();
+    public layers: InputSignal<string[]> = input<string[]>([]);
     public gridSize: InputSignal<{ x: number, y: number }> = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
     public gridEnabled: InputSignal<boolean> = input<boolean>(true);
     public isViewMode: InputSignal<boolean> = input<boolean>(true);
@@ -85,6 +86,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
             this.zIndex = this.item()!.z_index!;
             this.setPosition();
             this.setLayer(this.zIndex);
+            this.contextMenuItems = this.getDefaultContextMenuItems();
         });
     }
 
@@ -145,8 +147,6 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
     // fires drag end event and grid snapping logic
     public onDragEnd(cdkEvent: CdkDragEnd<any>) {
-
-        console.error("drag end");
 
         // grid snapping logic
         const mapCanvas = this.mapCanvasComponent.canvasContainerRef.nativeElement.getBoundingClientRect();
@@ -212,6 +212,34 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     }
 
     protected getDefaultContextMenuItems(): MenuItem[] {
+
+        let layerOptions: MenuItem[] = [];
+        for (let key in this.layers()) {
+            let icon = "";
+            if (key === this.item()!.z_index) {
+                icon = "fa fa-check";
+            }
+            layerOptions.push({
+                label: this.layers()[key],
+                icon: icon,
+                command: () => {
+                    this.contextActionEvent.emit({
+                        type: ContextActionType.LAYER,
+                        data: {
+                            id: this.id,
+                            x: this.x,
+                            y: this.y,
+                            map_id: this.mapId,
+                            z_index: key
+                        } as Mapitem,
+                        itemType: this.type
+                    });
+                    this.cdr.markForCheck();
+                }
+            });
+        }
+
+        const extraItems = this.getExtraContextMenuItems().flat();
         return [
             {
                 label: this.TranslocoService.translate('Edit'),
@@ -219,6 +247,18 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                 command: () => {
                     this.cdr.markForCheck();
                 }
+            },
+            {
+                separator: true
+            },
+            {
+                label: this.TranslocoService.translate('Layers'),
+                icon: 'fa fa-layer-group',
+                items: layerOptions
+            },
+            ...extraItems,
+            {
+                separator: true
             },
             {
                 label: this.TranslocoService.translate('Delete'),
@@ -238,7 +278,11 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                     this.cdr.markForCheck();
                 }
             }
-        ]
+        ];
+    }
+
+    protected getExtraContextMenuItems(): MenuItem[] {
+        return [];
     }
 
 }
