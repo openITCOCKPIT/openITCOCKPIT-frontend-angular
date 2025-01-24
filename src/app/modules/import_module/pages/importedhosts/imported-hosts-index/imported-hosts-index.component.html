@@ -136,7 +136,7 @@
                 </c-row>
                 <form cForm>
                     <c-row>
-                        <c-col md="6">
+                        <c-col [md]="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -152,7 +152,7 @@
                                 />
                             </c-input-group>
                         </c-col>
-                        <c-col md="6">
+                        <c-col [md]="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -168,7 +168,7 @@
                                 />
                             </c-input-group>
                         </c-col>
-                        <c-col md="6">
+                        <c-col [md]="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -184,9 +184,7 @@
                                 />
                             </c-input-group>
                         </c-col>
-                    </c-row>
-                    <c-row class="my-3">
-                        <c-col [xs]="12" lg="2">
+                        <c-col [md]="12" [xs]="12" [lg]="2" class="mb-2">
                             <fieldset>
                                 <h5>
                                     {{ t('Already synchronized') }}
@@ -195,17 +193,36 @@
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        name="filter.ImportedHosts.imported"
-                                        id="filter.ImportedHosts.imported"
+                                        name="filter.imported"
+                                        id="filter.imported"
                                         class="checkbox-lg checkbox-primary"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
                                         [(ngModel)]="params['filter[imported]']"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="filter.ImportedHosts.imported">
+                                           for="filter.imported">
                                         <c-badge color="info">
-                                            {{ t('In monitoring') }}
+                                            {{ t('In monitoring (active)') }}
+                                        </c-badge>
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        name="filter.disabled"
+                                        id="filter.disabled"
+                                        class="checkbox-lg checkbox-warning"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="params['filter[disabled]']"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="filter.disabled">
+                                        <c-badge color="warning">
+                                            <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                            {{ t('In monitoring (disabled)') }}
                                         </c-badge>
                                     </label>
                                 </c-form-check>
@@ -215,7 +232,7 @@
                                         cFormCheckInput
                                         name="filter.not_imported"
                                         id="filter.not_imported"
-                                        class="checkbox-lg checkbox-primary"
+                                        class="checkbox-lg checkbox-success"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
@@ -229,7 +246,148 @@
                                 </c-form-check>
                             </fieldset>
                         </c-col>
+                        <c-col [md]="12" [xs]="12" [lg]="2" class="mb-2">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Ready for synchronization') }}
+                                </h5>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        name="filter.ready_for_import"
+                                        id="filter.ready_for_import"
+                                        class="checkbox-lg checkbox-success"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="params['filter[ready_for_import]']"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="filter.ready_for_import">
+                                        <c-badge color="success">
+                                            {{ t('Yes') }}
+                                        </c-badge>
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        name="filter.not_ready_for_import"
+                                        id="filter.not_ready_for_import"
+                                        class="checkbox-lg checkbox-danger"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="params['filter[not_ready_for_import]']"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="filter.not_ready_for_import">
+                                        <c-badge color="danger">
+                                            {{ t('No') }}
+                                        </c-badge>
+                                    </label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                        <c-col [md]="12" [xs]="12" [lg]="2" class="mb-2">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Flags') }}
+                                </h5>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        name="marked_hosts_with_changes"
+                                        id="marked_hosts_with_changes"
+                                        class="checkbox-lg checkbox-primary"
+                                        type="checkbox"
+                                        [trueValue]="ImportedHostFlagsEnum.FLAG_MARKED_CHANGED"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="params['filter[ImportedHosts.flags]']"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="marked_hosts_with_changes">
+                                        {{ t('Imported hosts with changes') }}
+                                        <c-badge color="primary">
+                                            <fa-icon [icon]="['fas', 'person-digging']"></fa-icon>
+                                        </c-badge>
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        name="marked_for_disable"
+                                        id="marked_for_disable"
+                                        class="checkbox-lg checkbox-danger"
+                                        type="checkbox"
+                                        [trueValue]="ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="params['filter[ImportedHosts.flags]']"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="marked_for_disable">
+                                        {{ t('Marked for disable') }}
+                                        <c-badge color="danger">
+                                            <fa-icon [icon]="['fas', 'box-archive']"></fa-icon>
+                                        </c-badge>
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        name="marked_for_re_enable"
+                                        id="marked_for_re_enable"
+                                        class="checkbox-lg checkbox-success"
+                                        type="checkbox"
+                                        [trueValue]="ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="params['filter[ImportedHosts.flags]']"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="marked_for_re_enable">
+                                        {{ t('Marked for re-enable') }}
+                                        <c-badge color="success">
+                                            <fa-icon [icon]="['fas', 'boxes-packing']"></fa-icon>
+                                        </c-badge>
+                                    </label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
                     </c-row>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Importers') }}
+                                </h5>
+                                <c-form-check class="d-flex">
+                                    <c-input-group>
+                                        <span cInputGroupText>
+                                            <fa-icon [icon]="['fas', 'clipboard-list']"></fa-icon>
+                                        </span>
+
+                                        <oitc-multi-select
+                                            class="flex-1"
+                                            name="importer_id"
+                                            id="importer_id"
+                                            optionValue="id"
+                                            optionLabel="name"
+                                            [(ngModel)]="params['filter[ImportedHosts.importer_id][]']"
+                                            [options]="importers"
+                                            [debounce]="true"
+                                            [placeholder]="'Filter by importer' | transloco"
+                                            (onChange)="onFilterChange(null)">
+                                        </oitc-multi-select>
+                                    </c-input-group>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+
+                    </c-row>
+
                     <c-row class="mt-2">
                         <c-col class="text-end">
                             <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">

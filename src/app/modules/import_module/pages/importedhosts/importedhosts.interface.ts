@@ -217,6 +217,7 @@ export interface ImportedhostsIndexParams {
     'filter[imported]': number | string | null
     'filter[not_imported]': string
     'filter[ready_for_import]': string
+    'filter[not_ready_for_import]': string
     'filter[disabled]': string
 }
 
@@ -236,6 +237,7 @@ export function getDefaultImportedHostsIndexParams(): ImportedhostsIndexParams {
         'filter[imported]': '',
         'filter[not_imported]': '',
         'filter[ready_for_import]': '',
+        'filter[not_ready_for_import]': '',
         'filter[disabled]': ''
     }
 }

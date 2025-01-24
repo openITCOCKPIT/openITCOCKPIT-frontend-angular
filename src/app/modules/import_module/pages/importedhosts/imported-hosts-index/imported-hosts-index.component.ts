@@ -68,6 +68,7 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ImportedHostFlagsEnum } from '../imported-hosts.enum';
+import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 @Component({
     selector: 'oitc-imported-hosts-index',
@@ -119,7 +120,8 @@ import { ImportedHostFlagsEnum } from '../imported-hosts.enum';
         TrueFalseDirective,
         XsButtonDirective,
         RouterLink,
-        NgClass
+        NgClass,
+        MultiSelectComponent
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostsService} // Inject the ImportedhostsService into the DeleteAllModalComponent
