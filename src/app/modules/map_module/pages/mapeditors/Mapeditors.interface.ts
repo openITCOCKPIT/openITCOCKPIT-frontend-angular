@@ -91,20 +91,19 @@ export interface MaptextPost {
     action: string
 }
 
-export interface Mapsummaryitem {
-    id: number
-    map_id: number
-    x: number
-    y: number
+export interface Mapsummaryitem extends MapitemBase {
     size_x: number
     size_y: number
     limit: number
     type: string
     object_id: number
-    z_index: string
     show_label: boolean
     label_possition: number
-    display: boolean
+}
+
+export interface MapsummaryitemPost {
+    Mapsummaryitem: Mapsummaryitem
+    action: string
 }
 
 export interface MaxUploadLimit {

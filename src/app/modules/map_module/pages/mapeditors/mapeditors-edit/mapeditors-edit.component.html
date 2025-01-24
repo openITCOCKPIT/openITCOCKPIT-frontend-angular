@@ -197,6 +197,14 @@
                                        (dropItemEvent)="onDropItem($event)"
                                        [hidden]="!iconItem.display">
                         </oitc-map-icon>
+                        <oitc-map-summary-item *ngFor="let summaryItem of map.Mapsummaryitems" [item]="summaryItem"
+                                               [refreshInterval]="0"
+                                               [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                               [layers]="layers"
+                                               (contextActionEvent)="onContextAction($event)"
+                                               (dropItemEvent)="onDropItem($event)"
+                                               [hidden]="!summaryItem.display">
+                        </oitc-map-summary-item>
                     </oitc-map-canvas>
                     <!-- end mainMapContainer -->
                     <!-- start mapToolbar -->

@@ -47,6 +47,7 @@ import { MapTextComponent } from '../../../components/map-text/map-text.componen
 import { MapIconComponent } from '../../../components/map-icon/map-icon.component';
 import { MapLineComponent } from '../../../components/map-line/map-line.component';
 import { MapItemType } from '../../../components/map-item-base/map-item-base.enum';
+import { MapSummaryItemComponent } from '../../../components/map-summary-item/map-summary-item.component';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
@@ -83,7 +84,8 @@ import { MapItemType } from '../../../components/map-item-base/map-item-base.enu
         MapTextComponent,
         MapIconComponent,
         MapLineComponent,
-        KeyValuePipe
+        KeyValuePipe,
+        MapSummaryItemComponent
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',
@@ -158,10 +160,12 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.deleteIcon = this.deleteIcon.bind(this);
         this.deleteLine = this.deleteLine.bind(this);
         this.deleteText = this.deleteText.bind(this);
+        this.deleteSummaryItem = this.deleteSummaryItem.bind(this);
         this.saveItem = this.saveItem.bind(this);
         this.saveIcon = this.saveIcon.bind(this);
         this.saveLine = this.saveLine.bind(this);
         this.saveText = this.saveText.bind(this);
+        this.saveSummaryItem = this.saveSummaryItem.bind(this);
     }
 
     public ngOnInit(): void {
@@ -269,7 +273,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     x: x,
                     y: y
                 };
-                //this.saveSummaryItem('dragstop');
+                this.saveSummaryItem('dragstop');
                 break;
 
             default:
@@ -389,6 +393,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         const type = $event.type;
         if (type === 'labelPosition') {
             this.changeLabelPositionFromContextMenu($event, MapItemType.ITEM, 'Mapitems', this.saveItem);
+            this.changeLabelPositionFromContextMenu($event, MapItemType.SUMMARYITEM, 'Mapsummaryitems', this.saveSummaryItem);
         }
         if (type === 'edit') {
             console.error('Edit');
@@ -398,12 +403,14 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             this.changeLayerFromContextMenu($event, MapItemType.TEXT, 'Maptexts', this.saveText);
             this.changeLayerFromContextMenu($event, MapItemType.ICON, 'Mapicons', this.saveIcon);
             this.changeLayerFromContextMenu($event, MapItemType.LINE, 'Maplines', this.saveLine);
+            this.changeLayerFromContextMenu($event, MapItemType.SUMMARYITEM, 'Mapsummaryitems', this.saveSummaryItem);
         }
         if (type === 'delete') {
             this.deleteFromContextMenu($event, MapItemType.ITEM, 'Mapitems', this.deleteItem);
             this.deleteFromContextMenu($event, MapItemType.TEXT, 'Maptexts', this.deleteText);
             this.deleteFromContextMenu($event, MapItemType.ICON, 'Mapicons', this.deleteIcon);
             this.deleteFromContextMenu($event, MapItemType.LINE, 'Maplines', this.deleteLine);
+            this.deleteFromContextMenu($event, MapItemType.SUMMARYITEM, 'Mapsummaryitems', this.deleteSummaryItem);
         }
     }
 
@@ -710,6 +717,115 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.addNewObject = true;
         this.action = 'summaryItem';
         this.cdr.markForCheck();
+    };
+
+    public editSummaryItem(item: any) {
+        this.action = 'summaryItem';
+        this.currentItem = item;
+        //$('#addEditSummaryItemModal').modal('show');
+    };
+
+    public saveSummaryItem(action: string) {
+        if (typeof action === 'undefined') {
+            action = 'add_or_edit';
+        }
+
+        this.currentItem.map_id = this.mapId.toString();
+
+        this.subscriptions.add(this.MapeditorsService.saveSummaryItem({
+            'Mapsummaryitem': this.currentItem,
+            'action': action
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                if (action === 'resizestop') {
+                    this.notyService.genericSuccess(msg, title);
+                    //Nothing needs to be updated
+                    return;
+                }
+
+                //Update possition in current scope json data
+                if (this.currentItem.hasOwnProperty('id')) {
+                    for (let i in this.map.Mapsummaryitems) {
+                        if (this.map.Mapsummaryitems[i].id == this.currentItem.id) {
+                            this.map.Mapsummaryitems[i].x = this.currentItem.x;
+                            this.map.Mapsummaryitems[i].y = this.currentItem.y;
+
+                            //We are done here
+                            break;
+                        }
+                    }
+                } else {
+                    //New created item
+                    if (typeof this.map.Mapsummaryitems === "undefined") {
+                        this.map.Mapsummaryitems = [];
+                    }
+
+                    this.map.Mapsummaryitems.push(result.data.Mapsummaryitem.Mapsummaryitem);
+                    //setTimeout(makeDraggable, 250);
+                }
+
+                //$('#addEditSummaryItemModal').modal('hide');
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
+    public deleteSummaryItem() {
+        this.currentItem.map_id = this.mapId;
+
+        this.currentDeletedItem = {
+            id: this.currentItem.id,
+            type: MapItemType.SUMMARYITEM
+        }
+
+        this.subscriptions.add(this.MapeditorsService.deleteSummaryItem({
+            'Mapsummaryitem': this.currentItem,
+            'action': 'delete'
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                //Remove item from current scope
+                for (let i in this.map.Mapsummaryitems) {
+                    if (this.map.Mapsummaryitems[i].id == this.currentItem.id) {
+                        this.map.Mapsummaryitems.splice(Number(i), 1);
+
+                        //We are done here
+                        break;
+                    }
+                }
+
+                this.notyService.genericSuccess(msg, title);
+                //$('#addEditSummaryItemModal').modal('hide');
+                this.currentItem = {};
+                delete this.currentDeletedItem;
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                delete this.currentDeletedItem;
+                this.errors = errorResponse;
+
+            }
+        }));
     };
 
     public addGadget() {

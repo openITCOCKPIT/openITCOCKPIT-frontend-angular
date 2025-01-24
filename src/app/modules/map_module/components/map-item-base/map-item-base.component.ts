@@ -63,7 +63,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     protected cdr = inject(ChangeDetectorRef);
     protected mapCanvasComponent: MapCanvasComponent;
 
-    protected contextMenuItems: MenuItem[] = this.getDefaultContextMenuItems();
+    protected contextMenuItems: MenuItem[] = this.getContextMenuItems();
 
     constructor(protected parent: MapCanvasComponent) {
         this.mapCanvasComponent = parent;
@@ -86,7 +86,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
             this.zIndex = this.item()!.z_index!;
             this.setPosition();
             this.setLayer(this.zIndex);
-            this.contextMenuItems = this.getDefaultContextMenuItems();
+            this.contextMenuItems = this.getContextMenuItems();
         });
     }
 
@@ -126,7 +126,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     }
 
     //grid snapping logic
-    onDragMove(event: CdkDragMove<any>) {
+    public onDragMove(event: CdkDragMove<any>) {
 
         let posX;
         let posY;
@@ -211,7 +211,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         this.cdr.markForCheck();
     }
 
-    protected getDefaultContextMenuItems(): MenuItem[] {
+    private getContextMenuItems(): MenuItem[] {
 
         let layerOptions: MenuItem[] = [];
         for (let key in this.layers()) {
@@ -281,6 +281,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         ];
     }
 
+    // can be used to add extra context menu items in child components
     protected getExtraContextMenuItems(): MenuItem[] {
         return [];
     }
