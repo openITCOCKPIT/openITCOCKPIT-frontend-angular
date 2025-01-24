@@ -56,7 +56,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ImportITopDataComponent } from '../../../components/import-itop-data/import-itop-data.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -67,6 +67,7 @@ import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/tab
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { ImportedHostFlagsEnum } from '../imported-hosts.enum';
 
 @Component({
     selector: 'oitc-imported-hosts-index',
@@ -117,7 +118,8 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         TranslocoPipe,
         TrueFalseDirective,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        NgClass
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostsService} // Inject the ImportedhostsService into the DeleteAllModalComponent
@@ -146,6 +148,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
     private cdr = inject(ChangeDetectorRef);
+    protected readonly ImportedHostFlagsEnum = ImportedHostFlagsEnum;
 
     constructor() {
     }
@@ -278,5 +281,9 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     public loadImporter(id: number) {
 
+    }
+
+    public hasFlag(importedHostFlag: number, compareFlag: ImportedHostFlagsEnum) {
+        return importedHostFlag & compareFlag;
     }
 }

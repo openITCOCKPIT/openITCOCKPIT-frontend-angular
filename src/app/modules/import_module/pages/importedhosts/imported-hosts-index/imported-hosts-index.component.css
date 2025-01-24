@@ -1,0 +1,299 @@
+/* Weather icons */
+
+/* <i class="fas fa-sun sun"></i> */
+.sun {
+    background: rgb(255, 252, 10);
+    font-size: 22px;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* <i class="fas fa-cloud-sun sun-cloud-gradient"></i> */
+.sun-cloud-gradient {
+    background: rgb(255, 252, 10);
+    background: linear-gradient(132deg, rgba(255, 252, 10, 1) 0%, rgba(255, 252, 10, 1) 46%, transparent 46%,
+    transparent 39%, rgb(226, 217, 217) 40%, rgb(213, 204, 204) 100%);
+    font-size: 25px;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* <i class="fas fa-cloud-sun-rain sun-cloud-gradient-rain"></i> */
+.sun-cloud-gradient-rain {
+    background: rgb(255, 252, 10);
+    background: linear-gradient(132deg, rgba(255, 252, 10, 1) 0%, rgba(255, 252, 10, 1) 38%, transparent 38%,
+    transparent 39%, rgb(134, 125, 125) 40%, rgb(71, 89, 113) 100%);
+    font-size: 28px;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* <i class="fas fa-cloud cloud-gradient font-lg"></i> */
+.cloud-gradient {
+    background: linear-gradient(180deg, transparent 0%, transparent 7%, rgba(7, 19, 42, 0.5) 0%, rgb(156, 184, 239) 92%,
+    transparent 98%, transparent 100%) aliceblue;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Weather icons end */
+
+.connect-badge {
+    font-size: 7px;
+}
+
+.progress-0 {
+    background-color: rgb(204, 0, 0);
+}
+
+.progress-10 {
+    background-color: rgb(204, 41, 0);
+}
+
+.progress-20 {
+    background-color: rgb(204, 82, 0);
+}
+
+.progress-30 {
+    background-color: rgb(204, 122, 0);
+}
+
+.progress-40 {
+    background-color: rgb(204, 163, 0);
+}
+
+.progress-50 {
+    background-color: rgb(204, 204, 0);
+}
+
+.progress-60 {
+    background-color: rgb(163, 204, 0);
+}
+
+.progress-70 {
+    background-color: rgb(122, 204, 0);
+}
+
+.progress-80 {
+    background-color: rgb(82, 204, 0);
+}
+
+.progress-90 {
+    background-color: rgb(41, 204, 0);
+}
+
+.progress-100 {
+    background-color: rgb(0, 204, 0);
+}
+
+.colortext {
+    width: 48px;
+    text-align: right;
+    font-size: 11px;
+}
+
+.chart-label {
+    padding: 1px 3px !important;
+}
+
+.show-grid {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.html-report-host-row {
+    background-color: rgba(80, 80, 80, .02);
+}
+
+.report-border-sucess {
+    border-left: 3px solid #00C851;
+}
+
+.report-border-warning {
+    border-left: 3px solid #FFBB33;
+}
+
+.report-border-danger {
+    border-left: 3px solid #CC0000;
+}
+
+.report-border-default {
+    border-left: 3px solid #DEE2E6;
+}
+
+.report-font-weight-500 {
+    font-weight: 500;
+}
+
+.bg-color-lightGray-with-opacity {
+    background-color: #EEEEEE22 !important;
+}
+
+.bg-color-danger-with-opacity {
+    background-color: #CC00000E !important;
+}
+
+.bg-border-bottom-import-error th {
+    border-bottom: 2px solid #CC0000 !important;
+}
+
+.idoit-flex-card {
+    display: -webkit-flex;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.idoit-flex-card-image {
+    padding: 4px 0 0 4px;
+    height: 1.8rem;
+}
+
+.connect-badge {
+    font-size: 7px;
+}
+
+.inside-list {
+    list-style-position: inside;
+}
+
+.border-primary-top {
+    border-top: 2px solid #4285F4 !important;
+}
+
+.border-primary-bottom {
+    border-bottom: 2px solid #4285F4 !important;
+}
+
+
+#csvDropzone .dz-error-mark svg g g {
+    fill: #CC0000;
+}
+
+#csvDropzone .dz-success-mark svg g path {
+    fill: #00C851;
+}
+
+#csvDropzone.dz-details {
+    padding: 0 !important;
+}
+
+.business-criticity-low {
+    background-image: linear-gradient(180deg, rgba(114, 123, 132, 0.2) 70%, rgba(0, 200, 81, 0.7) 70%, rgba(0, 200, 81, 1.0));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.business-criticity-medium {
+    background-image: linear-gradient(180deg, rgba(114, 123, 132, 0.2) 40%, rgba(255, 187, 51, 0.7) 40%, rgba(255, 187, 51, 1.0));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.business-criticity-high {
+    background-image: linear-gradient(180deg, rgba(204, 0, 0, 0.7), rgba(204, 0, 0, 1.0));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.status-implementation {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: radial-gradient(at 80% 72%, rgba(0, 200, 81, 1.0) 0%, rgba(0, 200, 81, 1.0) 30%, #4285F4 33%, #7DACF5 100%);
+
+}
+
+.status-stock {
+    background-image: radial-gradient(at bottom left, rgb(13, 8, 96) 0%, rgb(6, 84, 170) 50%, #7DACF5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.status-production {
+    background-image: radial-gradient(at 80% 72%, rgba(0, 200, 81, 1.0) 0%, rgba(0, 200, 81, 1.0) 30%, #4285F4 33%, #7DACF5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+}
+
+.status-obsolete {
+    background-image: radial-gradient(at 80% 72%, rgba(204, 0, 0, 1.0) 0%, rgba(204, 0, 0, 1.0) 30%, #4285F4 33%, rgb(0, 159, 255) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.iTop-class-label {
+    letter-spacing: 7px;
+}
+
+.white-glow {
+    text-shadow: 2px 0 0 #ffffff;
+}
+
+.dark-shadow-minus-bottom-1 {
+    text-shadow: #0000007d 0.02em 0.02em 0;
+    bottom: -1px;
+}
+
+.odd {
+    background: #66666606;
+}
+
+.disable-updates-border {
+    border-left: 3px solid #CC0000;
+    padding-left: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.bg-host-to-disable {
+    background-image: linear-gradient(135deg, transparent 0%, transparent 80%, #CC0000ee 55.56%, #CC000055 100%);
+    background-position: right 0px bottom 0px;
+    background-size: 150px 70px;
+    background-repeat: no-repeat;
+}
+
+.bg-host-to-change {
+    background-image: linear-gradient(135deg, transparent 0%, transparent 80%, #4285F4ee 55.56%, #4285F455 100%);
+    background-position: right 0px bottom 0px;
+    background-size: 150px 70px;
+    background-repeat: no-repeat;
+}
+
+.bg-host-to-re-enable {
+    background-image: linear-gradient(135deg, transparent 0%, transparent 80%, #00C851ee 55.56%, #00C85155 100%);
+    background-position: right 0px bottom 0px;
+    background-size: 150px 70px;
+    background-repeat: no-repeat;
+}
+
+.power-off,
+.with-changes,
+.power-on {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    font-size: 18px;
+}
+
+.bg-host-marked-for-disable {
+    background-image: linear-gradient(135deg, #d6d6d64D 25%, transparent 25%, transparent 50%, #d6d6d64D 50%, #d6d6d64D 75%, transparent 75%, transparent 100%);
+    background-size: 61px 61px;
+}
+
+.bg-host-marked-for-re-enable {
+    background-image: linear-gradient(135deg, #00C85119 25%, transparent 25%, transparent 50%, #00C85119 50%, #00C85119 75%, transparent 75%, transparent 100%);
+    background-size: 61px 61px;
+}
+
+
+.min-vh-50 {
+    min-height: 50vh;
+}
+
+.host-summary-state-popover {
+    position: absolute;
+    right: 0;
+    width: 30%;
+    z-index: 99999;
+}

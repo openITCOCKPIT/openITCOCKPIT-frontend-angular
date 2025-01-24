@@ -25,6 +25,20 @@
             </h5>
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
+                    <i class="fas fa-sun sun"></i>
+                    <em class="pe-3">
+                        {{ t('Completely') }}
+                    </em>
+                    <i class="fas fa-cloud-sun sun-cloud-gradient"></i>
+                    <em class="pe-3">
+                        {{ t('Some optional fields are missing') }}
+                    </em>
+                    <i class="fas fa-cloud-sun-rain sun-cloud-gradient-rain"></i>
+                    <em class="pe-3">
+                        {{ t('Some required fields are missing') }}
+                    </em>
+                </c-nav-item>
+                <c-nav-item class="px-1">
                     <button (click)="load()" cButton class="ripple" color="default" size="xs">
                         <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                         {{ t('Refresh') }}
@@ -64,14 +78,16 @@
                                         }
                                     }
                                     {{ importer.name }}
-                                    <sup *ngIf="importer.connected"
-                                         class="badge badge-pill border-success text-success connect-badge">
-                                        {{ t('ONLINE') }}
-                                    </sup>
-                                    <sup *ngIf="!importer.connected"
-                                         class="badge badge-pill border-danger text-danger connect-badge">
-                                        {{ t('OFFLINE') }}
-                                    </sup>
+                                    <span *ngIf="importer.connected !== null">
+                                        <sup *ngIf="importer.connected"
+                                             class="badge rounded-pill border border-success text-success connect-badge">
+                                            {{ t('ONLINE') }}
+                                        </sup>
+                                        <sup *ngIf="!importer.connected"
+                                             class="badge rounded-pill border border-danger text-danger connect-badge">
+                                            {{ t('OFFLINE') }}
+                                        </sup>
+                                    </span>
                                 </button>
                             </li>
                         </ul>
@@ -108,7 +124,6 @@
             </c-nav>
         </c-card-header>
         <c-card-body>
-
             <!-- Filter -->
             <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                 <c-row>
@@ -132,6 +147,22 @@
                                        aria-label="ImportedHostName"
                                        cFormControl
                                        name="importedhost.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[ImportedHosts.address]']"
+                                       [placeholder]="'Filter by imported host address' | transloco"
+                                       aria-label="ImportedHostAdress"
+                                       cFormControl
+                                       name="importedhost.address"
                                        oitcDebounce
                                        type="text"
                                 />
@@ -182,15 +213,15 @@
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        name="filter.ImportedHosts.not_imported"
-                                        id="filter.ImportedHosts.not_imported"
+                                        name="filter.not_imported"
+                                        id="filter.not_imported"
                                         class="checkbox-lg checkbox-primary"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
                                         [(ngModel)]="params['filter[not_imported]']"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="filter.ImportedHosts.not_imported">
+                                           for="filter.not_imported">
                                         <c-badge color="success">
                                             {{ t('NEW') }}
                                         </c-badge>
@@ -218,17 +249,36 @@
                     <th class="width-50 text-center" scope="col">
                         <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                     </th>
+                    <th></th>
                     <th scope="col" mat-sort-header="ImportedHosts.name">
                         {{ t('Name') }}
                     </th>
+                    <th scope="col" mat-sort-header="ImportedHosts.address">
+                        {{ t('Address') }}
+                    </th>
                     <th scope="col" mat-sort-header="ImportedHosts.description">
                         {{ t('Description') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Importers.name">
+                        {{ t('Importer') }}
+                    </th>
+                    <th scope="col" mat-sort-header="full_name">
+                        {{ t('User') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Reserved settings') }}
                     </th>
                     <th scope="col" mat-sort-header="ImportedHosts.created">
                         {{ t('Import date') }}
                     </th>
                     <th scope="col" mat-sort-header="ImportedHosts.modified">
                         {{ t('Last modified') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Imported file') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Progress') }}
                     </th>
                     <th class="text-center width-50" scope="col">
                         <fa-icon [icon]="['fas', 'gear']"></fa-icon>
@@ -237,27 +287,39 @@
                 </thead>
                 <tbody *ngIf="importedhosts">
                 <tr *ngFor="let importedhost of importedhosts">
-                    <td class="text-center">
+                    <td>
                         <oitc-item-select
                             *oitcPermission="['ImportModule','importedhosts', 'delete']"
                             [disabled]="!importedhost.allowEdit"
                             [item]="importedhost"></oitc-item-select>
-
                     </td>
                     <td>
+                        <span *ngIf="importedhost.progress.state === 100">
+                            <i class="fas fa-sun sun"></i>
+                        </span>
+                        <span *ngIf="importedhost.progress.state == 80">
+                            <i class="fas fa-cloud-sun sun-cloud-gradient"></i>
+                        </span>
+                        <span *ngIf="importedhost.progress.state < 80">
+                            <i class="fas fa-cloud-sun-rain sun-cloud-gradient-rain"></i>
+                        </span>
+                    </td>
+                    <td [ngClass]="{'bg-host-to-disable': (importedhost.host.disabled==0 || importedhost.host_id == null ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE),
+                                'bg-host-to-change': importedhost.host.disabled==0 && (hasFlag(importedhost.flags,  ImportedHostFlagsEnum.FLAG_MARKED_CHANGED) && !hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)),
+                                'bg-host-to-re-enable':  importedhost.host.disabled==1 && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)}">
                         {{ importedhost.name }}
                         <c-badge color="success" *ngIf="importedhost.imported !== 1">
                             <fa-icon [icon]="['fas', 'star']"></fa-icon>
                             {{ t('NEW') }}
                         </c-badge>
                         @if (importedhost.imported === 1) {
-                            <c-badge color="info" *oitcPermission="['hostgroups', 'edit']"
-                                     [routerLink]="['/', 'hostgroups', 'edit', importedhost.host_id]"
+                            <c-badge color="info" *oitcPermission="['hosts', 'edit']"
+                                     [routerLink]="['/', 'hosts', 'edit', importedhost.host_id]"
                                      class="cursor-pointer">
                                 <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
                                 {{ t('In monitoring') }}
                             </c-badge>
-                            <span *oitcPermission="['hostgroups', 'edit']; negate: true">
+                            <span *oitcPermission="['hosts', 'edit']; negate: true">
                                 <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
                                 {{ t('In monitoring') }}
                             </span>
