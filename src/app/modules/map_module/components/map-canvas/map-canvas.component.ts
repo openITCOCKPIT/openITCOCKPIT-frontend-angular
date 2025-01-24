@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
 import { Helplines } from './map-canvas.interface';
+import { MapItemType } from '../map-item-base/map-item-base.enum';
 
 @Component({
     selector: 'oitc-map-canvas',
@@ -30,6 +31,10 @@ export class MapCanvasComponent {
     public helplines = input<Helplines>({enabled: true, size: 15});
     public background = input<string>('');
     public isViewMode: InputSignal<boolean> = input<boolean>(true);
+    public currentDeletedItem: InputSignal<{ id: number, type: MapItemType } | undefined> = input<{
+        id: number,
+        type: MapItemType
+    }>();
 
     constructor() {
     }

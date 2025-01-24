@@ -18,7 +18,7 @@ import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { interval, Subscription } from 'rxjs';
 import { MapItemService } from './map-item.service';
 import { Mapitem } from '../../pages/mapeditors/Mapeditors.interface';
-import { LabelPosition } from '../map-item-base/map-item-base.enum';
+import { ContextActionType, LabelPosition, MapItemType } from '../map-item-base/map-item-base.enum';
 
 @Component({
     selector: 'oitc-map-item',
@@ -45,17 +45,14 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
     protected allowView: boolean = false;
     protected label: string = "";
 
+    protected override type = MapItemType.ITEM;
+
     constructor(parent: MapCanvasComponent) {
         super(parent);
         effect(() => {
-            this.id = this.item()!.id;
-            this.mapId = this.item()!.map_id;
-            this.x = this.item()!.x;
-            this.y = this.item()!.y;
-            this.zIndex = this.item()!.z_index!;
-            this.setPosition();
-            this.setLayer(this.zIndex);
-            this.onItemObjectIdChange();
+            if (!this.isItemDeleted(this.type)) {
+                this.onItemObjectIdChange();
+            }
         });
     }
 
@@ -66,7 +63,9 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
     }
 
     public ngOnInit(): void {
-        this.load();
+        if (!this.isItemDeleted(this.type)) {
+            this.load();
+        }
         if (this.refreshInterval()! > 0) {
             /*MapItemReloadService.setRefreshInterval(this.refreshInterval());
             MapItemReloadService.registerNewItem(uuidForServices, this.mapItem(), updateCallback);*/
@@ -182,18 +181,8 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         this.load();
     };
 
-    protected override getDefaultContextMenuItems(): MenuItem[] {
+    protected override getExtraContextMenuItems(): MenuItem[] {
         return [
-            {
-                label: this.TranslocoService.translate('Edit'),
-                icon: 'fa fa-cog',
-                command: () => {
-                    this.cdr.markForCheck();
-                }
-            },
-            {
-                separator: true
-            },
             {
                 label: this.TranslocoService.translate('Label position'),
                 icon: 'fa fa-font',
@@ -203,14 +192,15 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                         icon: 'fa fa-up-long',
                         command: () => {
                             this.contextActionEvent.emit({
-                                type: 'labelPosition',
+                                type: ContextActionType.LABEL_POSITION,
                                 data: {
                                     id: this.id,
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
                                     label_possition: LabelPosition.TOP
-                                } as Mapitem
+                                } as Mapitem,
+                                itemType: this.type
                             });
                             this.cdr.markForCheck();
                         }
@@ -220,14 +210,15 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                         icon: 'fa fa-right-long',
                         command: () => {
                             this.contextActionEvent.emit({
-                                type: 'labelPosition',
+                                type: ContextActionType.LABEL_POSITION,
                                 data: {
                                     id: this.id,
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
                                     label_possition: LabelPosition.RIGHT
-                                } as Mapitem
+                                } as Mapitem,
+                                itemType: this.type
                             });
                             this.cdr.markForCheck();
                         }
@@ -237,14 +228,15 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                         icon: 'fa fa-down-long',
                         command: () => {
                             this.contextActionEvent.emit({
-                                type: 'labelPosition',
+                                type: ContextActionType.LABEL_POSITION,
                                 data: {
                                     id: this.id,
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
                                     label_possition: LabelPosition.BOTTOM
-                                } as Mapitem
+                                } as Mapitem,
+                                itemType: this.type
                             });
                             this.cdr.markForCheck();
                         }
@@ -254,38 +246,20 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                         icon: 'fa fa-left-long',
                         command: () => {
                             this.contextActionEvent.emit({
-                                type: 'labelPosition',
+                                type: ContextActionType.LABEL_POSITION,
                                 data: {
                                     id: this.id,
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
                                     label_possition: LabelPosition.LEFT
-                                } as Mapitem
+                                } as Mapitem,
+                                itemType: this.type
                             });
                             this.cdr.markForCheck();
                         }
                     }
                 ]
-            },
-            {
-                separator: true
-            },
-            {
-                label: this.TranslocoService.translate('Delete'),
-                styleClass: 'text-danger',
-                icon: 'fa fa-trash',
-                command: () => {
-                    this.contextActionEvent.emit({
-                        type: 'delete', data: {
-                            id: this.id,
-                            x: this.x,
-                            y: this.y,
-                            map_id: this.mapId,
-                        }
-                    });
-                    this.cdr.markForCheck();
-                }
             }
         ]
     }

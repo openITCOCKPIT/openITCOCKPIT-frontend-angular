@@ -29,8 +29,8 @@
             <h5 cCardTitle>
                 {{ t('Edit map:') }}
 
-                <small class="fw-300">
-                    <!--{{ map.Map.name }}-->
+                <small class="fw-300" *ngIf="map">
+                    {{ map.Map.name }}
                 </small>
             </h5>
 
@@ -82,7 +82,7 @@
                             color="danger"
                             size="xs"
                             [hidden]="Mapeditor.synchronizeGridAndHelplinesSize"
-                            (click)="Mapeditor.synchronizeGridAndHelplinesSize = true">
+                            (click)="onSynchronizeGridAndHelplinesSize(true)">
                         <fa-icon [icon]="['fas', 'arrow-left']" class="pe-1"></fa-icon>
                         <fa-icon [icon]="['fas', 'unlink']"></fa-icon>
                         {{ t('Change size automatically') }}
@@ -93,7 +93,7 @@
                             color="success"
                             size="xs"
                             [hidden]="!Mapeditor.synchronizeGridAndHelplinesSize"
-                            (click)="Mapeditor.synchronizeGridAndHelplinesSize = false">
+                            (click)="onSynchronizeGridAndHelplinesSize(false)">
                         <fa-icon [icon]="['fas', 'arrow-left']" class="pe-1"></fa-icon>
                         <fa-icon [icon]="['fas', 'unlink']"></fa-icon>
                         {{ t('Change size automatically') }}
@@ -111,6 +111,7 @@
                                 name="checkbox"
                                 checked="checked"
                                 [(ngModel)]="Mapeditor.grid.enabled"
+                                (ngModelChange)="onGridEnabledChange()"
                             />
                             <label
                                 cFormCheckLabel
@@ -167,27 +168,31 @@
                 <div id="map-editor" class="map-editor">
                     <!-- start mainMapContainer -->
                     <oitc-map-canvas [helplines]="Mapeditor.helplines" [background]="map.Map.background"
-                                     [isViewMode]="false">
+                                     [isViewMode]="false" [currentDeletedItem]="currentDeletedItem">
                         <oitc-map-item *ngFor="let item of map.Mapitems" [item]="item" [refreshInterval]="0"
                                        [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                       [layers]="layers"
                                        (contextActionEvent)="onContextAction($event)"
                                        (dropItemEvent)="onDropItem($event)"
                                        [hidden]="!item.display">
                         </oitc-map-item>
                         <oitc-map-text *ngFor="let textItem of map.Maptexts" [item]="textItem"
                                        [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                       [layers]="layers"
                                        (contextActionEvent)="onContextAction($event)"
                                        (dropItemEvent)="onDropItem($event)"
                                        [hidden]="!textItem.display">
                         </oitc-map-text>
                         <oitc-map-line *ngFor="let lineItem of map.Maplines" [item]="lineItem" [refreshInterval]="0"
                                        [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                       [layers]="layers"
                                        (contextActionEvent)="onContextAction($event)"
                                        (dropItemEvent)="onDropItem($event)"
                                        [hidden]="!lineItem.display">
                         </oitc-map-line>
                         <oitc-map-icon *ngFor="let iconItem of map.Mapicons" [item]="iconItem"
                                        [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                       [layers]="layers"
                                        (contextActionEvent)="onContextAction($event)"
                                        (dropItemEvent)="onDropItem($event)"
                                        [hidden]="!iconItem.display">
@@ -241,17 +246,17 @@
                     <div id="layersBox" cdkDrag cdkDragBoundary=".map-editor">
                         <div id="layersBoxDragger" cdkDragHandle></div>
                         <div class="layersContainer">
-                            <div class="mapLayer" *ngFor="let value of layers; let key = index"
-                                 [ngClass]="{ 'selectedLayer': key == parseInt(defaultLayer) }">
+                            <div class="mapLayer" *ngFor="let value of layers | keyvalue"
+                                 [ngClass]="{ 'selectedLayer': value.key == defaultLayer }">
                                 <span class="cursor-pointer"
-                                      (click)="setDefaultLayer(key)">
-                                    {{ value }}
+                                      (click)="setDefaultLayer(value.key)">
+                                    {{ value.value }}
                                 </span>
-                                <fa-icon [icon]="['fas', 'eye']" class="pull-right padding-right-5 cursor-pointer"
-                                         [hidden]="!visibleLayers['layer_'+key]" (click)="hideLayer(key)"
+                                <fa-icon [icon]="['fas', 'eye']" class="float-end pe-1 cursor-pointer"
+                                         [hidden]="!visibleLayers['layer_'+ value.key]" (click)="hideLayer(value.key)"
                                          title="{{t('Click to hide layer')}}"></fa-icon>
-                                <fa-icon [icon]="['fas', 'eye-slash']" class="pull-right padding-right-5 cursor-pointer"
-                                         [hidden]="visibleLayers['layer_'+key]" (click)="showLayer(key)"
+                                <fa-icon [icon]="['fas', 'eye-slash']" class="float-end pe-1 cursor-pointer"
+                                         [hidden]="visibleLayers['layer_'+ value.key]" (click)="showLayer(value.key)"
                                          title="{{t('Click to show layer')}}"></fa-icon>
                             </div>
                         </div>

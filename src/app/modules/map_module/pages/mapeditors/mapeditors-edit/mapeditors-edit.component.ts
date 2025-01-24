@@ -35,17 +35,18 @@ import {
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FCanvasComponent, FFlowModule } from '@foblex/flow';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MapItemComponent } from '../../../components/map-item/map-item.component';
 import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.component';
 import { filter, parseInt } from 'lodash';
 import { Background, Mapeditor, MapRoot, MaxUploadLimit, VisibleLayers } from '../Mapeditors.interface';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
-import { ContextAction, MapitemBase } from '../../../components/map-item-base/map-item-base.interface';
+import { ContextAction, MapitemBaseActionObject } from '../../../components/map-item-base/map-item-base.interface';
 import { MapTextComponent } from '../../../components/map-text/map-text.component';
 import { MapIconComponent } from '../../../components/map-icon/map-icon.component';
 import { MapLineComponent } from '../../../components/map-line/map-line.component';
+import { MapItemType } from '../../../components/map-item-base/map-item-base.enum';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
@@ -81,7 +82,8 @@ import { MapLineComponent } from '../../../components/map-line/map-line.componen
         CdkDragHandle,
         MapTextComponent,
         MapIconComponent,
-        MapLineComponent
+        MapLineComponent,
+        KeyValuePipe
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',
@@ -118,7 +120,11 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     public addNewObject = false;
     public action: string | null = null;
 
-    public currentItem = {};
+    public currentItem: any = {};
+    public currentDeletedItem: {
+        id: number
+        type: MapItemType
+    } | undefined; // to disable effect() after item delete
     public maxZIndex = 0;
     public clickCount = 1;
 
@@ -147,6 +153,17 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     public maxUploadLimit!: MaxUploadLimit;
 
+    constructor() {
+        this.deleteItem = this.deleteItem.bind(this);
+        this.deleteIcon = this.deleteIcon.bind(this);
+        this.deleteLine = this.deleteLine.bind(this);
+        this.deleteText = this.deleteText.bind(this);
+        this.saveItem = this.saveItem.bind(this);
+        this.saveIcon = this.saveIcon.bind(this);
+        this.saveLine = this.saveLine.bind(this);
+        this.saveText = this.saveText.bind(this);
+    }
+
     public ngOnInit(): void {
         this.mapId = Number(this.route.snapshot.paramMap.get('id'));
         this.load();
@@ -165,7 +182,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 this.maxZIndex = result.max_z_index;
                 this.layers = result.layers;
 
-                for (var k in this.layers) {
+                for (let k in this.layers) {
                     this.visibleLayers['layer_' + k] = true;
                 }
 
@@ -184,8 +201,81 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     }
 
-    public onDropItem(mapItem: MapitemBase) {
-        console.error("Item dropped", mapItem);
+    public onDropItem(item: MapitemBaseActionObject) {
+
+        let x = item.data.x;
+        let y = item.data.y;
+        let id = item.data.id;
+        let type = item.type;
+
+        switch (type) {
+            case MapItemType.ITEM:
+                this.currentItem = {
+                    id: id,
+                    x: x,
+                    y: y
+                };
+                this.saveItem('dragstop');
+                break;
+
+            case MapItemType.LINE:
+                x = item.data.startX!;
+                y = item.data.startY!;
+
+                let endX = item.data.endX;
+                let endY = item.data.endY;
+
+                this.currentItem = {
+                    id: id,
+                    startX: x,
+                    startY: y,
+                    endX: endX,
+                    endY: endY
+                };
+
+                this.saveLine('dragstop');
+                break;
+
+            case MapItemType.GADGET:
+                this.currentItem = {
+                    id: id,
+                    x: x,
+                    y: y
+                };
+                //this.saveGadget('dragstop');
+                break;
+
+            case MapItemType.TEXT:
+                this.currentItem = {
+                    id: id,
+                    x: x,
+                    y: y
+                };
+                this.saveText('dragstop');
+                break;
+
+            case MapItemType.ICON:
+                this.currentItem = {
+                    id: id,
+                    x: x,
+                    y: y
+                };
+                this.saveIcon('dragstop');
+                break;
+
+            case MapItemType.SUMMARYITEM:
+                this.currentItem = {
+                    id: id,
+                    x: x,
+                    y: y
+                };
+                //this.saveSummaryItem('dragstop');
+                break;
+
+            default:
+                console.log('Unknown map object type');
+                this.notyService.genericError();
+        }
     }
 
     public changeGridSize(size: number) {
@@ -197,6 +287,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         }
         //if (this.Mapeditor.grid.enabled) {
         this.gridSize = {x: size, y: size};
+        this.onMapeditorChange();
         this.cdr.markForCheck();
         //makeDraggable();
         //}
@@ -214,6 +305,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     public onHelplinesChange() {
         this.Mapeditor.helplines = {...this.Mapeditor.helplines};
+        this.onMapeditorChange();
         this.cdr.markForCheck();
     }
 
@@ -222,14 +314,31 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     }
 
-    public setDefaultLayer(layerNo: number) {
-        this.defaultLayer = layerNo.toString();
+    public onSynchronizeGridAndHelplinesSize(isEnabled: boolean) {
+        this.Mapeditor.synchronizeGridAndHelplinesSize = isEnabled;
+        this.onMapeditorChange();
         this.cdr.markForCheck();
     }
 
-    public hideLayer(key: number) {
-        let keyAsString = key.toString();
-        this.visibleLayers['layer_' + keyAsString] = false;
+    public onGridEnabledChange() {
+        this.onMapeditorChange();
+        this.cdr.markForCheck();
+    }
+
+    public onMapeditorChange() {
+        if (this.init) {
+            return;
+        }
+        this.saveMapeditorSettings();
+    }
+
+    public setDefaultLayer(layerNo: string) {
+        this.defaultLayer = layerNo;
+        this.cdr.markForCheck();
+    }
+
+    public hideLayer(key: string) {
+        this.visibleLayers['layer_' + key] = false;
 
         let objectsToHide = [
             'Mapitems',
@@ -243,7 +352,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             let objectName = objectsToHide[arrayKey];
             if (this.map.hasOwnProperty(objectName)) {
                 for (let i in this.map[objectName as keyof MapRoot]) {
-                    if (this.map[objectName as keyof MapRoot][i].z_index === keyAsString) {
+                    if (this.map[objectName as keyof MapRoot][i].z_index === key) {
                         this.map[objectName as keyof MapRoot][i].display = false;
                         this.onItemChange(objectName);
                     }
@@ -252,9 +361,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public showLayer(key: number) {
-        let keyAsString = key.toString();
-        this.visibleLayers['layer_' + keyAsString] = true;
+    public showLayer(key: string) {
+        this.visibleLayers['layer_' + key] = true;
 
         let objectsToHide = [
             'Mapitems',
@@ -268,7 +376,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             let objectName = objectsToHide[arrayKey];
             if (this.map.hasOwnProperty(objectName)) {
                 for (let i in this.map[objectName as keyof MapRoot]) {
-                    if (this.map[objectName as keyof MapRoot][i].z_index === keyAsString) {
+                    if (this.map[objectName as keyof MapRoot][i].z_index === key) {
                         this.map[objectName as keyof MapRoot][i].display = true;
                         this.onItemChange(objectName);
                     }
@@ -279,27 +387,71 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     public onContextAction($event: ContextAction) {
         const type = $event.type;
-        let index;
-        console.error('ContextAction', $event);
         if (type === 'labelPosition') {
-            for (let i = 0; i < this.map.Mapitems.length; i++) {
-                if (this.map.Mapitems[i].id === $event.data.id) {
-                    let data = $event.data as any;
-                    this.map.Mapitems[i].label_possition = data.label_possition!;
-                    index = i;
+            this.changeLabelPositionFromContextMenu($event, MapItemType.ITEM, 'Mapitems', this.saveItem);
+        }
+        if (type === 'edit') {
+            console.error('Edit');
+        }
+        if (type === 'layer') {
+            this.changeLayerFromContextMenu($event, MapItemType.ITEM, 'Mapitems', this.saveItem);
+            this.changeLayerFromContextMenu($event, MapItemType.TEXT, 'Maptexts', this.saveText);
+            this.changeLayerFromContextMenu($event, MapItemType.ICON, 'Mapicons', this.saveIcon);
+            this.changeLayerFromContextMenu($event, MapItemType.LINE, 'Maplines', this.saveLine);
+        }
+        if (type === 'delete') {
+            this.deleteFromContextMenu($event, MapItemType.ITEM, 'Mapitems', this.deleteItem);
+            this.deleteFromContextMenu($event, MapItemType.TEXT, 'Maptexts', this.deleteText);
+            this.deleteFromContextMenu($event, MapItemType.ICON, 'Mapicons', this.deleteIcon);
+            this.deleteFromContextMenu($event, MapItemType.LINE, 'Maplines', this.deleteLine);
+        }
+    }
+
+    private changeLabelPositionFromContextMenu(event: ContextAction, itemType: MapItemType, objectName: keyof MapRoot, saveMethod: (action: string) => void) {
+        let items = this.map[objectName];
+        if (event.itemType === itemType && items && Array.isArray(items) && items.length > 0) {
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].id === event.data.id) {
+                    let data = event.data as any;
+                    items[i].label_possition = data.label_possition!;
+                    items[i] = {...items[i]};
+
+                    this.currentItem = items[i];
+                    saveMethod('add_or_edit');
+                    this.cdr.markForCheck();
                     break;
                 }
             }
         }
-        if (type === 'Edit') {
-            console.error('Edit');
+    }
+
+    private changeLayerFromContextMenu(event: ContextAction, itemType: MapItemType, objectName: keyof MapRoot, saveMethod: (action: string) => void) {
+        let items = this.map[objectName];
+        if (event.itemType === itemType && items && Array.isArray(items) && items.length > 0) {
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].id === event.data.id) {
+                    let data = event.data as any;
+                    items[i].z_index = data.z_index!;
+                    items[i] = {...items[i]};
+                    this.currentItem = items[i];
+                    saveMethod('add_or_edit');
+                    this.cdr.markForCheck();
+                    break;
+                }
+            }
         }
-        if (type === 'Delete') {
-            console.error('Delete');
-        }
-        if (index !== undefined) {
-            this.map.Mapitems[index] = {...this.map.Mapitems[index]};
-            this.cdr.markForCheck();
+    }
+
+    private deleteFromContextMenu(event: ContextAction, itemType: MapItemType, objectName: keyof MapRoot, deleteMethod: () => void) {
+        let items = this.map[objectName];
+        if (event.itemType === itemType && items && Array.isArray(items) && items.length > 0) {
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].id === event.data.id) {
+                    this.currentItem = items[i];
+                    deleteMethod();
+                    break;
+                }
+            }
         }
     }
 
@@ -318,6 +470,109 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     };
 
+    public editItem(item: any) {
+        this.action = 'item';
+        this.currentItem = item;
+        //$('#addEditMapItemModal').modal('show');
+        this.cdr.markForCheck();
+    };
+
+    public saveItem(action: string) {
+        if (typeof action === 'undefined') {
+            action = 'add_or_edit';
+        }
+
+        this.currentItem.map_id = this.mapId.toString();
+
+        this.subscriptions.add(this.MapeditorsService.saveItem({
+            'Mapitem': this.currentItem,
+            'action': action
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                //Update possition in current scope json data
+                if (this.currentItem.hasOwnProperty('id')) {
+                    for (let i in this.map.Mapitems) {
+                        if (this.map.Mapitems[i].id == this.currentItem.id) {
+                            this.map.Mapitems[i].x = this.currentItem.x;
+                            this.map.Mapitems[i].y = this.currentItem.y;
+
+                            //We are done here
+                            break;
+                        }
+                    }
+                } else {
+                    //New created item
+                    if (typeof this.map.Mapitems === "undefined") {
+                        this.map.Mapitems = [];
+                    }
+                    this.map.Mapitems.push(result.data.Mapitem.Mapitem);
+                    //setTimeout(makeDraggable, 250);
+                }
+
+                //$('#addEditMapItemModal').modal('hide');
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
+    public deleteItem() {
+        this.currentItem.map_id = this.mapId;
+
+        this.currentDeletedItem = {
+            id: this.currentItem.id,
+            type: MapItemType.ITEM
+        }
+
+        this.subscriptions.add(this.MapeditorsService.deleteItem({
+            'Mapitem': this.currentItem,
+            'action': 'delete'
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                //Remove item from current scope
+                for (let i in this.map.Mapitems) {
+                    if (this.map.Mapitems[i].id == this.currentItem.id) {
+                        this.map.Mapitems.splice(Number(i), 1);
+
+                        //We are done here
+                        break;
+                    }
+                }
+
+                this.notyService.genericSuccess(msg, title);
+                //$('#addEditMapItemModal').modal('hide');
+                this.currentItem = {};
+                delete this.currentDeletedItem;
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                delete this.currentDeletedItem;
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
     public addLine() {
         const options = {
             timeOut: 3500,
@@ -331,6 +586,116 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.addNewObject = true;
         this.action = 'line';
         this.cdr.markForCheck();
+    };
+
+    public editLine(lineItem: any) {
+        this.action = 'line';
+        this.currentItem = lineItem;
+        //$('#addEditMapLineModal').modal('show');
+    };
+
+    public saveLine(action: string) {
+        if (typeof action === 'undefined') {
+            action = 'add_or_edit';
+        }
+
+        this.currentItem.map_id = this.mapId.toString();
+
+        if (this.currentItem.type === 'stateless') {
+            this.currentItem.object_id = null;
+        }
+
+
+        this.subscriptions.add(this.MapeditorsService.saveLine({
+            'Mapline': this.currentItem,
+            'action': action
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                //Update possition in current scope json data
+                if (this.currentItem.hasOwnProperty('id')) {
+                    for (let i in this.map.Maplines) {
+                        if (this.map.Maplines[i].id == this.currentItem.id) {
+                            this.map.Maplines[i].startY = this.currentItem.startY;
+                            this.map.Maplines[i].endX = this.currentItem.endX;
+                            this.map.Maplines[i].endY = this.currentItem.endY;
+                            this.map.Maplines[i].startX = this.currentItem.startX; //Change this last because of $watch in directive
+
+                            //We are done here
+                            break;
+                        }
+                    }
+                } else {
+                    //New created item
+                    if (typeof this.map.Maplines === "undefined") {
+                        this.map.Maplines = [];
+                    }
+
+                    this.map.Maplines.push(result.data.Mapline.Mapline);
+                    //setTimeout(makeDraggable, 250);
+                }
+
+                //$('#addEditMapLineModal').modal('hide');
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
+    public deleteLine() {
+        this.currentItem.map_id = this.mapId;
+
+        this.currentDeletedItem = {
+            id: this.currentItem.id,
+            type: MapItemType.LINE
+        }
+
+        this.subscriptions.add(this.MapeditorsService.deleteLine({
+            'Mapline': this.currentItem,
+            'action': 'delete'
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                //Remove item from current scope
+                for (let i in this.map.Maplines) {
+                    if (this.map.Maplines[i].id == this.currentItem.id) {
+                        this.map.Maplines.splice(Number(i), 1);
+
+                        //We are done here
+                        break;
+                    }
+                }
+
+                this.notyService.genericSuccess(msg, title);
+                //$('#addEditMapLineModal').modal('hide');
+                this.currentItem = {};
+                delete this.currentDeletedItem;
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                delete this.currentDeletedItem;
+                this.errors = errorResponse;
+
+            }
+        }));
     };
 
     public addSummaryItem() {
@@ -391,6 +756,117 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     };
 
+    public editText(item: any) {
+        this.action = 'text';
+        this.currentItem = item;
+        this.addLink = false;
+        //$('#docuText').val(item.text);
+        //$('#AddEditStatelessTextModal').modal('show');
+    };
+
+    public saveText(action: string) {
+        if (typeof action === 'undefined') {
+            action = 'add_or_edit';
+        }
+
+        this.currentItem.map_id = this.mapId.toString();
+        if (action === 'add_or_edit') {
+            //this.currentItem.text = $('#docuText').val();
+        }
+
+        this.subscriptions.add(this.MapeditorsService.saveText({
+            'Maptext': this.currentItem,
+            'action': action
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                //Update possition in current scope json data
+                if (this.currentItem.hasOwnProperty('id')) {
+                    for (let i in this.map.Maptexts) {
+                        if (this.map.Maptexts[i].id == this.currentItem.id) {
+                            this.map.Maptexts[i].x = this.currentItem.x;
+                            this.map.Maptexts[i].y = this.currentItem.y;
+                            if (action === 'add_or_edit') {
+                                this.map.Maptexts[i].text = this.currentItem.text;
+                            }
+
+                            //We are done here
+                            break;
+                        }
+                    }
+                } else {
+                    //New created item
+                    if (typeof this.map.Maptexts === "undefined") {
+                        this.map.Maptexts = [];
+                    }
+
+                    this.map.Maptexts.push(result.data.Maptext.Maptext);
+                    //setTimeout(makeDraggable, 250);
+                }
+
+                //$('#AddEditStatelessTextModal').modal('hide');
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
+    public deleteText() {
+        this.currentItem.map_id = this.mapId;
+
+        this.currentDeletedItem = {
+            id: this.currentItem.id,
+            type: MapItemType.TEXT
+        }
+
+        this.subscriptions.add(this.MapeditorsService.deleteText({
+            'Maptext': this.currentItem,
+            'action': 'delete'
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                for (let i in this.map.Maptexts) {
+                    if (this.map.Maptexts[i].id == this.currentItem.id) {
+                        this.map.Maptexts.splice(Number(i), 1);
+                        //$('#docuText').val('');
+
+                        //We are done here
+                        break;
+                    }
+                }
+
+                this.notyService.genericSuccess(msg, title);
+                //$('#AddEditStatelessTextModal').modal('hide');
+                this.currentItem = {};
+                delete this.currentDeletedItem;
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                delete this.currentDeletedItem;
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
     public addIcon() {
         const options = {
             timeOut: 3500,
@@ -403,6 +879,138 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.addNewObject = true;
         this.action = 'icon';
         this.cdr.markForCheck();
+    };
+
+    public editIcon(item: any) {
+        this.action = 'icon';
+        this.currentItem = item;
+        //$('#AddEditStatelessIconModal').modal('show');
+    };
+
+    public saveIcon(action: string) {
+        if (typeof action === 'undefined') {
+            action = 'add_or_edit';
+        }
+
+        this.currentItem.map_id = this.mapId.toString();
+
+
+        this.subscriptions.add(this.MapeditorsService.saveIcon({
+            'Mapicon': this.currentItem,
+            'action': action
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+
+                //Update possition in current scope json data
+                if (this.currentItem.hasOwnProperty('id')) {
+                    for (let i in this.map.Mapicons) {
+                        if (this.map.Mapicons[i].id == this.currentItem.id) {
+                            this.map.Mapicons[i].x = this.currentItem.x;
+                            this.map.Mapicons[i].y = this.currentItem.y;
+
+                            //We are done here
+                            break;
+                        }
+                    }
+                } else {
+                    //New created item
+                    if (typeof this.map.Mapicons === "undefined") {
+                        this.map.Mapicons = [];
+                    }
+
+                    this.map.Mapicons.push(result.data.Mapicon.Mapicon);
+                    //setTimeout(makeDraggable, 250);
+                }
+
+                //$('#AddEditStatelessIconModal').modal('hide');
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
+    public deleteIcon() {
+        this.currentItem.map_id = this.mapId;
+
+        this.currentDeletedItem = {
+            id: this.currentItem.id,
+            type: MapItemType.ICON
+        }
+
+        this.subscriptions.add(this.MapeditorsService.deleteIcon({
+            'Mapicon': this.currentItem,
+            'action': 'delete'
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                //Remove item from current scope
+                for (let i in this.map.Mapicons) {
+                    if (this.map.Mapicons[i].id == this.currentItem.id) {
+                        this.map.Mapicons.splice(Number(i), 1);
+
+                        //We are done here
+                        break;
+                    }
+                }
+
+                this.notyService.genericSuccess(msg, title);
+                //$('#AddEditStatelessIconModal').modal('hide');
+                this.currentItem = {};
+                delete this.currentDeletedItem;
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                delete this.currentDeletedItem;
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
+    public saveMapeditorSettings() {
+
+        this.subscriptions.add(this.MapeditorsService.saveMapeditorSettings({
+            'Map': {
+                id: this.mapId.toString(),
+            },
+            'Mapeditor': this.Mapeditor
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
     };
 
     protected readonly parseInt = parseInt;
