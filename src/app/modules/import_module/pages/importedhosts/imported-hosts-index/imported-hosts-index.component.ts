@@ -56,7 +56,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ImportITopDataComponent } from '../../../components/import-itop-data/import-itop-data.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf, NgStyle } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -286,4 +286,6 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     public hasFlag(importedHostFlag: number, compareFlag: ImportedHostFlagsEnum) {
         return importedHostFlag & compareFlag;
     }
+
+    protected readonly Object = Object;
 }

@@ -7,6 +7,8 @@ import { HostEntity } from '../../../../pages/hosts/hosts.interface';
 import { AgentcheckPost } from '../../../../pages/agentchecks/agentchecks.interface';
 import { ContainerEntity } from '../../../../pages/containers/containers.interface';
 import { ServicetemplateEntity } from '../../../../pages/servicetemplates/servicetemplates.interface';
+import { ServiceObject } from '../../../../pages/services/services.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 export interface ImportedhostsIndexRoot extends PaginateOrScroll {
     importedhosts: Importedhost[]
@@ -18,7 +20,7 @@ export interface ImportedhostsIndexRoot extends PaginateOrScroll {
 
 export interface Importedhost {
     id: number
-    host_id: number
+    host_id: number | null
     name: string
     address: string
     identifier: string
@@ -46,10 +48,16 @@ export interface Importedhost {
     readonly: boolean
     satellite?: SatelliteEntity
     allowEdit: boolean
-    services_overview: any[]
-    oitc_agent_services_overview: any[]
-    external_services_overview: any[]
+    services_overview: ServicesOverview
+    external_services_overview: ServicesOverview
+    oitc_agent_services_overview: ServicesOverview
     progress: ImportedhostProgress
+}
+
+export interface ServicesOverview {
+    new: SelectKeyValue[]
+    to_delete: ServiceObject[]
+    not_deletable: ServiceObject[]
 }
 
 export interface ImportedService {
