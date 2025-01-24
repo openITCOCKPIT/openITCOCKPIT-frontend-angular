@@ -31,7 +31,7 @@ eintragen
 ```
 # Proxy for /a/ Angular frontend
 location ^~ /a/ {
-    proxy_pass http://127.0.0.1:4200/a/;
+    proxy_pass http://localhost:4200/a/;
 
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;

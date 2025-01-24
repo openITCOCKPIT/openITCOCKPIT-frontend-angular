@@ -11,6 +11,7 @@ export interface JiraSettingsGetResponse {
 export interface JiraSettingsPost {
     id?: number,
     jira_url: string
+    username: string | null
     api_key: string
     jira_type: JiraType
     ignore_ssl_certificate: boolean
@@ -37,6 +38,7 @@ export interface JiraProject {
 
 export interface LoadJiraProjectParams {
     jira_url: string
+    username: string | null
     api_key: string
     jira_type: JiraType
     ignore_ssl_certificate: boolean

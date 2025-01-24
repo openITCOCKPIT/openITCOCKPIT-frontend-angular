@@ -109,6 +109,22 @@
                     </div>
                 </div>
 
+                <div class="mb-3" *ngIf="post.jira_type === JiraType.Cloud">
+                    <label cLabel for="api_key">
+                        {{ t('Jira Username / E-Mail address') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           name="username"
+                           id="username"
+                           [(ngModel)]="post.username"
+                           oitcFormError [errors]="errors" errorField="username"/>
+                    <oitc-form-feedback [errors]="errors" errorField="username"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Jira username') }}
+                    </div>
+                </div>
+
                 <div class="mb-3">
                     <label cLabel for="api_key">
                         {{ t('API Token / Personal Access Tokens') }}

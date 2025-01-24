@@ -126,6 +126,7 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
                         // Also load project details from Jira
                         const params: LoadJiraProjectParams = {
                             jira_url: this.post.jira_url,
+                            username: this.post.username,
                             api_key: this.post.api_key,
                             jira_type: this.post.jira_type,
                             ignore_ssl_certificate: this.post.ignore_ssl_certificate,
@@ -173,6 +174,7 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
 
         const params: LoadJiraProjectParams = {
             jira_url: this.post.jira_url,
+            username: this.post.username,
             api_key: this.post.api_key,
             jira_type: this.post.jira_type,
             ignore_ssl_certificate: this.post.ignore_ssl_certificate,
@@ -242,6 +244,7 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
             if (this.post.jira_projects.length > 0) {
                 const params: LoadJiraProjectParams = {
                     jira_url: this.post.jira_url,
+                    username: this.post.username,
                     api_key: this.post.api_key,
                     jira_type: this.post.jira_type,
                     ignore_ssl_certificate: this.post.ignore_ssl_certificate,
@@ -252,7 +255,6 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
                     this.projectDetails[this.post.jira_projects[i].project_key] = {
                         issueTypes: []
                     };
-
 
                     this.subscriptions.add(
                         this.JiraSettingsService.loadProjectDetails(params, this.post.jira_projects[i].project_key).subscribe((result): void => {
@@ -406,4 +408,6 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
 
         return null;
     }
+
+    protected readonly JiraType = JiraType;
 }
