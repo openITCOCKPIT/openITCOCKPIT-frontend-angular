@@ -1,6 +1,6 @@
-<div #mapCanvasContainer class="map-canvas"
-     [ngClass]="getHelplinesClass()">
-    <img [src]="'/map_module/img/backgrounds/' + background()" [ngClass]="{'bg-edit-mode': !isViewMode()}"
+<div #mapCanvasContainer class="map-canvas">
+    <div id="mapContent" *ngIf="this.helplines().enabled || !this.isViewMode()" [ngClass]="getHelplinesClass()"></div>
+    <img [src]="'/map_module/img/backgrounds/' + background()"
          *ngIf="background()"/>
     <ng-content></ng-content>
 </div>
