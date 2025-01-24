@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     getDefaultPrometheusQueryIndexParams,
+    LoadCurrentValueByMetricRoot,
     LoadServicetemplates,
     LoadValueByMetricRoot,
     PrometheusQueryIndexParams,
     PrometheusQueryIndexRoot,
-    PrometheusQueryIndexTargetDatum
+    PrometheusQueryIndexTargetDatum,
+    Ramsch
 } from '../prometheus-query.interface';
 import { Subscription } from 'rxjs';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
@@ -131,6 +133,8 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected thresholdType: string = 'scalar';
+    protected query: string = ' homeassistant_sensor_temperature_celsius { domain="sensor", entity="sensor.wc_thermometer_temperature", friendly_name="WC:Thermometer Temperature", instance="prometheus", job="HomeAssistant_exporter_5", service="homeassistant", uuid="cb27ec71-4c97-47fc-a94f-6853a35fc3f7" } ';
+    protected executeResult: string = '';
     protected intervalWarn: string = '1m';
     protected intervalCrit: string = '2m';
     protected errors: GenericValidationError = {} as GenericValidationError;
@@ -141,7 +145,7 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     protected hosts: SelectKeyValue[] = [];
     protected params: PrometheusQueryIndexParams = getDefaultPrometheusQueryIndexParams();
     protected timezone!: TimezoneObject;
-    protected metrics: { [key: string]: LoadValueByMetricRoot } = {};
+    protected metrics: { [key: string]: LoadCurrentValueByMetricRoot } = {};
     protected AutocompleteItems: AutocompleteItem[] = [
         {description: 'host', value: 'host'},
         {description: 'service', value: 'service'},
@@ -231,14 +235,20 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     }
 
     protected execute(): void {
+        this.subscriptions.add(this.PrometheusQueryService.loadValueByMetric(this.index.host.uuid, this.query)
+            .subscribe((result: LoadValueByMetricRoot) => {
+                let a: Ramsch = result.metricValue.data.result[0] as Ramsch;
+                this.executeResult = a.value[1];
 
+                this.cdr.markForCheck();
+            }));
     }
 
 
     protected onMetricsChange(): void {
         this.selectedMetrics.forEach(metric => {
-            this.subscriptions.add(this.PrometheusQueryService.loadValueByMetric(this.index.host.uuid, metric)
-                .subscribe((result: LoadValueByMetricRoot) => {
+            this.subscriptions.add(this.PrometheusQueryService.loadCurrentValueByMetric(this.index.host.uuid, metric)
+                .subscribe((result: LoadCurrentValueByMetricRoot) => {
                     this.metrics[metric] = result;
                     console.warn(this.metrics);
 

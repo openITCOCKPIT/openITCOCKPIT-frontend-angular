@@ -4,12 +4,12 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import {
     LoadServicetemplates,
-    LoadValueByMetricRoot,
+    LoadCurrentValueByMetricRoot,
     PrometheusPerformanceDataParams,
     PrometheusPerformanceDataRoot,
     PrometheusQueryApiResult,
     PrometheusQueryIndexParams,
-    PrometheusQueryIndexRoot
+    PrometheusQueryIndexRoot, LoadValueByMetricRoot
 } from './prometheus-query.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
@@ -70,8 +70,21 @@ export class PrometheusQueryService {
         )
     }
 
+    public loadCurrentValueByMetric(hostUuid: string, metric: string): Observable<LoadCurrentValueByMetricRoot> {
+        return this.http.get<LoadCurrentValueByMetricRoot>(`${this.proxyPath}/prometheus_module/PrometheusQuery/loadCurrentValueByMetric.json?angular=true`, {
+            params: {
+                metric: metric,
+                hostUuid: hostUuid
+            }
+        }).pipe(
+            map((data: LoadCurrentValueByMetricRoot) => {
+                return data;
+            })
+        )
+    }
+
     public loadValueByMetric(hostUuid: string, metric: string): Observable<LoadValueByMetricRoot> {
-        return this.http.get<LoadValueByMetricRoot>(`${this.proxyPath}/prometheus_module/PrometheusQuery/loadCurrentValueByMetric.json?angular=true`, {
+        return this.http.get<LoadValueByMetricRoot>(`${this.proxyPath}/prometheus_module/PrometheusQuery/loadValueByMetric.json?angular=true`, {
             params: {
                 metric: metric,
                 hostUuid: hostUuid

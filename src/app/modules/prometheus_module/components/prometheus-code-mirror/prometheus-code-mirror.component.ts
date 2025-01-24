@@ -53,6 +53,7 @@ export class PrometheusCodeMirrorComponent implements AfterViewInit, OnDestroy {
         }));
     }
 
+
     // border focus style
     // only this way is possible, because codemirror overwrites the set css classes
     private borderFocusStyle = EditorView.theme({
@@ -72,7 +73,9 @@ export class PrometheusCodeMirrorComponent implements AfterViewInit, OnDestroy {
         keymap.of([...defaultKeymap])
     ];
 
+    //Macros are overwriting highlightPatterns and autocompleteWords from user
     @Input({transform: numberAttribute}) rows: number = 6;
+
 
 
     //Macros are overwriting highlightPatterns and autocompleteWords from user
@@ -85,17 +88,14 @@ export class PrometheusCodeMirrorComponent implements AfterViewInit, OnDestroy {
             if (this.textareaModel !== undefined && this.textareaModel !== null && this.textareaModel.valueChanges !== undefined && this.textareaModel.valueChanges !== null) {
                 this.subscriptions.add(
                     this.textareaModel.valueChanges.subscribe(newValue => {
+                        console.warn(newValue);
                         // update codemirror if the value of the textarea changes
-                        if (newValue !== this.editor.state.doc.toString()) {
-                            this.updateCodemirrorExtension(CodeMirrorUpdateType.MACROS);
-                        }
+                        this.updateCodemirrorExtension(CodeMirrorUpdateType.MACROS);
                     })
                 );
             }
 
             let updateValueChangeCodemirrorListener = this.setUpdateValueChangeCodemirrorListener();
-
-            //  this.autocompleteExtension = this.createAutoCompleteExtension(this._autocompleteWords);
 
 
             if (this.theme === 'dark') {
@@ -106,7 +106,9 @@ export class PrometheusCodeMirrorComponent implements AfterViewInit, OnDestroy {
                 doc: textarea.value,
                 extensions: [
                     this.baseExtensions,
-                    promQL.asExtension(),
+                    updateValueChangeCodemirrorListener,
+                    this.customHighlightExtension,
+                    this.autocompleteExtension
                 ],
             });
 
@@ -127,42 +129,9 @@ export class PrometheusCodeMirrorComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-
-    // create autocompletion based on the given list
-    private createAutoCompleteExtension(autocompleteWords: AutocompleteItem[]) {
-        const completions: Completion[] = autocompleteWords.map((item) => ({
-            label: item.value,
-            detail: item.description,
-            type: 'variable',
-        }));
-        return autocompletion({
-            override: [completeFromList(completions)],
-        });
-    }
-
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
-
-    // sets the listener that updates changes in the codemirror with the textarea
-    private setUpdateValueChangeCodemirrorListener() {
-        const textarea = this.containerRef.nativeElement.querySelector('textarea');
-
-        let updateValueChangeCodemirrorListener;
-
-        if (textarea) {
-            // listener that updates changes in the codemirror with the textarea
-            updateValueChangeCodemirrorListener = EditorView.updateListener.of((update) => {
-                if (update.docChanged) {
-                    textarea.value = this.editor.state.doc.toString();
-                    textarea.dispatchEvent(new Event('input'));
-                }
-            });
-
-        }
-        return updateValueChangeCodemirrorListener;
-    }
-
 
     // update the codemirror extension based on the given value
     private updateCodemirrorExtension(updateType: string) {
@@ -188,6 +157,42 @@ export class PrometheusCodeMirrorComponent implements AfterViewInit, OnDestroy {
             });
         }
     }
+
+    // sets the listener that updates changes in the codemirror with the textarea
+    private setUpdateValueChangeCodemirrorListener() {
+        const textarea = this.containerRef.nativeElement.querySelector('textarea');
+
+        let updateValueChangeCodemirrorListener;
+
+        if (textarea) {
+            // listener that updates changes in the codemirror with the textarea
+            updateValueChangeCodemirrorListener = EditorView.updateListener.of((update) => {
+                if (update.docChanged) {
+                    textarea.value = this.editor.state.doc.toString();
+                    textarea.dispatchEvent(new Event('input'));
+                }
+            });
+
+        }
+
+        return updateValueChangeCodemirrorListener;
+    }
+
+    // create autocompletion based on the given list
+    private createAutoCompleteExtension(autocompleteWords: AutocompleteItem[]) {
+        const completions: Completion[] = autocompleteWords.map((item) => ({
+            label: item.value,
+            detail: item.description,
+            type: 'variable',
+        }));
+        return autocompletion({
+            override: [completeFromList(completions)],
+        });
+    }
+
+    // creates highlighting based on the given list
+
+
 
 
 }

@@ -81,8 +81,33 @@ export interface LoadServicetemplates {
 
 // LOAD VALUE BY METRIC
 export interface LoadValueByMetricRoot {
-    metricDetails: {
+    metricValue: {
         status: string
+        data: {
+            resultType: string
+            result: Ramsch[]
+        }
+    }
+}
+
+export interface Ramsch {
+    metric: {
+        __name__: string
+        domain: string
+        entity: string
+        friendly_name: string
+        instance: string
+        job: string
+        service: string
+        uuid: string
+    }
+    value: [number, string]
+}
+
+// LOAD CURRENT VALUE BY METRIC
+export interface LoadCurrentValueByMetricRoot {
+    metricDetails: {
+        // status: string
         data: {
             resultType: string
             result: {
@@ -100,7 +125,6 @@ export interface LoadValueByMetricRoot {
             }[]
         }
     }
-    _csrfToken: any
 }
 
 

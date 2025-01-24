@@ -144,26 +144,29 @@
                 </c-col>
             </c-row>
 
+            <oitc-required-icon/>
             <c-row>
                 <oitc-prometheus-code-mirror>
-                        <textarea cFormControl id="commandLine"
-                                  name="command_line"
-                                  oitcFormError [errors]="errors" errorField="command_line"
+                        <textarea cFormControl id="query"
+                                  name="query"
+                                  [(ngModel)]="query"
+                                  oitcFormError [errors]="errors" errorField="query"
                         ></textarea>
                 </oitc-prometheus-code-mirror>
             </c-row>
-            PromQL query
 
+            <button (click)="execute()">
+                {{ t('Execute') }}
+            </button>
 
-            <oitc-required-icon/>
 
             <div class="col col-9 font-md text-info">
-                {{ 'Query result:' }}
-                <span ng-show="currentServiceStringValue" class="ng-binding ng-hide">
-
+                {{ t('Query result:') }}
+                <span *ngIf="executeResult" class="ng-binding ng-hide">
+                    {{ executeResult }}
                 </span>
-                <span class="italic" ng-show="currentServiceStringValue === null">
-                    no data
+                <span class="italic" *ngIf="! executeResult">
+                    {{ t('no data') }}
                 </span>
             </div>
 
