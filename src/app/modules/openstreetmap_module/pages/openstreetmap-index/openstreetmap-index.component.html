@@ -1,0 +1,235 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('OpenStreetMap Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['OpenstreetmapModule', 'openstreetmap', 'index']"
+                   [routerLink]="['/', 'openstreetmap_module', 'openstreetmap', 'index']">
+                    <fa-icon [icon]="['fas', 'map']"></fa-icon>
+                    {{ t('OpenStreetMap') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                {{ t('Index') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('OpenStreetMap') }}
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button  cButton class="ripple" color="default" size="xs" (click)="refresh()">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="problemsOnly()" cButton class="ripple" color="danger" size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('Unhandled only') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button  (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" lg="4">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Show locations with status') }}
+                                </h5>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="filter.isOk"
+                                        id="filter.isOk"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [trueValue]=1
+                                        [falseValue]=0
+                                        [(ngModel)]="settingsFilter.filter.up_ok"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="filter.isOk">{{ t('Up / Ok') }}</label>
+                                </c-form-check>
+
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="filter.isWarning"
+                                        id="filter.isWarning"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [trueValue]=2
+                                        [falseValue]=0
+                                        [(ngModel)]="settingsFilter.filter.warning"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="filter.isWarning">{{ t('Warning') }}</label>
+                                </c-form-check>
+
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="filter.isCrit"
+                                        id="filter.isCrit"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [trueValue]=4
+                                        [falseValue]=0
+                                        [(ngModel)]="settingsFilter.filter.down_critical"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="filter.isCrit">{{ t('Down / Critical') }}</label>
+                                </c-form-check>
+
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="filter.isUnr"
+                                        id="filter.isUnr"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [trueValue]=8
+                                        [falseValue]=0
+                                        [(ngModel)]="settingsFilter.filter.unreachable_unknown"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="filter.isUnr">{{ t('Unreachable / Unknown') }}</label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                        <c-col [xs]="12" [lg]="4">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Empty or not monitored locations') }}
+                                </h5>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="filter.hEmpty"
+                                        id="filter.hEmpty"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [trueValue]=1
+                                        [falseValue]=0
+                                        [(ngModel)]="settingsFilter.hide_empty_locations"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="filter.hEmpty">{{ t('Hide empty locations') }}</label>
+                                </c-form-check><c-form-check>
+                                <input
+                                    (debouncedValue)="onFilterChange($event)"
+                                    cFormCheckInput
+                                    class="checkbox-lg checkbox-primary"
+                                    name="filter.hNML"
+                                    id="filter.hNML"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    oitcDebounce
+                                    [trueValue]=1
+                                    [falseValue]=0
+                                    [(ngModel)]="settingsFilter.hide_not_monitored_locations"/>
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="filter.hNML">{{ t('Hide not monitored locations') }}</label>
+                            </c-form-check>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2"
+                           *ngIf="mapData && mapData.emptyLocations.length > 0 && settingsFilter.hide_empty_locations">
+                        <c-col [lg]="2">
+                            <fa-icon [icon]="['fas', 'building']"></fa-icon>
+                            {{ t('Empty Locations') }}
+                        </c-col>
+                        <c-col>
+                            <span *ngFor="let location of mapData.emptyLocations; let isLast=last">
+                                @if (this.PermissionsService.hasPermissionObservable(['locations', 'edit'])) {
+                                    <a [routerLink]="['/', 'locations', 'edit', location.id]">
+                                        {{ location.container.name }}
+                                    </a>
+                                    <span *ngIf="!isLast">, &nbsp;</span>
+                                } @else {
+                                    {{ location.container.name }}
+                                    <span *ngIf="!isLast">, &nbsp;</span>
+                                }
+                            </span>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+            <div #lmap id="lmap" class="d-flex" style="height: 80vh;" (onResize)="handleResize($event)"></div>
+            <div id="legend">
+                <div id="legend-inner">
+                    <div class="gradient">
+                        <div class="limit"></div>
+                    </div>
+                    <div class="labels">
+                        <div class="label" style="bottom: 99%;">
+                            Unreachable | Unknown'
+                        </div>
+                        <div class="label" style="bottom: 75%;">
+                            Down | Critical
+                        </div>
+                        <div class="label" style="bottom: 50%;">
+                            Warning
+                        </div>
+                        <div class="label" style="bottom: 25%;">
+                            Up | Ok
+                        </div>
+                        <div class="label" style="bottom: 0%;">
+                            Not monitored
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </c-card-body>
+    </c-card>
+</ng-container>
