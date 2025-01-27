@@ -197,9 +197,11 @@
                                         id="filter.imported"
                                         class="checkbox-lg checkbox-primary"
                                         type="checkbox"
-                                        trueFalseValue
                                         oitcDebounce
-                                        [(ngModel)]="params['filter[imported]']"/>
+                                        [trueValue]="1"
+                                        [falseValue]="0"
+                                        trueFalseValue
+                                        [(ngModel)]="imported"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.imported">
                                         <c-badge color="info">
@@ -215,9 +217,11 @@
                                         id="filter.disabled"
                                         class="checkbox-lg checkbox-warning"
                                         type="checkbox"
-                                        trueFalseValue
                                         oitcDebounce
-                                        [(ngModel)]="params['filter[disabled]']"/>
+                                        [trueValue]="1"
+                                        [falseValue]="0"
+                                        trueFalseValue
+                                        [(ngModel)]="disabled"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.disabled">
                                         <c-badge color="warning">
@@ -234,9 +238,11 @@
                                         id="filter.not_imported"
                                         class="checkbox-lg checkbox-success"
                                         type="checkbox"
-                                        trueFalseValue
                                         oitcDebounce
-                                        [(ngModel)]="params['filter[not_imported]']"/>
+                                        [trueValue]="1"
+                                        [falseValue]="0"
+                                        trueFalseValue
+                                        [(ngModel)]="not_imported"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.not_imported">
                                         <c-badge color="success">
@@ -259,9 +265,11 @@
                                         id="filter.ready_for_import"
                                         class="checkbox-lg checkbox-success"
                                         type="checkbox"
-                                        trueFalseValue
                                         oitcDebounce
-                                        [(ngModel)]="params['filter[ready_for_import]']"/>
+                                        [trueValue]="1"
+                                        [falseValue]="0"
+                                        trueFalseValue
+                                        [(ngModel)]="ready_for_import"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.ready_for_import">
                                         <c-badge color="success">
@@ -277,9 +285,11 @@
                                         id="filter.not_ready_for_import"
                                         class="checkbox-lg checkbox-danger"
                                         type="checkbox"
-                                        trueFalseValue
                                         oitcDebounce
-                                        [(ngModel)]="params['filter[not_ready_for_import]']"/>
+                                        [trueValue]="1"
+                                        [falseValue]="0"
+                                        trueFalseValue
+                                        [(ngModel)]="not_ready_for_import"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.not_ready_for_import">
                                         <c-badge color="danger">
@@ -303,9 +313,10 @@
                                         class="checkbox-lg checkbox-primary"
                                         type="checkbox"
                                         [trueValue]="ImportedHostFlagsEnum.FLAG_MARKED_CHANGED"
+                                        [falseValue]="ImportedHostFlagsEnum.FLAG_BLANK"
                                         trueFalseValue
                                         oitcDebounce
-                                        [(ngModel)]="params['filter[ImportedHosts.flags]']"/>
+                                        [(ngModel)]="marked_hosts_with_changes"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="marked_hosts_with_changes">
                                         {{ t('Imported hosts with changes') }}
@@ -323,9 +334,10 @@
                                         class="checkbox-lg checkbox-danger"
                                         type="checkbox"
                                         [trueValue]="ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE"
+                                        [falseValue]="ImportedHostFlagsEnum.FLAG_BLANK"
                                         trueFalseValue
                                         oitcDebounce
-                                        [(ngModel)]="params['filter[ImportedHosts.flags]']"/>
+                                        [(ngModel)]="marked_for_disabled"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="marked_for_disable">
                                         {{ t('Marked for disable') }}
@@ -343,9 +355,10 @@
                                         class="checkbox-lg checkbox-success"
                                         type="checkbox"
                                         [trueValue]="ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE"
+                                        [falseValue]="ImportedHostFlagsEnum.FLAG_BLANK"
                                         trueFalseValue
                                         oitcDebounce
-                                        [(ngModel)]="params['filter[ImportedHosts.flags]']"/>
+                                        [(ngModel)]="marked_for_re_enable"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="marked_for_re_enable">
                                         {{ t('Marked for re-enable') }}

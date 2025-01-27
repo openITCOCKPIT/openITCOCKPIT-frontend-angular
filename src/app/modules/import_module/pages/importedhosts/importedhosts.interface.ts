@@ -213,12 +213,11 @@ export interface ImportedhostsIndexParams {
     'filter[ImportedHosts.address]': string
     'filter[ImportedHosts.description]': string
     'filter[ImportedHosts.importer_id][]': []
-    'filter[ImportedHosts.flags]': string | number
-    'filter[imported]': number | string | null
-    'filter[not_imported]': string
-    'filter[ready_for_import]': string
-    'filter[not_ready_for_import]': string
-    'filter[disabled]': string
+    'filter[ImportedHosts.flags]': number | string
+    'filter[imported]': boolean | string
+    'filter[ready_for_import]': boolean | string
+    'filter[not_ready_for_import]': boolean | string
+    'filter[disabled]': boolean | string
 }
 
 export function getDefaultImportedHostsIndexParams(): ImportedhostsIndexParams {
@@ -234,10 +233,9 @@ export function getDefaultImportedHostsIndexParams(): ImportedhostsIndexParams {
         'filter[ImportedHosts.description]': '',
         'filter[ImportedHosts.importer_id][]': [],
         'filter[ImportedHosts.flags]': '',
-        'filter[imported]': '',
-        'filter[not_imported]': '',
-        'filter[ready_for_import]': '',
-        'filter[not_ready_for_import]': '',
-        'filter[disabled]': ''
+        'filter[imported]': true,
+        'filter[disabled]': false,
+        'filter[ready_for_import]': true,
+        'filter[not_ready_for_import]': true
     }
 }

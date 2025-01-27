@@ -56,7 +56,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ImportITopDataComponent } from '../../../components/import-itop-data/import-itop-data.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgClass, NgForOf, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -152,6 +152,17 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
     protected readonly ImportedHostFlagsEnum = ImportedHostFlagsEnum;
 
+    public imported = 1;
+    public disabled = 0;
+    public not_imported = 1;
+
+    public ready_for_import = 1;
+    public not_ready_for_import = 1;
+
+    public marked_for_disabled = 0;
+    public marked_hosts_with_changes = 0;
+    public marked_for_re_enable = 0;
+
     constructor() {
     }
 
@@ -170,17 +181,33 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     public load() {
         this.SelectionServiceService.deselectAll();
-        let imported = null;
+        let imported: string | boolean = '';
+        let ready_for_import: string | boolean = '';
+        let disabled: string | boolean = '';
+        let flags: number | string = '';
 
-        const importedFilter = this.params['filter[imported]'] ? 1 : 0;
-        const notImportedFilter = this.params['filter[not_imported]'] ? 1 : 0;
-
-        if (importedFilter ^ notImportedFilter) {
-            imported = importedFilter === 1;
-            this.params['filter[imported]'] = imported ? 'true' : 'false';
-        } else {
-            this.params['filter[imported]'] = imported;
+        // only if not ALL "Already synchronized" filter are selected or deselected (XNOR)
+        if (!(this.imported === this.not_imported &&
+            this.not_imported === this.disabled)) {
+            disabled = this.disabled === 1;
+            if ((this.imported & this.disabled) ^ this.not_imported) {
+                imported = this.imported === 1;
+            }
         }
+
+        if (this.ready_for_import ^ this.not_ready_for_import) {
+            ready_for_import = this.ready_for_import === 1;
+        }
+
+        if (this.marked_hosts_with_changes ^ this.marked_for_disabled
+            ^ this.marked_for_re_enable) {
+            flags = this.marked_hosts_with_changes ^ this.marked_for_disabled ^ this.marked_for_re_enable;
+        }
+
+        this.params['filter[imported]'] = imported;
+        this.params['filter[ready_for_import]'] = ready_for_import;
+        this.params['filter[disabled]'] = disabled;
+        this.params['filter[ImportedHosts.flags]'] = flags;
 
         this.subscriptions.add(this.ImportedhostsService.getIndex(this.params)
             .subscribe((result) => {
@@ -197,6 +224,16 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter() {
+        this.imported = 1;
+        this.disabled = 0;
+        this.not_imported = 1;
+
+        this.ready_for_import = 1;
+        this.not_ready_for_import = 1;
+
+        this.marked_for_disabled = 0;
+        this.marked_hosts_with_changes = 0;
+        this.marked_for_re_enable = 0;
         this.params = getDefaultImportedHostsIndexParams();
         this.load();
     }
