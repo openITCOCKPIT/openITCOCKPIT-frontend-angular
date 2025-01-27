@@ -220,6 +220,7 @@
                         <label cLabel for="ValidateService.warning_min" class="text-warning">
                             {{ t('Warning') }}
                             <span [hidden]="ValidateService.threshold_type === 'scalar'">{{ t('min') }}</span>
+                            <oitc-required-icon/>
                         </label>
                         <input cFormControl
                                id="ValidateService.warning_min"
@@ -296,6 +297,7 @@
                         <label cLabel for="ValidateService.critical_min" class="text-danger">
                             {{ t('Critical') }}
                             <span [hidden]="ValidateService.threshold_type === 'scalar'">{{ t('min') }}</span>
+                            <oitc-required-icon/>
                         </label>
                         <input cFormControl
                                id="ValidateService.critical_min"
@@ -379,7 +381,6 @@
             <div class="mb-3">
                 <label cLabel for="ValidateService.unit">
                     {{ t('Metric unit') }}
-                    <oitc-required-icon/>
                 </label>
                 <input cFormControl
                        id="ValidateService.unit"
