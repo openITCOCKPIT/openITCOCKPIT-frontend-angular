@@ -1,13 +1,11 @@
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, ViewChild } from '@angular/core';
-
-import { NgIf, NgFor, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import {
     ColComponent,
     ProgressBarComponent,
     ProgressComponent,
     RowComponent,
-    TableDirective,
     ToastBodyComponent,
     ToastComponent,
     ToasterComponent,
@@ -18,41 +16,36 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { SkeletonModule } from 'primeng/skeleton';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
-import { HoststatusIconComponent } from '../../../../../pages/hosts/hoststatus-icon/hoststatus-icon.component';
-import {
-    ServicestatusIconComponent
-} from '../../../../../components/services/servicestatus-icon/servicestatus-icon.component';
-import { TrustAsHtmlPipe } from '../../../../../pipes/trust-as-html.pipe';
-import { ToasterLoaderComponent } from '../../../../../layouts/primeng/loading/toaster-loader/toaster-loader.component';
-import {OpenstreetmapAcls} from '../../openstreetmap.interface';
+import { OpenstreetmapAcls } from '../../openstreetmap.interface';
 import { OpenstreetmapToasterService } from './openstreetmap-toaster.service';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { PermissionsService } from '../../../../../permissions/permissions.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'oitc-openstreetmap-toaster',
-  imports: [
-      NgIf,
-      NgFor,
-      ProgressBarComponent,
-      ProgressComponent,
-      ToastBodyComponent,
-      ToastComponent,
-      ToastHeaderComponent,
-      ToasterComponent,
-      FaIconComponent,
-      TranslocoDirective,
-      SkeletonModule,
-      ToasterLoaderComponent,
-      RowComponent,
-      ColComponent,
-      LabelLinkComponent,
-      HoststatusIconComponent,
-      TitleCasePipe,
-      ServicestatusIconComponent,
-      TrustAsHtmlPipe
-  ],
-  templateUrl: './openstreetmap-toaster.component.html',
-  styleUrl: './openstreetmap-toaster.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'oitc-openstreetmap-toaster',
+    imports: [
+        NgIf,
+        NgFor,
+        ProgressBarComponent,
+        ProgressComponent,
+        ToastBodyComponent,
+        ToastComponent,
+        ToastHeaderComponent,
+        ToasterComponent,
+        FaIconComponent,
+        TranslocoDirective,
+        SkeletonModule,
+        RowComponent,
+        ColComponent,
+        LabelLinkComponent,
+        XsButtonDirective,
+        AsyncPipe,
+        RouterLink
+    ],
+    templateUrl: './openstreetmap-toaster.component.html',
+    styleUrl: './openstreetmap-toaster.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OpenstreetmapToasterComponent {
     public toastVisible: boolean = false;
@@ -63,15 +56,17 @@ export class OpenstreetmapToasterComponent {
     public summary?: any;
     public acls?: any;
 
+    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
+
     private cdr = inject(ChangeDetectorRef);
-    private readonly OpenstreetmapToasterService: OpenstreetmapToasterService= inject(OpenstreetmapToasterService);
+    private readonly OpenstreetmapToasterService: OpenstreetmapToasterService = inject(OpenstreetmapToasterService);
     private subscriptions: Subscription = new Subscription();
 
     constructor() {
         this.subscriptions.add(this.OpenstreetmapToasterService.rights$.subscribe((rights: OpenstreetmapAcls) => {
             this.acls = rights;
             this.cdr.markForCheck();
-           // console.log(rights);
+            // console.log(rights);
         }));
         this.subscriptions.add(this.OpenstreetmapToasterService.containerIds$.subscribe((containerIds: number[]) => {
             this.summary = undefined;

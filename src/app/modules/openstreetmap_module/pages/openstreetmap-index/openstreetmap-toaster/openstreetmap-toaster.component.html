@@ -8,11 +8,12 @@
                  class="align-items-center w-100">
             <div class="w-100" style="width:100%;">
                 <c-toast-header>
-                        <span>
-                            <h4><fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                    <span>
+                        <h4>
+                            <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
                             {{ t('Locations') }}
-                            </h4>
-                        </span>
+                        </h4>
+                    </span>
 
                 </c-toast-header>
                 <c-toast-body class="w-100">
@@ -24,35 +25,39 @@
                                     [route]="'/locations/edit'"
                                     [permissions]="'locations.edit'">
                                     <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                                    {{ summaryState.Location.name}}
+                                    {{ summaryState.Location.name }}
                                 </oitc-label-link>
                             </c-col>
                         </c-row>
                         <div *ngIf="!summaryState.Location.noObjectsInMonitoring">
                             <c-row class="pb-2">
-                            <c-col class="col-4 fs-6">
-                                {{ t('Summary State') }}
-                            </c-col>
-                            <c-col class="co-6" *ngIf="summaryState.HostSummary.total > 0 || summaryState.ServiceSummary.total > 0">
-                                <div  class="btn state-button-small w-100 text-center text-light text-capitalize fs-6 bg-{{ summaryState.CumulatedHumanState}}">
-                                    {{summaryState.CumulatedHumanState}}
-                                </div>
-                            </c-col>
-                            <c-col class="col-6" *ngIf="summaryState.HostSummary.total == 0 && summaryState.ServiceSummary.total == 0">
-                                <div  class="btn state-button-small w-100 text-center txt-light text-capitalize fs-6 bg-primary">
-                                    {{summaryState.CumulatedHumanState}}
-                                </div>
-                            </c-col>
+                                <c-col class="col-4 fs-6">
+                                    {{ t('Summary State') }}
+                                </c-col>
+                                <c-col class="co-6"
+                                       *ngIf="summaryState.HostSummary.total > 0 || summaryState.ServiceSummary.total > 0">
+                                    <div
+                                        class="btn state-button-small w-100 text-center text-light text-capitalize fs-6 bg-{{ summaryState.CumulatedHumanState}}">
+                                        {{ summaryState.CumulatedHumanState }}
+                                    </div>
+                                </c-col>
+                                <c-col class="col-6"
+                                       *ngIf="summaryState.HostSummary.total == 0 && summaryState.ServiceSummary.total == 0">
+                                    <div
+                                        class="btn state-button-small w-100 text-center txt-light text-capitalize fs-6 bg-primary">
+                                        {{ summaryState.CumulatedHumanState }}
+                                    </div>
+                                </c-col>
                             </c-row>
                             <c-row class="pb-2">
                                 <div class="col-4 fs-6">
                                     {{ t('Summary output') }}
                                 </div>
                                 <div class="col-4 fs-6">
-                                    {{ t('Hosts: ') }}{{summaryState.HostSummary.total}}
+                                    {{ t('Hosts: ') }}{{ summaryState.HostSummary.total }}
                                 </div>
                                 <div class="col-4 fs-6">
-                                    {{ t('Services: ') }}{{summaryState.ServiceSummary.total}}
+                                    {{ t('Services: ') }}{{ summaryState.ServiceSummary.total }}
                                 </div>
                             </c-row>
                             <c-row class="pb-2">
@@ -61,23 +66,45 @@
                                 </div>
                                 <div class="col-8">
                                     <div class="btn-group w-100">
-                                        <button cButton color="primary" class="ripple">
-                                        <oitc-label-link
-                                            [queryParams]="{'filter.Hosts.id': summaryState.HostIdsGroupByState[0]}"
-                                            [route]="'/hosts/index'"
-                                            [permissions]="'hosts.index'">
-                                            {{summaryState.HostSummary.state[0]}}
-                                        </oitc-label-link>
-                                        </button>
+                                        @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
+                                            <a
+                                                [routerLink]="['/', 'hosts', 'index']"
+                                                [queryParams]="{'filter.Hosts.id': summaryState.HostIdsGroupByState[0]}"
+                                                cButton
+                                                color="success"
+                                                class="ripple">
+                                                {{ summaryState.HostSummary.state[0] }}
+                                            </a>
 
-                                        <a class="btn btn-danger state-button-small font-sm"
-                                           >
-                                            {{summaryState.HostSummary.state[1]}}
-                                        </a>
-                                        <a class="btn btn-secondary state-button-small font-sm"
-                                           >
-                                            {{summaryState.HostSummary.state[2]}}
-                                        </a>
+                                            <a
+                                                [routerLink]="['/', 'hosts', 'index']"
+                                                [queryParams]="{'filter.Hosts.id': summaryState.HostIdsGroupByState[1]}"
+                                                cButton
+                                                color="danger"
+                                                class="ripple">
+                                                {{ summaryState.HostSummary.state[1] }}
+                                            </a>
+
+                                            <a
+                                                [routerLink]="['/', 'hosts', 'index']"
+                                                [queryParams]="{'filter.Hosts.id': summaryState.HostIdsGroupByState[2]}"
+                                                cButton
+                                                color="secondary"
+                                                class="ripple">
+                                                {{ summaryState.HostSummary.state[2] }}
+                                            </a>
+                                        } @else {
+                                            <button cButton color="success">
+                                                {{ summaryState.HostSummary.state[0] }}
+                                            </button>
+                                            <button cButton color="success">
+                                                {{ summaryState.HostSummary.state[1] }}
+                                            </button>
+                                            <button cButton color="success">
+                                                {{ summaryState.HostSummary.state[2] }}
+                                            </button>
+                                        }
+
                                     </div>
                                 </div>
                             </c-row>
@@ -89,19 +116,19 @@
                                     <div class="btn-group w-100">
                                         <a class="btn btn-success state-button-small"
                                         >
-                                            {{summaryState.ServiceSummary.state[0]}}
+                                            {{ summaryState.ServiceSummary.state[0] }}
                                         </a>
                                         <a class="btn btn-warning state-button-small"
                                         >
-                                            {{summaryState.ServiceSummary.state[1]}}
+                                            {{ summaryState.ServiceSummary.state[1] }}
                                         </a>
                                         <a class="btn btn-danger state-button-small"
                                         >
-                                            {{summaryState.ServiceSummary.state[2]}}
+                                            {{ summaryState.ServiceSummary.state[2] }}
                                         </a>
                                         <a class="btn btn-secondary state-button-small"
                                         >
-                                            {{summaryState.ServiceSummary.state[3]}}
+                                            {{ summaryState.ServiceSummary.state[3] }}
                                         </a>
                                     </div>
                                 </div>
@@ -114,7 +141,7 @@
                             </c-col>
                             <c-col class="col-8">
                                 <div class="btn state-button-small w-100 text-center text-white bg-primary fs-6">
-                                <fa-icon class="text-light" [icon]="['fas', 'eye-slash']"></fa-icon>
+                                    <fa-icon class="text-light" [icon]="['fas', 'eye-slash']"></fa-icon>
                                     {{ t('Not in monitoring') }}
                                 </div>
                             </c-col>
@@ -122,9 +149,9 @@
 
                     </div>
                     <div class="pt-2">
-                    <c-progress thin>
-                        <c-progress-bar [value]="toastPercentage"></c-progress-bar>
-                    </c-progress>
+                        <c-progress thin>
+                            <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                        </c-progress>
                     </div>
                 </c-toast-body>
             </div>

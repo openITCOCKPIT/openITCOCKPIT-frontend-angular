@@ -1,13 +1,13 @@
 import {
+    AfterViewInit,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    ElementRef,
     inject,
     OnDestroy,
     OnInit,
     ViewChild,
-    AfterViewInit,
-    ElementRef,
 } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
@@ -16,13 +16,14 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    ContainerComponent, FormDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
+    ContainerComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
+    FormDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
 } from '@coreui/angular';
 import { TrueFalseDirective } from '../../../../directives/true-false.directive';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
@@ -38,24 +39,20 @@ import { Subscription } from 'rxjs';
 import { OpenstreetmapToasterService } from './openstreetmap-toaster/openstreetmap-toaster.service';
 import { OpenstreetmapToasterComponent } from './openstreetmap-toaster/openstreetmap-toaster.component';
 import {
+    FilterTemplate,
     OpenstreetmapAcls,
-    OpenstreetmapSettings,
     OpenstreetmapIndexParams,
     OpenstreetmapIndexRoot,
-    OpenstreetmapSettingsFilter,
-    FilterTemplate
+    OpenstreetmapSettings,
+    OpenstreetmapSettingsFilter
 } from '../openstreetmap.interface';
 import * as L from 'leaflet';
 import './Hexbinlayer.interface';
 import { chain } from 'lodash';
 // @ts-ignore
 import { hexbinLayer } from './HexbinLayer.js';
-import { NgIf, NgFor } from '@angular/common';
-import {
-    EvcServicestatusToasterComponent
-} from '../../../eventcorrelation_module/pages/eventcorrelations/eventcorrelations-view/evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.component';
+import { NgFor, NgIf } from '@angular/common';
 
-;
 
 @Component({
     selector: 'oitc-openstreetmap-index',
@@ -84,8 +81,7 @@ import {
         FormCheckLabelDirective,
         NgxResizeObserverModule,
         NgIf,
-        NgFor,
-        EvcServicestatusToasterComponent,
+        NgFor
     ],
     templateUrl: './openstreetmap-index.component.html',
     styleUrl: './openstreetmap-index.component.css',
@@ -248,7 +244,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         pointData.map((point: any) => {
             containderIds.push(point.o.id);
         });
-       // console.log(containderIds);
+        // console.log(containderIds);
         //console.log(this.acls);
         //this.OpenstreetmapToasterService.setAclsToaster(this.acls);
         this.OpenstreetmapToasterService.setToasterProperties(containderIds, this.acls);
