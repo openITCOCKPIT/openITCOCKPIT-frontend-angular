@@ -4,10 +4,12 @@ import {
     LoadCurrentValueByMetricRoot,
     LoadServicetemplates,
     LoadValueByMetricRoot,
+    PrometheusCreateService,
     PrometheusQueryIndexParams,
     PrometheusQueryIndexRoot,
     PrometheusQueryIndexTargetDatum,
-    Ramsch
+    Ramsch,
+    ValidateService
 } from '../prometheus-query.interface';
 import { Subscription } from 'rxjs';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
@@ -15,9 +17,10 @@ import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../
 import { PrometheusQueryService } from '../prometheus-query.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { GenericValidationError } from '../../../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import {
+    ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -25,6 +28,7 @@ import {
     ColComponent,
     ContainerComponent,
     DropdownDividerDirective,
+    FormCheckInputDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -67,6 +71,7 @@ import { MetadataResponseRoot } from '../prometheus-autocomplete.interface';
 import {
     PrometheusCodeMirrorComponent
 } from '../../../components/prometheus-code-mirror/prometheus-code-mirror.component';
+import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 
 @Component({
     selector: 'oitc-prometheus-query-to-service',
@@ -117,7 +122,10 @@ import {
         FormErrorDirective,
         KeyValuePipe,
         CodeMirrorContainerComponent,
-        PrometheusCodeMirrorComponent
+        PrometheusCodeMirrorComponent,
+        FormCheckInputDirective,
+        ButtonGroupComponent,
+        FormFeedbackComponent
     ],
     templateUrl: './prometheus-query-to-service.component.html',
     styleUrl: './prometheus-query-to-service.component.css',
@@ -132,11 +140,25 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     private readonly route = inject(ActivatedRoute);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
+    protected serviceTemplateId: number = 0;
+    protected createServicesArray: PrometheusCreateService[] = [];
+    protected ValidateService: ValidateService = {
+        longer_as: '1m',
+        name: '',
+        promql: '',
+        unit: '',
+        warning_max: null,
+        critical_max: null,
+        threshold_type: 'scalar',
+        warning_longer_as: '1m',
+        critical_longer_as: '2m',
+        warning_operator: 'automatically',
+        critical_operator: 'automatically',
+    } as ValidateService;
+    protected createAnother: boolean = false;
     protected thresholdType: string = 'scalar';
-    protected query: string = ' homeassistant_sensor_temperature_celsius { domain="sensor", entity="sensor.wc_thermometer_temperature", friendly_name="WC:Thermometer Temperature", instance="prometheus", job="HomeAssistant_exporter_5", service="homeassistant", uuid="cb27ec71-4c97-47fc-a94f-6853a35fc3f7" } ';
+    protected query: string = 'homeassistant_sensor_temperature_celsius{domain="sensor",entity="sensor.bad_thermometer_temperature",instance="prometheus",job="HomeAssistant_exporter_5",service="homeassistant",uuid="cb27ec71-4c97-47fc-a94f-6853a35fc3f7"}';
     protected executeResult: string = '';
-    protected intervalWarn: string = '1m';
-    protected intervalCrit: string = '2m';
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected selectedMetrics: string[] = [];
     protected index: PrometheusQueryIndexRoot = {targets: {data: [] as PrometheusQueryIndexTargetDatum[]}} as PrometheusQueryIndexRoot;
@@ -231,7 +253,6 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
                     this.onMetricsChange();
                 }
             }));
-
     }
 
     protected execute(): void {
@@ -241,6 +262,22 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
                 this.executeResult = a.value[1];
 
                 this.cdr.markForCheck();
+            }));
+    }
+
+    protected createServices(): void {
+
+    }
+
+    protected validateService(): void {
+        this.subscriptions.add(this.PrometheusQueryService.validateService(this.ValidateService)
+            .subscribe((result: GenericResponseWrapper) => {
+                if (!result.success) {
+                    this.notyService.genericError();
+                    this.errors = result.data;
+                    console.debug(this.errors);
+                    this.cdr.markForCheck();
+                }
             }));
     }
 

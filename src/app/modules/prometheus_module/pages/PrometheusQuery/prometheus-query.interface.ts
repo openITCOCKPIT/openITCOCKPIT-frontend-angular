@@ -33,9 +33,9 @@ export interface PrometheusAlertRule {
     unit: string
     threshold_type: string
     warning_min: number
-    warning_max: any
+    warning_max: number | null
     critical_min: number
-    critical_max: any
+    critical_max: number | null
     warning_longer_as: string
     critical_longer_as: string
     warning_operator: string
@@ -194,4 +194,30 @@ export interface Host {
     }[]
 }
 
+// VALIDATE SERVICE
+export interface ValidateServiceRoot {
+    Service: ValidateService
+}
 
+export interface ValidateService extends PrometheusAlertRule {
+    longer_as: string
+    name: string
+    servicetemplate_id: number
+}
+
+
+// CREATE SERVICE
+export interface PrometheusCreateServiceRoot {
+    Service: PrometheusCreateService
+}
+
+export interface PrometheusCreateService {
+    host_id: string
+    name: string
+    prometheus_alert_rule: PrometheusAlertRule2
+    servicetemplate_id: number
+}
+
+export interface PrometheusAlertRule2 extends PrometheusAlertRule {
+    servicetemplate_id: number
+}

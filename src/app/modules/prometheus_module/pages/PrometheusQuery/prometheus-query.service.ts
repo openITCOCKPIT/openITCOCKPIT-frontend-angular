@@ -1,17 +1,21 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import {
-    LoadServicetemplates,
     LoadCurrentValueByMetricRoot,
+    LoadServicetemplates,
+    LoadValueByMetricRoot,
     PrometheusPerformanceDataParams,
     PrometheusPerformanceDataRoot,
     PrometheusQueryApiResult,
     PrometheusQueryIndexParams,
-    PrometheusQueryIndexRoot, LoadValueByMetricRoot
+    PrometheusQueryIndexRoot,
+    ValidateService
 } from './prometheus-query.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { ProfileUser } from '../../../../pages/profile/profile.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -81,6 +85,30 @@ export class PrometheusQueryService {
                 return data;
             })
         )
+    }
+
+    public validateService(ValidateService: ValidateService): Observable<GenericResponseWrapper> {
+        return this.http.post<{
+            user: ProfileUser
+        }>(`${this.proxyPath}/prometheus_module/PrometheusQuery/validateService.json?angular=true`, {
+            Service: ValidateService
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: {}
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
     public loadValueByMetric(hostUuid: string, metric: string): Observable<LoadValueByMetricRoot> {
