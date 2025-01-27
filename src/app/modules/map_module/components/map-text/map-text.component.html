@@ -1,0 +1,8 @@
+<div cdkDrag #container class="map-element-container"
+     [draggable]="isViewMode()"
+     (cdkDragEnded)="onDragEnd($event)"
+     (cdkDragMoved)="onDragMove($event)"
+     cdkDragBoundary=".map-canvas">
+    <span class="textElement" [ngStyle]="{'font-size.px': item()?.font_size}" [innerHTML]="bbhtml | trustAsHtml"></span>
+</div>
+<p-contextMenu [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>

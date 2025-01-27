@@ -26,6 +26,7 @@ import { oracleModuleRoutes } from './modules/oracle_module/oracle_module.routes
 import { sapModuleRoutes } from './modules/sap_module/sap_module.routes';
 import { upsModuleRoutes } from './modules/ups_module/ups_module.routes';
 import { openstreetmapModuleRoutes } from './modules/openstreetmap_module/openstreetmap_modules.routes';
+import { isarFlowModuleRoutes } from './modules/isarflow_module/isarflow_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -73,7 +74,8 @@ const moduleRoutes: Routes = [
     ...hpserverhardwareModuleRoutes,
     ...mapModuleRoutes,
     ...eventcorrelationModuleRoutes,
-    ...openstreetmapModuleRoutes
+    ...openstreetmapModuleRoutes,
+    ...isarFlowModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{

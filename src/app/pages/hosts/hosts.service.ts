@@ -603,6 +603,22 @@ export class HostsService {
             )
     }
 
+    public loadIsarFlowInformation(id: number): Observable<boolean> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{ isarFlowInformationExists: boolean }>(`${proxyPath}/hosts/loadIsarFlowInformation/.json`, {
+                params: {
+                    angular: true,
+                    id: id
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data.isarFlowInformationExists;
+                })
+            )
+    }
+
     public loadSlaInformation(id: number, slaId: number): Observable<false | HostBrowserSlaOverview> {
         const proxyPath = this.proxyPath;
         return this

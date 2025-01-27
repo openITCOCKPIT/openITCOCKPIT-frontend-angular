@@ -68,7 +68,7 @@
                     <input cFormControl id="ExternalMonitoringName" required type="text"
                            name="name"
                            [(ngModel)]="post.name"
-                           oitcFormError errorField="name">
+                           oitcFormError [errors]="errors" errorField="name">
                     <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                 </div>
                 <div class="mb-3">
@@ -77,8 +77,7 @@
                     </label>
                     <input cFormControl id="ExternalMonitoringDescription" required type="text"
                            name="description"
-                           [(ngModel)]="post.description"
-                           oitcFormError errorField="description">
+                           [(ngModel)]="post.description">
                 </div>
                 <div class="mb-3">
                     <label cLabel for="SystemType">

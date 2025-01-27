@@ -1,0 +1,90 @@
+<ng-container *transloco="let t">
+    <c-row *ngIf="isarflowHost">
+
+        <c-card class="mb-3 mt-3">
+            <c-card-header>
+                <div cCardTitle>
+                    <div class="h5 float-start me-2">
+                        {{ t('IsarFlow') }}:
+                        <small class="fw-300">
+                            {{ t('reports') }}
+                        </small>
+                    </div>
+
+                    <oitc-select
+                            name="isarflow_interface"
+                            id="isarflow_interface"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="interfaceId"
+                            [options]="interfacesSelect"
+                            (onChange)="onInterfaceChange()">
+                    </oitc-select>
+                </div>
+
+                <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
+                    <c-nav-item>
+                        <button
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == IsarFlowTabs.TopProtocols}"
+                                (click)="changeTab(IsarFlowTabs.TopProtocols)">
+                            <fa-icon [icon]="['fas', 'list-ul']"></fa-icon>
+                            {{ t('Top Protocol Analysis') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <button
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == IsarFlowTabs.TopSnmpInterfaces}"
+                                (click)="changeTab(IsarFlowTabs.TopSnmpInterfaces)">
+                            <fa-icon [icon]="['fas', 'sitemap']" rotate="270"></fa-icon>
+                            {{ t('SNMP Utilization Analysis') }}
+                        </button>
+                    </c-nav-item>
+
+                    <!-- ITC-3387 IsarFlow Module: Hide IP SLA Analysis Tab (Waiting for implementation requirements) -->
+                    <c-nav-item *ngIf="false">
+                        <button
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == IsarFlowTabs.IpSlaUdpJitterProbes}"
+                                (click)="changeTab(IsarFlowTabs.IpSlaUdpJitterProbes)">
+                            <fa-icon [icon]="['fas', 'list-ul']"></fa-icon>
+                            {{ t('IP SLA Analysis') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+
+                <c-row *ngIf="isarFlowInterfaceInformation">
+                    <c-col [xs]="12">
+                        <h5>{{ isarFlowInterfaceInformation.isarFlowInterfaceInformation.interface_name }}
+
+                            <a cButton size="xs" color="primary" class="ms-2"
+                               [href]="isarFlowInterfaceInformation.urls[selectedTab]"
+                               target="_blank">
+                                <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
+                                {{ t('Open in new tab') }}
+                            </a>
+
+                            <!-- pass a default duration -->
+                            <oitc-isar-flow-timepicker
+                                    class="ms-2"
+                                    [selectedDuration]="duration"
+                                    (change)="onIsarFlowTimeDurationChange($event)"></oitc-isar-flow-timepicker>
+                        </h5>
+                    </c-col>
+
+                    <c-col [xs]="12">
+                        <oitc-iframe [url]="isarFlowInterfaceInformation.urls[selectedTab]"></oitc-iframe>
+                    </c-col>
+
+                </c-row>
+
+
+            </c-card-body>
+        </c-card>
+
+    </c-row>
+
+</ng-container>

@@ -58,7 +58,7 @@
                     {{ slaServiceAndStatusLog.service.servicename }}
                 }
             </span>
-            <span>
+            <span *ngIf="slaServiceAndStatusLog && !isLoading">
                 {{ t('on') }}
                 @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser']) | async) {
                     <a [routerLink]="['/', 'hosts', 'browser', slaServiceAndStatusLog.service.host.id]">{{ slaServiceAndStatusLog.service.host.name }}</a>

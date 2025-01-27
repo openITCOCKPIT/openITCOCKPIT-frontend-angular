@@ -1,0 +1,18 @@
+<div cdkDrag #container class="map-element-container"
+     [draggable]="isViewMode()"
+     (cdkDragEnded)="onDragEnd($event)"
+     (cdkDragMoved)="onDragMove($event)"
+     cdkDragBoundary=".map-canvas">
+    <div class="text-center" *ngIf="allowView">
+        <div
+            [style.height.px]="5"
+            [style.width.px]="width"
+            [style.transform]="'rotate(' + arctan + 'deg)'"
+            [style.z-index]="zIndex"
+            [style.transform-origin]="origin"
+            [ngClass]="background">
+            <span [hidden]="!item()?.show_label">{{ label }}</span>
+        </div>
+    </div>
+</div>
+<p-contextMenu [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>

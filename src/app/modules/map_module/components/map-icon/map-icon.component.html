@@ -1,0 +1,8 @@
+<div cdkDrag #container class="map-element-container"
+     [draggable]="isViewMode()"
+     (cdkDragEnded)="onDragEnd($event)"
+     (cdkDragMoved)="onDragMove($event)"
+     cdkDragBoundary=".map-canvas">
+    <img [src]="'/map_module/img/icons/' + item()?.icon"/>
+</div>
+<p-contextMenu [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>
