@@ -46,9 +46,8 @@ export class ResizableDirective implements AfterViewInit {
         // timeout needed to prevent that height is 0
         setTimeout(() => {
             const rect = this.el.nativeElement.getBoundingClientRect();
-            this.lastWidth = rect.width;
-            this.lastHeight = rect.height;
-        }, 300);
+            this.setLastWidthHeight(rect.width, rect.height);
+        }, 400);
     }
 
     private onMouseUp() {
@@ -67,7 +66,7 @@ export class ResizableDirective implements AfterViewInit {
                 newHeight = newWidth / aspectRatio;
             }
         }
-
+        
         if ((newWidth !== this.lastWidth || newHeight !== this.lastHeight) && (this.lastWidth !== 0 && this.lastHeight !== 0)) {
             this.lastWidth = newWidth;
             this.lastHeight = newHeight;
@@ -76,6 +75,11 @@ export class ResizableDirective implements AfterViewInit {
 
         this.lastWidth = newWidth;
         this.lastHeight = newHeight;
+    }
+
+    public setLastWidthHeight(width: number, height: number) {
+        this.lastWidth = width;
+        this.lastHeight = height;
     }
 
 }

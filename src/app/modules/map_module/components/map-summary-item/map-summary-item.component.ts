@@ -7,7 +7,8 @@ import {
     InputSignal,
     OnDestroy,
     OnInit,
-    Output
+    Output,
+    ViewChild
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
@@ -33,6 +34,7 @@ import { ResizedEvent } from '../map-item-base/map-item-base.interface';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem> implements OnInit, OnDestroy {
+    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
 
     public override item: InputSignal<Mapsummaryitem | undefined> = input<Mapsummaryitem>();
     public refreshInterval = input<number>(0);
@@ -91,6 +93,7 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
                     this.getLabel(result.data);
                 }
                 this.initRefreshTimer();
+                this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
                 this.cdr.markForCheck();
             }));
     };
@@ -220,7 +223,6 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
     }
 
     protected onResizeStop(event: { width: number, height: number }) {
-        console.error('Resized', event);
         this.resizedEvent.emit({
             id: this.id,
             mapId: this.mapId,
