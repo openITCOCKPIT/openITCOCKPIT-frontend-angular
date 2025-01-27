@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, input, InputSignal, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    inject,
+    input,
+    InputSignal,
+    OnDestroy,
+    OnInit,
+    Output
+} from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
@@ -11,11 +21,13 @@ import { MapSummaryItemService } from './map-summary-item.service';
 import { Data, MapSummaryItemRoot } from './map-summary-item.interface';
 import { NgIf } from '@angular/common';
 import { MenuItem } from 'primeng/api';
+import { ResizableDirective } from '../../../../directives/resizable.directive';
+import { ResizedEvent } from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-map-summary-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, NgIf, CdkDragHandle],
+    imports: [CdkDrag, ContextMenuModule, NgIf, CdkDragHandle, ResizableDirective],
     templateUrl: './map-summary-item.component.html',
     styleUrl: './map-summary-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -24,6 +36,8 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
 
     public override item: InputSignal<Mapsummaryitem | undefined> = input<Mapsummaryitem>();
     public refreshInterval = input<number>(0);
+
+    @Output() resizedEvent = new EventEmitter<ResizedEvent>();
 
     private subscriptions: Subscription = new Subscription();
     private readonly MapSummaryItemService = inject(MapSummaryItemService);
@@ -203,6 +217,18 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
                 ]
             }
         ]
+    }
+
+    protected onResizeStop(event: { width: number, height: number }) {
+        console.error('Resized', event);
+        this.resizedEvent.emit({
+            id: this.id,
+            mapId: this.mapId,
+            width: event.width,
+            height: event.height,
+            itemType: this.type
+        });
+        this.cdr.markForCheck();
     }
 
 }

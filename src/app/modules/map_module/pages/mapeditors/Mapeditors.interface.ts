@@ -57,10 +57,10 @@ export interface MaplinePost {
     action: string
 }
 
-export interface Mapgadget {
+export interface Mapgadget extends MapitemBase {
     size_x: number
     size_y: number
-    limit: number
+    limit: any
     gadget: string
     type: string
     object_id: number
@@ -71,6 +71,12 @@ export interface Mapgadget {
     output_type: any
     label_possition: any
 }
+
+export interface MapgadgetPost {
+    Mapgadget: Mapgadget
+    action: string
+}
+
 
 export interface Mapicon extends MapitemBase {
     icon: string

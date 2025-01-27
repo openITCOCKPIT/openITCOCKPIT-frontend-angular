@@ -17,5 +17,5 @@
 
 .resizable {
     resize: both;
-    overflow: auto;
+    overflow: hidden;
 }

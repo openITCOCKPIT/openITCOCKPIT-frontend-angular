@@ -203,6 +203,7 @@
                                                [layers]="layers"
                                                (contextActionEvent)="onContextAction($event)"
                                                (dropItemEvent)="onDropItem($event)"
+                                               (resizedEvent)="onResizeStop($event)"
                                                [hidden]="!summaryItem.display">
                         </oitc-map-summary-item>
                     </oitc-map-canvas>

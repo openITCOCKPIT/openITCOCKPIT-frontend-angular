@@ -42,7 +42,11 @@ import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.co
 import { filter, parseInt } from 'lodash';
 import { Background, Mapeditor, MapRoot, MaxUploadLimit, VisibleLayers } from '../Mapeditors.interface';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
-import { ContextAction, MapitemBaseActionObject } from '../../../components/map-item-base/map-item-base.interface';
+import {
+    ContextAction,
+    MapitemBaseActionObject,
+    ResizedEvent
+} from '../../../components/map-item-base/map-item-base.interface';
 import { MapTextComponent } from '../../../components/map-text/map-text.component';
 import { MapIconComponent } from '../../../components/map-icon/map-icon.component';
 import { MapLineComponent } from '../../../components/map-line/map-line.component';
@@ -161,11 +165,13 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.deleteLine = this.deleteLine.bind(this);
         this.deleteText = this.deleteText.bind(this);
         this.deleteSummaryItem = this.deleteSummaryItem.bind(this);
+        this.deleteGadget = this.deleteGadget.bind(this);
         this.saveItem = this.saveItem.bind(this);
         this.saveIcon = this.saveIcon.bind(this);
         this.saveLine = this.saveLine.bind(this);
         this.saveText = this.saveText.bind(this);
         this.saveSummaryItem = this.saveSummaryItem.bind(this);
+        this.saveGadget = this.saveGadget.bind(this);
     }
 
     public ngOnInit(): void {
@@ -246,7 +252,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     x: x,
                     y: y
                 };
-                //this.saveGadget('dragstop');
+                this.saveGadget('dragstop');
                 break;
 
             case MapItemType.TEXT:
@@ -404,6 +410,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             this.changeLayerFromContextMenu($event, MapItemType.ICON, 'Mapicons', this.saveIcon);
             this.changeLayerFromContextMenu($event, MapItemType.LINE, 'Maplines', this.saveLine);
             this.changeLayerFromContextMenu($event, MapItemType.SUMMARYITEM, 'Mapsummaryitems', this.saveSummaryItem);
+            this.changeLayerFromContextMenu($event, MapItemType.GADGET, 'Mapgadgets', this.saveGadget);
         }
         if (type === 'delete') {
             this.deleteFromContextMenu($event, MapItemType.ITEM, 'Mapitems', this.deleteItem);
@@ -411,6 +418,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             this.deleteFromContextMenu($event, MapItemType.ICON, 'Mapicons', this.deleteIcon);
             this.deleteFromContextMenu($event, MapItemType.LINE, 'Maplines', this.deleteLine);
             this.deleteFromContextMenu($event, MapItemType.SUMMARYITEM, 'Mapsummaryitems', this.deleteSummaryItem);
+            this.deleteFromContextMenu($event, MapItemType.GADGET, 'Mapgadgets', this.deleteGadget);
         }
     }
 
@@ -459,6 +467,48 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     break;
                 }
             }
+        }
+    }
+
+    public onResizeStop(event: ResizedEvent) {
+        const id = event.id;
+        const type = event.itemType;
+        const newWidth = event.width;
+        const newHeight = event.height;
+
+        switch (type) {
+            case 'gadget':
+                this.map.Mapgadgets.forEach(gadget => {
+                    if (gadget.id === id) {
+                        gadget.size_y = newHeight;
+                        gadget.size_x = newWidth;
+                    }
+                });
+                this.currentItem = {id, size_x: newWidth, size_y: newHeight};
+                this.saveGadget('resizestop');
+                this.cdr.markForCheck();
+                break;
+
+            case 'summaryItem':
+                // create new reference to object to trigger change detection
+                this.map.Mapsummaryitems = this.map.Mapsummaryitems.map(summaryItem => {
+                    if (summaryItem.id === id) {
+                        return {
+                            ...summaryItem,
+                            size_y: newHeight,
+                            size_x: newWidth
+                        };
+                    }
+                    return summaryItem;
+                });
+                this.currentItem = {id, size_x: newWidth, size_y: newHeight};
+                this.saveSummaryItem('resizestop');
+                this.cdr.markForCheck();
+                break;
+
+            default:
+                console.log('Unknown map object type');
+                this.notyService.genericError();
         }
     }
 
@@ -840,6 +890,119 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.addNewObject = true;
         this.action = 'gadget';
         this.cdr.markForCheck();
+    };
+
+    public editGadget(gadgetItem: any) {
+        this.action = 'gadget';
+        this.currentItem = JSON.parse(JSON.stringify(gadgetItem));    //real clone
+        //$('#addEditMapGadgetModal').modal('show');
+    };
+
+    public saveGadget(action: string) {
+        if (typeof action === 'undefined') {
+            action = 'add_or_edit';
+        }
+
+        this.currentItem.map_id = this.mapId.toString();
+
+        this.subscriptions.add(this.MapeditorsService.saveGadget({
+            'Mapgadget': this.currentItem,
+            'action': action
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                if (action === 'resizestop') {
+                    this.notyService.genericSuccess(msg, title);
+                    //Nothing needs to be updated
+                    return;
+                }
+
+                //Update possition in current scope json data
+                if (this.currentItem.hasOwnProperty('id')) {
+                    for (let i in this.map.Mapgadgets) {
+                        if (this.map.Mapgadgets[i].id == this.currentItem.id) {
+
+                            if (this.currentItem.object_id) {   // after edit
+                                this.map.Mapgadgets[i] = this.currentItem;
+                            } else {                            // only after (draggable) position change
+                                this.map.Mapgadgets[i].x = this.currentItem.x;
+                                this.map.Mapgadgets[i].y = this.currentItem.y;
+                            }
+
+                            //We are done here
+                            break;
+                        }
+                    }
+                } else {
+                    //New created item
+                    if (typeof this.map.Mapgadgets === "undefined") {
+                        this.map.Mapgadgets = [];
+                    }
+                    this.map.Mapgadgets.push(result.data.Mapgadget.Mapgadget);
+                    //setTimeout(makeDraggable, 250);
+                }
+
+                //$('#addEditMapGadgetModal').modal('hide');
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
+    public deleteGadget() {
+        this.currentItem.map_id = this.mapId;
+
+        this.currentDeletedItem = {
+            id: this.currentItem.id,
+            type: MapItemType.GADGET
+        }
+
+        this.subscriptions.add(this.MapeditorsService.deleteGadget({
+            'Mapgadget': this.currentItem,
+            'action': 'delete'
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                //Remove item from current scope
+                for (let i in this.map.Mapgadgets) {
+                    if (this.map.Mapgadgets[i].id == this.currentItem.id) {
+                        this.map.Mapgadgets.splice(Number(i), 1);
+
+                        //We are done here
+                        break;
+                    }
+                }
+
+                this.notyService.genericSuccess(msg, title);
+                //$('#addEditMapGadgetModal').modal('hide');
+                this.currentItem = {};
+                delete this.currentDeletedItem;
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                delete this.currentDeletedItem;
+                this.errors = errorResponse;
+
+            }
+        }));
     };
 
     public openChangeMapBackgroundModal() {
