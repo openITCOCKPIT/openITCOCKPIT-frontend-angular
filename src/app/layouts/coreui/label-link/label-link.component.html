@@ -9,7 +9,12 @@ https://github.com/angular/angular/issues/22972#issuecomment-407358396
 
 
 <ng-container *ngIf=" objectId() && (hasPermission$|async)">
-    <a [routerLink]="route() + '/' + objectId()">
+    <a [routerLink]="route() + '/' + objectId()" [queryParams]="queryParams()">
+        <ng-container *ngTemplateOutlet="content"></ng-container>
+    </a>
+</ng-container>
+<ng-container *ngIf="!objectId() && (hasPermission$|async)">
+    <a [routerLink]="route()" [queryParams]="queryParams()">
         <ng-container *ngTemplateOutlet="content"></ng-container>
     </a>
 </ng-container>
