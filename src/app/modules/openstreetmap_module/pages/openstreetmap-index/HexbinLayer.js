@@ -28,12 +28,12 @@ L.HexbinLayer = L.SVG.extend({
         //radius : 12,
         opacity: 0.6,
         duration: 200,
-        radius: 25,
-        radiusRange: [10, 25],
+        radius: 25,//12
+        radiusRange:[10, 25],//[4,12]
         colorScaleExtent: [1, undefined],
         radiusScaleExtent: [1, undefined],
         colorDomain: [-1, 0, 1, 2, 3, 4],
-        colorRange: ['#003EF9', '#00C838', '#FFD938', '#E92223', '#808080', '#A128FF'],
+        colorRange: ['#4B49B6', '#00C838', '#FFD938', '#E92223', '#808080', '#A128FF'],
         radiusDomain: null,
         pointerEvents: 'all',
         click: function click(d) {

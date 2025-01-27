@@ -27,9 +27,6 @@ import {
 import { TrueFalseDirective } from '../../../../directives/true-false.directive';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { NgxResizeObserverModule } from 'ngx-resize-observer';
-import * as L from 'leaflet';
-import  './Hexbinlayer.interface';
-import { chain } from 'lodash';
 import { OpenstreetmapService } from '../openstreetmap.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
@@ -38,6 +35,8 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { PermissionsService } from '../../../../permissions/permissions.service';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { OpenstreetmapToasterService } from './openstreetmap-toaster/openstreetmap-toaster.service';
+import { OpenstreetmapToasterComponent } from './openstreetmap-toaster/openstreetmap-toaster.component';
 import {
     OpenstreetmapAcls,
     OpenstreetmapSettings,
@@ -46,9 +45,15 @@ import {
     OpenstreetmapSettingsFilter,
     FilterTemplate
 } from '../openstreetmap.interface';
+import * as L from 'leaflet';
+import './Hexbinlayer.interface';
+import { chain } from 'lodash';
 // @ts-ignore
-import {hexbinLayer} from './HexbinLayer.js';
+import { hexbinLayer } from './HexbinLayer.js';
 import { NgIf, NgFor } from '@angular/common';
+import {
+    EvcServicestatusToasterComponent
+} from '../../../eventcorrelation_module/pages/eventcorrelations/eventcorrelations-view/evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.component';
 
 ;
 
@@ -74,11 +79,13 @@ import { NgIf, NgFor } from '@angular/common';
         TrueFalseDirective,
         DebounceDirective,
         FormCheckComponent,
+        OpenstreetmapToasterComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
         NgxResizeObserverModule,
         NgIf,
         NgFor,
+        EvcServicestatusToasterComponent,
     ],
     templateUrl: './openstreetmap-index.component.html',
     styleUrl: './openstreetmap-index.component.css',
@@ -94,6 +101,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     private cdr = inject(ChangeDetectorRef);
     private readonly OpenstreetmapService = inject(OpenstreetmapService);
     public readonly PermissionsService = inject(PermissionsService);
+    private readonly OpenstreetmapToasterService = inject(OpenstreetmapToasterService);
     private subscriptions: Subscription = new Subscription();
     public hideFilter: boolean = true;
     public stateFilter: number = 0;
@@ -103,7 +111,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
 
     public indexParams: OpenstreetmapIndexParams = {
         'angular': true,
-        'includedLocationId[]':this.includedLocations,
+        'includedLocationId[]': this.includedLocations,
         'OpenstreetmapSetting[hide_empty_locations]': 0,
         'OpenstreetmapSetting[hide_not_monitored_locations]': 0,
         'OpenstreetmapSetting[state_filter]': 0
@@ -128,7 +136,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         hide_not_monitored_locations: null
     }
 
-    private acls?: OpenstreetmapAcls;
+    private acls!: OpenstreetmapAcls;
     public settings!: OpenstreetmapSettings;
     public mapData!: OpenstreetmapIndexRoot;
     public server_url: string | null = null;
@@ -208,7 +216,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     }
 
     public buildLayers(): void {
-        if(!this.server_url) {
+        if (!this.server_url) {
             return;
         }
         L.tileLayer(this.settings.server_url, {
@@ -219,13 +227,13 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         let cells = chain(this.mapData.locations).groupBy(function (location) {
             return location.container.id;
         }).map(function (values) {
-              return {
-                  latitude: Number(values[0].latitude),
-                  longitude: Number(values[0].longitude),
-                  id: values[0].container.id,
-                  name: values[0].container.name,
-                  colorcode: values[0].colorcode
-              };
+            return {
+                latitude: Number(values[0].latitude),
+                longitude: Number(values[0].longitude),
+                id: values[0].container.id,
+                name: values[0].container.name,
+                colorcode: values[0].colorcode
+            };
         }).value();
 
         this.hexlayer = hexbinLayer({click: (pointData: any) => this.hexClick(pointData)}).data(cells);
@@ -235,10 +243,15 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         this.map.fitBounds(new L.LatLngBounds(this.mapData.locationPoints));
     }
 
-    public hexClick(pointData: any){
+    public hexClick(pointData: any) {
+        let containderIds: number[] = [];
         pointData.map((point: any) => {
-            console.log(point.o);
-        })
+            containderIds.push(point.o.id);
+        });
+       // console.log(containderIds);
+        //console.log(this.acls);
+        //this.OpenstreetmapToasterService.setAclsToaster(this.acls);
+        this.OpenstreetmapToasterService.setToasterProperties(containderIds, this.acls);
     }
 
     public resetMap(): void {
@@ -296,8 +309,8 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         this.loadMapData(false);
     }
 
-    handleResize(event:any){
-        if(!this.server_url) {
+    handleResize(event: any) {
+        if (!this.server_url) {
             return;
         }
         this.buildLayers();
