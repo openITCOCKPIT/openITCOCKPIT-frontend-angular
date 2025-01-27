@@ -52,6 +52,7 @@ import { MapIconComponent } from '../../../components/map-icon/map-icon.componen
 import { MapLineComponent } from '../../../components/map-line/map-line.component';
 import { MapItemType } from '../../../components/map-item-base/map-item-base.enum';
 import { MapSummaryItemComponent } from '../../../components/map-summary-item/map-summary-item.component';
+import { PerfdataTextItemComponent } from '../../../components/perfdata-text-item/perfdata-text-item.component';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
@@ -89,7 +90,8 @@ import { MapSummaryItemComponent } from '../../../components/map-summary-item/ma
         MapIconComponent,
         MapLineComponent,
         KeyValuePipe,
-        MapSummaryItemComponent
+        MapSummaryItemComponent,
+        PerfdataTextItemComponent
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',
@@ -478,11 +480,16 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
         switch (type) {
             case 'gadget':
-                this.map.Mapgadgets.forEach(gadget => {
+                // create new reference to object to trigger change detection
+                this.map.Mapgadgets = this.map.Mapgadgets.map(gadget => {
                     if (gadget.id === id) {
-                        gadget.size_y = newHeight;
-                        gadget.size_x = newWidth;
+                        return {
+                            ...gadget,
+                            size_y: newHeight,
+                            size_x: newWidth
+                        };
                     }
+                    return gadget;
                 });
                 this.currentItem = {id, size_x: newWidth, size_y: newHeight};
                 this.saveGadget('resizestop');
