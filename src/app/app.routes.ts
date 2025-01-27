@@ -26,6 +26,7 @@ import { oracleModuleRoutes } from './modules/oracle_module/oracle_module.routes
 import { sapModuleRoutes } from './modules/sap_module/sap_module.routes';
 import { upsModuleRoutes } from './modules/ups_module/ups_module.routes';
 import { isarFlowModuleRoutes } from './modules/isarflow_module/isarflow_module.routes';
+import { grafanaModuleRoutes } from './modules/grafana_module/grafana_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -73,7 +74,8 @@ const moduleRoutes: Routes = [
     ...hpserverhardwareModuleRoutes,
     ...mapModuleRoutes,
     ...eventcorrelationModuleRoutes,
-    ...isarFlowModuleRoutes
+    ...isarFlowModuleRoutes,
+    ...grafanaModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
