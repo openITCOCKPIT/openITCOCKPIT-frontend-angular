@@ -3,10 +3,6 @@ import { map, Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../../../../tokens/proxy-path.token';
-import {OpenstreetmapAcls} from '../../openstreetmap.interface'
-import {
-    EvcServicestatusToast
-} from '../../../../eventcorrelation_module/pages/eventcorrelations/eventcorrelations.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -18,23 +14,11 @@ export class OpenstreetmapToasterService {
 
     constructor() {
     }
-
-    private rights$$: Subject<OpenstreetmapAcls> = new Subject<OpenstreetmapAcls>();
-    public rights$: Observable<OpenstreetmapAcls> = this.rights$$.asObservable();
     private containerIds$$: Subject<number[]> = new Subject<number[]>();
     public containerIds$: Observable<number[]> = this.containerIds$$.asObservable();
 
     public setContainerIdsToaster(containerIds: number[]): void {
         this.containerIds$$.next(containerIds);
-    }
-    public setAclsToaster(rights: OpenstreetmapAcls): void {
-       // console.log(rights);
-        this.rights$$.next(rights);
-    }
-
-    public setToasterProperties(containerIds: number[], rights: OpenstreetmapAcls ): void {
-        this.containerIds$$.next(containerIds);
-        this.rights$$.next(rights);
     }
 
     public loadOpenstreetMapSumaryState(containerIds: number[]): Observable<any> {

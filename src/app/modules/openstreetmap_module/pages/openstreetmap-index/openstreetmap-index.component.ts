@@ -244,10 +244,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         pointData.map((point: any) => {
             containderIds.push(point.o.id);
         });
-        // console.log(containderIds);
-        //console.log(this.acls);
-        //this.OpenstreetmapToasterService.setAclsToaster(this.acls);
-        this.OpenstreetmapToasterService.setToasterProperties(containderIds, this.acls);
+        this.OpenstreetmapToasterService.setContainerIdsToaster(containderIds);
     }
 
     public resetMap(): void {

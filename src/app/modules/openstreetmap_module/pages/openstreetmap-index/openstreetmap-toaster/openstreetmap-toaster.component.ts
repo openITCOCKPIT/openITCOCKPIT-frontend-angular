@@ -54,7 +54,7 @@ export class OpenstreetmapToasterComponent {
     @ViewChild(ToastComponent) private toast!: ToastComponent;
 
     public summary?: any;
-    public acls?: any;
+    //public acls?: any;
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
 
@@ -63,11 +63,6 @@ export class OpenstreetmapToasterComponent {
     private subscriptions: Subscription = new Subscription();
 
     constructor() {
-        this.subscriptions.add(this.OpenstreetmapToasterService.rights$.subscribe((rights: OpenstreetmapAcls) => {
-            this.acls = rights;
-            this.cdr.markForCheck();
-            // console.log(rights);
-        }));
         this.subscriptions.add(this.OpenstreetmapToasterService.containerIds$.subscribe((containerIds: number[]) => {
             this.summary = undefined;
             this.cdr.markForCheck();
