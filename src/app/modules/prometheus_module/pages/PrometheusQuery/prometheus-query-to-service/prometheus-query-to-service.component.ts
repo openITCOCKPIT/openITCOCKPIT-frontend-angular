@@ -147,19 +147,7 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
 
     protected serviceTemplateId: number = 0;
     protected createServicesArray: PrometheusCreateService[] = [];
-    protected ValidateService: ValidateService = {
-        longer_as: '1m',
-        name: '',
-        promql: '',
-        unit: '',
-        warning_max: null,
-        critical_max: null,
-        threshold_type: 'scalar',
-        warning_longer_as: '1m',
-        critical_longer_as: '2m',
-        warning_operator: 'automatically',
-        critical_operator: 'automatically',
-    } as ValidateService;
+    protected ValidateService: ValidateService = this.createDefaultValidateService();
     protected createAnother: boolean = false;
     protected thresholdType: string = 'scalar';
     protected query: string = 'homeassistant_sensor_temperature_celsius{domain="sensor",entity="sensor.bad_thermometer_temperature",instance="prometheus",job="HomeAssistant_exporter_5",service="homeassistant",uuid="cb27ec71-4c97-47fc-a94f-6853a35fc3f7"}';
@@ -263,6 +251,22 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
             }));
     }
 
+    private createDefaultValidateService(): ValidateService {
+        return {
+            longer_as: '1m',
+            name: '',
+            promql: '',
+            unit: '',
+            warning_max: null,
+            critical_max: null,
+            threshold_type: 'scalar',
+            warning_longer_as: '1m',
+            critical_longer_as: '2m',
+            warning_operator: 'automatically',
+            critical_operator: 'automatically',
+        } as ValidateService;
+    }
+
     protected onThresholdTypeChange(): void {
         if (this.ValidateService.threshold_type === 'scalar') {
             this.ValidateService.warning_max = null;
@@ -342,6 +346,9 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
 
                 this.createServicesArray.push(createService);
 
+                if (!this.createAnother) {
+                    this.ValidateService = this.createDefaultValidateService();
+                }
             }));
     }
 
