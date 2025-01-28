@@ -11,6 +11,15 @@ export interface Container {
     rght: number
 }
 
+export interface ContainerParentCanBeNull {
+    containertype_id: number
+    id: number
+    lft: number
+    name: string
+    parent_id: number | null
+    rght: number
+}
+
 // Just an alias for the Container interface
 export interface ContainerEntity extends Container {
 }
