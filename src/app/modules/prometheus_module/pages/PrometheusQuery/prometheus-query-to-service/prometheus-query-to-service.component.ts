@@ -318,6 +318,7 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
                     this.cdr.markForCheck();
                     return;
                 }
+
                 let createService: PrometheusCreateService = {
                     host_id: `${this.hostId}`,
                     name: this.ValidateService.name,
@@ -345,9 +346,13 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
 
                 this.createServicesArray.push(createService);
 
+                this.errors = {} as GenericValidationError;
+
                 if (!this.createAnother) {
                     this.ValidateService = this.createDefaultValidateService();
                 }
+
+                this.cdr.markForCheck();
             }));
     }
 
