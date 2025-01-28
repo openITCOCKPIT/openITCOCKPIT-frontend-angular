@@ -1,5 +1,6 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { ContainerParentCanBeNull } from '../../../../pages/containers/containers.interface';
+import { GenericValidationError } from '../../../../generic-responses';
 
 
 /**********************
@@ -42,4 +43,51 @@ export function getDefaultGrafanaUserDashboardsIndexParams(): GrafanaUserDashboa
         direction: 'asc',
         'filter[GrafanaUserdashboards.name]': ''
     };
+}
+
+/*********************
+ *    view action    *
+ *********************/
+
+export interface GrafanaUserdashboardViewResponse {
+    dashboard: {
+        id: number
+        container_id: number
+        configuration_id: number
+        name: string
+        tooltip: number
+        range: string
+        refresh: string
+        grafana_uid: string
+        grafana_url: string
+    }
+    allowEdit: boolean
+    dashboardFoundInGrafana: boolean
+}
+
+export interface GrafanaUserdashboardViewIframeUrlResponse {
+    dashboardFoundInGrafana: boolean,
+    iframeUrl: string,
+    _csrfToken: string | null
+}
+
+/*********************
+ *    copy action    *
+ *********************/
+
+export interface GrafanaUserdashboardCopyGet {
+    id: number
+    name: string
+}
+
+export interface GrafanaUserdashboardCopyPost {
+    Source: {
+        id: number
+        name: string
+    }
+    Dashboard: {
+        id?: number,
+        name: string
+    }
+    Error: GenericValidationError | null
 }

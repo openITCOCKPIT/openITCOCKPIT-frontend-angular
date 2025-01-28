@@ -12,6 +12,8 @@ export interface Importer {
     id: number
     name: string
     container_id: number
+    data_source?: string
+    connected?: boolean | null
     description: string
     hostdefault_id: number
     container: string

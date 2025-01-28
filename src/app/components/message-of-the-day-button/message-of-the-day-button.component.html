@@ -1,4 +1,6 @@
-<button cButton [color]="messageOfTheDay.messageOtd.style" (click)="showModal()" *ngIf="messageOfTheDay.messageOtdAvailable">
+<a class="btn btn-w-m"
+   *ngIf="messageOfTheDay.messageOtdAvailable"
+   [ngClass]="'pulse-'+messageOfTheDay.messageOtd.style + ' btn-outline-' + messageOfTheDay.messageOtd.style"
+   (click)="showModal()">
     <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
-</button>
-
+</a>

@@ -2,7 +2,7 @@
          size="lg" *ngIf="messageOfTheDay.messageOtd">
     <ng-container *transloco="let t">
         <c-modal-header [class]="'bg-' + messageOfTheDay.messageOtd.style">
-            <h5>
+            <h5 class="text-white">
                 {{ t('Message of the day!') }}
             </h5>
             <button (click)="hideModal()" cButtonClose></button>
@@ -14,17 +14,17 @@
                     <span class="icon-stack icon-stack-lg">
                         <i class="base base-comment icon-stack-3x opacity-100"
                            [ngClass]="'text-'+messageOfTheDay.messageOtd.style"></i>
-                        <i class="fas fa-info icon-stack-1x opacity-100 color-white mb-2"
+                        <i class="fas fa-info icon-stack-1x opacity-100 text-white mb-2"
                            *ngIf="messageOfTheDay.messageOtd.style == 'primary' || messageOfTheDay.messageOtd.style == 'info'"></i>
 
-                        <i class="fas fa-check icon-stack-1x opacity-100 color-white mb-2"
+                        <i class="fas fa-check icon-stack-1x opacity-100 text-white mb-2"
                            *ngIf="messageOfTheDay.messageOtd.style == 'success'"></i>
-                        <i class="fas fa-exclamation icon-stack-1x opacity-100 color-white mb-2"
+                        <i class="fas fa-exclamation icon-stack-1x opacity-100 text-white mb-2"
                            *ngIf="messageOfTheDay.messageOtd.style == 'warning' || messageOfTheDay.messageOtd.style == 'danger'"></i>
                     </span>
                 </div>
                 <div class="flex-1 ps-3">
-                    <h4 class="title-border" [ngClass]="'title-border-bottom-'+messageOfTheDay.messageOtd.style">
+                    <h4 [class]="'title-border title-border-bottom-' + messageOfTheDay.messageOtd.style + ' text-' + messageOfTheDay.messageOtd.style">
                         {{ messageOfTheDay.messageOtd.title }}
                     </h4>
                     <div class="italic mb-3">

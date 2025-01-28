@@ -18,6 +18,12 @@ export const grafanaModuleRoutes: Routes = [{
 }, {
     path: 'grafana_module/grafana_userdashboards/copy/:ids',
     loadComponent: () => import('./pages/GrafanaUserdashboards/grafana-userdashboards-copy/grafana-userdashboards-copy.component').then(m => m.GrafanaUserdashboardsCopyComponent)
+}, {
+    path: 'grafana_module/grafana_userdashboards/add',
+    loadComponent: () => import('./pages/GrafanaUserdashboards/grafana-userdashboards-add/grafana-userdashboards-add.component').then(m => m.GrafanaUserdashboardsAddComponent)
+}, {
+    path: 'grafana_module/grafana_userdashboards/edit/:id',
+    loadComponent: () => import('./pages/GrafanaUserdashboards/grafana-userdashboards-edit/grafana-userdashboards-edit.component').then(m => m.GrafanaUserdashboardsEditComponent)
 }
 ];
 
