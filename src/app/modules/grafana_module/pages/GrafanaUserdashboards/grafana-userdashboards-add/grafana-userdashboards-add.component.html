@@ -95,7 +95,9 @@
                         {{ t('Range & Refresh') }}
                     </label>
 
-                    <oitc-grafana-timepicker></oitc-grafana-timepicker>
+                    <div class="w-100">
+                        <oitc-grafana-timepicker (change)="onGrafanaTimeRangeChange($event)"></oitc-grafana-timepicker>
+                    </div>
                 </div>
 
 

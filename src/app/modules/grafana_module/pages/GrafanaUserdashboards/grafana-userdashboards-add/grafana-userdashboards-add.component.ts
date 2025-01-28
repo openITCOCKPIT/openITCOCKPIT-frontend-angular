@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -33,6 +33,7 @@ import { GrafanaUserdashboardPost } from '../grafana-userdashboards.interface';
 import { GrafanaTimepickerComponent } from '../../../components/grafana-timepicker/grafana-timepicker.component';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
+import { GrafanaTimepickerChange } from '../../../components/grafana-timepicker/grafana-timepicker.interface';
 
 @Component({
     selector: 'oitc-grafana-userdashboards-add',
@@ -82,9 +83,11 @@ export class GrafanaUserdashboardsAddComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
+        this.loadContainers();
     }
 
     public ngOnDestroy(): void {
@@ -102,6 +105,12 @@ export class GrafanaUserdashboardsAddComponent implements OnInit, OnDestroy {
         };
     }
 
+    public onGrafanaTimeRangeChange(event: GrafanaTimepickerChange): void {
+        this.post.GrafanaUserdashboard.range = event.timerange;
+        this.post.GrafanaUserdashboard.autoRefresh = event.autorefresh;
+        this.cdr.markForCheck();
+    }
+
     public submit() {
         this.subscriptions.add(this.GrafanaUserdashboardsService.add(this.post)
             .subscribe((result) => {
@@ -115,7 +124,7 @@ export class GrafanaUserdashboardsAddComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/grafana_module/grafana_userdashboards/index']);
+                        this.router.navigate(['/', 'grafana_module', 'grafana_userdashboards', 'editor', response.id]);
                         return;
                     }
                     this.post = this.getDefaultPost();
