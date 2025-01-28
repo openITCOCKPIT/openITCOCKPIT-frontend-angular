@@ -4,6 +4,7 @@ import {
     LoadCurrentValueByMetricRoot,
     LoadServicetemplates,
     LoadValueByMetricRoot,
+    PrometheusAlertRule2,
     PrometheusCreateService,
     PrometheusQueryIndexParams,
     PrometheusQueryIndexRoot,
@@ -193,6 +194,9 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
         {key: ">=", value: '>= (greater-or-equal)'},
         {key: "<=", value: '<= (less-or-equal)'},
     ];
+    protected onlyAutoOperator: SelectKeyValueString[] = [
+        {key: "", value: 'Automatically'}
+    ];
     protected longerThanValues: SelectKeyValueString[] = [
         {key: "5s", value: '5 seconds'},
         {key: "10s", value: '10 seconds'},
@@ -259,6 +263,18 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
             }));
     }
 
+    protected onThresholdTypeChange(): void {
+        if (this.ValidateService.threshold_type === 'scalar') {
+            this.ValidateService.warning_max = null;
+            this.ValidateService.critical_max = null;
+            this.ValidateService.warning_operator = '';
+            this.ValidateService.critical_operator = '';
+            return;
+        }
+        this.ValidateService.warning_operator = '';
+        this.ValidateService.critical_operator = '';
+    }
+
     protected execute(): void {
         this.subscriptions.add(this.PrometheusQueryService.loadValueByMetric(this.index.host.uuid, this.query)
             .subscribe((result: LoadValueByMetricRoot) => {
@@ -267,6 +283,10 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
 
                 this.cdr.markForCheck();
             }));
+    }
+
+    protected removeService(index: number): void {
+        this.createServicesArray.splice(index, 1);
     }
 
 
@@ -292,10 +312,35 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
                 if (!result.success) {
                     this.notyService.genericError();
                     this.errors = result.data;
-                    console.debug(this.errors);
                     this.cdr.markForCheck();
                     return;
                 }
+                let createService: PrometheusCreateService = {
+                    host_id: `${this.hostId}`,
+                    name: this.ValidateService.name,
+                    prometheus_alert_rule: {
+                        critical_longer_as: this.ValidateService.critical_longer_as,
+                        critical_max: this.ValidateService.critical_max,
+                        critical_min: this.ValidateService.critical_min,
+                        critical_operator: this.ValidateService.critical_operator,
+
+                        host_id: this.hostId,
+
+                        promql: this.ValidateService.promql,
+
+                        servicetemplate_id: this.ValidateService.servicetemplate_id,
+                        threshold_type: this.ValidateService.threshold_type,
+                        unit: this.ValidateService.unit,
+
+                        warning_longer_as: this.ValidateService.warning_longer_as,
+                        warning_max: this.ValidateService.warning_max,
+                        warning_min: this.ValidateService.warning_min,
+                        warning_operator: this.ValidateService.warning_operator,
+                    } as PrometheusAlertRule2,
+                    servicetemplate_id: this.ValidateService.servicetemplate_id,
+                };
+
+                this.createServicesArray.push(createService);
 
             }));
     }

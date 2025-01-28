@@ -184,6 +184,7 @@
                         id="thresholdType"
                         optionValue="key"
                         optionLabel="value"
+                        (onChange)="onThresholdTypeChange()"
                         [(ngModel)]="ValidateService.threshold_type"
                         [options]="thresholdTypes">
                 </oitc-select>
@@ -216,7 +217,17 @@
                             <oitc-form-feedback [errors]="errors" errorField="warning_operator"></oitc-form-feedback>
                         </ng-container>
                         <ng-container *ngIf="ValidateService.threshold_type !== 'scalar'">
-                            AUTO
+                            <oitc-select
+                                    name="ValidateService.warning_operatorOnlyAuto"
+                                    id="ValidateService.warning_operatorOnlyAuto"
+                                    [disabled]="true"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [options]="onlyAutoOperator"
+                                    [(ngModel)]="ValidateService.warning_operator"
+                                    oitcFormError [errors]="errors" errorField="warning_operator">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="warning_operator"></oitc-form-feedback>
                         </ng-container>
                     </div>
                 </c-col>
@@ -305,7 +316,17 @@
                             <oitc-form-feedback [errors]="errors" errorField="critical_operator"></oitc-form-feedback>
                         </ng-container>
                         <ng-container *ngIf="ValidateService.threshold_type !== 'scalar'">
-                            AUTO
+                            <oitc-select
+                                    name="ValidateService.critical_operatorOnlyAuto"
+                                    id="ValidateService.critical_operatorOnlyAuto"
+                                    [disabled]="true"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [options]="onlyAutoOperator"
+                                    [(ngModel)]="ValidateService.critical_operator"
+                                    oitcFormError [errors]="errors" errorField="critical_operator">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="critical_operator"></oitc-form-feedback>
                         </ng-container>
                     </div>
                 </c-col>
@@ -440,44 +461,47 @@
                 </button>
             </c-button-group>
 
-            <h5>{{ t('Services') }}</h5>
-            <table>
-                <thead>
-                <tr>
-                    <th>{{ t('Name') }}</th>
-                    <th>{{ t('PromQL Query') }}</th>
-                    <th>{{ t('Unit') }}</th>
-                    <th colspan="2">{{ t('Warning') }}</th>
-                    <th colspan="2">{{ t('Critical') }}</th>
-                    <th>{{ t('Remove') }}</th>
-                </tr>
-                </thead>
-                <tbody *ngIf="createServicesArray.length > 0">
-                <tr *ngFor="let service of createServicesArray">
-                    <td>{{ service.name }}</td>
-                    <td>{{ service.prometheus_alert_rule.promql }}</td>
-                    <td>{{ service.prometheus_alert_rule.unit }}</td>
-                    <td>{{ service.prometheus_alert_rule.warning_min }}</td>
-                    <td>{{ service.prometheus_alert_rule.warning_max }}</td>
-                    <td>{{ service.prometheus_alert_rule.critical_min }}</td>
-                    <td>{{ service.prometheus_alert_rule.critical_max }}</td>
-                    <td>
-                        <button cButton type="button" color="danger" size="xs">
-                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                            {{ t('Remove') }}
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <button cButton type="button" color="success" (click)="createServices()">
-                {{ t('Create services') }}
-            </button>
+            <ng-container *ngIf="createServicesArray.length > 0">
+
+                <h5>{{ t('Services') }}</h5>
+                <table bordered cTable hover>
+                    <thead>
+                    <tr>
+                        <th>{{ t('Name') }}</th>
+                        <th>{{ t('PromQL Query') }}</th>
+                        <th>{{ t('Unit') }}</th>
+                        <th colspan="2">{{ t('Warning') }}</th>
+                        <th colspan="2">{{ t('Critical') }}</th>
+                        <th>{{ t('Remove') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let service of createServicesArray; let i = index">
+                        <td>{{ service.name }}</td>
+                        <td>{{ service.prometheus_alert_rule.promql }}</td>
+                        <td>{{ service.prometheus_alert_rule.unit }}</td>
+                        <td>{{ service.prometheus_alert_rule.warning_min }}</td>
+                        <td>{{ service.prometheus_alert_rule.warning_max }}</td>
+                        <td>{{ service.prometheus_alert_rule.critical_min }}</td>
+                        <td>{{ service.prometheus_alert_rule.critical_max }}</td>
+                        <td>
+                            <button cButton type="button" color="danger" size="xs" (click)="removeService(i)">
+                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                {{ t('Remove') }}
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button cButton type="button" color="success" (click)="createServices()">
+                    {{ t('Create services') }}
+                </button>
+            </ng-container>
 
 
             <h5>{{ t('Current values') }}</h5>
 
-            <table>
+            <table bordered cTable hover>
                 <thead>
                 <tr>
                     <th>{{ t('Element') }}</th>

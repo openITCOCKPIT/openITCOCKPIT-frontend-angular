@@ -218,6 +218,19 @@ export interface PrometheusCreateService {
     servicetemplate_id: number
 }
 
-export interface PrometheusAlertRule2 extends PrometheusAlertRule {
+export interface PrometheusAlertRule2 {
+    id: number
+    host_id: number
+    promql: string
+    unit: string
+    threshold_type: string
+    warning_min: number
+    warning_max: number | null
+    critical_min: number
+    critical_max: number | null
+    warning_longer_as: string
+    critical_longer_as: string
+    warning_operator: string
+    critical_operator: string
     servicetemplate_id: number
 }
