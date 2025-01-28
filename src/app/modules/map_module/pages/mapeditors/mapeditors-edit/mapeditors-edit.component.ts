@@ -53,6 +53,7 @@ import { MapLineComponent } from '../../../components/map-line/map-line.componen
 import { MapItemType } from '../../../components/map-item-base/map-item-base.enum';
 import { MapSummaryItemComponent } from '../../../components/map-summary-item/map-summary-item.component';
 import { PerfdataTextItemComponent } from '../../../components/perfdata-text-item/perfdata-text-item.component';
+import { TrafficlightItemComponent } from '../../../components/trafficlight-item/trafficlight-item.component';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
@@ -91,7 +92,8 @@ import { PerfdataTextItemComponent } from '../../../components/perfdata-text-ite
         MapLineComponent,
         KeyValuePipe,
         MapSummaryItemComponent,
-        PerfdataTextItemComponent
+        PerfdataTextItemComponent,
+        TrafficlightItemComponent
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',

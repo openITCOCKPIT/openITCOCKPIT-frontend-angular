@@ -53,6 +53,7 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
     protected bitMaskHostState: number = 0;
     protected bitMaskServiceState: number = 0;
     protected label: string = "";
+    private intervalStartet: boolean = false; // needed to prevent multiple interval subscriptions
 
     constructor(parent: MapCanvasComponent) {
         super(parent);
@@ -125,14 +126,15 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
     };
 
     private stop() {
-        if (this.statusUpdateInterval) {
+        if (this.intervalStartet) {
             this.statusUpdateInterval.unsubscribe();
             this.cdr.markForCheck();
         }
     };
 
     private initRefreshTimer() {
-        if (this.refreshInterval() > 0 && !this.statusUpdateInterval) {
+        if (this.refreshInterval() > 0 && !this.intervalStartet) {
+            this.intervalStartet = true;
             this.statusUpdateInterval = interval(this.refreshInterval()).subscribe(() => {
                 this.load();
             });

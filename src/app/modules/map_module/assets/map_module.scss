@@ -10,7 +10,7 @@
     gap: 10px;
 }
 
-.cdk-drag-dragging {
+.cdk-drag-dragging:not(#layersBox):not(#mapToolbar) {
     opacity: 0.5;
     border: 2px dashed #4285F4 !important;
 }

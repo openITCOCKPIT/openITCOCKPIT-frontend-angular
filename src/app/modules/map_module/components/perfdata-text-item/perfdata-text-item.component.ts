@@ -52,6 +52,7 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
     protected text: string = "";
     private perfdataName: string = "";
     private perfdata!: Load1 | Load5 | Load15;
+    private intervalStartet: boolean = false; // needed to prevent multiple interval subscriptions
 
     constructor(parent: MapCanvasComponent) {
         super(parent);
@@ -166,7 +167,8 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
     };
 
     private initRefreshTimer() {
-        if (this.refreshInterval() > 0 && !this.statusUpdateInterval) {
+        if (this.refreshInterval() > 0 && !this.intervalStartet) {
+            this.intervalStartet = true;
             this.statusUpdateInterval = interval(this.refreshInterval()).subscribe(() => {
                 this.load();
             });
@@ -174,7 +176,7 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
     };
 
     private stop() {
-        if (this.statusUpdateInterval) {
+        if (this.intervalStartet) {
             this.statusUpdateInterval.unsubscribe();
             this.cdr.markForCheck();
         }

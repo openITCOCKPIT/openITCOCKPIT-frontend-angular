@@ -1,0 +1,266 @@
+import {
+    ChangeDetectionStrategy,
+    Component,
+    effect,
+    ElementRef,
+    EventEmitter,
+    inject,
+    input,
+    InputSignal,
+    OnDestroy,
+    OnInit,
+    Output,
+    Renderer2,
+    ViewChild
+} from '@angular/core';
+import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
+import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
+import { ContextMenuModule } from 'primeng/contextmenu';
+import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
+import { Mapgadget } from '../../pages/mapeditors/Mapeditors.interface';
+import { MapItemType } from '../map-item-base/map-item-base.enum';
+import { interval, Subscription } from 'rxjs';
+import { TrafficlightItemService } from './trafficlight-item.service';
+import { MapLineRootParams } from '../map-line/map-line.interface';
+import { Host, Service, TrafficlightItemRoot } from './trafficlight-item.interface';
+import { ResizableDirective } from '../../../../directives/resizable.directive';
+import { ResizedEvent } from '../map-item-base/map-item-base.interface';
+import { DOCUMENT, NgIf } from '@angular/common';
+
+@Component({
+    selector: 'oitc-trafficlight-item',
+    standalone: true,
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf],
+    templateUrl: './trafficlight-item.component.html',
+    styleUrl: './trafficlight-item.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
+    @ViewChild('redLight') redLightElement!: ElementRef;
+    @ViewChild('yellowLight') yellowLightElement!: ElementRef;
+    @ViewChild('greenLight') greenLightElement!: ElementRef;
+
+    public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
+    public refreshInterval = input<number>(0);
+
+    @Output() resizedEvent = new EventEmitter<ResizedEvent>();
+
+    private readonly document = inject(DOCUMENT);
+
+    private subscriptions: Subscription = new Subscription();
+    private readonly TrafficlightItemService = inject(TrafficlightItemService);
+    private statusUpdateInterval: Subscription = new Subscription();
+
+    protected override type = MapItemType.GADGET;
+
+    protected init: boolean = true;
+    protected width: number = 60;
+    protected height: number = 150;
+    private intervalStartet: boolean = false; // needed to prevent multiple interval subscriptions
+    private current_state: number = 0;
+    private is_flapping: boolean = false;
+    protected Host!: Host;
+    protected Service!: Service;
+    protected showGreen: boolean = false;
+    protected showYellow: boolean = false;
+    protected showRed: boolean = false;
+    protected showBlue: boolean = false;
+    private blink: boolean = false;
+    private timer: { [key: string]: any } = {
+        red: null,
+        yellow: null,
+        green: null
+    };
+
+    protected lightRadius: number = 0;
+    protected lightDiameter: number = 0;
+    protected lightPadding: number = 0;
+    protected circleX: number = 0;
+
+    constructor(parent: MapCanvasComponent, private renderer: Renderer2) {
+        super(parent);
+        effect(() => {
+            this.onSizeLabelChange();
+            this.onObjectIdChange();
+        });
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+        this.stop();
+    }
+
+    public ngOnInit(): void {
+
+        this.item()!.size_x = parseInt(this.item()!.size_x.toString(), 10);
+        this.item()!.size_y = parseInt(this.item()!.size_y.toString(), 10);
+
+        if (this.item()!.size_x > 0) {
+            this.width = this.item()!.size_x;
+        }
+        if (this.item()!.size_y > 0) {
+            this.height = this.item()!.size_y;
+        }
+
+        this.load();
+    }
+
+    private load() {
+
+        const params: MapLineRootParams = {
+            'angular': true,
+            'disableGlobalLoader': true,
+            'objectId': this.item()!.object_id as number,
+            'mapId': this.item()!.map_id as number,
+            'type': this.item()!.type as string
+        };
+
+        this.subscriptions.add(this.TrafficlightItemService.getTrafficlightItem(params)
+            .subscribe((result: TrafficlightItemRoot) => {
+                this.current_state = result.data.Servicestatus.currentState;
+                this.is_flapping = result.data.Servicestatus.isFlapping;
+
+                this.Host = result.data.Host;
+                this.Service = result.data.Service;
+
+                this.showGreen = false;
+                this.showYellow = false;
+                this.showRed = false;
+                this.showBlue = false;
+                this.blink = false;
+
+                this.stopBlinking();
+                switch (this.current_state) {
+                    case 0:
+                        this.showGreen = true;
+                        break;
+                    case 1:
+                        this.showYellow = true;
+                        break;
+                    case 2:
+                        this.showRed = true;
+                        break;
+                    case 3:
+                        this.showGreen = true;
+                        this.showYellow = true;
+                        this.showRed = true;
+                        break;
+                    default:
+                        this.showBlue = true;
+                        break;
+                }
+
+                if (this.is_flapping) {
+                    this.blink = true;
+                }
+
+                this.renderTrafficlight();
+
+                this.initRefreshTimer();
+
+                this.init = false;
+                this.cdr.markForCheck();
+            }));
+    };
+
+    private renderTrafficlight() {
+
+        // 17px was the old radius of the static traffic light.
+        // We calucate this value on the fly to be able to resize the traffic light
+        this.lightRadius = Math.floor(this.width * (17 / 60));
+        this.lightDiameter = (this.lightRadius * 2) + 2; //2 is the stroke width
+        this.lightPadding = Math.ceil((this.height - this.lightDiameter * 3) / 4);
+        this.circleX = Math.floor(this.width / 2);
+
+        if (this.showRed && this.blink) {
+            this.blinking(this.redLightElement, 'red');
+        }
+        if (this.showYellow && this.blink) {
+            this.blinking(this.yellowLightElement, 'yellow');
+        }
+        if (this.showGreen && this.blink) {
+            this.blinking(this.greenLightElement, 'green');
+        }
+
+    };
+
+    private blinking(el: ElementRef, color: string) {
+        //set the animation interval high to prevent high CPU usage
+        //the animation isnt that smooth anymore but the browser need ~70% less CPU!
+
+        //$.fx.interval = 100;
+
+        if (this.timer[color] !== null) {
+            clearInterval(this.timer[color]);
+            this.timer[color] = null;
+        }
+
+        /*timer[color] = setInterval(function () {
+            $(el).fadeOut(2000, function () {
+                $(el).fadeIn(2000);
+            });
+        }, 6000);*/
+        this.timer[color] = setInterval(() => {
+            this.renderer.setStyle(el.nativeElement, 'opacity', '0');
+            setTimeout(() => {
+                this.renderer.setStyle(el.nativeElement, 'opacity', '1');
+            }, 2000);
+        }, 6000);
+    };
+
+    private stopBlinking() {
+        for (let i in this.timer) {
+            if (this.timer[i] !== null) {
+                clearInterval(this.timer[i]);
+                this.timer[i] = null;
+            }
+        }
+    };
+
+    private initRefreshTimer() {
+        if (this.refreshInterval() > 0 && !this.intervalStartet) {
+            this.intervalStartet = true;
+            this.statusUpdateInterval = interval(this.refreshInterval()).subscribe(() => {
+                this.load();
+            });
+        }
+    };
+
+    private stop() {
+        if (this.intervalStartet) {
+            this.statusUpdateInterval.unsubscribe();
+            this.cdr.markForCheck();
+        }
+    };
+
+    private onSizeLabelChange() {
+        if (this.init) {
+            return;
+        }
+
+        this.width = this.item()!.size_x - 10; //The view adds 10px
+        this.height = this.item()!.size_y - 10;
+        this.renderTrafficlight();
+    }
+
+    private onObjectIdChange() {
+        if (this.init || this.item()!.object_id === null) {
+            //Avoid ajax error if user search a service in Gadget config modal
+            return;
+        }
+
+        this.load();
+    }
+
+    protected onResizeStop(event: { width: number, height: number }) {
+        this.resizedEvent.emit({
+            id: this.id,
+            mapId: this.mapId,
+            width: event.width,
+            height: event.height,
+            itemType: this.type
+        });
+        this.cdr.markForCheck();
+    }
+
+}

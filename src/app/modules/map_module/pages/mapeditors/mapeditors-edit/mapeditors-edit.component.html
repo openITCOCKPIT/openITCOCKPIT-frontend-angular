@@ -236,17 +236,17 @@
                                                        (dropItemEvent)="onDropItem($event)"
                                                        (resizedEvent)="onResizeStop($event)"
                                                        [hidden]="!gadgetItem.display">
-                                </oitc-cylinder-item>
+                                </oitc-cylinder-item>-->
                                 <oitc-trafficlight-item *ngIf="gadgetItem.gadget === 'TrafficLight'" [item]="gadgetItem"
-                                                       [refreshInterval]="0"
-                                                       [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
-                                                       [layers]="layers"
-                                                       (contextActionEvent)="onContextAction($event)"
-                                                       (dropItemEvent)="onDropItem($event)"
-                                                       (resizedEvent)="onResizeStop($event)"
-                                                       [hidden]="!gadgetItem.display">
+                                                        [refreshInterval]="0"
+                                                        [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                                        [layers]="layers"
+                                                        (contextActionEvent)="onContextAction($event)"
+                                                        (dropItemEvent)="onDropItem($event)"
+                                                        (resizedEvent)="onResizeStop($event)"
+                                                        [hidden]="!gadgetItem.display">
                                 </oitc-trafficlight-item>
-                                <oitc-temperature-item *ngIf="gadgetItem.gadget === 'Temperature'" [item]="gadgetItem"
+                                <!--<oitc-temperature-item *ngIf="gadgetItem.gadget === 'Temperature'" [item]="gadgetItem"
                                                        [refreshInterval]="0"
                                                        [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
                                                        [layers]="layers"

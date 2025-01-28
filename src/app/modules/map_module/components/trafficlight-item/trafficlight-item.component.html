@@ -1,0 +1,94 @@
+<div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
+     [draggable]="isViewMode()"
+     (cdkDragEnded)="onDragEnd($event)"
+     (cdkDragMoved)="onDragMove($event)"
+     (resizeStop)="onResizeStop($event)"
+     cdkDragBoundary=".map-canvas">
+    <div cdkDragHandle [id]="'map-trafficlight-' + item()?.id" [style.width.px]="width + 10"
+         [style.height.px]="height + 10">
+        <svg [attr.width]="width" [attr.height]="height">
+            <defs>
+                <linearGradient [attr.id]="'tlBg_' + item()!.id" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0.02" stop-color="#323232"/>
+                    <stop offset="0.02" stop-color="#323232"/>
+                    <stop offset="0.03" stop-color="#333"/>
+                    <stop offset="0.3" stop-color="#323232"/>
+                </linearGradient>
+                <linearGradient [attr.id]="'protectorGradient_' + item()!.id" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#555"/>
+                    <stop offset="0.03" stop-color="#444"/>
+                    <stop offset="0.07" stop-color="#333"/>
+                    <stop offset="0.12" stop-color="#222"/>
+                </linearGradient>
+                <radialGradient [attr.id]="'redLight_' + item()!.id" cx="1" cy="1" r="4" fx="0" fy="0"
+                                gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="brown"/>
+                    <stop offset="25%" stop-color="transparent"/>
+                </radialGradient>
+                <radialGradient [attr.id]="'yellowLight_' + item()!.id" cx="1" cy="1" r="4" fx="0" fy="0"
+                                gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="orange"/>
+                    <stop offset="25%" stop-color="transparent"/>
+                </radialGradient>
+                <radialGradient [attr.id]="'greenLight_' + item()!.id" cx="1" cy="1" r="4" fx="0" fy="0"
+                                gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="lime"/>
+                    <stop offset="25%" stop-color="transparent"/>
+                </radialGradient>
+                <pattern [attr.id]="'redLightPattern_' + item()!.id" x="0" y="0" width="3" height="3"
+                         patternUnits="userSpaceOnUse">
+                    <circle cx="1" cy="1" r="3" [attr.fill]="'url(#redLight_' + item()!.id + ')'"/>
+                </pattern>
+                <pattern [attr.id]="'yellowLightPattern_' + item()!.id" x="0" y="0" width="3" height="3"
+                         patternUnits="userSpaceOnUse">
+                    <circle cx="1" cy="1" r="3" [attr.fill]="'url(#yellowLight_' + item()!.id + ')'"/>
+                </pattern>
+                <pattern [attr.id]="'greenLightPattern_' + item()!.id" x="0" y="0" width="3" height="3"
+                         patternUnits="userSpaceOnUse">
+                    <circle cx="1" cy="1" r="3" [attr.fill]="'url(#greenLight_' + item()!.id + ')'"/>
+                </pattern>
+            </defs>
+
+            <rect [attr.width]="width" [attr.height]="height" rx="10" ry="10"
+                  [attr.fill]="'url(#tlBg_' + item()!.id + ')'" stroke="#444" stroke-width="2"></rect>
+
+            <text *ngIf="item()!.show_label" x="0" [attr.y]="height - 10" [attr.font-size]="width / 8"
+                  font-family="Verdana" fill="#FFF"
+                  [attr.transform]="'rotate(-90, 0, ' + (height - 10 - (width / 8)) + ')'">
+                {{ this.Host!.hostname + '/' + this.Service!.servicename }}
+            </text>
+
+            <g [attr.id]="'lights_' + item()!.id">
+                <g [attr.id]="'redLightGroup_' + item()!.id">
+                    <circle *ngIf="showRed" #redLight [attr.cx]="circleX" [attr.cy]="lightPadding + lightRadius"
+                            [attr.r]="lightRadius" fill="#f00"></circle>
+                    <circle [attr.cx]="circleX" [attr.cy]="lightPadding + lightRadius" [attr.r]="lightRadius"
+                            [attr.fill]="'url(#redLightPattern_' + item()!.id + ')'" stroke="#444"
+                            stroke-width="2"></circle>
+                </g>
+                <g [attr.id]="'yellowLightGroup_' + item()!.id">
+                    <circle *ngIf="showYellow" #yellowLight [attr.cx]="circleX"
+                            [attr.cy]="lightDiameter + lightPadding * 2 + lightRadius" [attr.r]="lightRadius"
+                            fill="#FFFF00"></circle>
+                    <circle [attr.cx]="circleX" [attr.cy]="lightDiameter + lightPadding * 2 + lightRadius"
+                            [attr.r]="lightRadius" [attr.fill]="'url(#yellowLightPattern_' + item()!.id + ')'"
+                            stroke="#444" stroke-width="2"></circle>
+                </g>
+                <g [attr.id]="'blueLightGroup_' + item()!.id">
+                    <circle *ngIf="showBlue" [attr.cx]="circleX"
+                            [attr.cy]="lightDiameter + lightPadding * 2 + lightRadius" [attr.r]="lightRadius"
+                            fill="#6e99ff"></circle>
+                </g>
+                <g [attr.id]="'greenLightGroup_' + item()!.id">
+                    <circle *ngIf="showGreen" #greenLight [attr.cx]="circleX"
+                            [attr.cy]="lightDiameter * 2 + lightPadding * 3 + lightRadius" [attr.r]="lightRadius"
+                            fill="#0F0"></circle>
+                    <circle [attr.cx]="circleX" [attr.cy]="lightDiameter * 2 + lightPadding * 3 + lightRadius"
+                            [attr.r]="lightRadius" [attr.fill]="'url(#greenLightPattern_' + item()!.id + ')'"
+                            stroke="#444" stroke-width="2"></circle>
+                </g>
+            </g>
+        </svg>
+    </div>
+</div>
+<p-contextMenu [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>
