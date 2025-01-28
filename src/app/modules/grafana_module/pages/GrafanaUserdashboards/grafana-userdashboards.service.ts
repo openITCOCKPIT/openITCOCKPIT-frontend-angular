@@ -1,10 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import {
     GrafanaUserdashboardCopyGet,
     GrafanaUserdashboardCopyPost,
+    GrafanaUserdashboardPost,
     GrafanaUserDashboardsIndexParams,
     GrafanaUserdashboardsIndexRoot,
     GrafanaUserdashboardViewIframeUrlResponse,
@@ -12,6 +13,8 @@ import {
 } from './grafana-userdashboards.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SynchronizeGrafanaResponse } from '../../components/synchronize-grafana-modal/synchronize.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -98,5 +101,46 @@ export class GrafanaUserdashboardsService {
         return this.http.post<any>(`${proxyPath}/grafana_module/grafana_userdashboards/copy/.json?angular=true`, {
             data: dashboards
         });
+    }
+
+    /*********************
+     *     add action    *
+     *********************/
+
+    public add(dashboard: GrafanaUserdashboardPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/grafana_module/grafana_userdashboards/add.json?angular=true`, dashboard)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.GrafanaUserdashboard as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public loadContainers(): Observable<{ containers: SelectKeyValue[], hasGrafanaConfig: boolean }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            containers: SelectKeyValue[],
+            hasGrafanaConfig: boolean
+        }>(`${proxyPath}/grafana_module/grafana_userdashboards/loadContainers.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
     }
 }

@@ -91,3 +91,16 @@ export interface GrafanaUserdashboardCopyPost {
     }
     Error: GenericValidationError | null
 }
+
+/*********************
+ *    add action     *
+ *********************/
+export interface GrafanaUserdashboardPost {
+    GrafanaUserdashboard: {
+        id?: number
+        container_id: number
+        name: string
+        autoRefresh: string    // 1m
+        range: string         // now-3h
+    }
+}
