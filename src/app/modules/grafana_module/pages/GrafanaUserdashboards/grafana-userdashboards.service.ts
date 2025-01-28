@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import {
+    GrafanaUserdashboardCopyGet,
+    GrafanaUserdashboardCopyPost,
     GrafanaUserDashboardsIndexParams,
     GrafanaUserdashboardsIndexRoot,
     GrafanaUserdashboardViewIframeUrlResponse,
@@ -73,5 +75,28 @@ export class GrafanaUserdashboardsService {
                 return data;
             })
         )
+    }
+
+    /*********************
+     *    copy action    *
+     *********************/
+    public getUserDashboardsCopy(ids: number[]): Observable<GrafanaUserdashboardCopyGet[]> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{
+                dashboards: GrafanaUserdashboardCopyGet[]
+            }>(`${proxyPath}/grafana_module/grafana_userdashboards/copy/${ids.join('/')}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data.dashboards;
+                })
+            )
+    }
+
+    public saveUserDashboardsCopy(dashboards: GrafanaUserdashboardCopyPost[]): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/grafana_module/grafana_userdashboards/copy/.json?angular=true`, {
+            data: dashboards
+        });
     }
 }
