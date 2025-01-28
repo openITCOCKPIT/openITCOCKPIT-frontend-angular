@@ -150,7 +150,7 @@
                         <oitc-actions-button [permission]="'GrafanaModule.GrafanaUserdashboards.editor'"
                                              [icon]="['fas', 'cog']"
                                              [allowEdit]="userdashboard.allowEdit"
-                                             [url]="'/hosts/browser/' + userdashboard.id">
+                                             [url]="'/grafana_module/grafana_userdashboards/editor/' + userdashboard.id">
                             <oitc-actions-button-element [permission]="'GrafanaModule.GrafanaUserdashboards.editor'"
                                                          *ngIf="userdashboard.allowEdit"
                                                          [url]="'/grafana_module/grafana_userdashboards/editor/' + userdashboard.id">
