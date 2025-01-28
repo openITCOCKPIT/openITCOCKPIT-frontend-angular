@@ -150,7 +150,6 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     protected ValidateService: ValidateService = this.createDefaultValidateService();
     protected createAnother: boolean = false;
     protected thresholdType: string = 'scalar';
-    protected query: string = 'homeassistant_sensor_temperature_celsius{domain="sensor",entity="sensor.bad_thermometer_temperature",instance="prometheus",job="HomeAssistant_exporter_5",service="homeassistant",uuid="cb27ec71-4c97-47fc-a94f-6853a35fc3f7"}';
     protected executeResult: string = '';
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected selectedMetrics: string[] = [];
@@ -280,7 +279,7 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     }
 
     protected execute(): void {
-        this.subscriptions.add(this.PrometheusQueryService.loadValueByMetric(this.index.host.uuid, this.query)
+        this.subscriptions.add(this.PrometheusQueryService.loadValueByMetric(this.index.host.uuid, this.ValidateService.promql)
             .subscribe((result: LoadValueByMetricRoot) => {
                 let a: Ramsch = result.metricValue.data.result[0] as Ramsch;
                 this.executeResult = a.value[1];
