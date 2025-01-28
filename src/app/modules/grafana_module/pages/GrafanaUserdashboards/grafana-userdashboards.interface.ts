@@ -1,5 +1,6 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { ContainerParentCanBeNull } from '../../../../pages/containers/containers.interface';
+import { GenericValidationError } from '../../../../generic-responses';
 
 
 /**********************
@@ -68,4 +69,25 @@ export interface GrafanaUserdashboardViewIframeUrlResponse {
     dashboardFoundInGrafana: boolean,
     iframeUrl: string,
     _csrfToken: string | null
+}
+
+/*********************
+ *    copy action    *
+ *********************/
+
+export interface GrafanaUserdashboardCopyGet {
+    id: number
+    name: string
+}
+
+export interface GrafanaUserdashboardCopyPost {
+    Source: {
+        id: number
+        name: string
+    }
+    Dashboard: {
+        id?: number,
+        name: string
+    }
+    Error: GenericValidationError | null
 }
