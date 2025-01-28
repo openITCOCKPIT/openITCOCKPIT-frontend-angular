@@ -264,8 +264,8 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     }
 
     public onLdapUserChange(): void {
-        this.post.name = this.ldapUser?.givenname as string;
-        this.post.description = this.ldapUser?.display_name as string;
+        this.post.name = this.ldapUser?.display_name as string;
+        this.post.description = this.ldapUser?.samaccountname as string;
         this.post.email = this.ldapUser?.email as string;
         this.cdr.markForCheck();
     }

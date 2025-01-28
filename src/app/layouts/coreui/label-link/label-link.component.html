@@ -8,7 +8,7 @@ https://github.com/angular/angular/issues/22972#issuecomment-407358396
 </ng-template>
 
 
-<ng-container *ngIf=" objectId() && (hasPermission$|async)">
+<ng-container *ngIf="objectId() && (hasPermission$|async)">
     <a [routerLink]="route() + '/' + objectId()">
         <ng-container *ngTemplateOutlet="content"></ng-container>
     </a>

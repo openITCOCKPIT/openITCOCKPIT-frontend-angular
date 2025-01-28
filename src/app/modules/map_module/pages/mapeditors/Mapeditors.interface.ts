@@ -39,12 +39,22 @@ export interface Mapitem extends MapitemBase {
     label_possition: number
 }
 
+export interface MapitemPost {
+    Mapitem: Mapitem
+    action: string
+}
+
 export interface Mapline extends MapitemBase {
     limit: any
     iconset: any
     type: string
     object_id: number
     show_label: boolean
+}
+
+export interface MaplinePost {
+    Mapline: Mapline
+    action: string
 }
 
 export interface Mapgadget {
@@ -66,9 +76,19 @@ export interface Mapicon extends MapitemBase {
     icon: string
 }
 
+export interface MapiconPost {
+    Mapicon: Mapicon
+    action: string
+}
+
 export interface Maptext extends MapitemBase {
     text: string
     font_size: number
+}
+
+export interface MaptextPost {
+    Maptext: Maptext
+    action: string
 }
 
 export interface Mapsummaryitem {
@@ -101,6 +121,13 @@ export interface Mapeditor {
     synchronizeGridAndHelplinesSize: boolean
     grid: Grid
     helplines: Helplines
+}
+
+export interface MapeditorSettingsPost {
+    Map: {
+        id: string
+    }
+    Mapeditor: Mapeditor
 }
 
 export interface Grid {

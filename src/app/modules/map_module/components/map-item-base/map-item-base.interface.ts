@@ -1,7 +1,4 @@
-export interface MapItemPosition {
-    x: number;
-    y: number;
-}
+import { ContextActionType, MapItemType } from './map-item-base.enum';
 
 export interface MapitemBase {
     id: number
@@ -17,6 +14,13 @@ export interface MapitemBase {
 }
 
 export interface ContextAction {
-    type: string
+    type: ContextActionType
     data: MapitemBase
+    itemType: MapItemType
+}
+
+export interface MapitemBaseActionObject {
+    data: MapitemBase
+    action: string
+    type: MapItemType
 }

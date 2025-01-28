@@ -14,11 +14,10 @@ import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { NgClass, NgIf } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
-import { MenuItem } from 'primeng/api';
 import { interval, Subscription } from 'rxjs';
 import { MapLineService } from './map-line.service';
-import { Mapitem, Mapline } from '../../pages/mapeditors/Mapeditors.interface';
-import { LabelPosition } from '../map-item-base/map-item-base.enum';
+import { Mapline } from '../../pages/mapeditors/Mapeditors.interface';
+import { MapItemType } from '../map-item-base/map-item-base.enum';
 
 @Component({
     selector: 'oitc-map-line',
@@ -47,24 +46,14 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
     protected background: string = "";
     protected init: boolean = true;
 
+    protected override type = MapItemType.LINE;
+
     constructor(parent: MapCanvasComponent) {
         super(parent);
         effect(() => {
-            this.id = this.item()!.id;
-            this.mapId = this.item()!.map_id;
-            if (this.isMapline(this.item())) {
-                this.startX = this.item()!.startX;
-                this.startY = this.item()!.startY;
-                this.endX = this.item()!.endX;
-                this.endY = this.item()!.endY;
-            } else {
-                this.x = this.item()!.x;
-                this.y = this.item()!.y;
+            if (!this.isItemDeleted(this.type)) {
+                this.onItemChange();
             }
-            this.zIndex = this.item()!.z_index!;
-            this.setPosition();
-            this.setLayer(this.zIndex);
-            this.onItemChange();
         });
     }
 
@@ -81,7 +70,9 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
             this.allowView = true;
             this.init = false;
         } else {
-            this.load();
+            if (!this.isItemDeleted(this.type)) {
+                this.load();
+            }
         }
     }
 
@@ -203,114 +194,6 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
         if (this.item()!.type !== 'stateless') {
             this.load();
         }
-    }
-
-    protected override getDefaultContextMenuItems(): MenuItem[] {
-        return [
-            {
-                label: this.TranslocoService.translate('Edit'),
-                icon: 'fa fa-cog',
-                command: () => {
-                    this.cdr.markForCheck();
-                }
-            },
-            {
-                separator: true
-            },
-            {
-                label: this.TranslocoService.translate('Label position'),
-                icon: 'fa fa-font',
-                items: [
-                    {
-                        label: this.TranslocoService.translate('Top'),
-                        icon: 'fa fa-up-long',
-                        command: () => {
-                            this.contextActionEvent.emit({
-                                type: 'labelPosition',
-                                data: {
-                                    id: this.id,
-                                    x: this.x,
-                                    y: this.y,
-                                    map_id: this.mapId,
-                                    label_possition: LabelPosition.TOP
-                                } as Mapitem
-                            });
-                            this.cdr.markForCheck();
-                        }
-                    },
-                    {
-                        label: this.TranslocoService.translate('Right'),
-                        icon: 'fa fa-right-long',
-                        command: () => {
-                            this.contextActionEvent.emit({
-                                type: 'labelPosition',
-                                data: {
-                                    id: this.id,
-                                    x: this.x,
-                                    y: this.y,
-                                    map_id: this.mapId,
-                                    label_possition: LabelPosition.RIGHT
-                                } as Mapitem
-                            });
-                            this.cdr.markForCheck();
-                        }
-                    },
-                    {
-                        label: this.TranslocoService.translate('Bottom'),
-                        icon: 'fa fa-down-long',
-                        command: () => {
-                            this.contextActionEvent.emit({
-                                type: 'labelPosition',
-                                data: {
-                                    id: this.id,
-                                    x: this.x,
-                                    y: this.y,
-                                    map_id: this.mapId,
-                                    label_possition: LabelPosition.BOTTOM
-                                } as Mapitem
-                            });
-                            this.cdr.markForCheck();
-                        }
-                    },
-                    {
-                        label: this.TranslocoService.translate('Left'),
-                        icon: 'fa fa-left-long',
-                        command: () => {
-                            this.contextActionEvent.emit({
-                                type: 'labelPosition',
-                                data: {
-                                    id: this.id,
-                                    x: this.x,
-                                    y: this.y,
-                                    map_id: this.mapId,
-                                    label_possition: LabelPosition.LEFT
-                                } as Mapitem
-                            });
-                            this.cdr.markForCheck();
-                        }
-                    }
-                ]
-            },
-            {
-                separator: true
-            },
-            {
-                label: this.TranslocoService.translate('Delete'),
-                styleClass: 'text-danger',
-                icon: 'fa fa-trash',
-                command: () => {
-                    this.contextActionEvent.emit({
-                        type: 'delete', data: {
-                            id: this.id,
-                            x: this.x,
-                            y: this.y,
-                            map_id: this.mapId,
-                        }
-                    });
-                    this.cdr.markForCheck();
-                }
-            }
-        ]
     }
 
 }

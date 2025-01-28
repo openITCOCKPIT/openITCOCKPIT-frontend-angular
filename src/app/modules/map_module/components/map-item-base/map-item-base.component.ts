@@ -12,13 +12,14 @@ import {
     Output,
     ViewChild
 } from '@angular/core';
-import { ContextAction, MapitemBase } from './map-item-base.interface';
+import { ContextAction, MapitemBase, MapitemBaseActionObject } from './map-item-base.interface';
 import { CdkDrag, CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
-import { Mapline } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapitem, Mapline } from '../../pages/mapeditors/Mapeditors.interface';
+import { ContextActionType, MapItemType } from './map-item-base.enum';
 
 @Component({
     selector: 'oitc-map-item-base',
@@ -32,6 +33,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     @ViewChild('container', {static: true}) containerRef!: ElementRef<HTMLDivElement>;
 
     public item: InputSignal<T | undefined> = input<T | undefined>();
+    public layers: InputSignal<string[]> = input<string[]>([]);
     public gridSize: InputSignal<{ x: number, y: number }> = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
     public gridEnabled: InputSignal<boolean> = input<boolean>(true);
     public isViewMode: InputSignal<boolean> = input<boolean>(true);
@@ -45,14 +47,21 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     protected startY?: number;
     protected endX?: number;
     protected endY?: number;
+    protected oldStartX?: number;
+    protected oldStartY?: number;
+    protected oldEndX?: number;
+    protected oldEndY?: number;
 
-    @Output() dropItemEvent = new EventEmitter<MapitemBase>();
+    // will be overridden by child components
+    protected type = MapItemType.ITEM;
+
+    @Output() dropItemEvent = new EventEmitter<MapitemBaseActionObject>();
     @Output() contextActionEvent = new EventEmitter<ContextAction>();
 
     protected readonly TranslocoService = inject(TranslocoService);
 
     protected cdr = inject(ChangeDetectorRef);
-    private mapCanvasComponent: MapCanvasComponent;
+    protected mapCanvasComponent: MapCanvasComponent;
 
     protected contextMenuItems: MenuItem[] = this.getDefaultContextMenuItems();
 
@@ -66,6 +75,10 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                 this.startY = this.item()!.startY;
                 this.endX = this.item()!.endX;
                 this.endY = this.item()!.endY;
+                this.oldStartX = this.startX;
+                this.oldStartY = this.startY;
+                this.oldEndX = this.endX;
+                this.oldEndY = this.endY;
             } else {
                 this.x = this.item()!.x;
                 this.y = this.item()!.y;
@@ -73,6 +86,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
             this.zIndex = this.item()!.z_index!;
             this.setPosition();
             this.setLayer(this.zIndex);
+            this.contextMenuItems = this.getDefaultContextMenuItems();
         });
     }
 
@@ -107,6 +121,10 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         return item && item.startX !== undefined && item.startY !== undefined && item.endX !== undefined && item.endY !== undefined;
     }
 
+    public isItemDeleted(type: MapItemType): boolean {
+        return this.parent.currentDeletedItem()?.id === this.id && this.parent.currentDeletedItem()?.type === type;
+    }
+
     //grid snapping logic
     onDragMove(event: CdkDragMove<any>) {
 
@@ -130,8 +148,6 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     // fires drag end event and grid snapping logic
     public onDragEnd(cdkEvent: CdkDragEnd<any>) {
 
-        console.error("drag end");
-
         // grid snapping logic
         const mapCanvas = this.mapCanvasComponent.canvasContainerRef.nativeElement.getBoundingClientRect();
         const mapItem = cdkEvent.source.element.nativeElement.getBoundingClientRect();
@@ -150,10 +166,24 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         }
 
         if (this.isMapline(this.item())) {
+            //Get movement distance
+
+            let distanceX = this.oldStartX! - posX;
+            distanceX = distanceX * -1;
+            let distanceY = this.oldStartY! - posY;
+            distanceY = distanceY * -1;
+
+            this.endX = this.oldEndX! + distanceX;
+            this.endY = this.oldEndY! + distanceY;
+
             this.startX = posX;
             this.startY = posY;
-            this.endX = this.item()!.endX;
-            this.endY = this.item()!.endY;
+
+            this.oldStartX = this.startX;
+            this.oldStartY = this.startY;
+            this.oldEndX = this.endX;
+            this.oldEndY = this.endY;
+
         } else {
             this.x = posX;
             this.y = posY;
@@ -164,20 +194,52 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
         // emit drop event
         this.dropItemEvent.emit({
-            id: this.id,
-            x: posX,
-            y: posY,
-            map_id: this.mapId,
-            startX: this.startX,
-            startY: this.startY,
-            endX: this.endX,
-            endY: this.endY,
+            data: {
+                id: this.id,
+                x: posX,
+                y: posY,
+                map_id: this.mapId,
+                startX: this.startX,
+                startY: this.startY,
+                endX: this.endX,
+                endY: this.endY
+            },
+            action: 'dragstop',
+            type: this.type
         });
 
         this.cdr.markForCheck();
     }
 
     protected getDefaultContextMenuItems(): MenuItem[] {
+
+        let layerOptions: MenuItem[] = [];
+        for (let key in this.layers()) {
+            let icon = "";
+            if (key === this.item()!.z_index) {
+                icon = "fa fa-check";
+            }
+            layerOptions.push({
+                label: this.layers()[key],
+                icon: icon,
+                command: () => {
+                    this.contextActionEvent.emit({
+                        type: ContextActionType.LAYER,
+                        data: {
+                            id: this.id,
+                            x: this.x,
+                            y: this.y,
+                            map_id: this.mapId,
+                            z_index: key
+                        } as Mapitem,
+                        itemType: this.type
+                    });
+                    this.cdr.markForCheck();
+                }
+            });
+        }
+
+        const extraItems = this.getExtraContextMenuItems().flat();
         return [
             {
                 label: this.TranslocoService.translate('Edit'),
@@ -187,22 +249,40 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                 }
             },
             {
+                separator: true
+            },
+            {
+                label: this.TranslocoService.translate('Layers'),
+                icon: 'fa fa-layer-group',
+                items: layerOptions
+            },
+            ...extraItems,
+            {
+                separator: true
+            },
+            {
                 label: this.TranslocoService.translate('Delete'),
                 styleClass: 'text-danger',
                 icon: 'fa fa-trash',
                 command: () => {
                     this.contextActionEvent.emit({
-                        type: 'delete', data: {
+                        type: ContextActionType.DELETE,
+                        data: {
                             id: this.id,
                             x: this.x,
                             y: this.y,
                             map_id: this.mapId,
-                        }
+                        },
+                        itemType: this.type
                     });
                     this.cdr.markForCheck();
                 }
             }
-        ]
+        ];
+    }
+
+    protected getExtraContextMenuItems(): MenuItem[] {
+        return [];
     }
 
 }
