@@ -84,7 +84,8 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
 
     public post?: JiraSettingsPost;
     public errors: GenericValidationError | null = null;
-    public webhook_url: string = '';
+    public webhook_url_acknowledgements: string = '';
+    public webhook_url_closed: string = '';
     public selectedJiraProjects: string[] = [];
     public jiraProjectsForSelect: SelectKeyValueString[] = [];
 
@@ -125,6 +126,7 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
                         // Also load project details from Jira
                         const params: LoadJiraProjectParams = {
                             jira_url: this.post.jira_url,
+                            username: this.post.username,
                             api_key: this.post.api_key,
                             jira_type: this.post.jira_type,
                             ignore_ssl_certificate: this.post.ignore_ssl_certificate,
@@ -153,7 +155,8 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
             )
         );
         const API_KEY_TRANSLATION = this.TranslocoService.translate('YOUR_API_KEY_HERE');
-        this.webhook_url = `https://${window.location.hostname}/jira_module/webhook/submit.json?apikey=${API_KEY_TRANSLATION}`;
+        this.webhook_url_acknowledgements = `https://${window.location.hostname}/jira_module/webhooks/acknowledge.json?apikey=${API_KEY_TRANSLATION}`;
+        this.webhook_url_closed = `https://${window.location.hostname}/jira_module/webhooks/close.json?apikey=${API_KEY_TRANSLATION}`;
         this.cdr.markForCheck();
     }
 
@@ -166,10 +169,12 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
             return;
         }
 
+
         this.isLoadingJiraProjects = true;
 
         const params: LoadJiraProjectParams = {
             jira_url: this.post.jira_url,
+            username: this.post.username,
             api_key: this.post.api_key,
             jira_type: this.post.jira_type,
             ignore_ssl_certificate: this.post.ignore_ssl_certificate,
@@ -239,6 +244,7 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
             if (this.post.jira_projects.length > 0) {
                 const params: LoadJiraProjectParams = {
                     jira_url: this.post.jira_url,
+                    username: this.post.username,
                     api_key: this.post.api_key,
                     jira_type: this.post.jira_type,
                     ignore_ssl_certificate: this.post.ignore_ssl_certificate,
@@ -249,7 +255,6 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
                     this.projectDetails[this.post.jira_projects[i].project_key] = {
                         issueTypes: []
                     };
-
 
                     this.subscriptions.add(
                         this.JiraSettingsService.loadProjectDetails(params, this.post.jira_projects[i].project_key).subscribe((result): void => {
@@ -403,4 +408,6 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
 
         return null;
     }
+
+    protected readonly JiraType = JiraType;
 }
