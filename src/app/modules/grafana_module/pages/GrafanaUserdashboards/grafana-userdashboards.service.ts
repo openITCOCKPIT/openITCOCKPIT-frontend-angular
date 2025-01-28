@@ -128,6 +128,51 @@ export class GrafanaUserdashboardsService {
             );
     }
 
+    public getUserdashboardEdit(id: number): Observable<GrafanaUserdashboardPost> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            dashboard: any,
+            hasGrafanaConfig: boolean
+        }>(`${proxyPath}/grafana_module/grafana_userdashboards/edit/${id}.json?angular=true`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return {
+                    GrafanaUserdashboard: {
+                        id: data.dashboard.id,
+                        container_id: data.dashboard.container_id,
+                        name: data.dashboard.name,
+                        refresh: data.dashboard.refresh,
+                        range: data.dashboard.range,
+                    }
+                }
+            })
+        );
+    }
+
+    public saveUserdashboardEdit(dashboard: GrafanaUserdashboardPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/grafana_module/grafana_userdashboards/edit/${dashboard.GrafanaUserdashboard.id}.json?angular=true`, dashboard.GrafanaUserdashboard)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.dashboard as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
     public loadContainers(): Observable<{ containers: SelectKeyValue[], hasGrafanaConfig: boolean }> {
         const proxyPath = this.proxyPath;
         return this.http.get<{

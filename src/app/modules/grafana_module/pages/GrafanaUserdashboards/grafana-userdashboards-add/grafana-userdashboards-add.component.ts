@@ -100,14 +100,14 @@ export class GrafanaUserdashboardsAddComponent implements OnInit, OnDestroy {
                 name: '',
                 container_id: 0,
                 range: 'now-3h',
-                autoRefresh: '1m'
+                refresh: '1m'
             }
         };
     }
 
     public onGrafanaTimeRangeChange(event: GrafanaTimepickerChange): void {
         this.post.GrafanaUserdashboard.range = event.timerange;
-        this.post.GrafanaUserdashboard.autoRefresh = event.autorefresh;
+        this.post.GrafanaUserdashboard.refresh = event.autorefresh;
         this.cdr.markForCheck();
     }
 

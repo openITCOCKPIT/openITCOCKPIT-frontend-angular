@@ -100,7 +100,7 @@ export interface GrafanaUserdashboardPost {
         id?: number
         container_id: number
         name: string
-        autoRefresh: string    // 1m
+        refresh: string    // 1m
         range: string         // now-3h
     }
 }
