@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import { GrafanaUserDashboardsIndexParams, GrafanaUserdashboardsIndexRoot } from './grafana-userdashboards.interface';
+import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { SynchronizeGrafanaResponse } from '../../components/synchronize-grafana-modal/synchronize.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -20,5 +22,19 @@ export class GrafanaUserdashboardsService {
                 return data;
             })
         )
+    }
+
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.post(`${proxyPath}/grafana_module/grafana_userdashboards/delete/${item.id}.json`, {});
+    }
+
+    public synchronizeWithGrafana(id: number): Observable<SynchronizeGrafanaResponse> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<SynchronizeGrafanaResponse>(`${proxyPath}/grafana_module/grafana_userdashboards/synchronizeWithGrafana.json?angular=true`, {
+            id: id
+        });
     }
 }
