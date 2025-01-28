@@ -72,6 +72,9 @@ import {
     PrometheusCodeMirrorComponent
 } from '../../../components/prometheus-code-mirror/prometheus-code-mirror.component';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import {
+    PrometheusThresholdsComponent
+} from '../../../components/prometheus-thresholds/prometheus-thresholds.component';
 
 @Component({
     selector: 'oitc-prometheus-query-to-service',
@@ -125,7 +128,8 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
         PrometheusCodeMirrorComponent,
         FormCheckInputDirective,
         ButtonGroupComponent,
-        FormFeedbackComponent
+        FormFeedbackComponent,
+        PrometheusThresholdsComponent
     ],
     templateUrl: './prometheus-query-to-service.component.html',
     styleUrl: './prometheus-query-to-service.component.css',
@@ -265,7 +269,20 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
             }));
     }
 
+
     protected createServices(): void {
+        this.createServicesArray.forEach((service: PrometheusCreateService) => {
+            this.subscriptions.add(this.PrometheusQueryService.createServices(service)
+                .subscribe((result: GenericResponseWrapper) => {
+                    if (!result.success) {
+                        this.notyService.genericError();
+                        this.errors = result.data;
+                        console.debug(this.errors);
+                        this.cdr.markForCheck();
+                        return;
+                    }
+                }));
+        });
 
     }
 
@@ -277,7 +294,9 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
                     this.errors = result.data;
                     console.debug(this.errors);
                     this.cdr.markForCheck();
+                    return;
                 }
+
             }));
     }
 

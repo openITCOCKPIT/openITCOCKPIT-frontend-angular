@@ -5,7 +5,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import {
     LoadCurrentValueByMetricRoot,
     LoadServicetemplates,
-    LoadValueByMetricRoot,
+    LoadValueByMetricRoot, PrometheusCreateService,
     PrometheusPerformanceDataParams,
     PrometheusPerformanceDataRoot,
     PrometheusQueryApiResult,
@@ -92,6 +92,30 @@ export class PrometheusQueryService {
             user: ProfileUser
         }>(`${this.proxyPath}/prometheus_module/PrometheusQuery/validateService.json?angular=true`, {
             Service: ValidateService
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: {}
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public createServices(PrometheusCreateService: PrometheusCreateService) : Observable<GenericResponseWrapper>{
+        return this.http.post<{
+            user: ProfileUser
+        }>(`${this.proxyPath}/prometheus_module/PrometheusQuery/createService.json?angular=true`, {
+            Service: PrometheusCreateService
         })
             .pipe(
                 map(data => {
