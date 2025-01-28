@@ -135,8 +135,8 @@ export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams
 
 export function getDefaultCustomAlertsIndexFilter(): CustomAlertsIndexFilter {
     let now = new Date();
-    // From: 30 days ago
-    let fromStr: string = formatDate(new Date(now.getTime() - 86400000 * 30), 'yyyy-MM-ddTHH:mm', 'en-US');
+    // From: 6 months / 180 days ago
+    let fromStr: string = formatDate(new Date(now.getTime() - 86400000 * 30 * 6), 'yyyy-MM-ddTHH:mm', 'en-US');
     // To: Tomorrow
     let toStr: string = formatDate(new Date(now.getTime() + 86400000), 'yyyy-MM-ddTHH:mm', 'en-US');
 
