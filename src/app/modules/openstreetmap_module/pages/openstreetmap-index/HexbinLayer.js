@@ -52,7 +52,7 @@ L.HexbinLayer = L.SVG.extend({
 
     },
 
-    /* value: function value(d) {
+     value: function value(d) {
          //return _.meanBy(d, (o) => o.o.colorcode)
          var stats = [];
          d.forEach(function(o) {
@@ -61,7 +61,7 @@ L.HexbinLayer = L.SVG.extend({
          return stats.reduce(function(a, b) {
              return Math.max(a, b);
          }, -Infinity);
-     }, */
+     },
 
 
 
@@ -92,7 +92,7 @@ L.HexbinLayer = L.SVG.extend({
             },
 
             fill: function(d) {
-                var val = this._fn.colorValue(d);
+                var val = this.options.value(d);
                 return ( null != val ) ? this._scale.color(val) : 'none';
             }
 

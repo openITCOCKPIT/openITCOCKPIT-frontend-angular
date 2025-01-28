@@ -104,6 +104,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     private includedLocations: number[] = [];
     public map!: L.Map;
     public hexlayer!: L.HexbinLayer;
+    private intervalId: any = null;
 
     public indexParams: OpenstreetmapIndexParams = {
         'angular': true,
@@ -149,6 +150,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     }
 
     public ngOnDestroy(): void {
+        clearInterval(this.intervalId);
         this.subscriptions.unsubscribe();
     }
 
@@ -174,7 +176,6 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         });
 
         this.map.addControl(new newCustomControl());
-
         this.loadAclsAndSettings();
 
     }
@@ -207,6 +208,11 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
                 this.mapData = mapData;
                 this.buildLayers();
                 this.cdr.markForCheck();
+                if(this.intervalId === null) {
+                    this.intervalId = setInterval(() => {
+                        this.loadMapData(false);
+                    }, this.settings.reload_interval * 1000);
+                }
             })
         );
     }
@@ -264,6 +270,8 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     }
 
     public onFilterChange(event: Event) {
+        clearInterval(this.intervalId);
+        this.intervalId = null;
         this.settingsFilter.state_filter = this.settingsFilter.filter.up_ok |
             this.settingsFilter.filter.warning |
             this.settingsFilter.filter.down_critical |
