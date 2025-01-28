@@ -220,6 +220,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
             attribution: "&copy; <a target='_blank' href='http://openstreetmap.org/copyright'>OpenStreetMap</a> contributors | <a target='_blank' href='https://it-novum.com'>it-novum.com</a>",
             noWrap: false
         }).addTo(this.map);
+
         let cells = chain(this.mapData.locations).groupBy(function (location) {
             return location.container.id;
         }).map(function (values) {
@@ -231,12 +232,18 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
                 colorcode: values[0].colorcode
             };
         }).value();
+        if (this.hexlayer) {
+            this.hexlayer.remove();
+        }
 
-        this.hexlayer = hexbinLayer({click: (pointData: any) => this.hexClick(pointData)}).data(cells);
-        this.hexlayer.addTo(this.map);
 
-        // @ts-ignore
-        this.map.fitBounds(new L.LatLngBounds(this.mapData.locationPoints));
+        this.hexlayer = hexbinLayer({click: (pointData: any) => this.hexClick(pointData)}).data(cells).addTo(this.map);
+        //this.hexlayer.addTo(this.map);
+        if(this.mapData.locationPoints.length > 0) {
+            // @ts-ignore
+            this.map.fitBounds(new L.LatLngBounds(this.mapData.locationPoints));
+        }
+
     }
 
     public hexClick(pointData: any) {
