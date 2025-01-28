@@ -457,7 +457,9 @@
                 </tr>
                 </thead>
                 <tbody *ngIf="importedhosts">
-                <tr *ngFor="let importedhost of importedhosts">
+                <tr *ngFor="let importedhost of importedhosts"
+                    [ngClass]="{'bg-host-marked-for-disable':  ((importedhost.host && importedhost.host.disabled==0) || importedhost.host_id == null ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE),
+                                'bg-host-marked-for-re-enable':  (importedhost.host && importedhost.host.disabled==1) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)}">
                     <td>
                         <oitc-item-select
                             *oitcPermission="['ImportModule','importedhosts', 'delete']"
@@ -475,67 +477,73 @@
                             <i class="fas fa-cloud-sun-rain sun-cloud-gradient-rain"></i>
                         </span>
                     </td>
-                    <td [ngClass]="{'bg-host-to-disable': ((importedhost.host && importedhost.host.disabled==0) || importedhost.host_id == null ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE),
+                    <td class="position-relative"
+                        [ngClass]="{'bg-host-to-disable': ((importedhost.host && importedhost.host.disabled==0) || importedhost.host_id == null ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE),
                                 'bg-host-to-change': (importedhost.host && importedhost.host.disabled==0) && (hasFlag(importedhost.flags,  ImportedHostFlagsEnum.FLAG_MARKED_CHANGED) && !hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)),
                                 'bg-host-to-re-enable':  (importedhost.host && importedhost.host.disabled==1) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)}">
-                        {{ importedhost.name }}
-                        <c-badge color="success" *ngIf="importedhost.imported !== 1">
-                            <fa-icon [icon]="['fas', 'star']"></fa-icon>
-                            {{ t('NEW') }}
-                        </c-badge>
-                        @if (importedhost.imported === 1 && ( importedhost.host && importedhost.host.disabled === 0 )) {
-                            <c-badge color="info" *oitcPermission="['hosts', 'edit']"
-                                     [routerLink]="['/', 'hosts', 'edit', importedhost.host_id]"
-                                     class="cursor-pointer">
-                                <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
-                                {{ t('In monitoring') }}
-                            </c-badge>
+                        <div class="h-100">
+                            <a *oitcPermission="['hosts', 'edit']"
+                               [routerLink]="['/', 'hosts', 'edit', importedhost.host_id]">
+                                {{ importedhost.name }}
+                            </a>
                             <span *oitcPermission="['hosts', 'edit']; negate: true">
-                                <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
-                                {{ t('In monitoring') }}
+                                {{ importedhost.name }}
                             </span>
-                        }
-                        @if (( importedhost.host && importedhost.host.disabled === 0 ) && importedhost.host_id === null && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)) {
-                            <c-badge color="danger" class="cursor-help">
-                                <fa-icon [icon]="['fas', 'box-archive']"></fa-icon>
-                                {{ t('Marked for disable') }}
+                            <c-badge color="success" class="mx-1" *ngIf="importedhost.imported !== 1">
+                                <fa-icon [icon]="['fas', 'star']"></fa-icon>
+                                {{ t('NEW') }}
                             </c-badge>
-                        }
-                        @if (( importedhost.host && importedhost.host.disabled === 0 ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_CHANGED) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)) {
-                            <c-badge color="danger" class="cursor-help">
-                                <fa-icon [icon]="['fas', 'person-digging']"></fa-icon>
-                                {{ t('Imported host with changes') }}
-                            </c-badge>
-                        }
-                        @if (importedhost.host && importedhost.host.disabled === 1) {
-                            <c-badge color="warning" *oitcPermission="['hosts', 'browser']"
-                                     [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]"
-                                     class="cursor-pointer text-white">
-                                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                {{ t('In monitoring (disabled)') }}
-                            </c-badge>
-                            <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                {{ t('In monitoring (disabled)') }}
-                            </span>
-                        }
-                        @if (( importedhost.host && importedhost.host.disabled === 1 ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)) {
-                            <c-badge color="success" class="cursor-help">
-                                <fa-icon [icon]="['fas', 'boxes-packing']"></fa-icon>
-                                {{ t('Marked for re-enable') }}
-                            </c-badge>
-                        }
-                        @if (( importedhost.host && importedhost.host.disabled === 0 ) || importedhost.host_id === null
+                            @if (importedhost.imported === 1 && ( importedhost.host && importedhost.host.disabled === 0 )) {
+                                <c-badge color="info" *oitcPermission="['hosts', 'edit']"
+                                         [routerLink]="['/', 'hosts', 'edit', importedhost.host_id]"
+                                         class="cursor-pointer">
+                                    <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
+                                    {{ t('In monitoring') }}
+                                </c-badge>
+                                <span *oitcPermission="['hosts', 'edit']; negate: true">
+                                    <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
+                                    {{ t('In monitoring') }}
+                                </span>
+                            }
+                            @if (( ( importedhost.host && importedhost.host.disabled === 0 ) || importedhost.host_id === null ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)) {
+                                <c-badge color="danger" class="cursor-help mx-1" [title]="t('Marked for disable')">
+                                    <fa-icon [icon]="['fas', 'box-archive']"></fa-icon>
+                                </c-badge>
+                            }
+                            @if (( importedhost.host && importedhost.host.disabled === 0 ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_CHANGED)) {
+                                <c-badge color="primary" class="cursor-help mx-1"
+                                         [title]="t('Imported host with changes')">
+                                    <fa-icon [icon]="['fas', 'person-digging']"></fa-icon>
+                                </c-badge>
+                            }
+                            @if (importedhost.host && importedhost.host.disabled === 1) {
+                                <c-badge color="warning" *oitcPermission="['hosts', 'browser']"
+                                         [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]"
+                                         class="cursor-pointer text-white">
+                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                    {{ t('In monitoring (disabled)') }}
+                                </c-badge>
+                                <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                    {{ t('In monitoring (disabled)') }}
+                                </span>
+                            }
+                            @if (( importedhost.host && importedhost.host.disabled === 1 ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)) {
+                                <c-badge color="success" class="cursor-help mx-1" [title]="t('Marked for re-enable')">
+                                    <fa-icon [icon]="['fas', 'boxes-packing']"></fa-icon>
+                                </c-badge>
+                            }
+                        </div>
+                        @if (( ( importedhost.host && importedhost.host.disabled === 0 ) || importedhost.host_id === null )
                         && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)) {
-                            <fa-icon [icon]="['fas', 'xmark']" class="power-off text-white"></fa-icon>
+                            <fa-icon [icon]="['fas', 'plug-circle-xmark']" class="power-off text-white"></fa-icon>
                         }
                         @if (( importedhost.host
                             && importedhost.host.disabled === 0 )
                         && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_CHANGED)) {
-                            <fa-icon [icon]="['fas', 'screwdriver']" class="text-white" [size]="'lg'"></fa-icon>
+                            <fa-icon [icon]="['fas', 'screwdriver-wrench']" class="with-changes text-white"></fa-icon>
                         }
-                        @if (( importedhost.host
-                            && importedhost.host.disabled === 1 )
+                        @if (( importedhost.host && importedhost.host.disabled === 1 )
                         && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)) {
                             <fa-icon [icon]="['fas', 'plug-circle-plus']" class="power-on text-white"></fa-icon>
                         }

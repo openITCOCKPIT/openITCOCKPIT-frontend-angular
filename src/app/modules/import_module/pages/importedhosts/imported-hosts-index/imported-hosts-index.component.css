@@ -271,19 +271,22 @@
 .with-changes,
 .power-on {
     position: absolute;
-    bottom: 3px;
-    right: 3px;
+    bottom: 1px;
+    right: 1px;
     font-size: 18px;
 }
 
 .bg-host-marked-for-disable {
-    background-image: linear-gradient(135deg, #d6d6d64D 25%, transparent 25%, transparent 50%, #d6d6d64D 50%, #d6d6d64D 75%, transparent 75%, transparent 100%);
+    background-image: linear-gradient(135deg, #d6d6d626 25%, transparent 25%, transparent 50%, #d6d6d626 50%, #d6d6d626 75%, transparent 75%, transparent 100%);
     background-size: 61px 61px;
+    --cui-table-bg: linear-gradient(135deg, #d6d6d626 25%, transparent 25%, transparent 50%, #d6d6d626 50%, #d6d6d626 75%, transparent 75%, transparent 100%);
+
 }
 
 .bg-host-marked-for-re-enable {
     background-image: linear-gradient(135deg, #00C85119 25%, transparent 25%, transparent 50%, #00C85119 50%, #00C85119 75%, transparent 75%, transparent 100%);
     background-size: 61px 61px;
+    --cui-table-bg: linear-gradient(135deg, #00C85119 25%, transparent 25%, transparent 50%, #00C85119 50%, #00C85119 75%, transparent 75%, transparent 100%);
 }
 
 
