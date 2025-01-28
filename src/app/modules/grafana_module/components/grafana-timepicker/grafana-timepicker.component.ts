@@ -45,8 +45,8 @@ import { Subscription } from 'rxjs';
 })
 export class GrafanaTimepickerComponent implements OnDestroy {
 
-    private selectedTimerange = 'now-3h';
-    private selectedAutoRefresh = '1m';
+    public selectedTimerange = 'now-3h';
+    public selectedAutoRefresh = '1m';
 
     selectedTimerangeInput = input<string>('now-3h');
     selectedAutoRefreshInput = input<string>('1m');
