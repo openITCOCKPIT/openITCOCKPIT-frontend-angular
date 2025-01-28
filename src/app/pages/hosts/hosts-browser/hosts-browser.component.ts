@@ -206,7 +206,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public GrafanaIframe?: GrafanaIframeUrlForDatepicker;
 
     public selectedGrafanaTimerange: string = 'now-3h';
-    public selectedGrafanaAutorefresh: string = '60s';
+    public selectedGrafanaAutorefresh: string = '1m';
 
     public AdditionalInformationExists: boolean = false;
     public isarFlowInformationExists: boolean = false;

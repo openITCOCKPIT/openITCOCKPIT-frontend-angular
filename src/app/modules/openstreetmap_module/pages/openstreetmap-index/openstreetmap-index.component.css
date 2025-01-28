@@ -1,0 +1,51 @@
+.hexbin-hexagon {
+    stroke: #000;
+    stroke-width: .5px;
+}
+
+
+.leaflet-pane > svg .d3-overlay path {
+    pointer-events: all;
+}
+#legend {
+    position: relative;
+    height: 225px;
+    width: 175px;
+    z-index: 1000;
+    background-color: rgba(238, 238, 238, 0.7);
+    margin-top: -225px;
+}
+
+#legend-inner {
+    position: relative;
+    left: 12px;
+    bottom: -12px;
+    z-index: 1001;
+    pointer-events: none;
+    height: 200px;
+    display: flex;
+}
+
+#legend-inner .gradient {
+    opacity: 0.8;
+    width: 20px;
+    background: linear-gradient(to top, rgba(0, 62, 249, 1) 0%, rgba(0, 200, 56, 1) 25%, rgba(255, 217, 56, 1) 50%, rgba(233, 34, 35, 1) 75%, rgba(128, 128, 128, 1) 100%);
+    position: relative;
+}
+
+#legend-inner .labels {
+    width: 150px;
+    position: relative;
+}
+
+#legend-inner .labels .label {
+    position: absolute;
+    transform: translateY(50%);
+    color: rgba(0, 0, 0, 0.87);
+    font-weight: bold;
+    font-size: smaller;
+}
+
+#legend-inner .labels .label:before {
+    content: '– ';
+}

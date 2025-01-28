@@ -131,7 +131,7 @@
                                 {{ userdashboard.name }}
                                 @if (PermissionsService.hasPermissionObservable(['GrafanaModule', 'GrafanaUserdashboards', 'edit'])|async) {
                                     <c-badge color="primary" class="cursor-pointer"
-                                             (click)="synchronizeWithGrafana([userdashboard])">
+                                             (click)="synchronizeWithGrafana(userdashboard)">
                                         {{ t('Not synchronized') }}
                                     </c-badge>
                                 } @else {
@@ -150,18 +150,90 @@
                         <oitc-actions-button [permission]="'GrafanaModule.GrafanaUserdashboards.editor'"
                                              [icon]="['fas', 'cog']"
                                              [allowEdit]="userdashboard.allowEdit"
-                                             [url]="'/hosts/browser/' + userdashboard.id">
+                                             [url]="'/grafana_module/grafana_userdashboards/editor/' + userdashboard.id">
                             <oitc-actions-button-element [permission]="'GrafanaModule.GrafanaUserdashboards.editor'"
                                                          *ngIf="userdashboard.allowEdit"
                                                          [url]="'/grafana_module/grafana_userdashboards/editor/' + userdashboard.id">
                                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                 {{ t('Open in Editor') }}
                             </oitc-actions-button-element>
+                            <li *oitcPermission="'GrafanaModule.GrafanaUserdashboards.edit'">
+                                <a cDropdownItem href="javascript:void(0);" *ngIf="userdashboard.allowEdit"
+                                   (click)="synchronizeWithGrafana(userdashboard)">
+                                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                    {{ t('Synchronize') }}
+                                </a>
+                            </li>
+
+                            <li cDropdownDivider *oitcPermission="'GrafanaModule.GrafanaUserdashboards.edit'"></li>
+                            <oitc-actions-button-element [permission]="'GrafanaModule.GrafanaUserdashboards.edit'"
+                                                         *ngIf="userdashboard.allowEdit"
+                                                         [url]="'/grafana_module/grafana_userdashboards/edit/' + userdashboard.id">
+                                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                                {{ t('Edit settings') }}
+                            </oitc-actions-button-element>
+
+                            <li cDropdownDivider *oitcPermission="'GrafanaModule.GrafanaUserdashboards.view'"></li>
+                            <oitc-actions-button-element [permission]="'GrafanaModule.GrafanaUserdashboards.view'"
+                                                         [url]="'/grafana_module/grafana_userdashboards/view/' + userdashboard.id">
+                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                {{ t('View') }}
+                            </oitc-actions-button-element>
+
+                            <li cDropdownDivider *oitcPermission="'GrafanaModule.GrafanaUserdashboards.copy'"></li>
+                            <oitc-actions-button-element [permission]="'GrafanaModule.GrafanaUserdashboards.copy'"
+                                                         [url]="'/grafana_module/grafana_userdashboards/copy/' + userdashboard.id">
+                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                {{ t('Copy') }}
+                            </oitc-actions-button-element>
+
+                            <li cDropdownDivider *ngIf="userdashboard.allowEdit"></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(userdashboard)"
+                                                         [permission]="'GrafanaModule.GrafanaUserdashboards.delete'"
+                                                         *ngIf="userdashboard.allowEdit">
+                                <span class="text-danger">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete') }}
+                                </span>
+                            </oitc-actions-button-element>
+
                         </oitc-actions-button>
                     </td>
                 </tr>
                 </tbody>
             </table>
+
+            <ng-container *ngIf="grafanaUserdhasobards && grafanaUserdhasobards.all_userdashboards">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="grafanaUserdhasobards.all_userdashboards.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        (click)="navigateCopy()">
+                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                    {{ t('Copy') }}
+                                </button>
+                                <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        (click)="synchronizeWithGrafana()">
+                                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                    {{ t('Synchronize') }}
+                                </button>
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </ng-container>
 
             <c-container class="mt-3"
                          [fluid]="true">
@@ -181,3 +253,8 @@
     </c-card>
 
 </ng-container>
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+
+<oitc-synchronize-grafana-modal (completed)="onMassActionComplete($event)"
+                                [items]="selectedItems"></oitc-synchronize-grafana-modal>

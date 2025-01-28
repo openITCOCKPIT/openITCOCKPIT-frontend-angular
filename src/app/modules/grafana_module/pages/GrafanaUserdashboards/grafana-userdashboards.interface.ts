@@ -43,3 +43,29 @@ export function getDefaultGrafanaUserDashboardsIndexParams(): GrafanaUserDashboa
         'filter[GrafanaUserdashboards.name]': ''
     };
 }
+
+/*********************
+ *    view action    *
+ *********************/
+
+export interface GrafanaUserdashboardViewResponse {
+    dashboard: {
+        id: number
+        container_id: number
+        configuration_id: number
+        name: string
+        tooltip: number
+        range: string
+        refresh: string
+        grafana_uid: string
+        grafana_url: string
+    }
+    allowEdit: boolean
+    dashboardFoundInGrafana: boolean
+}
+
+export interface GrafanaUserdashboardViewIframeUrlResponse {
+    dashboardFoundInGrafana: boolean,
+    iframeUrl: string,
+    _csrfToken: string | null
+}

@@ -2,11 +2,12 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    effect,
+    ElementRef,
     EventEmitter,
     inject,
-    Input,
+    input,
     OnDestroy,
-    OnInit,
     Output
 } from '@angular/core';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -26,29 +27,31 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'oitc-grafana-timepicker',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    DropdownComponent,
-    XsButtonDirective,
-    DropdownToggleDirective,
-    DropdownMenuDirective,
-    RowComponent,
-    ColComponent,
-    NgForOf,
-    NgClass,
-    NgIf
-],
+        TranslocoDirective,
+        FaIconComponent,
+        DropdownComponent,
+        XsButtonDirective,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        RowComponent,
+        ColComponent,
+        NgForOf,
+        NgClass,
+        NgIf
+    ],
     templateUrl: './grafana-timepicker.component.html',
     styleUrl: './grafana-timepicker.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GrafanaTimepickerComponent implements OnInit, OnDestroy {
+export class GrafanaTimepickerComponent implements OnDestroy {
 
-    private readonly defaultTimerange = 'now-3h';
-    private readonly defaultAutoRefresh = '1m';
+    private selectedTimerange = 'now-3h';
+    private selectedAutoRefresh = '1m';
 
-    @Input() public selectedTimerange: string = this.defaultTimerange;
-    @Input() public selectedAutoRefresh: string = this.defaultAutoRefresh;
+    selectedTimerangeInput = input<string>('now-3h');
+    selectedAutoRefreshInput = input<string>('1m');
+
+
     @Output() change = new EventEmitter<GrafanaTimepickerChange>();
 
     public humanTimerange: string = '';
@@ -92,11 +95,14 @@ export class GrafanaTimepickerComponent implements OnInit, OnDestroy {
         ]
     };
 
-    public ngOnInit(): void {
-        this.setHumanNames();
-        this.cdr.markForCheck();
+    constructor(elementRef: ElementRef) {
+        effect(() => {
+            this.selectedTimerange = this.selectedTimerangeInput();
+            this.selectedAutoRefresh = this.selectedAutoRefreshInput();
+            this.setHumanNames();
+            this.cdr.markForCheck();
+        });
     }
-
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -128,7 +134,6 @@ export class GrafanaTimepickerComponent implements OnInit, OnDestroy {
     private setHumanNames(): void {
         this.humanTimerange = '';
         this.humanAutoRefresh = '';
-        this.cdr.markForCheck()
 
         for (const category of Object.values(this.timeranges)) {
             const item = category.find((item: any) => item.key === this.selectedTimerange);

@@ -14,6 +14,8 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownDividerDirective,
+    DropdownItemDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -50,6 +52,12 @@ import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/pa
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
+import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
+import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
+import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import {
+    SynchronizeGrafanaModalComponent
+} from '../../../components/synchronize-grafana-modal/synchronize-grafana-modal.component';
 
 @Component({
     selector: 'oitc-grafana-userdashboards-index',
@@ -89,10 +97,18 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
         XsButtonDirective,
         RouterLink,
         ItemSelectComponent,
-        BadgeComponent
+        BadgeComponent,
+        DropdownItemDirective,
+        DropdownDividerDirective,
+        SelectAllComponent,
+        DeleteAllModalComponent,
+        SynchronizeGrafanaModalComponent
     ],
     templateUrl: './grafana-userdashboards-index.component.html',
     styleUrl: './grafana-userdashboards-index.component.css',
+    providers: [
+        {provide: DELETE_SERVICE_TOKEN, useClass: GrafanaUserdashboardsService} // Inject the GrafanaUserdashboardsService into the DeleteAllModalComponent
+    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GrafanaUserdashboardsIndexComponent implements OnInit, OnDestroy, IndexPage {
@@ -127,6 +143,8 @@ export class GrafanaUserdashboardsIndexComponent implements OnInit, OnDestroy, I
     }
 
     public loadGrafanaUserdashboards() {
+        this.SelectionServiceService.deselectAll();
+
         this.subscriptions.add(this.GrafanaUserdashboardsService.getIndex(this.params).subscribe((response: GrafanaUserdashboardsIndexRoot) => {
             this.grafanaUserdhasobards = response;
             this.cdr.markForCheck();
@@ -188,6 +206,8 @@ export class GrafanaUserdashboardsIndexComponent implements OnInit, OnDestroy, I
         // Pass selection to the modal
         this.selectedItems = items;
 
+        this.cdr.markForCheck();
+
         // open modal
         this.modalService.toggle({
             show: true,
@@ -209,8 +229,37 @@ export class GrafanaUserdashboardsIndexComponent implements OnInit, OnDestroy, I
         }
     }
 
-    public synchronizeWithGrafana(userdashboards: GrafanaUserdashboardsIndex[]) {
-        console.log(userdashboards);
+
+    // Open the synchronize with Grafana Modal
+    public synchronizeWithGrafana(userdashboard?: GrafanaUserdashboardsIndex) {
+        let items: DeleteAllItem[] = [];
+
+        if (userdashboard) {
+            // User just want to synchronize a single command
+            items = [{
+                id: userdashboard.id,
+                displayName: userdashboard.name
+            }];
+        } else {
+            // User clicked on synchronize selected button
+            items = this.SelectionServiceService.getSelectedItems().map((item: GrafanaUserdashboardsIndex): DeleteAllItem => {
+                return {
+                    id: item.id,
+                    displayName: item.name
+                };
+            });
+        }
+
+        // Pass selection to the modal
+        this.selectedItems = items;
+
+        this.cdr.markForCheck();
+        
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'synchronizeGrafanaModal',
+        });
     }
 
 }
