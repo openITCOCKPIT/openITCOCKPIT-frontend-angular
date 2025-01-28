@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -81,7 +82,8 @@ import { NgFor, NgIf } from '@angular/common';
         FormCheckLabelDirective,
         NgxResizeObserverModule,
         NgIf,
-        NgFor
+        NgFor,
+        AlertComponent
     ],
     templateUrl: './openstreetmap-index.component.html',
     styleUrl: './openstreetmap-index.component.css',
@@ -92,7 +94,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     constructor() {
     }
 
-    @ViewChild('lmap') lmap!: ElementRef<HTMLElement>
+    @ViewChild('map') lmap!: ElementRef<HTMLElement>
 
     private cdr = inject(ChangeDetectorRef);
     private readonly OpenstreetmapService = inject(OpenstreetmapService);
@@ -105,6 +107,8 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     public map!: L.Map;
     public hexlayer!: L.HexbinLayer;
     private intervalId: any = null;
+    private intervalSecs: number = 0;
+    public initSettings: boolean = false;
 
     public indexParams: OpenstreetmapIndexParams = {
         'angular': true,
@@ -158,8 +162,6 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
 
         this.map = L.map(this.lmap.nativeElement, this.leafletOptions);
         //this.map.setView([51.481811, 7.219664], 13);
-        let bounds = this.map.getBounds();
-        let zoom = this.map.getZoom();
         let self = this;
         const newCustomControl = L.Control.extend({
             options: {
@@ -185,6 +187,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
             this.OpenstreetmapService.getAclAndSettings().subscribe((aclAndSettings) => {
                 this.acls = aclAndSettings.acl;
                 this.settings = aclAndSettings.settings;
+                this.intervalSecs = this.settings.reload_interval;
                 this.server_url = this.settings.server_url;
                 this.settingsFilter.state_filter = Number(this.settings.state_filter);
                 this.settingsFilter.hide_empty_locations = Number(this.settings.hide_empty_locations);
@@ -193,13 +196,14 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
                 this.settingsFilter.filter.warning = this.settingsFilter.state_filter & this.filterTemplate.warning;
                 this.settingsFilter.filter.down_critical = this.settingsFilter.state_filter & this.filterTemplate.down_critical;
                 this.settingsFilter.filter.unreachable_unknown = this.settingsFilter.state_filter & this.filterTemplate.unreachable_unknown;
-                this.loadMapData(false);
-                //this.cdr.markForCheck();
+                this.initSettings = true;
+                this.loadMapData();
+                this.cdr.markForCheck();
             })
         );
     }
 
-    public loadMapData(includedLocations: boolean): void {
+    public loadMapData(): void {
         this.indexParams['OpenstreetmapSetting[hide_empty_locations]'] = this.settingsFilter.hide_empty_locations;
         this.indexParams['OpenstreetmapSetting[hide_not_monitored_locations]'] = this.settings.hide_not_monitored_locations;
         this.indexParams['OpenstreetmapSetting[state_filter]'] = this.settingsFilter.state_filter;
@@ -208,10 +212,10 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
                 this.mapData = mapData;
                 this.buildLayers();
                 this.cdr.markForCheck();
-                if(this.intervalId === null) {
+                if(this.intervalId === null && this.intervalSecs >= 15) {
                     this.intervalId = setInterval(() => {
-                        this.loadMapData(false);
-                    }, this.settings.reload_interval * 1000);
+                        this.loadMapData();
+                    }, this.intervalSecs * 1000);
                 }
             })
         );
@@ -266,7 +270,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     }
 
     public refresh() {
-        this.loadMapData(false);
+        this.loadMapData();
     }
 
     public onFilterChange(event: Event) {
@@ -276,7 +280,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
             this.settingsFilter.filter.warning |
             this.settingsFilter.filter.down_critical |
             this.settingsFilter.filter.unreachable_unknown;
-        this.loadMapData(false);
+        this.loadMapData();
 
     }
 
@@ -314,7 +318,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         this.settingsFilter.filter.warning = this.settingsFilter.state_filter & this.filterTemplate.warning;
         this.settingsFilter.filter.down_critical = this.settingsFilter.state_filter & this.filterTemplate.down_critical;
         this.settingsFilter.filter.unreachable_unknown = this.settingsFilter.state_filter & this.filterTemplate.unreachable_unknown;
-        this.loadMapData(false);
+        this.loadMapData();
     }
 
     handleResize(event: any) {

@@ -204,7 +204,16 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <div #lmap id="lmap" class="d-flex" style="height: 80vh;" (onResize)="handleResize($event)"></div>
+            <div *ngIf="initSettings && !server_url">
+                <div class="text-danger no-padding pb-2 fs-5">
+                    <fa-icon class="danger" [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                    {{ t('Missing configuration or location settings') }}
+                </div>
+                <c-alert color="danger">{{ t('Configurati)on / OpenStreetMap Settings')}}</c-alert>
+            </div>
+
+            <div #map id="map" class="d-flex" style="height: 80vh;" (onResize)="handleResize($event)"></div>
+
             <div id="legend">
                 <div id="legend-inner">
                     <div class="gradient">
