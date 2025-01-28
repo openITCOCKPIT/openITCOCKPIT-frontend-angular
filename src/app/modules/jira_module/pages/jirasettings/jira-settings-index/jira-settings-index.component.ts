@@ -214,7 +214,6 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
             // Remove projects from post if they are not selected anymore
             for (const i in this.post.jira_projects) {
                 const projectKey = this.post.jira_projects[i].project_key;
-                console.log(this.selectedJiraProjects);
                 if (!this.selectedJiraProjects.includes(projectKey)) {
                     // Project is not selected anymore - remove it
                     this.post.jira_projects.splice(parseInt(i), 1);
@@ -280,7 +279,6 @@ export class JiraSettingsIndexComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as JiraSettingsPost;
-                    console.log(response);
                     this.errors = null;
                     this.notyService.genericSuccess();
                     return;
