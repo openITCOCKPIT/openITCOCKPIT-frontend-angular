@@ -38,6 +38,7 @@
 @import "@fontsource/roboto/900.css";
 @import "@fontsource/roboto/900-italic.css";
 @import "vanilla-jsoneditor/themes/jse-theme-dark.css";
+@import "leaflet/dist/leaflet.css";
 
 /*
  * Importing FontAwesome globally that we can Web Fonts which support gradients
@@ -137,4 +138,18 @@ a {
 
 .scroll-hidden::-webkit-scrollbar-thumb {
     display: none; /* for Chrome, Safari, and Opera */
+}
+
+.leaflet-control-custom {
+    background-color: white;
+    height: 34px;
+    width: 34px;
+}
+
+.leaflet-control-custom:after {
+    font-family: "FontAwesome";
+    content: "\f112";
+    color: #4285F4;
+    padding-left: 6px;
+    font-size: 22px;
 }
