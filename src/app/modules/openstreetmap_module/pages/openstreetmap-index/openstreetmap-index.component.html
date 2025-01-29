@@ -61,7 +61,7 @@
                 </c-row>
                 <form cForm>
                     <c-row class="mb-2">
-                        <c-col [xs]="12" lg="4">
+                        <c-col [xs]="12" [lg]="4">
                             <fieldset>
                                 <h5>
                                     {{ t('Show locations with status') }}
@@ -155,7 +155,8 @@
                                         [(ngModel)]="settingsFilter.hide_empty_locations"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.hEmpty">{{ t('Hide empty locations') }}</label>
-                                </c-form-check><c-form-check>
+                                </c-form-check>
+                                <c-form-check>
                                 <input
                                     (debouncedValue)="onFilterChange($event)"
                                     cFormCheckInput
