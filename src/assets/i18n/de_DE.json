@@ -62,7 +62,7 @@
     "Add": "Hinzufügen",
     "No Grafana configuration found!": "Keine Grafana Konfiguration gefunden!",
     "Grafana Configuration": "Grafana Konfiguration",
-    "A valid {0} is required, before this feature can be used.": "Eine gültige {{0}} ist erforderlich, bevor diese Funktion verwendet werden kann.",
+    "A valid is required, before this feature can be used.": "Eine gültige ist erforderlich, bevor diese Funktion verwendet werden kann.",
     "Create new user defined Grafana dashboard": "Erstellen Sie ein neues benutzerdefiniertes Grafana Dashboard",
     "Back": "Zurück",
     "created successfully": "erfolgreich erstellt",

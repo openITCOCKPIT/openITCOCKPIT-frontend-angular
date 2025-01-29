@@ -61,7 +61,7 @@
     "Add": "Добавить",
     "No Grafana configuration found!": "Конфигурация Графаны не найдена!",
     "Grafana Configuration": "Конфигурация Графаны",
-    "A valid {0} is required, before this feature can be used.": "Требуется действительное {{0}}, до того, как эта функция может быть использована.",
+    "A valid is required, before this feature can be used.": "Требуется действительное, до того, как эта функция может быть использована.",
     "Create new user defined Grafana dashboard": "Создать новую пользовательскую панель Графаны",
     "Back": "Назад",
     "created successfully": "Создано успешно",

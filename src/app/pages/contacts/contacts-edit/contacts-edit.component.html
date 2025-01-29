@@ -259,7 +259,11 @@
                                         />
                                         <label
                                             cFormCheckLabel
-                                            for="host_notifications_enabled">{{ t('Host notifications enabled') }}</label>
+                                            for="host_notifications_enabled">
+                                            <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-warning-glow"
+                                                     *ngIf="!post.host_notifications_enabled"></fa-icon>
+                                            {{ t('Host notifications enabled') }}
+                                        </label>
                                     </c-form-check>
                                 </div>
                                 <div class="custom-control custom-checkbox">
@@ -462,7 +466,11 @@
                                         />
                                         <label
                                             cFormCheckLabel
-                                            for="service_notifications_enabled">{{ t('Service notifications enabled') }}</label>
+                                            for="service_notifications_enabled">
+                                            <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-warning-glow"
+                                                     *ngIf="!post.service_notifications_enabled"></fa-icon>
+                                            {{ t('Service notifications enabled') }}
+                                        </label>
                                     </c-form-check>
                                 </div>
                                 <div class="custom-control custom-checkbox">
