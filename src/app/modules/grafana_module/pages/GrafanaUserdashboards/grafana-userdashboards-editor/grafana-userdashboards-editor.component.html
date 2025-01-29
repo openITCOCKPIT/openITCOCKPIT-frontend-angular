@@ -1,1 +1,89 @@
-<p>grafana-userdashboards-editor works!</p>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Grafana Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'grafana_module', 'grafana_userdashboards', 'index']"
+                   *oitcPermission="['GrafanaModule', 'GrafanaUserdashboards', 'index']">
+                    <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
+                    {{ t('User Dashboards') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                {{ t('Editor') }}
+            </li>
+        </ol>
+    </nav>
+
+    <oitc-alert
+        color="info"
+        [errorHeadline]="'Notice' | transloco"
+        [errorText]="'Please make sure to synchronize your changes with Grafana after you have made modifications.' | transloco"
+        [baseIcon]="'circle'"
+        [icon]="['fas', 'info']"></oitc-alert>
+
+    <oitc-block-loader [height]="'25rem'" *ngIf="!post"></oitc-block-loader>
+
+    <form cForm (ngSubmit)="submit()">
+        <c-card class="mb-3" *ngIf="post">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Dashboard') }}:
+                    <small class="fw-300">
+                        hier dashboard name
+                    </small>
+                </h5>
+
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1" *oitcPermission="['GrafanaModule', 'GrafanaUserdashboards', 'edit']">
+                        <a [routerLink]="[ '/', 'grafana_module', 'grafana_userdashboards', 'edit']"
+                           cButton
+                           class="ripple" color="default"
+                           size="xs">
+                            <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                            {{ t('Edit settings') }}
+                        </a>
+                    </c-nav-item>
+
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['grafana_module', 'grafana_userdashboards', 'index']" cButton
+                                class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['grafana_module', 'grafana_userdashboards', 'index']" cButton
+                                class="ripple" color="primary"
+                                type="button"
+                                oitcBackButton
+                                size="xs"
+                                (click)="synchronizeWithGrafana()">
+                            <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                            {{ t('Synchronize with Grafana') }}
+                        </button>
+                    </c-nav-item>
+
+                </c-nav>
+
+            </c-card-header>
+            <c-card-body>
+                hier editor conent
+            </c-card-body>
+        </c-card>
+    </form>
+</ng-container>
