@@ -17,7 +17,7 @@ import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/pri
 import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../../../services/timezone.service';
 import { PrometheusQueryService } from '../prometheus-query.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import {
@@ -143,6 +143,7 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     private readonly TimezoneService: TimezoneService = inject(TimezoneService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected serviceTemplateId: number = 0;
@@ -304,6 +305,7 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
                         this.cdr.markForCheck();
                         return;
                     }
+                    this.router.navigate(['/prometheus_module/PrometheusAlertRules/index/' + this.hostId]);
                 }));
         });
 
