@@ -38,7 +38,7 @@ export class DebounceDirective {
             debounceTime(this.debounceTime),
             //distinctUntilChanged()
         ).subscribe(value => {
-            console.log('emit ', value);
+            //console.log('emit ', value);
             this.debouncedValue.emit(value);
         });
     }
