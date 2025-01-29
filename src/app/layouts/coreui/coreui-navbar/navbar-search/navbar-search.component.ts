@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnDestroy } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { MenuHeadline, MenuLink } from '../../../../components/navigation/navigation.interface';
+import { MenuHeadline, MenuLink, MenuLinkWithSearchPath } from '../../../../components/navigation/navigation.interface';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
@@ -31,7 +31,7 @@ export class NavbarSearchComponent implements OnDestroy {
     public menu = input.required<MenuHeadline[]>();
 
     public searchString: string = '';
-    public searchResult: MenuLink[] = [];
+    public searchResult: MenuLinkWithSearchPath[] = [];
 
     // currentSelectedIndex starts with -1 instead of 0 so we can detact if a user search for "test" and hit enter
     // to start a search for host names
@@ -133,7 +133,7 @@ export class NavbarSearchComponent implements OnDestroy {
     }
 
     public searchMenu(event: any) {
-        const result: MenuLink[] = [];
+        const result: MenuLinkWithSearchPath[] = [];
 
         this.menu().map(((item: MenuHeadline) => {
             item.items.map((link: MenuLink) => {
@@ -142,7 +142,9 @@ export class NavbarSearchComponent implements OnDestroy {
                     if (link.items.length === 0 && link.isAngular) {
                         // Single link, add to result set if matching
                         if (this.doesMatch(link, this.searchString)) {
-                            result.push(link);
+                            // Add search path to result
+                            const searchPath = item.alias;
+                            result.push({...link, searchPath});
                         }
                     }
 
@@ -151,7 +153,9 @@ export class NavbarSearchComponent implements OnDestroy {
                             if (subItem.isAngular) {
                                 // match
                                 if (this.doesMatch(subItem, this.searchString)) {
-                                    result.push(subItem);
+                                    // Add search path to result
+                                    const searchPath = `${item.alias} » ${link.alias}`;
+                                    result.push({...subItem, searchPath});
                                 }
                             }
                         });

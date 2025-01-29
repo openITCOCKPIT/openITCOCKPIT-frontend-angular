@@ -18,6 +18,9 @@
                         <fa-icon [icon]="result.icon"></fa-icon>
                         <strong>&nbsp;{{ result.name }}</strong>
                     </a>
+                    <div class="sidebar-search-path" *ngIf="result.searchPath">
+                        {{ result.searchPath }}
+                    </div>
                 </li>
             }
         </ul>

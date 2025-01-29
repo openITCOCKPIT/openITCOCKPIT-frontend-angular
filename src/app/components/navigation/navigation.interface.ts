@@ -25,3 +25,7 @@ export interface MenuLink {
 export interface NavigationInterface {
     menu: MenuHeadline[]
 }
+
+export interface MenuLinkWithSearchPath extends MenuLink {
+    searchPath?: string
+}
