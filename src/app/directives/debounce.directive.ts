@@ -1,5 +1,5 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import { debounceTime, distinctUntilChanged, Subject } from "rxjs";
+import { debounceTime, Subject } from "rxjs";
 
 @Directive({
     selector: '[oitcDebounce]',
@@ -7,50 +7,45 @@ import { debounceTime, distinctUntilChanged, Subject } from "rxjs";
 })
 export class DebounceDirective {
 
+    /**
+     * ITC-3422
+     * The original code used DOM events to detect changes in the input field.
+     * This had some own issues for checkboxes and ng-selects.
+     *
+     * Instead of using DOM events, we now use the ngModelChange event to detect changes
+     * when the ngModel changes. All our filters and forms use ngModel, so this should work for all cases.
+     *
+     * How every, when clicking on "Reset Filter" the ngModelChange is STILL NOT triggered. so ITC-3422 is not resolved.
+     * To resolve ITC-3422, distinctUntilChanged got removed.
+     *
+     * It works like so:
+     * 1. Filter for "abc"
+     * 2. Reset filter (ngModelChange will not trigger)
+     * 3. Filter for "abc" again. (ngModelChange will trigger (instead of the classic DOM events that won't trigger in this case)) and update the state of this directive.
+     * 4. The Subject will emit "abc" again due to distinctUntilChanged is removed
+     *
+     * Original code before ITC-3422:
+     * https://github.com/it-novum/openITCOCKPIT-frontend-angular/blob/8222cb62306b4da262afd54082df396078c0873c/src/app/directives/debounce.directive.ts
+     *
+     */
+
     @Input() debounceTime = 500;
     @Output() debouncedValue = new EventEmitter<any>();
     private subject = new Subject<any>();
 
-    private counter = 0;
-
     constructor(private elementRef: ElementRef) {
         this.subject.pipe(
             debounceTime(this.debounceTime),
-            distinctUntilChanged()
+            //distinctUntilChanged()
         ).subscribe(value => {
+            console.log('emit ', value);
             this.debouncedValue.emit(value);
         });
     }
 
-    // Input type=text uses the input event
-    @HostListener('input', ['$event.target.value'])
-    onInputChange(value: any): void {
-        // Ignore checkboxes
-        if (this.elementRef.nativeElement.type !== 'checkbox') {
-            this.subject.next(value);
-        }
-    }
-
-    // A checkbox uses the change event
-    // BUT! An input type=text fires also a change event on focus left, so we have to filter this
-    @HostListener('change', ['$event'])
-    onInputChangeCeckbox(event: any): void {
-        // For now, only listen to checkboxes
-        if (this.elementRef.nativeElement.tagName === 'NG-SELECT') {
-            // Not the value of the select box - but who cares
-            // Just use the data from ngModel
-
-            // The counter is just that we can push different data to the subject
-            // Otherwise the distinctUntilChanged would filter it out
-            this.counter++;
-            this.subject.next(this.counter);
-            return;
-        }
-
-        if (this.elementRef.nativeElement.type === 'checkbox') {
-            let value = event.target.checked;
-            this.subject.next(value);
-        }
+    @HostListener('ngModelChange', ['$event'])
+    ngModelChange(value: any) {
+        this.subject.next(value);
     }
 
 }
