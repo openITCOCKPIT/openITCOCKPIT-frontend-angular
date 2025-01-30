@@ -54,7 +54,7 @@ import { chain } from 'lodash';
 import{ leafletFullscreen } from './js/Leaflet.fullscreen.js';
 // @ts-ignore
 import { hexbinLayer } from './js/HexbinLayer.js';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, NgStyle } from '@angular/common';
 
 
 @Component({
@@ -85,7 +85,8 @@ import { NgFor, NgIf } from '@angular/common';
         NgxResizeObserverModule,
         NgIf,
         NgFor,
-        AlertComponent
+        AlertComponent,
+        NgStyle
     ],
     templateUrl: './openstreetmap-index.component.html',
     styleUrl: './openstreetmap-index.component.css',
@@ -146,8 +147,11 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
 
     public leafletOptions: L.MapOptions = {
         zoom: 0,
-        // center: latLng(51.481811, 7.219664),
-        center: L.latLng(0, 0),
+        //center: L.latLng(0, 0),
+        center: {
+            lat: 0,
+            lng: 0
+        },
     };
   //  public layers: L.Layer[] = [];
 
@@ -156,14 +160,13 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     }
 
     public ngOnDestroy(): void {
-        clearInterval(this.intervalId);
+        this.clearRequestloop();
         this.subscriptions.unsubscribe();
     }
 
     public ngAfterViewInit(): void {
 
         this.map = L.map(this.lmap.nativeElement, this.leafletOptions);
-        //this.map.setView([51.481811, 7.219664], 13);
         let self = this;
         const fullscreenControl = leafletFullscreen();
         const newCustomControl = L.Control.extend({
@@ -228,8 +231,18 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         if (!this.server_url) {
             return;
         }
+        if(!this.hasChanges(this.leafletOptions) && this.mapData.locationPoints.length > 0){
+            this.leafletOptions.zoom = this.map.getZoom();
+           this.leafletOptions.center = this.map.getCenter();
+           if(this.mapData.locationPoints.length > 0) {
+
+               this.map.fitBounds(new L.LatLngBounds(this.mapData.locationPoints));
+           }
+        }
+
         L.tileLayer(this.settings.server_url, {
-            maxZoom: 19,
+            maxNativeZoom: 18,
+            maxZoom: 18,
             attribution: "&copy; <a target='_blank' href='http://openstreetmap.org/copyright'>OpenStreetMap</a> contributors | <a target='_blank' href='https://it-novum.com'>it-novum.com</a>",
             noWrap: false
         }).addTo(this.map);
@@ -246,18 +259,10 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
             };
         }).value();
         if (this.hexlayer) {
-            this.hexlayer.remove();
+            this.hexlayer.removeFrom(this.map);
+            //this.hexlayer.remove();
         }
-
-
         this.hexlayer = hexbinLayer({click: (pointData: any) => this.hexClick(pointData)}).addTo(this.map).data(cells);
-        //this.hexlayer.redraw();
-        //this.map.addLayer(this.hexlayer);
-        if(this.mapData.locationPoints.length > 0) {
-            // @ts-ignore
-            this.map.fitBounds(new L.LatLngBounds(this.mapData.locationPoints));
-        }
-
     }
 
     public hexClick(pointData: any) {
@@ -269,26 +274,43 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     }
 
     public resetMap(): void {
-        this.buildLayers();
-        //this.loadMapData(false);
+        if(this.mapData.locationPoints.length > 0) {
+            this.map.fitBounds(new L.LatLngBounds(this.mapData.locationPoints));
+        }
     }
 
     public refresh() {
         this.loadMapData();
     }
 
+    private hasChanges(mapOptions:L.MapOptions) {
+        if(mapOptions.zoom === 0){
+            return false;
+        }
+        if(mapOptions.zoom !== this.map.getZoom()){
+            return true;
+        }
+        // @ts-ignore
+        if(mapOptions.center.lat !== this.map.getCenter()['lat'] && mapOptions.center.lng !== this.map.getCenter()['lng']){
+            return true;
+        }
+        return false;
+
+    }
+
     public onFilterChange(event: Event) {
-        clearInterval(this.intervalId);
-        this.intervalId = null;
+        this.clearRequestloop();
         this.settingsFilter.state_filter = this.settingsFilter.filter.up_ok |
             this.settingsFilter.filter.warning |
             this.settingsFilter.filter.down_critical |
             this.settingsFilter.filter.unreachable_unknown;
         this.loadMapData();
+        setTimeout(() => {this.resetMap()}, 700);
 
     }
 
     public resetFilter(): void {
+        this.clearRequestloop();
         this.initFilter();
         this.loadAclsAndSettings();
         this.cdr.markForCheck();
@@ -314,7 +336,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     }
 
     public problemsOnly() {
-
+        this.clearRequestloop();
         this.settingsFilter.state_filter = this.settingsFilter.filter.warning |
             this.settingsFilter.filter.down_critical |
             this.settingsFilter.filter.unreachable_unknown;
@@ -325,10 +347,13 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         this.loadMapData();
     }
 
-    handleResize(event: any) {
-        if (!this.server_url) {
-            return;
+    protected clearRequestloop() {
+        if(this.intervalId !== null) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
         }
-       // this.buildLayers();
+
     }
+
+
 }

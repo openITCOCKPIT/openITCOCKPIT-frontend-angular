@@ -1,10 +1,11 @@
 import { GenericValidationError } from '../../../generic-responses';
-import { PagerdutySettings } from '../../pagerduty_module/pages/settings/PagerdutySettings.interface';
+import { LatLngExpression } from 'leaflet';
+
 
 export interface OpenstreetmapIndexRoot {
     locations: Locations[],
     emptyLocations: Locations[],
-    locationPoints: number[][],
+    locationPoints: LatLngExpression[],
     _csrfToken: string | null
 }
 

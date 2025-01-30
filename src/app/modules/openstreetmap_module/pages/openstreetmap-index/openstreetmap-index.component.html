@@ -213,7 +213,7 @@
                 <c-alert color="danger">{{ t('Configurati)on / OpenStreetMap Settings')}}</c-alert>
             </div>
 
-            <div #map id="map" class="d-flex" style="height: 80vh;" (onResize)="handleResize($event)"></div>
+            <div #map id="map" class="d-flex" [ngStyle]="{'height': hideFilter ? '80vh' : '60vh'}"></div>
 
             <div id="legend">
                 <div id="legend-inner">
