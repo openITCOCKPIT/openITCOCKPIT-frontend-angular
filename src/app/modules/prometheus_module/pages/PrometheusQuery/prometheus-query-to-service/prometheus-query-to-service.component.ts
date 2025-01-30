@@ -281,14 +281,14 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
         this.ValidateService.critical_operator = '';
     }
 
-    protected addMetricString(metric: string) : void {
+    protected addMetricString(metric: string): void {
         this.ValidateService.promql += sprintf('%1$s{uuid="%2$s"}', metric, this.index.host.uuid);
 
     }
 
-    protected addAggregationToString( aggregation: string): void {
+    protected addAggregationToString(aggregation: string): void {
 
-        if(this.ValidateService.promql.length === 0){
+        if (this.ValidateService.promql.length === 0) {
             return;
         }
         this.ValidateService.promql = sprintf('%1$s(%2$s)', aggregation, trim(this.ValidateService.promql).replace(
@@ -315,7 +315,10 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
                     return;
                 }
                 let a: Ramsch = result.data.metricValue.data.result[0] as Ramsch;
-                this.executeResult = a.value[1];
+                this.executeResult = '';
+                if (typeof (a) !== "undefined") {
+                    this.executeResult = a.value[1];
+                }
                 this.cdr.markForCheck();
             }));
     }
