@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
-import { GrafanaEditorGetResponse } from './grafana-editor.interface';
+import { CreatePanelPost, GrafanaEditorDashboardRow, GrafanaEditorGetResponse } from './grafana-editor.interface';
 import {
     GenericResponseWrapper,
     GenericSuccessResponse,
@@ -40,6 +40,81 @@ export class GrafanaEditorService {
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    /**
+     * Rows do not exist in the Database, becasue a "row" is saved per panel.
+     * Do delete a row, we need to delete all panels in that row.
+     * @param panelIds
+     */
+    public removePanels(panelIds: number[]): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/grafana_module/grafana_userdashboards/removeRow.json?angular=true`, {
+            ids: panelIds
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public createPanel(data: CreatePanelPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/grafana_module/grafana_userdashboards/addPanel.json?angular=true`, data)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    const response = data as { panel: GrafanaEditorDashboardRow, _csrfToken: string | null };
+
+                    return {
+                        success: true,
+                        data: response.panel
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public removePanel(panelId: number): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/grafana_module/grafana_userdashboards/removePanel.json?angular=true`, {
+            id: panelId
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+
                     return {
                         success: true,
                         data: data as GenericSuccessResponse

@@ -1,5 +1,6 @@
 import { ServiceObject } from '../../../../../pages/services/services.interface';
 import { HostObject } from '../../../../../pages/hosts/hosts.interface';
+import { GrafanaChartTypesEnum } from './grafana-panel/chart-type-icon/GrafanaChartTypes.enum';
 
 export interface GrafanaEditorGetResponse {
     userdashboardData: GrafanaEditorDashboard
@@ -28,8 +29,8 @@ export interface GrafanaEditorDashboardPanel {
     row: number
     unit: string
     title: string
-    visualization_type: string
-    stacking_mode: string
+    visualization_type: GrafanaChartTypesEnum
+    stacking_mode: string | null
     grafana_userdashboard_metrics: GrafanaEditorDashboardPanelMetric[]
 }
 
@@ -64,8 +65,8 @@ export interface GrafanaEditorDashboardRow {
     row: number
     unit: string
     title: string
-    visualization_type: string
-    stacking_mode: string
+    visualization_type: GrafanaChartTypesEnum
+    stacking_mode: string | null
     metrics: DashboardRowMetric[]
 }
 
@@ -119,6 +120,13 @@ export interface GrafanaEditorPrometheusAlertRule {
     critical_operator: string
 }
 
+export interface CreatePanelPost {
+    GrafanaUserdashboardPanel: {
+        row: number
+        userdashboard_id: number
+        visualization_type: GrafanaChartTypesEnum
+    }
+}
 
 export interface GrafanaUnits {
     None: {

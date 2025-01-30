@@ -21,16 +21,17 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { GrafanaEditorGetResponse } from './grafana-editor.interface';
+import { CreatePanelPost, GrafanaEditorDashboardRow, GrafanaEditorGetResponse } from './grafana-editor.interface';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { GrafanaEditorService } from './grafana-editor.service';
 import { HistoryService } from '../../../../../history.service';
-import { GrafanaRowComponent } from './grafana-row/grafana-row.component';
+import { GrafanaRowComponent, RowPanelsChangedEvent } from './grafana-row/grafana-row.component';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
     SynchronizeGrafanaModalComponent
 } from '../../../components/synchronize-grafana-modal/synchronize-grafana-modal.component';
+import { GrafanaChartTypesEnum } from './grafana-panel/chart-type-icon/GrafanaChartTypes.enum';
 
 
 @Component({
@@ -127,6 +128,99 @@ export class GrafanaUserdashboardsEditorComponent implements OnInit, OnDestroy {
      */
     public onMassActionComplete(success: boolean): void {
         return;
+    }
+
+    /**
+     * Handle events from child components when panels are changed
+     * @param panelsEvent
+     */
+    public onRowPanelsChanged(panelsEvent: RowPanelsChangedEvent): void {
+        if (!this.data) {
+            return;
+        }
+
+
+        // Update the local data with the new panels
+        this.data.userdashboardData.rows[panelsEvent.rowIndex] = panelsEvent.panels;
+        this.cdr.markForCheck();
+    }
+
+    /**
+     * Handle events from child components when a row should be removed
+     * @param rowIndex
+     */
+    public onRowRemove(rowIndex: number) {
+        if (!this.data) {
+            return;
+        }
+
+        // "Rows" do not exist in the Database, because a "row" is saved per panel.
+        // To delete a row, we need to delete all panels in that row.
+        const panels = this.data.userdashboardData.rows[rowIndex];
+        const panelIds = panels.map(panel => panel.id);
+
+        // Update the local data with the removed row
+        this.subscriptions.add(this.GrafanaEditorService.removePanels(panelIds).subscribe(response => {
+            if (response.success) {
+                this.notyService.genericSuccess(
+                    this.TranslocoService.translate('Row removed successfully')
+                );
+
+                if (this.data) {
+                    this.data.userdashboardData.rows.splice(rowIndex, 1);
+                }
+                this.cdr.markForCheck();
+            } else {
+                this.notyService.genericError(
+                    this.TranslocoService.translate('Error while removing row')
+                );
+            }
+        }));
+    }
+
+    /**
+     * Handle events from child components when a new panel should be added to a row
+     * @param rowIndex
+     */
+    public onCreatePanelEvent(rowIndex: number) {
+        if (!this.data) {
+            return;
+        }
+
+        const post: CreatePanelPost = {
+            GrafanaUserdashboardPanel: {
+                userdashboard_id: this.data.userdashboardData.id,
+                row: rowIndex,
+                visualization_type: GrafanaChartTypesEnum.timeseries,
+            }
+        };
+
+        this.subscriptions.add(this.GrafanaEditorService.createPanel(post).subscribe(response => {
+            if (response.success) {
+                this.notyService.genericSuccess(
+                    this.TranslocoService.translate('Panel added successfully')
+                );
+
+                if (this.data) {
+                    const panel = response.data as GrafanaEditorDashboardRow;
+                    this.data.userdashboardData.rows[rowIndex].push(panel);
+                }
+
+                if (this.data) {
+                    // Clone the data to trigger change detection
+                    // Maybe we have to "refactor" this with JSON.parse(JSON.stringify(this.data.userdashboardData.rows))
+                    // like we did 3000 years ago
+                    // https://stackoverflow.com/questions/78710886/js-structuredclone-not-truly-deep-copy
+                    this.data.userdashboardData.rows = structuredClone(this.data.userdashboardData.rows);
+                }
+
+                this.cdr.markForCheck();
+            } else {
+                this.notyService.genericError(
+                    this.TranslocoService.translate('Error while adding panel')
+                );
+            }
+        }));
     }
 
     public synchronizeWithGrafana() {

@@ -85,8 +85,19 @@
                 @for (panels of data.userdashboardData.rows; track $index) {
                     <oitc-grafana-row
                         [panels]="panels"
+                        [grafanaUnits]="data.grafanaUnits"
+                        (panelsChangedEvent)="onRowPanelsChanged($event)"
+                        (removeRowEvent)="onRowRemove($event)"
+                        (createPanelEvent)="onCreatePanelEvent($event)"
                         [rowIndex]="$index"></oitc-grafana-row>
                 }
+
+                <c-row *ngIf="data.userdashboardData.rows.length === 0">
+                    <c-col xs="12" class="text-info text-center p-2">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Start by adding a new row.') }}
+                    </c-col>
+                </c-row>
 
                 <c-row>
                     <c-col>
