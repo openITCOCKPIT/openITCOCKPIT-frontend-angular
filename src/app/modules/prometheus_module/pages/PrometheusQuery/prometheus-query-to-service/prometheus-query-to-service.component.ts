@@ -75,6 +75,8 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import {
     PrometheusThresholdsComponent
 } from '../../../components/prometheus-thresholds/prometheus-thresholds.component';
+import { sprintf } from 'sprintf-js';
+import { trim } from 'lodash';
 
 @Component({
     selector: 'oitc-prometheus-query-to-service',
@@ -278,6 +280,29 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
         this.ValidateService.warning_operator = '';
         this.ValidateService.critical_operator = '';
     }
+
+    protected addMetricString(metric: string) : void {
+        this.ValidateService.promql += sprintf('%1$s{uuid="%2$s"}', metric, this.index.host.uuid);
+
+    }
+
+    protected addAggregationToString( aggregation: string): void {
+
+        if(this.ValidateService.promql.length === 0){
+            return;
+        }
+        this.ValidateService.promql = sprintf('%1$s(%2$s)', aggregation, trim(this.ValidateService.promql).replace(
+            /\s/g, ',')
+        );
+    }
+
+    protected addToString(value: string): void {
+        this.ValidateService.promql += value;
+
+    }
+
+
+
 
     protected execute(): void {
         this.subscriptions.add(this.PrometheusQueryService.loadValueByMetric(this.index.host.uuid, this.ValidateService.promql)

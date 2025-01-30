@@ -45,20 +45,20 @@
 
             <fieldset>
                 <h5>{{ t('Available metrics') }}</h5>
-                <button ng-repeat="metricSelected in metricsSelected"
+                <button *ngFor="let metricSelected of selectedMetrics"
                         class="margin-5 btn btn-primary btn-md ng-binding ng-scope"
-                        ng-click="addMetricString(metricSelected)">
-                    node_netstat_Udp6_SndbufErrors
+                        (click)="addMetricString(metricSelected)">
+                    {{ metricSelected }}
                 </button>
             </fieldset>
             <c-row>
                 <c-col md="1">
                     <fieldset>
                         <h5>{{ t('Brackets') }}</h5>
-                        <button class="margin-5 btn btn-info btn-xs" ng-click="addToString('(')">
+                        <button class="margin-5 btn btn-info btn-xs" (click)="addToString('(')">
                             (
                         </button>
-                        <button class="margin-5 btn btn-info btn-xs" ng-click="addToString(')')">
+                        <button class="margin-5 btn btn-info btn-xs" (click)="addToString(')')">
                             )
                         </button>
                     </fieldset>
@@ -66,24 +66,24 @@
                 <c-col>
                     <fieldset>
                         <h5>{{ t('Arithmetic binary operators') }}</h5>
-                        <button class="margin-5 btn btn-success btn-xs" title="addition" ng-click="addToString('+')">
+                        <button class="margin-5 btn btn-success btn-xs" title="addition" (click)="addToString('+')">
                             +
                         </button>
-                        <button class="margin-5 btn btn-success btn-xs" title="subtraction" ng-click="addToString('-')">
+                        <button class="margin-5 btn btn-success btn-xs" title="subtraction" (click)="addToString('-')">
                             -
                         </button>
                         <button class="margin-5 btn btn-success btn-xs" title="multiplication"
-                                ng-click="addToString('*')">
+                                (click)="addToString('*')">
                             *
                         </button>
-                        <button class="margin-5 btn btn-success btn-xs" title="division" ng-click="addToString('/')">
+                        <button class="margin-5 btn btn-success btn-xs" title="division" (click)="addToString('/')">
                             /
                         </button>
-                        <button class="margin-5 btn btn-success btn-xs" title="modulo" ng-click="addToString('%')">
+                        <button class="margin-5 btn btn-success btn-xs" title="modulo" (click)="addToString('%')">
                             %
                         </button>
                         <button class="margin-5 btn btn-success btn-xs" title="power/exponentiation"
-                                ng-click="addToString('^')">
+                                (click)="addToString('^')">
                             ^
                         </button>
                     </fieldset>
@@ -92,51 +92,51 @@
                     <fieldset>
                         <h5>{{ t('Aggregation operators') }}</h5>
                         <button class="margin-5 btn btn-default btn-xs" title="calculate sum over dimensions"
-                                ng-click="addAggregationToString('sum')">
+                                (click)="addAggregationToString('sum')">
                             sum
                         </button>
                         <button class="margin-5 btn btn-default btn-xs" title="select minimum over dimensions"
-                                ng-click="addAggregationToString('min')">
+                                (click)="addAggregationToString('min')">
                             min
                         </button>
                         <button class="margin-5 btn btn-default btn-xs" title="select maximum over dimensions"
-                                ng-click="addAggregationToString('max')">
+                                (click)="addAggregationToString('max')">
                             max
                         </button>
                         <button class="margin-5 btn btn-default btn-xs" title="calculate the average over dimensions"
-                                ng-click="addAggregationToString('avg')">
+                                (click)="addAggregationToString('avg')">
                             avg
                         </button>
                         <button class="margin-5 btn btn-default btn-xs"
                                 title="calculate population standard deviation over dimensions"
-                                ng-click="addAggregationToString('stddev')">
+                                (click)="addAggregationToString('stddev')">
                             stddev
                         </button>
                         <button class="margin-5 btn btn-default btn-xs"
                                 title="calculate population standard variance over dimensions"
-                                ng-click="addAggregationToString('stdvar')">
+                                (click)="addAggregationToString('stdvar')">
                             stdvar
                         </button>
                         <button class="margin-5 btn btn-default btn-xs" title="count number of elements in the vector"
-                                ng-click="addAggregationToString('count')">
+                                (click)="addAggregationToString('count')">
                             count
                         </button>
                         <button class="margin-5 btn btn-default btn-xs"
                                 title="count number of elements with the same value"
-                                ng-click="addAggregationToString('count_values')">
+                                (click)="addAggregationToString('count_values')">
                             count_values
                         </button>
                         <button class="margin-5 btn btn-default btn-xs" title="smallest k elements by sample value"
-                                ng-click="addAggregationToString('bottomk')">
+                                (click)="addAggregationToString('bottomk')">
                             bottomk
                         </button>
                         <button class="margin-5 btn btn-default btn-xs" title="largest k elements by sample value"
-                                ng-click="addAggregationToString('topk')">
+                                (click)="addAggregationToString('topk')">
                             topk
                         </button>
                         <button class="margin-5 btn btn-default btn-xs"
                                 title="calculate φ-quantile (0 ≤ φ ≤ 1) over dimensions"
-                                ng-click="addAggregationToString('quantile')">
+                                (click)="addAggregationToString('quantile')">
                             quantile
                         </button>
                     </fieldset>
