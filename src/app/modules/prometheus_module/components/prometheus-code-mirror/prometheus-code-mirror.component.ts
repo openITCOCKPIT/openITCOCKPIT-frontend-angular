@@ -33,6 +33,12 @@ import { LayoutService } from '../../../../layouts/coreui/layout.service';
 import { CodeMirrorUpdateType } from '../../../../components/code-mirror-container/code-mirror-update-type';
 
 const promQL = new PromQLExtension()
+promQL.setComplete({
+    remote: {
+        apiPrefix: '/prometheus_module/prometheusQuery/api/metadata.json?angular=true&type='
+    }
+});
+
 
 @Component({
     selector: 'oitc-prometheus-code-mirror',

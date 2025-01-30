@@ -5,7 +5,8 @@ import { catchError, map, Observable, of } from 'rxjs';
 import {
     LoadCurrentValueByMetricRoot,
     LoadServicetemplates,
-    LoadValueByMetricRoot, PrometheusCreateService,
+    LoadValueByMetricRoot,
+    PrometheusCreateService,
     PrometheusPerformanceDataParams,
     PrometheusPerformanceDataRoot,
     PrometheusQueryApiResult,
