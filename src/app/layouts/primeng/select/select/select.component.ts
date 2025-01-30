@@ -24,11 +24,11 @@ import { Select } from 'primeng/select';
 @Component({
     selector: 'oitc-select',
     imports: [
-    MultiSelectModule,
-    FormsModule,
-    HighlightSearchPipe,
-    Select
-],
+        MultiSelectModule,
+        FormsModule,
+        HighlightSearchPipe,
+        Select
+    ],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
@@ -119,6 +119,14 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
      * @group Props
      */
     @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = 'body';
+
+    /**
+     * If the selected value (current value of ngModel) does not exist in the options, the value will be reset to 0
+     * This is important in case a user change a container, and some objects (templates, contacts, etc.) are not available in the new container
+     *
+     * In some rare cases, you might want to disable this check
+     */
+    @Input() disableCheckThatEnsuresSelectedValueExistsInOptions: boolean = false;
 
     @Output() ngModelChange = new EventEmitter();
     @Output() onChange: EventEmitter<MultiSelectChangeEvent> = new EventEmitter<MultiSelectChangeEvent>();
@@ -216,7 +224,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
 
         this.cdr.markForCheck();
 
-        if (this.ngModel && this._options) {
+        if (this.ngModel && this._options && !this.disableCheckThatEnsuresSelectedValueExistsInOptions) {
             // Check if the selected values are still in the options
             let valueStillInOptions = false;
             let key = this.optionValue || 'key';
@@ -237,6 +245,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
                 this.ngModelChange.emit(this.ngModel);
             }, 0);
         }
+
         this._options?.forEach((element) => {
             // Check that we actually have a name to add prefix / suffix.
             if (!element.value) {

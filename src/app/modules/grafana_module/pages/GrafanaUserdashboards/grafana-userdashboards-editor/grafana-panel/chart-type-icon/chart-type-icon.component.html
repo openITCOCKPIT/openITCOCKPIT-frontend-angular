@@ -1,0 +1,23 @@
+@switch (chartType()) {
+    @case (GrafanaChartTypesEnum.barchart) {
+        <fa-icon [icon]="['fas', 'chart-column']" class="text-white"></fa-icon>
+    }
+    @case (GrafanaChartTypesEnum.stat) {
+        <fa-icon [icon]="['fas', 'terminal']" class="text-white"></fa-icon>
+    }
+    @case (GrafanaChartTypesEnum.gauge) {
+        <fa-icon [icon]="['fas', 'gauge-high']" class="text-white"></fa-icon>
+    }
+    @case (GrafanaChartTypesEnum.bargauge) {
+        <fa-icon [icon]="['fas', 'chart-simple']" class="text-white"></fa-icon>
+    }
+    @case (GrafanaChartTypesEnum.bargaugeretro) {
+        <fa-icon [icon]="['fas', 'bars']" class="text-white"></fa-icon>
+    }
+    @default {
+        <!-- timeseries -->
+        <fa-icon [icon]="['fas', 'chart-area']" class="text-white"></fa-icon>
+    }
+
+}
+

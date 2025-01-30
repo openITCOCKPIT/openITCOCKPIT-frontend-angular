@@ -26,12 +26,12 @@ import _ from 'lodash';
 @Component({
     selector: 'oitc-multi-select-optgroup',
     imports: [
-    HighlightSearchPipe,
-    MultiSelectModule,
-    SharedModule,
-    FormsModule,
-    CheckboxModule
-],
+        HighlightSearchPipe,
+        MultiSelectModule,
+        SharedModule,
+        FormsModule,
+        CheckboxModule
+    ],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
@@ -133,6 +133,14 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
      * @group Props
      */
     @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = 'body';
+
+    /**
+     * If the selected value (current value of ngModel) does not exist in the options, the value will be reset to 0
+     * This is important in case a user change a container, and some objects (templates, contacts, etc.) are not available in the new container
+     *
+     * In some rare cases, you might want to disable this check
+     */
+    @Input() disableCheckThatEnsuresSelectedValueExistsInOptions: boolean = false;
 
     @Output() ngModelChange = new EventEmitter();
     @Output() onChange: EventEmitter<MultiSelectChangeEvent> = new EventEmitter<MultiSelectChangeEvent>();
@@ -249,7 +257,7 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
 
         this.cdr.markForCheck();
 
-        if (this.ngModel && this._options) {
+        if (this.ngModel && this._options && !this.disableCheckThatEnsuresSelectedValueExistsInOptions) {
             let optionGroupValues: (string | number)[] = [];
 
             this._options.map(obj => {

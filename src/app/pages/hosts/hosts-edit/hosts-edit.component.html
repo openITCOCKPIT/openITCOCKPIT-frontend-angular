@@ -45,6 +45,15 @@
                         </span>
                     </c-nav-item>
 
+                    <c-nav-item class="px-1" *oitcPermission="['hosts', 'browser']">
+                        <a cButton class="ripple" color="primary"
+                           [routerLink]="['/hosts/browser/', post.id]"
+                           size="xs">
+                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                            {{ t('View') }}
+                        </a>
+                    </c-nav-item>
+
                     <c-nav-item class="px-1">
                         <button [fallbackUrl]="['hosts', 'index']" cButton class="ripple" color="default"
                                 oitcBackButton
