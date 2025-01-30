@@ -51,7 +51,9 @@ import * as L from 'leaflet';
 import './Hexbinlayer.interface';
 import { chain } from 'lodash';
 // @ts-ignore
-import { hexbinLayer } from './HexbinLayer.js';
+import{ leafletFullscreen } from './js/Leaflet.fullscreen.js';
+// @ts-ignore
+import { hexbinLayer } from './js/HexbinLayer.js';
 import { NgFor, NgIf } from '@angular/common';
 
 
@@ -141,13 +143,13 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     public settings!: OpenstreetmapSettings;
     public mapData!: OpenstreetmapIndexRoot;
     public server_url: string | null = null;
-    public leafletOptions: L.MapOptions = {
-        zoom: 6,
-        // center: latLng(51.481811, 7.219664),
-        center: L.latLng(0, 0)
 
+    public leafletOptions: L.MapOptions = {
+        zoom: 0,
+        // center: latLng(51.481811, 7.219664),
+        center: L.latLng(0, 0),
     };
-    public layers: L.Layer[] = [];
+  //  public layers: L.Layer[] = [];
 
     public ngOnInit(): void {
 
@@ -163,6 +165,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         this.map = L.map(this.lmap.nativeElement, this.leafletOptions);
         //this.map.setView([51.481811, 7.219664], 13);
         let self = this;
+        const fullscreenControl = leafletFullscreen();
         const newCustomControl = L.Control.extend({
             options: {
                 position: "topleft"
@@ -176,10 +179,10 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
                 return container;
             }
         });
-
+        this.map.addControl(fullscreenControl);
         this.map.addControl(new newCustomControl());
-        this.loadAclsAndSettings();
 
+        this.loadAclsAndSettings();
     }
 
     public loadAclsAndSettings(): void {
@@ -247,8 +250,9 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         }
 
 
-        this.hexlayer = hexbinLayer({click: (pointData: any) => this.hexClick(pointData)}).data(cells).addTo(this.map);
-        //this.hexlayer.addTo(this.map);
+        this.hexlayer = hexbinLayer({click: (pointData: any) => this.hexClick(pointData)}).addTo(this.map).data(cells);
+        //this.hexlayer.redraw();
+        //this.map.addLayer(this.hexlayer);
         if(this.mapData.locationPoints.length > 0) {
             // @ts-ignore
             this.map.fitBounds(new L.LatLngBounds(this.mapData.locationPoints));
@@ -325,6 +329,6 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         if (!this.server_url) {
             return;
         }
-        this.buildLayers();
+       // this.buildLayers();
     }
 }
