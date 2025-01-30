@@ -5,7 +5,6 @@ import { catchError, map, Observable, of } from 'rxjs';
 import {
     LoadCurrentValueByMetricRoot,
     LoadServicetemplates,
-    LoadValueByMetricRoot,
     PrometheusCreateService,
     PrometheusPerformanceDataParams,
     PrometheusPerformanceDataRoot,
@@ -136,17 +135,30 @@ export class PrometheusQueryService {
             );
     }
 
-    public loadValueByMetric(hostUuid: string, metric: string): Observable<LoadValueByMetricRoot> {
-        return this.http.get<LoadValueByMetricRoot>(`${this.proxyPath}/prometheus_module/PrometheusQuery/loadValueByMetric.json?angular=true`, {
+    public loadValueByMetric(hostUuid: string, metric: string): Observable<GenericResponseWrapper> {
+
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<any>(`${this.proxyPath}/prometheus_module/PrometheusQuery/loadValueByMetric.json?angular=true`, {
             params: {
                 metric: metric,
                 hostUuid: hostUuid
             }
-        }).pipe(
-            map((data: LoadValueByMetricRoot) => {
-                return data;
-            })
-        )
+        })
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data as {}
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
     /*********************************
      *    Services Browser action    *

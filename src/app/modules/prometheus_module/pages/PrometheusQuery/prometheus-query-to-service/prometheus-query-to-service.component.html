@@ -149,10 +149,10 @@
                         <textarea cFormControl id="query"
                                   name="query"
                                   [(ngModel)]="ValidateService.promql"
-                                  oitcFormError [errors]="errors" errorField="promql"
+                                  oitcFormError [errors]="promqlErrors" errorField="promql"
                         ></textarea>
                 </oitc-prometheus-code-mirror>
-                <oitc-form-feedback [errors]="errors" errorField="promql"></oitc-form-feedback>
+                <oitc-form-feedback [errors]="promqlErrors" errorField="promql"></oitc-form-feedback>
             </c-row>
 
             <button (click)="execute()">

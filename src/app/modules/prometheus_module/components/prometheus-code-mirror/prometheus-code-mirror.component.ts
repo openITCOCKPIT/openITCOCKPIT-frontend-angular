@@ -35,7 +35,7 @@ import { CodeMirrorUpdateType } from '../../../../components/code-mirror-contain
 const promQL = new PromQLExtension()
 promQL.setComplete({
     remote: {
-        apiPrefix: '/prometheus_module/prometheusQuery/api/metadata.json?angular=true&type='
+        apiPrefix: '/prometheus_module/prometheusQuery/proxy'
     }
 });
 
@@ -57,7 +57,6 @@ export class PrometheusCodeMirrorComponent implements AfterViewInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly LayoutService = inject(LayoutService);
     private cdr = inject(ChangeDetectorRef);
-
     private theme: 'light' | 'dark' = 'light';
 
     constructor() {

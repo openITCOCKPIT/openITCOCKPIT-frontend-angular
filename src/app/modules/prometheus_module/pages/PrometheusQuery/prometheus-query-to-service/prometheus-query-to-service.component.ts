@@ -3,7 +3,6 @@ import {
     getDefaultPrometheusQueryIndexParams,
     LoadCurrentValueByMetricRoot,
     LoadServicetemplates,
-    LoadValueByMetricRoot,
     PrometheusAlertRule2,
     PrometheusCreateService,
     PrometheusQueryIndexParams,
@@ -153,6 +152,7 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     protected thresholdType: string = 'scalar';
     protected executeResult: string = '';
     protected errors: GenericValidationError = {} as GenericValidationError;
+    protected promqlErrors: GenericValidationError = {} as GenericValidationError;
     protected selectedMetrics: string[] = [];
     protected index: PrometheusQueryIndexRoot = {targets: {data: [] as PrometheusQueryIndexTargetDatum[]}} as PrometheusQueryIndexRoot;
     protected serviceTemplates: SelectKeyValue[] = [];
@@ -281,10 +281,16 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
 
     protected execute(): void {
         this.subscriptions.add(this.PrometheusQueryService.loadValueByMetric(this.index.host.uuid, this.ValidateService.promql)
-            .subscribe((result: LoadValueByMetricRoot) => {
-                let a: Ramsch = result.metricValue.data.result[0] as Ramsch;
-                this.executeResult = a.value[1];
+            .subscribe((result: GenericResponseWrapper) => {
+                if (!result.success) {
+                    this.notyService.genericError();
+                    this.promqlErrors = {"promql": {"error": result.data}};
 
+                    this.cdr.markForCheck();
+                    return;
+                }
+                let a: Ramsch = result.data.metricValue.data.result[0] as Ramsch;
+                this.executeResult = a.value[1];
                 this.cdr.markForCheck();
             }));
     }

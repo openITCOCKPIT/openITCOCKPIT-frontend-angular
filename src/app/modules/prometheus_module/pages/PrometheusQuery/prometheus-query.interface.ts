@@ -1,6 +1,7 @@
 import { ServiceEntity } from '../../../../pages/services/services.interface';
 import { Datasource } from '../../../../components/popover-graph/popover-graph.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { GenericValidationError } from '../../../../generic-responses';
 
 export interface PrometheusQueryApiResult {
     metricValue: {
@@ -81,6 +82,8 @@ export interface LoadServicetemplates {
 
 // LOAD VALUE BY METRIC
 export interface LoadValueByMetricRoot {
+    success: boolean
+    data: GenericValidationError
     metricValue: {
         status: string
         data: {
