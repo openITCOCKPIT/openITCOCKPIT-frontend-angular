@@ -52,24 +52,20 @@
             <rect [attr.width]="width" [attr.height]="height" rx="10" ry="10"
                   [attr.fill]="'url(#tlBg_' + item()!.id + ')'" stroke="#444" stroke-width="2"></rect>
 
-            <text *ngIf="item()!.show_label" x="0" [attr.y]="height - 10" [attr.font-size]="width / 8"
+            <text *ngIf="item()!.show_label && this.Host && this.Service" x="0" [attr.y]="height - 10"
+                  [attr.font-size]="width / 8"
                   font-family="Verdana" fill="#FFF"
                   [attr.transform]="'rotate(-90, 0, ' + (height - 10 - (width / 8)) + ')'">
                 {{ this.Host!.hostname + '/' + this.Service!.servicename }}
             </text>
 
             <g [attr.id]="'lights_' + item()!.id">
-                <g [attr.id]="'redLightGroup_' + item()!.id">
-                    <circle *ngIf="showRed" #redLight [attr.cx]="circleX" [attr.cy]="lightPadding + lightRadius"
-                            [attr.r]="lightRadius" fill="#f00"></circle>
+                <g #redLightGroup [attr.id]="'redLightGroup_' + item()!.id">
                     <circle [attr.cx]="circleX" [attr.cy]="lightPadding + lightRadius" [attr.r]="lightRadius"
                             [attr.fill]="'url(#redLightPattern_' + item()!.id + ')'" stroke="#444"
                             stroke-width="2"></circle>
                 </g>
-                <g [attr.id]="'yellowLightGroup_' + item()!.id">
-                    <circle *ngIf="showYellow" #yellowLight [attr.cx]="circleX"
-                            [attr.cy]="lightDiameter + lightPadding * 2 + lightRadius" [attr.r]="lightRadius"
-                            fill="#FFFF00"></circle>
+                <g #yellowLightGroup [attr.id]="'yellowLightGroup_' + item()!.id">
                     <circle [attr.cx]="circleX" [attr.cy]="lightDiameter + lightPadding * 2 + lightRadius"
                             [attr.r]="lightRadius" [attr.fill]="'url(#yellowLightPattern_' + item()!.id + ')'"
                             stroke="#444" stroke-width="2"></circle>
@@ -79,10 +75,7 @@
                             [attr.cy]="lightDiameter + lightPadding * 2 + lightRadius" [attr.r]="lightRadius"
                             fill="#6e99ff"></circle>
                 </g>
-                <g [attr.id]="'greenLightGroup_' + item()!.id">
-                    <circle *ngIf="showGreen" #greenLight [attr.cx]="circleX"
-                            [attr.cy]="lightDiameter * 2 + lightPadding * 3 + lightRadius" [attr.r]="lightRadius"
-                            fill="#0F0"></circle>
+                <g #greenLightGroup [attr.id]="'greenLightGroup_' + item()!.id">
                     <circle [attr.cx]="circleX" [attr.cy]="lightDiameter * 2 + lightPadding * 3 + lightRadius"
                             [attr.r]="lightRadius" [attr.fill]="'url(#greenLightPattern_' + item()!.id + ')'"
                             stroke="#444" stroke-width="2"></circle>

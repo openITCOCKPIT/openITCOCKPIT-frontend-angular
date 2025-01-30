@@ -36,9 +36,9 @@ import { DOCUMENT, NgIf } from '@angular/common';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
-    @ViewChild('redLight') redLightElement!: ElementRef;
-    @ViewChild('yellowLight') yellowLightElement!: ElementRef;
-    @ViewChild('greenLight') greenLightElement!: ElementRef;
+    @ViewChild('redLightGroup') redLightGroupElement!: ElementRef;
+    @ViewChild('yellowLightGroup') yellowLightGroupElement!: ElementRef;
+    @ViewChild('greenLightGroup') greenLightGroupElement!: ElementRef;
 
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
@@ -88,6 +88,7 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
         this.stop();
+        this.stopBlinking();
     }
 
     public ngOnInit(): void {
@@ -172,19 +173,55 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
         this.lightPadding = Math.ceil((this.height - this.lightDiameter * 3) / 4);
         this.circleX = Math.floor(this.width / 2);
 
-        if (this.showRed && this.blink) {
-            this.blinking(this.redLightElement, 'red');
+        if (this.showRed) {
+            const circle = this.renderer.createElement('circle', 'svg');
+            this.renderer.setAttribute(circle, 'cx', this.circleX.toString());
+            this.renderer.setAttribute(circle, 'cy', (this.lightPadding + this.lightRadius).toString());
+            this.renderer.setAttribute(circle, 'r', this.lightRadius.toString());
+            this.renderer.setAttribute(circle, 'fill', '#f00');
+            this.renderer.setAttribute(circle, 'id', 'redLightCircle_' + this.id);
+            const redLightGroup = this.redLightGroupElement.nativeElement;
+            this.renderer.insertBefore(redLightGroup, circle, redLightGroup.firstChild);
         }
-        if (this.showYellow && this.blink) {
-            this.blinking(this.yellowLightElement, 'yellow');
+
+        if (this.showYellow) {
+            const circle = this.renderer.createElement('circle', 'svg');
+            this.renderer.setAttribute(circle, 'cx', this.circleX.toString());
+            this.renderer.setAttribute(circle, 'cy', (this.lightDiameter + this.lightPadding * 2 + this.lightRadius).toString());
+            this.renderer.setAttribute(circle, 'r', this.lightRadius.toString());
+            this.renderer.setAttribute(circle, 'fill', '#FFFF00');
+            this.renderer.setAttribute(circle, 'id', 'yellowLightCircle_' + this.id);
+            const yellowLightGroup = this.yellowLightGroupElement.nativeElement;
+            this.renderer.insertBefore(yellowLightGroup, circle, yellowLightGroup.firstChild);
         }
-        if (this.showGreen && this.blink) {
-            this.blinking(this.greenLightElement, 'green');
+
+        if (this.showGreen) {
+            const circle = this.renderer.createElement('circle', 'svg');
+            this.renderer.setAttribute(circle, 'cx', this.circleX.toString());
+            this.renderer.setAttribute(circle, 'cy', (this.lightDiameter * 2 + this.lightPadding * 3 + this.lightRadius).toString());
+            this.renderer.setAttribute(circle, 'r', this.lightRadius.toString());
+            this.renderer.setAttribute(circle, 'fill', '#0F0');
+            this.renderer.setAttribute(circle, 'id', 'greenLightCircle_' + this.id)
+            const greenLightGroup = this.greenLightGroupElement.nativeElement;
+            this.renderer.insertBefore(greenLightGroup, circle, greenLightGroup.firstChild);
+        }
+
+        let redLightElement = document.getElementById('redLightCircle_' + this.id) as HTMLElement;
+        let yellowLightElement = document.getElementById('yellowLightCircle_' + this.id) as HTMLElement;
+        let greenLightElement = document.getElementById('greenLightCircle_' + this.id) as HTMLElement;
+        if (this.showRed && this.blink && redLightElement) {
+            this.blinking(redLightElement, 'red');
+        }
+        if (this.showYellow && this.blink && yellowLightElement) {
+            this.blinking(yellowLightElement, 'yellow');
+        }
+        if (this.showGreen && this.blink && greenLightElement) {
+            this.blinking(greenLightElement, 'green');
         }
 
     };
 
-    private blinking(el: ElementRef, color: string) {
+    private blinking(el: HTMLElement, color: string) {
         //set the animation interval high to prevent high CPU usage
         //the animation isnt that smooth anymore but the browser need ~70% less CPU!
 
@@ -195,15 +232,14 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
             this.timer[color] = null;
         }
 
-        /*timer[color] = setInterval(function () {
-            $(el).fadeOut(2000, function () {
-                $(el).fadeIn(2000);
-            });
-        }, 6000);*/
         this.timer[color] = setInterval(() => {
-            this.renderer.setStyle(el.nativeElement, 'opacity', '0');
+            this.renderer.setStyle(el, 'opacity', '0');
+            this.renderer.setStyle(el, 'visibility', 'hidden');
+            this.renderer.setStyle(el, 'transition', 'visibility 0s 1.6s, opacity 1.6s linear');
             setTimeout(() => {
-                this.renderer.setStyle(el.nativeElement, 'opacity', '1');
+                this.renderer.setStyle(el, 'opacity', '1');
+                this.renderer.setStyle(el, 'visibility', 'visible');
+                this.renderer.setStyle(el, 'transition', 'opacity 2s linear');
             }, 2000);
         }, 6000);
     };
