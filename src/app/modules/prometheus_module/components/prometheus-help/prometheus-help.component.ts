@@ -11,5 +11,5 @@ import { TranslocoDirective } from '@jsverse/transloco';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PrometheusHelpComponent {
-    @Input({required: true}) public uuid: string = 'AAAAAAAAA';
+    @Input({required: true}) public uuid: string = '';
 }

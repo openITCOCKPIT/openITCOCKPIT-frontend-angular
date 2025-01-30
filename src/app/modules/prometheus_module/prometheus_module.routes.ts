@@ -2,6 +2,14 @@ import { Routes } from '@angular/router';
 
 export const prometheusModuleRoutes: Routes = [
     {
+        path: 'prometheus_module/PrometheusAlertRules/index',
+        loadComponent: () => import('./pages/PrometheusAlertRules/prometheus-alert-rules-index/prometheus-alert-rules-index.component').then(m => m.PrometheusAlertRulesIndexComponent)
+    },
+    {
+        path: 'prometheus_module/PrometheusAlertRules/index/:hostId',
+        loadComponent: () => import('./pages/PrometheusAlertRules/prometheus-alert-rules-index/prometheus-alert-rules-index.component').then(m => m.PrometheusAlertRulesIndexComponent)
+    },
+    {
         path: 'prometheus_module/PrometheusExporters/add',
         loadComponent: () => import('./pages/PrometheusExporters/prometheus-exporters-add/prometheus-exporters-add.component').then(m => m.PrometheusExportersAddComponent)
     },

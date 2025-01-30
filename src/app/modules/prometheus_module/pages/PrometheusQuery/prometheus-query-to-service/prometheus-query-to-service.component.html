@@ -25,6 +25,15 @@
     <c-card class="mb-3">
         <c-card-header>
             <h5 cCardTitle>{{ t('Prometheus metrics') }}</h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="showModal()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                        {{ t('PromQL help') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
         </c-card-header>
         <c-card-body>
             <div class="mb-3">
@@ -530,4 +539,6 @@
             </table>
         </c-card-body>
     </c-card>
+
+    <oitc-prometheus-help [uuid]="this.index.host.uuid"/>
 </ng-container>

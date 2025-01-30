@@ -136,7 +136,7 @@ export class PrometheusQueryIndexComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.getUserTimezone();
-        this.loadContainers();
+        this.loadHosts();
 
         const hostId = Number(this.route.snapshot.paramMap.get('hostId'));
         if (hostId) {
@@ -147,7 +147,7 @@ export class PrometheusQueryIndexComponent implements OnInit, OnDestroy {
         }
     }
 
-    private loadContainers(): void {
+    private loadHosts(): void {
         this.subscriptions.add(this.PrometheusQueryService.loadHostsByString('')
             .subscribe((result: SelectKeyValue[]) => {
                 this.hosts = result;

@@ -1,5 +1,26 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
+    ButtonGroupComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownDividerDirective,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
+} from '@coreui/angular';
+import {
     getDefaultPrometheusQueryIndexParams,
     LoadCurrentValueByMetricRoot,
     LoadServicetemplates,
@@ -19,26 +40,6 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import {
-    ButtonGroupComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownDividerDirective,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TableDirective
-} from '@coreui/angular';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -77,6 +78,8 @@ import {
 } from '../../../components/prometheus-thresholds/prometheus-thresholds.component';
 import { sprintf } from 'sprintf-js';
 import { trim } from 'lodash';
+import { PrometheusHelpComponent } from '../../../components/prometheus-help/prometheus-help.component';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-prometheus-query-to-service',
@@ -131,7 +134,9 @@ import { trim } from 'lodash';
         FormCheckInputDirective,
         ButtonGroupComponent,
         FormFeedbackComponent,
-        PrometheusThresholdsComponent
+        PrometheusThresholdsComponent,
+        PrometheusHelpComponent,
+        BackButtonDirective
     ],
     templateUrl: './prometheus-query-to-service.component.html',
     styleUrl: './prometheus-query-to-service.component.css',
@@ -145,6 +150,7 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
+    private readonly modalService: ModalService = inject(ModalService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected serviceTemplateId: number = 0;
@@ -156,7 +162,10 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected promqlErrors: GenericValidationError = {} as GenericValidationError;
     protected selectedMetrics: string[] = [];
-    protected index: PrometheusQueryIndexRoot = {targets: {data: [] as PrometheusQueryIndexTargetDatum[]}} as PrometheusQueryIndexRoot;
+    protected index: PrometheusQueryIndexRoot = {
+        targets: {data: [] as PrometheusQueryIndexTargetDatum[]},
+        host: {uuid: 'not yet loaded'}
+    } as PrometheusQueryIndexRoot;
     protected serviceTemplates: SelectKeyValue[] = [];
     protected hostId: number = 0;
     protected hosts: SelectKeyValue[] = [];
@@ -392,6 +401,13 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
             }));
     }
 
+    protected showModal(): void {
+        this.modalService.toggle({
+            show: true,
+            id: 'promQLHelpModal'
+        });
+        this.cdr.markForCheck();
+    }
 
     protected onMetricsChange(): void {
         this.selectedMetrics.forEach(metric => {
@@ -2831,9 +2847,6 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
             description: value[0].help
         } as AutocompleteItem))
         return;
-        this.subscriptions.add(this.PrometheusAutocompleteService.getMetadata().subscribe(data => {
-            console.warn(data);
-        }));
     }
 
 }
