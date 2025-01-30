@@ -58,6 +58,11 @@ pre {
     }
 }
 
+.sidebar-search-path {
+    font-size: 85%;
+    color: $gray-600;
+}
+
 .header > .container-fluid + .container-fluid {
     min-height: 3rem;
 }
