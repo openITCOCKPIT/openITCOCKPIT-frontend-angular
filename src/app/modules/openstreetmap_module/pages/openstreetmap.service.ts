@@ -6,8 +6,13 @@ import { PROXY_PATH } from '../../../tokens/proxy-path.token';
 import {
     OpenstreetmapIndexRoot,
     OpenstreetmapIndexParams,
-    OpenstreetmapAclSettingsRoot
+    OpenstreetmapAclSettingsRoot,
+    OpenstreetmapSettings,
+    OpenstreetmapRequestSettings,
+    OpenstreetmapSettingsFilter,
+    OpenstreetmapSettingsPostResponse
 } from './openstreetmap.interface';
+import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -24,7 +29,7 @@ export class OpenstreetmapService {
     public getIndex(params: OpenstreetmapIndexParams): Observable<OpenstreetmapIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<OpenstreetmapIndexRoot>(`${proxyPath}/openstreetmap_module/openstreetmap/index.json`, {
-            params: params as {} // cast EventcorrelationsIndexParams into object
+            params: params as {}
         }).pipe(
             map(data => {
                 return data;
@@ -35,12 +40,46 @@ export class OpenstreetmapService {
     public getAclAndSettings(): Observable<OpenstreetmapAclSettingsRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<OpenstreetmapAclSettingsRoot>(`${proxyPath}/openstreetmap_module/openstreetmap/getAclAndSettings.json`, {
-            params:  {angular: true} // cast EventcorrelationsIndexParams into object
+            params:  {angular: true}
         }).pipe(
             map(data => {
                 return data;
             })
         )
+    }
+
+    public getSettings(): Observable<OpenstreetmapRequestSettings> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<OpenstreetmapRequestSettings>(`${proxyPath}/openstreetmap_module/openstreetmap_settings/index.json`, {
+            params:  {angular: true}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public setOpenstreetmapSettings(post: OpenstreetmapSettingsFilter): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.post<OpenstreetmapSettingsPostResponse>(`${proxyPath}/openstreetmap_module/openstreetmap_settings/index.json?angular=true`,
+            post
+        ).pipe(
+            map((data: OpenstreetmapSettingsPostResponse) => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                const err = error.error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
+            })
+        );
     }
 
 }

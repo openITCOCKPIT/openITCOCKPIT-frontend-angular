@@ -31,7 +31,7 @@ eintragen
 ```
 # Proxy for /a/ Angular frontend
 location ^~ /a/ {
-    proxy_pass http://127.0.0.1:4200/a/;
+    proxy_pass http://localhost:4200/a/;
 
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
@@ -116,6 +116,29 @@ location ^~ /a/ {
     try_files $uri /a/index.html;
 }
 ```
+
+# Neues Module erstellen
+
+1. Neuen Ordner unter `src/app/modules` erstellen `jira_module`.
+2. Routes config hinzufügen in `jira_module/jira_module.routes.ts`
+
+```typescript
+import { Routes } from '@angular/router';
+
+export const jiraModuleRoutes: Routes = [];
+```
+
+3. Route laden in `src/app/app.routes.ts`
+
+````typescript
+/***    Routes for modules   ***/
+const moduleRoutes: Routes = [
+        ...eventcorrelationModuleRoutes,
+        ...jiraModuleRoutes // <-- add your module routes
+    ];
+````
+
+4. Unterordner `pages` erstellen, indem alle Seiten des Modules abgelegt werden.
 
 ---
 
