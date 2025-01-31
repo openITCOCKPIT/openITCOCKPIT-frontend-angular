@@ -4,13 +4,12 @@ import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontaweso
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
-
+import { ColorModeService, ContainerComponent, ModalService, ShadowOnScrollDirective } from '@coreui/angular';
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
 import { HistoryService } from './history.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { NgSelectConfig } from '@ng-select/ng-select';
-import { ColorModeService, ContainerComponent, ShadowOnScrollDirective } from '@coreui/angular';
 
 import { CoreuiHeaderComponent } from './layouts/coreui/coreui-header/coreui-header.component';
 import { CoreuiNavbarComponent } from './layouts/coreui/coreui-navbar/coreui-navbar.component';
@@ -51,7 +50,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     // Inject HistoryService to keep track of the previous URLs
     private historyService: HistoryService = inject(HistoryService);
 
-    // store the current message of the day
+    // I am the current messageOfTheDay.
     protected messageOfTheDay: CurrentMessageOfTheDay = {} as CurrentMessageOfTheDay;
 
     public readonly LayoutService = inject(LayoutService);
@@ -65,7 +64,9 @@ export class AppComponent implements OnDestroy, AfterViewInit {
                 private TranslocoService: TranslocoService,
                 private colorService: ColorModeService,
                 private cdr: ChangeDetectorRef,
-                private MessageOfTheDayService: MessagesOfTheDayService
+                private MessageOfTheDayService: MessagesOfTheDayService,
+                private readonly AuthService: AuthService,
+                private readonly ModalService: ModalService,
     ) {
         // Add an icon to the library for convenient access in other components
         library.addIconPacks(fas);
@@ -106,25 +107,33 @@ export class AppComponent implements OnDestroy, AfterViewInit {
         }));
 
         // Fetch the message of the day
-        this.fetchMessageOfTheDay();
+        this.watchMessageOfTheDay();
     }
 
-    private readonly AuthService: AuthService = inject(AuthService);
-
-    private fetchMessageOfTheDay(): void {
+    private watchMessageOfTheDay(): void {
         this.subscription.add(this.AuthService.authenticated$.subscribe((isLoggedIn) => {
             if (!isLoggedIn) {
-                console.log("Ich bin nicht angemeldet");
                 return;
             }
-            console.log("HURRA ICH BIN DRIN. is ja einfach...");
             // Solely fetch the current message of the day.
             this.subscription.add(this.MessageOfTheDayService.getCurrentMessageOfTheDay().subscribe((message: CurrentMessageOfTheDay) => {
-                if (message.messageOtdAvailable) {
-                    this.messageOfTheDay = message;
+                if (!message.messageOtdAvailable) {
+                    this.cdr.markForCheck();
+                    return;
                 }
+                this.messageOfTheDay = message;
+                if (!message.showMessageAfterLogin) {
+                    this.cdr.markForCheck();
+                    return;
+                }
+                window.setTimeout(() => {
+                    this.ModalService.toggle({
+                        show: true,
+                        id: 'messageOfTheDayModal'
+                    });
+                }, 500)
+                this.cdr.markForCheck();
             }));
-
         }));
     }
 
