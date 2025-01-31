@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    effect,
+    inject,
+    input,
+    OnDestroy,
+    output
+} from '@angular/core';
 import {
     BreadcrumbComponent,
     BreadcrumbItemComponent,
@@ -6,18 +15,28 @@ import {
     ColComponent,
     RowComponent
 } from '@coreui/angular';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ChartTypeIconComponent } from './chart-type-icon/chart-type-icon.component';
 import { DashboardRowMetric, GrafanaEditorDashboardRow, GrafanaUnits } from '../grafana-editor.interface';
 import { NgIf } from '@angular/common';
 import { LabelLinkComponent } from '../../../../../../layouts/coreui/label-link/label-link.component';
+import { Subscription } from 'rxjs';
+import { NotyService } from '../../../../../../layouts/coreui/noty.service';
+import { GrafanaEditorService } from '../grafana-editor.service';
+import { GrafanaPanelOptionsService } from '../grafana-panel-options-modal/grafana-panel-options.service';
 
 
 export interface RemovePanelEvent {
     panelIndex: number
     panelId: number
+}
+
+export interface OpenPanelOptionsEvent {
+    panelIndex: number
+    panel: GrafanaEditorDashboardRow,
+    GrafanaUnits?: GrafanaUnits
 }
 
 
@@ -41,7 +60,7 @@ export interface RemovePanelEvent {
     styleUrl: './grafana-panel.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GrafanaPanelComponent {
+export class GrafanaPanelComponent implements OnDestroy {
 
     public panelIndex = input<number>(0);
     public panel = input<GrafanaEditorDashboardRow>();
@@ -54,6 +73,11 @@ export class GrafanaPanelComponent {
     public panelLocal?: GrafanaEditorDashboardRow;
     public humanUnit: string = '';
 
+    private subscriptions: Subscription = new Subscription();
+    private readonly GrafanaEditorService = inject(GrafanaEditorService);
+    private readonly GrafanaPanelOptionsService = inject(GrafanaPanelOptionsService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
     private cdr = inject(ChangeDetectorRef);
 
     constructor() {
@@ -61,6 +85,10 @@ export class GrafanaPanelComponent {
             this.panelLocal = this.panel();
             this.setHumanUnit();
         });
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     private setHumanUnit(): void {
@@ -110,10 +138,43 @@ export class GrafanaPanelComponent {
             return;
         }
 
-        this.panelLocal.metrics = this.panelLocal.metrics.filter(m => m !== metric);
+        this.subscriptions.add(this.GrafanaEditorService.removeMetric(metric.id).subscribe(response => {
+            if (response.success) {
+                this.notyService.genericSuccess(
+                    this.TranslocoService.translate('Metric removed successfully')
+                );
 
-        // Notify the parent component that the panel has changed
-        this.panelChangedEvent.emit({index: this.panelIndex(), panel: this.panelLocal});
+                if (this.panelLocal) {
+                    // Remove the metric from the local panel
+                    this.panelLocal.metrics = this.panelLocal.metrics.filter(m => m !== metric);
+
+                    this.cdr.markForCheck();
+
+                    // Notify the parent component that the panel has changed
+                    this.panelChangedEvent.emit({
+                        index: this.panelIndex(),
+                        panel: this.panelLocal
+                    });
+                }
+
+            } else {
+                this.notyService.genericError(
+                    this.TranslocoService.translate('Error while removing metric')
+                );
+            }
+        }));
+    }
+
+    public openPanelOptions() {
+        if (!this.panelLocal) {
+            return;
+        }
+
+        this.GrafanaPanelOptionsService.togglePanelOptionsModal({
+            panelIndex: this.panelIndex(),
+            panel: this.panelLocal,
+            GrafanaUnits: this.grafanaUnits()
+        });
     }
 
 }
