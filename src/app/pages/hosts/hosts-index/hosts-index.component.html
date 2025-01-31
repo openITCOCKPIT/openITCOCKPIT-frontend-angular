@@ -965,7 +965,7 @@
 
                     <td *ngIf="fields[5]" class="text-center">
                         <strong
-                            *ngIf="host.Hoststatus.activeChecksEnabled || host.Host.is_satellite_host"
+                            *ngIf="host.Host.active_checks_enabled === false || host.Host.is_satellite_host === true"
                             [cTooltip]="'Passively transferred host' | transloco" cTooltipPlacement="right">
                             P
                         </strong>
