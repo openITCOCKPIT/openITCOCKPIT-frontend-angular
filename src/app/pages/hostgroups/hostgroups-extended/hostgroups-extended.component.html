@@ -327,7 +327,7 @@
                             </td>
                             <td class="text-center">
                                 <span
-                                    *ngIf="! host.Hoststatus.activeChecksEnabled || host.Host.is_satellite_host"
+                                    *ngIf="host.Host.active_checks_enabled === false || host.Host.is_satellite_host === true"
                                     [title]="'Passively transferred host' | transloco"
                                 >P</span>
                             </td>
