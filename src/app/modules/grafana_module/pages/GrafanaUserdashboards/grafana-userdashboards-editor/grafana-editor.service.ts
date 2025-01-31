@@ -57,13 +57,12 @@ export class GrafanaEditorService {
 
     /**
      * Rows do not exist in the Database, becasue a "row" is saved per panel.
-     * Do delete a row, we need to delete all panels in that row.
-     * @param panelIds
      */
-    public removePanels(panelIds: number[]): Observable<GenericResponseWrapper> {
+    public removePanels(userdashboardId: number, rowIndex: number): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/grafana_module/grafana_userdashboards/removeRow.json?angular=true`, {
-            ids: panelIds
+            userdashboard_id: userdashboardId,
+            rowIndex: rowIndex,
         })
             .pipe(
                 map(data => {
@@ -129,5 +128,29 @@ export class GrafanaEditorService {
                 })
             );
     }
+
+    public removeMetric(metricId: number): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/grafana_module/grafana_userdashboards/removeMetricFromPanel.json?angular=true`, {
+            id: metricId
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
 
 }

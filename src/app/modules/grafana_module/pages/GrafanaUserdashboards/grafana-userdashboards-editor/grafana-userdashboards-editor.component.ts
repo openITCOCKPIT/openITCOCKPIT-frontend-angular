@@ -154,13 +154,8 @@ export class GrafanaUserdashboardsEditorComponent implements OnInit, OnDestroy {
             return;
         }
 
-        // "Rows" do not exist in the Database, because a "row" is saved per panel.
-        // To delete a row, we need to delete all panels in that row.
-        const panels = this.data.userdashboardData.rows[rowIndex];
-        const panelIds = panels.map(panel => panel.id);
-
         // Update the local data with the removed row
-        this.subscriptions.add(this.GrafanaEditorService.removePanels(panelIds).subscribe(response => {
+        this.subscriptions.add(this.GrafanaEditorService.removePanels(this.id, rowIndex).subscribe(response => {
             if (response.success) {
                 this.notyService.genericSuccess(
                     this.TranslocoService.translate('Row removed successfully')
