@@ -74,7 +74,7 @@ export class SynchronizeGrafanaModalComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
-            if (state.show) {
+            if (state.show && state.id === 'synchronizeGrafanaModal') {
                 // Model got opened
                 setTimeout(() => {
                     // without the timeout this.items contains old data
