@@ -12,7 +12,7 @@ import {
     Output,
     ViewChild
 } from '@angular/core';
-import { ContextAction, MapitemBase, MapitemBaseActionObject } from './map-item-base.interface';
+import { ContextAction, MapitemBase, MapitemBaseActionObject, ResizedEvent } from './map-item-base.interface';
 import { CdkDrag, CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
@@ -33,10 +33,12 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     @ViewChild('container', {static: true}) containerRef!: ElementRef<HTMLDivElement>;
 
     public item: InputSignal<T | undefined> = input<T | undefined>();
-    public layers: InputSignal<string[]> = input<string[]>([]);
+    public layers: InputSignal<string[]> = input<string[]>([]); // Layer options for context menu
     public gridSize: InputSignal<{ x: number, y: number }> = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
     public gridEnabled: InputSignal<boolean> = input<boolean>(true);
     public isViewMode: InputSignal<boolean> = input<boolean>(true);
+
+    @Output() resizedEvent = new EventEmitter<ResizedEvent>();
 
     protected id!: number;
     protected mapId!: number;
@@ -53,6 +55,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     protected oldEndY?: number;
 
     // will be overridden by child components
+    // this is for the drop event to know which type of item is dropped
     protected type = MapItemType.ITEM;
 
     @Output() dropItemEvent = new EventEmitter<MapitemBaseActionObject>();
@@ -117,10 +120,13 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         this.setPosition();
     }
 
+    // difference between mapline and all other item, cause maplines have no x and y
     public isMapline(item: any): item is Mapline {
         return item && item.startX !== undefined && item.startY !== undefined && item.endX !== undefined && item.endY !== undefined;
     }
 
+    // check if item is deleted to prevent multiple request after delete through effect()
+    // type has to be given here because the type of parent class is wrong
     public isItemDeleted(type: MapItemType): boolean {
         return this.parent.currentDeletedItem()?.id === this.id && this.parent.currentDeletedItem()?.type === type;
     }
@@ -211,6 +217,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         this.cdr.markForCheck();
     }
 
+    // generates context menu
     private getContextMenuItems(): MenuItem[] {
 
         let layerOptions: MenuItem[] = [];
@@ -284,6 +291,20 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     // can be used to add extra context menu items in child components
     protected getExtraContextMenuItems(): MenuItem[] {
         return [];
+    }
+
+    // resize event for resizable items
+    // type has to be given here because the type of parent class is wrong
+    // in template of child you have to use the onResizeStop event to emit the event (example: (resizeStop)="onResizeStop($event, type)"
+    protected onResizeStop(event: { width: number, height: number }, itemType: MapItemType) {
+        this.resizedEvent.emit({
+            id: this.id,
+            mapId: this.mapId,
+            width: event.width,
+            height: event.height,
+            itemType: itemType
+        });
+        this.cdr.markForCheck();
     }
 
 }

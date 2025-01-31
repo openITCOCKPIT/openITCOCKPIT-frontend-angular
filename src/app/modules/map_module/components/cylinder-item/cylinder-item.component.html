@@ -4,11 +4,9 @@
      (cdkDragMoved)="onDragMove($event)"
      (resizeStop)="onResizeStop($event, type)"
      cdkDragBoundary=".map-canvas">
-    <svg cdkDragHandle viewBox="0 0 85 18" [attr.width]="width" [attr.height]="height"
-         id="map-perfdatatext-{{item()!.id}}">
-        <text x="0" y="15" [attr.fill]="color">
-            {{ text }}
-        </text>
-    </svg>
+    <div cdkDragHandle [id]="'map-cylinder-' + item()!.id"
+         [ngStyle]="{'width.px': width + 10, 'height.px': height + 10}">
+        <svg #cylinderSvg [attr.width]="width" [attr.height]="height"></svg>
+    </div>
 </div>
 <p-contextMenu [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>

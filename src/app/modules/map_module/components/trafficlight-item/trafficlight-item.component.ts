@@ -3,13 +3,11 @@ import {
     Component,
     effect,
     ElementRef,
-    EventEmitter,
     inject,
     input,
     InputSignal,
     OnDestroy,
     OnInit,
-    Output,
     Renderer2,
     ViewChild
 } from '@angular/core';
@@ -24,7 +22,6 @@ import { TrafficlightItemService } from './trafficlight-item.service';
 import { MapLineRootParams } from '../map-line/map-line.interface';
 import { Host, Service, TrafficlightItemRoot } from './trafficlight-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { ResizedEvent } from '../map-item-base/map-item-base.interface';
 import { DOCUMENT, NgIf } from '@angular/common';
 
 @Component({
@@ -42,8 +39,6 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
 
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
-
-    @Output() resizedEvent = new EventEmitter<ResizedEvent>();
 
     private readonly document = inject(DOCUMENT);
 
@@ -206,9 +201,9 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
             this.renderer.insertBefore(greenLightGroup, circle, greenLightGroup.firstChild);
         }
 
-        let redLightElement = document.getElementById('redLightCircle_' + this.id) as HTMLElement;
-        let yellowLightElement = document.getElementById('yellowLightCircle_' + this.id) as HTMLElement;
-        let greenLightElement = document.getElementById('greenLightCircle_' + this.id) as HTMLElement;
+        let redLightElement = this.document.getElementById('redLightCircle_' + this.id) as HTMLElement;
+        let yellowLightElement = this.document.getElementById('yellowLightCircle_' + this.id) as HTMLElement;
+        let greenLightElement = this.document.getElementById('greenLightCircle_' + this.id) as HTMLElement;
         if (this.showRed && this.blink && redLightElement) {
             this.blinking(redLightElement, 'red');
         }
@@ -286,17 +281,6 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
         }
 
         this.load();
-    }
-
-    protected onResizeStop(event: { width: number, height: number }) {
-        this.resizedEvent.emit({
-            id: this.id,
-            mapId: this.mapId,
-            width: event.width,
-            height: event.height,
-            itemType: this.type
-        });
-        this.cdr.markForCheck();
     }
 
 }

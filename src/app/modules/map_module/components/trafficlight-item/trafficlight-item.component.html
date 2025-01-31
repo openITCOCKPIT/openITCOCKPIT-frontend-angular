@@ -2,7 +2,7 @@
      [draggable]="isViewMode()"
      (cdkDragEnded)="onDragEnd($event)"
      (cdkDragMoved)="onDragMove($event)"
-     (resizeStop)="onResizeStop($event)"
+     (resizeStop)="onResizeStop($event, type)"
      cdkDragBoundary=".map-canvas">
     <div cdkDragHandle [id]="'map-trafficlight-' + item()?.id" [style.width.px]="width + 10"
          [style.height.px]="height + 10">

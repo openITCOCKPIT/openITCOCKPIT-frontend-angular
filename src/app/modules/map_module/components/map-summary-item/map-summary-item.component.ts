@@ -1,13 +1,11 @@
 import {
     ChangeDetectionStrategy,
     Component,
-    EventEmitter,
     inject,
     input,
     InputSignal,
     OnDestroy,
     OnInit,
-    Output,
     ViewChild
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
@@ -23,7 +21,6 @@ import { Data, MapSummaryItemRoot } from './map-summary-item.interface';
 import { NgIf } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { ResizedEvent } from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-map-summary-item',
@@ -38,8 +35,6 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
 
     public override item: InputSignal<Mapsummaryitem | undefined> = input<Mapsummaryitem>();
     public refreshInterval = input<number>(0);
-
-    @Output() resizedEvent = new EventEmitter<ResizedEvent>();
 
     private subscriptions: Subscription = new Subscription();
     private readonly MapSummaryItemService = inject(MapSummaryItemService);
@@ -222,17 +217,6 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
                 ]
             }
         ]
-    }
-
-    protected onResizeStop(event: { width: number, height: number }) {
-        this.resizedEvent.emit({
-            id: this.id,
-            mapId: this.mapId,
-            width: event.width,
-            height: event.height,
-            itemType: this.type
-        });
-        this.cdr.markForCheck();
     }
 
 }

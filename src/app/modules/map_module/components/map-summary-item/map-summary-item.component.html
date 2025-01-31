@@ -2,7 +2,7 @@
      [draggable]="isViewMode()"
      (cdkDragEnded)="onDragEnd($event)"
      (cdkDragMoved)="onDragMove($event)"
-     (resizeStop)="onResizeStop($event)"
+     (resizeStop)="onResizeStop($event, type)"
      cdkDragBoundary=".map-canvas">
     <div cdkDragHandle class="text-center"
          *ngIf="allowView && (item()!.label_possition == 1 || item()!.label_possition == 2)">

@@ -2,13 +2,11 @@ import {
     ChangeDetectionStrategy,
     Component,
     effect,
-    EventEmitter,
     inject,
     input,
     InputSignal,
     OnDestroy,
-    OnInit,
-    Output
+    OnInit
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
@@ -21,7 +19,6 @@ import { PerfdataTextItemService } from './perfdata-text-item.service';
 import { MapLineRootParams } from '../map-line/map-line.interface';
 import { Load1, Load15, Load5, Perfdata, PerfdataTextItemRoot } from './perfdata-text-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { ResizedEvent } from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-perfdata-text-item',
@@ -35,8 +32,6 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
 
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
-
-    @Output() resizedEvent = new EventEmitter<ResizedEvent>();
 
     private subscriptions: Subscription = new Subscription();
     private readonly PerfdataTextItemService = inject(PerfdataTextItemService);
@@ -199,17 +194,6 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
         }
 
         this.load();
-    }
-
-    protected onResizeStop(event: { width: number, height: number }) {
-        this.resizedEvent.emit({
-            id: this.id,
-            mapId: this.mapId,
-            width: event.width,
-            height: event.height,
-            itemType: this.type
-        });
-        this.cdr.markForCheck();
     }
 
 }
