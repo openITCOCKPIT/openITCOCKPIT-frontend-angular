@@ -244,7 +244,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
                 //window.location = this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/');
 
-                window.location.href = '/'; // Replace with the last page URL if needed
+                this.router.navigate(['/']); //todo replace with last page
 
                 return;
             }
