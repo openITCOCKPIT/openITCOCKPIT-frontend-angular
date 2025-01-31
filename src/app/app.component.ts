@@ -25,6 +25,7 @@ import {
 } from './components/message-of-the-day-modal/message-of-the-day-modal.component';
 import { CurrentMessageOfTheDay } from './pages/messagesotd/messagesotd.interface';
 import { MessagesOfTheDayService } from './pages/messagesotd/messagesotd.service';
+import { AuthService } from './auth/auth.service';
 
 @Component({
     selector: 'oitc-root',
@@ -104,13 +105,27 @@ export class AppComponent implements OnDestroy, AfterViewInit {
             }
         }));
 
-        // Solely fetch the current message of the day.
-        this.subscription.add(this.MessageOfTheDayService.getCurrentMessageOfTheDay().subscribe((message: CurrentMessageOfTheDay) => {
-            if (message.messageOtdAvailable) {
-                this.messageOfTheDay = message;
-            }
-        }));
+        // Fetch the message of the day
+        this.fetchMessageOfTheDay();
+    }
 
+    private readonly AuthService: AuthService = inject(AuthService);
+
+    private fetchMessageOfTheDay(): void {
+        this.subscription.add(this.AuthService.authenticated$.subscribe((isLoggedIn) => {
+            if (!isLoggedIn) {
+                console.log("Ich bin nicht angemeldet");
+                return;
+            }
+            console.log("HURRA ICH BIN DRIN. is ja einfach...");
+            // Solely fetch the current message of the day.
+            this.subscription.add(this.MessageOfTheDayService.getCurrentMessageOfTheDay().subscribe((message: CurrentMessageOfTheDay) => {
+                if (message.messageOtdAvailable) {
+                    this.messageOfTheDay = message;
+                }
+            }));
+
+        }));
     }
 
     public ngOnDestroy(): void {
