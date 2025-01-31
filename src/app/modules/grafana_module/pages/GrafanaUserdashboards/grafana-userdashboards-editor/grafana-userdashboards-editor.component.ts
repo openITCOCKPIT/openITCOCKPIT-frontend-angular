@@ -32,6 +32,7 @@ import {
     SynchronizeGrafanaModalComponent
 } from '../../../components/synchronize-grafana-modal/synchronize-grafana-modal.component';
 import { GrafanaChartTypesEnum } from './grafana-panel/chart-type-icon/GrafanaChartTypes.enum';
+import { GrafanaPanelOptionsModalComponent } from './grafana-panel-options-modal/grafana-panel-options-modal.component';
 
 
 @Component({
@@ -59,7 +60,8 @@ import { GrafanaChartTypesEnum } from './grafana-panel/chart-type-icon/GrafanaCh
         GrafanaRowComponent,
         RowComponent,
         ColComponent,
-        SynchronizeGrafanaModalComponent
+        SynchronizeGrafanaModalComponent,
+        GrafanaPanelOptionsModalComponent
     ],
     templateUrl: './grafana-userdashboards-editor.component.html',
     styleUrl: './grafana-userdashboards-editor.component.css',

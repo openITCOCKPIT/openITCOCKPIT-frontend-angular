@@ -14,7 +14,8 @@
                             <fa-icon [icon]="['fas', 'plus']"></fa-icon>
                             {{ t('Add Metric') }}
                         </button>
-                        <button cButton color="default" class="ripple" size="xs">
+                        <button cButton color="default" class="ripple" size="xs"
+                                (click)="openPanelOptions()">
                             <fa-icon [icon]="['fas', 'wrench']" flip="horizontal"></fa-icon>
                             {{ t('Panel options') }}
                         </button>

@@ -25,11 +25,18 @@ import { LabelLinkComponent } from '../../../../../../layouts/coreui/label-link/
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
 import { GrafanaEditorService } from '../grafana-editor.service';
+import { GrafanaPanelOptionsService } from '../grafana-panel-options-modal/grafana-panel-options.service';
 
 
 export interface RemovePanelEvent {
     panelIndex: number
     panelId: number
+}
+
+export interface OpenPanelOptionsEvent {
+    panelIndex: number
+    panel: GrafanaEditorDashboardRow,
+    GrafanaUnits?: GrafanaUnits
 }
 
 
@@ -68,6 +75,7 @@ export class GrafanaPanelComponent implements OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private readonly GrafanaEditorService = inject(GrafanaEditorService);
+    private readonly GrafanaPanelOptionsService = inject(GrafanaPanelOptionsService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private cdr = inject(ChangeDetectorRef);
@@ -155,8 +163,18 @@ export class GrafanaPanelComponent implements OnDestroy {
                 );
             }
         }));
+    }
 
+    public openPanelOptions() {
+        if (!this.panelLocal) {
+            return;
+        }
 
+        this.GrafanaPanelOptionsService.togglePanelOptionsModal({
+            panelIndex: this.panelIndex(),
+            panel: this.panelLocal,
+            GrafanaUnits: this.grafanaUnits()
+        });
     }
 
 }
