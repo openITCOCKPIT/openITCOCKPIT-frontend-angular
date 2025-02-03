@@ -8,6 +8,10 @@ import {
     GenericSuccessResponse,
     GenericValidationError
 } from '../../../../../generic-responses';
+import {
+    GrafanaChartTypesEnum,
+    GrafanaStackingModesEnum
+} from './grafana-panel/chart-type-icon/GrafanaChartTypes.enum';
 
 @Injectable({
     providedIn: 'root'
@@ -152,5 +156,31 @@ export class GrafanaEditorService {
             );
     }
 
+    public savePanelUnit(id: number, unit: string, title: string, visualization_type: GrafanaChartTypesEnum, stacking_mode: GrafanaStackingModesEnum | ''): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/grafana_module/grafana_userdashboards/savePanelUnit.json?angular=true`, {
+            id,
+            unit,
+            title,
+            visualization_type,
+            stacking_mode
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
 
 }

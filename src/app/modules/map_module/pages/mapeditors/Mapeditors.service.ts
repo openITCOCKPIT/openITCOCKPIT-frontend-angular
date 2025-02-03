@@ -5,9 +5,11 @@ import { catchError, map, Observable, of } from 'rxjs';
 import {
     MapeditorsEditRoot,
     MapeditorSettingsPost,
+    MapgadgetPost,
     MapiconPost,
     MapitemPost,
     MaplinePost,
+    MapsummaryitemPost,
     MaptextPost
 } from './Mapeditors.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
@@ -178,6 +180,90 @@ export class MapeditorsService {
     public deleteLine(mapLine: MaplinePost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/map_module/mapeditors/deleteLine.json?angular=true`, mapLine)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public saveSummaryItem(mapSummaryItem: MapsummaryitemPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/mapeditors/saveSummaryitem.json?angular=true`, mapSummaryItem)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public deleteSummaryItem(mapSummaryItem: MapsummaryitemPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/mapeditors/deleteSummaryitem.json?angular=true`, mapSummaryItem)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public saveGadget(mapGadget: MapgadgetPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/mapeditors/saveGadget.json?angular=true`, mapGadget)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public deleteGadget(mapGadget: MapgadgetPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/mapeditors/deleteGadget.json?angular=true`, mapGadget)
             .pipe(
                 map(data => {
                     // Return true on 200 Ok

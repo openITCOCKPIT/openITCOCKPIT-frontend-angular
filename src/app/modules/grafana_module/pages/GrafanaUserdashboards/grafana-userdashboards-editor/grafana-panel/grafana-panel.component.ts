@@ -26,6 +26,8 @@ import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
 import { GrafanaEditorService } from '../grafana-editor.service';
 import { GrafanaPanelOptionsService } from '../grafana-panel-options-modal/grafana-panel-options.service';
+import { GrafanaMetricOptionsService } from '../grafana-metric-options-modal/grafana-metric-options.service';
+import { ROOT_CONTAINER } from '../../../../../../pages/changelogs/object-types.enum';
 
 
 export interface RemovePanelEvent {
@@ -39,6 +41,17 @@ export interface OpenPanelOptionsEvent {
     GrafanaUnits?: GrafanaUnits
 }
 
+export interface OpenMetricOptionsEvent {
+    panelIndex: number
+    row: number,
+    panel_id: number,
+    service_id: number,
+    metric: string,
+    color: string,
+    userdashboard_id: number
+    containerId: number,
+    mode: 'add' | 'edit'
+}
 
 @Component({
     selector: 'oitc-grafana-panel',
@@ -64,6 +77,7 @@ export class GrafanaPanelComponent implements OnDestroy {
 
     public panelIndex = input<number>(0);
     public panel = input<GrafanaEditorDashboardRow>();
+    public containerId = input<number>(ROOT_CONTAINER);
     public grafanaUnits = input<GrafanaUnits>();
 
     // Emit the panel when it changes to the parent component
@@ -76,11 +90,28 @@ export class GrafanaPanelComponent implements OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private readonly GrafanaEditorService = inject(GrafanaEditorService);
     private readonly GrafanaPanelOptionsService = inject(GrafanaPanelOptionsService);
+    private readonly GrafanaMetricOptionsService = inject(GrafanaMetricOptionsService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private cdr = inject(ChangeDetectorRef);
 
     constructor() {
+        this.subscriptions.add(this.GrafanaPanelOptionsService.panelUpdated$.subscribe((event) => {
+            // Panel got modified by the Panel Options Modal
+            if (event.panelIndex === this.panelIndex()) {
+                this.panelLocal = event.panel;
+                this.setHumanUnit();
+
+
+                // Notify the parent component that the panel has changed
+                this.panelChangedEvent.emit({
+                    index: this.panelIndex(),
+                    panel: this.panelLocal
+                });
+            }
+        }));
+
+
         effect(() => {
             this.panelLocal = this.panel();
             this.setHumanUnit();
@@ -127,6 +158,25 @@ export class GrafanaPanelComponent implements OnDestroy {
                 panelId: this.panelLocal.id
             });
         }
+    }
+
+    public openAddMetric() {
+        if (!this.panelLocal) {
+            return;
+        }
+
+        this.GrafanaMetricOptionsService.toggleMetricOptionsModal({
+            panelIndex: this.panelIndex(),
+            containerId: this.containerId(),
+            row: this.panelLocal.row,
+            panel_id: this.panelLocal.id,
+            color: '',
+            userdashboard_id: this.panelLocal.userdashboard_id,
+
+            service_id: 0, // Default to 0
+            metric: '', // Default to empty string
+            mode: 'add'
+        });
     }
 
     public editMetric(metric: DashboardRowMetric) {
