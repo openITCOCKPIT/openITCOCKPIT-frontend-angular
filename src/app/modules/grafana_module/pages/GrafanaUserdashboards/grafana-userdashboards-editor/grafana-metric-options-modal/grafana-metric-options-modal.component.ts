@@ -134,6 +134,7 @@ export class GrafanaMetricOptionsModalComponent implements OnDestroy {
             searchString = '';
         }
 
+
         const selected: number[] = [];
 
         if (this.currentMetric) {
