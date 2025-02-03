@@ -99,6 +99,7 @@
                     </c-col>
                 </c-row>
 
+
                 <c-row>
                     <c-col>
                         <hr class="border-dashed">
@@ -117,3 +118,8 @@
 
 <oitc-synchronize-grafana-modal (completed)="onMassActionComplete($event)"
                                 [items]="selectedItems"></oitc-synchronize-grafana-modal>
+
+<oitc-grafana-panel-options-modal
+    *ngIf="data && data.grafanaUnits"
+    [grafanaUnits]="data.grafanaUnits"></oitc-grafana-panel-options-modal>
+

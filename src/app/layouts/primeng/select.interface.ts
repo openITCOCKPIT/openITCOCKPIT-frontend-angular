@@ -23,3 +23,9 @@ export interface SelectKeyValueString {
     key: string,
     value: string
 }
+
+export interface SelectKeyValueOptGroup {
+    value: string | number
+    items: SelectKeyValueString[]
+}
+
