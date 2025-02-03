@@ -179,15 +179,14 @@ export class ImportersService {
         if (importer.data_source === 'csv_with_header' || importer.data_source === 'csv_without_header') {
             this.modalService.toggle({
                 show: true,
-                id: 'importCsvData',
+                id: 'importCsvDataModal',
             });
         } else {
             this.modalService.toggle({
                 show: true,
-                id: 'importData',
+                id: 'importDataModal',
             });
         }
-
     }
 
     public loadDataFromITop(importer: Importer): Observable<{

@@ -923,6 +923,7 @@
     </c-card>
 </ng-container>
 <oitc-import-data (completed)="onImportIsCompleted($event)"></oitc-import-data>
-<oitc-import-csv-data (completed)="onImportIsCompleted($event)"></oitc-import-csv-data>
+<oitc-import-csv-data (completed)="onImportIsCompleted($event)"
+                      [maxUploadLimit]="maxUploadLimit"></oitc-import-csv-data>
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

@@ -103,7 +103,7 @@ export class ImportDataComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
             this.cdr.markForCheck();
-            if (state.show === true && state.id === 'importData') {
+            if (state.show === true && state.id === 'importDataModal') {
                 if (!this.importer) {
                     return;
                 }
@@ -190,7 +190,7 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                                 this.importData = {
                                     success: false,
                                     errorMessage: response.message,
-                                    notValidRawData: response.errors.notValidRawData
+                                    notValidRawData: (response.errors && response.errors.notValidRawData) ? response.errors.notValidRawData : []
                                 }
                             }
                             this.cdr.markForCheck();
@@ -211,7 +211,7 @@ export class ImportDataComponent implements OnInit, OnDestroy {
         this.importData = undefined;
         this.modalService.toggle({
             show: false,
-            id: 'importData'
+            id: 'importDataModal'
         });
     }
 

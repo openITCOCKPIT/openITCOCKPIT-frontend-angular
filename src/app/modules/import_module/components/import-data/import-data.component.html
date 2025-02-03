@@ -2,17 +2,56 @@
     <c-modal
         #modal='cModal'
         [keyboard]="true"
-        id="importData"
+        id="importDataModal"
         size="xl">
-        <c-modal-header>
+        <c-modal-header *ngIf="importer">
             <h5 cModalTitle>
-                <fa-stack class="me-1">
-                    <fa-icon [icon]="['fas', 'database']"
-                             stackItemSize="2x" pull="left" class="text-info"></fa-icon>
-                    <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                             stackItemSize="1x" pull="right" transform="right-5 down-15"
-                    ></fa-icon>
-                </fa-stack>
+                @switch (importer.data_source) {
+                    @case ('idoit') {
+                        <!-- Import i-doit data -->
+                        <fa-stack class="me-1">
+                            <fa-icon [icon]="['fas', 'database']"
+                                     stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                            <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+                                     stackItemSize="1x" pull="right" transform="right-5 down-15"
+                            ></fa-icon>
+                        </fa-stack>
+                        {{ t('Import data from i-doit system') }}
+                    }
+                    @case ('openitcockpit_agent') {
+                        <!-- Import openITCOCKPIT Agent data -->
+                        <fa-stack class="me-1">
+                            <fa-icon [icon]="['fas', 'user-secret']"
+                                     stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                            <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+                                     stackItemSize="1x" pull="right" transform="right-5 down-15"
+                            ></fa-icon>
+                        </fa-stack>
+                        {{ t('Import data from openITCOCKPIT Agent') }}
+                    }
+                    @case ('itop') {
+                        <!-- Import iTop data -->
+                        <fa-stack class="me-1">
+                            <fa-icon [icon]="['fas', 'user-secret']"
+                                     stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                            <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+                                     stackItemSize="1x" pull="right" transform="right-5 down-15"
+                            ></fa-icon>
+                        </fa-stack>
+                        {{ t('Import data from openITCOCKPIT Agent') }}
+                    }
+                    @case ('external_monitoring') {
+                        <!-- Import ExternalMonitoringSystem data -->
+                        <fa-stack class="me-1">
+                            <fa-icon [icon]="['fas', 'tower-observation']"
+                                     stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                            <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+                                     stackItemSize="1x" pull="right" transform="right-5 down-15"
+                            ></fa-icon>
+                        </fa-stack>
+                        {{ t('Import data from External Monitoring System system') }}
+                    }
+                }
             </h5>
             <button (click)="hideModal()" cButtonClose></button>
         </c-modal-header>

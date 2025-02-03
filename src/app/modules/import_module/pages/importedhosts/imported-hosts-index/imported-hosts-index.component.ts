@@ -34,7 +34,8 @@ import {
     Importedhost,
     ImportedHostIndex,
     ImportedhostsIndexParams,
-    ImportedhostsIndexRoot
+    ImportedhostsIndexRoot,
+    MaxUploadLimit
 } from '../importedhosts.interface';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { ImportedhostsService } from '../importedhosts.service';
@@ -140,6 +141,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     public importedhosts: Importedhost[] = [];
     public importers: Importer[] = [];
+    public maxUploadLimit?: MaxUploadLimit;
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
     private readonly modalService = inject(ModalService);
@@ -148,7 +150,6 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public showSynchronizingSpinner: boolean = false;
     public showSpinner: boolean = false;
-    public externalSystems: ExternalSystemEntity[] = [];
     public allImportedHosts?: ImportedhostsIndexRoot;
     private readonly notyService = inject(NotyService);
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
@@ -218,6 +219,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
                 this.allImportedHosts = result;
                 this.importedhosts = result.importedhosts;
                 this.importers = result.importers;
+                this.maxUploadLimit = result.maxUploadLimit;
                 this.cdr.markForCheck();
             })
         );
