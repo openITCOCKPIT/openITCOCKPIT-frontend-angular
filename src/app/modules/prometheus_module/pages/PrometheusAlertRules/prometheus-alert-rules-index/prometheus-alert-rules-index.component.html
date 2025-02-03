@@ -163,7 +163,10 @@
                                 [item]="alertRule"></oitc-item-select>
                     </td>
                     <td>
-                        CHART
+                        <oitc-prometheus-popover-graph
+                                [timezone]="timezone"
+                                [promql]="alertRule._matchingData.PrometheusAlertRules.promql"
+                        />
                     </td>
                     <td>
                         {{ alertRule.servicename }}

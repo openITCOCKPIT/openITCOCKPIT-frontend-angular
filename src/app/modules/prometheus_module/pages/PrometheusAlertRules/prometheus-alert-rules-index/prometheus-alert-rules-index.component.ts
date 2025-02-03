@@ -63,6 +63,7 @@ import { SelectionServiceService } from '../../../../../layouts/coreui/select-al
 import {
     PrometheusPopoverGraphComponent
 } from '../../../components/prometheus-popover-graph/prometheus-popover-graph.component';
+import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../../../services/timezone.service';
 
 @Component({
     selector: 'oitc-prometheus-alert-rules-index',
@@ -123,6 +124,7 @@ export class PrometheusAlertRulesIndexComponent implements OnInit, OnDestroy, In
     private readonly PrometheusAlertRulesService: PrometheusAlertRulesService = inject(PrometheusAlertRulesService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly TimezoneService: TimezoneService = inject(TimezoneService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected selectedItems: DeleteAllItem[] = [];
@@ -130,6 +132,7 @@ export class PrometheusAlertRulesIndexComponent implements OnInit, OnDestroy, In
     protected params: PrometheusAlertRulesIndexParams = getDefaultPrometheusAlertRulesIndexParams();
     protected result: PrometheusAlertRulesIndexRoot | undefined = undefined;
     protected hideFilter: boolean = true;
+    protected timezone!: TimezoneObject;
 
 
     // Generic callback whenever a mass action (like delete all) has been finished
@@ -198,6 +201,7 @@ export class PrometheusAlertRulesIndexComponent implements OnInit, OnDestroy, In
     }
 
     public ngOnInit() {
+        this.getUserTimezone();
         this.loadHosts();
 
         const hostId = Number(this.route.snapshot.paramMap.get('hostId'));
@@ -215,6 +219,13 @@ export class PrometheusAlertRulesIndexComponent implements OnInit, OnDestroy, In
     // Show or hide the filter
     public toggleFilter() {
         this.hideFilter = !this.hideFilter;
+    }
+
+    private getUserTimezone() {
+        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
+            this.timezone = data;
+            this.cdr.markForCheck();
+        }));
     }
 
     public reload() {
