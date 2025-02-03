@@ -45,6 +45,7 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
     protected arctan: number = 0;
     protected background: string = "";
     protected init: boolean = true;
+    private intervalStartet: boolean = false; // needed to prevent multiple interval subscriptions
 
     protected override type = MapItemType.LINE;
 
@@ -167,7 +168,8 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
 
     private initRefreshTimer() {
         if (this.item()!.type !== 'stateless') {
-            if (this.refreshInterval() > 0 && !this.statusUpdateInterval) {
+            if (this.refreshInterval() > 0 && !this.intervalStartet) {
+                this.intervalStartet = true;
                 this.statusUpdateInterval = interval(this.refreshInterval()).subscribe(() => {
                     this.load();
                 });
@@ -176,7 +178,7 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
     };
 
     private stop() {
-        if (this.statusUpdateInterval) {
+        if (this.intervalStartet) {
             this.statusUpdateInterval.unsubscribe();
             this.cdr.markForCheck();
         }
