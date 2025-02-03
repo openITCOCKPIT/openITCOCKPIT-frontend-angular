@@ -156,6 +156,9 @@ export class PrometheusQueryIndexComponent implements OnInit, OnDestroy {
     }
 
     protected loadIndex(): void {
+        if (this.params.hostId === 0) {
+            return;
+        }
         this.subscriptions.add(this.PrometheusQueryService.getIndex(this.params)
             .subscribe((result: PrometheusQueryIndexRoot) => {
                 this.index = result;
