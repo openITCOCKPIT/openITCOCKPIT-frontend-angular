@@ -217,7 +217,7 @@ export interface PrometheusCreateServiceRoot {
 export interface PrometheusCreateService {
     host_id: string
     name: string
-    prometheus_alert_rule: PrometheusAlertRule2
+    prometheus_alert_rule: EditablePrometheusAlertRule
     servicetemplate_id: number
 }
 
@@ -237,3 +237,35 @@ export interface PrometheusAlertRule2 {
     critical_operator: string
     servicetemplate_id: number
 }
+
+// EDIT SERVICE
+export interface PrometheusEditServiceRoot {
+    postData: PrometheusEditService
+    servicetemplates: SelectKeyValue[]
+    host: Host
+    selectedMetrics: string[]
+    _csrfToken: any
+}
+
+export interface PrometheusEditService {
+    Service: {
+        id: number
+        host_id: number
+        servicetemplate_id: number
+        name: string
+        prometheus_alert_rule: EditablePrometheusAlertRule
+    }
+}
+
+
+export interface EditablePrometheusAlertRule extends PrometheusAlertRule {
+    servicetemplate_id: number
+}
+
+export interface Host {
+    id: number
+    uuid: string
+    name: string
+    container_id: number
+}
+

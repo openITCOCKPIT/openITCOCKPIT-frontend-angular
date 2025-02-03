@@ -30,6 +30,10 @@ export const prometheusModuleRoutes: Routes = [
         loadComponent: () => import('./pages/PrometheusQuery/prometheus-query-index/prometheus-query-index.component').then(m => m.PrometheusQueryIndexComponent)
     },
     {
+        path: 'prometheus_module/PrometheusQuery/editService/:serviceId',
+        loadComponent: () => import('./pages/PrometheusQuery/prometheus-query-edit-service/prometheus-query-edit-service.component').then(m => m.PrometheusQueryEditServiceComponent)
+    },
+    {
         path: 'prometheus_module/PrometheusQuery/toService/:hostId',
         loadComponent: () => import('./pages/PrometheusQuery/prometheus-query-to-service/prometheus-query-to-service.component').then(m => m.PrometheusQueryToServiceComponent)
     }

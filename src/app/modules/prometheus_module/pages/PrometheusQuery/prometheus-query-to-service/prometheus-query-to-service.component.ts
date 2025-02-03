@@ -24,7 +24,7 @@ import {
     getDefaultPrometheusQueryIndexParams,
     LoadCurrentValueByMetricRoot,
     LoadServicetemplates,
-    PrometheusAlertRule2,
+    EditablePrometheusAlertRule,
     PrometheusCreateService,
     PrometheusQueryIndexParams,
     PrometheusQueryIndexRoot,
@@ -385,7 +385,7 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
                         warning_max: this.ValidateService.warning_max,
                         warning_min: this.ValidateService.warning_min,
                         warning_operator: this.ValidateService.warning_operator,
-                    } as PrometheusAlertRule2,
+                    } as EditablePrometheusAlertRule,
                     servicetemplate_id: this.ValidateService.servicetemplate_id,
                 };
 

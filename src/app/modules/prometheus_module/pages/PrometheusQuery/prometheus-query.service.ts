@@ -6,6 +6,8 @@ import {
     LoadCurrentValueByMetricRoot,
     LoadServicetemplates,
     PrometheusCreateService,
+    PrometheusEditService,
+    PrometheusEditServiceRoot,
     PrometheusPerformanceDataParams,
     PrometheusPerformanceDataRoot,
     PrometheusQueryApiResult,
@@ -112,9 +114,7 @@ export class PrometheusQueryService {
     }
 
     public createServices(PrometheusCreateService: PrometheusCreateService) : Observable<GenericResponseWrapper>{
-        return this.http.post<{
-            user: ProfileUser
-        }>(`${this.proxyPath}/prometheus_module/PrometheusQuery/createService.json?angular=true`, {
+        return this.http.post<GenericResponseWrapper>(`${this.proxyPath}/prometheus_module/PrometheusQuery/createService.json?angular=true`, {
             Service: PrometheusCreateService
         })
             .pipe(
@@ -149,6 +149,36 @@ export class PrometheusQueryService {
                     return {
                         success: true,
                         data: data as {}
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEditService(serviceId: number): Observable<PrometheusEditServiceRoot> {
+        return this.http.get<PrometheusEditServiceRoot>(`${this.proxyPath}/prometheus_module/PrometheusQuery/editService/${serviceId}.json?angular=true`, {}).pipe(
+            map((data: PrometheusEditServiceRoot) => {
+                return data;
+            })
+        );
+    }
+
+    public updateService(PrometheusEditService: PrometheusEditService): Observable<GenericResponseWrapper> {
+        return this.http.post<GenericResponseWrapper>(`${this.proxyPath}/prometheus_module/PrometheusQuery/editService/${PrometheusEditService.Service.id}.json?angular=true`, {
+            Service : PrometheusEditService.Service as {},
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: {}
                     };
                 }),
                 catchError((error: any) => {

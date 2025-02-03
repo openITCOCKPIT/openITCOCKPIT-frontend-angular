@@ -57,7 +57,6 @@
         </c-card-header>
         <c-card-body>
 
-            <!-- Filter -->
             <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                 <c-row>
                     <c-col>
@@ -154,21 +153,21 @@
                         {{ alertRule.servicename }}
                     </td>
                     <td>
-                        {{ alertRule._matchingData.PrometheusAlertRules.promql }}
+                        <code>{{ alertRule._matchingData.PrometheusAlertRules.promql }}</code>
                     </td>
                     <td>
                         {{ alertRule._matchingData.PrometheusAlertRules.unit }}
                     </td>
                     <td class="width-50">
-                        <oitc-actions-button [permission]="'PrometheusModule.PrometheusAlertRules.edit'"
-                                             [url]="'/prometheus_module/PrometheusAlertRules/edit/' + alertRule.id">
-                            <oitc-actions-button-element [permission]="'PrometheusModule.PrometheusAlertRules.edit'"
-                                                         [url]="'/prometheus_module/PrometheusAlertRules/edit/' + alertRule.id"
+                        <oitc-actions-button [permission]="'PrometheusModule.PrometheusQuery.editService'"
+                                             [url]="'/prometheus_module/PrometheusQuery/editService/' + alertRule.id">
+                            <oitc-actions-button-element [permission]="'PrometheusModule.PrometheusQuery.editService'"
+                                                         [url]="'/prometheus_module/PrometheusQuery/editService/' + alertRule.id"
                                                          *ngIf="alertRule.allow_edit">
                                 <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                 {{ t('Edit') }}
                             </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'PrometheusModule.PrometheusAlertRules.edit'"
+                            <oitc-actions-button-element [permission]="'PrometheusModule.PrometheusQuery.editService'"
                                                          *ngIf="!alertRule.allow_edit">
                                 <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                 {{ t('Edit') }}
