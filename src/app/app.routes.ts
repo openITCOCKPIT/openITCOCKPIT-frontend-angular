@@ -29,6 +29,7 @@ import { jiraModuleRoutes } from './modules/jira_module/jira_module.routes';
 import { openstreetmapModuleRoutes } from './modules/openstreetmap_module/openstreetmap_modules.routes';
 import { isarFlowModuleRoutes } from './modules/isarflow_module/isarflow_module.routes';
 import { grafanaModuleRoutes } from './modules/grafana_module/grafana_module.routes';
+import { autoreportModuleRoutes } from './modules/autoreport_module/autoreport_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -79,7 +80,8 @@ const moduleRoutes: Routes = [
     ...jiraModuleRoutes,
     ...isarFlowModuleRoutes,
     ...grafanaModuleRoutes,
-    ...openstreetmapModuleRoutes
+    ...openstreetmapModuleRoutes,
+    ...autoreportModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
