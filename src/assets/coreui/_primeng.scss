@@ -29,7 +29,8 @@
 }
 
 .p-chip-label {
-    white-space: nowrap;
+    white-space: wrap;
+    word-break: break-all;
 }
 
 .p-chip {
