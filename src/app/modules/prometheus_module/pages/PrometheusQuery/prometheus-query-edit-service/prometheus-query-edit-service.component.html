@@ -15,8 +15,8 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                {{ t('Add metric to monitoring') }}
+                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                {{ t('Edit Prometheus alert rule') }}
             </li>
         </ol>
     </nav>
@@ -25,7 +25,7 @@
 
     <c-card class="mb-3" *ngIf="post">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Prometheus metrics') }}</h5>
+            <h5 cCardTitle>{{ t('Edit Prometheus alert rule') }}</h5>
 
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
