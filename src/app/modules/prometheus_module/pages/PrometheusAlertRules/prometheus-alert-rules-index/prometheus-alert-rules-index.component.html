@@ -40,6 +40,22 @@
                     {{ t('of Host') }}
                 </small>
             </h5>
+
+            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                <c-nav-item>
+                    <a [routerLink]="['/', 'prometheus_module', 'PrometheusQuery', 'index']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'chart-line']"></fa-icon>
+                        {{ t('Metrics') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a class="nav-link active">
+                        <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
+                        {{ t('Alert rules') }}
+                    </a>
+                </c-nav-item>
+            </c-nav>
+
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
                     <button (click)="reload()" cButton class="ripple" color="default" size="xs">
