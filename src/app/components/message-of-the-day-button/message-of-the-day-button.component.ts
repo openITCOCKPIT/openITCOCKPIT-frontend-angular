@@ -30,7 +30,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { CurrentMessageOfTheDay } from '../../pages/messagesotd/messagesotd.interface';
 
@@ -45,11 +45,12 @@ type NewBookmark = {
 @Component({
     selector: 'oitc-message-of-the-day-button',
     imports: [
-    XsButtonDirective,
-    FaIconComponent,
-    FormsModule,
-    NgIf
-],
+        XsButtonDirective,
+        FaIconComponent,
+        FormsModule,
+        NgIf,
+        NgClass
+    ],
     templateUrl: './message-of-the-day-button.component.html',
     styleUrl: './message-of-the-day-button.component.css'
 })

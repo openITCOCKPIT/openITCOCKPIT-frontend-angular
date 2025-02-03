@@ -1,9 +1,9 @@
 import {
+    afterRenderEffect,
     AfterViewInit,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
-    effect,
     ElementRef,
     HostListener,
     inject,
@@ -49,7 +49,12 @@ export class VectormapComponent implements AfterViewInit {
     private cdr = inject(ChangeDetectorRef);
 
     constructor() {
-        effect(() => {
+        afterRenderEffect(() => {
+
+            if (!this.map) {
+                // Mao not yet initialized
+                return;
+            }
 
             // Update markers
             this.map.removeMarkers();

@@ -39,6 +39,9 @@
 @import "@fontsource/roboto/900-italic.css";
 @import "vanilla-jsoneditor/themes/jse-theme-dark.css";
 
+@import "leaflet/dist/leaflet.css";
+@import "assets/leafletextensions/leaflet.custom.controls.css";
+
 /*
  * Importing FontAwesome globally that we can Web Fonts which support gradients
  * and can also be used within libraries like Vis-Timeline
@@ -138,3 +141,5 @@ a {
 .scroll-hidden::-webkit-scrollbar-thumb {
     display: none; /* for Chrome, Safari, and Opera */
 }
+
+

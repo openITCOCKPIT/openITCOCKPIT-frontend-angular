@@ -1,0 +1,49 @@
+<ng-container *transloco="let t">
+    <c-card [cBorder]="{top: {color:'secondary', width: 3}}" class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle class="text-secondary">
+                {{ t('Row') }}:
+                <small class="fw-300">
+                    {{ ( rowIndex() + 1 ) }}
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="success" size="xs"
+                            *ngIf="panelsLocal.length < 4"
+                            (click)="createPanel()">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('Add Panel') }}
+                    </button>
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="danger" size="xs"
+                            (click)="removeRow()">
+                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                        {{ t('Remove Row') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+
+
+        </c-card-header>
+        <c-card-body class="p-2">
+            <c-row class="d-flex">
+
+                @for (panel of panelsLocal; track $index) {
+                    <c-col class="flex-1">
+                        <oitc-grafana-panel
+                            [grafanaUnits]="grafanaUnits()"
+                            [panelIndex]="$index"
+                            [panel]="panel"
+                            (removePanelEvent)="onPanelRemove($event)"></oitc-grafana-panel>
+                    </c-col>
+                }
+
+            </c-row>
+
+        </c-card-body>
+    </c-card>
+</ng-container>

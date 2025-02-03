@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
-  DropdownComponent,
-  DropdownItemDirective,
-  DropdownMenuDirective,
-  DropdownToggleDirective,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent
 } from '@coreui/angular';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 import { Router } from '@angular/router';
@@ -24,23 +24,23 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'oitc-top-search',
     imports: [
-    TranslocoDirective,
-    InputGroupComponent,
-    FormControlDirective,
-    FormDirective,
-    DropdownComponent,
-    DropdownToggleDirective,
-    DropdownMenuDirective,
-    DropdownItemDirective,
-    XsButtonDirective,
-    TranslocoPipe,
-    PermissionDirective,
-    NgClass,
-    FaIconComponent,
-    NgIf,
-    FormsModule,
-    AsyncPipe
-],
+        TranslocoDirective,
+        InputGroupComponent,
+        FormControlDirective,
+        FormDirective,
+        DropdownComponent,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        DropdownItemDirective,
+        XsButtonDirective,
+        TranslocoPipe,
+        PermissionDirective,
+        NgClass,
+        FaIconComponent,
+        NgIf,
+        FormsModule,
+        AsyncPipe
+    ],
     templateUrl: './top-search.component.html',
     styleUrl: './top-search.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -83,6 +83,7 @@ export class TopSearchComponent implements OnDestroy {
             this.subscriptions.add(this.SearchService.searchUUID(this.searchStr)
                 .subscribe((result) => {
                     this.isSearching = false;
+                    this.cdr.markForCheck();
                     if (result.hasPermission) {
                         this.router.navigate(result.url, {
                             queryParams: {
@@ -100,6 +101,7 @@ export class TopSearchComponent implements OnDestroy {
             // corresponding page with the search string as a query parameter
             this.SearchService.redirectSearch(this.currentSearchType, this.searchStr);
             this.isSearching = false;
+            this.cdr.markForCheck();
         }
     }
 
