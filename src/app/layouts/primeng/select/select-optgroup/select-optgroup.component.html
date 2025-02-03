@@ -1,0 +1,38 @@
+<!--
+appendTo=body is used to fix a bug where the dropdown closes when you scroll the body or reach the end of the dropdown list
+https://stackoverflow.com/a/74795986
+
+Alternative solution in case this makes any trouble:
+https://stackoverflow.com/a/76688561
+-->
+
+
+<p-select
+    [attr.id]="id"
+    [name]="String(name)"
+    [options]="options"
+    [filter]="filter"
+    [optionValue]="optionValue"
+    [optionLabel]="optionLabel"
+    [filterBy]="optionLabel"
+    [class]="class"
+    [placeholder]="placeholder"
+    (onChange)="triggerOnChange($event)"
+    [disabled]="disabled"
+    [(ngModel)]="ngModel"
+    (ngModelChange)="ngModelChange.emit($event)"
+    (onFilter)="doHighlightSearch($event.filter)"
+    [showClear]="showClear"
+    [group]="true"
+    [appendTo]="appendTo"
+    [autofocusFilter]="true">
+    <ng-template let-item pTemplate="item">
+        <div [innerHTML]="item | highlightSearch : this.searchText:this.optionLabel"></div>
+    </ng-template>
+    <ng-template let-group #group>
+        <div class="flex items-center">
+            <span>{{ group.value }}</span>
+        </div>
+    </ng-template>
+</p-select>
+

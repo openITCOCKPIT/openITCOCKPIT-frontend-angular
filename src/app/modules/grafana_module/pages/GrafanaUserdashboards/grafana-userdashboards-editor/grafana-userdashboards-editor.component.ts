@@ -32,6 +32,10 @@ import {
     SynchronizeGrafanaModalComponent
 } from '../../../components/synchronize-grafana-modal/synchronize-grafana-modal.component';
 import { GrafanaChartTypesEnum } from './grafana-panel/chart-type-icon/GrafanaChartTypes.enum';
+import { GrafanaPanelOptionsModalComponent } from './grafana-panel-options-modal/grafana-panel-options-modal.component';
+import {
+    GrafanaMetricOptionsModalComponent
+} from './grafana-metric-options-modal/grafana-metric-options-modal.component';
 
 
 @Component({
@@ -59,7 +63,9 @@ import { GrafanaChartTypesEnum } from './grafana-panel/chart-type-icon/GrafanaCh
         GrafanaRowComponent,
         RowComponent,
         ColComponent,
-        SynchronizeGrafanaModalComponent
+        SynchronizeGrafanaModalComponent,
+        GrafanaPanelOptionsModalComponent,
+        GrafanaMetricOptionsModalComponent
     ],
     templateUrl: './grafana-userdashboards-editor.component.html',
     styleUrl: './grafana-userdashboards-editor.component.css',
@@ -154,13 +160,8 @@ export class GrafanaUserdashboardsEditorComponent implements OnInit, OnDestroy {
             return;
         }
 
-        // "Rows" do not exist in the Database, because a "row" is saved per panel.
-        // To delete a row, we need to delete all panels in that row.
-        const panels = this.data.userdashboardData.rows[rowIndex];
-        const panelIds = panels.map(panel => panel.id);
-
         // Update the local data with the removed row
-        this.subscriptions.add(this.GrafanaEditorService.removePanels(panelIds).subscribe(response => {
+        this.subscriptions.add(this.GrafanaEditorService.removePanels(this.id, rowIndex).subscribe(response => {
             if (response.success) {
                 this.notyService.genericSuccess(
                     this.TranslocoService.translate('Row removed successfully')

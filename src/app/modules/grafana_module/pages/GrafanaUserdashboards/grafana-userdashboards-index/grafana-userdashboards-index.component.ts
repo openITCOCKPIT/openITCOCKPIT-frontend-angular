@@ -185,6 +185,7 @@ export class GrafanaUserdashboardsIndexComponent implements OnInit, OnDestroy, I
 
     // Open the Delete All Modal
     public toggleDeleteAllModal(userdashboard?: GrafanaUserdashboardsIndex) {
+        this.selectedItems = [];
         let items: DeleteAllItem[] = [];
 
         if (userdashboard) {
@@ -233,6 +234,7 @@ export class GrafanaUserdashboardsIndexComponent implements OnInit, OnDestroy, I
     // Open the synchronize with Grafana Modal
     public synchronizeWithGrafana(userdashboard?: GrafanaUserdashboardsIndex) {
         let items: DeleteAllItem[] = [];
+        this.selectedItems = [];
 
         if (userdashboard) {
             // User just want to synchronize a single command
@@ -254,7 +256,7 @@ export class GrafanaUserdashboardsIndexComponent implements OnInit, OnDestroy, I
         this.selectedItems = items;
 
         this.cdr.markForCheck();
-        
+
         // open modal
         this.modalService.toggle({
             show: true,

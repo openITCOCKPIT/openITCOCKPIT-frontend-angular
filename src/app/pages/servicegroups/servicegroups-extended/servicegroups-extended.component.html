@@ -299,7 +299,7 @@
                         </td>
                         <td class="text-center">
                             <span
-                                *ngIf="! service.Servicestatus.activeChecksEnabled"
+                                *ngIf="service.Service.active_checks_enabled === false || service.Host.is_satellite_host === true"
                                 [title]="'Passively transferred service' | transloco"
                             >P</span>
                         </td>

@@ -6,3 +6,9 @@ export enum GrafanaChartTypesEnum {
     bargaugeretro = "bargaugeretro",
     timeseries = "timeseries", // default
 }
+
+export enum GrafanaStackingModesEnum {
+    none = "none",
+    normal = "normal",
+    percent = "percent"
+}

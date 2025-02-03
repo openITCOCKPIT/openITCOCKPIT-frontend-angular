@@ -1,0 +1,83 @@
+<ng-container *transloco="let t">
+    <c-modal #grafanaMetricOptionsModal fullscreen="md" id="grafanaMetricOptionsModal" size="lg">
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'pen-to-square']" [flip]="'horizontal'"></fa-icon>
+                <span *ngIf="mode === 'add'">
+                    {{ t('Add new metric') }}
+                </span>
+
+                <span *ngIf="mode === 'edit'">
+                    {{ t('Update metric') }}
+                </span>
+
+            </h5>
+            <button [cModalToggle]="grafanaMetricOptionsModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+            <c-row>
+                <c-col [xs]="12" *ngIf="currentMetric">
+
+                    <div class="mb-3">
+                        <label cLabel for="metric_service">
+                            {{ t('Select service') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+
+                        <oitc-select
+                            name="metric_service"
+                            id="metric_service"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="currentMetric.service_id"
+                            [options]="services"
+                            (onChange)="onServiceChange()"
+                            [searchCallback]="loadServices"
+                            [appendTo]="''"
+                            oitcFormError [errors]="errors" errorField="service_id">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="service_id"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="metric_metric">
+                            {{ t('Select metric') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+
+                        <oitc-select
+                            name="metric_metric"
+                            id="metric_metric"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="currentMetric.metric"
+                            [options]="metrics"
+                            [appendTo]="''"
+                            oitcFormError [errors]="errors" errorField="metric">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="metric"></oitc-form-feedback>
+                    </div>
+
+                </c-col>
+            </c-row>
+
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button [cModalToggle]="grafanaMetricOptionsModal.id" cButton color="primary" class="ripple"
+                    (click)="saveMetric()">
+                <span *ngIf="mode === 'add'">
+                    {{ t('Add metric') }}
+                </span>
+                <span *ngIf="mode === 'edit'">
+                    {{ t('Update metric') }}
+                </span>
+            </button>
+            <button [cModalToggle]="grafanaMetricOptionsModal.id" cButton color="default" class="ripple">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+
+</ng-container>

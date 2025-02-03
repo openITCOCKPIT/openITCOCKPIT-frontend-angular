@@ -10,11 +10,13 @@
                     </span>
 
                     <c-button-group role="group" class="float-end">
-                        <button cButton color="default" class="ripple text-success" size="xs">
+                        <button cButton color="default" class="ripple text-success" size="xs"
+                                (click)="openAddMetric()">
                             <fa-icon [icon]="['fas', 'plus']"></fa-icon>
                             {{ t('Add Metric') }}
                         </button>
-                        <button cButton color="default" class="ripple" size="xs">
+                        <button cButton color="default" class="ripple" size="xs"
+                                (click)="openPanelOptions()">
                             <fa-icon [icon]="['fas', 'wrench']" flip="horizontal"></fa-icon>
                             {{ t('Panel options') }}
                         </button>
