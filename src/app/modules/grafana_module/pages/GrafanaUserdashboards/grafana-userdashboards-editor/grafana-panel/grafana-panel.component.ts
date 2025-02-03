@@ -81,6 +81,22 @@ export class GrafanaPanelComponent implements OnDestroy {
     private cdr = inject(ChangeDetectorRef);
 
     constructor() {
+        this.subscriptions.add(this.GrafanaPanelOptionsService.panelUpdated$.subscribe((event) => {
+            // Panel got modified by the Panel Options Modal
+            if (event.panelIndex === this.panelIndex()) {
+                this.panelLocal = event.panel;
+                this.setHumanUnit();
+
+
+                // Notify the parent component that the panel has changed
+                this.panelChangedEvent.emit({
+                    index: this.panelIndex(),
+                    panel: this.panelLocal
+                });
+            }
+        }));
+
+
         effect(() => {
             this.panelLocal = this.panel();
             this.setHumanUnit();
