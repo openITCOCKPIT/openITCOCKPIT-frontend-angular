@@ -129,7 +129,7 @@ export class PrometheusExportersAddComponent implements OnInit, OnDestroy {
 
                     const title: string = this.TranslocoService.translate('Prometheus Exporter');
                     const msg: string = this.TranslocoService.translate('created successfully');
-                    const url: (string | number)[] = ['prometheus_module', 'PrometheusExporters', 'edit', result.data.id];
+                    const url: (string | number)[] = ['prometheus_module', 'PrometheusExporters', 'edit', result.data.PrometheusExporter.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
