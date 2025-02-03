@@ -1,8 +1,9 @@
-<div cdkDrag #container class="map-element-container"
+<div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
      [draggable]="!isViewMode()"
      (cdkDragEnded)="onDragEnd($event)"
      (cdkDragMoved)="onDragMove($event)"
+     (resizeStop)="onResizeStop($event, type)"
      cdkDragBoundary=".map-canvas">
-    <ng-content></ng-content>
+    <canvas cdkDragHandle [id]="'map-temperature-' + item()!.id"></canvas>
 </div>
 <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>

@@ -24,3 +24,11 @@ export interface MapitemBaseActionObject {
     action: string
     type: MapItemType
 }
+
+export interface ResizedEvent {
+    id: number
+    mapId: number
+    itemType: MapItemType
+    width: number
+    height: number
+}

@@ -88,7 +88,9 @@
         "vanilla-jsoneditor": "^2.3.3",
         "vis-network": "^9.1.9",
         "vis-timeline": "^7.7.3",
-        "zone.js": "^0.15.0"
+        "zone.js": "^0.15.0",
+        "canvas-gauges": "^2.1.7",
+        "@types/canvas-gauges": "^2.1.8"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^19.0.7",
