@@ -169,7 +169,11 @@
                         />
                     </td>
                     <td>
-                        {{ alertRule.servicename }}
+
+                        <a *oitcPermission="['services', 'browser']"
+                           [routerLink]="['/', 'services', 'browser', alertRule.id]">
+                            {{ alertRule.servicename }}
+                        </a>
                     </td>
                     <td>
                         <code>{{ alertRule._matchingData.PrometheusAlertRules.promql }}</code>
