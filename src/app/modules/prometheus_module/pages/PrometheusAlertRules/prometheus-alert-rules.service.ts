@@ -13,8 +13,7 @@ export class PrometheusAlertRulesService {
     private readonly proxyPath = inject(PROXY_PATH);
 
     public getIndex(params: PrometheusAlertRulesIndexParams): Observable<PrometheusAlertRulesIndexRoot> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.get<PrometheusAlertRulesIndexRoot>(`${proxyPath}/prometheus_module/PrometheusAlertRules/index.json`, {
+        return this.http.get<PrometheusAlertRulesIndexRoot>(`${this.proxyPath}/prometheus_module/PrometheusAlertRules/index.json`, {
             params: {
                 ...params
             }
@@ -26,7 +25,6 @@ export class PrometheusAlertRulesService {
     }
 
     public delete(item: DeleteAllItem): Observable<Object> {
-        const proxyPath = this.proxyPath;
-        return this.http.post(`${proxyPath}/prometheus_module/PrometheusAlertRules/delete/${item.id}.json?angular=true`, {});
+        return this.http.post(`${this.proxyPath}/services/delete/${item.id}.json?angular=true`, {});
     }
 }

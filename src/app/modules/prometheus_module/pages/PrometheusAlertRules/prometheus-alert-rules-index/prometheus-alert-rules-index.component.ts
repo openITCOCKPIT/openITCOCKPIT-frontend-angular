@@ -143,14 +143,14 @@ export class PrometheusAlertRulesIndexComponent implements OnInit, OnDestroy, In
     }
 
     // Open the Delete All Modal
-    public toggleDeleteAllModal(user?: AllAlertRule) {
+    public toggleDeleteAllModal(item?: AllAlertRule) {
         let items: DeleteAllItem[] = [];
-        if (user) {
+        if (item) {
             // User just want to delete a single Service
             items = [
                 {
-                    id: user.id as number,
-                    displayName: user.servicename
+                    id: item.id as number,
+                    displayName: `${item.Hosts.name}/${item.servicename}`
                 }
             ];
         } else {
@@ -158,7 +158,7 @@ export class PrometheusAlertRulesIndexComponent implements OnInit, OnDestroy, In
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: item.full_name
+                    displayName: `${item.Hosts.name}/${item.servicename}`
                 };
             });
         }
