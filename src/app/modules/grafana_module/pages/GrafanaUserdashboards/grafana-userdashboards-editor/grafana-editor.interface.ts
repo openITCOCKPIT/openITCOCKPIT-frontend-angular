@@ -338,3 +338,14 @@ export interface GrafanaUnits {
         congNm3: string
     }
 }
+
+
+export interface GrfanaEditorCurrentMetricPost {
+    metric_id?: number
+    color: string
+    metric: string
+    panel_id: number
+    row: number
+    service_id: number
+    userdashboard_id: number
+}

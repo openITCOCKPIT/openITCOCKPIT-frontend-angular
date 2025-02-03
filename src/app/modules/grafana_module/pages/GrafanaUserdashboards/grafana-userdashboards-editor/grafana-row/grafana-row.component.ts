@@ -19,6 +19,7 @@ import { NgIf } from '@angular/common';
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
 import { GrafanaEditorService } from '../grafana-editor.service';
 import { Subscription } from 'rxjs';
+import { ROOT_CONTAINER } from '../../../../../../pages/changelogs/object-types.enum';
 
 export interface RowPanelsChangedEvent {
     rowIndex: number
@@ -52,6 +53,7 @@ export class GrafanaRowComponent {
 
     public rowIndex = input<number>(0);
     public panels = input<GrafanaEditorDashboardRow[]>([]);
+    public containerId = input<number>(ROOT_CONTAINER);
     public grafanaUnits = input<GrafanaUnits>();
 
     // Emits the new panels to the parent component

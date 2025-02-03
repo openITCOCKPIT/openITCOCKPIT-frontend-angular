@@ -71,3 +71,11 @@
 .p-select-option {
     padding: 0.25rem 1.25rem !important;
 }
+
+/* This fix the with of select and multiselect elements with very long names */
+.p-overlay {
+    max-width: 100%;
+    min-width: 50px !important; // OverWrite hardcoded PrimeNG value
+    width: 100%; // be 100%
+}
+
