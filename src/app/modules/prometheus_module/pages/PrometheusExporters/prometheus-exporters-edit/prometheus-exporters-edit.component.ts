@@ -5,11 +5,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { PrometheusExportersService } from '../prometheus-exporters.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import {
-    EditablePrometheusExporter,
-    PrometheusExporterEditPost,
-    PrometheusExporterEditRoot
-} from '../prometheus-exporters.interface';
+import { PrometheusExporterEditPost, PrometheusExporterEditRoot } from '../prometheus-exporters.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { HistoryService } from '../../../../../history.service';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -31,16 +27,14 @@ import {
 } from '@coreui/angular';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { HumanTimeComponent } from '../../../../../layouts/coreui/interval-input/human-time/human-time.component';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 
 @Component({
@@ -67,13 +61,9 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
-        NgForOf,
-        NgOptionComponent,
-        NgSelectComponent,
         RequiredIconComponent,
         FormControlDirective,
         SelectComponent,
-        HumanTimeComponent,
         FormCheckComponent,
         FormCheckInputDirective,
         TrueFalseDirective,

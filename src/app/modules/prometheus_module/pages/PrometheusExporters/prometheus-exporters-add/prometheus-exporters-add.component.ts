@@ -21,10 +21,8 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
-import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
@@ -56,14 +54,10 @@ import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } fro
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
-        FormLoaderComponent,
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgForOf,
         NgIf,
-        NgOptionComponent,
-        NgSelectComponent,
         PermissionDirective,
         ReactiveFormsModule,
         RequiredIconComponent,

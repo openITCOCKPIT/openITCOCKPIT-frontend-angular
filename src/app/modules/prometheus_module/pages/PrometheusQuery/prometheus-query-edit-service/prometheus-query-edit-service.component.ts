@@ -1,15 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
-    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    FormCheckInputDirective,
     FormControlDirective,
-    FormLabelDirective,
     ModalService,
     NavComponent,
     NavItemComponent,
@@ -20,7 +16,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import {
     PrometheusCodeMirrorComponent
@@ -59,24 +54,21 @@ import { PrometheusQueryService } from '../prometheus-query.service';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { HistoryService } from '../../../../../history.service';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 @Component({
     selector: 'oitc-prometheus-query-edit-service',
     imports: [
-        ButtonGroupComponent,
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
         FaIconComponent,
-        FormCheckInputDirective,
         FormControlDirective,
         FormErrorDirective,
         FormFeedbackComponent,
-        FormLabelDirective,
         KeyValuePipe,
-        MultiSelectComponent,
         NavComponent,
         NavItemComponent,
         NgForOf,
@@ -95,9 +87,9 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         RouterLink,
         FormsModule,
         BackButtonDirective,
-        CardFooterComponent,
         FormLoaderComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        MultiSelectComponent
     ],
     templateUrl: './prometheus-query-edit-service.component.html',
     styleUrl: './prometheus-query-edit-service.component.css',

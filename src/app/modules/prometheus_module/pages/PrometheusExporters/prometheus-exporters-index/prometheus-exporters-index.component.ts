@@ -20,7 +20,6 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
-    DropdownDividerDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -43,8 +42,6 @@ import { ActionsButtonComponent } from '../../../../../components/actions-button
 import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
-import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
-import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
@@ -86,9 +83,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
         TableDirective,
         ActionsButtonComponent,
         ActionsButtonElementComponent,
-        BadgeOutlineComponent,
-        DropdownDividerDirective,
-        ItemSelectComponent,
         NgForOf,
         NoRecordsComponent,
         PaginateOrScrollComponent,

@@ -6,10 +6,8 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
-    DropdownDividerDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
@@ -35,14 +33,12 @@ import {
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
-import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PrometheusPopoverGraphComponent
@@ -65,7 +61,6 @@ import { SelectionServiceService } from '../../../../../layouts/coreui/select-al
         TranslocoDirective,
         RouterLink,
         SelectComponent,
-        FormLabelDirective,
         NavComponent,
         NavItemComponent,
         XsButtonDirective,
@@ -78,7 +73,6 @@ import { SelectionServiceService } from '../../../../../layouts/coreui/select-al
         FormsModule,
         InputGroupComponent,
         InputGroupTextDirective,
-        MultiSelectComponent,
         ReactiveFormsModule,
         RowComponent,
         TranslocoPipe,
@@ -86,9 +80,6 @@ import { SelectionServiceService } from '../../../../../layouts/coreui/select-al
         TableLoaderComponent,
         ActionsButtonComponent,
         ActionsButtonElementComponent,
-        DropdownDividerDirective,
-        MatSort,
-        MatSortHeader,
         NgForOf,
         TableDirective,
         NoRecordsComponent,

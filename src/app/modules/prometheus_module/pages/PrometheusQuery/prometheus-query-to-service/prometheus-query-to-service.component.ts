@@ -6,14 +6,9 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    ContainerComponent,
-    DropdownDividerDirective,
     FormCheckInputDirective,
     FormControlDirective,
-    FormDirective,
     FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
     ModalService,
     NavComponent,
     NavItemComponent,
@@ -40,32 +35,15 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
-import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../../../components/actions-button-element/actions-button-element.component';
-import { MatSort, MatSortHeader } from '@angular/material/sort';
-import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import {
-    PrometheusPopoverGraphComponent
-} from '../../../components/prometheus-popover-graph/prometheus-popover-graph.component';
-import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
-import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
+import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import {
-    CodeMirrorContainerComponent
-} from '../../../../../components/code-mirror-container/code-mirror-container.component';
 import { AutocompleteItem } from '../../../../../components/code-mirror-container/code-mirror-container.interface';
 import { PrometheusAutocompleteService } from '../prometheus-autocomplete.service';
 import { MetadataResponseRoot } from '../prometheus-autocomplete.interface';
@@ -79,7 +57,6 @@ import {
 import { sprintf } from 'sprintf-js';
 import { trim } from 'lodash';
 import { PrometheusHelpComponent } from '../../../components/prometheus-help/prometheus-help.component';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-prometheus-query-to-service',
@@ -98,45 +75,24 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         XsButtonDirective,
         CardBodyComponent,
         ColComponent,
-        ContainerComponent,
-        DebounceDirective,
         FormControlDirective,
-        FormDirective,
         FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
         MultiSelectComponent,
         ReactiveFormsModule,
         RowComponent,
         TranslocoPipe,
         NgIf,
-        TableLoaderComponent,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        DropdownDividerDirective,
-        MatSort,
-        MatSortHeader,
         NgForOf,
         TableDirective,
-        NoRecordsComponent,
-        PrometheusPopoverGraphComponent,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        NgClass,
-        OitcAlertComponent,
-        ItemSelectComponent,
-        SelectAllComponent,
         RequiredIconComponent,
         FormErrorDirective,
         KeyValuePipe,
-        CodeMirrorContainerComponent,
         PrometheusCodeMirrorComponent,
         FormCheckInputDirective,
         ButtonGroupComponent,
         FormFeedbackComponent,
         PrometheusThresholdsComponent,
-        PrometheusHelpComponent,
-        BackButtonDirective
+        PrometheusHelpComponent
     ],
     templateUrl: './prometheus-query-to-service.component.html',
     styleUrl: './prometheus-query-to-service.component.css',

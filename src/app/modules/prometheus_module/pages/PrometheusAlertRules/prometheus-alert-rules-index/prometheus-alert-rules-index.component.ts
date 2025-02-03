@@ -3,7 +3,6 @@ import { ActionsButtonComponent } from '../../../../../components/actions-button
 import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
-import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
 import {
     CardBodyComponent,
     CardComponent,
@@ -30,16 +29,12 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import {
-    ResetPasswordModalComponent
-} from '../../../../../components/reset-password-modal/reset-password-modal.component';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -70,7 +65,6 @@ import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
-        BadgeOutlineComponent,
         CardBodyComponent,
         CardComponent,
         CardFooterComponent,
@@ -90,7 +84,6 @@ import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../
         ItemSelectComponent,
         MatSort,
         MatSortHeader,
-        MultiSelectComponent,
         NavComponent,
         NavItemComponent,
         NgForOf,
@@ -98,7 +91,6 @@ import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../
         NoRecordsComponent,
         PaginateOrScrollComponent,
         PermissionDirective,
-        ResetPasswordModalComponent,
         RowComponent,
         SelectAllComponent,
         TableDirective,
