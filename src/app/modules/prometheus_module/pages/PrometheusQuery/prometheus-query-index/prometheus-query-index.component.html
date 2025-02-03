@@ -242,7 +242,7 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-default col-3 border-0"
-                                        type="button">
+                                        type="button" (click)="createFromMetrics()">
                                     <fa-stack>
                                         <fa-icon [icon]="['fas', 'gear']" stackItemSize="1x" pull="right"></fa-icon>
                                         <fa-icon [icon]="['fas', 'plus']" class="text-success"

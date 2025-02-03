@@ -51,6 +51,7 @@ import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
+import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 
 @Component({
     selector: 'oitc-prometheus-query-index',
@@ -104,6 +105,7 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PrometheusQueryIndexComponent implements OnInit, OnDestroy {
+    private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly PrometheusQueryService: PrometheusQueryService = inject(PrometheusQueryService);
     private readonly TimezoneService: TimezoneService = inject(TimezoneService);
@@ -181,5 +183,18 @@ export class PrometheusQueryIndexComponent implements OnInit, OnDestroy {
         this.hideFilter = !this.hideFilter;
     }
 
+    protected createFromMetrics(): void {
+        // User clicked on delete selected button
+        let items: string[];
+        items = this.SelectionServiceService.getSelectedItems().map((item): string => {
+            return item.metric;
+        });
+        this.router.navigate(['/prometheus_module/PrometheusQuery/toService/' + this.params.hostId], {
+            queryParams: {
+                'metrics[]': items
+            }
+        });
 
+        console.error(items);
+    }
 }
