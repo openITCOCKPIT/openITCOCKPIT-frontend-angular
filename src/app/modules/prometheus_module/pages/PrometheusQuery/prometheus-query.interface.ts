@@ -60,6 +60,7 @@ export interface PrometheusPerformanceDataParams {
     host_uuid: string,
     jsTimestamp: number,
     metric: string,
+    promql: string,
     start: number
 }
 
