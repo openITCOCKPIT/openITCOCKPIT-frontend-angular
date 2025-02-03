@@ -529,12 +529,16 @@
                 <ng-container *ngFor="let metric of selectedMetrics">
                     <ng-container *ngIf="typeof(metrics[metric]) !== 'undefined'">
                         <tr *ngFor="let datum of metrics[metric].metricDetails.data.result">
-
                             <td>
                                 <span class="no-padding bold ng-binding">{{ datum.metric.__name__ }}</span>
                                 {{ '{' }}
-                                <code *ngFor="let a of datum.metric | keyvalue"
-                                      class="no-padding ng-binding ng-scope">{{ a.key }}="{{ a.value }}",</code>
+                                <code class="no-padding ng-binding ng-scope">
+                                    <ng-container *ngFor="let a of datum.metric | keyvalue">
+                                        <ng-container *ngIf="a.key !== '__name__'">
+                                            {{ a.key }}="{{ a.value }}"
+                                        </ng-container>
+                                    </ng-container>
+                                </code>
                                 {{ '}' }}
                             </td>
                             <td>
