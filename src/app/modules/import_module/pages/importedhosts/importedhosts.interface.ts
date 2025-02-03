@@ -259,3 +259,8 @@ export interface ImportedHostRawData {
     software: string
     external_services: any[]
 }
+
+export interface NotValidRawData {
+    error: string
+    description: string
+}

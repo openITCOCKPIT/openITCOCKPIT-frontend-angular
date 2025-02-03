@@ -35,7 +35,7 @@ import { GenericMessageResponse } from '../../../../generic-responses';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { FormsModule } from '@angular/forms';
 import { ImportersService } from '../../pages/importers/importers.service';
-import { Importer } from '../../pages/importers/importers.interface';
+import { Importer, ImportersErrorMessageResponse } from '../../pages/importers/importers.interface';
 import { ImportDataResponse, ImportedHostRawData } from '../../pages/importedhosts/importedhosts.interface';
 
 @Component({
@@ -82,6 +82,7 @@ export class ImportDataComponent implements OnInit, OnDestroy {
         data?: ImportedHostRawData[]
         success: boolean
         errorMessage?: string
+        notValidRawData?: any
     };
     public showSynchronizingSpinner: boolean = false;
     public showSpinner: boolean = false;
@@ -108,8 +109,51 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                 }
 
                 switch (this.importer.data_source) {
-                    case 'itop':
+                    case 'idoit':
+                        this.ImporterService.loadDataFromIdoit(this.importer).subscribe(data => {
+                            if (data.success) {
+                                let response = data.data as ImportDataResponse;
+                                this.importData = {
+                                    success: true,
+                                    data: response.response.rawData
+                                }
+                                this.cdr.markForCheck();
+                            }
+                            if (!data.success) {
+                                let response = data.data as ImportersErrorMessageResponse;
+                                this.importData = {
+                                    success: false,
+                                    errorMessage: response.message,
+                                    notValidRawData: response.errors.notValidRawData
+                                }
+                            }
+                            this.cdr.markForCheck();
 
+                        });
+                        break;
+                    case 'openitcockpit_agent':
+                        this.ImporterService.loadDataFromOITCAgent(this.importer).subscribe(data => {
+                            if (data.success) {
+                                let response = data.data as ImportDataResponse;
+                                this.importData = {
+                                    success: true,
+                                    data: response.response.rawData
+                                }
+                                this.cdr.markForCheck();
+                            }
+                            if (!data.success) {
+                                let response = data.data as ImportersErrorMessageResponse;
+                                this.importData = {
+                                    success: false,
+                                    errorMessage: response.message,
+                                    notValidRawData: response.errors.notValidRawData
+                                }
+                            }
+                            this.cdr.markForCheck();
+
+                        });
+                        break;
+                    case 'itop':
                         this.ImporterService.loadDataFromITop(this.importer).subscribe(data => {
                             if (data.success) {
                                 let response = data.data as ImportDataResponse;
@@ -120,17 +164,38 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                                 this.cdr.markForCheck();
                             }
                             if (!data.success) {
-                                let response = data.data as GenericMessageResponse;
+                                let response = data.data as ImportersErrorMessageResponse;
                                 this.importData = {
                                     success: false,
-                                    errorMessage: response.message
+                                    errorMessage: response.message,
+                                    notValidRawData: response.errors.notValidRawData
                                 }
                             }
                             this.cdr.markForCheck();
 
                         });
+                        break;
+                    case 'external_monitoring':
+                        this.ImporterService.loadDataFromExternalMonitoring(this.importer).subscribe(data => {
+                            if (data.success) {
+                                let response = data.data as ImportDataResponse;
+                                this.importData = {
+                                    success: true,
+                                    data: response.response.rawData
+                                }
+                                this.cdr.markForCheck();
+                            }
+                            if (!data.success) {
+                                let response = data.data as ImportersErrorMessageResponse;
+                                this.importData = {
+                                    success: false,
+                                    errorMessage: response.message,
+                                    notValidRawData: response.errors.notValidRawData
+                                }
+                            }
+                            this.cdr.markForCheck();
 
-
+                        });
                         break;
 
                     default:
@@ -143,6 +208,7 @@ export class ImportDataComponent implements OnInit, OnDestroy {
     }
 
     public hideModal() {
+        this.importData = undefined;
         this.modalService.toggle({
             show: false,
             id: 'importData'

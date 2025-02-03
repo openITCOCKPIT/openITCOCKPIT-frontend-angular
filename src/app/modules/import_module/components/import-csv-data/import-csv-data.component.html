@@ -2,17 +2,23 @@
     <c-modal
         #modal='cModal'
         [keyboard]="true"
-        id="importData"
+        id="importCsvData"
         size="xl">
-        <c-modal-header>
+        <c-modal-header *ngIf="importer">
             <h5 cModalTitle>
-                <fa-stack class="me-1">
-                    <fa-icon [icon]="['fas', 'database']"
+                <fa-stack class="me-1" [size]="'lg'">
+                    <fa-icon [icon]="['fas', 'file-csv']"
                              stackItemSize="2x" pull="left" class="text-info"></fa-icon>
                     <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
                              stackItemSize="1x" pull="right" transform="right-5 down-15"
                     ></fa-icon>
                 </fa-stack>
+                <span *ngIf="importer.data_source==='csv_with_header'">
+                    {{ t('Import CSV File with header') }}
+                </span>
+                <span *ngIf="importer.data_source==='csv_without_header'">
+                    {{ t('Import CSV File without header') }}
+                </span>
             </h5>
             <button (click)="hideModal()" cButtonClose></button>
         </c-modal-header>
@@ -41,6 +47,7 @@
                                     </a>
                                 </span>
                             </h5>
+                            <hr class="bg-info">
                         </legend>
                     </fieldset>
                 </c-col>

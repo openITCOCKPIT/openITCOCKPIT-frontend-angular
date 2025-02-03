@@ -12,13 +12,9 @@ import {
     ImportersPost,
     LoadElementsByContainerIdResponse
 } from './importers.interface';
-import { Hostdefault, HostDefaultsGet, HostDefaultsPost } from '../hostdefaults/hostdefaults.interface';
+import { Hostdefault } from '../hostdefaults/hostdefaults.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import {
-    Applications,
-    ExternalSystemEntity,
-    ExternalSystemsAsList
-} from '../externalsystems/external-systems.interface';
+import { ExternalSystemsAsList } from '../externalsystems/external-systems.interface';
 import { ExternalMonitoringsAsList } from '../externalmonitorings/external-monitorings.interface';
 import {
     GenericIdResponse,
@@ -180,11 +176,18 @@ export class ImportersService {
 
     public openImportedHostsDataModal(importer: Importer) {
         this.modalImporter$$.next(importer);
+        if (importer.data_source === 'csv_with_header' || importer.data_source === 'csv_without_header') {
+            this.modalService.toggle({
+                show: true,
+                id: 'importCsvData',
+            });
+        } else {
+            this.modalService.toggle({
+                show: true,
+                id: 'importData',
+            });
+        }
 
-        this.modalService.toggle({
-            show: true,
-            id: 'importData',
-        });
     }
 
     public loadDataFromITop(importer: Importer): Observable<{
@@ -213,4 +216,86 @@ export class ImportersService {
             })
         );
     }
+
+    public loadDataFromIdoit(importer: Importer): Observable<{
+        success: boolean;
+        data: ImportDataResponse | GenericMessageResponse;
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ImportDataResponse>(`${proxyPath}/import_module/imported_hosts/loadDataFromIdoit/${importer.id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                let errorMessage: GenericMessageResponse = {message: error.error.response.error};
+                return of({
+                    success: false,
+                    data: errorMessage
+                });
+            })
+        );
+    }
+
+    public loadDataFromOITCAgent(importer: Importer): Observable<{
+        success: boolean;
+        data: ImportDataResponse | GenericMessageResponse;
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ImportDataResponse>(`${proxyPath}/import_module/imported_hosts/loadDataFromOITCAgent/${importer.id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                let errorMessage: GenericMessageResponse = {message: error.error.response.error};
+                return of({
+                    success: false,
+                    data: errorMessage
+                });
+            })
+        );
+    }
+
+    public loadDataFromExternalMonitoring(importer: Importer): Observable<{
+        success: boolean;
+        data: ImportDataResponse | GenericMessageResponse;
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ImportDataResponse>(`${proxyPath}/import_module/imported_hosts/loadDataFromExternalMonitoring/${importer.id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                let errorMessage: GenericMessageResponse = {message: error.error.response.error};
+                return of({
+                    success: false,
+                    data: errorMessage
+                });
+            })
+        );
+    }
+
 }

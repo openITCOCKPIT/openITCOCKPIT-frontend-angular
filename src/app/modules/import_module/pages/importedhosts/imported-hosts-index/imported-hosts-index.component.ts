@@ -70,6 +70,7 @@ import { ImportedHostFlagsEnum } from '../imported-hosts.enum';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { ImportersService } from '../../importers/importers.service';
 import { ImportDataComponent } from '../../../components/import-data/import-data.component';
+import { ImportCsvDataComponent } from '../../../components/import-csv-data/import-csv-data.component';
 
 @Component({
     selector: 'oitc-imported-hosts-index',
@@ -122,7 +123,8 @@ import { ImportDataComponent } from '../../../components/import-data/import-data
         RouterLink,
         NgClass,
         MultiSelectComponent,
-        ImportDataComponent
+        ImportDataComponent,
+        ImportCsvDataComponent
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostsService} // Inject the ImportedhostsService into the DeleteAllModalComponent
@@ -321,7 +323,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public loadImporter(importer: Importer) {
-        this.ImportersService.openImportedHostsDataModal(importer)
+        this.ImportersService.openImportedHostsDataModal(importer);
     }
 
     public hasFlag(importedHostFlag: number, compareFlag: ImportedHostFlagsEnum) {
