@@ -1,13 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    ButtonCloseDirective,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
     FormControlDirective,
-    ModalService, ModalToggleDirective,
+    ModalService,
     NavComponent,
     NavItemComponent,
     RowComponent,
@@ -91,8 +90,6 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
         FormLoaderComponent,
         TranslocoPipe,
         MultiSelectComponent,
-        ButtonCloseDirective,
-        ModalToggleDirective
     ],
     templateUrl: './prometheus-query-edit-service.component.html',
     styleUrl: './prometheus-query-edit-service.component.css',
