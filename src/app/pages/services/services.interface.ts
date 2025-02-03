@@ -811,3 +811,22 @@ export interface ServiceUsedByObjects {
     Eventcorrelations: GenericIdAndName[]
     Maps: GenericIdAndName[]
 }
+
+export interface ServicesLoadServicesByContainerIdResponse {
+    key: number,
+    value: {
+        Service: {
+            id: number,
+            name: string | null, // null if name is from service template
+            servicename: string, // name of the service use this
+            disabled: number // 0 or 1
+        },
+        Host: {
+            id: number,
+            name: string
+        },
+        Servicetemplate: {
+            name: string
+        }
+    }
+}

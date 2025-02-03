@@ -33,6 +33,9 @@ import {
 } from '../../../components/synchronize-grafana-modal/synchronize-grafana-modal.component';
 import { GrafanaChartTypesEnum } from './grafana-panel/chart-type-icon/GrafanaChartTypes.enum';
 import { GrafanaPanelOptionsModalComponent } from './grafana-panel-options-modal/grafana-panel-options-modal.component';
+import {
+    GrafanaMetricOptionsModalComponent
+} from './grafana-metric-options-modal/grafana-metric-options-modal.component';
 
 
 @Component({
@@ -61,7 +64,8 @@ import { GrafanaPanelOptionsModalComponent } from './grafana-panel-options-modal
         RowComponent,
         ColComponent,
         SynchronizeGrafanaModalComponent,
-        GrafanaPanelOptionsModalComponent
+        GrafanaPanelOptionsModalComponent,
+        GrafanaMetricOptionsModalComponent
     ],
     templateUrl: './grafana-userdashboards-editor.component.html',
     styleUrl: './grafana-userdashboards-editor.component.css',
