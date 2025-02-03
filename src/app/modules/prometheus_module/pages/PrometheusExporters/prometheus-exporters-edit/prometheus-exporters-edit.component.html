@@ -28,8 +28,8 @@
     </nav>
 
 
-    <oitc-form-loader *ngIf="post.PrometheusExporter.id === 0"></oitc-form-loader>
-    <form *ngIf="post.PrometheusExporter.id !== 0" cForm (ngSubmit)="update()">
+    <oitc-form-loader *ngIf="typeof(post.PrometheusExporter) === 'undefined'"></oitc-form-loader>
+    <form cForm (ngSubmit)="update()" *ngIf="typeof(post.PrometheusExporter) !== 'undefined'">
 
         <c-card class="mb-3">
             <c-card-header>
