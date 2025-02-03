@@ -43,7 +43,7 @@
 
             <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
                 <c-nav-item>
-                    <a [routerLink]="['/', 'prometheus_module', 'PrometheusQuery', 'index']" class="nav-link">
+                    <a [routerLink]="['/', 'prometheus_module', 'PrometheusQuery', 'index', this.params['filter[PrometheusAlertRules.host_id]']]" class="nav-link">
                         <fa-icon [icon]="['fas', 'chart-line']"></fa-icon>
                         {{ t('Metrics') }}
                     </a>

@@ -81,7 +81,7 @@
                     </a>
                 </c-nav-item>
                 <c-nav-item>
-                    <a [routerLink]="['/', 'prometheus_module', 'PrometheusAlertRules', 'index']" class="nav-link">
+                    <a [routerLink]="['/', 'prometheus_module', 'PrometheusAlertRules', 'index', this.params.hostId]" class="nav-link">
                         <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
                         {{ t('Alert rules') }}
                     </a>
