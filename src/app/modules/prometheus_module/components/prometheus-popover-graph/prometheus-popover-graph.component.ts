@@ -104,6 +104,7 @@ export class PrometheusPopoverGraphComponent {
         host_uuid: '',
         jsTimestamp: 0,
         metric: 'process_cpu_seconds_total',
+        promql : '',
         start: 0
     } as PrometheusPerformanceDataParams;
 
@@ -118,6 +119,17 @@ export class PrometheusPopoverGraphComponent {
         this._metric = metric;
     }
 
+    protected _promql : string = '';
+
+    get promql() {
+        return this._promql;
+    }
+
+    @Input()
+    set promql(promql: string) {
+        this._promql = promql;
+    }
+
     protected setParamsAndLoadPerfdata() {
         let serverTime: Date = new Date(this.timezone.server_time_iso);
         let compareTimestamp: number = new Date().getTime();
@@ -127,6 +139,7 @@ export class PrometheusPopoverGraphComponent {
         let graphStart = graphEnd - (3600 * 4);
         this.perfParams.host_uuid = this._hostUuid;
         this.perfParams.metric = this._metric;
+        this.perfParams.promql = this._promql;
         this.perfParams.start = graphStart;
         this.perfParams.end = graphEnd;
 
