@@ -38,8 +38,8 @@
         </c-card-header>
         <c-card-body>
             <div class="mb-3">
-                <label cLabel for="selectedMetrics">
-                    {{ t('Metrics') }}
+                <label cLabel for="query">
+                    {{ t('Selected metrics to use') }}
                     <oitc-required-icon/>
                 </label>
                 <oitc-multi-select
@@ -53,18 +53,20 @@
                 </oitc-multi-select>
             </div>
 
-            <fieldset>
-                <h5>{{ t('Available metrics') }}</h5>
-                <button *ngFor="let metricSelected of selectedMetrics"
-                        cButton
-                        color="primary"
-                        [size]="'xs'"
-                        class="m-1"
-                        (click)="addMetricString(metricSelected)">
-                    {{ metricSelected }}
-                </button>
-            </fieldset>
-            <c-row>
+            <c-row class="mb-3">
+                <fieldset>
+                    <h5>{{ t('Available metrics') }}</h5>
+                    <button *ngFor="let metricSelected of selectedMetrics"
+                            cButton
+                            color="primary"
+                            [size]="'xs'"
+                            class="m-1"
+                            (click)="addMetricString(metricSelected)">
+                        {{ metricSelected }}
+                    </button>
+                </fieldset>
+            </c-row>
+            <c-row class="mb-3">
                 <c-col md="1">
                     <fieldset>
                         <h5>{{ t('Brackets') }}</h5>
@@ -76,7 +78,7 @@
                         </button>
                     </fieldset>
                 </c-col>
-                <c-col>
+                <c-col md="3">
                     <fieldset>
                         <h5>{{ t('Arithmetic binary operators') }}</h5>
                         <button cButton size="xs" color="success" class="m-1" [title]="'addition' | transloco" (click)="addToString('+')">
@@ -99,7 +101,7 @@
                         </button>
                     </fieldset>
                 </c-col>
-                <c-col>
+                <c-col md="8">
                     <fieldset>
                         <h5>{{ t('Aggregation operators') }}</h5>
                         <button cButton size="xs" class="m-1" title="calculate sum over dimensions"
@@ -154,35 +156,41 @@
                 </c-col>
             </c-row>
 
-            <oitc-required-icon/>
-            <c-row>
+            <c-row class="mb-3">
                 <oitc-prometheus-code-mirror>
-                        <textarea cFormControl id="query"
-                                  name="query"
-                                  [(ngModel)]="post.Service.prometheus_alert_rule.promql"
-                                  oitcFormError [errors]="promqlErrors" errorField="promql"
-                        ></textarea>
+                    <label cLabel for="query">
+                        {{ t('PromQL query') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <textarea cFormControl id="query"
+                              name="query"
+                              [(ngModel)]="post.Service.prometheus_alert_rule.promql"
+                              oitcFormError [errors]="promqlErrors" errorField="promql"
+                    ></textarea>
                 </oitc-prometheus-code-mirror>
                 <oitc-form-feedback [errors]="promqlErrors" errorField="promql"></oitc-form-feedback>
             </c-row>
 
-            <button (click)="execute()">
-                {{ t('Execute') }}
-            </button>
+            <c-row class="mb-3">
+                <c-col md="10">
 
+                    <h5 class="text-info">
+                        {{ t('Query result:') }}
+                        <span *ngIf="executeResult" class="ng-binding ng-hide">
+                            {{ executeResult }}
+                        </span>
+                        <span class="italic" *ngIf="! executeResult">
+                            {{ t('no data') }}
+                        </span>
+                    </h5>
+                </c-col>
+                <c-col md="2" class=" text-end">
 
-            <div class="col col-9 font-md text-info">
-                {{ t('Query result:') }}
-                <span *ngIf="executeResult" class="ng-binding ng-hide">
-                    {{ executeResult }}
-                </span>
-                <span class="italic" *ngIf="! executeResult">
-                    {{ t('no data') }}
-                </span>
-            </div>
-
-
-            Service and alert def
+                    <button cButton color="success" (click)="execute()">
+                        {{ t('Execute') }}
+                    </button>
+                </c-col>
+            </c-row>
 
 
             <div class="mb-3">

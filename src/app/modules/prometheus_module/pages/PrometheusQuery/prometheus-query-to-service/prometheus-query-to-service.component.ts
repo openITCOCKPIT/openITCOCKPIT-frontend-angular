@@ -21,10 +21,10 @@ import {
     TableDirective
 } from '@coreui/angular';
 import {
+    EditablePrometheusAlertRule,
     getDefaultPrometheusQueryIndexParams,
     LoadCurrentValueByMetricRoot,
     LoadServicetemplates,
-    EditablePrometheusAlertRule,
     PrometheusCreateService,
     PrometheusQueryIndexParams,
     PrometheusQueryIndexRoot,
@@ -324,6 +324,7 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
                     return;
                 }
                 let a: Ramsch = result.data.metricValue.data.result[0] as Ramsch;
+                this.promqlErrors = {} as GenericValidationError;
                 this.executeResult = '';
                 if (typeof (a) !== "undefined") {
                     this.executeResult = a.value[1];

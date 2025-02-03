@@ -275,6 +275,7 @@ export class PrometheusQueryEditServiceComponent implements OnInit, OnDestroy {
                 }
                 let a: Ramsch = result.data.metricValue.data.result[0] as Ramsch;
                 this.executeResult = '';
+                this.promqlErrors = {} as GenericValidationError;
                 if (typeof (a) !== "undefined") {
                     this.executeResult = a.value[1];
                 }
