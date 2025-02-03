@@ -34,7 +34,8 @@ import {
     Importedhost,
     ImportedHostIndex,
     ImportedhostsIndexParams,
-    ImportedhostsIndexRoot
+    ImportedhostsIndexRoot,
+    MaxUploadLimit
 } from '../importedhosts.interface';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { ImportedhostsService } from '../importedhosts.service';
@@ -54,7 +55,6 @@ import {
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ImportITopDataComponent } from '../../../components/import-itop-data/import-itop-data.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
@@ -69,6 +69,9 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ImportedHostFlagsEnum } from '../imported-hosts.enum';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { ImportersService } from '../../importers/importers.service';
+import { ImportDataComponent } from '../../../components/import-data/import-data.component';
+import { ImportCsvDataComponent } from '../../../components/import-csv-data/import-csv-data.component';
 
 @Component({
     selector: 'oitc-imported-hosts-index',
@@ -98,7 +101,6 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
         FormCheckLabelDirective,
         FormControlDirective,
         FormDirective,
-        ImportITopDataComponent,
         InputGroupComponent,
         InputGroupTextDirective,
         ItemSelectComponent,
@@ -121,7 +123,9 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
         XsButtonDirective,
         RouterLink,
         NgClass,
-        MultiSelectComponent
+        MultiSelectComponent,
+        ImportDataComponent,
+        ImportCsvDataComponent
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostsService} // Inject the ImportedhostsService into the DeleteAllModalComponent
@@ -137,6 +141,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     public importedhosts: Importedhost[] = [];
     public importers: Importer[] = [];
+    public maxUploadLimit?: MaxUploadLimit;
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
     private readonly modalService = inject(ModalService);
@@ -145,10 +150,10 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public showSynchronizingSpinner: boolean = false;
     public showSpinner: boolean = false;
-    public externalSystems: ExternalSystemEntity[] = [];
     public allImportedHosts?: ImportedhostsIndexRoot;
     private readonly notyService = inject(NotyService);
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
+    private readonly ImportersService = inject(ImportersService);
     private cdr = inject(ChangeDetectorRef);
     protected readonly ImportedHostFlagsEnum = ImportedHostFlagsEnum;
 
@@ -214,6 +219,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
                 this.allImportedHosts = result;
                 this.importedhosts = result.importedhosts;
                 this.importers = result.importers;
+                this.maxUploadLimit = result.maxUploadLimit;
                 this.cdr.markForCheck();
             })
         );
@@ -318,8 +324,8 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     }
 
-    public loadImporter(id: number) {
-
+    public loadImporter(importer: Importer) {
+        this.ImportersService.openImportedHostsDataModal(importer);
     }
 
     public hasFlag(importedHostFlag: number, compareFlag: ImportedHostFlagsEnum) {

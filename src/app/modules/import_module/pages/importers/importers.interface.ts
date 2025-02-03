@@ -2,6 +2,7 @@ import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator
 import { ExternalMonitoringsAsList } from '../externalmonitorings/external-monitorings.interface';
 import { ExternalSystemsAsList } from '../externalsystems/external-systems.interface';
 import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
+import { ImportedHostRawData } from '../importedhosts/importedhosts.interface';
 
 export interface ImportersIndexRoot extends PaginateOrScroll {
     importers: Importer[]
@@ -213,4 +214,70 @@ export interface ImporterConfig {
         }
         formFields: DynamicalFormFields
     }
+}
+
+export interface ImportersErrorMessageResponse {
+    message: string
+    errors: {
+        notValidRawData: {
+            error: string
+            description: string
+            invalidData: ImportedHostRawData[]
+        }
+    }
+}
+
+export interface ImportCsvDataResponse {
+    response: {
+        success: boolean
+        message: string
+        filename: string
+        filenameOrigin: string
+        previewData: CsvPreviewData
+    }
+    _csrfToken: any
+}
+
+export interface CsvPreviewData {
+    headers: CsvHeaders
+    rawData: ImportedHostRawData[]
+    errors: CsvErrors
+}
+
+export interface CsvHeaders {
+    mapping_identifier: CsvHeadersMappingFields
+    mapping_hostname: CsvHeadersMappingFields
+    mapping_address: CsvHeadersMappingFields
+    mapping_description: CsvHeadersMappingFields
+    mapping_software: CsvHeadersMappingFields
+}
+
+export interface CsvHeadersMappingFields {
+    name: string
+    exists: boolean
+}
+
+export interface CsvErrors {
+    missingHeaderFields: MissingCsvHeaderFields
+    notValidRawData: NotValidCsvRawData
+}
+
+export interface MissingCsvHeaderFields {
+    error: string
+    description: string
+    invalidData: InvalidCsvData
+}
+
+export interface NotValidCsvRawData {
+    error: string
+    description: string
+    invalidData: InvalidCsvData | ImportedHostRawData[]
+}
+
+export interface InvalidCsvData {
+    mapping_identifier: string
+    mapping_hostname: string
+    mapping_address: string
+    mapping_description: string
+    mapping_software: string
 }
