@@ -28,10 +28,7 @@
 
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
-                    <button (click)="showModal()" cButton class="ripple" color="primary" size="xs">
-                        <fa-icon [icon]="['fas', 'info']"></fa-icon>
-                        {{ t('PromQL help') }}
-                    </button>
+                    <oitc-prometheus-help [uuid]="this.index.host.uuid"/>
                 </c-nav-item>
             </c-nav>
         </c-card-header>
@@ -551,5 +548,4 @@
         </c-card-body>
     </c-card>
 
-    <oitc-prometheus-help [uuid]="this.index.host.uuid"/>
 </ng-container>
