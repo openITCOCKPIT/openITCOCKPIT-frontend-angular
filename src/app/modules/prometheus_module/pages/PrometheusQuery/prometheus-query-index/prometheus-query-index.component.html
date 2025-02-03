@@ -229,7 +229,7 @@
                 </tbody>
             </table>
             <oitc-no-records
-                    *ngIf="index && index.targets.data.length === 0"></oitc-no-records>
+                    *ngIf="params.hostId !== 0 && index && index.targets.data.length === 0"></oitc-no-records>
 
             <ng-container *ngIf="index && index.targets.data">
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
