@@ -32,7 +32,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -96,7 +96,8 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         FormsModule,
         BackButtonDirective,
         CardFooterComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        TranslocoPipe
     ],
     templateUrl: './prometheus-query-edit-service.component.html',
     styleUrl: './prometheus-query-edit-service.component.css',

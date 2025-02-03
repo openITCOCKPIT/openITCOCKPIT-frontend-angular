@@ -56,7 +56,10 @@
             <fieldset>
                 <h5>{{ t('Available metrics') }}</h5>
                 <button *ngFor="let metricSelected of selectedMetrics"
-                        class="margin-5 btn btn-primary btn-md ng-binding ng-scope"
+                        cButton
+                        color="primary"
+                        [size]="'xs'"
+                        class="m-1"
                         (click)="addMetricString(metricSelected)">
                     {{ metricSelected }}
                 </button>
@@ -65,10 +68,10 @@
                 <c-col md="1">
                     <fieldset>
                         <h5>{{ t('Brackets') }}</h5>
-                        <button class="margin-5 btn btn-info btn-xs" (click)="addToString('(')">
+                        <button cButton size="xs" color="info" class="m-1" (click)="addToString('(')">
                             (
                         </button>
-                        <button class="margin-5 btn btn-info btn-xs" (click)="addToString(')')">
+                        <button cButton size="xs" color="info" class="m-1" (click)="addToString(')')">
                             )
                         </button>
                     </fieldset>
@@ -76,24 +79,22 @@
                 <c-col>
                     <fieldset>
                         <h5>{{ t('Arithmetic binary operators') }}</h5>
-                        <button class="margin-5 btn btn-success btn-xs" title="addition" (click)="addToString('+')">
+                        <button cButton size="xs" color="success" class="m-1" [title]="'addition' | transloco" (click)="addToString('+')">
                             +
                         </button>
-                        <button class="margin-5 btn btn-success btn-xs" title="subtraction" (click)="addToString('-')">
+                        <button cButton size="xs" color="success" class="m-1" [title]="'subtraction'  | transloco" (click)="addToString('-')">
                             -
                         </button>
-                        <button class="margin-5 btn btn-success btn-xs" title="multiplication"
-                                (click)="addToString('*')">
+                        <button cButton size="xs" color="success" class="m-1" [title]="'multiplication'  | transloco" (click)="addToString('*')">
                             *
                         </button>
-                        <button class="margin-5 btn btn-success btn-xs" title="division" (click)="addToString('/')">
+                        <button cButton size="xs" color="success" class="m-1" [title]="'division'  | transloco" (click)="addToString('/')">
                             /
                         </button>
-                        <button class="margin-5 btn btn-success btn-xs" title="modulo" (click)="addToString('%')">
+                        <button cButton size="xs" color="success" class="m-1" [title]="'modulo'  | transloco" (click)="addToString('%')">
                             %
                         </button>
-                        <button class="margin-5 btn btn-success btn-xs" title="power/exponentiation"
-                                (click)="addToString('^')">
+                        <button cButton size="xs" color="success" class="m-1" [title]="'power/exponentiation' | transloco" (click)="addToString('^')">
                             ^
                         </button>
                     </fieldset>
@@ -101,50 +102,50 @@
                 <c-col>
                     <fieldset>
                         <h5>{{ t('Aggregation operators') }}</h5>
-                        <button class="margin-5 btn btn-default btn-xs" title="calculate sum over dimensions"
+                        <button cButton size="xs" class="m-1" title="calculate sum over dimensions"
                                 (click)="addAggregationToString('sum')">
                             sum
                         </button>
-                        <button class="margin-5 btn btn-default btn-xs" title="select minimum over dimensions"
+                        <button cButton size="xs" class="m-1" title="select minimum over dimensions"
                                 (click)="addAggregationToString('min')">
                             min
                         </button>
-                        <button class="margin-5 btn btn-default btn-xs" title="select maximum over dimensions"
+                        <button cButton size="xs" class="m-1" title="select maximum over dimensions"
                                 (click)="addAggregationToString('max')">
                             max
                         </button>
-                        <button class="margin-5 btn btn-default btn-xs" title="calculate the average over dimensions"
+                        <button cButton size="xs" class="m-1" title="calculate the average over dimensions"
                                 (click)="addAggregationToString('avg')">
                             avg
                         </button>
-                        <button class="margin-5 btn btn-default btn-xs"
+                        <button cButton size="xs" class="m-1"
                                 title="calculate population standard deviation over dimensions"
                                 (click)="addAggregationToString('stddev')">
                             stddev
                         </button>
-                        <button class="margin-5 btn btn-default btn-xs"
+                        <button cButton size="xs" class="m-1"
                                 title="calculate population standard variance over dimensions"
                                 (click)="addAggregationToString('stdvar')">
                             stdvar
                         </button>
-                        <button class="margin-5 btn btn-default btn-xs" title="count number of elements in the vector"
+                        <button cButton size="xs" class="m-1" title="count number of elements in the vector"
                                 (click)="addAggregationToString('count')">
                             count
                         </button>
-                        <button class="margin-5 btn btn-default btn-xs"
+                        <button cButton size="xs" class="m-1"
                                 title="count number of elements with the same value"
                                 (click)="addAggregationToString('count_values')">
                             count_values
                         </button>
-                        <button class="margin-5 btn btn-default btn-xs" title="smallest k elements by sample value"
+                        <button cButton size="xs" class="m-1" title="smallest k elements by sample value"
                                 (click)="addAggregationToString('bottomk')">
                             bottomk
                         </button>
-                        <button class="margin-5 btn btn-default btn-xs" title="largest k elements by sample value"
+                        <button cButton size="xs" class="m-1" title="largest k elements by sample value"
                                 (click)="addAggregationToString('topk')">
                             topk
                         </button>
-                        <button class="margin-5 btn btn-default btn-xs"
+                        <button cButton size="xs" class="m-1"
                                 title="calculate φ-quantile (0 ≤ φ ≤ 1) over dimensions"
                                 (click)="addAggregationToString('quantile')">
                             quantile
