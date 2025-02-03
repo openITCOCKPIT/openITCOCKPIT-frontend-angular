@@ -47,8 +47,10 @@
 
         <ng-template #buttonTemplate let-data>
             <div class="ms-2" *ngIf="data">
-                <button class="btn btn-sm ripple" [ngClass]="'btn-outline-'+data.color" [routerLink]="['exports','index']">
-                    {{t('Go to "Refresh monitoring configuration"') }}
+                <button class="btn btn-sm ripple" [ngClass]="'btn-outline-'+data.color"
+                        [routerLink]="['/', 'exports','index']">
+                    <fa-icon [icon]="['fas', 'retweet']"></fa-icon>
+                    {{ t('Go to "Refresh monitoring configuration"') }}
                 </button>
             </div>
 
