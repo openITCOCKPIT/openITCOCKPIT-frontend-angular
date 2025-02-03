@@ -19,8 +19,7 @@ import { Mapgadget } from '../../pages/mapeditors/Mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { TrafficlightItemService } from './trafficlight-item.service';
-import { MapLineRootParams } from '../map-line/map-line.interface';
-import { Host, Service, TrafficlightItemRoot } from './trafficlight-item.interface';
+import { Host, Service, TrafficlightItemRoot, TrafficlightItemRootParams } from './trafficlight-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { DOCUMENT, NgIf } from '@angular/common';
 
@@ -103,7 +102,7 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
 
     private load() {
 
-        const params: MapLineRootParams = {
+        const params: TrafficlightItemRootParams = {
             'angular': true,
             'disableGlobalLoader': true,
             'objectId': this.item()!.object_id as number,

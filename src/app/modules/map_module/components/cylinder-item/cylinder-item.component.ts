@@ -19,15 +19,21 @@ import { Mapgadget } from '../../pages/mapeditors/Mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { CylinderItemService } from './cylinder-item.service';
-import { Host, MapLineRootParams, Service } from '../map-line/map-line.interface';
-import { CylinderItemRoot, GeneratedType, Perfdata } from './cylinder-item.interface';
+import {
+    CylinderItemRoot,
+    CylinderItemRootParams,
+    GeneratedType,
+    Host,
+    Perfdata,
+    Service
+} from './cylinder-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { NgStyle } from '@angular/common';
+import { NgIf, NgStyle } from '@angular/common';
 
 @Component({
     selector: 'oitc-cylinder-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgStyle],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgStyle, NgIf],
     templateUrl: './cylinder-item.component.html',
     styleUrl: './cylinder-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -85,7 +91,7 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
 
     private load() {
 
-        const params: MapLineRootParams = {
+        const params: CylinderItemRootParams = {
             'angular': true,
             'disableGlobalLoader': true,
             'objectId': this.item()!.object_id as number,

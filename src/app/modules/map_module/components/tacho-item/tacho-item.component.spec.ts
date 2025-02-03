@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CylinderItemComponent } from './cylinder-item.component';
+import { TachoItemComponent } from './tacho-item.component';
 
-describe('CylinderItemComponent', () => {
-    let component: CylinderItemComponent;
-    let fixture: ComponentFixture<CylinderItemComponent>;
+describe('TachoItemComponent', () => {
+    let component: TachoItemComponent;
+    let fixture: ComponentFixture<TachoItemComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CylinderItemComponent]
+            imports: [TachoItemComponent]
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(CylinderItemComponent);
+        fixture = TestBed.createComponent(TachoItemComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

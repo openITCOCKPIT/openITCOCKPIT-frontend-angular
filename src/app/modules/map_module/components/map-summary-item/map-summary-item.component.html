@@ -1,5 +1,5 @@
 <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
-     [draggable]="isViewMode()"
+     [draggable]="!isViewMode()"
      (cdkDragEnded)="onDragEnd($event)"
      (cdkDragMoved)="onDragMove($event)"
      (resizeStop)="onResizeStop($event, type)"
@@ -22,4 +22,4 @@
         <span [hidden]="!(item()!.show_label && item()!.label_possition == 3)">{{ label }}</span>
     </div>
 </div>
-<p-contextMenu [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>
+<p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>

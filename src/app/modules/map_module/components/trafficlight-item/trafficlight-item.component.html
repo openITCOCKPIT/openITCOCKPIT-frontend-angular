@@ -1,5 +1,5 @@
 <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
-     [draggable]="isViewMode()"
+     [draggable]="!isViewMode()"
      (cdkDragEnded)="onDragEnd($event)"
      (cdkDragMoved)="onDragMove($event)"
      (resizeStop)="onResizeStop($event, type)"
@@ -84,4 +84,4 @@
         </svg>
     </div>
 </div>
-<p-contextMenu [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>
+<p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>

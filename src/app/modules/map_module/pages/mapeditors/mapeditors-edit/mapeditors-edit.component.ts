@@ -55,6 +55,8 @@ import { MapSummaryItemComponent } from '../../../components/map-summary-item/ma
 import { PerfdataTextItemComponent } from '../../../components/perfdata-text-item/perfdata-text-item.component';
 import { TrafficlightItemComponent } from '../../../components/trafficlight-item/trafficlight-item.component';
 import { CylinderItemComponent } from '../../../components/cylinder-item/cylinder-item.component';
+import { TachoItemComponent } from '../../../components/tacho-item/tacho-item.component';
+import { TemperatureItemComponent } from '../../../components/temperature-item/temperature-item.component';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
@@ -95,7 +97,9 @@ import { CylinderItemComponent } from '../../../components/cylinder-item/cylinde
         MapSummaryItemComponent,
         PerfdataTextItemComponent,
         TrafficlightItemComponent,
-        CylinderItemComponent
+        CylinderItemComponent,
+        TachoItemComponent,
+        TemperatureItemComponent
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',

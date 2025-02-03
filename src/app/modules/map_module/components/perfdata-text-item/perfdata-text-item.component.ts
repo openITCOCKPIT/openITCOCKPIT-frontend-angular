@@ -16,14 +16,21 @@ import { Mapgadget } from '../../pages/mapeditors/Mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { PerfdataTextItemService } from './perfdata-text-item.service';
-import { MapLineRootParams } from '../map-line/map-line.interface';
-import { Load1, Load15, Load5, Perfdata, PerfdataTextItemRoot } from './perfdata-text-item.interface';
+import {
+    Load1,
+    Load15,
+    Load5,
+    Perfdata,
+    PerfdataTextItemRoot,
+    PerfdataTextItemRootParams
+} from './perfdata-text-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-perfdata-text-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf],
     templateUrl: './perfdata-text-item.component.html',
     styleUrl: './perfdata-text-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -68,7 +75,7 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
 
     private load() {
 
-        const params: MapLineRootParams = {
+        const params: PerfdataTextItemRootParams = {
             'angular': true,
             'disableGlobalLoader': true,
             'objectId': this.item()!.object_id as number,

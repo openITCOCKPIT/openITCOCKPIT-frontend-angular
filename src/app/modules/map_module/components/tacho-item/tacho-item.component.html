@@ -4,9 +4,6 @@
      (cdkDragMoved)="onDragMove($event)"
      (resizeStop)="onResizeStop($event, type)"
      cdkDragBoundary=".map-canvas">
-    <div cdkDragHandle [id]="'map-cylinder-' + item()!.id"
-         [ngStyle]="{'width.px': width + 10, 'height.px': height + 10}">
-        <svg #cylinderSvg [attr.width]="width" [attr.height]="height"></svg>
-    </div>
+    <canvas cdkDragHandle [id]="'map-tacho-' + item()!.id"></canvas>
 </div>
 <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>

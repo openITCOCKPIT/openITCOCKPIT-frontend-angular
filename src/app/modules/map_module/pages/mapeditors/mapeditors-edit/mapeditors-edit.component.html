@@ -219,15 +219,15 @@
                                                          (resizedEvent)="onResizeStop($event)"
                                                          [hidden]="!gadgetItem.display">
                                 </oitc-perfdata-text-item>
-                                <!--<oitc-tacho-item *ngIf="gadgetItem.gadget === 'Tacho'" [item]="gadgetItem"
-                                                       [refreshInterval]="0"
-                                                       [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
-                                                       [layers]="layers"
-                                                       (contextActionEvent)="onContextAction($event)"
-                                                       (dropItemEvent)="onDropItem($event)"
-                                                       (resizedEvent)="onResizeStop($event)"
-                                                       [hidden]="!gadgetItem.display">
-                                </oitc-tacho-item>-->
+                                <oitc-tacho-item *ngIf="gadgetItem.gadget === 'Tacho'" [item]="gadgetItem"
+                                                 [refreshInterval]="0"
+                                                 [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                                 [layers]="layers"
+                                                 (contextActionEvent)="onContextAction($event)"
+                                                 (dropItemEvent)="onDropItem($event)"
+                                                 (resizedEvent)="onResizeStop($event)"
+                                                 [hidden]="!gadgetItem.display">
+                                </oitc-tacho-item>
                                 <oitc-cylinder-item *ngIf="gadgetItem.gadget === 'Cylinder'" [item]="gadgetItem"
                                                     [refreshInterval]="0"
                                                     [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
@@ -246,7 +246,7 @@
                                                         (resizedEvent)="onResizeStop($event)"
                                                         [hidden]="!gadgetItem.display">
                                 </oitc-trafficlight-item>
-                                <!--<oitc-temperature-item *ngIf="gadgetItem.gadget === 'Temperature'" [item]="gadgetItem"
+                                <oitc-temperature-item *ngIf="gadgetItem.gadget === 'Temperature'" [item]="gadgetItem"
                                                        [refreshInterval]="0"
                                                        [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
                                                        [layers]="layers"
@@ -254,9 +254,10 @@
                                                        (dropItemEvent)="onDropItem($event)"
                                                        (resizedEvent)="onResizeStop($event)"
                                                        [hidden]="!gadgetItem.display">
-                                </oitc-temperature-item>-->
+                                </oitc-temperature-item>
                             }
                         </ng-container>
+                        <!-- service output item here -->
                         <oitc-map-summary-item *ngFor="let summaryItem of map.Mapsummaryitems" [item]="summaryItem"
                                                [refreshInterval]="0"
                                                [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"

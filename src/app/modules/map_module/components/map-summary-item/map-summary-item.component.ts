@@ -14,10 +14,9 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Mapsummaryitem } from '../../pages/mapeditors/Mapeditors.interface';
 import { ContextActionType, LabelPosition, MapItemType } from '../map-item-base/map-item-base.enum';
-import { MapLineRootParams } from '../map-line/map-line.interface';
 import { interval, Subscription } from 'rxjs';
 import { MapSummaryItemService } from './map-summary-item.service';
-import { Data, MapSummaryItemRoot } from './map-summary-item.interface';
+import { Data, MapSummaryItemRoot, MapSummaryItemRootParams } from './map-summary-item.interface';
 import { NgIf } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
@@ -70,7 +69,7 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
 
     private load() {
 
-        const params: MapLineRootParams = {
+        const params: MapSummaryItemRootParams = {
             'angular': true,
             'disableGlobalLoader': true,
             'objectId': this.item()!.object_id as number,

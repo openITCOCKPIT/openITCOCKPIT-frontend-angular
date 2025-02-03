@@ -20,11 +20,12 @@ import { MenuItem } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
 import { Mapitem, Mapline } from '../../pages/mapeditors/Mapeditors.interface';
 import { ContextActionType, MapItemType } from './map-item-base.enum';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-map-item-base',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule],
+    imports: [CdkDrag, ContextMenuModule, NgIf],
     templateUrl: './map-item-base.component.html',
     styleUrl: './map-item-base.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -36,7 +37,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     public layers: InputSignal<string[]> = input<string[]>([]); // Layer options for context menu
     public gridSize: InputSignal<{ x: number, y: number }> = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
     public gridEnabled: InputSignal<boolean> = input<boolean>(true);
-    public isViewMode: InputSignal<boolean> = input<boolean>(true);
+    public isViewMode: InputSignal<boolean> = input<boolean>(false);
 
     @Output() resizedEvent = new EventEmitter<ResizedEvent>();
 
@@ -67,6 +68,12 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     protected mapCanvasComponent: MapCanvasComponent;
 
     protected contextMenuItems: MenuItem[] = this.getContextMenuItems();
+
+    /**
+     * TODO: There is a bug on map items with resizable directive. When you drag the item, the drag starts only after release the mouse button.
+     * This is because when the item is resizable, you have to place the cdkDragHandle inside the content of the item, so you can drag the element and resize it in the corner.
+     * If you remove the cdkDragHandle from the content, the drag will work as expected, but you are not able to resize the item.
+     */
 
     constructor(protected parent: MapCanvasComponent) {
         this.mapCanvasComponent = parent;
