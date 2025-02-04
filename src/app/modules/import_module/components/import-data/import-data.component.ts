@@ -35,8 +35,10 @@ import { GenericMessageResponse } from '../../../../generic-responses';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { FormsModule } from '@angular/forms';
 import { ImportersService } from '../../pages/importers/importers.service';
-import { Importer, ImportersErrorMessageResponse } from '../../pages/importers/importers.interface';
+import { Importer, ImporterConfig, ImportersErrorMessageResponse } from '../../pages/importers/importers.interface';
 import { ImportDataResponse, ImportedHostRawData } from '../../pages/importedhosts/importedhosts.interface';
+import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-import-data',
@@ -89,6 +91,8 @@ export class ImportDataComponent implements OnInit, OnDestroy {
     public errors: GenericMessageResponse | null = null;
     public hasRootPrivileges: boolean = false;
     private cdr = inject(ChangeDetectorRef);
+    public formFields?: DynamicalFormFields;
+
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -107,7 +111,14 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                 if (!this.importer) {
                     return;
                 }
-
+                if (this.importer.data_source) {
+                    this.ImporterService.loadConfig(this.importer.data_source)
+                        .subscribe((result:ImporterConfig) => {
+                            this.formFields = result.config.formFields;
+                            this.cdr.markForCheck();
+                        });
+                }
+console.log(this.formFields);
                 switch (this.importer.data_source) {
                     case 'idoit':
                         this.ImporterService.loadDataFromIdoit(this.importer).subscribe(data => {

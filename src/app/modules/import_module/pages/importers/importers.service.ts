@@ -3,8 +3,7 @@ import { catchError, forkJoin, map, Observable, of, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
-    Importer,
-    ImporterConfig,
+    Importer, ImporterConfig,
     ImporterElements,
     ImportersGet,
     ImportersIndexParams,
@@ -24,6 +23,7 @@ import {
 } from '../../../../generic-responses';
 import { ModalService } from '@coreui/angular';
 import { ImportDataResponse } from '../importedhosts/importedhosts.interface';
+import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 
 @Injectable({
     providedIn: 'root'
