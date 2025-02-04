@@ -3,12 +3,13 @@ import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-a
 import { VmwareEsxDirectlyWizardGet, VmwareEsxDirectlyWizardPost } from './vmware-esx-directly-wizard.interface';
 import { VmwareEsxDirectlyWizardService } from './vmware-esx-directly-wizard.service';
 import {
+    AccordionButtonDirective, AccordionComponent, AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     FormControlDirective,
-    FormLabelDirective
+    FormLabelDirective, TemplateIdDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -40,7 +41,11 @@ import { FormsModule } from '@angular/forms';
         TranslocoPipe,
         WizardsDynamicfieldsComponent,
         RouterLink,
-        FormsModule
+        FormsModule,
+        AccordionButtonDirective,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective
     ],
     templateUrl: './vmware-esx-directly.component.html',
     styleUrl: './vmware-esx-directly.component.css',

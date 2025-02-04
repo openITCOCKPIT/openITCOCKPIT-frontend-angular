@@ -5,8 +5,7 @@ import { NetworkbasicWizardService } from './networkbasic-wizard.service';
 import {
     InterfaceServicetemplate,
     NetworkbasicWizardGet,
-    NetworkbasicWizardPost,
-    SnmpDiscovery
+    NetworkbasicWizardPost
 } from './networkbasic-wizard.interface';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -14,6 +13,7 @@ import {
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
+    CardTitleDirective,
     FormControlDirective,
     FormLabelDirective
 } from '@coreui/angular';
@@ -30,6 +30,7 @@ import {
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { GenericValidationError } from '../../../../../generic-responses';
 
 @Component({
     selector: 'oitc-networkbasic',
@@ -52,7 +53,8 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         TranslocoDirective,
         OitcAlertComponent,
         ProgressBarModule,
-        XsButtonDirective
+        XsButtonDirective,
+        CardTitleDirective
     ],
     templateUrl: './networkbasic.component.html',
     styleUrl: './networkbasic.component.css',
@@ -61,6 +63,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 export class NetworkbasicComponent extends WizardsAbstractComponent {
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
     protected override WizardService: NetworkbasicWizardService = inject(NetworkbasicWizardService);
+    protected snmpErrors: GenericValidationError = {} as GenericValidationError;
 
     protected override post: NetworkbasicWizardPost = {
 // Default fields from the base wizard
@@ -82,6 +85,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         {value: '2', key: 'SNMP V 2c'},
         {value: '3', key: 'SNMP V 3'},
     ]
+
     protected securityLevels: SelectKeyValueString[] = [
         {key: 'authPriv', value: '1'},
         {key: 'authNoPriv', value: '2'},
@@ -107,23 +111,34 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
     }
 
     protected runSnmpDiscovery(): void {
-        this.WizardService.executeSNMPDiscovery(this.post).subscribe((data: SnmpDiscovery) => {
-            for (let key in data.interfaces) {
-                let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.interfaceServicetemplate.servicetemplatecommandargumentvalues));
-                servicetemplatecommandargumentvalues[0].value = data.interfaces[key].value.name;
-                this.post.interfaces.push(
-                    {
-                        'host_id': this.post.host_id,
-                        'servicetemplate_id': this.interfaceServicetemplate.id,
-                        'name': data.interfaces[key].value.name,
-                        'description': data.interfaces[key].value.number,
-                        'servicecommandargumentvalues': servicetemplatecommandargumentvalues,
-                        'createService': false
-                    });
-            }
+        this.WizardService.executeSNMPDiscovery(this.post).subscribe((data: any) => {
+            this.cdr.markForCheck();
+            console.warn(data);
+            // Error
+            if (data.success) {
+                for (let key in data.interfaces) {
+                    let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.interfaceServicetemplate.servicetemplatecommandargumentvalues));
+                    servicetemplatecommandargumentvalues[0].value = data.interfaces[key].value.name;
+                    this.post.interfaces.push(
+                        {
+                            'host_id': this.post.host_id,
+                            'servicetemplate_id': this.interfaceServicetemplate.id,
+                            'name': data.interfaces[key].value.name,
+                            'description': data.interfaces[key].value.number,
+                            'servicecommandargumentvalues': servicetemplatecommandargumentvalues,
+                            'createService': false
+                        });
+                }
 
-            this.childComponentLocal.cdr.markForCheck();
-            this.childComponent.cdr.markForCheck();
+                this.childComponentLocal.cdr.markForCheck();
+                this.childComponent.cdr.markForCheck();
+                return;
+            }
+            this.notyService.genericError();
+            const errorResponse: GenericValidationError = data.data as GenericValidationError;
+            if (data.data) {
+                this.snmpErrors = errorResponse;
+            }
         });
     }
 }

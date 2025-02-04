@@ -174,6 +174,13 @@ export class GrafanaPanelOptionsModalComponent implements OnDestroy {
                     this.notyService.genericSuccess(
                         this.TranslocoService.translate('Panel options saved successfully')
                     );
+
+                    // Close the modal
+                    this.modalService.toggle({
+                        show: false,
+                        id: 'grafanaPanelOptionsModal',
+                    });
+
                 }
             } else {
                 this.notyService.genericError(

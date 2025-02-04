@@ -1,0 +1,47 @@
+<div class="threshold-container padding-top-10">
+
+    <!-- Range Inclusive (≥ 10 and ≤ 20 - inside the range of 10 to 20) -->
+    <div class="subcontainer-{{type}}" *ngIf="!inclusive">
+        <div class="value-container">
+            <div class="values-left-container">
+                <div class="speech-bubble-ds">
+                    <p>{{ min }}</p>
+                    <div class="speech-bubble-ds-arrow-left"></div>
+                </div>
+            </div>
+            <div class="values-right-container">
+                <div class="speech-bubble-ds">
+                    <p>{{ max }}</p>
+                    <div class="speech-bubble-ds-arrow-right"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="label-container">
+            <div class="label-left"></div>
+            <div class="label-right"></div>
+        </div>
+    </div>
+
+    <!-- Range Exclusive (< 10 or > 20 - outside the range of 10 to 20) -->
+    <div class="subcontainer-{{type}}-inclusive" *ngIf="inclusive">
+        <div class="value-container">
+            <div class="values-left-container">
+                <div class="speech-bubble-ds">
+                    <p>{{ min }}</p>
+                    <div class="speech-bubble-ds-arrow-left"></div>
+                </div>
+            </div>
+            <div class="values-right-container">
+                <div class="speech-bubble-ds">
+                    <p>{{ max }}</p>
+                    <div class="speech-bubble-ds-arrow-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="label-container">
+            <div class="label-left-inclusive"></div>
+            <div class="label-right-inclusive"></div>
+        </div>
+    </div>
+</div>

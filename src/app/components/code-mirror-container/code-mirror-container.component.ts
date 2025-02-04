@@ -11,6 +11,7 @@ import {
     OnDestroy,
     ViewChild
 } from '@angular/core';
+import { PrometheusClient }  from '@prometheus-io/codemirror-promql';
 import { basicSetup, EditorView } from 'codemirror';
 import { EditorState, Range, RangeSet, StateEffect, StateField } from '@codemirror/state';
 import { Decoration, DecorationSet, keymap } from '@codemirror/view';
