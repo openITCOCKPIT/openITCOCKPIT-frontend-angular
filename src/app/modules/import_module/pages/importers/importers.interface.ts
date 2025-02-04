@@ -271,7 +271,7 @@ export interface MissingCsvHeaderFields {
 export interface NotValidCsvRawData {
     error: string
     description: string
-    invalidData: InvalidCsvData | ImportedHostRawData[]
+    invalidData: ImportedHostRawData[]
 }
 
 export interface InvalidCsvData {
@@ -280,4 +280,10 @@ export interface InvalidCsvData {
     mapping_address: string
     mapping_description: string
     mapping_software: string
+}
+
+export interface CsvPreviewHeadersAsArray {
+    key: string
+    name: string
+    exists: boolean
 }

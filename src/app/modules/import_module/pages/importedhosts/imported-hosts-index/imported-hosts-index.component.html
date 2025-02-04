@@ -585,10 +585,12 @@
                         </span>
                     </td>
                     <td>
-                        <a *oitcPermission="['users', 'edit']"
-                           [routerLink]="['/', 'users', 'edit', importedhost.user.id]">
-                            {{ importedhost.full_name }}
-                        </a>
+                        <span *ngIf="importedhost.user">
+                            <a *oitcPermission="['users', 'edit']"
+                               [routerLink]="['/', 'users', 'edit', importedhost.user.id]">
+                                {{ importedhost.full_name }}
+                            </a>
+                        </span>
                         <span *oitcPermission="['users', 'edit']; negate: true">
                             {{ importedhost.full_name }}
                         </span>
