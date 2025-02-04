@@ -54,7 +54,7 @@ import { chain } from 'lodash';
 import{ leafletFullscreen } from './js/Leaflet.fullscreen.js';
 // @ts-ignore
 import { hexbinLayer } from './js/HexbinLayer.js';
-import { NgFor, NgIf, NgStyle } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf, NgStyle } from '@angular/common';
 
 
 @Component({
@@ -86,7 +86,8 @@ import { NgFor, NgIf, NgStyle } from '@angular/common';
         NgIf,
         NgFor,
         AlertComponent,
-        NgStyle
+        NgStyle,
+        AsyncPipe
     ],
     templateUrl: './openstreetmap-index.component.html',
     styleUrl: './openstreetmap-index.component.css',
@@ -112,6 +113,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     private intervalId: any = null;
     private intervalSecs: number = 0;
     public initSettings: boolean = false;
+    public initLocations: boolean = false;
 
     public indexParams: OpenstreetmapIndexParams = {
         'angular': true,
@@ -216,6 +218,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         this.subscriptions.add(
             this.OpenstreetmapService.getIndex(this.indexParams).subscribe((mapData) => {
                 this.mapData = mapData;
+                this.initLocations = true
                 this.buildLayers();
                 this.cdr.markForCheck();
                 if(this.intervalId === null && this.intervalSecs >= 15) {
@@ -352,8 +355,6 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
             clearInterval(this.intervalId);
             this.intervalId = null;
         }
-
     }
-
 
 }

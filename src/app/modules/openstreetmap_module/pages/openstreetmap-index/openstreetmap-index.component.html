@@ -205,12 +205,34 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <div *ngIf="initSettings && !server_url">
+            <div *ngIf="initSettings && initLocations && !server_url">
                 <div class="text-danger no-padding pb-2 fs-5">
                     <fa-icon class="danger" [icon]="['fas', 'exclamation-triangle']"></fa-icon>
                     {{ t('Missing configuration or location settings') }}
                 </div>
-                <c-alert color="danger">{{ t('Configurati)on / OpenStreetMap Settings')}}</c-alert>
+                <c-alert color="danger">
+                    @if (PermissionsService.hasPermissionObservable(['OpenstreetmapModule', 'openstreetmapsettings', 'index'])|async) {
+                        <a [routerLink]="['/', 'openstreetmap_module', 'openstreetmap_settings', 'index']">
+                            <span class="text-white">
+                                <fa-icon class="danger" [icon]="['fas', 'cogs']"></fa-icon> {{ t('Configuration / OpenStreetMap Settings') }}
+                            </span>
+                        </a>
+                    } @else {
+                        <span class="text-white">{{ t('No OpenStreetMap Settings defined') }}</span>
+                    }
+                </c-alert>
+                <c-alert color="info" *ngIf="initLocations && mapData.locations.length === 0">
+                    @if (PermissionsService.hasPermissionObservable(['locations', 'index'])|async) {
+                        <a [routerLink]="['/', 'locations', 'index']">
+                            <span>
+                                <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon> {{ t('Basic Monitoring / Locations') }}
+                            </span>
+                        </a>
+                    } @else {
+                        <span> {{ t('Missing  Settings') }} </span>
+                    }
+                    {{ t('No locations with longitude and latitude parameter defined') }}
+                </c-alert>
             </div>
 
             <div #map id="map" class="d-flex" [ngStyle]="{'height': hideFilter ? '80vh' : '60vh'}"></div>
