@@ -9,6 +9,7 @@ import { ContainerEntity } from '../../../../pages/containers/containers.interfa
 import { ServicetemplateEntity } from '../../../../pages/servicetemplates/servicetemplates.interface';
 import { ServiceObject } from '../../../../pages/services/services.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { Application } from '../externalsystems/external-systems.interface';
 
 export interface ImportedhostsIndexRoot extends PaginateOrScroll {
     importedhosts: Importedhost[]
@@ -238,4 +239,28 @@ export function getDefaultImportedHostsIndexParams(): ImportedhostsIndexParams {
         'filter[ready_for_import]': true,
         'filter[not_ready_for_import]': true
     }
+}
+
+export interface ImportDataResponse {
+    response: {
+        rawData: ImportedHostRawData[]
+        success: boolean
+        message: string
+        errors: any[]
+    }
+    _csrfToken: any
+}
+
+export interface ImportedHostRawData {
+    identifier: string
+    hostname: string
+    address: string
+    description: string
+    software: string
+    external_services: any[]
+}
+
+export interface NotValidRawData {
+    error: string
+    description: string
 }
