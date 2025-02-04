@@ -4,11 +4,12 @@ import { GenericResponseWrapper, GenericValidationError } from '../../../../../g
 import { OracleWizardService } from './oracle-wizard.service';
 import { OracleWizardGet, OracleWizardPost } from './oracle-wizard.interface';
 import {
+    AccordionButtonDirective, AccordionComponent, AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    FormControlDirective, FormLabelDirective
+    FormControlDirective, FormLabelDirective, TemplateIdDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -40,7 +41,11 @@ import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mss
         TranslocoPipe,
         WizardsDynamicfieldsComponent,
         FormsModule,
-        RouterLink
+        RouterLink,
+        AccordionButtonDirective,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective
     ],
     templateUrl: './oracle.component.html',
     styleUrl: './oracle.component.css',

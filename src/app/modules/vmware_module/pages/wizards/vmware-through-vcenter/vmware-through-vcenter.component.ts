@@ -6,12 +6,13 @@ import {
 } from './vmware-through-vcenter-wizard.interface';
 import { VmwareThroughVcenterWizardService } from './vmware-through-vcenter-wizard.service';
 import {
+    AccordionButtonDirective, AccordionComponent, AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     FormControlDirective,
-    FormLabelDirective
+    FormLabelDirective, TemplateIdDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -43,7 +44,11 @@ import { FormsModule } from '@angular/forms';
         TranslocoPipe,
         WizardsDynamicfieldsComponent,
         RouterLink,
-        FormsModule
+        FormsModule,
+        AccordionButtonDirective,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective
     ],
     templateUrl: './vmware-through-vcenter.component.html',
     styleUrl: './vmware-through-vcenter.component.css',
