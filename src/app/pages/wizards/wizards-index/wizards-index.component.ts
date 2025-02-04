@@ -23,28 +23,30 @@ import { Router, RouterLink } from '@angular/router';
 
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HistoryService } from '../../../history.service';
+import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
     selector: 'oitc-wizards-index',
     imports: [
-    RowComponent,
-    ColComponent,
-    NgIf,
-    NgForOf,
-    KeyValuePipe,
-    CardComponent,
-    CardBodyComponent,
-    CardFooterComponent,
-    FaIconComponent,
-    TranslocoDirective,
-    RouterLink,
-    CardHeaderComponent,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    ButtonGroupComponent,
-    NgClass
-],
+        RowComponent,
+        ColComponent,
+        NgIf,
+        NgForOf,
+        KeyValuePipe,
+        CardComponent,
+        CardBodyComponent,
+        CardFooterComponent,
+        FaIconComponent,
+        TranslocoDirective,
+        RouterLink,
+        CardHeaderComponent,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        ButtonGroupComponent,
+        NgClass,
+        BadgeOutlineComponent
+    ],
     templateUrl: './wizards-index.component.html',
     styleUrl: './wizards-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

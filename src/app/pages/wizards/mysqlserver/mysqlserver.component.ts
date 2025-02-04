@@ -3,22 +3,21 @@ import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
-  AccordionButtonDirective,
-  AccordionComponent,
-  AccordionItemComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormControlDirective,
-  FormLabelDirective,
-  TemplateIdDirective
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-
 
 
 import {
@@ -27,6 +26,7 @@ import {
 import { MysqlWizardGet, MysqlWizardPost } from './mysqlserver-wizard.interface';
 import { MysqlserverWizardService } from './mysqlserver-wizard.service';
 import { WizardsAbstractComponent } from '../wizards-abstract/wizards-abstract.component';
+import { SystemnameService } from '../../../services/systemname.service';
 
 @Component({
     selector: 'oitc-mysqlserver',
@@ -63,18 +63,28 @@ export class MysqlserverComponent extends WizardsAbstractComponent {
         host_id: 0,
         services: [],
 // Fields for the wizard
-        database: '',
+        database: 'information_schema',
         password: '',
         username: ''
     } as MysqlWizardPost;
 
-    protected serverAddr: string = 'localhost';
-    protected systemName: string = 'mysqlserver';
+    private readonly SystemnameService = inject(SystemnameService);
+    protected serverAddr: string = '1.2.3.4';
+    protected systemName: string = 'openITCOCKPIT';
+
+    public override ngOnInit() {
+        this.SystemnameService.systemName$.forEach((a: string) => {
+            this.systemName = a;
+        })
+        super.ngOnInit();
+
+    }
 
     protected override wizardLoad(result: MysqlWizardGet): void {
         this.post.username = result.username;
         this.post.password = result.password;
         this.post.database = result.database;
+        this.serverAddr = result.serverAddr;
         super.wizardLoad(result);
     }
 }

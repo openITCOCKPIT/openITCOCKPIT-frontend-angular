@@ -1,4 +1,5 @@
 import { WizardGet, WizardPost } from '../../../../../pages/wizards/wizards.interface';
+import { GenericValidationError } from '../../../../../generic-responses';
 
 // WIZARD GET
 export interface NetworkbasicWizardGet extends WizardGet {
@@ -112,6 +113,8 @@ export interface NetworkbasicWizardPost extends WizardPost {
 // SNMP Discovery
 export interface SnmpDiscovery {
     interfaces: Interface[]
+    success: boolean
+    errors: GenericValidationError | undefined
     _csrfToken: any
 }
 

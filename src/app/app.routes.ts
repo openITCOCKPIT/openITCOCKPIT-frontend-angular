@@ -30,6 +30,7 @@ import { openstreetmapModuleRoutes } from './modules/openstreetmap_module/openst
 import { isarFlowModuleRoutes } from './modules/isarflow_module/isarflow_module.routes';
 import { grafanaModuleRoutes } from './modules/grafana_module/grafana_module.routes';
 import { autoreportModuleRoutes } from './modules/autoreport_module/autoreport_module.routes';
+import { prometheusModuleRoutes } from './modules/prometheus_module/prometheus_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -63,6 +64,7 @@ const moduleRoutes: Routes = [
     ...mssqlModuleRoutes,
     ...nwcModuleRoutes,
     ...oracleModuleRoutes,
+    ...prometheusModuleRoutes,
     ...vmwareModuleRoutes,
     ...sapModuleRoutes,
     ...hanaModuleRoutes,

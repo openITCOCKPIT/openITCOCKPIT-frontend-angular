@@ -1,0 +1,13 @@
+.popup-graph-container {
+    width: 750px;
+    height: auto;
+}
+
+.word-wrap-anywhere {
+    word-wrap: anywhere;
+}
+
+.popover-chart {
+    width: 100%;
+    height: 260px;
+}

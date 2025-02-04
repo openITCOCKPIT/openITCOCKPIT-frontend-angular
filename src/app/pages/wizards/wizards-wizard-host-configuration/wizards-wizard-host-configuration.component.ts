@@ -3,17 +3,17 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
-  AlertComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormLabelDirective,
-  LocalStorageService
+    AlertComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    LocalStorageService
 } from '@coreui/angular';
 import { HostsService } from '../../hosts/hosts.service';
 import { WizardsService } from '../wizards.service';
@@ -85,6 +85,7 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     protected hostPost: HostPost = {} as HostPost;
     protected errors: GenericValidationError | null = null;
     protected useExistingHost: boolean = false;
+    protected useExistingHostReadonly: boolean = false;
     // state: wizard.state, selectedOs: wizard.selected_os, typeId: wizard.type_id, title: wizard.title
     protected state: string = '';
     protected selectedOs: string = '';
@@ -255,7 +256,6 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
 
         this.loadWizardElement();
         this.loadContainers();
-        this.loadHosts();
     }
 
     protected loadWizardElement(): void {
@@ -265,6 +265,13 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
             console.warn(wizards.wizards);
             console.warn(this.typeId);
             console.warn(this.WizardElement);
+
+            this.loadHosts(this.WizardElement.type_id);
+
+            if (this.WizardElement.type_id === "prometheus") {
+                this.useExistingHostReadonly = true;
+                this.useExistingHost = true;
+            }
             this.cdr.markForCheck();
         }));
     }

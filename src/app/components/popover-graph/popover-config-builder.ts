@@ -175,7 +175,7 @@ export class PopoverConfigBuilder {
             }
         };
 
-        if (this.datasource) {
+        if (this.datasource && this.datasource.setup) {
             //console.log(this.datasource.setup.scale.type);
             //console.log(this.datasource.setup);
             switch (this.datasource.setup.scale.type) {

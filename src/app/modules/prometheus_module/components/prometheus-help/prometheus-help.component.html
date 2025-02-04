@@ -1,0 +1,108 @@
+<ng-container *transloco="let t">
+    <button cButton class="ripple me-1" color="primary" size="xs" cModalToggle="promQLHelpModal"
+            (click)="showModal()">
+        <fa-icon [icon]="['fas', 'info']"></fa-icon>
+        {{ t('PromQL help') }}
+    </button>
+
+    <c-modal #promQLHelpModal fullscreen="md" id="promQLHelpModal" size="lg">
+        <c-modal-header>
+            <h5 cModalTitle>
+                <i class="fas fa-info"></i>
+                {{ t('PromQL help and example queries') }}
+            </h5>
+            <button [cModalToggle]="promQLHelpModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+            <div class="row">
+                <div class="col-12">
+                    <h5>{{ t('Linux memory usage in percent') }}</h5>
+                </div>
+                <div class="col-12">
+                    <code>node_memory_MemAvailable_bytes&#123;uuid="{{ uuid }}"&#125; /
+                        node_memory_MemTotal_bytes&#123;uuid="{{ uuid }}"&#125; * 100</code>
+                </div>
+            </div>
+
+            <div class="row padding-top-10">
+                <div class="col-12">
+                    <h5>{{ t('Average MB/s network traffic (transmit) over the last 2 minutes') }}</h5>
+                </div>
+                <div class="col-12">
+                    <code>rate(node_network_transmit_bytes_total&#123;uuid="{{ uuid }}",
+                        device="enp0s8"&#125;[2m]) / 1024 / 1024</code>
+                </div>
+            </div>
+
+            <div class="row padding-top-10">
+                <div class="col-12">
+                    <h5>{{ t('Average Mbit/s network traffic (transmit) over the last 2 minutes') }}</h5>
+                </div>
+                <div class="col-12">
+                    <code>rate(node_network_transmit_bytes_total&#123;uuid="{{ uuid }}",
+                        device="enp0s8"&#125;[2m]) * 8 / 1000 / 1000</code>
+                </div>
+            </div>
+
+            <div class="row padding-top-10">
+                <div class="col-12">
+                    <h5>{{ t('Average Mbit/s network traffic (transmit) of all network interfaces over the last 2 minutes') }}</h5>
+                </div>
+                <div class="col-12">
+                    <code>sum(rate(node_network_transmit_bytes_total&#123;uuid="{{ uuid }}"&#125;[2m]))
+                        * 8 / 1000 / 1000</code>
+                </div>
+            </div>
+
+            <div class="row padding-top-10">
+                <div class="col-12">
+                    <h5>{{ t('Average MB/s written to disk sda over the last 2 minutes') }}</h5>
+                </div>
+                <div class="col-12">
+                    <code>rate(node_disk_written_bytes_total&#123;uuid="{{ uuid }}",
+                        device="sda"&#125;[2m]) / 1024 / 1024</code>
+                </div>
+            </div>
+
+            <div class="row padding-top-10">
+                <div class="col-12">
+                    <h5>{{ t('Windows CPU usage in percentage') }}</h5>
+                </div>
+                <div class="col-12">
+                    <code>100 -
+                        rate(windows_cpu_time_total&#123;uuid="{{ uuid }}",mode="idle"&#125;[5m]) *
+                        100</code>
+                </div>
+            </div>
+
+            <div class="row padding-top-10">
+                <div class="col-12">
+                    <h5>{{ t('Windows Disk usage in percentage') }}</h5>
+                </div>
+                <div class="col-12">
+                    <code>100 - (windows_logical_disk_free_bytes&#123;uuid="{{ uuid }}",
+                        volume="C:"&#125; / 1024 / 1024) /
+                        (windows_logical_disk_size_bytes&#123;uuid="{{ uuid }}", volume="C:"&#125; /
+                        1024 / 1024) * 100</code>
+                </div>
+            </div>
+
+            <div class="row padding-top-10">
+                <div class="col-12">
+                    <h5>{{ t('Windows memory usage in percentage') }}</h5>
+                </div>
+                <div class="col-12">
+                    <code>windows_os_physical_memory_free_bytes&#123;uuid="{{ uuid }}"&#125;
+                        /windows_cs_physical_memory_bytes&#123;uuid="{{ uuid }}"&#125; * 100</code>
+                </div>
+            </div>
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button [cModalToggle]="promQLHelpModal.id" cButton color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
