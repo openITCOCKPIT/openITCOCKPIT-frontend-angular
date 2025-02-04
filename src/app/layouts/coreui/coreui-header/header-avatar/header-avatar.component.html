@@ -1,0 +1,57 @@
+@if (hasRootPrivileges) {
+    <!-- Root Users -->
+    @if (image) {
+        <!-- Root User with Image -->
+        <div class="avatar-overlaybadge inline-flex">
+            <p-avatar
+                class="d-flex"
+                [image]="'/img/userimages/'+image"
+                size="normal"
+                [styleClass]="'avatar-size'"
+                shape="circle"
+            ></p-avatar>
+
+            <div class="avatar-badge"
+                 [cTooltip]="'Administrator privileges' | transloco" cTooltipPlacement="left">
+                <fa-icon [icon]="['fas', 'crown']"></fa-icon>
+            </div>
+        </div>
+
+    } @else {
+        <!-- Root User without Image -->
+        <div class="avatar-overlaybadge inline-flex">
+            <p-avatar
+                class="d-flex"
+                size="normal"
+                [label]="nameInitials"
+                [styleClass]="'avatar-size'"
+                [style]="{ 'background-color': 'var(--cui-primary)', color: 'var(--cui-white)' }"
+                shape="circle"></p-avatar>
+            <div class="avatar-badge"
+                 [cTooltip]="'Administrator privileges' | transloco" cTooltipPlacement="left">
+                <fa-icon [icon]="['fas', 'crown']"></fa-icon>
+            </div>
+        </div>
+    }
+} @else {
+    <!-- Regular Users -->
+    @if (image) {
+        <!-- Regular User with Image -->
+        <p-avatar
+            class="d-flex"
+            [image]="'/img/userimages/'+image"
+            size="normal"
+            [styleClass]="'avatar-size'"
+            shape="circle"
+        ></p-avatar>
+    } @else {
+        <!-- Regular User without Image -->
+        <p-avatar
+            class="d-flex"
+            size="normal"
+            [label]="nameInitials"
+            [styleClass]="'avatar-size'"
+            [style]="{ 'background-color': 'var(--cui-primary)', color: 'var(--cui-white)' }"
+            shape="circle"></p-avatar>
+    }
+}

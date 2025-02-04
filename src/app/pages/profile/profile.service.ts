@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of, Subject } from 'rxjs';
 import {
     ProfileApikey,
     ProfileApiRoot,
@@ -25,7 +25,14 @@ export class ProfileService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
+    private readonly profileImageChanged$$ = new Subject<boolean>();
+    public readonly profileImageChanged$ = this.profileImageChanged$$.asObservable();
+
     constructor() {
+    }
+
+    public notifyProfileImageChanged(): void {
+        this.profileImageChanged$$.next(true);
     }
 
     public getProfile(): Observable<ProfileApiRoot> {

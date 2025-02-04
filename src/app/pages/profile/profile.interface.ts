@@ -4,6 +4,7 @@ export interface ProfileApiRoot {
     maxUploadLimit: ProfileMaxUploadLimit
     newDesktopApi: boolean
     oitcVersion: string
+    hasRootPrivileges: boolean
     _csrfToken: string
 }
 
