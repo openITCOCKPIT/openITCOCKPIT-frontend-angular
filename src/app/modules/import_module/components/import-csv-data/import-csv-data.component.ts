@@ -23,7 +23,7 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { DOCUMENT, JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { DOCUMENT, NgClass, NgForOf, NgIf } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
@@ -37,6 +37,7 @@ import {
     CsvErrors,
     CsvPreviewData,
     CsvPreviewHeadersAsArray,
+    GenericKeyValueFieldType,
     ImportCsvDataResponse,
     Importer,
     ImporterConfig
@@ -46,7 +47,6 @@ import Dropzone from 'dropzone';
 import { AuthService } from '../../../../auth/auth.service';
 import { NotyService } from '../../../../layouts/coreui/noty.service';
 import { GenericKeyValue } from '../../../../generic.interfaces';
-import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 import _ from 'lodash';
 
 @Component({
@@ -71,8 +71,7 @@ import _ from 'lodash';
         FormsModule,
         TableDirective,
         NgForOf,
-        NgClass,
-        JsonPipe
+        NgClass
     ],
     templateUrl: './import-csv-data.component.html',
     styleUrl: './import-csv-data.component.css',
@@ -119,7 +118,7 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
     public hasError: boolean = false;
     public errorMessage: string = '';
     private readonly notyService = inject(NotyService);
-    public formFields?: DynamicalFormFields;
+    public dynamicFieldsNameValue: GenericKeyValueFieldType[] = [];
 
 
     public ngOnDestroy(): void {
@@ -135,28 +134,41 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
             this.cdr.markForCheck();
+            this.dynamicFieldsNameValue = [];
             if (state.show === true && state.id === 'importCsvDataModal') {
                 if (!this.importer) {
                     return;
                 }
-
-                if (this.importer.data_source) {
-                    let test = null;
+                if (this.importer.data_source && this.importer.config) {
+                    const importerConfig = this.importer.config;
                     this.ImporterService.loadConfig(this.importer.data_source)
                         .subscribe((result: ImporterConfig) => {
                             _.forEach(result.config.formFields, (value, key) => {
-                                console.log(result.config.config.mapping[value.ngModel]);
-                                _.assign(test, {
-                                    [value.label]: result.config.config.mapping[value.ngModel]
-                                });
+                                if (importerConfig.mapping && importerConfig.mapping[value.ngModel]) {
+                                    let fieldValue = importerConfig.mapping[value.ngModel];
+                                    if (value.type === 'select') {
+                                        if (value.options) {
+                                            value.options.forEach((option: any) => {
+                                                if (option.key === fieldValue) {
+                                                    fieldValue = option.value;
+                                                }
+                                            });
+                                        }
+                                    }
+                                    this.dynamicFieldsNameValue.push({
+                                        label: value.label,
+                                        value: fieldValue,
+                                        type: value.type
+
+                                    });
+
+                                }
+
+
+                                this.cdr.markForCheck();
                             });
-                            console.log(test);
-                            //this.formFields = result.config.formFields;
-                            this.cdr.markForCheck();
-                            //console.log(this.formFields);
                         });
                 }
-
 
                 this.createDropzone();
             }
@@ -270,7 +282,6 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
                                     this.rawDataForTemplate.push(tr);
                                 });
                             }
-                            console.log(this.rawDataForTemplate);
 
                             this.rawInvalidDataForTemplate = [];
                             if (this.previewData.errors) {

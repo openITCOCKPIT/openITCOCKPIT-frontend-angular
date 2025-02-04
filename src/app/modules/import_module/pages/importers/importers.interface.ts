@@ -19,6 +19,14 @@ export interface Importer {
     hostdefault_id: number
     container: string
     allowEdit: boolean
+    config?: {
+        mapping: {
+            [key: string]: {
+                key: string
+                value: string
+            }
+        }
+    }
 }
 
 export interface ImportersIndexParams {
@@ -286,4 +294,10 @@ export interface CsvPreviewHeadersAsArray {
     key: string
     name: string
     exists: boolean
+}
+
+export interface GenericKeyValueFieldType {
+    label: any
+    value: any
+    type: string
 }
