@@ -2,7 +2,13 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
-import { CreatePanelPost, GrafanaEditorDashboardRow, GrafanaEditorGetResponse } from './grafana-editor.interface';
+import {
+    CreatePanelPost,
+    DashboardRowMetric,
+    GrafanaEditorDashboardRow,
+    GrafanaEditorGetResponse,
+    GrfanaEditorCurrentMetricPost
+} from './grafana-editor.interface';
 import {
     GenericResponseWrapper,
     GenericSuccessResponse,
@@ -12,6 +18,7 @@ import {
     GrafanaChartTypesEnum,
     GrafanaStackingModesEnum
 } from './grafana-panel/chart-type-icon/GrafanaChartTypes.enum';
+import { ServiceBrowserPerfdata } from '../../../../../pages/services/services.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -171,6 +178,72 @@ export class GrafanaEditorService {
                     return {
                         success: true,
                         data: data as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getPerformanceDataMetricsByServiceId(serviceId: number): Observable<{
+        [key: string]: ServiceBrowserPerfdata
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            perfdata: { [key: string]: ServiceBrowserPerfdata }
+            _csrfToken: string | null
+        }>(`${proxyPath}/grafana_module/grafana_userdashboards/getPerformanceDataMetrics/${serviceId}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.perfdata;
+            })
+        )
+    }
+
+    public addMetricToPanel(metric: GrfanaEditorCurrentMetricPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/grafana_module/grafana_userdashboards/addMetricToPanel.json?angular=true`, {
+            GrafanaUserdashboardMetric: metric
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.metric as DashboardRowMetric
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public editMetricFromPanel(metric: GrfanaEditorCurrentMetricPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/grafana_module/grafana_userdashboards/editMetricFromPanel/${metric.metric_id}.json?angular=true`, {
+            GrafanaUserdashboardMetric: metric
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: data.success,
+                        data: data.metric as DashboardRowMetric
                     };
                 }),
                 catchError((error: any) => {
