@@ -20,7 +20,6 @@ import {
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
-import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { TrueFalseDirective } from '../../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { OpenstreetmapService } from '../openstreetmap.service';
@@ -55,7 +54,6 @@ import { FormErrorDirective } from '../../../../layouts/coreui/form-error.direct
         FormLabelDirective,
         RequiredIconComponent,
         ColComponent,
-        DebounceDirective,
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
