@@ -48,13 +48,25 @@
                                 </span>
                             </h5>
                             <hr class="border-primary border-dashed">
-                            @if (formFields) {
-                                <div *ngFor="let formField of Object.values(formFields)">
-                                    *** {{formField.label | json}}: {{formField.ngModel}}
-                                </div>
-                            }
-
                         </legend>
+                        @if (dynamicFieldsNameValue.length > 0) {
+                            <div class="pb-3">
+                                <div *ngFor="let formField of dynamicFieldsNameValue" class="bold">
+                                    {{ formField.label }}:
+                                    @if (formField.type !== 'checkbox') {
+                                        <span class="text-info">
+                                            {{ formField.value }}
+                                        </span>
+                                    } @else {
+                                        <fa-icon [icon]="['fas', 'times']" class="text-danger"
+                                                 *ngIf="formField.value == 0"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'check']" class="text-success"
+                                                 *ngIf="formField.value == 1"></fa-icon>
+                                    }
+                                </div>
+                            </div>
+
+                        }
                     </fieldset>
                 </c-col>
             </c-row>
