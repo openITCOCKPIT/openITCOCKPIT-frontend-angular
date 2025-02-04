@@ -47,9 +47,17 @@ export interface OpenMetricOptionsEvent {
     panel_id: number,
     service_id: number,
     metric: string,
+    metric_id?: number,
     color: string,
     userdashboard_id: number
     containerId: number,
+    mode: 'add' | 'edit'
+}
+
+export interface MetricUpdatedEvent {
+    panelIndex: number,
+    panel_id: number,
+    metric: DashboardRowMetric
     mode: 'add' | 'edit'
 }
 
@@ -102,6 +110,37 @@ export class GrafanaPanelComponent implements OnDestroy {
                 this.panelLocal = event.panel;
                 this.setHumanUnit();
 
+
+                // Notify the parent component that the panel has changed
+                this.panelChangedEvent.emit({
+                    index: this.panelIndex(),
+                    panel: this.panelLocal
+                });
+            }
+        }));
+
+        this.subscriptions.add(this.GrafanaMetricOptionsService.metricUpdated$.subscribe((event) => {
+            // Metric got modified by the Metric Options Modal
+            if (!this.panelLocal) {
+                return;
+            }
+
+            if (event.panelIndex === this.panelIndex() && event.panel_id === this.panelLocal.id) {
+
+                if (event.mode === 'add') {
+                    this.panelLocal.metrics.push(event.metric);
+                } else {
+                    // Find the metric and replace it
+                    this.panelLocal.metrics = this.panelLocal.metrics.map(m => {
+                        if (m.id === event.metric.id) {
+                            return event.metric;
+                        }
+
+                        return m;
+                    });
+                }
+
+                this.cdr.markForCheck();
 
                 // Notify the parent component that the panel has changed
                 this.panelChangedEvent.emit({
@@ -179,8 +218,30 @@ export class GrafanaPanelComponent implements OnDestroy {
         });
     }
 
-    public editMetric(metric: DashboardRowMetric) {
+    public openEditMetric(metric: DashboardRowMetric) {
+        if (!this.panelLocal) {
+            return;
+        }
 
+        let color = '';
+        if (metric.color) {
+            // String(undefined) === 'undefined' in JS -.-
+            color = String(metric.color);
+        }
+
+        this.GrafanaMetricOptionsService.toggleMetricOptionsModal({
+            panelIndex: this.panelIndex(),
+            containerId: this.containerId(),
+            row: this.panelLocal.row,
+            panel_id: this.panelLocal.id,
+            userdashboard_id: this.panelLocal.userdashboard_id,
+
+            color: color,
+            service_id: metric.service_id,
+            metric: metric.metric,
+            metric_id: metric.id,
+            mode: 'edit'
+        });
     }
 
     public removeMetric(metric: DashboardRowMetric): void {

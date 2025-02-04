@@ -19,10 +19,10 @@ import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-dir
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
 import { GrafanaEditorService } from '../grafana-editor.service';
-import { SelectKeyValue } from '../../../../../../layouts/primeng/select.interface';
+import { SelectKeyValue, SelectKeyValueString } from '../../../../../../layouts/primeng/select.interface';
 import { GrafanaMetricOptionsService } from './grafana-metric-options.service';
-import { GrfanaEditorCurrentMetricPost } from '../grafana-editor.interface';
-import { NgIf } from '@angular/common';
+import { DashboardRowMetric, GrfanaEditorCurrentMetricPost } from '../grafana-editor.interface';
+import { NgClass, NgIf } from '@angular/common';
 import { ServicesService } from '../../../../../../pages/services/services.service';
 import { ROOT_CONTAINER } from '../../../../../../pages/changelogs/object-types.enum';
 import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.directive';
@@ -30,6 +30,7 @@ import { FormFeedbackComponent } from '../../../../../../layouts/coreui/form-fee
 import { RequiredIconComponent } from '../../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../../layouts/primeng/select/select/select.component';
 import { GenericValidationError } from '../../../../../../generic-responses';
+import { GrafanaColor, GrafanaColors } from './GrafanaColors.class';
 
 
 @Component({
@@ -53,7 +54,8 @@ import { GenericValidationError } from '../../../../../../generic-responses';
         FormFeedbackComponent,
         FormLabelDirective,
         RequiredIconComponent,
-        SelectComponent
+        SelectComponent,
+        NgClass
     ],
     templateUrl: './grafana-metric-options-modal.component.html',
     styleUrl: './grafana-metric-options-modal.component.css',
@@ -62,7 +64,10 @@ import { GenericValidationError } from '../../../../../../generic-responses';
 export class GrafanaMetricOptionsModalComponent implements OnDestroy {
 
     public services: SelectKeyValue[] = [];
-    public metrics: SelectKeyValue[] = [];
+    public metrics: SelectKeyValueString[] = [];
+    public unitOfSelectedMetric: string = '';
+    public metricUnits: { [key: string]: string } = {};
+    public grafanaColors: GrafanaColor[] = [];
 
     public searchString: string = '';
     public currentMetric?: GrfanaEditorCurrentMetricPost;
@@ -71,6 +76,7 @@ export class GrafanaMetricOptionsModalComponent implements OnDestroy {
 
 
     private containerId: number = ROOT_CONTAINER;
+    private currentPanelIndex: number = 0;
 
     private readonly subscriptions: Subscription = new Subscription();
     private readonly modalService = inject(ModalService);
@@ -89,6 +95,7 @@ export class GrafanaMetricOptionsModalComponent implements OnDestroy {
             this.mode = event.mode; // add or edit
             this.currentMetric = undefined;
             this.containerId = event.containerId;
+            this.currentPanelIndex = event.panelIndex;
 
             // Reset errors
             this.errors = null;
@@ -104,16 +111,23 @@ export class GrafanaMetricOptionsModalComponent implements OnDestroy {
             };
 
             if (event.mode === 'edit') {
-                // Update extisting metric
+                // Update existing metric
                 this.currentMetric = {
                     metric: event.metric,
+                    metric_id: event.metric_id,
                     service_id: event.service_id,
                     row: event.row,
                     panel_id: event.panel_id,
                     userdashboard_id: event.userdashboard_id,
                     color: event.color
                 };
+
+                // Load metrics of the selected service
+                this.onServiceChange();
             }
+
+            const gfColors = new GrafanaColors(this.TranslocoService);
+            this.grafanaColors = gfColors.getColors();
 
             this.loadServices('');
 
@@ -166,10 +180,134 @@ export class GrafanaMetricOptionsModalComponent implements OnDestroy {
      * Callback when the user selects a service to load the metrics of the service
      */
     public onServiceChange(): void {
-        console.log('load metrics');
+        // Load the metrics of the selected service
+        if (!this.currentMetric) {
+            return;
+        }
+
+        // Reset selected metric as the service has changed
+        this.unitOfSelectedMetric = '';
+        this.metricUnits = {};
+
+        this.cdr.markForCheck();
+
+        this.subscriptions.add(this.GrafanaEditorService.getPerformanceDataMetricsByServiceId(this.currentMetric.service_id).subscribe(response => {
+            this.metrics = [];
+
+
+            Object.keys(response).forEach(key => {
+                this.metrics.push({
+                    key: response[key].metric,
+                    value: response[key].metric
+                });
+
+                this.metricUnits[response[key].metric] = response[key].unit;
+            });
+
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public onMetricChange(): void {
+        // Update the selected metric
+        if (!this.currentMetric) {
+            return;
+        }
+
+        this.unitOfSelectedMetric = '';
+        if (this.metricUnits && this.metricUnits[this.currentMetric.metric]) {
+            this.unitOfSelectedMetric = this.metricUnits[this.currentMetric.metric];
+        }
+        this.cdr.markForCheck();
     }
 
     public saveMetric() {
+        if (!this.currentMetric) {
+            return;
+        }
 
+        if (this.mode === 'add') {
+            this.subscriptions.add(this.GrafanaEditorService.addMetricToPanel(this.currentMetric)
+                .subscribe((result) => {
+                    this.cdr.markForCheck();
+                    if (result.success) {
+                        const response = result.data as DashboardRowMetric;
+
+                        this.errors = null;
+
+                        // All done - tell the panel that we have a new metric
+                        if (this.currentMetric) {
+                            this.GrafanaMetricOptionsService.sendUpdatedMetricToPanelComponent({
+                                panelIndex: this.currentPanelIndex,
+                                panel_id: this.currentMetric.panel_id,
+                                metric: response,
+                                mode: this.mode
+                            });
+
+                            this.notyService.genericSuccess(
+                                this.TranslocoService.translate('Metric added successfully')
+                            );
+
+                            // Close the modal
+                            this.modalService.toggle({
+                                show: false,
+                                id: 'grafanaMetricOptionsModal',
+                            });
+                        }
+
+                        return;
+                    }
+
+                    // Error
+                    const errorResponse = result.data as GenericValidationError;
+                    this.notyService.genericError();
+                    if (result) {
+                        this.errors = errorResponse;
+                        console.log(this.errors);
+                    }
+                }));
+
+        } else {
+            // Edit existing metric
+            this.subscriptions.add(this.GrafanaEditorService.editMetricFromPanel(this.currentMetric)
+                .subscribe((result) => {
+                    this.cdr.markForCheck();
+                    if (result.success) {
+                        const response = result.data as DashboardRowMetric;
+
+                        this.errors = null;
+
+                        // All done - tell the panel that we have updated a metric
+                        if (this.currentMetric) {
+                            this.GrafanaMetricOptionsService.sendUpdatedMetricToPanelComponent({
+                                panelIndex: this.currentPanelIndex,
+                                panel_id: this.currentMetric.panel_id,
+                                metric: response,
+                                mode: this.mode
+                            });
+
+                            this.notyService.genericSuccess(
+                                this.TranslocoService.translate('Metric updated successfully')
+                            );
+
+                            // Close the modal
+                            this.modalService.toggle({
+                                show: false,
+                                id: 'grafanaMetricOptionsModal',
+                            });
+                        }
+
+                        return;
+                    }
+
+                    // Error
+                    const errorResponse = result.data as GenericValidationError;
+                    this.notyService.genericError();
+                    if (result) {
+                        this.errors = errorResponse;
+                        console.log(this.errors);
+                    }
+                }));
+        }
     }
 }
