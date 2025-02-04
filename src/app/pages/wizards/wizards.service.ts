@@ -29,8 +29,12 @@ export abstract class WizardsService {
         );
     }
 
-    public loadHostsByString(search: string = ''): Observable<SelectKeyValue[]> {
-        return this.http.get<LoadHostsByStringRoot>(`${this.proxyPath}/wizards/loadHostsByString.json?angular=true`).pipe(
+    public loadHostsByString(typeId: string = ''): Observable<SelectKeyValue[]> {
+        return this.http.get<LoadHostsByStringRoot>(`${this.proxyPath}/wizards/loadHostsByString.json?angular=true`, {
+            params: {
+                typeId: typeId
+            }
+        }).pipe(
             map((data: LoadHostsByStringRoot): SelectKeyValue[] => {
                 return data.hosts;
             })

@@ -29,7 +29,7 @@
                 </small>
             </h5>
         </c-card-header>
-        <c-card-body>
+        <c-card-body class="p-0">
 
             <div class="row m-0 text-center mb-3" style="min-height: 22px;">
                 <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
@@ -43,6 +43,8 @@
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('VMware') }}
                     </span>
+                </div>
+                <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
                 </div>
                 <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
                     <div class="btn-group btn-group-xs w-100 h-100">
@@ -63,6 +65,8 @@
                 </div>
             </div>
 
+        </c-card-body>
+        <c-card-body>
 
             <fieldset class="padding-bottom-20">
                 <legend class="fs-md fieldset-legend-border-bottom">
@@ -70,6 +74,39 @@
                         {{ t('VMware Server') }}
                     </h4>
                 </legend>
+
+                <c-accordion class="mb-3">
+                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                        <ng-template cTemplateId="accordionHeaderTemplate">
+                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                                {{ t('VMware configuration help') }}
+                            </button>
+                        </ng-template>
+                        <ng-template cTemplateId="accordionBodyTemplate">
+                            <div class="accordion-body">
+                                {{t('Check everything regarding VMware. ESX Hosts, vCenter, virtual machine')}}
+                                <ol>
+                                    <li>
+                                        <div>
+                                            {{ t('Download the VMware Perl SDK') }}
+                                            (
+                                            <a href="https://code.vmware.com/web/sdk/65/vsphere-perl" target="_blank">
+                                                https://code.vmware.com/web/sdk/65/vsphere-perl
+                                            </a>
+                                            )
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            {{ t('Add an read-only user to your vCenter host.') }}
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </ng-template>
+                    </c-accordion-item>
+                </c-accordion>
 
                 <div class="mb-3">
                     <label cLabel for="post.username">

@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { catchError, forkJoin, map, Observable, of } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
+    Importer,
     ImporterConfig,
     ImporterElements,
     ImportersGet,
@@ -11,18 +12,30 @@ import {
     ImportersPost,
     LoadElementsByContainerIdResponse
 } from './importers.interface';
-import { Hostdefault, HostDefaultsGet, HostDefaultsPost } from '../hostdefaults/hostdefaults.interface';
+import { Hostdefault } from '../hostdefaults/hostdefaults.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { ExternalSystemsAsList } from '../externalsystems/external-systems.interface';
 import { ExternalMonitoringsAsList } from '../externalmonitorings/external-monitorings.interface';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import {
+    GenericIdResponse,
+    GenericMessageResponse,
+    GenericResponseWrapper,
+    GenericValidationError
+} from '../../../../generic-responses';
+import { ModalService } from '@coreui/angular';
+import { ImportDataResponse } from '../importedhosts/importedhosts.interface';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ImportersService {
+    public modalImporter$$: Subject<Importer> = new Subject();
+    public modalImporter$$$ = this.modalImporter$$.asObservable();
+
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
+
+    private readonly modalService = inject(ModalService);
 
     constructor() {
     }
@@ -160,4 +173,128 @@ export class ImportersService {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/import_module/importers/delete/${item.id}.json?angular=true`, {});
     }
+
+    public openImportedHostsDataModal(importer: Importer) {
+        this.modalImporter$$.next(importer);
+        if (importer.data_source === 'csv_with_header' || importer.data_source === 'csv_without_header') {
+            this.modalService.toggle({
+                show: true,
+                id: 'importCsvDataModal',
+            });
+        } else {
+            this.modalService.toggle({
+                show: true,
+                id: 'importDataModal',
+            });
+        }
+    }
+
+    public loadDataFromITop(importer: Importer): Observable<{
+        success: boolean;
+        data: ImportDataResponse | GenericMessageResponse;
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ImportDataResponse>(`${proxyPath}/import_module/imported_hosts/loadDataFromITop/${importer.id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                let errorMessage: GenericMessageResponse = {message: error.error.response.error};
+                return of({
+                    success: false,
+                    data: errorMessage
+                });
+            })
+        );
+    }
+
+    public loadDataFromIdoit(importer: Importer): Observable<{
+        success: boolean;
+        data: ImportDataResponse | GenericMessageResponse;
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ImportDataResponse>(`${proxyPath}/import_module/imported_hosts/loadDataFromIdoit/${importer.id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                let errorMessage: GenericMessageResponse = {message: error.error.response.error};
+                return of({
+                    success: false,
+                    data: errorMessage
+                });
+            })
+        );
+    }
+
+    public loadDataFromOITCAgent(importer: Importer): Observable<{
+        success: boolean;
+        data: ImportDataResponse | GenericMessageResponse;
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ImportDataResponse>(`${proxyPath}/import_module/imported_hosts/loadDataFromOITCAgent/${importer.id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                let errorMessage: GenericMessageResponse = {message: error.error.response.error};
+                return of({
+                    success: false,
+                    data: errorMessage
+                });
+            })
+        );
+    }
+
+    public loadDataFromExternalMonitoring(importer: Importer): Observable<{
+        success: boolean;
+        data: ImportDataResponse | GenericMessageResponse;
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ImportDataResponse>(`${proxyPath}/import_module/imported_hosts/loadDataFromExternalMonitoring/${importer.id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                let errorMessage: GenericMessageResponse = {message: error.error.response.error};
+                return of({
+                    success: false,
+                    data: errorMessage
+                });
+            })
+        );
+    }
+
 }
