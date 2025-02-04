@@ -1,0 +1,24 @@
+#csvDropzone .dz-error-mark svg g g {
+    fill: #CC0000 !important;
+}
+
+#csvDropzone .dz-success-mark svg g path,
+#csvDropzone .dz-success {
+    fill: #00C851 !important;
+}
+
+#csvDropzone.dz-details {
+    padding: 0 !important;
+}
+
+.bg-color-lightGray-with-opacity {
+    background-color: #EEEEEE22 !important;
+}
+
+.bg-color-danger-with-opacity {
+    background-color: #CC00000E !important;
+}
+
+.bg-border-bottom-import-error th {
+    border-bottom: 2px solid #CC0000 !important;
+}

@@ -19,10 +19,11 @@ import {
     ModalHeaderComponent,
     ModalService,
     ModalTitleDirective,
-    RowComponent
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { DOCUMENT, NgIf } from '@angular/common';
+import { DOCUMENT, NgClass, NgForOf, NgIf } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
@@ -32,11 +33,18 @@ import { Router, RouterLink } from '@angular/router';
 import { GenericMessageResponse } from '../../../../generic-responses';
 import { FormsModule } from '@angular/forms';
 import { ImportersService } from '../../pages/importers/importers.service';
-import { CsvErrors, CsvPreviewData, ImportCsvDataResponse, Importer } from '../../pages/importers/importers.interface';
+import {
+    CsvErrors,
+    CsvPreviewData,
+    CsvPreviewHeadersAsArray,
+    ImportCsvDataResponse,
+    Importer
+} from '../../pages/importers/importers.interface';
 import { ImportedHostRawData, MaxUploadLimit } from '../../pages/importedhosts/importedhosts.interface';
 import Dropzone from 'dropzone';
 import { AuthService } from '../../../../auth/auth.service';
 import { NotyService } from '../../../../layouts/coreui/noty.service';
+import { GenericKeyValue } from '../../../../generic.interfaces';
 
 @Component({
     selector: 'oitc-import-csv-data',
@@ -57,7 +65,10 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
         FaStackItemSizeDirective,
         PermissionDirective,
         RouterLink,
-        FormsModule
+        FormsModule,
+        TableDirective,
+        NgForOf,
+        NgClass
     ],
     templateUrl: './import-csv-data.component.html',
     styleUrl: './import-csv-data.component.css',
@@ -81,7 +92,10 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
         notValidRawData?: any
     };
 
-    public previewData!: CsvPreviewData;
+    public previewData!: CsvPreviewData | null;
+    public headersForTemplate: CsvPreviewHeadersAsArray[] = [];
+    public rawDataForTemplate: GenericKeyValue[][] = [];
+    public rawInvalidDataForTemplate: GenericKeyValue[][] = [];
     public numberOfHeaders: number = 0;
     public importProcessRun: boolean = false;
     public importSuccessfullyFinished: boolean = false;
@@ -160,7 +174,7 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
     }
 
     private createDropzone() {
-        let elm = this.document.getElementById('csvImportDropzone');
+        let elm = this.document.getElementById('csvDropzone');
         if (this.importer && elm && !this.dropzoneCreated) {
             const dropzone = new Dropzone(elm, {
                 method: "post",
@@ -194,13 +208,68 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
                     let errorMessage: undefined | string = undefined;
                     if (response) {
                         const serverResponse = JSON.parse(response.response) as ImportCsvDataResponse;
-                        console.log(serverResponse);
-                        console.log(serverResponse.response.success);
+
                         if (serverResponse.response.success) {
                             // Update the preview element to show check mark icon
                             this.updatePreviewElement(file, 'success');
                             this.previewData = serverResponse.response.previewData;
                             this.numberOfHeaders = Object.keys(this.previewData.headers).length;
+                            if (this.numberOfHeaders > 0) {
+                                this.headersForTemplate = [];
+                                for (let header in this.previewData.headers) {
+                                    // @ts-ignore
+                                    const value = this.previewData.headers[header];
+                                    this.headersForTemplate.push(
+                                        {
+                                            key: header,
+                                            name: value.name,
+                                            exists: value.exists
+                                        }
+                                    );
+                                }
+                            }
+                            this.rawDataForTemplate = [];
+                            if (this.previewData.rawData.length > 0) {
+                                this.previewData.rawData.forEach((rawData, index) => {
+                                    let tr: GenericKeyValue[] = [];
+                                    for (const key in rawData) {
+                                        if (rawData.hasOwnProperty(key) && key !== 'external_services') {
+                                            tr.push(
+                                                {
+                                                    key: key,
+                                                    value: rawData[key as keyof ImportedHostRawData]
+                                                }
+                                            );
+
+                                        }
+                                    }
+                                    this.rawDataForTemplate.push(tr);
+                                });
+                            }
+                            console.log(this.rawDataForTemplate);
+
+                            this.rawInvalidDataForTemplate = [];
+                            if (this.previewData.errors) {
+                                if (this.previewData.errors.notValidRawData && this.previewData.errors.notValidRawData.invalidData.length > 0) {
+                                    this.previewData.errors.notValidRawData.invalidData.forEach((rawData, index) => {
+                                        let tr: GenericKeyValue[] = [];
+                                        for (const key in rawData) {
+                                            if (rawData.hasOwnProperty(key)) {
+                                                tr.push(
+                                                    {
+                                                        key: key,
+                                                        value: rawData[key as keyof ImportedHostRawData]
+                                                    }
+                                                );
+
+                                            }
+                                        }
+                                        this.rawInvalidDataForTemplate.push(tr);
+                                    });
+                                }
+                            }
+
+
                             this.importProcessRun = false;
                             this.csvErrors = null;
 
@@ -267,8 +336,13 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
     }
 
     private removeFile(file: Dropzone.DropzoneFile) {
-        this.cdr.markForCheck();
+        this.csvErrors = null;
+        this.rawInvalidDataForTemplate = [];
+        this.rawDataForTemplate = [];
+        this.previewData = null;
+        this.errors = null;
 
+        this.cdr.markForCheck();
         // Remove uploaded file from dropzone preview
         file.previewElement.parentNode?.removeChild(file.previewElement);
 

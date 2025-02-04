@@ -10,7 +10,7 @@
                     <fa-icon [icon]="['fas', 'file-csv']"
                              stackItemSize="2x" pull="left" class="text-info"></fa-icon>
                     <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                             stackItemSize="1x" pull="right" transform="right-5 down-15"
+                             stackItemSize="1x" pull="right" transform="right-15 down-20"
                     ></fa-icon>
                 </fa-stack>
                 <span *ngIf="importer.data_source==='csv_with_header'">
@@ -61,7 +61,7 @@
                         {{ maxUploadLimit?.string }}
                     </c-col>
                     <c-col [xs]="12">
-                        <div id="csvImportDropzone" class="dropzone dropzoneStyle">
+                        <div id="csvDropzone" class="dropzone dropzoneStyle">
                             <div class="dz-message">
                                 <fa-icon [icon]="['fas', 'cloud-upload-alt']" size="5x"
                                          class="mb-3 text-muted"></fa-icon>
@@ -85,12 +85,91 @@
                                 {{ csvErrors.notValidRawData.error }}
                             </p>
                         </blockquote>
-                        <figcaption class="blockquote-footer" *ngIf="csvErrors.notValidRawData.description">
+                        <figcaption class="blockquote-footer mb-1" *ngIf="csvErrors.notValidRawData.description">
                             {{ csvErrors.notValidRawData.description }}
                         </figcaption>
                     </figure>
 
+                    <figure *ngIf="csvErrors && csvErrors.missingHeaderFields" class="text-danger">
+                        <blockquote class="blockquote" *ngIf="csvErrors.missingHeaderFields.error">
+                            <p>
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                {{ csvErrors.missingHeaderFields.error }}
+                            </p>
+                        </blockquote>
+                        <figcaption class="blockquote-footer mb-1" *ngIf="csvErrors.missingHeaderFields.description">
+                            {{ csvErrors.missingHeaderFields.description }}
+                        </figcaption>
+                    </figure>
 
+                    <figure *ngIf="csvErrors && !csvErrors.notValidRawData && !csvErrors.missingHeaderFields"
+                            class="text-danger">
+                        <blockquote class="blockquote">
+                            <p>
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                {{ csvErrors }}
+                            </p>
+                        </blockquote>
+                    </figure>
+
+                    <c-col class="help-block text-info pb-2">
+                        {{ t('This preview shows maximal 10 first valid records from csv file.') }}
+                        <span>
+                            {{ t('Furthermore are all hosts displayed and no filter rules get applied.') }}
+                        </span>
+                        <span class="italic text-warning">
+                            {{ t('Lines with duplicate identifiers are automatically ignored') }}
+
+                        </span>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col>
+                        <table class="mt-2 mb-0 table table-fit" bordered cTable hover striped small>
+                            <thead>
+                            <tr>
+                                <th *ngFor="let fieldToMap of headersForTemplate">
+                                    <b>{{ fieldToMap.key }}</b>
+                                    <fa-icon [icon]="['fas', 'long-arrow-alt-right']" class="mx-1"></fa-icon>
+                                    <span class="text-info italic" [ngClass]="{'text-danger': !fieldToMap.exists}">
+                                        {{ fieldToMap.name }}
+                                    </span>
+                                    <span class="badge bg-danger" *ngIf="!fieldToMap.exists">
+                                        {{ t('Is missing') }}
+                                    </span>
+                                    <span class="badge bg-success" *ngIf="fieldToMap.exists">
+                                        <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                                    </span>
+                                </th>
+                            </tr>
+                            <tr *ngFor="let previewDataRaw of rawDataForTemplate">
+                                <td *ngFor="let fieldValue of previewDataRaw">
+                                    {{ fieldValue.value }}
+                                </td>
+                            </tr>
+                            <tr *ngIf="rawInvalidDataForTemplate.length> 0"
+                                class="bg-border-bottom-import-error word-break">
+                                <th [colSpan]="numberOfHeaders"
+                                    class="text-danger text-center bg-color-danger-with-opacity font-sm">
+                                    <fa-icon [icon]="['fas', 'angle-double-down']"></fa-icon>
+                                    {{ t('Invalid rows (show maximal 5 rows for preview)') }}
+                                    <fa-icon [icon]="['fas', 'angle-double-down']"></fa-icon>
+                                </th>
+                            </tr>
+                            <tr *ngFor="let previewDataRaw of rawInvalidDataForTemplate">
+                                <td *ngFor="let fieldValue of previewDataRaw">
+                                    <span *ngIf="fieldValue.value === false">
+                                        <fa-icon [icon]="['fas', 'times']" class="text-danger"></fa-icon>
+                                    </span>
+                                    <span *ngIf="fieldValue.value">
+                                        {{ fieldValue.value }}
+                                        <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
+                                    </span>
+                                </td>
+                            </tr>
+                            </thead>
+                        </table>
+                    </c-col>
                 </c-row>
             </ng-container>
         </c-modal-body>

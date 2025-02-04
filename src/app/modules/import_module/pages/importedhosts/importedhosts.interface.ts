@@ -257,7 +257,7 @@ export interface ImportedHostRawData {
     address: string
     description: string
     software: string
-    external_services: any[]
+    external_services?: any[]
 }
 
 export interface NotValidRawData {
