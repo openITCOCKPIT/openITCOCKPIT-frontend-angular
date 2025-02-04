@@ -41,3 +41,15 @@ export interface AllChangecalendar {
     modified: string
     allowEdit: boolean
 }
+
+// ADD
+export interface AddChangeCalendar {
+    Changecalendar: Changecalendar
+}
+
+export interface Changecalendar {
+    colour: string
+    container_id: number
+    description: string
+    name: string
+}
