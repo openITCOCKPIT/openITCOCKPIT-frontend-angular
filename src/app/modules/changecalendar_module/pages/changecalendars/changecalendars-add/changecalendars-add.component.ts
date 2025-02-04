@@ -16,34 +16,23 @@ import {
     CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    ColComponent,
-    FormCheckComponent,
     FormCheckInputDirective,
-    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
-    InputGroupComponent,
     NavComponent,
     NavItemComponent,
-    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
-import {
-    DropdownColorpickerComponent
-} from '../../../../../pages/documentations/dropdown-colorpicker/dropdown-colorpicker.component';
 import { ColorPicker } from 'primeng/colorpicker';
 
 @Component({
@@ -55,36 +44,24 @@ import { ColorPicker } from 'primeng/colorpicker';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        ColComponent,
         FaIconComponent,
-        FormCheckComponent,
         FormCheckInputDirective,
-        FormCheckLabelDirective,
         FormControlDirective,
         FormDirective,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
         FormsModule,
-        InputGroupComponent,
-        KeyValuePipe,
-        MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
         NgIf,
-        NgOptionTemplateDirective,
-        NgSelectComponent,
         PermissionDirective,
         ReactiveFormsModule,
         RequiredIconComponent,
-        RowComponent,
         SelectComponent,
         TranslocoDirective,
-        TrueFalseDirective,
         XsButtonDirective,
         RouterLink,
-        DropdownColorpickerComponent,
         ColorPicker
     ],
     templateUrl: './changecalendars-add.component.html',
