@@ -47,7 +47,13 @@
                                     </a>
                                 </span>
                             </h5>
-                            <hr class="border-bottom border-info border-dashed">
+                            <hr class="border-primary border-dashed">
+                            @if (formFields) {
+                                <div *ngFor="let formField of Object.values(formFields)">
+                                    *** {{formField.label | json}}: {{formField.ngModel}}
+                                </div>
+                            }
+
                         </legend>
                     </fieldset>
                 </c-col>
