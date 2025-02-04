@@ -23,7 +23,7 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { DOCUMENT, NgClass, NgForOf, NgIf } from '@angular/common';
+import { DOCUMENT, JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
@@ -38,13 +38,16 @@ import {
     CsvPreviewData,
     CsvPreviewHeadersAsArray,
     ImportCsvDataResponse,
-    Importer
+    Importer,
+    ImporterConfig
 } from '../../pages/importers/importers.interface';
 import { ImportedHostRawData, MaxUploadLimit } from '../../pages/importedhosts/importedhosts.interface';
 import Dropzone from 'dropzone';
 import { AuthService } from '../../../../auth/auth.service';
 import { NotyService } from '../../../../layouts/coreui/noty.service';
 import { GenericKeyValue } from '../../../../generic.interfaces';
+import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-import-csv-data',
@@ -68,7 +71,8 @@ import { GenericKeyValue } from '../../../../generic.interfaces';
         FormsModule,
         TableDirective,
         NgForOf,
-        NgClass
+        NgClass,
+        JsonPipe
     ],
     templateUrl: './import-csv-data.component.html',
     styleUrl: './import-csv-data.component.css',
@@ -115,6 +119,8 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
     public hasError: boolean = false;
     public errorMessage: string = '';
     private readonly notyService = inject(NotyService);
+    public formFields?: DynamicalFormFields;
+
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -133,6 +139,24 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
                 if (!this.importer) {
                     return;
                 }
+
+                if (this.importer.data_source) {
+                    let test = null;
+                    this.ImporterService.loadConfig(this.importer.data_source)
+                        .subscribe((result: ImporterConfig) => {
+                            _.forEach(result.config.formFields, (value, key) => {
+                                console.log(result.config.config.mapping[value.ngModel]);
+                                _.assign(test, {
+                                    [value.label]: result.config.config.mapping[value.ngModel]
+                                });
+                            });
+                            console.log(test);
+                            //this.formFields = result.config.formFields;
+                            this.cdr.markForCheck();
+                            //console.log(this.formFields);
+                        });
+                }
+
 
                 this.createDropzone();
             }
@@ -387,4 +411,5 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
         }
     }
 
+    protected readonly Object = Object;
 }
