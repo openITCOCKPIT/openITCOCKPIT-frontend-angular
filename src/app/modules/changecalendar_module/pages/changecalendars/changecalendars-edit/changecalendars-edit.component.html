@@ -118,7 +118,16 @@
                 </div>
 
                 <!-- Calendar here -->
-                Hier kommt der Kalender hin, bro
+                <div class="mb-3">
+                    <label cLabel for="post.changeCalendar.colour">
+                        {{ t('Change calendar events') }}
+                    </label>
+                    <br/>
+                    <oitc-calendar
+                            [(events)]="events"
+                            [showButtons]="false"
+                    />
+                </div>
             </c-card-body>
             <c-card-footer class="text-end">
 
