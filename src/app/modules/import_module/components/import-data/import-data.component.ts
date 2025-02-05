@@ -158,10 +158,14 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                             }
                             if (!data.success) {
                                 let response = data.data as ImportersErrorMessageResponse;
+                                let notValidData: any = [];
+                                if (response.errors && response.errors.notValidRawData) {
+                                    notValidData = response.errors.notValidRawData;
+                                }
                                 this.importData = {
                                     success: false,
                                     errorMessage: response.message,
-                                    notValidRawData: response.errors.notValidRawData
+                                    notValidRawData: notValidData
                                 }
                             }
                             this.cdr.markForCheck();
@@ -202,10 +206,14 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                             }
                             if (!data.success) {
                                 let response = data.data as ImportersErrorMessageResponse;
+                                let notValidData: any = [];
+                                if (response.errors && response.errors.notValidRawData) {
+                                    notValidData = response.errors.notValidRawData;
+                                }
                                 this.importData = {
                                     success: false,
                                     errorMessage: response.message,
-                                    notValidRawData: response.errors.notValidRawData
+                                    notValidRawData: notValidData
                                 }
                             }
                             this.cdr.markForCheck();
@@ -224,10 +232,14 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                             }
                             if (!data.success) {
                                 let response = data.data as ImportersErrorMessageResponse;
+                                let notValidData: any = [];
+                                if (response.errors && response.errors.notValidRawData) {
+                                    notValidData = response.errors.notValidRawData;
+                                }
                                 this.importData = {
                                     success: false,
                                     errorMessage: response.message,
-                                    notValidRawData: (response.errors && response.errors.notValidRawData) ? response.errors.notValidRawData : []
+                                    notValidRawData: notValidData
                                 }
                             }
                             this.cdr.markForCheck();
