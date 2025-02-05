@@ -303,6 +303,9 @@
                     </c-row>
                 </form>
             </c-container>
+
+            <oitc-block-loader *ngIf="!changes" [height]="'30rem'"></oitc-block-loader>
+            
             <c-container
                 [fluid]="true" *ngIf="changes && changes.all_changes">
                 <ul class="cbp_tmtimeline">
