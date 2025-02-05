@@ -11,21 +11,21 @@ import { HostDefaultsPost } from '../hostdefaults.interface';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
@@ -40,13 +40,11 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enum';
-import _ from 'lodash';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
-import { AgentHttpClientErrors } from '../../../../../pages/agentconnector/agentconnector.enums';
 import { ServicetemplateTypesEnum } from '../../../../../pages/servicetemplates/servicetemplate-types.enum';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
@@ -54,42 +52,42 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
 @Component({
     selector: 'oitc-hostdefaults-edit',
     imports: [
-    AsyncPipe,
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    ReactiveFormsModule,
-    RequiredIconComponent,
-    RowComponent,
-    SelectComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    MultiSelectComponent,
-    LabelLinkComponent,
-    DebounceDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    RegexHelperTooltipComponent,
-    OitcAlertComponent,
-    PermissionDirective,
-    FormLoaderComponent
-],
+        AsyncPipe,
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        ReactiveFormsModule,
+        RequiredIconComponent,
+        RowComponent,
+        SelectComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        MultiSelectComponent,
+        LabelLinkComponent,
+        DebounceDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        RegexHelperTooltipComponent,
+        OitcAlertComponent,
+        PermissionDirective,
+        FormLoaderComponent
+    ],
     templateUrl: './hostdefaults-edit.component.html',
     styleUrl: './hostdefaults-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -232,67 +230,17 @@ export class HostdefaultsEditComponent implements OnInit, OnDestroy {
             field: 'hostname',
             regex: '',
             servicetemplate_id: null,
-            index: Object.keys(this.post.hostdefaults_to_servicetemplates).length
         });
-
-        if (this.errors !== null) {
-            if (!(typeof this.errors['validate_matches_servicetemplates'] !== 'undefined' ||
-                typeof this.errors['hostdefaults_to_servicetemplates'] !== 'undefined')) {
-                this.errors_exists_matches_servicetemplates = true;
-                this.post.hostdefaults_to_servicetemplates = _(this.post.hostdefaults_to_servicetemplates)
-                    .chain()
-                    .flatten()
-                    .sortBy(
-                        function (match) {
-                            return [match.regex, match.field];
-                        })
-                    .value();
-            }
-        }
     }
 
-    public removeMatchServicetemplate(index: number | undefined) {
-        let hostdefault_matches_servicetemplates = [];
-        for (var i in this.post.hostdefaults_to_servicetemplates) {
-            if (this.post.hostdefaults_to_servicetemplates[i]['index'] !== index) {
-                hostdefault_matches_servicetemplates.push(this.post.hostdefaults_to_servicetemplates[i])
-            }
-        }
-        if (this.errors?.hasOwnProperty('validate_matches_servicetemplates') && typeof this.errors['validate_matches_servicetemplates'] !== 'undefined' ||
-            this.errors?.hasOwnProperty('validate_matches_servicetemplates') && typeof this.errors['hostdefault_matches_servicetemplates'] !== 'undefined') {
-            this.post.hostdefaults_to_servicetemplates = hostdefault_matches_servicetemplates;
-        } else {
-            this.post.hostdefaults_to_servicetemplates = _(hostdefault_matches_servicetemplates)
-                .chain()
-                .flatten()
-                .sortBy(
-                    function (match) {
-                        return [match.field, match.regex];
-                    })
-                .value();
-        }
+    public removeMatchServicetemplate(index: number) {
+        this.post.hostdefaults_to_servicetemplates.splice(index, 1);
+        this.removeErrorIfExists(index, 'hostdefaults_to_servicetemplates');
     }
 
-    public removeMatchServicetemplategroup(index: number | undefined) {
-        let hostdefault_matches_servicetemplategroups = [];
-        for (var i in this.post.hostdefaults_to_servicetemplategroups) {
-            if (this.post.hostdefaults_to_servicetemplategroups[i]['index'] !== index) {
-                hostdefault_matches_servicetemplategroups.push(this.post.hostdefaults_to_servicetemplategroups[i])
-            }
-        }
-        if (this.errors?.hasOwnProperty('validate_matches_servicetemplategroup') && typeof this.errors['validate_matches_servicetemplategroup'] !== 'undefined' ||
-            this.errors?.hasOwnProperty('validate_matches_servicetemplategroup') && typeof this.errors['validate_matches_servicetemplategroup'] !== 'undefined') {
-            this.post.hostdefaults_to_servicetemplategroups = hostdefault_matches_servicetemplategroups;
-        } else {
-            this.post.hostdefaults_to_servicetemplategroups = _(hostdefault_matches_servicetemplategroups)
-                .chain()
-                .flatten()
-                .sortBy(
-                    function (match) {
-                        return [match.field, match.regex];
-                    })
-                .value();
-        }
+    public removeMatchServicetemplategroup(index: number) {
+        this.post.hostdefaults_to_servicetemplategroups.splice(index, 1);
+        this.removeErrorIfExists(index, 'hostdefaults_to_servicetemplategroups');
     }
 
     public addMatchServicetemplategroup() {
@@ -303,40 +251,12 @@ export class HostdefaultsEditComponent implements OnInit, OnDestroy {
             field: 'hostname',
             regex: '',
             servicetemplategroup_id: null,
-            index: Object.keys(this.post.hostdefaults_to_servicetemplategroups).length
         });
-
-        if (this.errors !== null) {
-            if (!(typeof this.errors['validate_matches_servicetemplategroups'] !== 'undefined' ||
-                typeof this.errors['hostdefaults_to_servicetemplategroups'] !== 'undefined')) {
-                this.post.hostdefaults_to_servicetemplategroups = _(this.post.hostdefaults_to_servicetemplategroups)
-                    .chain()
-                    .flatten()
-                    .sortBy(
-                        function (match) {
-                            return [match.regex, match.field];
-                        })
-                    .value();
-            }
-        }
     };
 
-    public removeMatchAgentcheck(index: any) {
-        let hostdefault_matches_agentchecks = [];
-        for (let i in this.post.hostdefaults_to_agentchecks) {
-            if (this.post.hostdefaults_to_agentchecks[i]['index'] !== index) {
-                hostdefault_matches_agentchecks.push(this.post.hostdefaults_to_agentchecks[i])
-            }
-        }
-        if (typeof this.post.hostdefaults_to_agentchecks !== 'undefined' ||
-            (this.errors?.hasOwnProperty('validate_matches_servicetemplategroup') && typeof this.errors['validate_matches_agentchecks'] !== 'undefined')) {
-            this.post.hostdefaults_to_agentchecks = hostdefault_matches_agentchecks;
-        } else {
-            this.post.hostdefaults_to_agentchecks = _(hostdefault_matches_agentchecks)
-                .chain()
-                .flatten()
-                .value();
-        }
+    public removeMatchAgentcheck(index: number) {
+        this.post.hostdefaults_to_agentchecks.splice(index, 1);
+        this.removeErrorIfExists(index, 'hostdefaults_to_agentchecks');
     }
 
     public addMatchAgentcheck() {
@@ -346,40 +266,13 @@ export class HostdefaultsEditComponent implements OnInit, OnDestroy {
             id: count,
             agentcheck_id: null,
             regex: '',
-            index: Object.keys(this.post.hostdefaults_to_agentchecks).length
         });
-
-        if (this.errors !== null) {
-            if (!(typeof this.errors['validate_matches_agentchecks'] !== 'undefined' ||
-                typeof this.errors['hostdefaults_to_agentchecks'] !== 'undefined')) {
-                this.post.hostdefaults_to_agentchecks = _(this.post.hostdefaults_to_agentchecks)
-                    .chain()
-                    .flatten()
-                    .sortBy(
-                        function (match) {
-                            return [match.regex];
-                        })
-                    .value();
-            }
-        }
     }
 
-    public removeMatchServicetemplatesExternalMonitoring(index: number | undefined) {
-        let hostdefault_matches_servicetemplates_external_monitoring = [];
-        for (var i in this.post.hostdefaults_to_servicetemplates_external_monitoring) {
-            if (this.post.hostdefaults_to_servicetemplates_external_monitoring[i]['index'] !== index) {
-                hostdefault_matches_servicetemplates_external_monitoring.push(this.post.hostdefaults_to_servicetemplates_external_monitoring[i])
-            }
-        }
-        if (typeof this.post.hostdefaults_to_agentchecks !== 'undefined' ||
-            (this.errors?.hasOwnProperty('validate_matches_servicetemplates_external_monitoring') && typeof this.errors['validate_matches_servicetemplates_external_monitoring'] !== 'undefined')) {
-            this.post.hostdefaults_to_servicetemplates_external_monitoring = hostdefault_matches_servicetemplates_external_monitoring;
-        } else {
-            this.post.hostdefaults_to_servicetemplates_external_monitoring = _(hostdefault_matches_servicetemplates_external_monitoring)
-                .chain()
-                .flatten()
-                .value();
-        }
+    public removeMatchServicetemplatesExternalMonitoring(index: number) {
+        this.post.hostdefaults_to_servicetemplates_external_monitoring.splice(index, 1);
+
+        this.removeErrorIfExists(index, 'hostdefaults_to_servicetemplates_external_monitoring');
     }
 
     public addMatchServicetemplatesExternalMonitoring() {
@@ -389,22 +282,43 @@ export class HostdefaultsEditComponent implements OnInit, OnDestroy {
             id: count,
             servicetemplate_id: null,
             regex: '',
-            index: Object.keys(this.post.hostdefaults_to_servicetemplates_external_monitoring).length
         });
 
-        if (this.errors !== null) {
-            if (!(typeof this.errors['validate_matches_servicetemplates_external_monitoring'] !== 'undefined' ||
-                typeof this.errors['hostdefaults_to_servicetemplates_external_monitoring'] !== 'undefined')) {
-                this.post.hostdefaults_to_servicetemplates_external_monitoring = _(this.post.hostdefaults_to_servicetemplates_external_monitoring)
-                    .chain()
-                    .flatten()
-                    .sortBy(
-                        function (match) {
-                            return [match.regex];
-                        })
-                    .value();
+    }
+
+    private removeErrorIfExists(index: number, errorKey: string) {
+        if (this.errors) {
+            if (this.errors.hasOwnProperty(errorKey) && this.errors[errorKey].hasOwnProperty(index)) {
+                if (Array.isArray(this.errors[errorKey])) {
+                    // CakePHP returns an array bacuase the index with the error starts at 0
+                    this.errors[errorKey].splice(index, 1);
+                } else {
+                    // CakePHP returns an array bacuase the index with the error starts at is > 0
+                    delete this.errors[errorKey][index];
+                }
             }
+
+            // Reduce all indexes > index by 1
+            // If a user remove an element with error above other elements
+            const newErrors: GenericValidationError = {};
+            for (const key in this.errors[errorKey]) {
+                let numericKey = Number(key);
+                if (numericKey > index) {
+                    numericKey = numericKey - 1;
+                }
+                if (!newErrors.hasOwnProperty(errorKey)) {
+                    newErrors[errorKey] = {};
+                }
+
+                newErrors[errorKey][numericKey] = this.errors[errorKey][key];
+            }
+
+            this.errors[errorKey] = newErrors[errorKey];
+
+            this.errors = structuredClone(this.errors); // get new reference to trigger change detection if signals
+            this.cdr.markForCheck();
         }
     }
+
     protected readonly ServicetemplateTypesEnum = ServicetemplateTypesEnum;
 }
