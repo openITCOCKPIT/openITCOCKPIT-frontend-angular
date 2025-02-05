@@ -53,3 +53,35 @@ export interface Changecalendar {
     description: string
     name: string
 }
+
+// EDIT
+export interface EditChangecalendarRoot {
+    changeCalendar: EditableChangecalendar
+}
+
+export interface EditableChangecalendar extends Changecalendar {
+    id: number
+    user_id: number
+    created: string
+    modified: string
+    changecalendar_events: ChangecalendarEvent[]
+}
+
+export interface ChangecalendarEvent {
+    id: number
+    title: string
+    description: string
+    start: string
+    end: string
+    uid: any
+    context: any
+    created: string
+    modified: string
+    changecalendar_id: number
+    user_id: number
+}
+
+export interface Updatechangecalendar {
+    changeCalendar: EditableChangecalendar,
+    events: ChangecalendarEvent[]
+}

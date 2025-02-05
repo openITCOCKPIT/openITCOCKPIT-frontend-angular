@@ -26,7 +26,6 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -74,7 +73,6 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
         InputGroupTextDirective,
         MatSort,
         MatSortHeader,
-        MultiSelectComponent,
         NavComponent,
         NavItemComponent,
         NgForOf,

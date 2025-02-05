@@ -35,9 +35,13 @@ import { GenericMessageResponse } from '../../../../generic-responses';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { FormsModule } from '@angular/forms';
 import { ImportersService } from '../../pages/importers/importers.service';
-import { Importer, ImporterConfig, ImportersErrorMessageResponse } from '../../pages/importers/importers.interface';
+import {
+    GenericKeyValueFieldType,
+    Importer,
+    ImporterConfig,
+    ImportersErrorMessageResponse
+} from '../../pages/importers/importers.interface';
 import { ImportDataResponse, ImportedHostRawData } from '../../pages/importedhosts/importedhosts.interface';
-import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 import _ from 'lodash';
 
 @Component({
@@ -91,7 +95,7 @@ export class ImportDataComponent implements OnInit, OnDestroy {
     public errors: GenericMessageResponse | null = null;
     public hasRootPrivileges: boolean = false;
     private cdr = inject(ChangeDetectorRef);
-    public formFields?: DynamicalFormFields;
+    public dynamicFieldsNameValue: GenericKeyValueFieldType[] = [];
 
 
     public ngOnDestroy(): void {
@@ -111,14 +115,36 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                 if (!this.importer) {
                     return;
                 }
-                if (this.importer.data_source) {
+                if (this.importer.data_source && this.importer.config) {
+                    const importerConfig = this.importer.config;
                     this.ImporterService.loadConfig(this.importer.data_source)
-                        .subscribe((result:ImporterConfig) => {
-                            this.formFields = result.config.formFields;
-                            this.cdr.markForCheck();
+                        .subscribe((result: ImporterConfig) => {
+                            _.forEach(result.config.formFields, (value, key) => {
+                                if (importerConfig.mapping && importerConfig.mapping[value.ngModel]) {
+                                    let fieldValue = importerConfig.mapping[value.ngModel];
+                                    if (value.type === 'select') {
+                                        if (value.options) {
+                                            value.options.forEach((option: any) => {
+                                                if (option.key === fieldValue) {
+                                                    fieldValue = option.value;
+                                                }
+                                            });
+                                        }
+                                    }
+                                    this.dynamicFieldsNameValue.push({
+                                        label: value.label,
+                                        value: fieldValue,
+                                        type: value.type
+
+                                    });
+
+                                }
+
+
+                                this.cdr.markForCheck();
+                            });
                         });
                 }
-console.log(this.formFields);
                 switch (this.importer.data_source) {
                     case 'idoit':
                         this.ImporterService.loadDataFromIdoit(this.importer).subscribe(data => {
