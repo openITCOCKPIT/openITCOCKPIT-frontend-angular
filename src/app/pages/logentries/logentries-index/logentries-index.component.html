@@ -119,7 +119,9 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+
+            <oitc-table-loader *ngIf="!logentries"></oitc-table-loader>
+            <table *ngIf="logentries" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
@@ -135,7 +137,7 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="logentries">
+                <tbody>
                 <tr *ngFor="let logentry of logentries.logentries">
                     <td>
                         {{ logentry.entry_time }}
