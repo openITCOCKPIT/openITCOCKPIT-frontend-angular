@@ -566,6 +566,12 @@
                         </span>
                         <span class="text-primary">
                             @switch (importedhost.importer.data_source) {
+                                @case ("itop") {
+                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                }
+                                @case ("idoit") {
+                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                }
                                 @case ("csv_with_header") {
                                     <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
                                 }
