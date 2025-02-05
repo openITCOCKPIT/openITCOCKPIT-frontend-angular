@@ -24,8 +24,9 @@
         </ol>
     </nav>
 
+    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
     <form cForm (ngSubmit)="submit()">
-        <c-card class="mb-3">
+        <c-card class="mb-3" *ngIf="post">
             <c-card-header>
                 <h5 cCardTitle>
                     {{ t('MSTeams') }}
