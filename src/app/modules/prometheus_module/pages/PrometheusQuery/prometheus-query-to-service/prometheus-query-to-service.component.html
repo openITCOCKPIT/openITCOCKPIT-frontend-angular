@@ -478,42 +478,51 @@
                 </button>
             </c-button-group>
 
-            <ng-container *ngIf="createServicesArray.length > 0">
-
-                <h5>{{ t('Services') }}</h5>
-                <table bordered cTable hover>
-                    <thead>
-                    <tr>
-                        <th>{{ t('Name') }}</th>
-                        <th>{{ t('PromQL Query') }}</th>
-                        <th>{{ t('Unit') }}</th>
-                        <th colspan="2">{{ t('Warning') }}</th>
-                        <th colspan="2">{{ t('Critical') }}</th>
-                        <th>{{ t('Remove') }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let service of createServicesArray; let i = index">
-                        <td>{{ service.name }}</td>
-                        <td>{{ service.prometheus_alert_rule.promql }}</td>
-                        <td>{{ service.prometheus_alert_rule.unit }}</td>
-                        <td>{{ service.prometheus_alert_rule.warning_min }}</td>
-                        <td>{{ service.prometheus_alert_rule.warning_max }}</td>
-                        <td>{{ service.prometheus_alert_rule.critical_min }}</td>
-                        <td>{{ service.prometheus_alert_rule.critical_max }}</td>
-                        <td>
-                            <button cButton type="button" color="danger" size="xs" (click)="removeService(i)">
-                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+            <c-card *ngIf="createServicesArray.length > 0">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Services') }}
+                    </h5>
+                </c-card-header>
+                <c-card-body class="p-0">
+                    <table bordered cTable hover class="mb-0">
+                        <thead>
+                        <tr>
+                            <th>{{ t('Name') }}</th>
+                            <th>{{ t('PromQL Query') }}</th>
+                            <th class="width-50 text-center" scope="col">{{ t('Unit') }}</th>
+                            <th class="width-50 text-center" scope="col" colspan="2">{{ t('Warning') }}</th>
+                            <th class="width-50 text-center" scope="col" colspan="2">{{ t('Critical') }}</th>
+                            <th class="width-50 text-center" scope="col">
                                 {{ t('Remove') }}
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <button cButton type="button" color="success" (click)="createServices()">
-                    {{ t('Create services') }}
-                </button>
-            </ng-container>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let service of createServicesArray; let i = index">
+                            <td>{{ service.name }}</td>
+                            <td>{{ service.prometheus_alert_rule.promql }}</td>
+                            <td class="width-50 text-center">{{ service.prometheus_alert_rule.unit }}</td>
+                            <td class="width-50 text-center">{{ service.prometheus_alert_rule.warning_min }}</td>
+                            <td class="width-50 text-center">{{ service.prometheus_alert_rule.warning_max }}</td>
+                            <td class="width-50 text-center">{{ service.prometheus_alert_rule.critical_min }}</td>
+                            <td class="width-50 text-center">{{ service.prometheus_alert_rule.critical_max }}</td>
+                            <td class="width-50 text-center">
+                                <button cButton type="button" color="danger" size="xs" (click)="removeService(i)">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Remove') }}
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton type="button" color="success" (click)="createServices()">
+                        {{ t('Create services') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
 
 
             <h5>{{ t('Current values') }}</h5>
