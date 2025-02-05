@@ -488,11 +488,11 @@
                                 'bg-host-to-change': (importedhost.host && importedhost.host.disabled==0) && (hasFlag(importedhost.flags,  ImportedHostFlagsEnum.FLAG_MARKED_CHANGED) && !hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)),
                                 'bg-host-to-re-enable':  (importedhost.host && importedhost.host.disabled==1) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)}">
                         <div class="h-100">
-                            <a *oitcPermission="['hosts', 'edit']"
-                               [routerLink]="['/', 'hosts', 'edit', importedhost.host_id]">
+                            <a *oitcPermission="['ImportModule', 'ImportedHosts', 'edit']"
+                               [routerLink]="['/', 'import_module', 'ImportedHosts', 'edit', importedhost.id]">
                                 {{ importedhost.name }}
                             </a>
-                            <span *oitcPermission="['hosts', 'edit']; negate: true">
+                            <span *oitcPermission="['ImportModule', 'ImportedHosts', 'edit']; negate: true">
                                 {{ importedhost.name }}
                             </span>
                             <c-badge color="success" class="mx-1" *ngIf="importedhost.imported !== 1">
@@ -500,13 +500,13 @@
                                 {{ t('NEW') }}
                             </c-badge>
                             @if (importedhost.imported === 1 && ( importedhost.host && importedhost.host.disabled === 0 )) {
-                                <c-badge color="info" *oitcPermission="['hosts', 'edit']"
-                                         [routerLink]="['/', 'hosts', 'edit', importedhost.host_id]"
+                                <c-badge color="info" *oitcPermission="['hosts', 'browser']"
+                                         [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]"
                                          class="cursor-pointer">
                                     <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
                                     {{ t('In monitoring') }}
                                 </c-badge>
-                                <span *oitcPermission="['hosts', 'edit']; negate: true">
+                                <span *oitcPermission="['hosts', 'browser']; negate: true">
                                     <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
                                     {{ t('In monitoring') }}
                                 </span>
@@ -855,14 +855,14 @@
                     </td>
 
                     <td class="width-50">
-                        <oitc-actions-button [permission]="'ImportModule.importedhosts.view'"
-                                             [icon]="['fas', 'eye']"
-                                             [url]="'/import_module/ImportedHosts/view/' + importedhost.id">
-                            <oitc-actions-button-element [permission]="'ImportModule.importedhosts.view'"
-                                                         *ngIf="importedhost.allowEdit"
-                                                         [url]="'/import_module/ImportedHosts/view/' + importedhost.id">
-                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                                {{ t('View') }}
+                        <oitc-actions-button [permission]="'ImportModule.ImportedHosts.edit'"
+                                             [url]="'/import_module/ImportedHosts/edit/' + importedhost.id"
+                                             [allowEdit]="(importedhost.allowEdit && !importedhost.readonly)">
+                            <oitc-actions-button-element [permission]="'ImportModule.ImportedHosts.edit'"
+                                                         *ngIf="(importedhost.allowEdit && !importedhost.readonly)"
+                                                         [url]="'/import_module/ImportedHosts/edit/' + importedhost.id">
+                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                {{ t('Edit') }}
                             </oitc-actions-button-element>
                             <oitc-actions-button-element [permission]="'ImportModule.importchangelogs.index'"
                                                          [url]="'/import_module/import_changelogs/entity/importedHost/' + importedhost.id">
@@ -872,7 +872,7 @@
                             <li cDropdownDivider></li>
                             <oitc-actions-button-element (click)="toggleDeleteAllModal(importedhost)"
                                                          *ngIf="importedhost.allowEdit"
-                                                         [permission]="'ImportModule.importedhosts.delete'">
+                                                         [permission]="'ImportModule.ImportedHosts.delete'">
                                 <span class="text-danger">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete') }}
