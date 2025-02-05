@@ -138,39 +138,31 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
                 if (!this.importer) {
                     return;
                 }
-                if (this.importer.data_source && this.importer.config) {
-                    const importerConfig = this.importer.config;
+                if (this.importer.data_source && this.importer.config && this.importer.config.mapping) {
+                    let importerConfig = this.importer.config;
                     this.ImporterService.loadConfig(this.importer.data_source)
                         .subscribe((result: ImporterConfig) => {
                             this.dynamicFieldsNameValue = [];
-                            console.log(result.config.formFields);
-                            console.log(importerConfig.mapping);
                             _.forEach(result.config.formFields, (value, key) => {
-
-                                if (importerConfig.mapping && importerConfig.mapping[value.ngModel]) {
-                                    let fieldValue = importerConfig.mapping[value.ngModel];
-                                    if (value.type === 'select') {
-                                        if (value.options) {
-                                            value.options.forEach((option: any) => {
-                                                if (option.key === fieldValue) {
-                                                    fieldValue = option.value;
-                                                }
-                                            });
-                                        }
+                                let fieldValue = importerConfig.mapping[value.ngModel];
+                                if (value.type === 'select') {
+                                    if (value.options) {
+                                        value.options.forEach((option: any) => {
+                                            if (option.key === fieldValue) {
+                                                fieldValue = option.value;
+                                            }
+                                        });
                                     }
-                                    this.dynamicFieldsNameValue.push({
-                                        label: value.label,
-                                        value: fieldValue,
-                                        type: value.type
-
-                                    });
-
                                 }
+                                this.dynamicFieldsNameValue.push({
+                                    label: value.label,
+                                    value: fieldValue,
+                                    type: value.type
+                                });
 
 
-
-                                this.cdr.markForCheck();
                             });
+                            this.cdr.markForCheck();
                         });
                 }
 
