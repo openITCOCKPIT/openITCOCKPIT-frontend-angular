@@ -98,7 +98,8 @@
 
             <oitc-table-loader *ngIf="!userContainerRolesIndexRoot"></oitc-table-loader>
 
-            <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+            <table *ngIf="userContainerRolesIndexRoot" bordered cTable class="mt-2 mb-0" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
                 <tr>
@@ -116,7 +117,7 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="userContainerRolesIndexRoot">
+                <tbody>
                 <tr *ngFor="let userContainerRole of userContainerRolesIndexRoot.all_usercontainerroles">
                     <td class="text-center">
                         <oitc-item-select

@@ -1,30 +1,29 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
-  AlertComponent,
-  AlertHeadingDirective,
-  ButtonCloseDirective,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckComponent,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  FormSelectDirective,
-  FormTextDirective,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective,
-  ModalToggleDirective,
-  NavComponent,
-  NavItemComponent
+    AlertComponent,
+    AlertHeadingDirective,
+    ButtonCloseDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    FormSelectDirective,
+    FormTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    ModalToggleDirective,
+    NavComponent,
+    NavItemComponent
 } from "@coreui/angular";
 import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
@@ -38,7 +37,6 @@ import { PermissionDirective } from "../../../permissions/permission.directive";
 
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
 
 
 import { CommandTypesEnum } from '../command-types.enum';
@@ -60,51 +58,53 @@ import { DefaultMacros } from '../../../components/code-mirror-container/code-mi
 import { MacroIndex } from '../../macros/macros.interface';
 import { MacrosService } from '../../macros/macros.service';
 import { HistoryService } from '../../../history.service';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-commands-edit',
     imports: [
-    TranslocoDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    FaIconComponent,
-    NgIf,
-    FormDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    RequiredIconComponent,
-    FormCheckComponent,
-    TranslocoPipe,
-    RouterLink,
-    FormsModule,
-    NgForOf,
-    PermissionDirective,
-    MatCheckboxModule,
-    FormSelectDirective,
-    FormTextDirective,
-    AlertComponent,
-    AlertHeadingDirective,
-    BackButtonDirective,
-    UserMacrosModalComponent,
-    FormFeedbackComponent,
-    FormErrorDirective,
-    NgSelectModule,
-    ButtonCloseDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ModalToggleDirective,
-    ObjectUuidComponent,
-    CodeMirrorContainerComponent
-],
+        TranslocoDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        FaIconComponent,
+        NgIf,
+        FormDirective,
+        FormControlDirective,
+        FormLabelDirective,
+        RequiredIconComponent,
+        FormCheckComponent,
+        TranslocoPipe,
+        RouterLink,
+        FormsModule,
+        NgForOf,
+        PermissionDirective,
+        MatCheckboxModule,
+        FormSelectDirective,
+        FormTextDirective,
+        AlertComponent,
+        AlertHeadingDirective,
+        BackButtonDirective,
+        UserMacrosModalComponent,
+        FormFeedbackComponent,
+        FormErrorDirective,
+        NgSelectModule,
+        ButtonCloseDirective,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ModalToggleDirective,
+        ObjectUuidComponent,
+        CodeMirrorContainerComponent,
+        FormLoaderComponent
+    ],
     templateUrl: './commands-edit.component.html',
     styleUrl: './commands-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -117,7 +117,7 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
         command_line: "",
         description: "",
         commandarguments: []
-    }
+    };
     public defaultMacros: DefaultMacros[] = [];
     public macros: MacroIndex[] = [];
     public errors: GenericValidationError | null = null;

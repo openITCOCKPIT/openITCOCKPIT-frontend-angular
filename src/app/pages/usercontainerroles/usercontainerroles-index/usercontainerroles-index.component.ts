@@ -98,10 +98,10 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     styleUrl: './usercontainerroles-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: UsercontainerrolesService } // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: UsercontainerrolesService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
     ]
 })
-export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy{
+export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy {
     private readonly modalService: ModalService = inject(ModalService);
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly subscriptions: Subscription = new Subscription();
@@ -113,9 +113,7 @@ export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy{
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected params: UserContainerRolesIndexParams = {} as UserContainerRolesIndexParams;
-    protected userContainerRolesIndexRoot: UserContainerRolesIndexRoot = {
-        all_usercontainerroles: [] as UserContainerRolesIndex[],
-    } as UserContainerRolesIndexRoot;
+    protected userContainerRolesIndexRoot?: UserContainerRolesIndexRoot;
     protected selectedItems: DeleteAllItem[] = [];
     protected hideFilter: boolean = true;
 
@@ -213,6 +211,7 @@ export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy{
             id: 'deleteAllModal',
         });
     }
+
     public navigateCopy() {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.id).join(',');
         if (ids) {

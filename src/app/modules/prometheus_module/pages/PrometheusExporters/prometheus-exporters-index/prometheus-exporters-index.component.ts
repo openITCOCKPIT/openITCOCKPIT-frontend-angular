@@ -114,9 +114,7 @@ export class PrometheusExportersIndexComponent implements OnInit, OnDestroy, Ind
 
     protected params: PrometheusExportersIndexParams = getDefaultPrometheusExportersIndexParams();
     protected selectedItems: DeleteAllItem[] = [];
-    protected result: PrometheusExportersIndex = {
-        all_exporters: [],
-    } as PrometheusExportersIndex;
+    protected result?: PrometheusExportersIndex;
     protected hideFilter: boolean = true;
 
     public ngOnDestroy(): void {
