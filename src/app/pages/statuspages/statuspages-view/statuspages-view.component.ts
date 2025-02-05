@@ -1,8 +1,8 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {TranslocoDirective} from '@jsverse/transloco';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {PermissionDirective} from '../../../permissions/permission.directive';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { StatuspagesService } from '../statuspages.service';
 import { Subscription } from 'rxjs';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -12,15 +12,15 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     NavComponent,
-    NavItemComponent, RowComponent
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
-import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
-import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import {
-    StatuspageRoot}
-    from '../statuspage.interface';
-import {toString} from 'lodash';
+import { StatuspageRoot } from '../statuspage.interface';
+import { toString } from 'lodash';
+import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 
 
 @Component({
@@ -42,6 +42,7 @@ import {toString} from 'lodash';
         NgForOf,
         AsyncPipe,
         RowComponent,
+        BlockLoaderComponent,
     ],
     templateUrl: './statuspages-view.component.html',
     styleUrl: './statuspages-view.component.css',
@@ -55,9 +56,9 @@ export class StatuspagesViewComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
     public statuspage!: StatuspageRoot;
     public id: number = 0;
-    public showAcknowledgeComments: {[key: string]: boolean} = {};
-    public showPlannedDowntimes: {[key: string]: boolean} = {};
-    public showCurrentDowntimes: {[key: string]: boolean} = {};
+    public showAcknowledgeComments: { [key: string]: boolean } = {};
+    public showPlannedDowntimes: { [key: string]: boolean } = {};
+    public showCurrentDowntimes: { [key: string]: boolean } = {};
 
     constructor(private route: ActivatedRoute) {
     }
@@ -80,31 +81,29 @@ export class StatuspagesViewComponent implements OnInit, OnDestroy {
             }));
     }
 
-   public  toggleAcknowledgeComments(identifier: string){
-       if(!this.showAcknowledgeComments[identifier]){
-           this.showAcknowledgeComments[identifier]= true;
-        }else{
-           this.showAcknowledgeComments[identifier] = false;
+    public toggleAcknowledgeComments(identifier: string) {
+        if (!this.showAcknowledgeComments[identifier]) {
+            this.showAcknowledgeComments[identifier] = true;
+        } else {
+            this.showAcknowledgeComments[identifier] = false;
         }
-   }
+    }
 
-    public togglePlannedDowntimes(identifier: string){
-        if(!this.showPlannedDowntimes[identifier]){
-        this.showPlannedDowntimes[identifier]= true;
-        }else{
+    public togglePlannedDowntimes(identifier: string) {
+        if (!this.showPlannedDowntimes[identifier]) {
+            this.showPlannedDowntimes[identifier] = true;
+        } else {
             this.showPlannedDowntimes[identifier] = false;
         }
     }
 
-    public toggleCurrentDowntimes(identifier: string){
-        if(!this.showCurrentDowntimes[identifier]){
-        this.showCurrentDowntimes[identifier]= true;
-        }else{
+    public toggleCurrentDowntimes(identifier: string) {
+        if (!this.showCurrentDowntimes[identifier]) {
+            this.showCurrentDowntimes[identifier] = true;
+        } else {
             this.showCurrentDowntimes[identifier] = false;
         }
-}
-
-
+    }
 
 
     protected readonly toString = toString;

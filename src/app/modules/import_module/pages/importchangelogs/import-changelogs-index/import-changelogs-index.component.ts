@@ -18,7 +18,6 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { ChangelogsEntryComponent } from '../../../../../pages/changelogs/changelogs-entry/changelogs-entry.component';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -42,6 +41,7 @@ import { ImportChangelogsService } from '../importchangelogs.service';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { IndexPage } from '../../../../../pages.interface';
 import { Sort } from '@angular/material/sort';
+import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 
 
 @Component({
@@ -77,7 +77,8 @@ import { Sort } from '@angular/material/sort';
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        AsyncPipe
+        AsyncPipe,
+        BlockLoaderComponent
     ],
     templateUrl: './import-changelogs-index.component.html',
     styleUrl: './import-changelogs-index.component.css',

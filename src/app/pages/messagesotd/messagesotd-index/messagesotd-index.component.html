@@ -132,7 +132,8 @@
 
             <oitc-table-loader *ngIf="!messagesOfTheDay"></oitc-table-loader>
 
-            <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+            <table *ngIf="messagesOfTheDay" bordered cTable class="mt-2 mb-0" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
                 <tr>
@@ -156,7 +157,7 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="messagesOfTheDay">
+                <tbody>
                 <tr *ngFor="let messageOfTheDay of messagesOfTheDay.messagesOtd">
                     <td class="text-center">
                         <oitc-item-select

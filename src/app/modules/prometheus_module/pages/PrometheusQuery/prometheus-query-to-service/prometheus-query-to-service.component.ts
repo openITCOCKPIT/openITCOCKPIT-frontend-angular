@@ -3,6 +3,7 @@ import {
     ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -46,7 +47,6 @@ import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { AutocompleteItem } from '../../../../../components/code-mirror-container/code-mirror-container.interface';
 import { PrometheusAutocompleteService } from '../prometheus-autocomplete.service';
-import { MetadataResponseRoot } from '../prometheus-autocomplete.interface';
 import {
     PrometheusCodeMirrorComponent
 } from '../../../components/prometheus-code-mirror/prometheus-code-mirror.component';
@@ -92,7 +92,8 @@ import { PrometheusHelpComponent } from '../../../components/prometheus-help/pro
         ButtonGroupComponent,
         FormFeedbackComponent,
         PrometheusThresholdsComponent,
-        PrometheusHelpComponent
+        PrometheusHelpComponent,
+        CardFooterComponent
     ],
     templateUrl: './prometheus-query-to-service.component.html',
     styleUrl: './prometheus-query-to-service.component.css',

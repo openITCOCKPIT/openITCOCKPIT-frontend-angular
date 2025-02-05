@@ -2,34 +2,34 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 
 
 import {
-  AlertHeadingDirective,
-  ButtonCloseDirective,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective,
-  ModalToggleDirective,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    AlertHeadingDirective,
+    ButtonCloseDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    ModalToggleDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 
 
@@ -55,57 +55,59 @@ import { GenericValidationError } from '../../../generic-responses';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-macro-index',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    FaIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RowComponent,
-    TableDirective,
-    TranslocoDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    RouterLink,
-    NgClass,
-    AlertHeadingDirective,
-    ModalToggleDirective,
-    ModalHeaderComponent,
-    ModalComponent,
-    ModalBodyComponent,
-    ButtonCloseDirective,
-    ModalTitleDirective,
-    ModalFooterComponent,
-    NgSelectModule,
-    FormLabelDirective,
-    RequiredIconComponent,
-    TrueFalseDirective,
-    FormFeedbackComponent,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    NgOptionHighlightModule
-],
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NoRecordsComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        TableDirective,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        RouterLink,
+        NgClass,
+        AlertHeadingDirective,
+        ModalToggleDirective,
+        ModalHeaderComponent,
+        ModalComponent,
+        ModalBodyComponent,
+        ButtonCloseDirective,
+        ModalTitleDirective,
+        ModalFooterComponent,
+        NgSelectModule,
+        FormLabelDirective,
+        RequiredIconComponent,
+        TrueFalseDirective,
+        FormFeedbackComponent,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        NgOptionHighlightModule,
+        TableLoaderComponent
+    ],
     templateUrl: './macro-index.component.html',
     styleUrl: './macro-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -116,6 +118,8 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
     public currentMacro: MacroPost | null = null;
     public availableMacroNames: string[] = [];
     public errors: GenericValidationError | null = null;
+
+    public initialized: boolean = false;
 
     private subscriptions: Subscription = new Subscription();
     private MacrosService = inject(MacrosService)
@@ -136,6 +140,7 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.MacrosService.getIndex()
             .subscribe((result) => {
                 this.macros = result;
+                this.initialized = true;
                 this.cdr.markForCheck();
             })
         );

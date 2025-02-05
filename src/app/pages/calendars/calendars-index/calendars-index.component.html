@@ -107,7 +107,8 @@
             </c-container>
             <!-- End Filter -->
 
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+            <oitc-table-loader *ngIf="!calendars"></oitc-table-loader>
+            <table *ngIf="calendars" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
@@ -126,7 +127,7 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="calendars">
+                <tbody>
                 <tr *ngFor="let calendar of calendars.all_calendars">
                     <td class="text-center">
                         <oitc-item-select

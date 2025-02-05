@@ -42,7 +42,8 @@
                     </div>
                 </div>
 
-                <table bordered cTable class="mt-2 mb-0" hover striped *ngIf="SystemsettingsCategories">
+                <oitc-table-loader *ngIf="!SystemsettingsCategories"></oitc-table-loader>
+                <table *ngIf="SystemsettingsCategories" bordered cTable class="mt-2 mb-0" hover striped>
                     <thead>
                     <tr>
                         <th scope="col">

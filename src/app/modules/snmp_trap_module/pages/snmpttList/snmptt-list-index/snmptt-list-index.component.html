@@ -169,7 +169,9 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+
+            <oitc-table-loader *ngIf="!snmptt_entries"></oitc-table-loader>
+            <table *ngIf="snmptt_entries" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
@@ -203,7 +205,7 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="snmptt_entries">
+                <tbody>
                 <tr *ngFor="let snmpttEntry of snmptt_entries.snmptt_entries">
                     <td class="text-center">
                         <oitc-item-select
