@@ -453,32 +453,39 @@
                        oitcFormError [errors]="errors" errorField="unit"
                 >
                 <oitc-form-feedback [errors]="errors" errorField="unit"></oitc-form-feedback>
-                <div class="help-block">
-                    Unit of the metric.                                <br>
-                    Examples:                                <ul>
-                    <li>"b" for bytes.</li>
-                    <li>"KB" for kilobytes.</li>
-                    <li>"s" for seconds.</li>
-                    <li>"Mbps" or "Mbit/s"</li>
-                    <li>"MB/s" for megabytes per second</li>
-                </ul>
-                </div>
+                <c-row>
+                    <c-col md="6">
+                        <div class="help-block">
+                            Unit of the metric. <br>
+                            Examples:
+                            <ul>
+                                <li>"b" for bytes.</li>
+                                <li>"KB" for kilobytes.</li>
+                                <li>"s" for seconds.</li>
+                                <li>"Mbps" or "Mbit/s"</li>
+                                <li>"MB/s" for megabytes per second</li>
+                            </ul>
+                        </div>
+                    </c-col>
+                    <c-col md="6" class="text-end pt-3">
+                        <c-button-group>
+                            <button cButton color="default">
+                                <label class="me-2">
+                                    <input cFormCheckInput type="checkbox" name="createAnother"
+                                           [(ngModel)]="createAnother">
+                                    {{ t('Add another') }}
+                                </label>
+                            </button>
+                            <button cButton color="success" (click)="validateService()">
+                                {{ t('Add to service') }}
+                            </button>
+                        </c-button-group>
+                    </c-col>
+                </c-row>
             </div>
 
-            <c-button-group>
-                <button cButton color="default">
-                    <label class="me-2">
-                        <input cFormCheckInput type="checkbox" name="createAnother"
-                               [(ngModel)]="createAnother">
-                        {{ t('Add another') }}
-                    </label>
-                </button>
-                <button cButton color="success" (click)="validateService()">
-                    {{ t('Add to service') }}
-                </button>
-            </c-button-group>
 
-            <c-card *ngIf="createServicesArray.length > 0">
+            <c-card class="mb-3" *ngIf="createServicesArray.length > 0">
                 <c-card-header>
                     <h5 cCardTitle>
                         {{ t('Services') }}
