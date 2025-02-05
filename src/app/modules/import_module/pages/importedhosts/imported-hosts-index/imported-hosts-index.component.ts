@@ -191,14 +191,43 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
         let ready_for_import: string | boolean = '';
         let disabled: string | boolean = '';
         let flags: number | string = '';
+        
+        // ALL "Already synchronized" filter are selected or deselected
+        if (this.imported === this.not_imported && this.not_imported === this.disabled) {
+            // "In monitoring (active)" and "NEW" checkboxes are selected
+            // Do not filter by imported status
+            imported = '';
+            disabled = '';
+        } else if (!(this.disabled | this.not_imported) && this.imported) {
+            // Only "In monitoring (active)" checkbox is selected
+            imported = true;
+            disabled = false;
+        } else if ((this.imported !== this.not_imported) && !this.disabled) {
+            // "In monitoring (active)" or "NEW" checkbox is selected
+            // Do not filter by disabled status
+            imported = this.imported === 1;
+            disabled = '';
+        } else if ((this.imported & this.disabled) && !this.not_imported) {
+            // "In monitoring (active)" and " In monitoring (disabled) " checkbox is selected - "NEW" checkbox is not selected
+            imported = true;
+            disabled = '';
+        } else if (!(this.imported | this.not_imported) && this.imported) {
+            // Only "In monitoring (active) " checkbox is selected
+            imported = true;
+            disabled = true;
 
-        // only if not ALL "Already synchronized" filter are selected or deselected (XNOR)
-        if (!(this.imported === this.not_imported &&
-            this.not_imported === this.disabled)) {
-            disabled = this.disabled === 1;
-            if ((this.imported & this.disabled) ^ this.not_imported) {
-                imported = this.imported === 1;
-            }
+        } else if (!(this.imported ^ this.not_imported) && this.disabled) {
+            // Only "In monitoring (disabled) " checkbox is selected
+            imported = true;
+            disabled = true;
+        } else if ((this.disabled & this.not_imported) && !this.imported) {
+            // "In monitoring (disabled)" and "NEW" checkbox is selected - "In monitoring (active)" checkbox is not selected
+            imported = '';
+            disabled = true;
+        } else if ((this.imported & this.not_imported) && !this.disabled) {
+            // "In monitoring (active)" and "NEW" checkbox is selected - "In monitoring (disabled)" checkbox is not selected
+            imported = '';
+            disabled = false;
         }
 
         if (this.ready_for_import ^ this.not_ready_for_import) {
