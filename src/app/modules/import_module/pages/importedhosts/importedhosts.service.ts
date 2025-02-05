@@ -4,6 +4,7 @@ import { GenericSuccessAndMessageResponse } from '../../../../generic-responses'
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { ImportedhostsIndexParams, ImportedhostsIndexRoot } from './importedhosts.interface';
+import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -39,6 +40,14 @@ export class ImportedhostsService {
                 return data;
             })
         );
+    }
+    /**********************
+     *    Delete action    *
+     **********************/
+// Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/import_module/imported_hosts/delete/${item.id}.json?angular=true`, {});
     }
 
 }
