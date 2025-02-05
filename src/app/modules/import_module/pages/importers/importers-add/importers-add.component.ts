@@ -15,7 +15,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import {
-    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -33,10 +32,11 @@ import {
     InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent, TableDirective
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -214,6 +214,11 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
     }
 
     public submit() {
+        // Set the current array order of host defaults as "order" to save the current order in the database
+        this.post.importers_to_hostdefaults.forEach((value, index) => {
+            value.order = index;
+        });
+
         this.subscriptions.add(this.ImportersService.createImporter(this.post)
             .subscribe((result) => {
                 this.cdr.markForCheck();
@@ -226,13 +231,16 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
 
                     this.notyService.genericSuccess(msg, title, url);
 
-                    // Create another
-                    this.post = this.getClearForm();
-                    this.errors = null;
-                    this.ngOnInit();
+                    this.HistoryService.navigateWithFallback(['/import_module/importers/index']);
                     this.notyService.scrollContentDivToTop();
-
                     return;
+
+                    // Create another
+                    //this.post = this.getClearForm();
+                    //this.errors = null;
+                    //this.ngOnInit();
+                    //this.notyService.scrollContentDivToTop();
+                    //return;
                 }
 
                 // Error
@@ -294,54 +302,51 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
 
     public addMatch() {
         let count = this.post.importers_to_hostdefaults.length + 1;
-        let highest = 0;
-        if (this.post.importers_to_hostdefaults.length > 0) {
-            highest = Math.max.apply(Math, _.map(this.post.importers_to_hostdefaults, 'index')) + 1;
-        }
 
         this.post.importers_to_hostdefaults.push({
             id: count,
             field: 'hostname',
             regex: '',
-            hostdefault_id: null,
-            index: highest,
-            order: count
+            hostdefault_id: null
         });
-
-        if (this.errors !== null) {
-            if (!(typeof this.errors['validate_matches'] !== 'undefined' ||
-                typeof this.errors['hostdefault_matches'] !== 'undefined')) {
-                this.post.importers_to_hostdefaults = _(this.post.importers_to_hostdefaults)
-                    .chain()
-                    .flatten()
-                    .sortBy(
-                        function (match) {
-                            return [match.index];
-                        })
-                    .value();
-            }
-        }
     }
 
-    public removeMatch(index: number | undefined) {
-        let importers_to_hostdefaults = [];
-        for (var i in this.post.importers_to_hostdefaults) {
-            if (this.post.importers_to_hostdefaults[i]['index'] !== index) {
-                importers_to_hostdefaults.push(this.post.importers_to_hostdefaults[i])
+    public removeMatch(index: number) {
+        this.post.importers_to_hostdefaults.splice(index, 1);
+        this.removeErrorIfExists(index, 'importers_to_hostdefaults');
+    }
+
+    private removeErrorIfExists(index: number, errorKey: string) {
+        if (this.errors) {
+            if (this.errors.hasOwnProperty(errorKey) && this.errors[errorKey].hasOwnProperty(index)) {
+                if (Array.isArray(this.errors[errorKey])) {
+                    // CakePHP returns an array bacuase the index with the error starts at 0
+                    this.errors[errorKey].splice(index, 1);
+                } else {
+                    // CakePHP returns an array bacuase the index with the error starts at is > 0
+                    delete this.errors[errorKey][index];
+                }
             }
-        }
-        if (this.errors?.hasOwnProperty('validate_matches') && typeof this.errors['validate_matches'] !== 'undefined' ||
-            this.errors?.hasOwnProperty('hostdefault_matches') && typeof this.errors['hostdefault_matches'] !== 'undefined') {
-            this.post.importers_to_hostdefaults = importers_to_hostdefaults;
-        } else {
-            this.post.importers_to_hostdefaults = _(importers_to_hostdefaults)
-                .chain()
-                .flatten()
-                .sortBy(
-                    function (match) {
-                        return [match.field, match.regex];
-                    })
-                .value();
+
+            // Reduce all indexes > index by 1
+            // If a user remove an element with error above other elements
+            const newErrors: GenericValidationError = {};
+            for (const key in this.errors[errorKey]) {
+                let numericKey = Number(key);
+                if (numericKey > index) {
+                    numericKey = numericKey - 1;
+                }
+                if (!newErrors.hasOwnProperty(errorKey)) {
+                    newErrors[errorKey] = {};
+                }
+
+                newErrors[errorKey][numericKey] = this.errors[errorKey][key];
+            }
+
+            this.errors[errorKey] = newErrors[errorKey];
+
+            this.errors = structuredClone(this.errors); // get new reference to trigger change detection if signals
+            this.cdr.markForCheck();
         }
     }
 }

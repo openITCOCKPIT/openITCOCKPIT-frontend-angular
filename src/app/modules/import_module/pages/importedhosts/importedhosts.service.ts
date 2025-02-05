@@ -8,6 +8,8 @@ import {
 } from '../../../../generic-responses';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
+import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+
 import {
     ImportedHostElements,
     ImportedHostPost,
@@ -15,6 +17,7 @@ import {
     ImportedhostsIndexRoot
 } from './importedhosts.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+
 
 @Injectable({
     providedIn: 'root'
@@ -50,6 +53,14 @@ export class ImportedhostsService {
                 return data;
             })
         );
+    }
+    /**********************
+     *    Delete action    *
+     **********************/
+// Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/import_module/imported_hosts/delete/${item.id}.json?angular=true`, {});
     }
 
     public getEdit(id: number): Observable<ImportedHostPost> {

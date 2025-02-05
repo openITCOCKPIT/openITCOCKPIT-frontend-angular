@@ -100,8 +100,7 @@ export interface ImportersToHostdefaults {
     hostdefault_id?: number | null
     field: string
     regex: string
-    index: number
-    order: number
+    order?: number // Only relevant to store the order in the database
 }
 
 
