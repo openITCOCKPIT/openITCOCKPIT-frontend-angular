@@ -59,8 +59,8 @@ export interface PrometheusPerformanceDataParams {
     end: number,
     host_uuid: string,
     jsTimestamp: number,
-    metric: string,
-    promql: string,
+    metric: string | undefined,
+    promql: string | undefined,
     start: number
 }
 

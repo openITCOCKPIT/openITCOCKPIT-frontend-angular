@@ -138,10 +138,18 @@ export class PrometheusPopoverGraphComponent {
         let graphEnd = Math.floor((serverTime.getTime() + diffFromStartToNow) / 1000);
         let graphStart = graphEnd - (3600 * 4);
         this.perfParams.host_uuid = this._hostUuid;
-        this.perfParams.metric = this._metric;
-        this.perfParams.promql = this._promql;
         this.perfParams.start = graphStart;
         this.perfParams.end = graphEnd;
+        if (this._metric.length > 0) {
+            this.perfParams.metric = this._metric;
+        } else {
+            delete this.perfParams.metric;
+        }
+        if (this._promql.length > 0) {
+            this.perfParams.promql = this._promql;
+        } else {
+            delete this.perfParams.promql;
+        }
 
         this.loadPerfData();
     }
