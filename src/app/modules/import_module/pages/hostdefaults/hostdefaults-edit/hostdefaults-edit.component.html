@@ -325,7 +325,7 @@
                                 <c-col [xs]="12" [md]="12" [lg]="1">
                                     <button class="btn btn-danger ripple waves-effect waves-themed"
                                             type="button"
-                                            (click)="removeMatchServicetemplate(match.index)">
+                                            (click)="removeMatchServicetemplate($index)">
                                         <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
                                     </button>
                                 </c-col>
@@ -467,7 +467,7 @@
                                 <c-col [xs]="12" [md]="12" [lg]="1">
                                     <button class="btn btn-danger ripple waves-effect waves-themed"
                                             type="button"
-                                            (click)="removeMatchServicetemplategroup(match.index)">
+                                            (click)="removeMatchServicetemplategroup($index)">
                                         <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
                                     </button>
                                 </c-col>
@@ -588,7 +588,7 @@
                                 <c-col [xs]="12" [md]="12" [lg]="1">
                                     <button class="btn btn-danger ripple waves-effect waves-themed"
                                             type="button"
-                                            (click)="removeMatchAgentcheck(match.index)">
+                                            (click)="removeMatchAgentcheck($index)">
                                         <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
                                     </button>
                                 </c-col>
@@ -663,8 +663,8 @@
                                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                         </span>
                                         <input type="text" cFormControl
-                                               name="hd_regex_ac_{{$index}}"
-                                               id="hd_regex_ac_{{$index}}"
+                                               name="hd_regex_sem_{{$index}}"
+                                               id="hd_regex_sem_{{$index}}"
                                                oitcDebounce
                                                placeholder="{{ t('RegEx') }}"
                                                [(ngModel)]="post.hostdefaults_to_servicetemplates_external_monitoring[$index].regex"
@@ -712,7 +712,7 @@
                                 <c-col [xs]="12" [md]="12" [lg]="1">
                                     <button class="btn btn-danger ripple waves-effect waves-themed"
                                             type="button"
-                                            (click)="removeMatchServicetemplatesExternalMonitoring(match.index)">
+                                            (click)="removeMatchServicetemplatesExternalMonitoring($index)">
                                         <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
                                     </button>
                                 </c-col>
@@ -738,7 +738,7 @@
                 <button cButton class="ripple" color="primary" type="submit">
                     {{ t('Update host defaults') }}
                 </button>
-                <button [fallbackUrl]="['import_module','Hostdefaults', 'index']" cButton class="ms-1 ripple"
+                <button [fallbackUrl]="['import_module','HostDefaults', 'index']" cButton class="ms-1 ripple"
                         color="default" oitcBackButton type="button">
                     {{ t('Cancel') }}
                 </button>

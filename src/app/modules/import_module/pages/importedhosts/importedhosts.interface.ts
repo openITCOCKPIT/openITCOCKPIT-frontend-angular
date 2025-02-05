@@ -49,12 +49,20 @@ export interface Importedhost {
     satellite?: SatelliteEntity
     allowEdit: boolean
     services_overview: ServicesOverview
-    external_services_overview: ServicesOverview
-    oitc_agent_services_overview: ServicesOverview
+    external_services_overview: ServicesOverviewByType
+    oitc_agent_services_overview: ServicesOverviewByType
     progress: ImportedhostProgress
 }
 
 export interface ServicesOverview {
+    new: {
+        [key: number]: string
+    }
+    to_delete: ServiceObject[]
+    not_deletable: ServiceObject[]
+}
+
+export interface ServicesOverviewByType {
     new: SelectKeyValue[]
     to_delete: ServiceObject[]
     not_deletable: ServiceObject[]
@@ -262,4 +270,60 @@ export interface ImportedHostRawData {
 export interface NotValidRawData {
     error: string
     description: string
+}
+
+
+/**********************
+ *    Edit action    *
+ **********************/
+
+export interface ImportedHostPost {
+    id: number
+    importer_id: number
+    user_id: number
+    host_id: number
+    identifier: string
+    name: string
+    description: string
+    address: string
+    container_id: number
+    hosttemplate_id: number
+    satellite_id: number
+    importedfile_id: number | null
+    flags: number
+    created: string
+    modified: string
+    host: {
+        id: number
+        disabled: number
+    }
+    imported_hosts_to_agentchecks: ImportedhostAgentcheck[]
+    imported_hosts_to_servicetemplategroups: {
+        _ids: number[]
+    }
+    imported_hosts_to_servicetemplates: {
+        _ids: number[]
+    }
+    imported_hosts_to_containers_sharing: {
+        _ids: number[]
+    }
+    readonly: boolean
+}
+
+export interface ImportedhostAgentcheck {
+    id: number,
+    importedhost_id: number
+    agentcheck_id: number
+    regex: string
+}
+
+
+export interface ImportedHostElements {
+    sharingContainers: SelectKeyValue[]
+    hosttemplates: SelectKeyValue[]
+    servicetemplates: SelectKeyValue[]
+    servicetemplategroups: SelectKeyValue[]
+    satellites: SelectKeyValue[]
+    agentchecks: SelectKeyValue[]
+
 }
