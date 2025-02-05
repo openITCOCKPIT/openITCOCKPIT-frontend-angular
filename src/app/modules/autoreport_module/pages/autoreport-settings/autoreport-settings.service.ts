@@ -2,15 +2,12 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
-import { Subscription } from 'rxjs';
 import {
-    DefaultAutoreportSettings,
     AllAutoreportSettings,
     AutoreportSettingsRoot,
     AutoreportSettingsPostResponse
 } from './autoreport-settings.interface';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
-import { OpenstreetmapSettingsPostResponse } from '../../../openstreetmap_module/pages/openstreetmap.interface';
 
 @Injectable({
     providedIn: 'root'
