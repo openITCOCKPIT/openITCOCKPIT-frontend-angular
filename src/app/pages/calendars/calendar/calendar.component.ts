@@ -109,6 +109,16 @@ export class CalendarComponent {
         return this._events;
     }
 
+    private _showButtons: boolean = true;
+    @Input()
+    set showButtons(showButtons: boolean) {
+        this._showButtons = showButtons;
+    }
+
+    get showButtons(): boolean {
+        return this._showButtons;
+    }
+
     @Output() eventsChange = new EventEmitter<CalendarEvent[]>();
 
     @Input() public countries: Countries = {};
