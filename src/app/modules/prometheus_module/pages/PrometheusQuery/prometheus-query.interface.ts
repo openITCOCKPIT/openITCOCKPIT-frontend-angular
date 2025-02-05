@@ -142,10 +142,10 @@ export interface PrometheusQueryIndexParams {
     'filter[PrometheusQuery.name]': string,
 }
 
-export function getDefaultPrometheusQueryIndexParams(): PrometheusQueryIndexParams {
+export function getDefaultPrometheusQueryIndexParams(hostId: number = 0): PrometheusQueryIndexParams {
     return {
         angular: true,
-        hostId: 0,
+        hostId: hostId,
         'filter[PrometheusQuery.name]': '',
     }
 }
