@@ -14,13 +14,17 @@ export interface PrometheusAlertRulesIndexParams {
     'filter[PrometheusAlertRules.host_id]': number
 }
 
-export function getDefaultPrometheusAlertRulesIndexParams(): PrometheusAlertRulesIndexParams {
+export function getDefaultPrometheusAlertRulesIndexParams(hostId: number = 0): PrometheusAlertRulesIndexParams {
     return {
         angular: true,
         direction: 'asc', // asc or desc
         page: 0,
         scroll: true,
         sort: 'servicename',
+
+        'filter[PrometheusAlertRules.host_id]': hostId,
+        'filter[PrometheusAlertRules.promql]': '',
+        'filter[servicename]': ''
     } as PrometheusAlertRulesIndexParams;
 }
 
