@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnDestroy,
+    ViewChild
+} from '@angular/core';
 import { PrometheusQueryService } from '../../pages/PrometheusQuery/prometheus-query.service';
 import {
     PrometheusPerformanceDataParams,
@@ -9,13 +17,14 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgClass, NgIf } from '@angular/common';
 import { ChartLoaderComponent } from '../../../../components/popover-graph/chart-loader/chart-loader.component';
 import * as _uPlot from 'uplot';
-import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 import { PerformanceData } from '../../../../components/popover-graph/popover-graph.interface';
 import { Subscription } from 'rxjs';
 import { TimezoneObject } from '../../../../pages/services/timezone.interface';
 import { debounce } from '../../../../components/debounce.decorator';
 import { PopoverConfigBuilder } from '../../../../components/popover-graph/popover-config-builder';
 import { PopoverGraphService } from '../../../../components/popover-graph/popover-graph.service';
+import { Popover } from 'primeng/popover';
+import { PrimeTemplate } from 'primeng/api';
 
 const uPlot: any = (_uPlot as any)?.default;
 @Component({
@@ -24,16 +33,17 @@ const uPlot: any = (_uPlot as any)?.default;
     imports: [
         NgClass,
         ChartLoaderComponent,
-        OverlayPanelModule,
         FaIconComponent,
         TranslocoDirective,
-        NgIf
+        NgIf,
+        Popover,
+        PrimeTemplate
     ],
     templateUrl: './prometheus-popover-graph.component.html',
     styleUrl: './prometheus-popover-graph.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PrometheusPopoverGraphComponent {
+export class PrometheusPopoverGraphComponent implements OnDestroy {
     private visible: boolean = false;
     public _hostUuid: string = '';
     public _serviceUuid: string = '';
@@ -47,11 +57,11 @@ export class PrometheusPopoverGraphComponent {
     public readonly chartHeight: number = 260;
 
     private timer: ReturnType<typeof setTimeout> | null = null;
-    protected startTimestamp: number = new Date().getTime();
+    private startTimestamp: number = new Date().getTime();
 
-    @ViewChild('graphOverlayPanel') graphOverlayPanel!: OverlayPanel;
+    @ViewChild('graphOverlayPanel') graphOverlayPanel!: Popover;
 
-    public cdr = inject(ChangeDetectorRef);
+    private cdr = inject(ChangeDetectorRef);
 
     public constructor(private window: Window) {
     }
@@ -138,15 +148,23 @@ export class PrometheusPopoverGraphComponent {
         let graphEnd = Math.floor((serverTime.getTime() + diffFromStartToNow) / 1000);
         let graphStart = graphEnd - (3600 * 4);
         this.perfParams.host_uuid = this._hostUuid;
-        this.perfParams.metric = this._metric;
-        this.perfParams.promql = this._promql;
         this.perfParams.start = graphStart;
         this.perfParams.end = graphEnd;
+        if (this._metric.length > 0) {
+            this.perfParams.metric = this._metric;
+        } else {
+            delete this.perfParams.metric;
+        }
+        if (this._promql.length > 0) {
+            this.perfParams.promql = this._promql;
+        } else {
+            delete this.perfParams.promql;
+        }
 
         this.loadPerfData();
     }
 
-    protected loadPerfData(): void {
+    private loadPerfData() {
         this.isLoading = true;
         this.subscriptions.add(this.PrometheusQueryService.getPerfdata(this.perfParams)
             .subscribe((perfdata: PrometheusPerformanceDataRoot) => {
@@ -156,6 +174,7 @@ export class PrometheusPopoverGraphComponent {
                 } else {
                     this.perfData = perfdata.performance_data ?? [];
                 }
+
                 setTimeout(() => {
                     this.renderGraphs();
                     this.isLoading = false;
@@ -173,7 +192,7 @@ export class PrometheusPopoverGraphComponent {
     }
 
     @debounce(300)
-    protected renderGraphs() {
+    private renderGraphs() {
         for (let i = 0; i < this.perfData.length; i++) {
             //Only render 4 gauges in popover...
             let data: any = [];

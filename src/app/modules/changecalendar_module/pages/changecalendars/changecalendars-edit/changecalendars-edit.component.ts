@@ -33,8 +33,13 @@ import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface'
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { ChangecalendarsService } from '../changecalendars.service';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
-import { EditChangecalendarRoot } from '../changecalendars.interface';
+import { ChangecalendarEvent, EditChangecalendar, EditChangecalendarRoot } from '../changecalendars.interface';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { CalendarComponent } from '../../../../../pages/calendars/calendar/calendar.component';
+import { CalendarEvent } from '../../../../../pages/calendars/calendars.interface';
+import {
+    ChangecalendarsEventEditorComponent
+} from '../../../components/changecalendars-event-editor/changecalendars-event-editor.component';
 
 @Component({
     selector: 'oitc-changecalendars-edit',
@@ -63,7 +68,9 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        FormLoaderComponent
+        FormLoaderComponent,
+        CalendarComponent,
+        ChangecalendarsEventEditorComponent
     ],
     templateUrl: './changecalendars-edit.component.html',
     styleUrl: './changecalendars-edit.component.css',
@@ -82,8 +89,17 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     protected post: EditChangecalendarRoot = {
         changeCalendar: {}
     } as EditChangecalendarRoot;
+    protected events: CalendarEvent[] = [];
     protected containers: SelectKeyValue[] = [];
     protected errors: GenericValidationError = {} as GenericValidationError;
+
+    protected event: ChangecalendarEvent = {
+        title: 'fake',
+        description: 'fake',
+        start: '',
+        end: '',
+        changecalendar_id: 0,
+    } as ChangecalendarEvent;
 
     public ngOnInit() {
         this.loadContainers();
@@ -106,8 +122,9 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     private loadEditChangecalendar(): void {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.ChangecalendarsService.getEdit(id)
-            .subscribe((result: EditChangecalendarRoot) => {
+            .subscribe((result: EditChangecalendar) => {
                 this.post = result;
+                this.events = result.events;
                 this.cdr.markForCheck();
             }));
     }
