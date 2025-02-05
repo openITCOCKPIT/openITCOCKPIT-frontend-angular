@@ -566,6 +566,12 @@
                         </span>
                         <span class="text-primary">
                             @switch (importedhost.importer.data_source) {
+                                @case ("itop") {
+                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                }
+                                @case ("idoit") {
+                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                }
                                 @case ("csv_with_header") {
                                     <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
                                 }
@@ -685,7 +691,7 @@
                             <hr class="my-2">
                             <b>{{ t('Services:') }}</b>
                             <ul class="mb-2 p-0">
-                                @for (service of importedhost.services_overview.new; track $index) {
+                                @for (service of importedhost.services_overview.new|keyvalue; track $index) {
                                     <li class="ms-3">
                                         {{ service.value }}
                                         <c-badge color="success">
@@ -708,7 +714,8 @@
                                     </li>
                                 }
                                 @for (service of importedhost.services_overview.not_deletable; track $index) {
-                                    <li class="ms-3">
+                                    <li class="ms-3"
+                                        [title]="' Service used by other objects.'|transloco">
                                         <a *oitcPermission="['services', 'browser']"
                                            [routerLink]="['/', 'services', 'browser', service.id]">
                                             {{ service.servicename }}
@@ -777,7 +784,8 @@
                                     </li>
                                 }
                                 @for (service of importedhost.oitc_agent_services_overview.not_deletable; track $index) {
-                                    <li class="ms-3">
+                                    <li class="ms-3"
+                                        [title]="' Service used by other objects.'|transloco">
                                         <a *oitcPermission="['services', 'browser']"
                                            [routerLink]="['/', 'services', 'browser', service.id]">
                                             {{ service.servicename }}
@@ -821,7 +829,8 @@
                                     </li>
                                 }
                                 @for (service of importedhost.external_services_overview.not_deletable; track $index) {
-                                    <li class="ms-3">
+                                    <li class="ms-3"
+                                        [title]="' Service used by other objects.'|transloco">
                                         <a *oitcPermission="['services', 'browser']"
                                            [routerLink]="['/', 'services', 'browser', service.id]">
                                             {{ service.servicename }}

@@ -134,7 +134,6 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
             this.cdr.markForCheck();
-            this.dynamicFieldsNameValue = [];
             if (state.show === true && state.id === 'importCsvDataModal') {
                 if (!this.importer) {
                     return;
@@ -143,7 +142,11 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
                     const importerConfig = this.importer.config;
                     this.ImporterService.loadConfig(this.importer.data_source)
                         .subscribe((result: ImporterConfig) => {
+                            this.dynamicFieldsNameValue = [];
+                            console.log(result.config.formFields);
+                            console.log(importerConfig.mapping);
                             _.forEach(result.config.formFields, (value, key) => {
+
                                 if (importerConfig.mapping && importerConfig.mapping[value.ngModel]) {
                                     let fieldValue = importerConfig.mapping[value.ngModel];
                                     if (value.type === 'select') {
@@ -163,6 +166,7 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
                                     });
 
                                 }
+
 
 
                                 this.cdr.markForCheck();

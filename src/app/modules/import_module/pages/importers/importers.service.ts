@@ -3,7 +3,8 @@ import { catchError, forkJoin, map, Observable, of, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
-    Importer, ImporterConfig,
+    Importer,
+    ImporterConfig,
     ImporterElements,
     ImportersGet,
     ImportersIndexParams,
@@ -23,7 +24,6 @@ import {
 } from '../../../../generic-responses';
 import { ModalService } from '@coreui/angular';
 import { ImportDataResponse } from '../importedhosts/importedhosts.interface';
-import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -288,7 +288,14 @@ export class ImportersService {
                 };
             }),
             catchError((error: any) => {
-                let errorMessage: GenericMessageResponse = {message: error.error.response.error};
+                let message: any = '';
+                if (error.status == 500 && error.error && error.error.response && error.error.response.error) {
+                    message = error.error.response.error;
+
+                } else if (error.status == 500 && error.message && !error.error.response) {
+                    message = error.message;
+                }
+                let errorMessage: GenericMessageResponse = {message: message};
                 return of({
                     success: false,
                     data: errorMessage

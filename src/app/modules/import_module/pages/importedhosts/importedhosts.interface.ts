@@ -49,12 +49,20 @@ export interface Importedhost {
     satellite?: SatelliteEntity
     allowEdit: boolean
     services_overview: ServicesOverview
-    external_services_overview: ServicesOverview
-    oitc_agent_services_overview: ServicesOverview
+    external_services_overview: ServicesOverviewByType
+    oitc_agent_services_overview: ServicesOverviewByType
     progress: ImportedhostProgress
 }
 
 export interface ServicesOverview {
+    new: {
+        [key: number]: string
+    }
+    to_delete: ServiceObject[]
+    not_deletable: ServiceObject[]
+}
+
+export interface ServicesOverviewByType {
     new: SelectKeyValue[]
     to_delete: ServiceObject[]
     not_deletable: ServiceObject[]
