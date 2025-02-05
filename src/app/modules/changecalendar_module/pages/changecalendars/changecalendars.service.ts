@@ -4,12 +4,15 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
     AddChangeCalendar,
+    ChangecalendarEvent,
     ChangeCalendarsIndex,
     ChangeCalendarsIndexParams,
-    EditableChangecalendar, EditChangecalendarRoot
+    EditChangecalendar,
+    EditChangecalendarRoot
 } from './changecalendars.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
 
 
 @Injectable({
@@ -31,11 +34,21 @@ export class ChangecalendarsService {
         );
     }
 
-    public getEdit(id: number): Observable<EditChangecalendarRoot> {
+    public getEdit(id: number): Observable<EditChangecalendar> {
         return this.http.get<EditChangecalendarRoot>(`${this.proxyPath}/changecalendar_module/changecalendars/edit/${id}.json?angular=true`)
             .pipe(
                 map((data: EditChangecalendarRoot) => {
-                    return data;
+                    let returnData: EditChangecalendar = data as EditChangecalendar;
+                    returnData.events = [] as CalendarEvent[];
+                    data.changeCalendar.changecalendar_events.forEach((event: ChangecalendarEvent) => {
+                        returnData.events.push({
+                            start: event.start,
+                            title: event.title,
+                            default_holiday: false,
+                            className: ''
+                        });
+                    });
+                    return returnData;
                 })
             );
     }
@@ -83,5 +96,24 @@ export class ChangecalendarsService {
 
     public delete(item: DeleteAllItem): Observable<Object> {
         return this.http.post(`${this.proxyPath}/changecalendar_module/changecalendars/delete/${item.id}.json`, {});
+    }
+
+    public getEvents(id: number): Observable<CalendarEvent[]> {
+        return this.http.get<EditChangecalendarRoot>(`${this.proxyPath}/changecalendar_module/changecalendars/events/${id}.json`)
+            .pipe(
+                map((data: EditChangecalendarRoot) => {
+                    let returndata: CalendarEvent[] = [];
+                    data.changeCalendar.changecalendar_events.forEach((event: ChangecalendarEvent) => {
+                        returndata.push({
+                            start: event.start,
+                            title: event.title,
+                            default_holiday: false,
+                            className: ''
+                        });
+                    });
+
+                    return returndata;
+                })
+            );
     }
 }
