@@ -121,14 +121,14 @@
                         <c-col md="6">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'broadcast-tower']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[PrometheusQuery.name]']"
-                                       [placeholder]="'Filter by exporter name' | transloco"
-                                       aria-label="Filter by exporter name"
+                                       [placeholder]="'Filter by metric name' | transloco"
+                                       aria-label="Filter by metric name"
                                        cFormControl
-                                       name="params['filter[PrometheusExporters.name]']"
+                                       name="params['filter[PrometheusQuery.name]']"
                                        oitcDebounce
                                        type="text"
                                 />
