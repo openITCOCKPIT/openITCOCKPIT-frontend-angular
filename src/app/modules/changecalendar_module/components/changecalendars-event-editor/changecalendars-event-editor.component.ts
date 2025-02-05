@@ -9,8 +9,9 @@ import {
     SimpleChanges
 } from '@angular/core';
 import {
-    CardBodyComponent, CardComponent,
-    CardHeaderComponent, CardTitleDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardTitleDirective,
     ColComponent,
     FormControlDirective,
     FormLabelDirective,
@@ -60,7 +61,6 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
         FaIconComponent,
         ModalToggleDirective,
         XsButtonDirective,
-        CardHeaderComponent,
         CardTitleDirective,
         CardBodyComponent,
         CardComponent
