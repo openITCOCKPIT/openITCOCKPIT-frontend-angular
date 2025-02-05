@@ -37,7 +37,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     public layers: InputSignal<string[]> = input<string[]>([]); // Layer options for context menu
     public gridSize: InputSignal<{ x: number, y: number }> = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
     public gridEnabled: InputSignal<boolean> = input<boolean>(true);
-    public isViewMode: InputSignal<boolean> = input<boolean>(false);
+    public isViewMode: InputSignal<boolean> = input<boolean>(false); // View mode for disabling drag and drop and context menu
 
     @Output() resizedEvent = new EventEmitter<ResizedEvent>();
 

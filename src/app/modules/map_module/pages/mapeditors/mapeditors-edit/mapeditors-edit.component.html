@@ -200,15 +200,15 @@
 
                         <ng-container *ngFor="let gadgetItem of map.Mapgadgets">
                             @if (gadgetItem.gadget !== 'ServiceOutput') {
-                                <!--<oitc-graph-item *ngIf="gadgetItem.gadget === 'RRDGraph'" [item]="gadgetItem"
-                                                       [refreshInterval]="0"
-                                                       [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
-                                                       [layers]="layers"
-                                                       (contextActionEvent)="onContextAction($event)"
-                                                       (dropItemEvent)="onDropItem($event)"
-                                                       (resizedEvent)="onResizeStop($event)"
-                                                       [hidden]="!gadgetItem.display">
-                                </oitc-graph-item>-->
+                                <oitc-graph-item *ngIf="gadgetItem.gadget === 'RRDGraph'" [item]="gadgetItem"
+                                                 [refreshInterval]="0"
+                                                 [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                                 [layers]="layers"
+                                                 (contextActionEvent)="onContextAction($event)"
+                                                 (dropItemEvent)="onDropItem($event)"
+                                                 (resizedEvent)="onResizeStop($event)"
+                                                 [hidden]="!gadgetItem.display">
+                                </oitc-graph-item>
                                 <oitc-perfdata-text-item *ngIf="gadgetItem.gadget === 'Text'" [item]="gadgetItem"
                                                          [refreshInterval]="0"
                                                          [gridSize]="gridSize"

@@ -1,0 +1,21 @@
+<div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
+     [draggable]="!isViewMode()"
+     (cdkDragEnded)="onDragEnd($event)"
+     (cdkDragMoved)="onDragMove($event)"
+     (resizeStop)="onResizeStop($event, type)"
+     cdkDragBoundary=".map-canvas">
+    <div cdkDragHandle class="bg-light" *ngIf="allowView && hasEnoughData" [style.width.px]="width">
+        <div [id]="'mapgraph-' + item()!.id" [style.height.px]="height" style="padding:0; position:relative;"
+             echarts [options]="chartOption"
+             [theme]="theme"
+             (chartInit)="onChartInit($event)">
+        </div>
+    </div>
+    <div cdkDragHandle *ngIf="!hasEnoughData">
+        <c-alert [color]="'info'">
+            <fa-icon [icon]="['fas', 'chart-area']"></fa-icon>
+            {{ notEnoughDataString }}
+        </c-alert>
+    </div>
+</div>
+<p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>

@@ -57,6 +57,7 @@ import { TrafficlightItemComponent } from '../../../components/trafficlight-item
 import { CylinderItemComponent } from '../../../components/cylinder-item/cylinder-item.component';
 import { TachoItemComponent } from '../../../components/tacho-item/tacho-item.component';
 import { TemperatureItemComponent } from '../../../components/temperature-item/temperature-item.component';
+import { GraphItemComponent } from '../../../components/graph-item/graph-item.component';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
@@ -99,7 +100,8 @@ import { TemperatureItemComponent } from '../../../components/temperature-item/t
         TrafficlightItemComponent,
         CylinderItemComponent,
         TachoItemComponent,
-        TemperatureItemComponent
+        TemperatureItemComponent,
+        GraphItemComponent
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',
