@@ -269,7 +269,7 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
 
     public loadConfigFieldsByDataSource() {
         if (this.post.data_source) {
-            this.subscriptions.add(this.ImportersService.loadConfig(this.post.data_source)
+            this.subscriptions.add(this.ImportersService.loadConfig(this.post.data_source, this.id)
                 .subscribe((result: ImporterConfig) => {
                     this.errors = null;
                     _.forEach(result.config.formFields, (value, key) => {
