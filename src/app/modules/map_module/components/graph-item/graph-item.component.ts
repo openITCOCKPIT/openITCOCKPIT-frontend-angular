@@ -40,6 +40,7 @@ import 'echarts/theme/dark.js';
 import {
     GridComponent,
     LegendComponent,
+    MarkLineComponent,
     TitleComponent,
     ToolboxComponent,
     TooltipComponent,
@@ -50,7 +51,7 @@ import { PerformanceData } from '../../../../components/popover-graph/popover-gr
 import { AlertComponent } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
-echarts.use([LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent]);
+echarts.use([LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent, MarkLineComponent]);
 
 @Component({
     selector: 'oitc-graph-item',
@@ -423,6 +424,216 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         return false;
     }
 
+    private getThresholdLines(gauge: PerformanceData): any[] {
+
+        let markLineData: any[] = [];
+
+        switch (gauge.datasource.setup.scale.type) {
+            case ScaleTypes.O:
+                // We do not have any thresholds
+                break;
+
+            case ScaleTypes.W_O:
+                // warning
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.warn.low,
+                    name: gauge.datasource?.setup.warn.low?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(234, 184, 57, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+                break;
+
+            case ScaleTypes.C_W_O:
+                // Critical
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.crit.low,
+                    name: gauge.datasource?.setup.crit.low?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(224, 47, 68, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+
+                // Warning
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.warn.low,
+                    name: gauge.datasource?.setup.warn.low?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(234, 184, 57, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+                break;
+
+
+            case ScaleTypes.O_W:
+                // Warning
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.warn.high,
+                    name: gauge.datasource?.setup.warn.high?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(234, 184, 57, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+                break;
+
+            case ScaleTypes.O_W_C:
+                // Critical
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.crit.low,
+                    name: gauge.datasource?.setup.crit.low?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(224, 47, 68, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+
+                // Warning
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.warn.low,
+                    name: gauge.datasource?.setup.warn.low?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(234, 184, 57, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+                break;
+
+            case ScaleTypes.C_W_O_W_C:
+                // Critical
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.crit.low,
+                    name: gauge.datasource?.setup.crit.low?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(224, 47, 68, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+
+                // Warning
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.warn.low,
+                    name: gauge.datasource?.setup.warn.low?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(234, 184, 57, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+
+                // Warning
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.warn.high,
+                    name: gauge.datasource?.setup.warn.high?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(234, 184, 57, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+
+                // Critical
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.crit.high,
+                    name: gauge.datasource?.setup.crit.high?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(224, 47, 68, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+                break;
+
+
+            case ScaleTypes.O_W_C_W_O:
+                // Warning
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.warn.low,
+                    name: gauge.datasource?.setup.warn.low?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(234, 184, 57, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+
+                // Critical
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.crit.low,
+                    name: gauge.datasource?.setup.crit.low?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(224, 47, 68, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+
+                // Critical
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.crit.high,
+                    name: gauge.datasource?.setup.crit.high?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(224, 47, 68, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+
+                // Warning
+                markLineData.push({
+                    yAxis: gauge.datasource?.setup.warn.high,
+                    name: gauge.datasource?.setup.warn.high?.toString(),
+                    lineStyle: {
+                        type: 'solid',
+                        color: 'rgba(234, 184, 57, 1)'
+                    },
+                    label: {
+                        show: false
+                    }
+                });
+                break;
+        }
+
+        return markLineData;
+
+    }
+
     onChartInit(ec: any) {
         this.echartsInstance = ec;
     }
@@ -452,6 +663,8 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         if (this.height < 130) {
             showTicks = false;
         }
+
+        const thresholdsLines = this.getThresholdLines(performance_data);
 
         this.chartOption = {
             chart: {
@@ -580,6 +793,10 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     encode: {
                         x: 'timestamp',
                         y: performance_data.datasource.name // refer gauge (rta) value
+                    },
+                    markLine: {
+                        symbol: 'none',
+                        data: thresholdsLines as []
                     }
                 },
             ],
