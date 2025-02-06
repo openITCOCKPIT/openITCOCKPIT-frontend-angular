@@ -5,7 +5,9 @@ import {
     KtdDragEnd,
     KtdDragStart,
     KtdGridComponent,
+    KtdGridDragHandle,
     KtdGridItemComponent,
+    KtdGridItemPlaceholder,
     KtdGridLayout,
     KtdGridLayoutItem,
     KtdResizeEnd,
@@ -16,6 +18,19 @@ import { fromEvent, merge, Subscription } from 'rxjs';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { MatSelectChange } from '@angular/material/select';
 import { debounceTime, filter } from 'rxjs/operators';
+import {
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTextDirective,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent
+} from '@coreui/angular';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { RouterLink } from '@angular/router';
+import { DashboardColorpickerComponent } from './dashboard-colorpicker/dashboard-colorpicker.component';
 
 @Component({
     selector: 'oitc-dashboards-index',
@@ -23,7 +38,20 @@ import { debounceTime, filter } from 'rxjs/operators';
         NgForOf,
         KtdGridComponent,
         KtdGridItemComponent,
-        NgIf
+        NgIf,
+        CardTextDirective,
+        CardTitleDirective,
+        CardBodyComponent,
+        CardHeaderComponent,
+        CardComponent,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        TranslocoDirective,
+        RouterLink,
+        KtdGridItemPlaceholder,
+        KtdGridDragHandle,
+        DashboardColorpickerComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
