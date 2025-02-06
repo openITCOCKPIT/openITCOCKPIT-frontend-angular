@@ -338,6 +338,7 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
         this.height = this.item()!.size_y;
 
         this.renderGauge();
+        this.cdr.markForCheck();
     }
 
     private onMetricChange() {
@@ -347,6 +348,7 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
 
         this.processPerfdata();
         this.renderGauge();
+        this.cdr.markForCheck();
     }
 
     private onObjectIdChange() {

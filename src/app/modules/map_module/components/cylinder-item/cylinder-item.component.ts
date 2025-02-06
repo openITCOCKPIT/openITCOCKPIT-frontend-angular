@@ -22,9 +22,9 @@ import { CylinderItemService } from './cylinder-item.service';
 import {
     CylinderItemRoot,
     CylinderItemRootParams,
-    GeneratedType,
     Host,
     Perfdata,
+    PerformanceData,
     Service
 } from './cylinder-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
@@ -59,7 +59,7 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
     private current_state: number = 0;
     private responsePerfdata!: Perfdata;
     private perfdataName: string = '';
-    private perfdata: GeneratedType | undefined;
+    private perfdata: PerformanceData | undefined;
 
     constructor(parent: MapCanvasComponent, private renderer: Renderer2) {
         super(parent);
@@ -389,6 +389,7 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
 
         this.processPerfdata();
         this.renderCylinder(this.perfdata);
+        this.cdr.markForCheck();
     }
 
     private onObjectIdChange() {

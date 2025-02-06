@@ -120,6 +120,7 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
         if (this.item()!.output_type !== 'service_output') {
             if (this.longOutputHtml !== null) {
                 this.output = this.longOutputHtml;
+                this.cdr.markForCheck();
             }
         }
 
@@ -148,6 +149,7 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
 
         this.width = this.item()!.size_x;
         this.height = this.item()!.size_y;
+        this.cdr.markForCheck();
         this.renderOutput();
     }
 

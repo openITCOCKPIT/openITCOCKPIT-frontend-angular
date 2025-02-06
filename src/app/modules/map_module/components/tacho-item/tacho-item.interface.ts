@@ -63,10 +63,10 @@ export interface Service {
 }
 
 export interface Perfdata {
-    [key: string]: NodeMemoryMemAvailableBytesotalBytes
+    [key: string]: PerformanceData
 }
 
-export interface NodeMemoryMemAvailableBytesotalBytes {
+export interface PerformanceData {
     current: number
     unit: string
     warning: number

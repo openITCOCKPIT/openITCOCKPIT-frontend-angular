@@ -17,12 +17,10 @@ import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { PerfdataTextItemService } from './perfdata-text-item.service';
 import {
-    Load1,
-    Load15,
-    Load5,
     Perfdata,
     PerfdataTextItemRoot,
-    PerfdataTextItemRootParams
+    PerfdataTextItemRootParams,
+    PerformanceData
 } from './perfdata-text-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { NgIf } from '@angular/common';
@@ -53,7 +51,7 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
     protected color: string = "";
     protected text: string = "";
     private perfdataName: string = "";
-    private perfdata!: Load1 | Load5 | Load15;
+    private perfdata!: PerformanceData;
     private intervalStartet: boolean = false; // needed to prevent multiple interval subscriptions
 
     constructor(parent: MapCanvasComponent) {
@@ -129,15 +127,15 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
     private processPerfdata() {
 
         if (this.responsePerfdata !== null) {
-            const metric = this.item()!.metric as keyof Perfdata;
+            const metric = this.item()!.metric;
             if (this.item()!.metric !== null && this.responsePerfdata.hasOwnProperty(metric)) {
                 this.perfdataName = metric;
                 this.perfdata = this.responsePerfdata[metric];
             } else {
                 //Use first metric.
                 for (let metricName in this.responsePerfdata) {
-                    this.perfdataName = metricName as keyof Perfdata;
-                    this.perfdata = this.responsePerfdata[metricName as keyof Perfdata];
+                    this.perfdataName = metricName;
+                    this.perfdata = this.responsePerfdata[metricName];
                     break;
                 }
             }
@@ -192,6 +190,7 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
         this.processPerfdata();
         this.width = this.item()!.size_x;
         this.height = this.item()!.size_y;
+        this.cdr.markForCheck();
     }
 
     private onObjectIdChange() {

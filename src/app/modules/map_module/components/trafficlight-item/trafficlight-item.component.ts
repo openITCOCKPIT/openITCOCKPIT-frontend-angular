@@ -271,6 +271,7 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
         this.width = this.item()!.size_x - 10; //The view adds 10px
         this.height = this.item()!.size_y - 10;
         this.renderTrafficlight();
+        this.cdr.markForCheck();
     }
 
     private onObjectIdChange() {

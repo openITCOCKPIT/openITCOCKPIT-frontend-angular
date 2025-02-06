@@ -875,6 +875,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         // Let Angular update the template and rerender graph
         setTimeout(() => {
             this.renderGraph();
+            this.cdr.markForCheck();
         }, 250);
     }
 
@@ -894,6 +895,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
         this.processPerfdata();
         this.renderGraph();
+        this.cdr.markForCheck();
     }
 
 }

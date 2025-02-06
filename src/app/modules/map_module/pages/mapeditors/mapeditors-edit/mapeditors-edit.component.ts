@@ -478,6 +478,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 if (items[i].id === event.data.id) {
                     this.currentItem = items[i];
                     deleteMethod();
+                    this.cdr.markForCheck();
                     break;
                 }
             }
@@ -668,6 +669,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.action = 'line';
         this.currentItem = lineItem;
         //$('#addEditMapLineModal').modal('show');
+        this.cdr.markForCheck();
     };
 
     public saveLine(action: string) {
@@ -792,6 +794,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.action = 'summaryItem';
         this.currentItem = item;
         //$('#addEditSummaryItemModal').modal('show');
+        this.cdr.markForCheck();
     };
 
     public saveSummaryItem(action: string) {
@@ -915,6 +918,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.action = 'gadget';
         this.currentItem = JSON.parse(JSON.stringify(gadgetItem));    //real clone
         //$('#addEditMapGadgetModal').modal('show');
+        this.cdr.markForCheck();
     };
 
     public saveGadget(action: string) {
@@ -1060,6 +1064,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.addLink = false;
         //$('#docuText').val(item.text);
         //$('#AddEditStatelessTextModal').modal('show');
+        this.cdr.markForCheck();
     };
 
     public saveText(action: string) {
@@ -1183,6 +1188,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.action = 'icon';
         this.currentItem = item;
         //$('#AddEditStatelessIconModal').modal('show');
+        this.cdr.markForCheck();
     };
 
     public saveIcon(action: string) {

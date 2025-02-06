@@ -64,10 +64,10 @@ export interface Service {
 }
 
 export interface Perfdata {
-    [key: string]: GeneratedType
+    [key: string]: PerformanceData
 }
 
-export interface GeneratedType {
+export interface PerformanceData {
     current: string
     unit: string
     warning: string

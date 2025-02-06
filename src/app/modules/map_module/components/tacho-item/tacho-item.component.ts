@@ -317,6 +317,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         this.height = this.width;
 
         this.renderGauge();
+        this.cdr.markForCheck();
     }
 
     private onMetricChange() {
@@ -326,6 +327,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
         this.processPerfdata();
         this.renderGauge();
+        this.cdr.markForCheck();
     }
 
     private onObjectIdChange() {
