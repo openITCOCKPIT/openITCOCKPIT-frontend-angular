@@ -10,17 +10,17 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
 import { NgIf } from '@angular/common';
 
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -39,32 +39,32 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
 @Component({
     selector: 'oitc-settings-edit',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    FormLoaderComponent,
-    NgIf,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    PaginatorModule,
-    RequiredIconComponent,
-    XsButtonDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    TrueFalseDirective,
-    ApikeyDocModalComponent
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        FormLoaderComponent,
+        NgIf,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        PaginatorModule,
+        RequiredIconComponent,
+        XsButtonDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        ApikeyDocModalComponent
+    ],
     templateUrl: './settings-edit.component.html',
     styleUrl: './settings-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -76,16 +76,7 @@ export class SettingsEditComponent implements OnInit, OnDestroy {
     protected errors: GenericValidationError | null = null;
     protected currentCommandAsPostRequest: string = '';
     private readonly notyService: NotyService = inject(NotyService);
-    protected post: PagerdutySettings = {
-        api_key: '',
-        api_url: '',
-        created: '',
-        id: null,
-        integration_key: '',
-        modified: '',
-        two_way: false,
-        use_proxy: false
-    };
+    protected post?: PagerdutySettings;
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
@@ -107,6 +98,10 @@ export class SettingsEditComponent implements OnInit, OnDestroy {
     }
 
     protected updatePagerdutySettings(): void {
+        if (!this.post) {
+            return;
+        }
+
         this.subscriptions.add(
             this.pagerdutySettingsService.setPagerdutySettings(this.post).subscribe((result: GenericResponseWrapper): void => {
                     this.cdr.markForCheck();

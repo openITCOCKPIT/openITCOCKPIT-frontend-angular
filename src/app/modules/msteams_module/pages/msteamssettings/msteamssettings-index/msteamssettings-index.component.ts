@@ -27,31 +27,35 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { MsteamssettingsService } from '../msteamssettings.service';
 import { RouterLink } from '@angular/router';
 import { GenericValidationError } from '../../../../../generic-responses';
+import { NgIf } from '@angular/common';
+import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-msteamssettings-index',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    PermissionDirective,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink
-],
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        NgIf,
+        FormLoaderComponent
+    ],
     templateUrl: './msteamssettings-index.component.html',
     styleUrl: './msteamssettings-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -63,11 +67,15 @@ export class MsteamssettingsIndexComponent implements OnInit, OnDestroy {
     private readonly MsteamssettingsService: MsteamssettingsService = inject(MsteamssettingsService);
     private readonly notyService: NotyService = inject(NotyService);
 
-    protected post: TeamsSettings = {} as TeamsSettings;
+    protected post?: TeamsSettings;
     protected errors: GenericValidationError | null = null;
     private cdr = inject(ChangeDetectorRef);
 
     protected submit(): void {
+        if (!this.post) {
+            return;
+        }
+
         this.subscriptions.add(
             this.MsteamssettingsService.saveMsteamsSettings(this.post).subscribe((response) => {
                 this.cdr.markForCheck();

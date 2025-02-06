@@ -59,8 +59,8 @@ export interface PrometheusPerformanceDataParams {
     end: number,
     host_uuid: string,
     jsTimestamp: number,
-    metric: string,
-    promql: string,
+    metric: string | undefined,
+    promql: string | undefined,
     start: number
 }
 
@@ -142,10 +142,10 @@ export interface PrometheusQueryIndexParams {
     'filter[PrometheusQuery.name]': string,
 }
 
-export function getDefaultPrometheusQueryIndexParams(): PrometheusQueryIndexParams {
+export function getDefaultPrometheusQueryIndexParams(hostId: number = 0): PrometheusQueryIndexParams {
     return {
         angular: true,
-        hostId: 0,
+        hostId: hostId,
         'filter[PrometheusQuery.name]': '',
     }
 }

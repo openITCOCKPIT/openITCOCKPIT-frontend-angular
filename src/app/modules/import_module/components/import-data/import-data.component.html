@@ -13,7 +13,7 @@
                             <fa-icon [icon]="['fas', 'database']"
                                      stackItemSize="2x" pull="left" class="text-info"></fa-icon>
                             <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                                     stackItemSize="1x" pull="right" transform="right-5 down-15"
+                                     stackItemSize="1x" pull="right" transform="right-12 down-15"
                             ></fa-icon>
                         </fa-stack>
                         {{ t('Import data from i-doit system') }}
@@ -24,7 +24,7 @@
                             <fa-icon [icon]="['fas', 'user-secret']"
                                      stackItemSize="2x" pull="left" class="text-info"></fa-icon>
                             <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                                     stackItemSize="1x" pull="right" transform="right-5 down-15"
+                                     stackItemSize="1x" pull="right" transform="right-12 down-15"
                             ></fa-icon>
                         </fa-stack>
                         {{ t('Import data from openITCOCKPIT Agent') }}
@@ -35,7 +35,7 @@
                             <fa-icon [icon]="['fas', 'user-secret']"
                                      stackItemSize="2x" pull="left" class="text-info"></fa-icon>
                             <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                                     stackItemSize="1x" pull="right" transform="right-5 down-15"
+                                     stackItemSize="1x" pull="right" transform="right-12 down-15"
                             ></fa-icon>
                         </fa-stack>
                         {{ t('Import data from openITCOCKPIT Agent') }}
@@ -46,7 +46,7 @@
                             <fa-icon [icon]="['fas', 'tower-observation']"
                                      stackItemSize="2x" pull="left" class="text-info"></fa-icon>
                             <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                                     stackItemSize="1x" pull="right" transform="right-5 down-15"
+                                     stackItemSize="1x" pull="right" transform="right-12 down-15"
                             ></fa-icon>
                         </fa-stack>
                         {{ t('Import data from External Monitoring System system') }}
@@ -81,6 +81,24 @@
                                 </span>
                             </h5>
                         </legend>
+                        @if (dynamicFieldsNameValue.length > 0) {
+                            <div class="pb-3">
+                                <div *ngFor="let formField of dynamicFieldsNameValue" class="bold">
+                                    {{ formField.label }}:
+                                    @if (formField.type !== 'checkbox') {
+                                        <span class="text-info">
+                                            {{ formField.value }}
+                                        </span>
+                                    } @else {
+                                        <fa-icon [icon]="['fas', 'times']" class="text-danger"
+                                                 *ngIf="formField.value == 0"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'check']" class="text-success"
+                                                 *ngIf="formField.value == 1"></fa-icon>
+                                    }
+                                </div>
+                            </div>
+
+                        }
                     </fieldset>
                 </c-col>
             </c-row>

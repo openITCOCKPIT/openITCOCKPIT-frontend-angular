@@ -1,22 +1,21 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -34,8 +33,6 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { NgForOf, NgIf } from '@angular/common';
 
 
-
-
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -50,43 +47,45 @@ import { HostsService } from '../../hosts/hosts.service';
 import { HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
 import _, { parseInt } from 'lodash';
 import { IndexPage } from '../../../pages.interface';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-logentries-index',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    ColComponent,
-    DebounceDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    PaginatorModule,
-    RowComponent,
-    TranslocoPipe,
-    MatSort,
-    MatSortHeader,
-    NgIf,
-    TableDirective,
-    NgForOf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    ContainerComponent,
-    ServerLinkComponent,
-    MultiSelectComponent,
-    CardFooterComponent
-],
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        ColComponent,
+        DebounceDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        PaginatorModule,
+        RowComponent,
+        TranslocoPipe,
+        MatSort,
+        MatSortHeader,
+        NgIf,
+        TableDirective,
+        NgForOf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        ContainerComponent,
+        ServerLinkComponent,
+        MultiSelectComponent,
+        CardFooterComponent,
+        TableLoaderComponent
+    ],
     templateUrl: './logentries-index.component.html',
     styleUrl: './logentries-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

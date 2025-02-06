@@ -165,7 +165,7 @@ export class PrometheusQueryIndexComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter(): void {
-        this.params = getDefaultPrometheusQueryIndexParams();
+        this.params = getDefaultPrometheusQueryIndexParams(this.params.hostId);
 
         this.loadIndex();
     }

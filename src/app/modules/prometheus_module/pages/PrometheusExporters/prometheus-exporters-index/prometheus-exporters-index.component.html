@@ -37,7 +37,8 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <button  *oitcPermission="['PrometheusModule', 'PrometheusExporters', 'add']" [routerLink]="['/', 'prometheus_module', 'PrometheusExporters', 'add']"
+                    <button *oitcPermission="['PrometheusModule', 'PrometheusExporters', 'add']"
+                            [routerLink]="['/', 'prometheus_module', 'PrometheusExporters', 'add']"
                             cButton
                             class="ripple"
                             color="success"
@@ -111,16 +112,16 @@
                                 </span>
 
                                 <oitc-multi-select
-                                        name="params['filter[PrometheusExporters.scrape_interval][]']"
-                                        id="params['filter[PrometheusExporters.scrape_interval][]']"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        aria-label="Filter by scrape interval"
-                                        [(ngModel)]="params['filter[PrometheusExporters.scrape_interval][]']"
-                                        [options]="intervals"
-                                        [debounce]="true"
-                                        [placeholder]="'Filter by scrape interval' | transloco"
-                                        (onChange)="onFilterChange(true)"
+                                    name="params['filter[PrometheusExporters.scrape_interval][]']"
+                                    id="params['filter[PrometheusExporters.scrape_interval][]']"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    aria-label="Filter by scrape interval"
+                                    [(ngModel)]="params['filter[PrometheusExporters.scrape_interval][]']"
+                                    [options]="intervals"
+                                    [debounce]="true"
+                                    [placeholder]="'Filter by scrape interval' | transloco"
+                                    (onChange)="onFilterChange(true)"
                                 >
                                 </oitc-multi-select>
                             </c-input-group>
@@ -137,10 +138,10 @@
             </c-container>
 
 
-            <oitc-table-loader *ngIf="! result"></oitc-table-loader>
-
-
-            <table bordered cTable class="mt-2 mb-2" hover striped matSort (matSortChange)="onSortChange($event)"
+            <oitc-table-loader *ngIf="!result"></oitc-table-loader>
+            
+            <table *ngIf="result" bordered cTable class="mt-2 mb-2" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
                 <tr>
@@ -161,7 +162,7 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="result.all_exporters.length">
+                <tbody>
                 <tr *ngFor="let exporter of result.all_exporters">
                     <td>
                         {{ exporter.name }}
@@ -201,17 +202,17 @@
             </table>
 
             <oitc-no-records
-                    *ngIf="result && result.all_exporters.length === 0"></oitc-no-records>
+                *ngIf="result && result.all_exporters.length === 0"></oitc-no-records>
 
 
             <c-container
-                    [fluid]="true">
+                [fluid]="true">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="result"
-                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="result"
+                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>

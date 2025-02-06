@@ -18,8 +18,9 @@
             </li>
         </ol>
     </nav>
+    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
     <form cForm (ngSubmit)="checkForMisingArguments()">
-        <c-card class="mb-3">
+        <c-card class="mb-3" *ngIf="post">
             <c-card-header>
                 <h5 cCardTitle>
                     {{ t('Edit command:') }}

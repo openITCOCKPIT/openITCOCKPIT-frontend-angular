@@ -35,8 +35,14 @@ import { GenericMessageResponse } from '../../../../generic-responses';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { FormsModule } from '@angular/forms';
 import { ImportersService } from '../../pages/importers/importers.service';
-import { Importer, ImportersErrorMessageResponse } from '../../pages/importers/importers.interface';
+import {
+    GenericKeyValueFieldType,
+    Importer,
+    ImporterConfig,
+    ImportersErrorMessageResponse
+} from '../../pages/importers/importers.interface';
 import { ImportDataResponse, ImportedHostRawData } from '../../pages/importedhosts/importedhosts.interface';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-import-data',
@@ -89,6 +95,8 @@ export class ImportDataComponent implements OnInit, OnDestroy {
     public errors: GenericMessageResponse | null = null;
     public hasRootPrivileges: boolean = false;
     private cdr = inject(ChangeDetectorRef);
+    public dynamicFieldsNameValue: GenericKeyValueFieldType[] = [];
+
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -107,7 +115,33 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                 if (!this.importer) {
                     return;
                 }
+                if (this.importer.data_source && this.importer.config && this.importer.config.mapping) {
+                    let importerConfig = this.importer.config;
+                    this.ImporterService.loadConfig(this.importer.data_source)
+                        .subscribe((result: ImporterConfig) => {
+                            this.dynamicFieldsNameValue = [];
+                            _.forEach(result.config.formFields, (value, key) => {
+                                let fieldValue = importerConfig.mapping[value.ngModel];
+                                if (value.type === 'select') {
+                                    if (value.options) {
+                                        value.options.forEach((option: any) => {
+                                            if (option.key === fieldValue) {
+                                                fieldValue = option.value;
+                                            }
+                                        });
+                                    }
+                                }
+                                this.dynamicFieldsNameValue.push({
+                                    label: value.label,
+                                    value: fieldValue,
+                                    type: value.type
+                                });
 
+
+                            });
+                            this.cdr.markForCheck();
+                        });
+                }
                 switch (this.importer.data_source) {
                     case 'idoit':
                         this.ImporterService.loadDataFromIdoit(this.importer).subscribe(data => {
@@ -121,10 +155,14 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                             }
                             if (!data.success) {
                                 let response = data.data as ImportersErrorMessageResponse;
+                                let notValidData: any = [];
+                                if (response.errors && response.errors.notValidRawData) {
+                                    notValidData = response.errors.notValidRawData;
+                                }
                                 this.importData = {
                                     success: false,
                                     errorMessage: response.message,
-                                    notValidRawData: response.errors.notValidRawData
+                                    notValidRawData: notValidData
                                 }
                             }
                             this.cdr.markForCheck();
@@ -165,10 +203,14 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                             }
                             if (!data.success) {
                                 let response = data.data as ImportersErrorMessageResponse;
+                                let notValidData: any = [];
+                                if (response.errors && response.errors.notValidRawData) {
+                                    notValidData = response.errors.notValidRawData;
+                                }
                                 this.importData = {
                                     success: false,
                                     errorMessage: response.message,
-                                    notValidRawData: response.errors.notValidRawData
+                                    notValidRawData: notValidData
                                 }
                             }
                             this.cdr.markForCheck();
@@ -187,10 +229,14 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                             }
                             if (!data.success) {
                                 let response = data.data as ImportersErrorMessageResponse;
+                                let notValidData: any = [];
+                                if (response.errors && response.errors.notValidRawData) {
+                                    notValidData = response.errors.notValidRawData;
+                                }
                                 this.importData = {
                                     success: false,
                                     errorMessage: response.message,
-                                    notValidRawData: (response.errors && response.errors.notValidRawData) ? response.errors.notValidRawData : []
+                                    notValidRawData: notValidData
                                 }
                             }
                             this.cdr.markForCheck();

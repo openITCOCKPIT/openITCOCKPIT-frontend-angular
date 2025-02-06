@@ -46,7 +46,8 @@
                 </c-nav>
             </c-card-header>
             <c-card-body>
-                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                <oitc-table-loader *ngIf="!cronjobs"></oitc-table-loader>
+                <table *ngIf="cronjobs" bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
                     <thead>
                     <tr>
 
@@ -73,7 +74,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="cronjobs">
+                    <tbody>
                     <tr *ngFor="let cronjob of cronjobs.cronjobs">
 
                         <td>{{ cronjob.Cronjob.task }}</td>

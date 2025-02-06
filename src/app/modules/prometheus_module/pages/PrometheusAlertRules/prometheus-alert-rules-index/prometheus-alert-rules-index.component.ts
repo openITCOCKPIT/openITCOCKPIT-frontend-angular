@@ -179,7 +179,7 @@ export class PrometheusAlertRulesIndexComponent implements OnInit, OnDestroy, In
     }
 
     public resetFilter() {
-        this.params = getDefaultPrometheusAlertRulesIndexParams();
+        this.params = getDefaultPrometheusAlertRulesIndexParams(this.params['filter[PrometheusAlertRules.host_id]']);
         this.reload();
     }
 

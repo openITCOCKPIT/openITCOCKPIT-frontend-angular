@@ -31,6 +31,7 @@ import { isarFlowModuleRoutes } from './modules/isarflow_module/isarflow_module.
 import { grafanaModuleRoutes } from './modules/grafana_module/grafana_module.routes';
 import { autoreportModuleRoutes } from './modules/autoreport_module/autoreport_module.routes';
 import { prometheusModuleRoutes } from './modules/prometheus_module/prometheus_module.routes';
+import { changecalendarsModuleRoutes } from './modules/changecalendar_module/changecalendar_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -83,7 +84,8 @@ const moduleRoutes: Routes = [
     ...isarFlowModuleRoutes,
     ...grafanaModuleRoutes,
     ...openstreetmapModuleRoutes,
-    ...autoreportModuleRoutes
+    ...autoreportModuleRoutes,
+    ...changecalendarsModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{

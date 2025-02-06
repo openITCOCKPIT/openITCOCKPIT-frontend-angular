@@ -61,7 +61,8 @@
         </c-card-header>
         <c-card-body>
 
-            <table bordered cTable class="mt-2 mb-0" hover striped>
+            <oitc-table-loader *ngIf="!initialized"></oitc-table-loader>
+            <table *ngIf="initialized" bordered cTable class="mt-2 mb-0" hover striped>
                 <thead>
                 <tr>
                     <th scope="col">

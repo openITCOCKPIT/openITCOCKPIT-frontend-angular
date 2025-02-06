@@ -19,6 +19,14 @@ export interface Importer {
     hostdefault_id: number
     container: string
     allowEdit: boolean
+    config?: {
+        mapping: {
+            [key: string]: {
+                key: string
+                value: string
+            }
+        }
+    }
 }
 
 export interface ImportersIndexParams {
@@ -92,8 +100,7 @@ export interface ImportersToHostdefaults {
     hostdefault_id?: number | null
     field: string
     regex: string
-    index: number
-    order: number
+    order?: number // Only relevant to store the order in the database
 }
 
 
@@ -271,7 +278,7 @@ export interface MissingCsvHeaderFields {
 export interface NotValidCsvRawData {
     error: string
     description: string
-    invalidData: InvalidCsvData | ImportedHostRawData[]
+    invalidData: ImportedHostRawData[]
 }
 
 export interface InvalidCsvData {
@@ -280,4 +287,16 @@ export interface InvalidCsvData {
     mapping_address: string
     mapping_description: string
     mapping_software: string
+}
+
+export interface CsvPreviewHeadersAsArray {
+    key: string
+    name: string
+    exists: boolean
+}
+
+export interface GenericKeyValueFieldType {
+    label: any
+    value: any
+    type: string
 }

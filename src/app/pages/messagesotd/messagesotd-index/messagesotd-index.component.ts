@@ -58,47 +58,47 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 @Component({
     selector: 'oitc-messagesotd-index',
     imports: [
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    DeleteAllModalComponent,
-    DropdownDividerDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ItemSelectComponent,
-    MatSort,
-    MatSortHeader,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    PermissionDirective,
-    RowComponent,
-    SelectAllComponent,
-    TableDirective,
-    TableLoaderComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    RouterLink
-],
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        DeleteAllModalComponent,
+        DropdownDividerDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        PermissionDirective,
+        RowComponent,
+        SelectAllComponent,
+        TableDirective,
+        TableLoaderComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        RouterLink
+    ],
     templateUrl: './messagesotd-index.component.html',
     styleUrl: './messagesotd-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: MessagesOfTheDayService } // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: MessagesOfTheDayService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
     ]
 })
 export class MessagesotdIndexComponent implements IndexPage, OnInit, OnDestroy {
@@ -112,10 +112,7 @@ export class MessagesotdIndexComponent implements IndexPage, OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
 
     protected params: MessagesOtdIndexParams = {} as MessagesOtdIndexParams;
-    protected messagesOfTheDay: MessagesOtdIndexGet = {
-        messagesOtd: [],
-        _csrfToken : '',
-    } as MessagesOtdIndexGet;
+    protected messagesOfTheDay?: MessagesOtdIndexGet;
     protected selectedItems: DeleteAllItem[] = [];
     protected hideFilter: boolean = true;
 

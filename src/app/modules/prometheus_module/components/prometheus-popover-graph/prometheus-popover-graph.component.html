@@ -7,7 +7,7 @@
         ></fa-icon>
     </div>
 
-    <p-overlayPanel #graphOverlayPanel [showCloseIcon]="true"
+    <p-popover #graphOverlayPanel
                     class="popup-graph-container"
                     [style]="{ width: '70%', 'margin-left': '35px' }">
         <ng-template pTemplate="content">
@@ -31,6 +31,6 @@
                 }
             </div>
         </ng-template>
-    </p-overlayPanel>
+    </p-popover>
 
 </ng-container>

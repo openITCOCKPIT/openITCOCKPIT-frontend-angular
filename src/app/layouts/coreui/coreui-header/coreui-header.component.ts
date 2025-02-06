@@ -3,25 +3,25 @@ import {
     ChangeDetectorRef,
     Component,
     DestroyRef,
-    inject, Input,
+    inject,
+    Input,
     input,
-    OnDestroy, SimpleChanges
+    OnDestroy
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
-  AvatarComponent,
-  BadgeComponent,
-  ColorModeService,
-  ContainerComponent,
-  DropdownComponent,
-  DropdownDividerDirective,
-  DropdownHeaderDirective,
-  DropdownItemDirective,
-  DropdownMenuDirective,
-  DropdownToggleDirective,
-  HeaderComponent,
-  HeaderNavComponent,
-  NavItemComponent
+    BadgeComponent,
+    ColorModeService,
+    ContainerComponent,
+    DropdownComponent,
+    DropdownDividerDirective,
+    DropdownHeaderDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    HeaderComponent,
+    HeaderNavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 import { delay, filter, map, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -35,33 +35,36 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
-import { MessageOfTheDayButtonComponent } from '../../../components/message-of-the-day-button/message-of-the-day-button.component';
+import {
+    MessageOfTheDayButtonComponent
+} from '../../../components/message-of-the-day-button/message-of-the-day-button.component';
 import { CurrentMessageOfTheDay } from '../../../pages/messagesotd/messagesotd.interface';
+import { HeaderAvatarComponent } from './header-avatar/header-avatar.component';
 
 @Component({
     selector: 'oitc-coreui-header',
     imports: [
-    ContainerComponent,
-    HeaderNavComponent,
-    NavItemComponent,
-    AvatarComponent,
-    BadgeComponent,
-    RouterLink,
-    NgTemplateOutlet,
-    DropdownComponent,
-    DropdownDividerDirective,
-    DropdownHeaderDirective,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    IconDirective,
-    ChangeLanguageComponent,
-    TopSearchComponent,
-    TranslocoDirective,
-    FaIconComponent,
-    PermissionDirective,
-    MessageOfTheDayButtonComponent
-],
+        ContainerComponent,
+        HeaderNavComponent,
+        NavItemComponent,
+        BadgeComponent,
+        RouterLink,
+        NgTemplateOutlet,
+        DropdownComponent,
+        DropdownDividerDirective,
+        DropdownHeaderDirective,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        IconDirective,
+        ChangeLanguageComponent,
+        TopSearchComponent,
+        TranslocoDirective,
+        FaIconComponent,
+        PermissionDirective,
+        MessageOfTheDayButtonComponent,
+        HeaderAvatarComponent
+    ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

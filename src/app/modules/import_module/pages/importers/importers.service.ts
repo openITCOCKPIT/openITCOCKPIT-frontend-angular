@@ -288,7 +288,14 @@ export class ImportersService {
                 };
             }),
             catchError((error: any) => {
-                let errorMessage: GenericMessageResponse = {message: error.error.response.error};
+                let message: any = '';
+                if (error.status == 500 && error.error && error.error.response && error.error.response.error) {
+                    message = error.error.response.error;
+
+                } else if (error.status == 500 && error.message && !error.error.response) {
+                    message = error.message;
+                }
+                let errorMessage: GenericMessageResponse = {message: message};
                 return of({
                     success: false,
                     data: errorMessage

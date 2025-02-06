@@ -55,6 +55,7 @@
         "@tsparticles/angular": "^3.0.0",
         "@tsparticles/engine": "^3.7.1",
         "@tsparticles/slim": "^3.7.1",
+        "@types/canvas-gauges": "^2.1.8",
         "@types/codemirror": "^5.60.15",
         "@types/d3": "^7.4.3",
         "@types/d3-hexbin": "^0.2.5",
@@ -62,12 +63,14 @@
         "@types/lodash": "^4.17.14",
         "@types/sprintf-js": "^1.1.4",
         "animate.css": "^4.1.1",
+        "canvas-gauges": "^2.1.7",
         "codemirror": "^6.0.1",
         "d3": "^7.9.0",
         "d3-hexbin": "^0.2.2",
         "dropzone": "^6.0.0-beta.2",
         "file-saver": "^2.0.5",
         "flag-icons": "^7.2.3",
+        "initials": "^3.1.2",
         "jsvectormap": "^1.6.0",
         "leaflet": "^1.9.4",
         "lodash": "^4.17.21",
@@ -88,9 +91,7 @@
         "vanilla-jsoneditor": "^2.3.3",
         "vis-network": "^9.1.9",
         "vis-timeline": "^7.7.3",
-        "zone.js": "^0.15.0",
-        "canvas-gauges": "^2.1.7",
-        "@types/canvas-gauges": "^2.1.8"
+        "zone.js": "^0.15.0"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^19.0.7",

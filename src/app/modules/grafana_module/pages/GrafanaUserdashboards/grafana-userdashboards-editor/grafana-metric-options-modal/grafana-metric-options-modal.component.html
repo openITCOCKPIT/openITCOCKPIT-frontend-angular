@@ -53,19 +53,58 @@
                             optionLabel="value"
                             [(ngModel)]="currentMetric.metric"
                             [options]="metrics"
+                            (onChange)="onMetricChange()"
                             [appendTo]="''"
                             oitcFormError [errors]="errors" errorField="metric">
                         </oitc-select>
                         <oitc-form-feedback [errors]="errors" errorField="metric"></oitc-form-feedback>
+                        <div class="help-block" *ngIf="unitOfSelectedMetric">
+                            {{ t('Unit') }}:
+                            {{ unitOfSelectedMetric }}
+                        </div>
                     </div>
 
                 </c-col>
             </c-row>
 
+            <c-row *ngIf="currentMetric">
+                @for (color of grafanaColors; track $index) {
+                    <c-col [xs]="12" [md]="6" [lg]="3" class="mb-3">
+
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <div class="grafana-main-color"
+                                         [ngClass]="{'grafana-selected-color': currentMetric.color === color.main}"
+                                         (click)="currentMetric.color = color.main"
+                                         [style.background]="color.main"></div>
+                                </td>
+                                <td class="ps-2">
+                                    {{ color.name }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-1" colspan="2">
+                                    @for (childColor of color.children; track $index) {
+                                        <div class="grafana-child-color d-inline-block me-3px"
+                                             [ngClass]="{'grafana-selected-color': currentMetric.color === childColor}"
+                                             (click)="currentMetric.color = childColor"
+                                             [style.background]="color.main"></div>
+                                    }
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </c-col>
+                }
+            </c-row>
+
 
         </c-modal-body>
         <c-modal-footer>
-            <button [cModalToggle]="grafanaMetricOptionsModal.id" cButton color="primary" class="ripple"
+            <button cButton color="primary" class="ripple"
                     (click)="saveMetric()">
                 <span *ngIf="mode === 'add'">
                     {{ t('Add metric') }}

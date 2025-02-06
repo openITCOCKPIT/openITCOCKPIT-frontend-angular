@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -9,23 +8,23 @@ import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownDividerDirective,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownDividerDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
@@ -53,51 +52,53 @@ import { CalendarsService } from '../calendars.service';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { IndexPage } from '../../../pages.interface';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-calendars-index',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    DeleteAllModalComponent,
-    DropdownDividerDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ItemSelectComponent,
-    MatSort,
-    MatSortHeader,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    ReactiveFormsModule,
-    RowComponent,
-    SelectAllComponent,
-    TableDirective,
-    TranslocoPipe,
-    XsButtonDirective
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        DeleteAllModalComponent,
+        DropdownDividerDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        ReactiveFormsModule,
+        RowComponent,
+        SelectAllComponent,
+        TableDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        TableLoaderComponent
+    ],
     templateUrl: './calendars-index.component.html',
     styleUrl: './calendars-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: CalendarsService } // Inject the CalendarsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: CalendarsService} // Inject the CalendarsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
