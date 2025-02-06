@@ -208,11 +208,10 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
                     } else {
                         this.selectedMetrics = myMetrix;
                     }
-                    console.log(this.selectedMetrics);
                 });
                 this.getUserTimezone();
 
-                if (this.selectedMetrics.length > 0) {
+                if (this.selectedMetrics && this.selectedMetrics.length > 0) {
                     this.onMetricsChange();
                 }
             }));
@@ -301,7 +300,6 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
                     if (!result.success) {
                         this.notyService.genericError();
                         this.errors = result.data;
-                        console.debug(this.errors);
                         this.cdr.markForCheck();
                         return;
                     }
@@ -371,7 +369,6 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.PrometheusQueryService.loadCurrentValueByMetric(this.index.host.uuid, metric)
                 .subscribe((result: LoadCurrentValueByMetricRoot) => {
                     this.metrics[metric] = result;
-                    console.warn(this.metrics);
 
                     this.cdr.markForCheck();
                 }));

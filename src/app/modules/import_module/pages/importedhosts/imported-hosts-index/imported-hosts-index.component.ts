@@ -191,7 +191,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
         let ready_for_import: string | boolean = '';
         let disabled: string | boolean = '';
         let flags: number | string = '';
-        
+
         // ALL "Already synchronized" filter are selected or deselected
         if (this.imported === this.not_imported && this.not_imported === this.disabled) {
             // "In monitoring (active)" and "NEW" checkboxes are selected
@@ -332,15 +332,18 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public synchronizeWithMonitoring() {
+        this.showSynchronizingSpinner = true;
         this.subscriptions.add(this.ImportedhostsService.synchronizeWithMonitoring()
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     this.notyService.genericSuccess(result.message);
+                    this.showSynchronizingSpinner = false;
                     return;
                 }
                 // Error
                 this.notyService.genericError(result.message);
+                this.showSynchronizingSpinner = false;
             })
         );
     }
