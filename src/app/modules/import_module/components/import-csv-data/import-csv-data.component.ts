@@ -183,15 +183,21 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
 
     public startDataImport() {
         this.cdr.markForCheck();
-        if (this.importer && !this.importer.id) {
+        if (this.importer && !this.importer.id && !this.importer.data_source) {
             return;
         }
+
+        if((this.importer?.data_source === 'csv_with_header' || this.importer?.data_source === 'csv_without_header')
+            && (!this.filenameOnServer && !this.uploadSuccessful)) {
+           return;
+
+        }
+
         if (this.importer) {
             this.showSpinner = true;
             this.showSynchronizingSpinner = true;
             this.errors = null;
-            /*
-            this.ExternalSystemService.startDataImport(this.externalSystem, this.ignoreExternalSystem).subscribe(data => {
+            this.ImporterService.startDataImport(this.importer, this.filenameOnServer).subscribe(data => {
                 this.cdr.markForCheck();
                 this.showSynchronizingSpinner = false;
                 this.showSpinner = false;
@@ -200,8 +206,6 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
                     this.completed.emit(true);
                 }
             });
-
-             */
         }
     }
 
@@ -226,8 +230,6 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
                     this.removeFile(file);
                 },
                 sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
-                    //this.hasRelevantChanges = false;
-                    //this.relevantChanges = [];
                     this.cdr.markForCheck();
                 },
                 success: (file: Dropzone.DropzoneFile) => {
