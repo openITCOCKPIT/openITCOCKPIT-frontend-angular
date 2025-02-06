@@ -304,4 +304,27 @@ export class ImportersService {
         );
     }
 
+    public startDataImport(importer: Importer, uploadedFile: string | undefined): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+
+
+        return this.http.post(`${proxyPath}/import_module/imported_hosts/importData/.json?angular=true`, {
+            filename: uploadedFile,
+            importerId: importer.id
+        }).pipe(map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data as GenericIdResponse
+                };
+            }),
+            catchError((error: any) => {
+                const err = error.error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
+            })
+        );
+    }
 }
