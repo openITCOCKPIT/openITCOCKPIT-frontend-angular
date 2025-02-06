@@ -39,3 +39,27 @@ export interface AutoreportIndex {
         max_number_of_outages: number | null,
         allowEdit: boolean
 }
+
+export interface AutoreportPost {
+    Autoreport: {
+        container_id: number,
+        name: string,
+        description: string,
+        use_start_time: number,
+        report_start_date: string,
+        timeperiod_id: number,
+        report_interval: string,
+        report_send_interval: string,
+        min_availability_percent: boolean,
+        min_availability: string,
+        max_number_of_outages: number,
+        show_time: number, //SLA Graph - if true -> show availability in hours
+        check_hard_state: number, // if true -> consider only hard states from state history
+        consider_downtimes: number,
+        consider_holidays: number,
+        calendar_id: number | null,
+        users: {
+            _ids: number[]
+        }
+    }
+}

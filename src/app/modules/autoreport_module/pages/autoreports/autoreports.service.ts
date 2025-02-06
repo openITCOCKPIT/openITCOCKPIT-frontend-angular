@@ -11,6 +11,7 @@ import {
 
 } from './autoreports.interface';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -37,6 +38,19 @@ export class AutoreportsService {
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/autoreport_module/autoreports/delete/${item.id}.json?angular=true`, {});
+    }
+
+    public loadContainers(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ containers: SelectKeyValue[] }>(`${proxyPath}/containers/loadContainers.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.containers;
+            })
+        )
     }
 
 }

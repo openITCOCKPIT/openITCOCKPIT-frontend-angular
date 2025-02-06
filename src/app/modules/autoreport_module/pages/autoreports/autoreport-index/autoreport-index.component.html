@@ -17,7 +17,7 @@
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Auto Reports Overviw') }}
+                {{ t('Auto Reports Overview') }}
             </li>
         </ol>
     </nav>
@@ -37,7 +37,7 @@
                 </c-nav-item>
                 <c-nav-item class="px-1">
                     <button *oitcPermission="['AutoreportModule', 'autoreports', 'add']"
-                            [routerLink]="['/', 'autoreport_module', 'autoreports', 'add']" cButton
+                            [routerLink]="['/', 'autoreport_module', 'autoreports', 'addStepOne']" cButton
                             class="ripple"
                             color="success"
                             size="xs">

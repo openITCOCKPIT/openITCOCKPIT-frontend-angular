@@ -97,7 +97,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
     ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AutoreportIndexComponent implements OnInit, OnDestroy {
+export class AutoreportIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     private cdr = inject(ChangeDetectorRef);
     private subscriptions: Subscription = new Subscription();
