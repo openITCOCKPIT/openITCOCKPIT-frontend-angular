@@ -246,7 +246,7 @@
             </ng-container>
         </c-modal-body>
         <c-modal-footer>
-            <button cButton class="ripple" color="primary"
+            <button cButton class="ripple" color="primary" *ngIf="importData"
                     [disabled]="showSynchronizingSpinner || showSpinner || errors !== null"
                     (click)="startDataImport()">
                 <fa-icon [icon]="['fas', 'spinner']" animation="spin" *ngIf="showSpinner"></fa-icon>

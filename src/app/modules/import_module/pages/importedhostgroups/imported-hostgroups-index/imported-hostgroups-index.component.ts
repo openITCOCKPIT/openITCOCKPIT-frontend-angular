@@ -257,15 +257,18 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
     }
 
     public synchronizeWithMonitoring() {
+        this.showSynchronizingSpinner = true;
         this.subscriptions.add(this.ImportedhostgroupsService.synchronizeWithMonitoring()
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     this.notyService.genericSuccess(result.message);
+                    this.showSynchronizingSpinner = false;
                     return;
                 }
                 // Error
                 this.notyService.genericError(result.message);
+                this.showSynchronizingSpinner = false;
             })
         );
     }
