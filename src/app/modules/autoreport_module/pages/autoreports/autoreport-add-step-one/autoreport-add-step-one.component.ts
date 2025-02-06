@@ -4,17 +4,26 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
 import {
-    BadgeComponent,
+    BadgeComponent, ButtonDirective,
+    CalloutComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    FormDirective, FormLabelDirective,
+    DropdownComponent, DropdownItemDirective, DropdownMenuDirective, DropdownToggleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     RowComponent
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
-import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { Subscription } from 'rxjs';
 import { AutoreportsService } from '../autoreports.service';
 import {
@@ -23,10 +32,14 @@ import {
 import { InstantreportPost } from '../../../../../pages/instantreports/instantreports.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
+import { NgIf, DatePipe } from '@angular/common';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { GenericValidationError } from '../../../../../generic-responses';
+import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
+import { TimeperiodsService } from '../../../../../pages/timeperiods/timeperiods.service';
+import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
+import { DebounceDirective } from '../../../../../directives/debounce.directive';
 
 @Component({
   selector: 'oitc-autoreport-add-step-one',
@@ -50,7 +63,23 @@ import { GenericValidationError } from '../../../../../generic-responses';
         FormLabelDirective,
         NgIf,
         RequiredIconComponent,
-        SelectComponent
+        SelectComponent,
+        FormControlDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        LabelLinkComponent,
+        DatePipe,
+        CalloutComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        DropdownComponent,
+        ButtonDirective,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        DropdownItemDirective,
+        DebounceDirective
     ],
   templateUrl: './autoreport-add-step-one.component.html',
   styleUrl: './autoreport-add-step-one.component.css',
@@ -61,10 +90,37 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
     private subscriptions: Subscription = new Subscription();
     private readonly AutoreportsService: AutoreportsService = inject(AutoreportsService);
+    private readonly TimeperiodsService: TimeperiodsService = inject(TimeperiodsService);
 
     public errors: GenericValidationError | null = null;
     public containers: SelectKeyValue[] = [];
+    public timeperiods: SelectKeyValue[] = [];
     public post: AutoreportPost = this.getDefaultPost();
+    public setMinAvailability : boolean = false;
+    public setMaxNumberOfOutages : boolean = false;
+    public evalutionperiods: SelectKeyValueString[] = [
+        {key: 'Year', value: 'YEAR'},
+        {key: 'Quarter', value: 'QUARTER'},
+        {key: 'Month', value: 'MONTH'},
+        {key: 'Week', value: 'WEEK'},
+        {key: 'Day', value: 'DAY'}
+    ];
+    public sendintervals: SelectKeyValueString[] = [
+        {key: 'never', value: 'Never'},
+        {key: 'yearly', value: 'YEAR'},
+        {key: 'quarterly', value: 'QUARTER'},
+        {key: 'monthly', value: 'MONTH'},
+        {key: 'weekly', value: 'WEEK'},
+        {key: 'daily', value: 'DAY'}
+    ];
+    public graphoptions: SelectKeyValueString[] = [
+        {key: '0', value: 'in %'},
+        {key: '1', value: 'in h'}
+    ];
+    public checkstates: SelectKeyValueString[] = [
+        {key: '0', value: 'soft and hard state'},
+        {key: '1', value: 'only hard state'}
+    ];
 
 
     public ngOnInit(): void {
@@ -83,7 +139,14 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     }
 
     public onContainerChange() {
+        this.loadTimeperiods();
+    }
 
+    private loadTimeperiods() {
+        this.subscriptions.add(this.TimeperiodsService.loadTimeperiodsByContainerId(this.post.Autoreport.container_id).subscribe((result) => {
+            this.timeperiods = result;
+            this.cdr.markForCheck();
+        }));
     }
 
     private getDefaultPost(): AutoreportPost {
@@ -93,15 +156,15 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
                 name: '',
                 description: '',
                 use_start_time: 0,
-                report_start_date: '',
+                report_start_date: '01.02.2025',
                 timeperiod_id: 0,
                 report_interval: '',
                 report_send_interval: '',
-                min_availability_percent: false,
+                min_availability_percent: true,
                 min_availability: '',
                 max_number_of_outages: 0,
-                show_time: 0, //SLA Graph - if true -> show availability in hours
-                check_hard_state: 0, // if true -> consider only hard states from state history
+                show_time: '0', //SLA Graph - if true -> show availability in hours
+                check_hard_state: '0', // if true -> consider only hard states from state history
                 consider_downtimes: 0,
                 consider_holidays: 0,
                 calendar_id: null,

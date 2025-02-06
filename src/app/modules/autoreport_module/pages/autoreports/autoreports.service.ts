@@ -7,7 +7,8 @@ import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delet
 
 import {
     AutoreportsIndexRoot,
-    AutoreportsIndexParams
+    AutoreportsIndexParams,
+    CalendarParams
 
 } from './autoreports.interface';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
@@ -49,6 +50,17 @@ export class AutoreportsService {
         }).pipe(
             map(data => {
                 return data.containers;
+            })
+        )
+    }
+
+    public loadCalendars(params:CalendarParams): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ calendars: SelectKeyValue[] }>(`${proxyPath}/calendars/loadCalendarsByContainerId.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data.calendars;
             })
         )
     }

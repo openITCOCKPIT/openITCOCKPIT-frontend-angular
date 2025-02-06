@@ -100,7 +100,6 @@
                         {{ t('Container') }}
                         <oitc-required-icon></oitc-required-icon>
                     </label>
-
                     <oitc-select
                         name="container"
                         id="container"
@@ -111,13 +110,259 @@
                         (onChange)="onContainerChange()"
                         oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
-
-
                     <div *ngIf="!post.Autoreport.container_id" class="text-warning-glow pt-1">
                         {{ t('Please select a container.') }}
                     </div>
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                 </c-row>
+                <c-row class="mb-3">
+                    <label cLabel for="Name">
+                        {{ t('Report name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="Name" required type="text"
+                           name="Name"
+                           oitcFormError [errors]="errors" errorField="name"
+                           [(ngModel)]="post.Autoreport.name">
+                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                </c-row>
+                <c-row class="mb-3">
+                    <label cLabel for="Description">
+                        {{ t('Report description') }}
+                    </label>
+                    <input cFormControl id="Description" required type="text"
+                           name="Description"
+                           [(ngModel)]="post.Autoreport.description">
+                </c-row>
+                <c-row class="mb-3">
+                    <c-form-check>
+                        <input
+                            id="set_start"
+                            name="set_start"
+                            [(ngModel)]="post.Autoreport.use_start_time"
+                            cFormCheckInput
+                            class="checkbox-lg me-2 mt-0"
+                            trueFalseValue
+                            [falseValue]="0"
+                            [trueValue]="1"
+                            type="checkbox"/>
+                        <label cFormCheckLabel
+                               for="set_start">{{ t('Set start') }}</label>
+                    </c-form-check>
+                </c-row>
+                <c-row class="mb-3">
+                    <label cLabel for="Start_date">
+                        {{ t('Start date')}}
+                        <oitc-required-icon *ngIf="post.Autoreport.use_start_time"></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="Start_date" type="date"
+                           [disabled]="!post.Autoreport.use_start_time"
+                           name="Start_date"
+                           placeholder="{{ t('DD.MM.YYYY') }}"
+                           [(ngModel)]="post.Autoreport.report_start_date"
+                           oitcFormError [errors]="errors" errorField="report_start_date">
+                    <oitc-form-feedback [errors]="errors" errorField="report_start_date"></oitc-form-feedback>
+                </c-row>
+                <c-row class="mb-3">
+                    <label cLabel for="TimePeriodSelect">
+                        <oitc-label-link
+                            [objectId]="post.Autoreport.timeperiod_id"
+                            [route]="'/timeperiods/edit'"
+                            [permissions]="'timeperiods.edit'"
+                        >
+                            {{ t('Time period') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </oitc-label-link>
+                    </label>
+
+                    <oitc-select
+                        name="TimePeriodSelect"
+                        id="TimePeriodSelect"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.Autoreport.timeperiod_id"
+                        [options]="timeperiods"
+                        oitcFormError [errors]="errors" errorField="timeperiod_id">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="timeperiod_id"></oitc-form-feedback>
+                </c-row>
+                <c-row class="mb-3">
+                    <label cLabel for="Evaluation_period">
+                        {{ t('Evaluation period') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-select
+                        name="Evaluation_period"
+                        id="Evaluation_period"
+                        optionValue="value"
+                        optionLabel="key"
+                        [(ngModel)]="post.Autoreport.report_interval"
+                        [options]="evalutionperiods"
+                        oitcFormError [errors]="errors" errorField="report_interval">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="report_interval"></oitc-form-feedback>
+                </c-row>
+                <c-row class="mb-3">
+                    <label cLabel for="Send_interval">
+                        {{ t('Evaluation period') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-select
+                        name="Send_interval"
+                        id="Send_interval"
+                        optionValue="value"
+                        optionLabel="key"
+                        [(ngModel)]="post.Autoreport.report_send_interval"
+                        [options]="sendintervals"report_send_intervall
+                        oitcFormError [errors]="errors" errorField="report_send_intervall">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="report_send_interval"></oitc-form-feedback>
+                </c-row>
+                <c-callout color="primary">
+                    <c-row  class="mb-3">
+                    <label cLabel>
+                        {{ t('Guaranteed availability') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <c-input-group
+                                   oitcFormError [errors]="errors" errorField="min_availability">
+                        <span cInputGroupText>
+                            <c-form-check>
+                                <input
+                                    id="check_availibility"
+                                    name="check_availibility"
+                                    [(ngModel)]="setMinAvailability"
+                                    cFormCheckInput
+                                    class="checkbox-lg"
+                                    trueFalseValue
+                                    [falseValue]=false
+                                    [trueValue]=true
+                                    type="checkbox"/>
+                            </c-form-check>
+                        </span>
+                        <input aria-describedby="check_availibility"
+                               type="text"
+                               name="min_availability"
+                               aria-label=""
+                               cFormControl
+                               placeholder="{{(post.Autoreport.min_availability_percent)?'99.999':'1234567'}}"
+                               (focus)="setMinAvailability = true"
+                               [(ngModel)]="post.Autoreport.min_availability"
+                        />
+                        <span>
+                            <c-dropdown>
+                                <button cButton cDropdownToggle color="light" split>
+                                    <fa-icon [icon]="['fas', 'percent']"></fa-icon> &nbsp;
+                                </button>
+                                <ul cDropdownMenu>
+                                    <li><button cDropdownItem (click)="post.Autoreport.min_availability_percent = true"><fa-icon [icon]="['fas', 'percent']"></fa-icon> {{ t('in percent') }}</button></li>
+                                    <li><button cDropdownItem (click)="post.Autoreport.min_availability_percent = false"><fa-icon [icon]="['fas', 'clock']"></fa-icon> {{ t('in minutes') }}</button></li>
+                                </ul>
+                            </c-dropdown>
+                        </span>
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="min_availability"></oitc-form-feedback>
+                    </c-row>
+                    <c-row>
+                        <span  class="text-info">
+                            <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                            {{ t('You must specify at least "Guaranteed availability" or "Max. number of outages"') }}
+                        </span>
+                    </c-row>
+
+                    <label cLabel>
+                        {{ t('Max number of outages') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <c-input-group class="mb-3">
+                        <span cInputGroupText>
+                            <c-form-check>
+                                <input
+                                    id="outages"
+                                    name="outages"
+                                    [(ngModel)]="setMaxNumberOfOutages"
+                                    cFormCheckInput
+                                    class="checkbox-lg"
+                                    trueFalseValue
+                                    [falseValue]=false
+                                    [trueValue]=true
+                                    type="checkbox"/>
+                            </c-form-check>
+                        </span>
+                        <input aria-describedby="outages"
+                               type="text"
+                                 name="max_number_of_outages"
+                               aria-label=""
+                               cFormControl
+                               [(ngModel)]="post.Autoreport.max_number_of_outages"
+                        />
+                    </c-input-group>
+                </c-callout>
+                <c-row class="mb-3">
+                    <label cLabel for="Graph">
+                        {{ t('Graph') }}
+                    </label>
+                    <oitc-select
+                        name="Graph"
+                        id="Graph"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.Autoreport.show_time"
+                        [options]="graphoptions">
+                    </oitc-select>
+                </c-row>
+                <c-row class="mb-3">
+                    <label cLabel for="states">
+                        {{ t('Reflection state') }}
+                    </label>
+                    <oitc-select
+                        name="states"
+                        id="states"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.Autoreport.check_hard_state"
+                        [options]="checkstates">
+                    </oitc-select>
+                </c-row>
+                <c-row class="mb-3">
+                    <c-col>
+                    <c-form-check>
+                        <input
+                            cFormCheckInput
+                            class="checkbox-lg checkbox-primary"
+                            name="cdowntimes"
+                            id="cdowntimes"
+                            type="checkbox"
+                            trueFalseValue
+                            [trueValue]=1
+                            [falseValue]=0
+                            [(ngModel)]="post.Autoreport.consider_downtimes"/>
+                        <label cFormCheckLabel class="ms-1 mt-1"
+                               for="cdowntimes">{{ t('Consider downtimes') }}</label>
+                    </c-form-check>
+                    </c-col>
+                </c-row>
+                <c-row class="mb-3">
+                    <c-col>
+                        <c-form-check>
+                            <input
+                                cFormCheckInput
+                                class="checkbox-lg checkbox-primary"
+                                name="cholidays"
+                                id="cholidays"
+                                type="checkbox"
+                                trueFalseValue
+                                [trueValue]=1
+                                [falseValue]=0
+                                [(ngModel)]="post.Autoreport.consider_holidays"/>
+                            <label cFormCheckLabel class="ms-1 mt-1"
+                                   for="cholidays">{{ t('Consider holidays') }}</label>
+                        </c-form-check>
+                    </c-col>
+                </c-row>
+
+
             </c-card-body>
         </c-card>
     </form>

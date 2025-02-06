@@ -53,8 +53,8 @@ export interface AutoreportPost {
         min_availability_percent: boolean,
         min_availability: string,
         max_number_of_outages: number,
-        show_time: number, //SLA Graph - if true -> show availability in hours
-        check_hard_state: number, // if true -> consider only hard states from state history
+        show_time: string, //SLA Graph - if true -> show availability in hours
+        check_hard_state: string, // if true -> consider only hard states from state history
         consider_downtimes: number,
         consider_holidays: number,
         calendar_id: number | null,
@@ -62,4 +62,10 @@ export interface AutoreportPost {
             _ids: number[]
         }
     }
+}
+
+export interface CalendarParams {
+    angular: boolean,
+    containerId: number,
+    'filter[Calendar.name]': string
 }
