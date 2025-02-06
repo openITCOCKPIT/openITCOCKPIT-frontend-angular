@@ -1,0 +1,15 @@
+<div cdkDrag #container oitcResizable [aspectRatio]="false" class="map-element-container"
+     [draggable]="!isViewMode()"
+     (cdkDragEnded)="onDragEnd($event)"
+     (cdkDragMoved)="onDragMove($event)"
+     (resizeStop)="onResizeStop($event, type)"
+     cdkDragBoundary=".map-canvas">
+    <div cdkDragHandle *ngIf="allowView"
+         [ngStyle]="{'width.px': width, 'height.px': height, 'font-size.px': item()!.font_size}">
+        <span [hidden]="!item()!.show_label" class="bold">
+            {{ Service.hostname }} / {{ Service.servicename }}:
+        </span>
+        <span [ngClass]="color" [innerHTML]="output | trustAsHtml"></span>
+    </div>
+</div>
+<p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>

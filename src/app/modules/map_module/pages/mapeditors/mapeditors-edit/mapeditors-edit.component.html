@@ -257,7 +257,20 @@
                                 </oitc-temperature-item>
                             }
                         </ng-container>
-                        <!-- service output item here -->
+                        <ng-container *ngFor="let gadgetItem of map.Mapgadgets">
+                            @if (gadgetItem.gadget === 'ServiceOutput') {
+                                <oitc-service-output-item *ngIf="gadgetItem.gadget === 'ServiceOutput'"
+                                                          [item]="gadgetItem"
+                                                          [refreshInterval]="0"
+                                                          [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                                          [layers]="layers"
+                                                          (contextActionEvent)="onContextAction($event)"
+                                                          (dropItemEvent)="onDropItem($event)"
+                                                          (resizedEvent)="onResizeStop($event)"
+                                                          [hidden]="!gadgetItem.display">
+                                </oitc-service-output-item>
+                            }
+                        </ng-container>
                         <oitc-map-summary-item *ngFor="let summaryItem of map.Mapsummaryitems" [item]="summaryItem"
                                                [refreshInterval]="0"
                                                [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
