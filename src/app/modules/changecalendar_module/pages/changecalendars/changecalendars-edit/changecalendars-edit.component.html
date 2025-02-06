@@ -48,7 +48,6 @@
 
 
             <c-card-body>
-
                 <oitc-changecalendars-event-editor [event]="event"></oitc-changecalendars-event-editor>
                 <div class="mb-3">
                     <label cLabel for="post.changeCalendar.container_id">
@@ -127,6 +126,7 @@
                     <br/>
                     <oitc-calendar
                             [(events)]="events"
+                            (eventClick)="editEvent($event);"
                             [showButtons]="false"
                     />
                 </div>

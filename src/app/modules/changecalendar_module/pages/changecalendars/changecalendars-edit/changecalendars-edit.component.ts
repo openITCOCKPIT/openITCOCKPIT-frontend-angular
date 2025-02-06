@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { HistoryService } from '../../../../../history.service';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
-
 import {
     CardBodyComponent,
     CardComponent,
@@ -12,6 +11,7 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
+    ModalService,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -40,6 +40,7 @@ import { CalendarEvent } from '../../../../../pages/calendars/calendars.interfac
 import {
     ChangecalendarsEventEditorComponent
 } from '../../../components/changecalendars-event-editor/changecalendars-event-editor.component';
+import { EventClickArg } from '@fullcalendar/core';
 
 @Component({
     selector: 'oitc-changecalendars-edit',
@@ -84,6 +85,7 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly route = inject(ActivatedRoute);
+    private readonly ModalService: ModalService = inject(ModalService);
     private readonly cdr = inject(ChangeDetectorRef);
 
     protected post: EditChangecalendarRoot = {
@@ -94,12 +96,36 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     protected errors: GenericValidationError = {} as GenericValidationError;
 
     protected event: ChangecalendarEvent = {
-        title: 'fake',
-        description: 'fake',
+        title: '',
+        description: '',
         start: '',
         end: '',
         changecalendar_id: 0,
     } as ChangecalendarEvent;
+
+    public editEvent(clickInfo: EventClickArg): void {
+        // set this.event to the event from this.events where the originId matches clickInfo.event._def.extendedProps.originId
+        this.event = this.post.changeCalendar.changecalendar_events.find((event: ChangecalendarEvent) => {
+            return event.id === clickInfo.event._def.extendedProps['originId'];
+        }) as ChangecalendarEvent;
+
+        console.warn(this.event);
+
+        this.ModalService.toggle({
+            show: true,
+            id: 'changeCalendarEditorModal'
+        });
+
+        this.cdr.markForCheck();
+        return;
+        /*
+        this.event = event;
+
+
+        this.cdr.markForCheck();
+
+         */
+    }
 
     public ngOnInit() {
         this.loadContainers();

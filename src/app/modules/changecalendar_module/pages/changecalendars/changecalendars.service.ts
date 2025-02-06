@@ -42,6 +42,7 @@ export class ChangecalendarsService {
                     returnData.events = [] as CalendarEvent[];
                     data.changeCalendar.changecalendar_events.forEach((event: ChangecalendarEvent) => {
                         returnData.events.push({
+                            originId: event.id,
                             start: event.start,
                             title: event.title,
                             default_holiday: false,
