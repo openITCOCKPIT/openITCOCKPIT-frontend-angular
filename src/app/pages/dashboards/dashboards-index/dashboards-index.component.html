@@ -15,8 +15,11 @@
 
     <c-card class="mb-3">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Dashboard') }}
-            </h5>
+            <h5>{{ t('Dashboard') }}</h5>
+            <oitc-dashboard-tabs [tabs]="tabs"
+                                 [currentTabId]="currentTabId"
+                                 (changeTabEvent)="onTabChange($event)"></oitc-dashboard-tabs>
+
         </c-card-header>
         <c-card-body>
             <div class="grid-container">

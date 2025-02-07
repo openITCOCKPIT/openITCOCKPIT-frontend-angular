@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    inject,
+    Inject,
+    OnDestroy,
+    OnInit,
+    ViewChild
+} from '@angular/core';
 import { DOCUMENT, NgForOf, NgIf } from '@angular/common';
 
 import {
@@ -31,7 +41,9 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { DashboardColorpickerComponent } from './dashboard-colorpicker/dashboard-colorpicker.component';
-import { DashboardsIndexResponse } from '../dashboards.interface';
+import { DashboardTab, DashboardWidget } from '../dashboards.interface';
+import { DashboardsService } from '../dashboards.service';
+import { DashboardTabsComponent } from './dashboard-tabs/dashboard-tabs.component';
 
 @Component({
     selector: 'oitc-dashboards-index',
@@ -52,7 +64,8 @@ import { DashboardsIndexResponse } from '../dashboards.interface';
         RouterLink,
         KtdGridItemPlaceholder,
         KtdGridDragHandle,
-        DashboardColorpickerComponent
+        DashboardColorpickerComponent,
+        DashboardTabsComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
@@ -60,10 +73,15 @@ import { DashboardsIndexResponse } from '../dashboards.interface';
 })
 export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
-    public data?: DashboardsIndexResponse;
+    public tabs: DashboardTab[] = [];
+    public currentTabId: number = 0;
+
+    public availableWidgets: DashboardWidget[] = [];
 
     private readonly subscriptions: Subscription = new Subscription();
+    private readonly DashboardsService = inject(DashboardsService);
 
+    private cdr = inject(ChangeDetectorRef);
 
     @ViewChild(KtdGridComponent, {static: true}) grid?: KtdGridComponent;
     trackById = ktdTrackById;
@@ -112,6 +130,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
 
     constructor(public elementRef: ElementRef, @Inject(DOCUMENT) public document: Document) {
+
     }
 
     public ngOnInit(): void {
@@ -126,11 +145,34 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                 this.grid.resize();
             }
         });
+
+        this.loadDashboardsIndex();
     }
 
     public ngOnDestroy(): void {
         this.resizeSubscription.unsubscribe();
         this.subscriptions.unsubscribe();
+    }
+
+    public loadDashboardsIndex(): void {
+        this.subscriptions.add(this.DashboardsService.getIndex().subscribe(data => {
+            this.tabs = data.tabs;
+
+            if (this.currentTabId === 0 && data.tabs.length > 0) {
+                // Mark the first tab as active
+                this.currentTabId = data.tabs[0].id;
+            }
+
+
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public onTabChange(tabId: number): void {
+        console.log("todo implement onTabChange", tabId);
+        this.currentTabId = tabId;
+        this.cdr.markForCheck();
+
     }
 
     public onDragStarted(event: KtdDragStart): void {

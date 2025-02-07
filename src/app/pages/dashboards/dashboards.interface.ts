@@ -1,6 +1,6 @@
 export interface DashboardsIndexResponse {
     tabs: DashboardTab[]
-    widgets: Widget[]
+    widgets: DashboardWidget[]
     tabRotationInterval: number
     askForHelp: boolean
     _csrfToken: string
@@ -37,7 +37,7 @@ export interface DashboardTabAllocation {
     }
 }
 
-export interface Widget {
+export interface DashboardWidget {
     type_id: number
     title: string
     icon: string
