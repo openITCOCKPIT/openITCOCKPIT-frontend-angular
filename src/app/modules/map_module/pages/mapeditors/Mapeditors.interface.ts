@@ -152,3 +152,15 @@ export interface VisibleLayers {
 export interface Background {
     image: string
 }
+
+export interface MapItemMultiItem {
+    objectId: number;
+    mapId: number;
+    type: string;
+    uuid: string;
+}
+
+export interface MapItemMultiPost {
+    items: MapItemMultiItem[];
+    disableGlobalLoader: boolean;
+}

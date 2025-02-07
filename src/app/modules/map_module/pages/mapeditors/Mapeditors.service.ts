@@ -7,6 +7,7 @@ import {
     MapeditorSettingsPost,
     MapgadgetPost,
     MapiconPost,
+    MapItemMultiPost,
     MapitemPost,
     MaplinePost,
     MapsummaryitemPost,
@@ -285,6 +286,27 @@ export class MapeditorsService {
     public saveMapeditorSettings(settings: MapeditorSettingsPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/map_module/mapeditors/saveMapeditorSettings.json?angular=true`, settings)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public saveMapitemMulti(postData: MapItemMultiPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/mapeditors/mapitemMulti.json?angular=true`, postData)
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
