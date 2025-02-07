@@ -1,0 +1,36 @@
+.colorpicker-dropdown {
+    width: 10.7rem;
+}
+
+.width-2 {
+    width: 2rem;
+}
+
+.height-2 {
+    height: 2rem;
+}
+
+.hover-effect-dot {
+    position: relative;
+}
+
+.hover-effect-dot:before {
+    content: "";
+    background: rgba(0, 0, 0, 0.2);
+    width: 0;
+    height: 0;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 100%;
+    -webkit-transition: all 50ms ease-in;
+    transition: all 50ms ease-in;
+}
+
+.hover-effect-dot:hover:before {
+    width: 75%;
+    height: 75%;
+    top: 12%;
+    left: 12%;
+}

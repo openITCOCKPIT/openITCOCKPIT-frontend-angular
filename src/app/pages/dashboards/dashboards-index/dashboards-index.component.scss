@@ -1,0 +1,151 @@
+@use '@angular/material' as mat;
+@use "sass:color";
+
+@include mat.core();
+
+:host {
+
+    $primary: #5856d6 !default;
+
+    --ktd-color-primary: $primary;
+    --ktd-color-primary-rgb: $primary;
+    --ktd-color-primary-contrast: $primary;
+
+    --ktd-color-accent: $secondary;
+    --ktd-color-accent-rgb: $secondary;
+    --ktd-color-accent-contrast: $secondary;
+
+    // Background & foreground (as background contrast)
+    --ktd-background-color: #121212;
+    --ktd-background-color-rgb: 18, 18, 18;
+    --ktd-background-color-contrast: #ffffff;
+    --ktd-background-color-contrast-rgb: 255, 255, 255;
+
+    --ktd-background-color-step-25: #1a1a1a;
+    --ktd-background-color-step-50: #1e1e1e;
+    --ktd-background-color-step-100: #2a2a2a;
+    --ktd-background-color-step-150: #363636;
+    --ktd-background-color-step-200: #414141;
+    --ktd-background-color-step-250: #4d4d4d;
+    --ktd-background-color-step-300: #595959;
+    --ktd-background-color-step-350: #656565;
+    --ktd-background-color-step-400: #717171;
+    --ktd-background-color-step-450: #7d7d7d;
+    --ktd-background-color-step-500: #898989;
+
+    // steps in rgb
+    --ktd-background-color-step-150-rgb: 54, 54, 54;
+
+    --ktd-item-background: #1A1B1E;
+    --ktd-border-color: #4a4a4a;
+    --ktd-border-color-light: #4a4e51;
+
+    // Background light
+    --ktd-background-color-light: #222428;
+    --ktd-background-color-light-rgb: 34, 36, 40;
+    --ktd-background-color-light-contrast: #ffffff;
+    --ktd-background-color-light-contrast-rgb: 255, 255, 255;
+    --ktd-background-color-light-darker: #1e2023;
+    --ktd-background-color-light-lighter: #383a3e;
+
+    // Custom SVG variable colors
+    --ktd-svg-color: #ffffff;
+    --ktd-svg-color-complementary: #9b9b9b;
+    --ktd-svg-color-rgb: 255, 255, 255;
+    --ktd-svg-color-complementary-rgb: 155, 155, 155;
+
+    // text colors
+    --ktd-text-color: $body-color;
+    --ktd-text-accent-color: rgba(var(--ktd-color-accent-rgb), 0.94);
+
+
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+
+    .playground-container {
+        width: 100%;
+    }
+
+    .controls-container {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+
+        & > * {
+            margin: 8px 24px 8px 0;
+        }
+    }
+
+    .grid-container {
+        padding: 4px;
+        box-sizing: border-box;
+        border: 1px dashed var(--cui-border-color);
+        /*background-color: var(--ktd-background-color);*/
+        border-radius: 2px;
+    }
+
+    ktd-grid-item {
+        color: #121212;
+        box-shadow: 0 0 13px 0 rgba(10, 71, 172, 0.08);
+    }
+
+    ktd-grid {
+        transition: height 500ms ease;
+    }
+
+
+    .grid-item-content {
+        box-sizing: border-box;
+        //background: #ccc;
+        /*border: 1px solid;*/
+        width: 100%;
+        height: 100%;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .widget-placeholder {
+        border-style: dashed;
+        border-color: $primary;
+        background: color.adjust($primary, $alpha: -0.5)
+    }
+
+    /*
+    .grid-item-remove-handle {
+        position: absolute;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        top: 0;
+        right: 0;
+
+        &::after {
+            content: 'x';
+            color: #121212;
+            font-size: 16px;
+            font-weight: 300;
+            font-family: Arial, sans-serif;
+        }
+    }*/
+
+    // Add custom drag mouse styles
+    ktd-grid-item {
+        cursor: grab;
+
+        &.ktd-grid-item-dragging {
+            cursor: grabbing;
+        }
+    }
+
+    mat-chip-list, mat-chip {
+        pointer-events: none;
+        user-select: none;
+    }
+
+}
