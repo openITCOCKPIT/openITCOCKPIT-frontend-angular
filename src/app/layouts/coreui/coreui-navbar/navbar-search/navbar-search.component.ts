@@ -51,7 +51,7 @@ export class NavbarSearchComponent implements OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public onKeydown(event: any) {
+    public onKeyDownCallback(event: any) {
         if (this.searchString === "") {
             this.resetSearch();
             return;
@@ -130,10 +130,16 @@ export class NavbarSearchComponent implements OnDestroy {
         this.searchString = '';
         this.searchResult = [];
         this.currentSelectedIndex = -1;
+        this.cdr.markForCheck();
     }
 
     public searchMenu(event: any) {
         const result: MenuLinkWithSearchPath[] = [];
+
+        if (this.searchString === "") {
+            this.resetSearch();
+            return;
+        }
 
         this.menu().map(((item: MenuHeadline) => {
             item.items.map((link: MenuLink) => {
