@@ -8,22 +8,23 @@ https://stackoverflow.com/a/76688561
 
 
 <p-select
-        [attr.id]="id"
-        [name]="String(name)"
-        [options]="options"
-        [filter]="filter"
-        [optionValue]="optionValue"
-        [optionLabel]="optionLabel"
-        [filterBy]="optionLabel"
-        [class]="class"
-        [placeholder]="placeholder"
-        (onChange)="triggerOnChange($event)"
-        [disabled]="disabled"
-        [(ngModel)]="ngModel"
-        (ngModelChange)="ngModelChange.emit($event)"
-        (onFilter)="doHighlightSearch($event.filter)"
-        [showClear]="showClear"
-        [appendTo]="appendTo">
+    [attr.id]="id"
+    [name]="String(name)"
+    [options]="options"
+    [filter]="filter"
+    [optionValue]="optionValue"
+    [optionLabel]="optionLabel"
+    [filterBy]="optionLabel"
+    [class]="class"
+    [placeholder]="placeholder"
+    (onChange)="triggerOnChange($event)"
+    [disabled]="disabled"
+    [(ngModel)]="ngModel"
+    (ngModelChange)="ngModelChange.emit($event)"
+    (onFilter)="doHighlightSearch($event.filter)"
+    [showClear]="showClear"
+    [appendTo]="appendTo"
+    [autofocusFilter]="true">
     <ng-template let-item pTemplate="item">
         <div [innerHTML]="item | highlightSearch : this.searchText:this.optionLabel"></div>
     </ng-template>

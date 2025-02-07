@@ -34,7 +34,8 @@ import {
     Importedhost,
     ImportedHostIndex,
     ImportedhostsIndexParams,
-    ImportedhostsIndexRoot
+    ImportedhostsIndexRoot,
+    MaxUploadLimit
 } from '../importedhosts.interface';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { ImportedhostsService } from '../importedhosts.service';
@@ -54,9 +55,8 @@ import {
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ImportITopDataComponent } from '../../../components/import-itop-data/import-itop-data.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -69,6 +69,9 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ImportedHostFlagsEnum } from '../imported-hosts.enum';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { ImportersService } from '../../importers/importers.service';
+import { ImportDataComponent } from '../../../components/import-data/import-data.component';
+import { ImportCsvDataComponent } from '../../../components/import-csv-data/import-csv-data.component';
 
 @Component({
     selector: 'oitc-imported-hosts-index',
@@ -98,7 +101,6 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
         FormCheckLabelDirective,
         FormControlDirective,
         FormDirective,
-        ImportITopDataComponent,
         InputGroupComponent,
         InputGroupTextDirective,
         ItemSelectComponent,
@@ -121,7 +123,10 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
         XsButtonDirective,
         RouterLink,
         NgClass,
-        MultiSelectComponent
+        MultiSelectComponent,
+        ImportDataComponent,
+        ImportCsvDataComponent,
+        KeyValuePipe
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostsService} // Inject the ImportedhostsService into the DeleteAllModalComponent
@@ -137,6 +142,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     public importedhosts: Importedhost[] = [];
     public importers: Importer[] = [];
+    public maxUploadLimit?: MaxUploadLimit;
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
     private readonly modalService = inject(ModalService);
@@ -145,10 +151,10 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public showSynchronizingSpinner: boolean = false;
     public showSpinner: boolean = false;
-    public externalSystems: ExternalSystemEntity[] = [];
     public allImportedHosts?: ImportedhostsIndexRoot;
     private readonly notyService = inject(NotyService);
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
+    private readonly ImportersService = inject(ImportersService);
     private cdr = inject(ChangeDetectorRef);
     protected readonly ImportedHostFlagsEnum = ImportedHostFlagsEnum;
 
@@ -186,13 +192,42 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
         let disabled: string | boolean = '';
         let flags: number | string = '';
 
-        // only if not ALL "Already synchronized" filter are selected or deselected (XNOR)
-        if (!(this.imported === this.not_imported &&
-            this.not_imported === this.disabled)) {
-            disabled = this.disabled === 1;
-            if ((this.imported & this.disabled) ^ this.not_imported) {
-                imported = this.imported === 1;
-            }
+        // ALL "Already synchronized" filter are selected or deselected
+        if (this.imported === this.not_imported && this.not_imported === this.disabled) {
+            // "In monitoring (active)" and "NEW" checkboxes are selected
+            // Do not filter by imported status
+            imported = '';
+            disabled = '';
+        } else if (!(this.disabled | this.not_imported) && this.imported) {
+            // Only "In monitoring (active)" checkbox is selected
+            imported = true;
+            disabled = false;
+        } else if ((this.imported !== this.not_imported) && !this.disabled) {
+            // "In monitoring (active)" or "NEW" checkbox is selected
+            // Do not filter by disabled status
+            imported = this.imported === 1;
+            disabled = '';
+        } else if ((this.imported & this.disabled) && !this.not_imported) {
+            // "In monitoring (active)" and " In monitoring (disabled) " checkbox is selected - "NEW" checkbox is not selected
+            imported = true;
+            disabled = '';
+        } else if (!(this.imported | this.not_imported) && this.imported) {
+            // Only "In monitoring (active) " checkbox is selected
+            imported = true;
+            disabled = true;
+
+        } else if (!(this.imported ^ this.not_imported) && this.disabled) {
+            // Only "In monitoring (disabled) " checkbox is selected
+            imported = true;
+            disabled = true;
+        } else if ((this.disabled & this.not_imported) && !this.imported) {
+            // "In monitoring (disabled)" and "NEW" checkbox is selected - "In monitoring (active)" checkbox is not selected
+            imported = '';
+            disabled = true;
+        } else if ((this.imported & this.not_imported) && !this.disabled) {
+            // "In monitoring (active)" and "NEW" checkbox is selected - "In monitoring (disabled)" checkbox is not selected
+            imported = '';
+            disabled = false;
         }
 
         if (this.ready_for_import ^ this.not_ready_for_import) {
@@ -214,6 +249,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
                 this.allImportedHosts = result;
                 this.importedhosts = result.importedhosts;
                 this.importers = result.importers;
+                this.maxUploadLimit = result.maxUploadLimit;
                 this.cdr.markForCheck();
             })
         );
@@ -296,15 +332,18 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public synchronizeWithMonitoring() {
+        this.showSynchronizingSpinner = true;
         this.subscriptions.add(this.ImportedhostsService.synchronizeWithMonitoring()
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     this.notyService.genericSuccess(result.message);
+                    this.showSynchronizingSpinner = false;
                     return;
                 }
                 // Error
                 this.notyService.genericError(result.message);
+                this.showSynchronizingSpinner = false;
             })
         );
     }
@@ -318,8 +357,8 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     }
 
-    public loadImporter(id: number) {
-
+    public loadImporter(importer: Importer) {
+        this.ImportersService.openImportedHostsDataModal(importer);
     }
 
     public hasFlag(importedHostFlag: number, compareFlag: ImportedHostFlagsEnum) {

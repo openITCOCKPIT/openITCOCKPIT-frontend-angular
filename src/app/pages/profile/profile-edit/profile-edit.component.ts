@@ -1,19 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  ModalService,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    ModalService,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -42,43 +42,42 @@ import Dropzone from 'dropzone';
 import { AuthService } from '../../../auth/auth.service';
 
 
-
 import { ProfileApikeysComponent } from '../profile-apikeys/profile-apikeys.component';
 import { ProfileChangePasswordComponent } from '../profile-change-password/profile-change-password.component';
 
 @Component({
     selector: 'oitc-profile-edit',
     imports: [
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    TranslocoDirective,
-    CardBodyComponent,
-    CardFooterComponent,
-    RouterLink,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    ReactiveFormsModule,
-    RequiredIconComponent,
-    NgIf,
-    FormsModule,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    TrueFalseDirective,
-    NgSelectModule,
-    NgOptionHighlightModule,
-    FormDirective,
-    XsButtonDirective,
-    BackButtonDirective,
-    ColComponent,
-    RowComponent,
-    ProfileApikeysComponent,
-    ProfileChangePasswordComponent
-],
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        TranslocoDirective,
+        CardBodyComponent,
+        CardFooterComponent,
+        RouterLink,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        ReactiveFormsModule,
+        RequiredIconComponent,
+        NgIf,
+        FormsModule,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        NgSelectModule,
+        NgOptionHighlightModule,
+        FormDirective,
+        XsButtonDirective,
+        BackButtonDirective,
+        ColComponent,
+        RowComponent,
+        ProfileApikeysComponent,
+        ProfileChangePasswordComponent
+    ],
     templateUrl: './profile-edit.component.html',
     styleUrl: './profile-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -185,6 +184,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
                     if (result.success) {
                         this.notyService.genericSuccess();
                         this.loadUser();
+
+                        // Notify the avatar component that the image has changed
+                        this.ProfileService.notifyProfileImageChanged();
                     } else {
                         this.notyService.genericError();
                     }
@@ -209,6 +211,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
                 success: (file: Dropzone.DropzoneFile) => {
                     this.notyService.genericSuccess();
                     this.loadUser();
+                    // Notify the avatar component that the image has changed
+                    this.ProfileService.notifyProfileImageChanged();
                 },
                 error: (file: Dropzone.DropzoneFile, message: string, xhr: XMLHttpRequest) => {
                     if (typeof xhr === 'undefined') {

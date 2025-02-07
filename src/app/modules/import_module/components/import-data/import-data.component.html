@@ -1,0 +1,260 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="importDataModal"
+        size="xl">
+        <c-modal-header *ngIf="importer">
+            <h5 cModalTitle>
+                @switch (importer.data_source) {
+                    @case ('idoit') {
+                        <!-- Import i-doit data -->
+                        <fa-stack class="me-1">
+                            <fa-icon [icon]="['fas', 'database']"
+                                     stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                            <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+                                     stackItemSize="1x" pull="right" transform="right-12 down-15"
+                            ></fa-icon>
+                        </fa-stack>
+                        {{ t('Import data from i-doit system') }}
+                    }
+                    @case ('openitcockpit_agent') {
+                        <!-- Import openITCOCKPIT Agent data -->
+                        <fa-stack class="me-1">
+                            <fa-icon [icon]="['fas', 'user-secret']"
+                                     stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                            <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+                                     stackItemSize="1x" pull="right" transform="right-12 down-15"
+                            ></fa-icon>
+                        </fa-stack>
+                        {{ t('Import data from openITCOCKPIT Agent') }}
+                    }
+                    @case ('itop') {
+                        <!-- Import iTop data -->
+                        <fa-stack class="me-1">
+                            <fa-icon [icon]="['fas', 'user-secret']"
+                                     stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                            <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+                                     stackItemSize="1x" pull="right" transform="right-12 down-15"
+                            ></fa-icon>
+                        </fa-stack>
+                        {{ t('Import data from openITCOCKPIT Agent') }}
+                    }
+                    @case ('external_monitoring') {
+                        <!-- Import ExternalMonitoringSystem data -->
+                        <fa-stack class="me-1">
+                            <fa-icon [icon]="['fas', 'tower-observation']"
+                                     stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                            <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+                                     stackItemSize="1x" pull="right" transform="right-12 down-15"
+                            ></fa-icon>
+                        </fa-stack>
+                        {{ t('Import data from External Monitoring System system') }}
+                    }
+                }
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+            <c-row class="fieldset-legend-border-bottom">
+                <c-col>
+                    <fieldset>
+                        <legend>
+                            <h5>
+                                {{ t('Overview importer configuration') }}
+                                <span *ngIf="importer">
+                                    <a *oitcPermission="['ImportModule','Importers', 'edit']"
+                                       [routerLink]="['/', 'import_module', 'importers', 'edit', importer.id]">
+                                        {{ importer.name }}
+                                    </a>
+                                    <span *oitcPermission="['ImportModule','Importers', 'edit']; negate: true">
+                                        {{ importer.name }}
+                                    </span>
+                                </span>
+                                <span *ngIf="importer" class="float-end">
+                                    <a *oitcPermission="['ImportModule','Importers', 'edit']"
+                                       class="btn btn-outline-primary btn-sm ripple"
+                                       [routerLink]="['/', 'import_module', 'importers', 'edit', importer.id]">
+                                        {{ t('Go to "Importer configuration"') }}
+                                    </a>
+                                </span>
+                            </h5>
+                        </legend>
+                        @if (dynamicFieldsNameValue.length > 0) {
+                            <div class="pb-3">
+                                <div *ngFor="let formField of dynamicFieldsNameValue" class="bold">
+                                    {{ formField.label }}:
+                                    @if (formField.type !== 'checkbox') {
+                                        <span class="text-info">
+                                            {{ formField.value }}
+                                        </span>
+                                    } @else {
+                                        <fa-icon [icon]="['fas', 'times']" class="text-danger"
+                                                 *ngIf="formField.value == 0"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'check']" class="text-success"
+                                                 *ngIf="formField.value == 1"></fa-icon>
+                                    }
+                                </div>
+                            </div>
+
+                        }
+                    </fieldset>
+                </c-col>
+            </c-row>
+            <oitc-table-loader *ngIf="!importData"></oitc-table-loader>
+            <c-row *ngIf="importData">
+                <c-col *ngIf="!importData.success">
+                    <c-alert color="danger" class="my-3 p-1">
+                        <h5 cAlertHeading> {{ t('Error!') }}</h5>
+                        <p *ngIf="importData.errorMessage">
+                            <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
+                            {{ importData.errorMessage }}
+                        </p>
+                        <p *ngIf="importData.notValidRawData.length>0">
+                            <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
+                            {{ importData.notValidRawData.error }}
+                            <span class="help-block text-danger italic">
+                                {{ importData.notValidRawData.description }}
+                            </span>
+                        </p>
+                    </c-alert>
+                </c-col>
+            </c-row>
+            <ng-container *ngIf="importData && importData.success && importer">
+                <c-row class="mt-3">
+                    @switch (importer.data_source) {
+                        @case ('idoit') {
+                            <c-col>
+                                <h5>
+                                    {{ t('i-doit Data preview') }}
+                                </h5>
+                                <div class="help-block text-info pb-2 small">
+                                    {{ t('This preview shows maximal 10 first valid records from i-doit system.') }}
+                                    <span>
+                                        {{ t('Furthermore are all hosts displayed and no filter rules get applied.') }}
+                                    </span>
+                                    <span class="text-warning italic text-decoration-underline">
+                                        {{ t('Lines with duplicate identifiers are automatically ignored') }}
+                                    </span>
+                                </div>
+                            </c-col>
+                        }
+                        @case ('itop') {
+                            <c-col>
+                                <h5>
+                                    {{ t('iTop Data preview!') }}
+                                </h5>
+                                <div class="help-block text-info pb-2 small">
+                                    {{ t('This preview shows maximal 10 first valid records from iTop system.') }}
+                                    <span>
+                                        {{ t('Furthermore are all objects displayed and no filter rules get applied.') }}
+                                    </span>
+                                    <span class="text-warning italic text-decoration-underline">
+                                        {{ t('Lines with duplicate identifiers are automatically ignored') }}
+                                    </span>
+                                </div>
+                            </c-col>
+                        }
+                        @case ('openitcockpit_agent') {
+                            <c-col>
+                                <h5>
+                                    {{ t('openITCOCKPIT Agent Data preview') }}
+                                </h5>
+                                <div class="help-block text-info pb-2 small">
+                                    {{ t('This preview shows maximal 10 first valid records from openITCOCKPIT Agent.') }}
+                                    <span>
+                                        {{ t('Furthermore are all hosts displayed and no filter rules get applied.') }}
+                                    </span>
+                                    <span class="text-warning italic text-decoration-underline">
+                                        {{ t('Lines with duplicate identifiers are automatically ignored') }}
+                                    </span>
+                                </div>
+                            </c-col>
+                        }
+                    }
+                </c-row>
+                <c-row>
+                    <c-col>
+                        <table class="mt-2 mb-0 table table-fit" bordered cTable hover striped small>
+                            <thead>
+                            <tr>
+                                <th class="col-1">
+                                    {{ t('UID') }}
+                                </th>
+                                <th class="col-2">
+                                    {{ t('Name') }}
+                                </th>
+                                <th class="col-2">
+                                    {{ t('Address') }}
+                                </th>
+                                <th>
+                                    {{ t('Description') }}
+                                </th>
+                                <th>
+                                    {{ t('Software') }}
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @if (importData.data) {
+                                    <tr *ngFor="let importHostData of importData.data" class="word-break">
+                                        <td>
+                                            {{ importHostData.identifier }}
+                                        </td>
+                                        <td>
+                                            {{ importHostData.hostname }}
+                                        </td>
+                                        <td>
+                                            {{ importHostData.address }}
+                                        </td>
+                                        <td>
+                                            {{ importHostData.description }}
+                                        </td>
+                                        <td>
+                                            {{ importHostData.software }}
+                                        </td>
+                                    </tr>
+                                }
+
+                                @if (!importData.success && importData.notValidRawData && importData.notValidRawData.invalidData.length > 0) {
+                                    <tr *ngFor="let importInvalidHostData of importData.notValidRawData.invalidData"
+                                        class="word-break">
+                                        <td>
+                                            {{ importInvalidHostData.identifier }}
+                                        </td>
+                                        <td>
+                                            {{ importInvalidHostData.hostname }}
+                                        </td>
+                                        <td>
+                                            {{ importInvalidHostData.address }}
+                                        </td>
+                                        <td>
+                                            {{ importInvalidHostData.description }}
+                                        </td>
+                                        <td>
+                                            {{ importInvalidHostData.software }}
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </c-col>
+                </c-row>
+
+            </ng-container>
+        </c-modal-body>
+        <c-modal-footer>
+            <button cButton class="ripple" color="primary" *ngIf="importData"
+                    [disabled]="showSynchronizingSpinner || showSpinner || errors !== null"
+                    (click)="startDataImport()">
+                <fa-icon [icon]="['fas', 'spinner']" animation="spin" *ngIf="showSpinner"></fa-icon>
+                {{ t('Start data import') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>

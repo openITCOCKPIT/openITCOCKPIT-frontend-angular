@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GrafanaPanelOptionsService } from './grafana-panel-options.service';
 import {
@@ -16,7 +16,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { OpenPanelOptionsEvent } from '../grafana-panel/grafana-panel.component';
 import { FormsModule } from '@angular/forms';
@@ -31,6 +31,8 @@ import { GrafanaUnits } from '../grafana-editor.interface';
 import {
     SelectOptgroupComponent
 } from '../../../../../../layouts/primeng/select/select-optgroup/select-optgroup.component';
+import { NotyService } from '../../../../../../layouts/coreui/noty.service';
+import { GrafanaEditorService } from '../grafana-editor.service';
 
 @Component({
     selector: 'oitc-grafana-panel-options-modal',
@@ -62,14 +64,18 @@ import {
 export class GrafanaPanelOptionsModalComponent implements OnDestroy {
 
 
-    private readonly GrafanaPanelOptionsService = inject(GrafanaPanelOptionsService);
-    private readonly modalService = inject(ModalService);
-    private readonly subscriptions = new Subscription();
-
     public currentEvent?: OpenPanelOptionsEvent;
     public grafanaUnitsSelect: SelectKeyValueOptGroup[] = [];
 
     public grafanaUnits = input<GrafanaUnits>();
+
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly modalService = inject(ModalService);
+    private readonly GrafanaEditorService = inject(GrafanaEditorService);
+    private readonly GrafanaPanelOptionsService = inject(GrafanaPanelOptionsService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
         this.subscriptions.add(this.GrafanaPanelOptionsService.panel$.subscribe((event) => {
@@ -108,8 +114,6 @@ export class GrafanaPanelOptionsModalComponent implements OnDestroy {
                 }
 
                 this.grafanaUnitsSelect.push(group);
-
-                console.log(this.grafanaUnitsSelect);
             }
         });
 
@@ -142,7 +146,48 @@ export class GrafanaPanelOptionsModalComponent implements OnDestroy {
     }
 
     public saveOptions() {
-        // Save the options
+        if (!this.currentEvent) {
+            return;
+        }
+
+        let stacking_mode: GrafanaStackingModesEnum | '' | null = this.currentEvent.panel.stacking_mode;
+        if (stacking_mode === null) {
+            stacking_mode = '';
+        }
+
+        this.subscriptions.add(this.GrafanaEditorService.savePanelUnit(
+            this.currentEvent.panel.id,
+            this.currentEvent.panel.unit,
+            this.currentEvent.panel.title,
+            this.currentEvent.panel.visualization_type,
+            stacking_mode
+        ).subscribe(response => {
+            if (response.success) {
+
+                // All done send panel back tp the panel component
+                if (this.currentEvent) {
+                    this.GrafanaPanelOptionsService.sendUpdatedPanelToPanelComponent({
+                        panel: this.currentEvent.panel,
+                        panelIndex: this.currentEvent.panelIndex
+                    });
+
+                    this.notyService.genericSuccess(
+                        this.TranslocoService.translate('Panel options saved successfully')
+                    );
+
+                    // Close the modal
+                    this.modalService.toggle({
+                        show: false,
+                        id: 'grafanaPanelOptionsModal',
+                    });
+
+                }
+            } else {
+                this.notyService.genericError(
+                    this.TranslocoService.translate('Error while saving panel options')
+                );
+            }
+        }));
     }
 
     protected readonly GrafanaChartTypesEnum = GrafanaChartTypesEnum;

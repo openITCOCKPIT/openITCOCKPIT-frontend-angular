@@ -2,6 +2,7 @@ import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator
 import { ExternalMonitoringsAsList } from '../externalmonitorings/external-monitorings.interface';
 import { ExternalSystemsAsList } from '../externalsystems/external-systems.interface';
 import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
+import { ImportedHostRawData } from '../importedhosts/importedhosts.interface';
 
 export interface ImportersIndexRoot extends PaginateOrScroll {
     importers: Importer[]
@@ -18,6 +19,14 @@ export interface Importer {
     hostdefault_id: number
     container: string
     allowEdit: boolean
+    config?: {
+        mapping: {
+            [key: string]: {
+                key: string
+                value: string
+            }
+        }
+    }
 }
 
 export interface ImportersIndexParams {
@@ -91,8 +100,7 @@ export interface ImportersToHostdefaults {
     hostdefault_id?: number | null
     field: string
     regex: string
-    index: number
-    order: number
+    order?: number // Only relevant to store the order in the database
 }
 
 
@@ -213,4 +221,82 @@ export interface ImporterConfig {
         }
         formFields: DynamicalFormFields
     }
+}
+
+export interface ImportersErrorMessageResponse {
+    message: string
+    errors: {
+        notValidRawData: {
+            error: string
+            description: string
+            invalidData: ImportedHostRawData[]
+        }
+    }
+}
+
+export interface ImportCsvDataResponse {
+    response: {
+        success: boolean
+        message: string
+        filename: string
+        filenameOrigin: string
+        previewData: CsvPreviewData
+    }
+    _csrfToken: any
+}
+
+export interface CsvPreviewData {
+    headers: CsvHeaders
+    rawData: ImportedHostRawData[]
+    errors: CsvErrors
+}
+
+export interface CsvHeaders {
+    mapping_identifier: CsvHeadersMappingFields
+    mapping_hostname: CsvHeadersMappingFields
+    mapping_address: CsvHeadersMappingFields
+    mapping_description: CsvHeadersMappingFields
+    mapping_software: CsvHeadersMappingFields
+}
+
+export interface CsvHeadersMappingFields {
+    name: string
+    exists: boolean
+}
+
+export interface CsvErrors {
+    missingHeaderFields: MissingCsvHeaderFields
+    notValidRawData: NotValidCsvRawData
+}
+
+export interface MissingCsvHeaderFields {
+    error: string
+    description: string
+    invalidData: InvalidCsvData
+}
+
+export interface NotValidCsvRawData {
+    error: string
+    description: string
+    invalidData: ImportedHostRawData[]
+}
+
+export interface InvalidCsvData {
+    mapping_identifier: string
+    mapping_hostname: string
+    mapping_address: string
+    mapping_description: string
+    mapping_software: string
+}
+
+export interface CsvPreviewHeadersAsArray {
+    key: string
+    name: string
+    exists: boolean
+}
+
+export interface GenericKeyValueFieldType {
+    label: any
+    value: any
+    type: string
 }

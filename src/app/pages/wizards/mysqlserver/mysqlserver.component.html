@@ -25,7 +25,7 @@
                 {{ t('Configuration Wizard: MySQL Server') }}
             </h5>
         </c-card-header>
-        <c-card-body>
+        <c-card-body class="p-0">
 
             <div class="row m-0 text-center mb-3" style="min-height: 22px;">
                 <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
@@ -39,6 +39,8 @@
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('MySQL Information') }}
                     </span>
+                </div>
+                <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
                 </div>
                 <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
                     <div class="btn-group btn-group-xs w-100 h-100">
@@ -59,6 +61,8 @@
                 </div>
             </div>
 
+        </c-card-body>
+        <c-card-body>
 
             <fieldset class="padding-bottom-20">
                 <legend class="fs-md fieldset-legend-border-bottom">
@@ -71,7 +75,7 @@
                     <c-accordion-item #item0="cAccordionItem" [visible]="false">
                         <ng-template cTemplateId="accordionHeaderTemplate">
                             <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
-                                <i class="fas fa-life-ring width-2 alert-icon"></i>
+                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
                                 {{ t('MySQL configuration help') }}
                             </button>
                         </ng-template>
@@ -84,7 +88,12 @@
                                             <div class="alert border-danger bg-transparent text-danger">
                                                 {{ t('Changing the bind address can be a potential security issue!') }}
                                             </div>
-                                            {{ t('The bind-address is configured in my.cnf. Most likely this file is located at {0} or {1}') }}
+                                            {{
+                                                t('The bind-address is configured in my.cnf. Most likely this file is located at {0} or {1}', {
+                                                    "0": "/etc/mysql/mysql.conf.d/mysqld.cnf",
+                                                    "1": "/etc/mysql/my.cnf"
+                                                })
+                                            }}
                                         </div>
                                     </li>
 
@@ -104,13 +113,13 @@
 
                                     <li>
                                         <div>
-                                            {{ t('Create a new MySQL user for {0}', {"1": systemName}) }}
+                                            {{ t('Create a new MySQL user for {0}', {"0": systemName}) }}
                                             <pre>CREATE USER 'monitoring'&#64;'{{ serverAddr }}' IDENTIFIED BY 'secure_password';
 GRANT SELECT, SHOW VIEW ON *.* TO 'monitoring'&#64;'{{ serverAddr }}';</pre>
                                             {{
                                                 t('Please replace {0} with the address of the {1} server and set a secure password', {
-                                                    "1": serverAddr,
-                                                    "2": systemName
+                                                    "0": serverAddr,
+                                                    "1": systemName
                                                 })
                                             }}
                                         </div>

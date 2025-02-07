@@ -3,12 +3,13 @@ import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-a
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormControlDirective,
-  FormLabelDirective
+    AccordionButtonDirective, AccordionComponent, AccordionItemComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormLabelDirective, TemplateIdDirective
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
@@ -24,22 +25,26 @@ import { VmwarehorizonWizardGet, VmwarehorizonWizardPost } from './vmwarehorizon
 @Component({
     selector: 'oitc-vmwarehorizon',
     imports: [
-    RouterLink,
-    FaIconComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    TranslocoPipe,
-    WizardsDynamicfieldsComponent,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    RequiredIconComponent,
-    TranslocoDirective
-],
+        RouterLink,
+        FaIconComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        TranslocoPipe,
+        WizardsDynamicfieldsComponent,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        RequiredIconComponent,
+        TranslocoDirective,
+        AccordionButtonDirective,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective
+    ],
     templateUrl: './vmwarehorizon.component.html',
     styleUrl: './vmwarehorizon.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

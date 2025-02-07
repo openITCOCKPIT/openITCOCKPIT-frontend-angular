@@ -29,6 +29,9 @@ import { jiraModuleRoutes } from './modules/jira_module/jira_module.routes';
 import { openstreetmapModuleRoutes } from './modules/openstreetmap_module/openstreetmap_modules.routes';
 import { isarFlowModuleRoutes } from './modules/isarflow_module/isarflow_module.routes';
 import { grafanaModuleRoutes } from './modules/grafana_module/grafana_module.routes';
+import { autoreportModuleRoutes } from './modules/autoreport_module/autoreport_module.routes';
+import { prometheusModuleRoutes } from './modules/prometheus_module/prometheus_module.routes';
+import { changecalendarsModuleRoutes } from './modules/changecalendar_module/changecalendar_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -62,6 +65,7 @@ const moduleRoutes: Routes = [
     ...mssqlModuleRoutes,
     ...nwcModuleRoutes,
     ...oracleModuleRoutes,
+    ...prometheusModuleRoutes,
     ...vmwareModuleRoutes,
     ...sapModuleRoutes,
     ...hanaModuleRoutes,
@@ -79,13 +83,18 @@ const moduleRoutes: Routes = [
     ...jiraModuleRoutes,
     ...isarFlowModuleRoutes,
     ...grafanaModuleRoutes,
-    ...openstreetmapModuleRoutes
+    ...openstreetmapModuleRoutes,
+    ...autoreportModuleRoutes,
+    ...changecalendarsModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
     path: '',
     loadComponent: () => import('./pages/start-page/start-page.component').then(m => m.StartPageComponent),
     canActivate: [authGuard]
+}, {
+    path: 'dashboards/index',
+    loadComponent: () => import('./pages/dashboards/dashboards-index/dashboards-index.component').then(m => m.DashboardsIndexComponent)
 }, {
     path: 'macros/index',
     loadComponent: () => import('./pages/macros/macro-index/macro-index.component').then(m => m.MacroIndexComponent)

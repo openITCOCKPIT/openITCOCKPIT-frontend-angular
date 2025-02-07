@@ -11,7 +11,7 @@
             </button>
 
             <oitc-top-search class="flex-1 pe-3"></oitc-top-search>
-            <oitc-message-of-the-day-button [messageOfTheDay]="messageOfTheDay" />
+            <oitc-message-of-the-day-button [messageOfTheDay]="messageOfTheDay"/>
             <!-- todo remove me or use me -->
 
             <c-header-nav class="d-none d-md-flex ms-2">
@@ -57,13 +57,7 @@
     <ng-template #userDropdown>
         <c-dropdown [popperOptions]="{ placement: 'bottom-start' }" variant="nav-item">
             <button [caret]="false" cDropdownToggle class="py-0 pe-0">
-                <c-avatar
-                    [size]="'md'"
-                    shape="rounded-1"
-                    src="/img/userimages/initial_avatar_d78ff0bc69e9a7a5c86ab082d61d9716.png"
-                    status="success"
-                    textColor="primary"
-                />
+                <oitc-header-avatar></oitc-header-avatar>
             </button>
             <ul cDropdownMenu class="pt-0 w-auto">
                 <li>

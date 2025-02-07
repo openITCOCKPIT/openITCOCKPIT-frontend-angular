@@ -80,7 +80,7 @@ export interface DashboardRowMetric {
     host_id: number
     service_id: number
     color?: string | null
-    service: {
+    service?: { // missing in addMetricToPanel result
         id: number
         name?: string | null
         uuid: string
@@ -91,13 +91,13 @@ export interface DashboardRowMetric {
         }
         prometheus_alert_rule?: GrafanaEditorPrometheusAlertRule
     }
-    host: {
+    host?: { // missing in addMetricToPanel result
         id: number
         name: string
         uuid: string
     }
-    servicetemplate: any[]
-    Servicetemplate: {
+    servicetemplate: any[]  // missing in addMetricToPanel result (unused at all)
+    Servicetemplate: {  // missing in addMetricToPanel result
         id: number
         name: string
     }
@@ -337,4 +337,15 @@ export interface GrafanaUnits {
         congm3: string
         congNm3: string
     }
+}
+
+
+export interface GrfanaEditorCurrentMetricPost {
+    metric_id?: number
+    color: string
+    metric: string
+    panel_id: number
+    row: number
+    service_id: number
+    userdashboard_id: number
 }

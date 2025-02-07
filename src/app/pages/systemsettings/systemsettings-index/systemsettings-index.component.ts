@@ -1,23 +1,22 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { SystemsettingsService } from '../systemsettings.service';
 import { Subscription } from 'rxjs';
 
 
 import {
-  AlertComponent,
-  AlertHeadingDirective,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormControlDirective,
-  FormDirective,
-  FormSelectDirective,
-  ModalService,
-  TableDirective,
-  TooltipDirective
+    AlertComponent,
+    AlertHeadingDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormDirective,
+    FormSelectDirective,
+    ModalService,
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
 
 
@@ -40,37 +39,39 @@ import {
     ReloadInterfaceModalComponent
 } from '../../../layouts/coreui/reload-interface-modal/reload-interface-modal.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-systemsettings-index',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    NgForOf,
-    NgIf,
-    PermissionDirective,
-    TableDirective,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    AlertComponent,
-    AlertHeadingDirective,
-    TooltipDirective,
-    KeyValuePipe,
-    FormSelectDirective,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchMultiCasePipe,
-    NgSwitchDefault,
-    ReloadInterfaceModalComponent
-],
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        NgForOf,
+        NgIf,
+        PermissionDirective,
+        TableDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        AlertComponent,
+        AlertHeadingDirective,
+        TooltipDirective,
+        KeyValuePipe,
+        FormSelectDirective,
+        NgSwitch,
+        NgSwitchCase,
+        NgSwitchMultiCasePipe,
+        NgSwitchDefault,
+        ReloadInterfaceModalComponent,
+        TableLoaderComponent
+    ],
     templateUrl: './systemsettings-index.component.html',
     styleUrl: './systemsettings-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

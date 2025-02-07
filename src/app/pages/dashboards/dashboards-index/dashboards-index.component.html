@@ -1,0 +1,101 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'gauge-high']"></fa-icon>
+                {{ t('Dashboard') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Dashboard') }}
+            </h5>
+        </c-card-header>
+        <c-card-body>
+            <div class="grid-container">
+                <ktd-grid [cols]="cols"
+                          [rowHeight]="rowHeight"
+                          [gap]="10"
+                          [layout]="layout"
+                          [compactType]="compactType"
+                          [preventCollision]="preventCollision"
+                          [scrollableParent]="autoScroll ? document : null"
+                          scrollSpeed="4"
+                          (dragStarted)="onDragStarted($event)"
+                          (resizeStarted)="onResizeStarted($event)"
+                          (dragEnded)="onDragEnded($event)"
+                          (resizeEnded)="onResizeEnded($event)"
+                          (layoutUpdated)="onLayoutUpdated($event)">
+                    <ktd-grid-item *ngFor="let item of layout; trackBy:trackById"
+                                   [id]="item.id"
+                                   [transition]="currentTransition"
+                                   [dragStartThreshold]="dragStartThreshold"
+                                   [draggable]="!disableDrag"
+                                   [resizable]="!disableResize">
+
+                        <!-- Optional Custom placeholder template -->
+                        <ng-template ktdGridItemPlaceholder>
+                            <!-- Custom placeholder content goes here -->
+
+                            <c-card class="w-100 h-100 justify-content-center widget-placeholder">
+                                <div class="align-self-center">
+                                    <fa-icon [icon]="['fas', 'up-down-left-right']" size="2x"></fa-icon>
+                                </div>
+                            </c-card>
+
+                        </ng-template>
+
+                        <div class="grid-item-content">
+
+                            <c-card class="w-100 h-100">
+                                <c-card-header>
+                                    <h5 cCardTitle ktdGridDragHandle>
+                                        Header
+                                    </h5>
+
+                                    <c-nav class="card-toolbar card-header-pills">
+
+                                        <c-nav-item class="px-1">
+                                            <oitc-dashboard-colorpicker></oitc-dashboard-colorpicker>
+
+                                        </c-nav-item>
+
+                                        <c-nav-item class="px-1" *ngIf="!disableRemove">
+                                            <button class="btn btn-sm btn-icon ripple btn-icon-hover-danger"
+
+                                                    (mousedown)="stopEventPropagation($event)"
+                                                    (click)="removeItem(item.id)">
+                                                <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                                            </button>
+                                        </c-nav-item>
+                                    </c-nav>
+
+                                </c-card-header>
+                                <c-card-body>
+                                    <h5 cCardTitle>Special title treatment</h5>
+                                    <p cCardText>
+
+                                        {{ item.id }}
+
+                                        With supporting text below as a natural lead-in to additional content.
+                                    </p>
+
+                                </c-card-body>
+                            </c-card>
+
+                        </div>
+
+                    </ktd-grid-item>
+                </ktd-grid>
+            </div>
+        </c-card-body>
+    </c-card>
+
+</ng-container>

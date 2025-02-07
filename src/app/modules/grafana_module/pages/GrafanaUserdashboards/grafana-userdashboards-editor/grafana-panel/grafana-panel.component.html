@@ -10,7 +10,8 @@
                     </span>
 
                     <c-button-group role="group" class="float-end">
-                        <button cButton color="default" class="ripple text-success" size="xs">
+                        <button cButton color="default" class="ripple text-success" size="xs"
+                                (click)="openAddMetric()">
                             <fa-icon [icon]="['fas', 'plus']"></fa-icon>
                             {{ t('Add Metric') }}
                         </button>
@@ -74,7 +75,7 @@
 
                             <c-button-group role="group">
                                 <button cButton color="default" class="ripple text-primary" size="xs"
-                                        (click)="editMetric(metric)"
+                                        (click)="openEditMetric(metric)"
                                         [title]="'Edit Metric' | transloco">
                                     <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
                                 </button>

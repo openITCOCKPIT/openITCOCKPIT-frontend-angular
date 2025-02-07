@@ -47,6 +47,7 @@ import {
     ServicesDisabledRoot,
     ServicesIndexFilterApiRequest,
     ServicesIndexRoot,
+    ServicesLoadServicesByContainerIdResponse,
     ServicesLoadServicesByStringParams,
     ServicesNotMonitoredParams,
     ServicesNotMonitoredRoot,
@@ -529,5 +530,29 @@ export class ServicesService {
                     return data;
                 })
             )
+    }
+
+    /**********************
+     *       Generic      *
+     **********************/
+    public loadServicesByContainerId(containerId: number, searchString: string, selected: number[], recursive: boolean = true): Observable<ServicesLoadServicesByContainerIdResponse[]> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.get<{
+            services: ServicesLoadServicesByContainerIdResponse[],
+            _csrfToken: string | null
+        }>(`${proxyPath}/services/loadServicesByContainerId.json?angular=true`, {
+            params: {
+                'angular': true,
+                'filter[servicename]': searchString,
+                'selected[]': selected,
+                containerId: containerId,
+                recursive: recursive
+            }
+        }).pipe(
+            map((data) => {
+                return data.services;
+            })
+        )
     }
 }

@@ -56,47 +56,47 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 @Component({
     selector: 'oitc-usergroups-index',
     imports: [
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    DeleteAllModalComponent,
-    DropdownDividerDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ItemSelectComponent,
-    MatSort,
-    MatSortHeader,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    PermissionDirective,
-    RowComponent,
-    SelectAllComponent,
-    TableDirective,
-    TableLoaderComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    RouterLink
-],
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        DeleteAllModalComponent,
+        DropdownDividerDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        PermissionDirective,
+        RowComponent,
+        SelectAllComponent,
+        TableDirective,
+        TableLoaderComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        RouterLink
+    ],
     templateUrl: './usergroups-index.component.html',
     styleUrl: './usergroups-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: UsergroupsService } // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: UsergroupsService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -110,7 +110,7 @@ export class UsergroupsIndexComponent implements OnInit, OnDestroy {
     private readonly cdr = inject(ChangeDetectorRef);
 
     protected params: UsergroupsIndexParams = getdefaultUsergroupsIndexParams();
-    protected usergroups: UsergroupsIndexRoot = {allUsergroups: [], _csrfToken: ''} as UsergroupsIndexRoot;
+    protected usergroups?: UsergroupsIndexRoot;
     protected selectedItems: DeleteAllItem[] = [];
     protected hideFilter: boolean = true;
 

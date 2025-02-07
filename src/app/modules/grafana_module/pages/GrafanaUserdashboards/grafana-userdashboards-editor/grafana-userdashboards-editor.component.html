@@ -77,6 +77,17 @@
                         </button>
                     </c-nav-item>
 
+                    <c-nav-item class="px-1" *oitcPermission="['GrafanaModule', 'GrafanaUserdashboards', 'view']">
+                        <a [routerLink]="[ '/', 'grafana_module', 'grafana_userdashboards', 'view', data.userdashboardData.id]"
+                           *ngIf="data.userdashboardData.grafana_url"
+                           cButton
+                           class="ripple" color="primary"
+                           size="xs">
+                            <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
+                            {{ t('View') }}
+                        </a>
+                    </c-nav-item>
+
                 </c-nav>
 
             </c-card-header>
@@ -85,6 +96,7 @@
                 @for (panels of data.userdashboardData.rows; track $index) {
                     <oitc-grafana-row
                         [panels]="panels"
+                        [containerId]="data.userdashboardData.container_id"
                         [grafanaUnits]="data.grafanaUnits"
                         (panelsChangedEvent)="onRowPanelsChanged($event)"
                         (removeRowEvent)="onRowRemove($event)"
@@ -123,3 +135,4 @@
     *ngIf="data && data.grafanaUnits"
     [grafanaUnits]="data.grafanaUnits"></oitc-grafana-panel-options-modal>
 
+<oitc-grafana-metric-options-modal></oitc-grafana-metric-options-modal>

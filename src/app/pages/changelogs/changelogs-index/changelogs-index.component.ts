@@ -18,7 +18,6 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { ChangelogsEntryComponent } from '../changelogs-entry/changelogs-entry.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -40,43 +39,45 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 
 import { IndexPage } from '../../../pages.interface';
 import { Sort } from '@angular/material/sort';
+import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 
 
 @Component({
     selector: 'oitc-changelogs-index',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ChangelogsEntryComponent,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    FaIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    PaginateOrScrollComponent,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RowComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    RouterLink,
-    NoRecordsComponent,
-    AsyncPipe
-],
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ChangelogsEntryComponent,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        PaginateOrScrollComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        RouterLink,
+        NoRecordsComponent,
+        AsyncPipe,
+        BlockLoaderComponent
+    ],
     templateUrl: './changelogs-index.component.html',
     styleUrl: './changelogs-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

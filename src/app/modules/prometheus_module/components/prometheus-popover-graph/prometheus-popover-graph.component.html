@@ -1,0 +1,36 @@
+<ng-container *transloco="let t">
+    <div #hoverIcon
+         (mouseenter)="showTooltip($event)"
+         (mouseleave)="cancelDebounce($event)">
+        <fa-icon [icon]="['fas', 'area-chart']"
+                 id="serviceGraphContainer-{{service}}"
+        ></fa-icon>
+    </div>
+
+    <p-popover #graphOverlayPanel
+                    class="popup-graph-container"
+                    [style]="{ width: '70%', 'margin-left': '35px' }">
+        <ng-template pTemplate="content">
+            <div class="row" *ngIf="isLoading">
+                <div class="col-12">
+                    <oitc-chart-loader></oitc-chart-loader>
+                </div>
+            </div>
+
+            <div class="row" [hidden]="isLoading">
+                @for (gauge of perfData; track perfData; let index = $index) {
+                    @if (index < 4) {
+                        <div class="col-sm-12 col-md-12 col-lg-6"
+                             [ngClass]="{'w-100': perfData.length === 1}">
+                            <div class="gauge-name text-center fw-bold word-wrap-anywhere">
+                                {{ gauge.datasource.name }}
+                            </div>
+                            <div id="serviceGraphUPlot-{{service}}-{{index}}" class="popover-chart"></div>
+                        </div>
+                    }
+                }
+            </div>
+        </ng-template>
+    </p-popover>
+
+</ng-container>

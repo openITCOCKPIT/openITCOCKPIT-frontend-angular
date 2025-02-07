@@ -4,7 +4,7 @@
             <input class="form-control" type="text" [placeholder]="'Type to search' | transloco"
                    [(ngModel)]="searchString" (debouncedValue)="searchMenu($event)" oitcDebounce
                    [disabled]="isSearching"
-                   (keydown)="onKeydown($event)"/>
+                   (keydown)="onKeyDownCallback($event)"/>
             <span class="input-group-text">
                 <fa-icon [icon]="['fas', 'search']" *ngIf="!isSearching"></fa-icon>
                 <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'" *ngIf="isSearching"></fa-icon>
