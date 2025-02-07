@@ -1,0 +1,3 @@
+.select-all-border {
+    border-bottom: var(--cui-border-width) dashed var(--cui-border-color) !important;
+}
