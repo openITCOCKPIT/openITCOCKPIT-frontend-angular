@@ -1,11 +1,13 @@
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
-    Component, EventEmitter,
+    Component,
+    EventEmitter,
     inject,
     Input,
     OnChanges,
-    OnInit, Output,
+    OnInit,
+    Output,
     SimpleChanges
 } from '@angular/core';
 import {
@@ -36,8 +38,6 @@ import { BbCodeParserService } from '../../../../services/bb-code-parser.service
 import { GenericValidationError } from '../../../../generic-responses';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ChangecalendarsService } from '../../pages/changecalendars/changecalendars.service';
-import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { NgIf } from '@angular/common';
 
 @Component({
@@ -74,7 +74,6 @@ import { NgIf } from '@angular/common';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChangecalendarsEventEditorComponent implements OnInit, OnChanges {
-    private readonly ChangecalendarsService: ChangecalendarsService = inject(ChangecalendarsService);
     private readonly ModalService: ModalService = inject(ModalService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly BbCodeParserService: BbCodeParserService = inject(BbCodeParserService);

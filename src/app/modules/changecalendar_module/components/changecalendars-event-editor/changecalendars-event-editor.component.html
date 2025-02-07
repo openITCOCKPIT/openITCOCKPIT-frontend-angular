@@ -94,7 +94,7 @@
             </c-row>
         </c-modal-body>
         <c-modal-footer>
-            <button *ngIf="event.id" cButton color="danger" (click)="onDeleteClick.emit(event)">
+            <button *ngIf="event.id" cButton color="danger" (click)="onDeleteClick.emit(event)" style="margin-right: auto;">
                 {{ t('Delete') }}
             </button>
             <button *ngIf="event.id" cButton color="success" (click)="onEventChange.emit(event)">
