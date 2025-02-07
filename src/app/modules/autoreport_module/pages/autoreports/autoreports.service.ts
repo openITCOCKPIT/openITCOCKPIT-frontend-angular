@@ -8,11 +8,15 @@ import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delet
 import {
     AutoreportsIndexRoot,
     AutoreportsIndexParams,
-    CalendarParams
+    CalendarParams, AutoreportPost
 
 } from './autoreports.interface';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import {
+    AllAutoreportSettings,
+    AutoreportSettingsPostResponse
+} from '../autoreport-settings/autoreport-settings.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -63,6 +67,28 @@ export class AutoreportsService {
                 return data.calendars;
             })
         )
+    }
+
+    public setAddStepOne(post: AutoreportPost): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/autoreport_module/autoreports/addStepOne.json?angular=true`,
+            post
+        ).pipe(
+            map((data: any) => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                const err = error.error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
+            })
+        );
     }
 
 }

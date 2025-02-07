@@ -17,7 +17,7 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective,
+    FormLabelDirective, FormTextDirective,
     InputGroupComponent,
     InputGroupTextDirective,
     RowComponent
@@ -27,19 +27,22 @@ import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/pri
 import { Subscription } from 'rxjs';
 import { AutoreportsService } from '../autoreports.service';
 import {
-    AutoreportPost
+    AutoreportPost,
+    CalendarParams,
+    getDefaultCalendarParams
 } from '../autoreports.interface';
-import { InstantreportPost } from '../../../../../pages/instantreports/instantreports.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf, DatePipe } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { GenericValidationError } from '../../../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { TimeperiodsService } from '../../../../../pages/timeperiods/timeperiods.service';
+import { UsersService } from '../../../../../pages/users/users.service';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
+import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 @Component({
   selector: 'oitc-autoreport-add-step-one',
@@ -70,7 +73,6 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
         FormCheckLabelDirective,
         TrueFalseDirective,
         LabelLinkComponent,
-        DatePipe,
         CalloutComponent,
         InputGroupComponent,
         InputGroupTextDirective,
@@ -79,7 +81,10 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
         DropdownToggleDirective,
         DropdownMenuDirective,
         DropdownItemDirective,
-        DebounceDirective
+        DebounceDirective,
+        MultiSelectComponent,
+        AsyncPipe,
+        FormTextDirective
     ],
   templateUrl: './autoreport-add-step-one.component.html',
   styleUrl: './autoreport-add-step-one.component.css',
@@ -91,11 +96,15 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private readonly AutoreportsService: AutoreportsService = inject(AutoreportsService);
     private readonly TimeperiodsService: TimeperiodsService = inject(TimeperiodsService);
+    private readonly UsersService: UsersService = inject(UsersService);
 
     public errors: GenericValidationError | null = null;
     public containers: SelectKeyValue[] = [];
+    public calendars: SelectKeyValue[] = [];
     public timeperiods: SelectKeyValue[] = [];
+    public users: SelectKeyValue[] = [];
     public post: AutoreportPost = this.getDefaultPost();
+    protected calendarParams: CalendarParams = getDefaultCalendarParams();
     public setMinAvailability : boolean = false;
     public setMaxNumberOfOutages : boolean = false;
     public evalutionperiods: SelectKeyValueString[] = [
@@ -106,7 +115,7 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
         {key: 'Day', value: 'DAY'}
     ];
     public sendintervals: SelectKeyValueString[] = [
-        {key: 'never', value: 'Never'},
+        {key: 'never', value: 'NEVER'},
         {key: 'yearly', value: 'YEAR'},
         {key: 'quarterly', value: 'QUARTER'},
         {key: 'monthly', value: 'MONTH'},
@@ -140,11 +149,61 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
 
     public onContainerChange() {
         this.loadTimeperiods();
+        this.loadCalendars();
+        this.loadUsers();
+    }
+
+    public onAvailabilityChange($event: boolean) {
+        if(!$event ) {
+            this.post.Autoreport.min_availability = null;
+        }
+    }
+
+    public onOutageChange($event: boolean) {
+        if(!$event ) {
+            this.post.Autoreport.max_number_of_outages = null;
+        }
+    }
+
+    public onHolidayChange($event: any) {
+        if($event === 0 && this.post.Autoreport.calendar_id !== null){
+            this.post.Autoreport.calendar_id = null;
+        }
+    }
+
+    public onStartChange($event: any) {
+        if($event === 0){
+            this.post.Autoreport.report_start_date = '';
+        }
     }
 
     private loadTimeperiods() {
+        if(this.post.Autoreport.container_id === null){
+            return;
+        }
         this.subscriptions.add(this.TimeperiodsService.loadTimeperiodsByContainerId(this.post.Autoreport.container_id).subscribe((result) => {
             this.timeperiods = result;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    private loadCalendars() {
+        if(this.post.Autoreport.container_id === null){
+            return;
+        }
+        this.calendarParams.containerId = this.post.Autoreport.container_id;
+        this.subscriptions.add(this.AutoreportsService.loadCalendars(this.calendarParams).subscribe((result) => {
+            this.calendars = result;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    private loadUsers() {
+        if(this.post.Autoreport.container_id === null){
+            return;
+        }
+        this.subscriptions.add(this.UsersService.loadUsersByContainerId(this.post.Autoreport.container_id, this.post.Autoreport.users._ids).subscribe((result) => {
+            this.users = result;
             this.cdr.markForCheck();
         }));
     }
@@ -152,17 +211,17 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     private getDefaultPost(): AutoreportPost {
         return {
             Autoreport: {
-                container_id: 0,
-                name: '',
-                description: '',
+                container_id: null,
+                name: null,
+                description: null,
                 use_start_time: 0,
-                report_start_date: '01.02.2025',
-                timeperiod_id: 0,
-                report_interval: '',
-                report_send_interval: '',
+                report_start_date: '',
+                timeperiod_id: null,
+                report_interval: null,
+                report_send_interval: null,
                 min_availability_percent: true,
-                min_availability: '',
-                max_number_of_outages: 0,
+                min_availability: null,
+                max_number_of_outages: null,
                 show_time: '0', //SLA Graph - if true -> show availability in hours
                 check_hard_state: '0', // if true -> consider only hard states from state history
                 consider_downtimes: 0,
@@ -173,5 +232,19 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
                 }
             }
         };
+    }
+
+    public submitStepOne() {
+        this.errors = null;
+        this.AutoreportsService.setAddStepOne(this.post).subscribe((result: GenericResponseWrapper): void => {
+                if (result.success) {
+                    this.errors = null;
+
+                    return;
+                }
+                this.errors = result.data as GenericValidationError;
+                this.cdr.markForCheck();
+            }
+        );
     }
 }
