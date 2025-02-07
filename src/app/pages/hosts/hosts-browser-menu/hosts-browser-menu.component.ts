@@ -6,7 +6,8 @@ import {
     inject,
     input,
     OnDestroy,
-    OnInit
+    OnInit,
+    output
 } from '@angular/core';
 import {
     BadgeComponent,
@@ -78,6 +79,8 @@ export class HostsBrowserMenuComponent implements OnInit, OnDestroy {
     public config = input.required<HostBrowserMenuConfig>();
     public lastUpdated = input<Date>(); // Change the date to trigger an update from an external component
 
+    public toggleRescheduling = output<boolean>();
+
     public data?: HostBrowserMenu;
     public hostStatusTextClass: string = '';
     public isLoading = true;
@@ -122,6 +125,10 @@ export class HostsBrowserMenuComponent implements OnInit, OnDestroy {
 
             })
         );
+    }
+
+    public toggleReschedulingOutput() {
+        this.toggleRescheduling.emit(true);
     }
 
 }

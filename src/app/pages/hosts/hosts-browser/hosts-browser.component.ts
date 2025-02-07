@@ -544,6 +544,13 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         });
     }
 
+    public onToggleRescheduling(event: boolean) {
+        // Host browser menu wants to toggle a rescheduling
+        if (this.result) {
+            this.resetChecktime(this.result.mergedHost);
+        }
+    }
+
     protected readonly HostBrowserTabs = HostBrowserTabs;
     protected readonly Number = Number;
     protected readonly String = String;

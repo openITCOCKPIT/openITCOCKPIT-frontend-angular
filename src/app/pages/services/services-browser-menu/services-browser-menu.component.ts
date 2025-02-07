@@ -7,6 +7,7 @@ import {
     OnChanges,
     OnDestroy,
     OnInit,
+    output,
     SimpleChanges
 } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -40,7 +41,6 @@ import {
 import { RouterLink } from '@angular/router';
 
 
-
 export interface ServiceBrowserMenuConfig {
     serviceId: number,
     showReschedulingButton?: boolean,
@@ -52,28 +52,28 @@ export interface ServiceBrowserMenuConfig {
 @Component({
     selector: 'oitc-services-browser-menu',
     imports: [
-    BadgeComponent,
-    BrowserMenuLoaderComponent,
-    ColComponent,
-    CopyToClipboardComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FaIconComponent,
-    NgIf,
-    PermissionDirective,
-    RowComponent,
-    TitleCasePipe,
-    TranslocoDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    ServicestatusIconComponent,
-    NgClass,
-    RouterLink,
-    TooltipDirective,
-    AsyncPipe
-],
+        BadgeComponent,
+        BrowserMenuLoaderComponent,
+        ColComponent,
+        CopyToClipboardComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        FaIconComponent,
+        NgIf,
+        PermissionDirective,
+        RowComponent,
+        TitleCasePipe,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        ServicestatusIconComponent,
+        NgClass,
+        RouterLink,
+        TooltipDirective,
+        AsyncPipe
+    ],
     templateUrl: './services-browser-menu.component.html',
     styleUrl: './services-browser-menu.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -82,6 +82,8 @@ export class ServicesBrowserMenuComponent implements OnInit, OnChanges, OnDestro
 
     @Input() config!: ServiceBrowserMenuConfig;
     @Input() lastUpdated?: Date; // Change the date to trigger an update from an external component
+
+    public toggleRescheduling = output<boolean>();
 
     public data?: ServiceBrowserMenu;
     public hostStatusTextClass: string = '';
@@ -135,6 +137,10 @@ export class ServicesBrowserMenuComponent implements OnInit, OnChanges, OnDestro
                 }
             })
         );
+    }
+
+    public toggleReschedulingOutput() {
+        this.toggleRescheduling.emit(true);
     }
 
 }

@@ -128,6 +128,24 @@
                                 <h5>
                                     {{ t('Object type') }}
                                 </h5>
+
+                                <c-form-check class="mb-2">
+                                    <input
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        id="select_all_types"
+                                        name="select_all_types"
+                                        [indeterminate]="allSelectedIndeterminate"
+                                        oitcDebounce
+                                        [ngModel]="allSelected"
+                                        (ngModelChange)="toggleSelectAllTypes($event)"
+                                        type="checkbox"/>
+                                    <label cFormCheckLabel for="select_all_types"
+                                           class="ms-1 mt-1 select-all-border">
+                                        {{ t('Select all') }}
+                                    </label>
+                                </c-form-check>
+
                                 <c-form-check>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="tmpFilter.Models.Command" cFormCheckInput
@@ -413,7 +431,7 @@
             </c-container>
 
             <oitc-block-loader *ngIf="!changes" [height]="'30rem'"></oitc-block-loader>
-            
+
             <c-container
                 [fluid]="true" *ngIf="changes && changes.all_changes">
                 <ul class="cbp_tmtimeline">
