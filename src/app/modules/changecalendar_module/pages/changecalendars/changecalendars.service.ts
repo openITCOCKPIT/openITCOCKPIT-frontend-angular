@@ -95,8 +95,7 @@ export class ChangecalendarsService {
     }
 
     public addEvent(event: ChangecalendarEvent): Observable<GenericResponseWrapper> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/changecalendar_module/changecalendars/events/${event.changecalendar_id}.json?angular=true`, {event: event})
+        return this.http.post<any>(`${this.proxyPath}/changecalendar_module/changecalendars/events/${event.changecalendar_id}.json?angular=true`, {event: event})
             .pipe(
                 map(data => {
                     return {

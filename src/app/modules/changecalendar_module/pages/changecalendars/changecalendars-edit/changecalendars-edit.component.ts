@@ -148,6 +148,44 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
                 }
             })
         );
+    }
+
+    public createEvent(event: any): void {
+        console.log(event);
+        this.event = {
+            title: '',
+            description: '',
+            start: '', // Fetch from event!
+            end: '', // Fetch from event!
+            changecalendar_id: this.post.changeCalendar.id,
+        } as ChangecalendarEvent;
+        this.showModal();
+        this.cdr.markForCheck();
+    }
+
+    protected addEvent(): void {
+        this.subscriptions.add(this.ChangecalendarsService.addEvent(this.event)
+            .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+                    const title: string = this.TranslocoService.translate('Event');
+                    const msg: string = this.TranslocoService.translate('Created successfully');
+
+                    this.notyService.genericSuccess(msg, title);
+
+                    this.hideModal();
+
+                    this.ngOnInit();
+                    return;
+                }
+                // Error
+                this.notyService.genericError();
+                const errorResponse: GenericValidationError = result.data as GenericValidationError;
+                if (result) {
+                    this.eventErrors = errorResponse;
+                }
+            })
+        );
 
     }
 
@@ -171,6 +209,13 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     private hideModal(): void {
         this.ModalService.toggle({
             show: false,
+            id: 'changeCalendarEditorModal'
+        });
+    }
+
+    private showModal(): void {
+        this.ModalService.toggle({
+            show: true,
             id: 'changeCalendarEditorModal'
         });
     }

@@ -52,6 +52,7 @@
                         [event]="event"
                         (onDeleteClick)="deleteEvent($event);"
                         (onEventChange)="updateEvent($event)"
+                        (onEventCreate)="addEvent()"
                 ></oitc-changecalendars-event-editor>
                 <div class="mb-3">
                     <label cLabel for="post.changeCalendar.container_id">
@@ -132,6 +133,7 @@
                             [(events)]="events"
                             (eventClick)="editEvent($event);"
                             [showButtons]="false"
+                            (onCreateClick)="createEvent($event)"
                     />
                 </div>
             </c-card-body>

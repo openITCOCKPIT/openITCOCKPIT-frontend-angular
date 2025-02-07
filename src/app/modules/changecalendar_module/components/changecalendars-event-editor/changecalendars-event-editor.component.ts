@@ -38,6 +38,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ChangecalendarsService } from '../../pages/changecalendars/changecalendars.service';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-changecalendars-event-editor',
@@ -65,7 +66,8 @@ import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delet
         XsButtonDirective,
         CardTitleDirective,
         CardBodyComponent,
-        CardComponent
+        CardComponent,
+        NgIf
     ],
     templateUrl: './changecalendars-event-editor.component.html',
     styleUrl: './changecalendars-event-editor.component.css',
@@ -80,6 +82,7 @@ export class ChangecalendarsEventEditorComponent implements OnInit, OnChanges {
 
     @Output() onDeleteClick = new EventEmitter<ChangecalendarEvent>();
     @Output() onEventChange = new EventEmitter<ChangecalendarEvent>();
+    @Output() onEventCreate = new EventEmitter<ChangecalendarEvent>();
 
     protected html: string = '';
     protected errors?: GenericValidationError;
