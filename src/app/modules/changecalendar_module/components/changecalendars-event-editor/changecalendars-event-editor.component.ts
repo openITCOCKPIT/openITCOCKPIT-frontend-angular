@@ -1,11 +1,11 @@
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
-    Component,
+    Component, EventEmitter,
     inject,
     Input,
     OnChanges,
-    OnInit,
+    OnInit, Output,
     SimpleChanges
 } from '@angular/core';
 import {
@@ -36,6 +36,8 @@ import { BbCodeParserService } from '../../../../services/bb-code-parser.service
 import { GenericValidationError } from '../../../../generic-responses';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { ChangecalendarsService } from '../../pages/changecalendars/changecalendars.service';
+import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Component({
     selector: 'oitc-changecalendars-event-editor',
@@ -70,10 +72,14 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChangecalendarsEventEditorComponent implements OnInit, OnChanges {
+    private readonly ChangecalendarsService: ChangecalendarsService = inject(ChangecalendarsService);
     private readonly ModalService: ModalService = inject(ModalService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly BbCodeParserService: BbCodeParserService = inject(BbCodeParserService);
     private _event: ChangecalendarEvent = {} as ChangecalendarEvent;
+
+    @Output() onDeleteClick = new EventEmitter<ChangecalendarEvent>();
+    @Output() onEventChange = new EventEmitter<ChangecalendarEvent>();
 
     protected html: string = '';
     protected errors?: GenericValidationError;
@@ -105,5 +111,12 @@ export class ChangecalendarsEventEditorComponent implements OnInit, OnChanges {
 
     public ngOnChanges(changes: SimpleChanges) {
         this.html = this.BbCodeParserService.parse(this.event.description);
+    }
+
+    public hideModal(): void {
+        this.ModalService.toggle({
+            show: false,
+            id: 'changeCalendarEditorModal'
+        })
     }
 }

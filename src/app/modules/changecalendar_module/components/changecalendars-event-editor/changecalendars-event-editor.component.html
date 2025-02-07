@@ -94,13 +94,13 @@
             </c-row>
         </c-modal-body>
         <c-modal-footer>
-            <button cButton color="danger">
+            <button cButton color="danger" (click)="onDeleteClick.emit(event)">
                 {{ t('Delete') }}
             </button>
-            <button cButton color="success">
+            <button cButton color="success" (click)="onEventChange.emit(event)">
                 {{ t('Save') }}
             </button>
-            <button cButton color="default">
+            <button cButton color="default" (click)="hideModal()">
                 {{ t('Close') }}
             </button>
         </c-modal-footer>

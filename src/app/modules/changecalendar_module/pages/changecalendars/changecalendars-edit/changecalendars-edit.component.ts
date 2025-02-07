@@ -43,6 +43,7 @@ import {
 import { EventClickArg } from '@fullcalendar/core';
 import { TimezoneObject } from '../../../../../pages/services/timezone.interface';
 import { TimezoneService } from '../../../../../services/timezone.service';
+import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Component({
     selector: 'oitc-changecalendars-edit',
@@ -97,6 +98,7 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     protected timezone!: TimezoneObject;
     protected events: CalendarEvent[] = [];
     protected containers: SelectKeyValue[] = [];
+    protected eventErrors: GenericValidationError = {} as GenericValidationError;
     protected errors: GenericValidationError = {} as GenericValidationError;
 
     protected event: ChangecalendarEvent = {
@@ -108,7 +110,7 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     } as ChangecalendarEvent;
 
 
-    private stripZone(date: Date) : string {
+    private stripZone(date: Date): string {
 
         let ZeroForMonth = (date.getMonth() + 1) < 10 ? '0' : '', ZeroForDay = date.getDate() < 10 ? '0' : '',
             ZeroForHour = date.getHours() < 10 ? '0' : '', ZeroForMinute = date.getMinutes() < 10 ? '0' : '',
@@ -120,6 +122,57 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
             dS = Year + "-" + Month + "-" + Day + "T" + Hour + ":" + Minute + ":" + Second;
 
         return dS;
+    }
+
+    protected updateEvent(event: ChangecalendarEvent) {
+        this.subscriptions.add(this.ChangecalendarsService.updateEvent(this.event)
+            .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+                    const title: string = this.TranslocoService.translate('Event');
+                    const msg: string = this.TranslocoService.translate('updated successfully');
+
+                    this.notyService.genericSuccess(msg, title);
+
+
+                    this.hideModal();
+
+                    this.ngOnInit();
+                    return;
+                }
+                // Error
+                this.notyService.genericError();
+                const errorResponse: GenericValidationError = result.data as GenericValidationError;
+                if (result) {
+                    this.eventErrors = errorResponse;
+                }
+            })
+        );
+
+    }
+
+    public deleteEvent(event: ChangecalendarEvent): void {
+        let eventItem: DeleteAllItem = {
+            id: event.id as number,
+            displayName: '',
+        }
+
+        let changecalendar: DeleteAllItem = {
+            id: this.post.changeCalendar.id,
+            displayName: this.post.changeCalendar.name,
+        }
+
+        this.ChangecalendarsService.deleteEvent(changecalendar, eventItem).subscribe(() => {
+            this.hideModal();
+            this.ngOnInit();
+        });
+    }
+
+    private hideModal(): void {
+        this.ModalService.toggle({
+            show: false,
+            id: 'changeCalendarEditorModal'
+        });
     }
 
     private getUserTimezone() {

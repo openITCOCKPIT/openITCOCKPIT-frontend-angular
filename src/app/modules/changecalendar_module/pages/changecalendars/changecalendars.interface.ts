@@ -73,7 +73,7 @@ export interface EditableChangecalendar extends Changecalendar {
 }
 
 export interface ChangecalendarEvent {
-    id: number
+    id: number | null
     title: string
     description: string
     start: string
