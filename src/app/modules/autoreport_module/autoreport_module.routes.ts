@@ -20,4 +20,8 @@ export const autoreportModuleRoutes: Routes = [
         path: 'autoreport_module/autoreports/addStepOne',
         loadComponent: () => import('./pages/autoreports/autoreport-add-step-one/autoreport-add-step-one.component').then(m => m.AutoreportAddStepOneComponent)
     },
+    {
+        path: 'autoreport_module/autoreports/addStepTwo/:id',
+        loadComponent: () => import('./pages/autoreports/autoreport-add-step-two/autoreport-add-step-two.component').then(m => m.AutoreportAddStepTwoComponent)
+    },
 ];

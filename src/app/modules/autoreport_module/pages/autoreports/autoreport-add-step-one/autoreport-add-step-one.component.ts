@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import {
     BadgeComponent, ButtonDirective,
     CalloutComponent,
@@ -33,7 +33,7 @@ import {
 } from '../autoreports.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
@@ -83,8 +83,6 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
         DropdownItemDirective,
         DebounceDirective,
         MultiSelectComponent,
-        AsyncPipe,
-        FormTextDirective
     ],
   templateUrl: './autoreport-add-step-one.component.html',
   styleUrl: './autoreport-add-step-one.component.css',
@@ -97,6 +95,8 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     private readonly AutoreportsService: AutoreportsService = inject(AutoreportsService);
     private readonly TimeperiodsService: TimeperiodsService = inject(TimeperiodsService);
     private readonly UsersService: UsersService = inject(UsersService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly router = inject(Router);
 
     public errors: GenericValidationError | null = null;
     public containers: SelectKeyValue[] = [];
@@ -108,27 +108,27 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     public setMinAvailability : boolean = false;
     public setMaxNumberOfOutages : boolean = false;
     public evalutionperiods: SelectKeyValueString[] = [
-        {key: 'Year', value: 'YEAR'},
-        {key: 'Quarter', value: 'QUARTER'},
-        {key: 'Month', value: 'MONTH'},
-        {key: 'Week', value: 'WEEK'},
-        {key: 'Day', value: 'DAY'}
+        {key: 'YEAR', value: this.TranslocoService.translate('Year')},
+        {key: 'QUARTER', value: this.TranslocoService.translate('Quarter')},
+        {key: 'MONTH', value: this.TranslocoService.translate('Month')},
+        {key: 'WEEK', value: this.TranslocoService.translate('Week')},
+        {key: 'DAY', value: this.TranslocoService.translate('Day')}
     ];
     public sendintervals: SelectKeyValueString[] = [
-        {key: 'never', value: 'NEVER'},
-        {key: 'yearly', value: 'YEAR'},
-        {key: 'quarterly', value: 'QUARTER'},
-        {key: 'monthly', value: 'MONTH'},
-        {key: 'weekly', value: 'WEEK'},
-        {key: 'daily', value: 'DAY'}
+        {key: 'NEVER', value: this.TranslocoService.translate('never')},
+        {key: 'YEAR', value: this.TranslocoService.translate('yearly')},
+        {key: 'QUARTER', value: this.TranslocoService.translate('quarterly')},
+        {key: 'MONTH', value: this.TranslocoService.translate('monthly')},
+        {key: 'WEEK', value: this.TranslocoService.translate('weekly')},
+        {key: 'DAY', value: this.TranslocoService.translate('daily')}
     ];
     public graphoptions: SelectKeyValueString[] = [
-        {key: '0', value: 'in %'},
-        {key: '1', value: 'in h'}
+        {key: '0', value: this.TranslocoService.translate('in %')},
+        {key: '1', value: this.TranslocoService.translate('in h')}
     ];
     public checkstates: SelectKeyValueString[] = [
-        {key: '0', value: 'soft and hard state'},
-        {key: '1', value: 'only hard state'}
+        {key: '0', value: this.TranslocoService.translate('soft and hard state')},
+        {key: '1', value: this.TranslocoService.translate('only hard state')}
     ];
 
 
@@ -151,6 +151,7 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
         this.loadTimeperiods();
         this.loadCalendars();
         this.loadUsers();
+        this.cdr.markForCheck();
     }
 
     public onAvailabilityChange($event: boolean) {
@@ -162,18 +163,21 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     public onOutageChange($event: boolean) {
         if(!$event ) {
             this.post.Autoreport.max_number_of_outages = null;
+            this.cdr.markForCheck();
         }
     }
 
     public onHolidayChange($event: any) {
         if($event === 0 && this.post.Autoreport.calendar_id !== null){
             this.post.Autoreport.calendar_id = null;
+            this.cdr.markForCheck();
         }
     }
 
     public onStartChange($event: any) {
         if($event === 0){
             this.post.Autoreport.report_start_date = '';
+            this.cdr.markForCheck();
         }
     }
 
@@ -239,8 +243,7 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
         this.AutoreportsService.setAddStepOne(this.post).subscribe((result: GenericResponseWrapper): void => {
                 if (result.success) {
                     this.errors = null;
-
-                    return;
+                    this.router.navigate(['/autoreport_module/autoreports/addStepTwo', result.data.autoreport.id]);
                 }
                 this.errors = result.data as GenericValidationError;
                 this.cdr.markForCheck();

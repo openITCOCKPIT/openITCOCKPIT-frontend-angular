@@ -198,8 +198,8 @@
                     <oitc-select
                         name="Evaluation_period"
                         id="Evaluation_period"
-                        optionValue="value"
-                        optionLabel="key"
+                        optionValue="key"
+                        optionLabel="value"
                         [(ngModel)]="post.Autoreport.report_interval"
                         [options]="evalutionperiods"
                         oitcFormError [errors]="errors" errorField="report_interval">
@@ -214,8 +214,8 @@
                     <oitc-select
                         name="Send_interval"
                         id="Send_interval"
-                        optionValue="value"
-                        optionLabel="key"
+                        optionValue="key"
+                        optionLabel="value"
                         [(ngModel)]="post.Autoreport.report_send_interval"
                         [options]="sendintervals"
                         oitcFormError [errors]="errors" errorField="report_send_interval">
