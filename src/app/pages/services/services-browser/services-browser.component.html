@@ -3,7 +3,8 @@
     <oitc-services-browser-menu
         *ngIf="serviceBrowserConfig"
         [config]="serviceBrowserConfig"
-        [lastUpdated]="lastUpdated">
+        [lastUpdated]="lastUpdated"
+        (toggleRescheduling)="onToggleRescheduling($event)">
     </oitc-services-browser-menu>
 
     <oitc-query-handler-checker></oitc-query-handler-checker>
