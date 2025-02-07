@@ -1,0 +1,14 @@
+<c-dropdown>
+    <button cDropdownToggle class="btn btn-sm btn-icon ripple btn-icon-hover-primary" type="button">
+        <fa-icon [icon]="['fas', 'palette']"></fa-icon>
+    </button>
+
+    <div cDropdownMenu class="p-1 colorpicker-dropdown">
+        <button cDropdownItem *ngFor="let class of colorsClasses"
+                type="button"
+                [ngClass]="class"
+                class="d-inline-block width-2 height-2 m-1 hover-effect-dot"
+                (click)="selectColor(class)">
+        </button>
+    </div>
+</c-dropdown>
