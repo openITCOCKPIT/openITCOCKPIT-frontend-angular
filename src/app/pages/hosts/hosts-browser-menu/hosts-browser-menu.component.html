@@ -29,6 +29,7 @@
             @if (data) {
                 @if (config().showBackButton && ( this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async )) {
                     <button cButton color="primary"
+                            type="button"
                             class="me-2 ripple"
                             [routerLink]="['/', 'hosts', 'browser', data.hostId]">
                         <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon>
@@ -38,8 +39,9 @@
 
                 @if (config().showReschedulingButton) {
                     <button cButton color="default"
+                            type="button"
                             class="ripple me-2"
-                            [routerLink]="['/', 'hosts', 'browser', data.hostId]"
+                            (click)="toggleReschedulingOutput();"
                             [cTooltip]="'Reset check time'|transloco" cTooltipPlacement="bottom">
                         <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
                     </button>
@@ -47,6 +49,7 @@
 
                 @if (this.PermissionsService.hasPermissionObservable(['documentations', 'view'])|async) {
                     <button cButton color="default" class="position-relative me-2"
+                            type="button"
                             [routerLink]="'/documentations/view/' + data.hostUuid +'/host'"
                             [cTooltip]="'Object documentation'|transloco" cTooltipPlacement="bottom">
                         <fa-icon [icon]="['fas', 'book']"></fa-icon>
@@ -59,6 +62,7 @@
 
                 @if (this.PermissionsService.hasPermissionObservable(['notifications', 'hostNotification'])|async) {
                     <button cButton color="default"
+                            type="button"
                             class="ripple me-2"
                             [routerLink]="['/', 'notifications', 'hostNotification', data.hostId]"
                             [cTooltip]="'Notifications'|transloco" cTooltipPlacement="bottom">
@@ -68,6 +72,7 @@
 
                 @if (this.PermissionsService.hasPermissionObservable(['hostchecks', 'index'])|async) {
                     <button cButton color="default"
+                            type="button"
                             class="ripple me-2"
                             [routerLink]="['/', 'hostchecks', 'index', data.hostId]"
                             [cTooltip]="'Check history'|transloco" cTooltipPlacement="bottom">
@@ -77,6 +82,7 @@
 
                 @if (this.PermissionsService.hasPermissionObservable(['statehistories', 'host'])|async) {
                     <button cButton color="default"
+                            type="button"
                             class="ripple me-2"
                             [routerLink]="['/', 'statehistories', 'host', data.hostId]"
                             [cTooltip]="'State history'|transloco" cTooltipPlacement="bottom">
@@ -86,6 +92,7 @@
 
                 @if (this.PermissionsService.hasPermissionObservable(['acknowledgements', 'host'])|async) {
                     <button cButton color="default"
+                            type="button"
                             class="ripple me-2"
                             [routerLink]="['/', 'acknowledgements', 'host', data.hostId]"
                             [cTooltip]="'Acknowledgement history'|transloco" cTooltipPlacement="bottom">
@@ -103,6 +110,7 @@
 
                 @if (( this.PermissionsService.hasPermissionObservable(['hosts', 'edit']) |async ) && data.allowEdit) {
                     <button cButton color="default"
+                            type="button"
                             class="ripple me-2"
                             [routerLink]="['/', 'hosts', 'edit', data.hostId]"
                             [cTooltip]="'Edit host'|transloco" cTooltipPlacement="bottom">
@@ -111,7 +119,7 @@
                 }
 
                 <c-dropdown class="d-inline-block">
-                    <button cButton cDropdownToggle color="default">
+                    <button cButton cDropdownToggle color="default" type="button">
                         {{ t('More actions') }}
                     </button>
                     <ul cDropdownMenu>
