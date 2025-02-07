@@ -41,6 +41,8 @@ import {
     ChangecalendarsEventEditorComponent
 } from '../../../components/changecalendars-event-editor/changecalendars-event-editor.component';
 import { EventClickArg } from '@fullcalendar/core';
+import { TimezoneObject } from '../../../../../pages/services/timezone.interface';
+import { TimezoneService } from '../../../../../services/timezone.service';
 
 @Component({
     selector: 'oitc-changecalendars-edit',
@@ -84,6 +86,7 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly notyService: NotyService = inject(NotyService);
+    private readonly TimezoneService: TimezoneService = inject(TimezoneService);
     private readonly route = inject(ActivatedRoute);
     private readonly ModalService: ModalService = inject(ModalService);
     private readonly cdr = inject(ChangeDetectorRef);
@@ -91,6 +94,7 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     protected post: EditChangecalendarRoot = {
         changeCalendar: {}
     } as EditChangecalendarRoot;
+    protected timezone!: TimezoneObject;
     protected events: CalendarEvent[] = [];
     protected containers: SelectKeyValue[] = [];
     protected errors: GenericValidationError = {} as GenericValidationError;
@@ -103,11 +107,36 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
         changecalendar_id: 0,
     } as ChangecalendarEvent;
 
+
+    private stripZone(date: Date) : string {
+
+        let ZeroForMonth = (date.getMonth() + 1) < 10 ? '0' : '', ZeroForDay = date.getDate() < 10 ? '0' : '',
+            ZeroForHour = date.getHours() < 10 ? '0' : '', ZeroForMinute = date.getMinutes() < 10 ? '0' : '',
+            ZeroForSecond = date.getSeconds() < 10 ? '0' : '', Year = date.getFullYear(),
+            Month = ZeroForMonth + (date.getMonth() + 1), Day = ZeroForDay + date.getDate(),
+            Hour = ZeroForHour + date.getHours(), Minute = ZeroForMinute + date.getMinutes(),
+            Second = ZeroForSecond + date.getSeconds(), Zone = this.timezone.user_offset / 60 / 60,
+            ZeroForZone = Zone < 10 ? '0' : '', TimeZone = "+" + ZeroForZone + Zone,
+            dS = Year + "-" + Month + "-" + Day + "T" + Hour + ":" + Minute + ":" + Second;
+
+        return dS;
+    }
+
+    private getUserTimezone() {
+        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
+            this.timezone = data;
+            this.cdr.markForCheck();
+        }));
+    }
+
     public editEvent(clickInfo: EventClickArg): void {
         // set this.event to the event from this.events where the originId matches clickInfo.event._def.extendedProps.originId
         this.event = this.post.changeCalendar.changecalendar_events.find((event: ChangecalendarEvent) => {
             return event.id === clickInfo.event._def.extendedProps['originId'];
         }) as ChangecalendarEvent;
+
+        this.event.start = this.stripZone(new Date(this.event.start));
+        this.event.end = this.stripZone(new Date(this.event.end));
 
         console.warn(this.event);
 
@@ -128,6 +157,7 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.getUserTimezone();
         this.loadContainers();
         this.loadEditChangecalendar();
     }
