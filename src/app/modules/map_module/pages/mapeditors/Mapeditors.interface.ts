@@ -6,7 +6,14 @@ export interface MapeditorsEditRoot {
     max_z_index: number
     layers: string[]
     config: Config
+    requiredIcons: string[]
+    gadgetPreviews: GadgetPreviews[]
     _csrfToken: string
+}
+
+export interface GadgetPreviews {
+    name: string
+    preview: string
 }
 
 export interface MapRoot {

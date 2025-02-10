@@ -34,7 +34,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     @ViewChild('container', {static: true}) containerRef!: ElementRef<HTMLDivElement>;
 
     public item: InputSignal<T | undefined> = input<T | undefined>();
-    public layers: InputSignal<{ key: number, value: string }[]> = input<{ key: number, value: string }[]>([]); // Layer options for context menu
+    public layers: InputSignal<{ key: string, value: string }[]> = input<{ key: string, value: string }[]>([]); // Layer options for context menu
     public gridSize: InputSignal<{ x: number, y: number }> = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
     public gridEnabled: InputSignal<boolean> = input<boolean>(true);
     public isViewMode: InputSignal<boolean> = input<boolean>(false); // View mode for disabling drag and drop and context menu
@@ -230,10 +230,10 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         let layerOptions: MenuItem[] = [];
         for (let key in this.layers()) {
             let icon = "";
-            if (key === this.item()!.z_index) {
+            if (this.layers()[key].key === this.item()!.z_index) {
                 icon = "fa fa-check";
             }
-            let layer = this.layers().find(layer => layer.key === Number(key));
+            let layer = this.layers().find(layer => layer.key === this.layers()[key].key);
             layerOptions.push({
                 label: layer?.value,
                 icon: icon,
@@ -245,7 +245,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                             x: this.x,
                             y: this.y,
                             map_id: this.mapId,
-                            z_index: key
+                            z_index: this.layers()[key].key
                         } as Mapitem,
                         itemType: this.type
                     });

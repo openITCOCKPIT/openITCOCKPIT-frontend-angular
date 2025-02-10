@@ -188,6 +188,7 @@
                             <oitc-map-line *ngFor="let lineItem of map.Maplines" [item]="lineItem" [refreshInterval]="0"
                                            [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
                                            [layers]="layers"
+                                           (dblclick)="editLine(lineItem)"
                                            (contextActionEvent)="onContextAction($event)"
                                            (dropItemEvent)="onDropItem($event)"
                                            [hidden]="!lineItem.display">
@@ -391,7 +392,7 @@
                                     optionValue="key"
                                     optionLabel="value"
                                     [(ngModel)]="currentItem.type"
-                                    [options]="objectTypes"
+                                    [options]="mapItemObjectTypes"
                                     (onChange)="onCurrentItemTypeObjectIdChange()"
                                     [appendTo]="addEditMapItemModal"
                                     oitcFormError [errors]="errors" errorField="type">
@@ -637,5 +638,491 @@
             </c-modal-footer>
         </form>
     </c-modal>
+
+
+    <!-- Add/Edit map line modal -->
+    <c-modal #addEditMapLineModal fullscreen="md" size="xl" id="addEditMapLineModal">
+        <form cForm (ngSubmit)="saveLine()">
+            <c-modal-header>
+                <h5 cModalTitle>
+                    <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
+                    {{ t('Add or edit line') }}
+                </h5>
+                <button [cModalToggle]="addEditMapLineModal.id" cButtonClose></button>
+            </c-modal-header>
+            <c-modal-body>
+
+                <c-row>
+                    <c-col lg="12" class="form-group">
+                        <div class="mb-3">
+                            <label cLabel for="mapLineType">
+                                {{ t('Select object type') }}
+                            </label>
+
+                            <oitc-select
+                                name="mapLineType"
+                                id="mapLineType"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="currentItem.type"
+                                [options]="mapLineObjectTypes"
+                                (onChange)="onCurrentItemTypeObjectIdChange()"
+                                [appendTo]="addEditMapLineModal"
+                                oitcFormError [errors]="errors" errorField="type">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="type"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row *ngIf="currentItem.type !== 'stateless'">
+                    <c-col lg="12" class="form-group">
+                        <div class="mb-3">
+                            <label cLabel for="mapLineObjectId">
+                                {{ t('Select object') }}
+                            </label>
+
+                            <oitc-select
+                                name="mapLineObjectId"
+                                id="mapLineObjectId"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="currentItem.object_id"
+                                [options]="itemObjects"
+                                (onChange)="onCurrentItemTypeObjectIdChange()"
+                                [searchCallback]="loadMoreItemObjects"
+                                [appendTo]="addEditMapLineModal"
+                                oitcFormError [errors]="errors" errorField="object_id">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="object_id"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="addEditLinePosStartX">
+                                {{ t('Start X') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="addEditLinePosStartX"
+                                       type="number"
+                                       name="addEditLinePosStartX"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.startX"
+                                       oitcFormError [errors]="errors" errorField="startX">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="startX"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="addEditLinePosStartY">
+                                {{ t('Start Y') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="addEditLinePosStartY"
+                                       type="number"
+                                       name="addEditLinePosStartY"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.startY"
+                                       oitcFormError [errors]="errors" errorField="startY">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="startY"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="addEditLinePosEndX">
+                                {{ t('End X') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="addEditLinePosEndX"
+                                       type="number"
+                                       name="addEditLinePosEndX"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.endX"
+                                       oitcFormError [errors]="errors" errorField="endX">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="endX"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="addEditLinePosEndY">
+                                {{ t('End Y') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="addEditLinePosEndY"
+                                       type="number"
+                                       name="addEditLinePosEndY"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.endY"
+                                       oitcFormError [errors]="errors" errorField="endY">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="endY"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="10">
+                        <div class="mb-3">
+                            <label cLabel for="mapLineLayers">
+                                {{ t('Select layer') }}
+                            </label>
+
+                            <oitc-select
+                                name="mapLineLayers"
+                                id="mapLineLayers"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="currentItem.z_index"
+                                [options]="layers"
+                                [appendTo]="addEditMapLineModal"
+                                oitcFormError [errors]="errors" errorField="z_index">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
+                            <span class="help-block">
+                                {{ t('Layers could be used to stack items on a map. Empty layers will be deleted automatically.') }}
+                            </span>
+                        </div>
+                    </c-col>
+                    <c-col lg="2">
+                        <button (click)="addNewLayer()" cButton class="ripple mt-4" style="width: 100%"
+                                color="default">
+                            {{ t('Add new layer') }}
+                        </button>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col class="mb-3">
+                        <c-form-check>
+                            <input [(ngModel)]="currentItem.show_label" cFormCheckInput
+                                   id="addEditElShowLabel"
+                                   name="addEditElShowLabel"
+                                   oitcFormError [errors]="errors" errorField="show_label"
+                                   type="checkbox"/>
+                            <label cFormCheckLabel for="addEditElShowLabel">
+                                {{ t('Show Label') }}
+                            </label>
+                        </c-form-check>
+                        <oitc-form-feedback [errors]="errors" errorField="show_label"></oitc-form-feedback>
+                    </c-col>
+                </c-row>
+
+            </c-modal-body>
+            <c-modal-footer>
+                <button cButton color="danger" class="ripple me-auto" (click)="deleteLine()">
+                    {{ t('Delete') }}
+                </button>
+                <button cButton color="success" type="submit" class="ripple">
+                    {{ t('Save') }}
+                </button>
+                <button [cModalToggle]="addEditMapLineModal.id" cButton color="default" class="ripple">
+                    {{ t('Close') }}
+                </button>
+            </c-modal-footer>
+        </form>
+    </c-modal>
+
+
+    <!-- Add/Edit map gadget modal -->
+    <c-modal #addEditMapGadgetModal fullscreen="md" size="xl" id="addEditMapGadgetModal">
+        <form cForm (ngSubmit)="saveGadget()">
+            <c-modal-header>
+                <h5 cModalTitle>
+                    <fa-icon [icon]="['fas', 'tachometer-alt']"></fa-icon>
+                    {{ t('Add or edit gadget') }}
+                </h5>
+                <button [cModalToggle]="addEditMapGadgetModal.id" cButtonClose></button>
+            </c-modal-header>
+            <c-modal-body>
+
+                <c-row>
+                    <c-col lg="12" class="form-group">
+                        <div class="mb-3">
+                            <label cLabel for="mapGadgetObjectId">
+                                {{ t('Select service') }}
+                            </label>
+
+                            <oitc-select
+                                name="mapGadgetObjectId"
+                                id="mapGadgetObjectId"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="currentItem.object_id"
+                                [options]="itemObjects"
+                                (onChange)="onCurrentItemTypeObjectIdChange()"
+                                [searchCallback]="loadMoreItemObjects"
+                                [appendTo]="addEditMapGadgetModal"
+                                oitcFormError [errors]="errors" errorField="object_id">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="object_id"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <div class="mb-3">
+                        <c-col lg="12">
+                            {{ t('Select gadget type') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </c-col>
+                        <c-col lg="12" *ngIf="iconsets">
+                            <c-row style="max-height: 200px; overflow: auto;"
+                                   [ngClass]="{'has-error-border': errors?.['iconset']}">
+                                <ng-container *ngFor="let gadget of gadgetPreviews">
+                                    <c-col xs="12" md="6" lg="2">
+                                        <div class="card"
+                                             style="height: 175px; width: 175px"
+                                             (click)="currentItem.gadget = gadget.name; currentItem.size_x = null; currentItem.size_y = null;"
+                                             [ngClass]="{ 'selectedMapItem': currentItem.gadget === gadget.name }">
+                                            <img class="mx-auto my-auto"
+                                                 [src]="getSanitizedGadgetPreviewUrl(gadget.preview)">
+                                        </div>
+                                    </c-col>
+                                </ng-container>
+                            </c-row>
+                            <oitc-form-feedback [errors]="errors" errorField="iconset"></oitc-form-feedback>
+                        </c-col>
+                    </div>
+                </c-row>
+                <c-row [hidden]="!(currentItem.gadget !== 'TrafficLight' && currentItem.gadget !== 'ServiceOutput')">
+                    <c-col lg="12" class="form-group">
+                        <div class="mb-3">
+                            <label cLabel for="mapGadgetMetric">
+                                {{ t('Select metric') }}
+                            </label>
+
+                            <oitc-select
+                                name="mapGadgetMetric"
+                                id="mapGadgetMetric"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="currentItem.metric"
+                                [options]="metrics"
+                                [appendTo]="addEditMapGadgetModal"
+                                oitcFormError [errors]="errors" errorField="metric">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="metric"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row [hidden]="!(currentItem.gadget == 'ServiceOutput')">
+                    <c-col lg="12">
+                        <div class="mb-3">
+                            <label cLabel for="addEditGadgetFontSize">
+                                {{ t('Font size') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'font']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="addEditGadgetFontSize"
+                                       type="number"
+                                       name="addEditGadgetFontSize"
+                                       min="1"
+                                       [placeholder]="'13' | transloco"
+                                       [(ngModel)]="currentItem.font_size"
+                                       oitcFormError [errors]="errors" errorField="font_size">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="font_size"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="addEditElPosX">
+                                {{ t('Position X') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="addEditElPosX"
+                                       type="number"
+                                       name="addEditElPosX"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.x"
+                                       oitcFormError [errors]="errors" errorField="x">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="x"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="addEditElPosY">
+                                {{ t('Position Y') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="addEditElPosY"
+                                       type="number"
+                                       name="addEditElPosY"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.y"
+                                       oitcFormError [errors]="errors" errorField="y">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="y"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="addEditGadgetWidth">
+                                {{ t('Width') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'arrows-alt-h']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="addEditGadgetWidth"
+                                       type="number"
+                                       name="addEditGadgetWidth"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.size_x"
+                                       oitcFormError [errors]="errors" errorField="size_x">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="size_x"></oitc-form-feedback>
+                            <span class="help-block">
+                                {{ t('Keep blank for default width') }}
+                            </span>
+                        </div>
+                    </c-col>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="addEditGadgetHeight">
+                                {{ t('Height') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'arrows-alt-v']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="addEditGadgetHeight"
+                                       type="number"
+                                       name="addEditGadgetHeight"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.size_y"
+                                       oitcFormError [errors]="errors" errorField="size_y">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="size_y"></oitc-form-feedback>
+                            <span class="help-block">
+                                {{ t('Keep blank for default width') }}
+                            </span>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="10">
+                        <div class="mb-3">
+                            <label cLabel for="mapGadgetLayers">
+                                {{ t('Select layer') }}
+                            </label>
+
+                            <oitc-select
+                                name="mapGadgetLayers"
+                                id="mapGadgetLayers"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="currentItem.z_index"
+                                [options]="layers"
+                                [appendTo]="addEditMapGadgetModal"
+                                oitcFormError [errors]="errors" errorField="z_index">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
+                            <span class="help-block">
+                                {{ t('Layers could be used to stack items on a map. Empty layers will be deleted automatically.') }}
+                            </span>
+                        </div>
+                    </c-col>
+                    <c-col lg="2">
+                        <button (click)="addNewLayer()" cButton class="ripple mt-4" style="width: 100%"
+                                color="default">
+                            {{ t('Add new layer') }}
+                        </button>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col class="mb-3">
+                        <c-form-check>
+                            <input [(ngModel)]="currentItem.show_label" cFormCheckInput
+                                   id="addEditElShowLabel"
+                                   name="addEditElShowLabel"
+                                   oitcFormError [errors]="errors" errorField="show_label"
+                                   type="checkbox"/>
+                            <label cFormCheckLabel for="addEditElShowLabel">
+                                {{ t('Show Label') }}
+                            </label>
+                        </c-form-check>
+                        <oitc-form-feedback [errors]="errors" errorField="show_label"></oitc-form-feedback>
+                    </c-col>
+                </c-row>
+
+            </c-modal-body>
+            <c-modal-footer>
+                <button cButton color="danger" class="ripple me-auto" (click)="deleteGadget()">
+                    {{ t('Delete') }}
+                </button>
+                <button cButton color="success" type="submit" class="ripple">
+                    {{ t('Save') }}
+                </button>
+                <button [cModalToggle]="addEditMapGadgetModal.id" cButton color="default" class="ripple">
+                    {{ t('Close') }}
+                </button>
+            </c-modal-footer>
+        </form>
+    </c-modal>
+
 
 </ng-container>
