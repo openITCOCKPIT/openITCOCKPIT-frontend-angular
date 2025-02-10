@@ -44,6 +44,7 @@ export class ChangecalendarsService {
                         returnData.events.push({
                             originId: event.id as number,
                             start: event.start,
+                            end: event.end,
                             title: event.title,
                             default_holiday: false,
                             className: ''
