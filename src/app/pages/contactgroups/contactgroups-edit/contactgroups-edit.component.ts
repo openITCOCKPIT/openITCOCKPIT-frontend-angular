@@ -92,12 +92,10 @@ export class ContactgroupsEditComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
-        //First, load shit into the component.
         this.loadContainers();
         this.subscriptions.add(this.ContactgroupsService.getEdit(id)
             .subscribe((result: ContactgroupsEditRoot) => {
 
-                // Then put post where it belongs. Also unpack that bullshit
                 this.post = result.contactgroup.Contactgroup;
 
                 // Then force containerChange!
