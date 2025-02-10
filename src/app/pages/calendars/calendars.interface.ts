@@ -48,6 +48,7 @@ export interface CalendarPost {
 }
 
 export interface CalendarEvent extends EventInput {
+    originId?: number
     start: string
     title: string
     default_holiday: boolean
