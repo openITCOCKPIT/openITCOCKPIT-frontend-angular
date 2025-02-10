@@ -105,6 +105,7 @@
                         id="container"
                         optionValue="key"
                         optionLabel="value"
+                        [appendTo]="''"
                         [(ngModel)]="post.Autoreport.container_id"
                         [options]="containers"
                         (onChange)="onContainerChange()"
@@ -183,6 +184,7 @@
                         id="TimePeriodSelect"
                         optionValue="key"
                         optionLabel="value"
+                        [appendTo]="''"
                         [(ngModel)]="post.Autoreport.timeperiod_id"
                         [options]="timeperiods"
                         oitcFormError [errors]="errors" errorField="timeperiod_id">
@@ -216,6 +218,7 @@
                         id="Send_interval"
                         optionValue="key"
                         optionLabel="value"
+                        [appendTo]="''"
                         [(ngModel)]="post.Autoreport.report_send_interval"
                         [options]="sendintervals"
                         oitcFormError [errors]="errors" errorField="report_send_interval">
@@ -270,7 +273,7 @@
                     <oitc-form-feedback [errors]="errors" errorField="min_availability"></oitc-form-feedback>
                     </c-row>
                     <c-row>
-                        @if ( errors && (errors['min_availability_percent'] || errors['max_number_of_outages'])) {
+                        @if(errors && (errors['min_availability_percent'] || errors['max_number_of_outages'])) {
                             <span  class="text-danger">
                                 <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
                                 {{ t('You must specify at least "Guaranteed availability" or "Max. number of outages"') }}
@@ -388,6 +391,7 @@
                         id="calendar"
                         optionValue="key"
                         optionLabel="value"
+                        [appendTo]="''"
                         [(ngModel)]="post.Autoreport.calendar_id"
                         [options]="calendars"
                         [disabled]="!post.Autoreport.consider_holidays"
@@ -406,6 +410,7 @@
                         id="UsersSelect"
                         optionValue="key"
                         optionLabel="value"
+                        [appendTo]="''"
                         [(ngModel)]="post.Autoreport.users._ids"
                         [options]="users"
                         oitcFormError [errors]="errors" errorField="users">

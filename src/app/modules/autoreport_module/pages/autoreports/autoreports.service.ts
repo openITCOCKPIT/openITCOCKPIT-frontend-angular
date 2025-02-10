@@ -8,15 +8,14 @@ import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delet
 import {
     AutoreportsIndexRoot,
     AutoreportsIndexParams,
-    CalendarParams, AutoreportPost
-
+    CalendarParams,
+    AutoreportPost,
+    AutoreportObject,
+    HostServiceParams
 } from './autoreports.interface';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
-import {
-    AllAutoreportSettings,
-    AutoreportSettingsPostResponse
-} from '../autoreport-settings/autoreport-settings.interface';
+
 
 @Injectable({
     providedIn: 'root'
@@ -89,6 +88,51 @@ export class AutoreportsService {
                 });
             })
         );
+    }
+
+    public getAddStepTwo(id: number): Observable<AutoreportObject> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{autoreport: AutoreportObject}>(`${proxyPath}/autoreport_module/autoreports/addStepTwo/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.autoreport;
+            })
+        )
+    }
+
+    public loadHosts (containerId: number, search: string, selected: number[]): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            hosts: SelectKeyValue[]
+        }>(`${proxyPath}/hosts/loadHostsByContainerId.json`, {
+            params: {
+                'angular': true,
+                'containerId': containerId,
+                'filter[Hosts.name]': search,
+                'selected[]': selected,
+                'resolveContainerIds': true
+
+            }
+        }).pipe(
+            map(data => {
+                return data.hosts
+            })
+        )
+    }
+
+    public loadServicesWithHostByHostIds(params: HostServiceParams): Observable<any>{
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/autoreport_module/autoreports/hostAndServicesByHostId.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data
+            })
+        );
+
     }
 
 }

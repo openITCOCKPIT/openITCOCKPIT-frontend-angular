@@ -64,6 +64,39 @@ export interface AutoreportPost {
     }
 }
 
+export interface AutoreportObject {
+    id?: number,
+    name?: string,
+    description?: string,
+    container_id: number,
+    timeperiod_id?: number,
+    report_interval?: string,
+    report_send_interval?: string,
+    consider_downtimes?: boolean,
+    last_send_date?: string,
+    min_availability_percent?: boolean,
+    min_availability?: number,
+    check_hard_state?: boolean,
+    use_start_time?: number,
+    report_start_date?: string,
+    last_percent_value?: number,
+    last_absolut_value?: number,
+    show_time: number,
+    last_number_of_outages?: number,
+    failure_statistic?: number,
+    consider_holidays?: number,
+    calendar_id?: number,
+    max_number_of_outages?: number,
+    created?: string
+    modified?: string
+}
+
+
+export interface AutoreportGet {
+    autoreport: AutoreportObject,
+    _csrfToken?: string
+}
+
 export interface CalendarParams {
     angular: boolean,
     containerId: number,
@@ -75,5 +108,53 @@ export function getDefaultCalendarParams(): CalendarParams {
         angular: true,
         containerId: 0,
         'filter[Calendar.name]': ''
+    }
+}
+
+export interface HostServiceParams {
+    angular: true,
+    'hostIds[]': number[],
+    'servicenameRegex': string | null,
+    'selected[]': number[];
+}
+
+export interface AutoreportServiceObject {
+    id: number,
+    host_id: number,
+    servicename: string,
+    disabled: number
+
+}
+
+export interface AutoReportHostWithServicesObject {
+    id: number,
+    name: string,
+    services: AutoreportServiceObject[]
+}
+
+export interface  PostHost {
+    host_id: number,
+    percent: number,
+    minute: number,
+    alias: number,
+    outage: string,
+    allfailures: number
+}
+
+export interface PostService {
+    host_id: number,
+    service_id: number,
+    percent: number,
+    minute: number,
+    graph: number,
+    graphSettings: string,
+    outage: string,
+    allfailures: number
+}
+
+export interface PostAutoreport {
+    Autoreport: {
+        hosts: PostHost[],
+        services: PostService[]
     }
 }

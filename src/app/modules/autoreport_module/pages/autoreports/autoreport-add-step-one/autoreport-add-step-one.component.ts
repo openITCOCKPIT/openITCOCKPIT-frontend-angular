@@ -43,6 +43,7 @@ import { UsersService } from '../../../../../pages/users/users.service';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 @Component({
   selector: 'oitc-autoreport-add-step-one',
@@ -96,6 +97,7 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     private readonly TimeperiodsService: TimeperiodsService = inject(TimeperiodsService);
     private readonly UsersService: UsersService = inject(UsersService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
     private readonly router = inject(Router);
 
     public errors: GenericValidationError | null = null;
@@ -244,8 +246,11 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
                 if (result.success) {
                     this.errors = null;
                     this.router.navigate(['/autoreport_module/autoreports/addStepTwo', result.data.autoreport.id]);
+                } else {
+                    this.errors = result.data as GenericValidationError;
+                    this.notyService.genericError();
                 }
-                this.errors = result.data as GenericValidationError;
+
                 this.cdr.markForCheck();
             }
         );
