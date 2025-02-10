@@ -1,0 +1,14 @@
+<ng-container *transloco="let t">
+    <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
+
+        @for (tab of tabs(); track $index) {
+            <c-nav-item>
+                <span class="nav-link"
+                      [ngClass]="{'active': tab.id === currentTabId()}"
+                      (click)="changeTab(tab.id)">
+                    {{ tab.name }}
+                </span>
+            </c-nav-item>
+        }
+    </c-nav>
+</ng-container>

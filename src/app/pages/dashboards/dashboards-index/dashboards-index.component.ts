@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    inject,
+    Inject,
+    OnDestroy,
+    OnInit,
+    ViewChild
+} from '@angular/core';
 import { DOCUMENT, NgForOf, NgIf } from '@angular/common';
 
 import {
@@ -31,6 +41,9 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { DashboardColorpickerComponent } from './dashboard-colorpicker/dashboard-colorpicker.component';
+import { DashboardTab, DashboardWidget } from '../dashboards.interface';
+import { DashboardsService } from '../dashboards.service';
+import { DashboardTabsComponent } from './dashboard-tabs/dashboard-tabs.component';
 
 @Component({
     selector: 'oitc-dashboards-index',
@@ -51,7 +64,8 @@ import { DashboardColorpickerComponent } from './dashboard-colorpicker/dashboard
         RouterLink,
         KtdGridItemPlaceholder,
         KtdGridDragHandle,
-        DashboardColorpickerComponent
+        DashboardColorpickerComponent,
+        DashboardTabsComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
@@ -59,6 +73,15 @@ import { DashboardColorpickerComponent } from './dashboard-colorpicker/dashboard
 })
 export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
+    public tabs: DashboardTab[] = [];
+    public currentTabId: number = 0;
+
+    public availableWidgets: DashboardWidget[] = [];
+
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly DashboardsService = inject(DashboardsService);
+
+    private cdr = inject(ChangeDetectorRef);
 
     @ViewChild(KtdGridComponent, {static: true}) grid?: KtdGridComponent;
     trackById = ktdTrackById;
@@ -107,9 +130,10 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
 
     constructor(public elementRef: ElementRef, @Inject(DOCUMENT) public document: Document) {
+
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.resizeSubscription = merge(
             fromEvent(window, 'resize'),
             fromEvent(window, 'orientationchange')
@@ -121,80 +145,104 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                 this.grid.resize();
             }
         });
+
+        this.loadDashboardsIndex();
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.resizeSubscription.unsubscribe();
+        this.subscriptions.unsubscribe();
     }
 
-    onDragStarted(event: KtdDragStart) {
+    public loadDashboardsIndex(): void {
+        this.subscriptions.add(this.DashboardsService.getIndex().subscribe(data => {
+            this.tabs = data.tabs;
+
+            if (this.currentTabId === 0 && data.tabs.length > 0) {
+                // Mark the first tab as active
+                this.currentTabId = data.tabs[0].id;
+            }
+
+
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public onTabChange(tabId: number): void {
+        console.log("todo implement onTabChange", tabId);
+        this.currentTabId = tabId;
+        this.cdr.markForCheck();
+
+    }
+
+    public onDragStarted(event: KtdDragStart): void {
         this.isDragging = true;
     }
 
-    onResizeStarted(event: KtdResizeStart) {
+    public onResizeStarted(event: KtdResizeStart): void {
         this.isResizing = true;
     }
 
-    onDragEnded(event: KtdDragEnd) {
+    public onDragEnded(event: KtdDragEnd): void {
         this.isDragging = false;
     }
 
-    onResizeEnded(event: KtdResizeEnd) {
+    public onResizeEnded(event: KtdResizeEnd): void {
         this.isResizing = false;
     }
 
-    onLayoutUpdated(layout: KtdGridLayout) {
+    public onLayoutUpdated(layout: KtdGridLayout): void {
         console.log('on layout updated', layout);
         this.layout = layout;
     }
 
-    onCompactTypeChange(change: MatSelectChange) {
+    public onCompactTypeChange(change: MatSelectChange): void {
         console.log('onCompactTypeChange', change);
         this.compactType = change.value;
     }
 
-    onTransitionChange(change: MatSelectChange) {
+    public onTransitionChange(change: MatSelectChange): void {
         console.log('onTransitionChange', change);
         this.currentTransition = change.value;
     }
 
-    onAutoScrollChange(checked: boolean) {
+    public onAutoScrollChange(checked: boolean): void {
         this.autoScroll = checked;
     }
 
-    onDisableDragChange(checked: boolean) {
+    public onDisableDragChange(checked: boolean): void {
         this.disableDrag = checked;
     }
 
-    onDisableResizeChange(checked: boolean) {
+    public onDisableResizeChange(checked: boolean): void {
         this.disableResize = checked;
     }
 
-    onDisableRemoveChange(checked: boolean) {
+    public onDisableRemoveChange(checked: boolean): void {
         this.disableRemove = checked;
     }
 
-    onAutoResizeChange(checked: boolean) {
+    public onAutoResizeChange(checked: boolean): void {
         this.autoResize = checked;
     }
 
-    onPreventCollisionChange(checked: boolean) {
+    public onPreventCollisionChange(checked: boolean): void {
         this.preventCollision = checked;
     }
 
-    onColsChange(event: Event) {
+    public onColsChange(event: Event): void {
         this.cols = coerceNumberProperty((event.target as HTMLInputElement).value);
     }
 
-    onRowHeightChange(event: Event) {
+    public onRowHeightChange(event: Event): void {
         this.rowHeight = coerceNumberProperty((event.target as HTMLInputElement).value);
     }
 
-    onDragStartThresholdChange(event: Event) {
+    public onDragStartThresholdChange(event: Event): void {
         this.dragStartThreshold = coerceNumberProperty((event.target as HTMLInputElement).value);
     }
 
-    generateLayout() {
+    public generateLayout(): void {
         const layout: KtdGridLayout = [];
         for (let i = 0; i < this.cols; i++) {
             const y = Math.ceil(Math.random() * 4) + 1;
@@ -212,7 +260,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     }
 
     /** Adds a grid item to the layout */
-    addItemToLayout() {
+    public addItemToLayout(): void {
         const maxId = this.layout.reduce((acc, cur) => Math.max(acc, parseInt(cur.id, 10)), -1);
         const nextId = maxId + 1;
 
@@ -236,13 +284,13 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
      * Stops the event from propagating an causing the drag to start.
      * We don't want to drag when mousedown is fired on remove icon button.
      */
-    stopEventPropagation(event: Event) {
+    public stopEventPropagation(event: Event): void {
         event.preventDefault();
         event.stopPropagation();
     }
 
     /** Removes the item from the layout */
-    removeItem(id: string) {
+    public removeItem(id: string): void {
         // Important: Don't mutate the array. Let Angular know that the layout has changed creating a new reference.
         this.layout = this.ktdArrayRemoveItem(this.layout, (item) => item.id === id);
     }
