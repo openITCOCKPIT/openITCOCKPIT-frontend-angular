@@ -3,6 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
+    BackgroundImagesRoot,
+    IconsetRoot,
+    IconsRoot,
     MapeditorsEditRoot,
     MapeditorSettingsPost,
     MapgadgetPost,
@@ -10,8 +13,14 @@ import {
     MapItemMultiPost,
     MapitemPost,
     MaplinePost,
+    MapsByStringParams,
+    MapsByStringRoot,
     MapsummaryitemPost,
-    MaptextPost
+    MaptextPost,
+    PerformanceDataMetricsRoot,
+    SaveBackgroundPost,
+    ServicesByStringParams,
+    ServicesByStringRoot
 } from './Mapeditors.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
@@ -323,6 +332,126 @@ export class MapeditorsService {
                     });
                 })
             );
+    }
+
+    public getBackgroundImages(): Observable<BackgroundImagesRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<BackgroundImagesRoot>(`${proxyPath}/map_module/mapeditors/backgroundImages.json`, {
+            params: {
+                'angular': true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public saveBackground(background: SaveBackgroundPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/mapeditors/saveBackground.json?angular=true`, background)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public resetBackground(mapId: number): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/mapeditors/resetBackground.json?angular=true`, {
+            'Map': {
+                id: mapId
+            }
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getIconsets(): Observable<IconsetRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/map_module/mapeditors/getIconsets.json`, {
+            params: {
+                'angular': true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getIcons(): Observable<IconsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/map_module/mapeditors/getIcons.json`, {
+            params: {
+                'angular': true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getPerformanceDataMetrics(objectId: number): Observable<PerformanceDataMetricsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/map_module/mapeditors/getPerformanceDataMetrics/${objectId}.json`, {
+            params: {
+                'angular': true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadServicesByString(params: ServicesByStringParams): Observable<ServicesByStringRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/services/loadServicesByString.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadMapsByString(params: MapsByStringParams): Observable<MapsByStringRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/map_module/mapeditors/loadMapsByString.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 
 }

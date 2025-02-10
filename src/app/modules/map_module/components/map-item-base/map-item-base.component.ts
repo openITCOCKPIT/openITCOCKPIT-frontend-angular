@@ -34,7 +34,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     @ViewChild('container', {static: true}) containerRef!: ElementRef<HTMLDivElement>;
 
     public item: InputSignal<T | undefined> = input<T | undefined>();
-    public layers: InputSignal<string[]> = input<string[]>([]); // Layer options for context menu
+    public layers: InputSignal<{ key: number, value: string }[]> = input<{ key: number, value: string }[]>([]); // Layer options for context menu
     public gridSize: InputSignal<{ x: number, y: number }> = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
     public gridEnabled: InputSignal<boolean> = input<boolean>(true);
     public isViewMode: InputSignal<boolean> = input<boolean>(false); // View mode for disabling drag and drop and context menu
@@ -233,8 +233,9 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
             if (key === this.item()!.z_index) {
                 icon = "fa fa-check";
             }
+            let layer = this.layers().find(layer => layer.key === Number(key));
             layerOptions.push({
-                label: this.layers()[key],
+                label: layer?.value,
                 icon: icon,
                 command: () => {
                     this.contextActionEvent.emit({
@@ -259,6 +260,17 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                 label: this.TranslocoService.translate('Edit'),
                 icon: 'fa fa-cog',
                 command: () => {
+                    this.contextActionEvent.emit({
+                        type: ContextActionType.EDIT,
+                        data: {
+                            id: this.id,
+                            x: this.x,
+                            y: this.y,
+                            map_id: this.mapId,
+                        },
+                        itemType: this.type,
+                        item: this.item()
+                    });
                     this.cdr.markForCheck();
                 }
             },

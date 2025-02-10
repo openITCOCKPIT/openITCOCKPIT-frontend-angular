@@ -2,6 +2,7 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    ElementRef,
     inject,
     OnDestroy,
     OnInit,
@@ -12,16 +13,18 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { MapeditorsService } from '../Mapeditors.service';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HistoryService } from '../../../../../history.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import {
+    ButtonCloseDirective,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
     DropdownComponent,
     DropdownItemDirective,
     DropdownMenuDirective,
@@ -29,18 +32,39 @@ import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    ModalToggleDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    RowComponent,
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FCanvasComponent, FFlowModule } from '@foblex/flow';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { DOCUMENT, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MapItemComponent } from '../../../components/map-item/map-item.component';
 import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.component';
-import { filter, parseInt } from 'lodash';
-import { Background, Mapeditor, MapRoot, MaxUploadLimit, VisibleLayers } from '../Mapeditors.interface';
+import _, { parseInt } from 'lodash';
+import {
+    Background,
+    Iconset,
+    Mapeditor,
+    MapRoot,
+    MapsByStringParams,
+    MaxUploadLimit,
+    ServicesByStringParams,
+    VisibleLayers
+} from '../Mapeditors.interface';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import {
     ContextAction,
@@ -59,10 +83,26 @@ import { TachoItemComponent } from '../../../components/tacho-item/tacho-item.co
 import { TemperatureItemComponent } from '../../../components/temperature-item/temperature-item.component';
 import { GraphItemComponent } from '../../../components/graph-item/graph-item.component';
 import { ServiceOutputItemComponent } from '../../../components/service-output-item/service-output-item.component';
+import { BackgrounduploadsService } from '../Backgrounduploads.service';
+import { HostsService } from '../../../../../pages/hosts/hosts.service';
+import { HostsLoadHostsByStringParams } from '../../../../../pages/hosts/hosts.interface';
+import { HostgroupsService } from '../../../../../pages/hostgroups/hostgroups.service';
+import { HostgroupsLoadHostgroupsByStringParams } from '../../../../../pages/hostgroups/hostgroups.interface';
+import {
+    ServicegroupsLoadServicegroupsByStringParams
+} from '../../../../../pages/servicegroups/servicegroups.interface';
+import { ServicegroupsService } from '../../../../../pages/servicegroups/servicegroups.service';
+import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
+import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
+import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import Dropzone from 'dropzone';
+import { AuthService } from '../../../../../auth/auth.service';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
-    standalone: true,
     imports: [
         FaIconComponent,
         PermissionDirective,
@@ -72,7 +112,6 @@ import { ServiceOutputItemComponent } from '../../../components/service-output-i
         NavComponent,
         NavItemComponent,
         BackButtonDirective,
-        XsButtonDirective,
         CardBodyComponent,
         RouterLink,
         TranslocoDirective,
@@ -103,7 +142,27 @@ import { ServiceOutputItemComponent } from '../../../components/service-output-i
         TachoItemComponent,
         TemperatureItemComponent,
         GraphItemComponent,
-        ServiceOutputItemComponent
+        ServiceOutputItemComponent,
+        ButtonCloseDirective,
+        FormControlDirective,
+        FormDirective,
+        FormLabelDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        TranslocoPipe,
+        RowComponent,
+        ColComponent,
+        FormErrorDirective,
+        SelectComponent,
+        ModalToggleDirective,
+        FormFeedbackComponent,
+        RequiredIconComponent,
+        XsButtonDirective
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',
@@ -113,16 +172,24 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     @ViewChild(FCanvasComponent, {static: true})
     public fCanvasComponent!: FCanvasComponent;
+    @ViewChild('mapEditor') mapEditor!: ElementRef<HTMLDivElement>;
 
     private subscriptions: Subscription = new Subscription();
     private MapeditorsService: MapeditorsService = inject(MapeditorsService);
+    private BackgrounduploadsService: BackgrounduploadsService = inject(BackgrounduploadsService);
+    private HostsService: HostsService = inject(HostsService);
+    private HostgroupsService: HostgroupsService = inject(HostgroupsService);
+    private ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
+    private readonly modalService = inject(ModalService);
+    private readonly authService = inject(AuthService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private route = inject(ActivatedRoute);
-    public errors: GenericValidationError = {} as GenericValidationError;
+    public errors: GenericValidationError | null = null;
     private cdr = inject(ChangeDetectorRef);
+    private readonly document = inject(DOCUMENT);
 
     public init = true;
     protected mapId: number = 0;
@@ -132,9 +199,12 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     public gridSize: { x: number, y: number } = {x: 25, y: 25};
 
     public backgrounds: Background[] = [];
-    public lastBackgroundImageToDeletePreventForSave = null;
+    public lastBackgroundImageToDeletePreventForSave: string | null = null;
 
-    public layers: string[] = [];
+    public layers: {
+        key: number
+        value: string
+    }[] = [];
     public currentBackground: string = '';
 
     public addNewObject = false;
@@ -171,7 +241,19 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     public visibleLayers: VisibleLayers = {};
 
-    public maxUploadLimit!: MaxUploadLimit;
+    public maxUploadLimit?: MaxUploadLimit;
+    public iconsets: Iconset[] = [];
+    private icons: string[] = [];
+    private metrics: { [p: string]: string } = {};
+    public itemObjects: SelectKeyValue[] = [];
+    public objectTypes = [
+        {key: 'host', value: this.TranslocoService.translate('Host')},
+        {key: 'service', value: this.TranslocoService.translate('Service')},
+        {key: 'hostgroup', value: this.TranslocoService.translate('Hostgroup')},
+        {key: 'servicegroup', value: this.TranslocoService.translate('Servicegroup')},
+        {key: 'map', value: this.TranslocoService.translate('Map')}
+    ];
+    public requiredIcons: string[] = [];
 
     constructor() {
         this.deleteItem = this.deleteItem.bind(this);
@@ -191,6 +273,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.mapId = Number(this.route.snapshot.paramMap.get('id'));
         this.load();
+        this.loadIconsets();
+        this.loadIcons();
     }
 
     public ngOnDestroy(): void {
@@ -204,19 +288,26 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 this.Mapeditor = result.config.Mapeditor;
                 this.maxUploadLimit = result.maxUploadLimit;
                 this.maxZIndex = result.max_z_index;
-                this.layers = result.layers;
+                //this.requiredIcons = result.requiredIcons;
+                this.layers = [];
+                for (let layer in result.layers) {
+                    this.layers.push({
+                        key: parseInt(layer),
+                        value: result.layers[layer]
+                    });
+                }
 
                 for (let k in this.layers) {
                     this.visibleLayers['layer_' + k] = true;
                 }
 
-                this.currentBackground = this.map.Map.background;
+                if (this.map.Map.background) {
+                    this.currentBackground = this.map.Map.background;
+                }
 
                 if (this.init) {
-                    /*createDropzones();
-                    loadBackgroundImages();
-
-                    setTimeout(makeDraggable, 250);*/
+                    this.createDropzones();
+                    this.loadBackgroundImages();
                 }
 
                 this.init = false;
@@ -309,12 +400,11 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 this.changeHelplinesSize(this.Mapeditor.grid.size);
             }
         }
-        //if (this.Mapeditor.grid.enabled) {
+
         this.gridSize = {x: size, y: size};
         this.onMapeditorChange();
         this.cdr.markForCheck();
-        //makeDraggable();
-        //}
+
     }
 
     public changeHelplinesSize(size: number) {
@@ -328,6 +418,9 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     }
 
     public onHelplinesChange() {
+        if (this.init) {
+            return;
+        }
         this.Mapeditor.helplines = {...this.Mapeditor.helplines};
         this.onMapeditorChange();
         this.cdr.markForCheck();
@@ -342,9 +435,20 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.Mapeditor.synchronizeGridAndHelplinesSize = isEnabled;
         this.onMapeditorChange();
         this.cdr.markForCheck();
+
+        if (this.init) {
+            return;
+        }
+
+        if (this.Mapeditor.synchronizeGridAndHelplinesSize && (this.Mapeditor.helplines.size != this.Mapeditor.grid.size)) {
+            this.changeGridSize(this.Mapeditor.helplines.size);
+        }
     }
 
     public onGridEnabledChange() {
+        if (this.init) {
+            return;
+        }
         this.onMapeditorChange();
         this.cdr.markForCheck();
     }
@@ -356,12 +460,12 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.saveMapeditorSettings();
     }
 
-    public setDefaultLayer(layerNo: string) {
-        this.defaultLayer = layerNo;
+    public setDefaultLayer(layerNo: number) {
+        this.defaultLayer = layerNo.toString();
         this.cdr.markForCheck();
     }
 
-    public hideLayer(key: string) {
+    public hideLayer(key: number) {
         this.visibleLayers['layer_' + key] = false;
 
         let objectsToHide = [
@@ -376,7 +480,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             let objectName = objectsToHide[arrayKey];
             if (this.map.hasOwnProperty(objectName)) {
                 for (let i in this.map[objectName as keyof MapRoot]) {
-                    if (this.map[objectName as keyof MapRoot][i].z_index === key) {
+                    if (this.map[objectName as keyof MapRoot][i].z_index === key.toString()) {
                         this.map[objectName as keyof MapRoot][i].display = false;
                         this.onItemChange(objectName);
                     }
@@ -385,7 +489,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public showLayer(key: string) {
+    public showLayer(key: number) {
         this.visibleLayers['layer_' + key] = true;
 
         let objectsToHide = [
@@ -400,7 +504,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             let objectName = objectsToHide[arrayKey];
             if (this.map.hasOwnProperty(objectName)) {
                 for (let i in this.map[objectName as keyof MapRoot]) {
-                    if (this.map[objectName as keyof MapRoot][i].z_index === key) {
+                    if (this.map[objectName as keyof MapRoot][i].z_index === key.toString()) {
                         this.map[objectName as keyof MapRoot][i].display = true;
                         this.onItemChange(objectName);
                     }
@@ -416,7 +520,29 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             this.changeLabelPositionFromContextMenu($event, MapItemType.SUMMARYITEM, 'Mapsummaryitems', this.saveSummaryItem);
         }
         if (type === 'edit') {
-            console.error('Edit');
+            switch ($event.itemType) {
+                case MapItemType.ITEM:
+                    this.editItem($event.item);
+                    break;
+                case MapItemType.TEXT:
+                    this.editText($event.item);
+                    break;
+                case MapItemType.ICON:
+                    this.editIcon($event.item);
+                    break;
+                case MapItemType.LINE:
+                    this.editLine($event.item);
+                    break;
+                case MapItemType.SUMMARYITEM:
+                    this.editSummaryItem($event.item);
+                    break;
+                case MapItemType.GADGET:
+                    this.editGadget($event.item);
+                    break;
+                default:
+                    console.log('Unknown map object type');
+                    this.notyService.genericError();
+            }
         }
         if (type === 'layer') {
             this.changeLayerFromContextMenu($event, MapItemType.ITEM, 'Mapitems', this.saveItem);
@@ -532,6 +658,391 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    public openChangeMapBackgroundModal() {
+        if (this.map.Map.background !== null && this.map.Map.background.length > 0) {
+            if (this.backgrounds.length === 0) {
+                this.brokenImageDetected = true;
+            } else {
+                this.brokenImageDetected = _.filter(
+                    this.backgrounds, (background) => background.image === this.map.Map.background).length === 0;
+            }
+        }
+
+        //$('#changeBackgroundModal').modal('show');
+    };
+
+    private loadBackgroundImages(selectedImage?: string) {
+
+        this.subscriptions.add(this.MapeditorsService.getBackgroundImages()
+            .subscribe((result) => {
+                this.backgrounds = result.backgrounds;
+
+                if (typeof selectedImage !== "undefined") {
+                    this.changeBackground({
+                        image: selectedImage
+                    });
+                }
+                this.cdr.markForCheck();
+            }));
+    };
+
+    public changeBackground(background: Background) {
+        if (background !== undefined && this.lastBackgroundImageToDeletePreventForSave === background.image) {
+            this.lastBackgroundImageToDeletePreventForSave = null;
+            this.map.Map.background = null;
+            return;
+        }
+
+        this.subscriptions.add(this.MapeditorsService.saveBackground({
+            'Map': {
+                id: this.mapId.toString(),
+                background: background.image
+            }
+        }).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                this.map.Map.background = background.image;
+
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
+
+    };
+
+    public deleteBackground(background: Background) {
+        this.lastBackgroundImageToDeletePreventForSave = background.image;
+        this.subscriptions.add(this.BackgrounduploadsService.deleteBackground(background.image).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const msg = this.TranslocoService.translate(result.data.response.message);
+
+                this.loadBackgroundImages();
+
+                this.notyService.genericSuccess(msg);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            let text = '';
+            if (errorResponse.hasOwnProperty('message')) {
+                text = result.data.message;
+            }
+
+            if (errorResponse.hasOwnProperty('response')) {
+                text = result.data.response.message;
+            }
+
+            this.notyService.genericError(text);
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
+    public resetBackground() {
+
+        this.subscriptions.add(this.MapeditorsService.resetBackground(this.mapId).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const title = this.TranslocoService.translate('Data');
+                const msg = this.TranslocoService.translate('saved successfully');
+
+                this.map.Map.background = null;
+                this.brokenImageDetected = false;
+
+                this.notyService.genericSuccess(msg, title);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            this.notyService.genericError();
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
+    public setCurrentIconset(iconset: string) {
+        this.currentItem.iconset = iconset;
+    };
+
+    public addNewLayer() {
+        this.maxZIndex++;
+
+        let newZIndex = this.maxZIndex;
+
+        this.layers.push({key: newZIndex, value: 'Layer ' + newZIndex});
+        this.visibleLayers['layer_' + newZIndex] = true;
+
+        if (this.currentItem.hasOwnProperty('z_index')) {
+            this.currentItem.z_index = newZIndex;
+        }
+    };
+
+    //Gets called by on-click on the map editor contain
+    public addNewObjectFunc(event: MouseEvent) {
+        if (!this.addNewObject) {
+            return;
+        }
+
+        let mapEditor = this.mapEditor.nativeElement;
+
+        switch (this.action) {
+            case MapItemType.ITEM:
+                mapEditor.style.cursor = 'default';
+                this.addNewObject = false;
+
+                this.modalService.toggle({
+                    show: true,
+                    id: 'addEditMapItemModal',
+                });
+
+                // Create currentItem skeleton
+                // Set X and Y poss of the new object
+                this.currentItem = {
+                    iconset: 'std_mid_64px',
+                    z_index: this.defaultLayer, //Yes we need this as a string!
+                    x: event.offsetX,
+                    y: event.offsetY,
+                    show_label: false,
+                    label_possition: 2
+                    //x: $event.pageX,
+                    //y: $event.pageY
+                };
+
+                this.action = null;
+                this.cdr.markForCheck();
+                break;
+
+            case MapItemType.LINE:
+                if (this.clickCount === 2) {
+                    //Endpoint of the line
+                    mapEditor.style.cursor = 'default';
+                    this.addNewObject = false;
+                    this.action = null;
+
+
+                    this.currentItem['endX'] = event.offsetX;
+                    this.currentItem['endY'] = event.offsetY;
+
+                    //$('#addEditMapLineModal').modal('show');
+                }
+
+                if (this.clickCount === 1) {
+
+                    this.currentItem = {
+                        z_index: this.defaultLayer, //Yes we need this as a string!
+                        startX: event.offsetX,
+                        startY: event.offsetY,
+                        show_label: false
+                    };
+
+                    const options = {
+                        timeOut: 3500,
+                        progressBar: true,
+                        enableHtml: true,
+                        positionClass: 'toast-top-center'
+                    }
+                    this.notyService.noty('Click a second time to define the endpoint of the line.', 'info', options, '');
+                }
+
+                this.clickCount++;
+                this.cdr.markForCheck();
+                break;
+
+            case MapItemType.GADGET:
+                mapEditor.style.cursor = 'default';
+                this.addNewObject = false;
+
+                //$('#addEditMapGadgetModal').modal('show');
+
+                // Create currentItem skeleton
+                // Set X and Y poss of the new object
+                this.currentItem = {
+                    type: 'service', //Gadgets are only available for services
+                    z_index: this.defaultLayer, //Yes we need this as a string!
+                    x: event.offsetX,
+                    y: event.offsetY,
+                    show_label: false,
+                    label_possition: 2,
+                    gadget: 'RRDGraph',
+                    size_x: null,
+                    size_y: null,
+                    metric: null,
+                    output_type: null,
+                    font_size: 13
+                };
+
+                this.action = null;
+                this.cdr.markForCheck();
+                break;
+
+            case MapItemType.TEXT:
+                mapEditor.style.cursor = 'default';
+                this.addNewObject = false;
+
+                //$('#AddEditStatelessTextModal').modal('show');
+
+                // Create currentItem skeleton
+                // Set X and Y poss of the new object
+                this.currentItem = {
+                    z_index: this.defaultLayer, //Yes we need this as a string!
+                    x: event.offsetX,
+                    y: event.offsetY,
+                    text: ''
+                };
+
+                this.action = null;
+                this.cdr.markForCheck();
+                break;
+
+            case MapItemType.ICON:
+                mapEditor.style.cursor = 'default';
+                this.addNewObject = false;
+
+                //$('#AddEditStatelessIconModal').modal('show');
+
+                // Create currentItem skeleton
+                // Set X and Y poss of the new object
+                this.currentItem = {
+                    z_index: this.defaultLayer, //Yes we need this as a string!
+                    x: event.offsetX,
+                    y: event.offsetY
+
+                };
+
+                this.action = null;
+                this.cdr.markForCheck();
+                break;
+
+            case MapItemType.SUMMARYITEM:
+                mapEditor.style.cursor = 'default';
+                this.addNewObject = false;
+
+                //$('#addEditSummaryItemModal').modal('show');
+
+                // Create currentItem skeleton
+                // Set X and Y poss of the new object
+                this.currentItem = {
+                    z_index: this.defaultLayer, //Yes we need this as a string!
+                    x: event.offsetX,
+                    y: event.offsetY,
+                    show_label: false,
+                    label_possition: 2
+                };
+
+                this.action = null;
+                this.cdr.markForCheck();
+                break;
+
+            default:
+                this.notyService.genericWarning('Unknown action - sorry :(');
+                this.action = null;
+                this.addNewObject = false;
+                mapEditor.style.cursor = 'default';
+                this.cdr.markForCheck();
+                break;
+        }
+    };
+
+    private loadIconsets(selectedIconset?: string) {
+        this.subscriptions.add(this.MapeditorsService.getIconsets()
+            .subscribe((result) => {
+                this.iconsets = [];
+                this.iconsets = result.iconsets;
+
+                if (typeof selectedIconset !== "undefined") {
+                    this.currentItem.iconset = selectedIconset;
+                }
+                this.cdr.markForCheck();
+            }));
+    };
+
+    private loadIcons(selectedIcon?: string) {
+        this.subscriptions.add(this.MapeditorsService.getIcons()
+            .subscribe((result) => {
+                this.icons = result.icons;
+
+                if (typeof selectedIcon !== "undefined") {
+                    this.currentItem.icon = selectedIcon;
+                }
+                this.cdr.markForCheck();
+            }));
+    };
+
+    private loadMetrics() {
+        this.subscriptions.add(this.MapeditorsService.getPerformanceDataMetrics(this.currentItem.object_id)
+            .subscribe((result) => {
+                let metrics: { [key: string]: string } = {};
+
+                let firstMetric = null;
+
+                for (let metricKey in result.perfdata) {
+                    if (firstMetric === null) {
+                        firstMetric = metricKey;
+                    }
+                    let metricDisplayName = result.perfdata[metricKey].metric
+
+                    metrics[metricKey] = metricDisplayName;
+                }
+
+                if (this.currentItem.metric === null) {
+                    this.currentItem.metric = firstMetric;
+                }
+
+                this.metrics = metrics;
+                this.cdr.markForCheck();
+            }));
+    };
+
+    public deleteIconImage(filename: string) {
+
+        this.subscriptions.add(this.BackgrounduploadsService.deleteIconImage(filename).subscribe((result) => {
+            this.cdr.markForCheck();
+            if (result.success) {
+                const msg = this.TranslocoService.translate(result.data.response.message);
+
+                this.loadIcons();
+
+                this.notyService.genericSuccess(msg);
+                return;
+            }
+
+            // Error
+            const errorResponse = result.data as GenericValidationError;
+            let text = '';
+            if (result.data.hasOwnProperty('message')) {
+                text = result.data.message;
+            }
+
+            if (result.data.hasOwnProperty('response')) {
+                text = result.data.response.message;
+            }
+
+            this.notyService.genericError(text);
+            if (result) {
+                this.errors = errorResponse;
+
+            }
+        }));
+    };
+
     public addItem() {
 
         const options = {
@@ -541,7 +1052,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             positionClass: 'toast-top-center'
         }
         this.notyService.noty('Click at the position on the map, where you want to create a new object.', 'info', options, '');
-        //$('#map-editor').css('cursor', 'crosshair');
+        this.mapEditor.nativeElement.style.cursor = 'crosshair';
         this.addNewObject = true;
         this.action = 'item';
         this.cdr.markForCheck();
@@ -550,11 +1061,16 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     public editItem(item: any) {
         this.action = 'item';
         this.currentItem = item;
-        //$('#addEditMapItemModal').modal('show');
+        console.error(this.currentItem);
+        this.onCurrentItemTypeObjectIdChange();
+        this.modalService.toggle({
+            show: true,
+            id: 'addEditMapItemModal',
+        });
         this.cdr.markForCheck();
     };
 
-    public saveItem(action: string) {
+    public saveItem(action?: string) {
         if (typeof action === 'undefined') {
             action = 'add_or_edit';
         }
@@ -587,10 +1103,12 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                         this.map.Mapitems = [];
                     }
                     this.map.Mapitems.push(result.data.Mapitem.Mapitem);
-                    //setTimeout(makeDraggable, 250);
                 }
 
-                //$('#addEditMapItemModal').modal('hide');
+                this.modalService.toggle({
+                    show: false,
+                    id: 'addEditMapItemModal',
+                });
                 this.notyService.genericSuccess(msg, title);
                 return;
             }
@@ -633,7 +1151,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 }
 
                 this.notyService.genericSuccess(msg, title);
-                //$('#addEditMapItemModal').modal('hide');
+                this.modalService.toggle({
+                    show: false,
+                    id: 'addEditMapItemModal',
+                });
                 this.currentItem = {};
                 delete this.currentDeletedItem;
                 return;
@@ -659,7 +1180,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         }
         this.notyService.noty('Click at the position on the map, where the line should start.', 'info', options, '');
         this.clickCount = 1;
-        //$('#map-editor').css('cursor', 'crosshair');
+        this.mapEditor.nativeElement.style.cursor = 'crosshair';
         this.addNewObject = true;
         this.action = 'line';
         this.cdr.markForCheck();
@@ -713,7 +1234,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     }
 
                     this.map.Maplines.push(result.data.Mapline.Mapline);
-                    //setTimeout(makeDraggable, 250);
                 }
 
                 //$('#addEditMapLineModal').modal('hide');
@@ -784,7 +1304,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             positionClass: 'toast-top-center'
         }
         this.notyService.noty('Click at the position on the map, where you want to create a new status summary icon', 'info', options, '');
-        //$('#map-editor').css('cursor', 'crosshair');
+        this.mapEditor.nativeElement.style.cursor = 'crosshair';
         this.addNewObject = true;
         this.action = 'summaryItem';
         this.cdr.markForCheck();
@@ -837,7 +1357,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     }
 
                     this.map.Mapsummaryitems.push(result.data.Mapsummaryitem.Mapsummaryitem);
-                    //setTimeout(makeDraggable, 250);
                 }
 
                 //$('#addEditSummaryItemModal').modal('hide');
@@ -908,7 +1427,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             positionClass: 'toast-top-center'
         }
         this.notyService.noty('Click at the position on the map, where you want to place the new Gadget.', 'info', options, '');
-        //$('#map-editor').css('cursor', 'crosshair');
+        this.mapEditor.nativeElement.style.cursor = 'crosshair';
         this.addNewObject = true;
         this.action = 'gadget';
         this.cdr.markForCheck();
@@ -965,7 +1484,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                         this.map.Mapgadgets = [];
                     }
                     this.map.Mapgadgets.push(result.data.Mapgadget.Mapgadget);
-                    //setTimeout(makeDraggable, 250);
                 }
 
                 //$('#addEditMapGadgetModal').modal('hide');
@@ -1028,20 +1546,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         }));
     };
 
-    public openChangeMapBackgroundModal() {
-        if (this.map.Map.background !== null && this.map.Map.background.length > 0) {
-            if (this.backgrounds.length === 0) {
-                this.brokenImageDetected = true;
-            } else {
-                this.brokenImageDetected = filter(
-                    this.backgrounds, (background) => background.image === this.map.Map.background).length === 0;
-            }
-        }
-
-        //$('#changeBackgroundModal').modal('show');
-        this.cdr.markForCheck();
-    };
-
     public addText() {
         const options = {
             timeOut: 3500,
@@ -1050,7 +1554,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             positionClass: 'toast-top-center'
         }
         this.notyService.noty('Click at the position on the map, where you want to create new text', 'info', options, '');
-        //$('#map-editor').css('cursor', 'crosshair');
+        this.mapEditor.nativeElement.style.cursor = 'crosshair';
         this.addNewObject = true;
         this.action = 'text';
         this.addLink = false;
@@ -1107,7 +1611,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     }
 
                     this.map.Maptexts.push(result.data.Maptext.Maptext);
-                    //setTimeout(makeDraggable, 250);
                 }
 
                 //$('#AddEditStatelessTextModal').modal('hide');
@@ -1178,7 +1681,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             positionClass: 'toast-top-center'
         }
         this.notyService.noty('Click at the position on the map, where you want to create a new icon', 'info', options, '');
-        //$('#map-editor').css('cursor', 'crosshair');
+        this.mapEditor.nativeElement.style.cursor = 'crosshair';
         this.addNewObject = true;
         this.action = 'icon';
         this.cdr.markForCheck();
@@ -1227,7 +1730,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     }
 
                     this.map.Mapicons.push(result.data.Mapicon.Mapicon);
-                    //setTimeout(makeDraggable, 250);
                 }
 
                 //$('#AddEditStatelessIconModal').modal('hide');
@@ -1315,6 +1817,460 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
             }
         }));
+    };
+
+    /**
+     * Load more objects if the user type to search in a select box.
+     * @param searchString
+     */
+    public loadMoreItemObjects(searchString: string) {
+        if (typeof this.currentItem.type !== "undefined") {
+
+            //Avoid duplicate search requests because of $scope.currentItem.object_id will be set to
+            //null if the search result will not contain the current selected object_id. If object_id is null
+            //the watchGroup will be triggerd. This will cause duplicate search requests and overwrite results
+            let objectId = undefined;
+            if (typeof this.currentItem.object_id !== 'undefined') {
+                if (this.currentItem.object_id !== null && this.currentItem.object_id > 0) {
+                    objectId = this.currentItem.object_id;
+                }
+            }
+
+            if (this.currentItem.type === 'host') {
+                this.loadHosts(searchString, objectId);
+            }
+
+            if (this.currentItem.type === 'service') {
+                this.loadServices(searchString, objectId);
+            }
+
+            if (this.currentItem.type === 'hostgroup') {
+                this.loadHostgroups(searchString, objectId);
+            }
+
+            if (this.currentItem.type === 'servicegroup') {
+                this.loadServicegroups(searchString, objectId);
+            }
+
+            if (this.currentItem.type === 'map') {
+                this.loadMaps(searchString, objectId);
+            }
+        }
+    };
+
+    private loadHosts(searchString: string, selected: number[]) {
+        if (typeof selected === "undefined") {
+            selected = [];
+        }
+
+        const params: HostsLoadHostsByStringParams = {
+            angular: true,
+            'filter[Hosts.name]': searchString,
+            'selected[]': selected,
+            includeDisabled: true
+        }
+
+
+        this.subscriptions.add(this.HostsService.loadHostsByString(params)
+            .subscribe((result) => {
+
+                this.itemObjects = result;
+
+                this.cdr.markForCheck();
+            }));
+    };
+
+    private loadServices(searchString: string, selected: number[]) {
+        if (typeof selected === "undefined") {
+            selected = [];
+        }
+
+        const params: ServicesByStringParams = {
+            'angular': true,
+            //'filter[Hosts.name]': searchString,
+            'filter[servicename]': searchString,
+            'selected[]': selected,
+            'includeDisabled': true
+        }
+
+
+        this.subscriptions.add(this.MapeditorsService.loadServicesByString(params)
+            .subscribe((result) => {
+
+                let tmpServices = [];
+                for (let i in result.services) {
+                    let tmpService = result.services[i];
+
+                    let serviceName = tmpService.value.Service.name;
+                    if (serviceName === null || serviceName === '') {
+                        serviceName = tmpService.value.Servicetemplate.name;
+                    }
+
+                    tmpServices.push({
+                        key: tmpService.key,
+                        value: tmpService.value.Host.name + '/' + serviceName
+                    });
+
+                }
+
+                this.itemObjects = tmpServices;
+
+                this.cdr.markForCheck();
+            }));
+    };
+
+    private loadHostgroups(searchString: string, selected: number[]) {
+        if (typeof selected === "undefined") {
+            selected = [];
+        }
+
+        const params: HostgroupsLoadHostgroupsByStringParams = {
+            'angular': true,
+            'filter[Containers.name]': searchString,
+            'selected[]': selected
+        }
+
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString(params)
+            .subscribe((result) => {
+
+                this.itemObjects = result;
+
+                this.cdr.markForCheck();
+            }));
+    };
+
+    private loadServicegroups(searchString: string, selected: number[]) {
+        if (typeof selected === "undefined") {
+            selected = [];
+        }
+
+        const params: ServicegroupsLoadServicegroupsByStringParams = {
+            'angular': true,
+            'filter[Containers.name]': searchString,
+            'selected[]': selected
+        }
+
+        this.subscriptions.add(this.ServicegroupsService.loadServicegroupsByString(params)
+            .subscribe((result) => {
+
+                this.itemObjects = result;
+
+                this.cdr.markForCheck();
+            }));
+    };
+
+    private loadMaps(searchString: string, selected: number[]) {
+        if (typeof selected === "undefined") {
+            selected = [];
+        }
+
+        const params: MapsByStringParams = {
+            'angular': true,
+            'filter[Maps.name]': searchString,
+            'selected[]': selected,
+            'excluded[]': [this.mapId]
+        }
+
+        this.subscriptions.add(this.MapeditorsService.loadMapsByString(params)
+            .subscribe((result) => {
+
+                this.itemObjects = result.maps;
+
+                this.cdr.markForCheck();
+            }));
+    };
+
+    private createDropzones() {
+        let backgroundDropzone = this.document.getElementById('backgroundDropzone');
+        if (backgroundDropzone) {
+            const dropzone = new Dropzone(backgroundDropzone, {
+                method: "post",
+                maxFilesize: this.maxUploadLimit?.value, //MB
+                acceptedFiles: 'image/gif,image/jpeg,image/png', //mimetypes
+                paramName: "file",
+                clickable: true,
+                addRemoveLinks: true,
+                headers: {
+                    'X-CSRF-TOKEN': this.authService.csrfToken || ''
+                },
+                url: '/map_module/backgroundUploads/upload/.json',
+                removedfile: (file: Dropzone.DropzoneFile) => {
+                    this.cdr.markForCheck();
+                },
+                sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                    this.cdr.markForCheck();
+                },
+                success: (file: Dropzone.DropzoneFile) => {
+                    this.cdr.markForCheck();
+
+                    const response = file.xhr;
+
+                    let errorMessage: undefined | string = undefined;
+                    if (response) {
+                        const serverResponse = JSON.parse(response.response);
+
+                        if (serverResponse.response.success) {
+                            // Update the preview element to show check mark icon
+                            this.updatePreviewElement(file, 'success');
+
+                            this.notyService.genericSuccess(
+                                serverResponse.response.message
+                            );
+                            this.loadBackgroundImages(response.response.filename);
+                            return;
+                        }
+
+                        if (serverResponse.response.message) {
+                            errorMessage = serverResponse.response.message;
+                        }
+                    }
+
+                    // Update the preview element to show the error message and the X icon
+                    this.updatePreviewElement(file, 'error', errorMessage);
+                    this.notyService.genericError(errorMessage);
+
+                },
+                error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
+                    this.cdr.markForCheck();
+
+                    let message = '';
+                    if (typeof error === 'string') {
+                        message = error;
+                    } else {
+                        // Error is an object
+                        // "error" contains now the server response
+                        // This happens if you upload a wrong file type like ".exe" or ".pdf"
+                        message = "Unknown server error";
+                        if (error.hasOwnProperty('error')) {
+                            message = error.error;
+                        }
+                    }
+
+                    // Update the preview element to show the error message and the X icon
+                    this.updatePreviewElement(file, 'error', message);
+
+                    if (typeof xhr === 'undefined') {
+                        // User tried to upload illegal file types such as .pdf or so
+                        this.notyService.genericError(message);
+                    } else {
+                        // File got uploaded to the server, but server returned an error
+                        let response = message as unknown as Error;
+                        this.notyService.genericError(response.message);
+                    }
+                }
+            });
+        }
+        let iconDropzone = this.document.getElementById('iconDropzone');
+        if (iconDropzone) {
+            const dropzone = new Dropzone(iconDropzone, {
+                method: "post",
+                maxFilesize: this.maxUploadLimit?.value, //MB
+                acceptedFiles: 'image/gif,image/jpeg,image/png', //mimetypes
+                paramName: "file",
+                clickable: true,
+                addRemoveLinks: true,
+                headers: {
+                    'X-CSRF-TOKEN': this.authService.csrfToken || ''
+                },
+                url: '/map_module/backgroundUploads/icon/.json',
+                removedfile: (file: Dropzone.DropzoneFile) => {
+                    this.cdr.markForCheck();
+                },
+                sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                    this.cdr.markForCheck();
+                },
+                success: (file: Dropzone.DropzoneFile) => {
+                    this.cdr.markForCheck();
+
+                    const response = file.xhr;
+
+                    let errorMessage: undefined | string = undefined;
+                    if (response) {
+                        const serverResponse = JSON.parse(response.response);
+
+                        if (serverResponse.response.success) {
+                            // Update the preview element to show check mark icon
+                            this.updatePreviewElement(file, 'success');
+
+                            this.notyService.genericSuccess(
+                                serverResponse.response.message
+                            );
+                            this.loadIcons(response.response.filename);
+                            return;
+                        }
+
+                        if (serverResponse.response.message) {
+                            errorMessage = serverResponse.response.message;
+                        }
+                    }
+
+                    // Update the preview element to show the error message and the X icon
+                    this.updatePreviewElement(file, 'error', errorMessage);
+                    this.notyService.genericError(errorMessage);
+
+                },
+                error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
+                    this.cdr.markForCheck();
+
+                    let message = '';
+                    if (typeof error === 'string') {
+                        message = error;
+                    } else {
+                        // Error is an object
+                        // "error" contains now the server response
+                        // This happens if you upload a wrong file type like ".exe" or ".pdf"
+                        message = "Unknown server error";
+                        if (error.hasOwnProperty('error')) {
+                            message = error.error;
+                        }
+                    }
+
+                    // Update the preview element to show the error message and the X icon
+                    this.updatePreviewElement(file, 'error', message);
+
+                    if (typeof xhr === 'undefined') {
+                        // User tried to upload illegal file types such as .pdf or so
+                        this.notyService.genericError(message);
+                    } else {
+                        // File got uploaded to the server, but server returned an error
+                        let response = message as unknown as Error;
+                        this.notyService.genericError(response.message);
+                    }
+                }
+            });
+        }
+        let iconSetDropzone = this.document.getElementById('iconsetDropzone');
+        if (iconSetDropzone) {
+            const dropzone = new Dropzone(iconSetDropzone, {
+                method: "post",
+                maxFilesize: this.maxUploadLimit?.value, //MB
+                acceptedFiles: '.zip', //mimetypes
+                paramName: "file",
+                clickable: true,
+                addRemoveLinks: true,
+                headers: {
+                    'X-CSRF-TOKEN': this.authService.csrfToken || ''
+                },
+                url: '/map_module/backgroundUploads/iconset/.json',
+                removedfile: (file: Dropzone.DropzoneFile) => {
+                    this.cdr.markForCheck();
+                },
+                sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                    this.cdr.markForCheck();
+                },
+                success: (file: Dropzone.DropzoneFile) => {
+                    this.cdr.markForCheck();
+
+                    const response = file.xhr;
+
+                    let errorMessage: undefined | string = undefined;
+                    if (response) {
+                        const serverResponse = JSON.parse(response.response);
+
+                        if (serverResponse.response.success) {
+                            // Update the preview element to show check mark icon
+                            this.updatePreviewElement(file, 'success');
+
+                            this.notyService.genericSuccess(
+                                serverResponse.response.message
+                            );
+                            this.loadIconsets(response.response.iconsetname);
+                            this.uploadIconSet = false;
+                            return;
+                        }
+
+                        if (serverResponse.response.message) {
+                            errorMessage = serverResponse.response.message;
+                        }
+                    }
+
+                    // Update the preview element to show the error message and the X icon
+                    this.updatePreviewElement(file, 'error', errorMessage);
+                    this.notyService.genericError(errorMessage);
+
+                },
+                error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
+                    this.cdr.markForCheck();
+
+                    let message = '';
+                    if (typeof error === 'string') {
+                        message = error;
+                    } else {
+                        // Error is an object
+                        // "error" contains now the server response
+                        // This happens if you upload a wrong file type like ".exe" or ".pdf"
+                        message = "Unknown server error";
+                        if (error.hasOwnProperty('error')) {
+                            message = error.error;
+                        }
+                    }
+
+                    // Update the preview element to show the error message and the X icon
+                    this.updatePreviewElement(file, 'error', message);
+
+                    if (typeof xhr === 'undefined') {
+                        // User tried to upload illegal file types such as .pdf or so
+                        this.notyService.genericError(message);
+                    } else {
+                        // File got uploaded to the server, but server returned an error
+                        let response = message as unknown as Error;
+                        this.notyService.genericError(response.message);
+                    }
+                }
+            });
+        }
+        this.cdr.markForCheck();
+    }
+
+    private updatePreviewElement(file: Dropzone.DropzoneFile, state: 'success' | 'error', tooltipMessage: string | undefined = undefined) {
+        const previewElement = file.previewElement;
+
+        previewElement.classList.remove('dz-processing');
+        previewElement.classList.add(`dz-${state}`); // dz-error or dz-success
+
+        const errorMessageElement = previewElement.children.item(3);  // .dz-error-message
+        if (errorMessageElement && tooltipMessage) {
+            errorMessageElement.children[0].innerHTML = tooltipMessage; // .dz-error-message span
+        }
+    }
+
+    public onCurrentItemTypeObjectIdChange() {
+        //Initial load objects (like hosts or services) if the user pick an object type
+        //while creating a new object on the map
+        let objectId = undefined;
+        if (typeof this.currentItem.object_id !== 'undefined') {
+            if (this.currentItem.object_id !== null && this.currentItem.object_id > 0) {
+                objectId = this.currentItem.object_id;
+            }
+        }
+
+        if (typeof this.currentItem.type !== "undefined") {
+            if (this.currentItem.type === 'host') {
+                this.loadHosts('', objectId);
+            }
+
+            if (this.currentItem.type === 'service') {
+                this.loadServices('', objectId);
+            }
+
+            if (this.currentItem.type === 'hostgroup') {
+                this.loadHostgroups('', objectId);
+            }
+
+            if (this.currentItem.type === 'servicegroup') {
+                this.loadServicegroups('', objectId);
+            }
+
+            if (this.currentItem.type === 'map') {
+                this.loadMaps('', objectId);
+            }
+        }
+
+        if (this.currentItem.hasOwnProperty('gadget') && typeof objectId !== "undefined") {
+            if (this.currentItem.gadget !== 'TrafficLight') {
+                this.loadMetrics();
+            }
+        }
     };
 
     protected readonly parseInt = parseInt;

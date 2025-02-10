@@ -25,10 +25,14 @@ export interface Map {
     id: number
     name: string
     title: string
-    background: string
+    background: string | null
     refresh_interval: number
     json_data: string
 }
+
+/********************************
+ * Mapitems
+ ********************************/
 
 export interface Mapitem extends MapitemBase {
     limit?: number
@@ -112,6 +116,10 @@ export interface MapsummaryitemPost {
     action: string
 }
 
+/********************************
+ * Editor
+ ********************************/
+
 export interface MaxUploadLimit {
     value: number
     unit: string
@@ -149,9 +157,9 @@ export interface VisibleLayers {
     [key: string]: boolean;
 }
 
-export interface Background {
-    image: string
-}
+/********************************
+ * Services
+ ********************************/
 
 export interface MapItemMultiItem {
     objectId: number;
@@ -163,4 +171,141 @@ export interface MapItemMultiItem {
 export interface MapItemMultiPost {
     items: MapItemMultiItem[];
     disableGlobalLoader: boolean;
+}
+
+/********************************
+ * Background
+ ********************************/
+
+export interface BackgroundImagesRoot {
+    backgrounds: Background[]
+    _csrfToken: string
+}
+
+export interface Background {
+    image: string
+    path?: string
+    thumbnail?: string
+}
+
+export interface SaveBackgroundPost {
+    'Map': {
+        id: string
+        background: string
+    }
+}
+
+/********************************
+ * Icons
+ ********************************/
+
+export interface IconsetRoot {
+    iconsets: Iconset[]
+    _csrfToken: string
+}
+
+export interface Iconset {
+    [key: string]: MapUpload
+}
+
+export interface MapUpload {
+    id: number
+    upload_type: number
+    upload_name: string
+    saved_name: string
+    user_id: any
+    container_id: number
+    created?: string
+}
+
+export interface IconsRoot {
+    icons: string[]
+    _csrfToken: string
+}
+
+/********************************
+ * Metrics
+ ********************************/
+
+export interface PerformanceDataMetricsRoot {
+    perfdata: Perfdata
+    _csrfToken: string
+}
+
+export interface Perfdata {
+    [key: string]: GeneratedType
+}
+
+export interface GeneratedType {
+    current: string
+    unit: string
+    warning: string
+    critical: string
+    min: string
+    max: string
+    metric: string
+}
+
+/********************************
+ * Services
+ ********************************/
+
+export interface ServicesByStringParams {
+    'angular': boolean,
+    'filter[servicename]': string,
+    'selected[]': number[],
+    'includeDisabled': boolean
+}
+
+export interface ServicesByStringRoot {
+    services: ServicesByString[]
+    _csrfToken: string
+}
+
+export interface ServicesByString {
+    key: number
+    value: Value
+}
+
+export interface Value {
+    Service: Service
+    Host: Host
+    Servicetemplate: Servicetemplate
+}
+
+export interface Service {
+    id: number
+    name?: string
+    servicename: string
+    disabled: number
+}
+
+export interface Host {
+    id: number
+    name: string
+}
+
+export interface Servicetemplate {
+    name: string
+}
+
+/********************************
+ * Maps
+ ********************************/
+
+export interface MapsByStringParams {
+    'angular': boolean,
+    'filter[Maps.name]': string,
+    'selected[]': number[],
+    'excluded[]': number[]
+}
+
+export interface MapsByStringRoot {
+    maps: MapsByStringMap[]
+    _csrfToken: string
+}
+
+export interface MapsByStringMap {
+    key: number
+    value: string
 }

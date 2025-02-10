@@ -71,3 +71,8 @@
     background-color: #0088cc;
     color: #FFF;
 }
+
+.selectedMapItem {
+    /** important is required due to DesignModule **/
+    background: #0088cc !important;
+}
