@@ -52,7 +52,7 @@ export interface CalendarEvent extends EventInput {
     start: string
     title: string
     default_holiday: boolean
-    className: string
+    className?: string
 }
 
 export interface CalendarEditGet {

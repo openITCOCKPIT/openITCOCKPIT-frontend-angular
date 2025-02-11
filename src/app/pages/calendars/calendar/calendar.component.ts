@@ -109,23 +109,10 @@ export class CalendarComponent {
         return this._events;
     }
 
-    private _showButtons: boolean = true;
-    @Input()
-    set showButtons(showButtons: boolean) {
-        this._showButtons = showButtons;
-    }
-
-    get showButtons(): boolean {
-        return this._showButtons;
-    }
-
-
     @Input() public countries: Countries = {};
     @Input() public countryCode: string = 'de';
     @Output() eventsChange = new EventEmitter<CalendarEvent[]>();
-    @Output() eventClick = new EventEmitter<EventClickArg>();
     @Output() countryCodeChange = new EventEmitter<string>();
-    @Output() onCreateClick = new EventEmitter<any>();
 
     // Gets used by the add and edit holiday modal
     public addNewEvent: AddNewEvent = {
@@ -209,10 +196,6 @@ export class CalendarComponent {
 
     // Handle event edit
     public handleEventClick(clickInfo: EventClickArg) {
-        if (this.eventClick) {
-            this.eventClick.emit(clickInfo);
-            return;
-        }
         clickInfo.event;
         let start = new Date(String(clickInfo.event.start));
         this.addNewEvent = {
@@ -311,10 +294,6 @@ export class CalendarComponent {
 
 
     public triggerAddEventModal(arg: DayCellContentArg) {
-        if (this.onCreateClick) {
-            this.onCreateClick.emit(arg);
-            return;
-        }
         this.addNewEvent = {
             title: '',
             start: this.formatJsDateToFullcalendarString(arg.date),
