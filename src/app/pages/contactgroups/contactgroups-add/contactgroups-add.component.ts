@@ -92,7 +92,6 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        //First, load shit into the component.
         this.loadContainers();
     }
 

@@ -185,7 +185,6 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        //First, load shit into the component.
         this.loadUsergroups();
     }
 

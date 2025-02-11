@@ -9,35 +9,8 @@ import {
     signal,
     ViewChild
 } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { DateTime } from 'luxon';
-
-import {
-    ButtonCloseDirective,
-    ColComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalService,
-    ModalTitleDirective,
-    ModalToggleDirective,
-    RowComponent
-} from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { AddNewEvent, CalendarEvent, Countries } from '../calendars.interface';
 import {
     CalendarOptions,
     DateSelectArg,
@@ -50,69 +23,46 @@ import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { FormsModule } from '@angular/forms';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { AddNewEvent, CalendarEvent } from '../../../../pages/calendars/calendars.interface';
+import { DateTime } from 'luxon';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { ModalService } from '@coreui/angular';
 
 @Component({
-    selector: 'oitc-calendar',
+    selector: 'oitc-changecalendars-calendar',
     imports: [
-    ColComponent,
-    TranslocoDirective,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FaIconComponent,
-    FullCalendarModule,
-    KeyValuePipe,
-    NgForOf,
-    NgIf,
-    RowComponent,
-    XsButtonDirective,
-    NgClass,
-    ButtonCloseDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    RequiredIconComponent,
-    TranslocoPipe,
-    ModalToggleDirective
-],
-    templateUrl: './calendar.component.html',
-    styleUrl: './calendar.component.css',
+        TranslocoDirective,
+        FullCalendarModule,
+        FaIconComponent,
+        XsButtonDirective
+    ],
+    templateUrl: './changecalendars-calendar.component.html',
+    styleUrl: './changecalendars-calendar.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalendarComponent {
+export class ChangecalendarsCalendarComponent {
+    private readonly cdr = inject(ChangeDetectorRef);
+
     @ViewChild('fullCalendar') fullCalendar!: FullCalendarComponent;
 
     private _events: CalendarEvent[] = [];
 
-    private cdr = inject(ChangeDetectorRef);
 
     @Input()
-    set events(externalEvents: CalendarEvent[]) {
-        // Setter method for events which will update the calendar whenever [(events)]="events" changes
+    public set events(externalEvents: CalendarEvent[]) {
         this._events = externalEvents;
         this.calendarOptions.update(options => ({...options, events: this.events}));
     }
 
-    get events(): CalendarEvent[] {
-        // Getter method for events, automatically used when you use "this.events" in the code
+
+    public get events(): CalendarEvent[] {
         return this._events;
     }
 
-    @Input() public countries: Countries = {};
-    @Input() public countryCode: string = 'de';
     @Output() eventsChange = new EventEmitter<CalendarEvent[]>();
-    @Output() countryCodeChange = new EventEmitter<string>();
+    @Output() eventClick = new EventEmitter<EventClickArg>();
+    @Output() onCreateClick = new EventEmitter<any>();
 
     // Gets used by the add and edit holiday modal
     public addNewEvent: AddNewEvent = {
@@ -120,7 +70,6 @@ export class CalendarComponent {
         start: ''
     };
 
-    private readonly TranslocoService = inject(TranslocoService);
     private readonly modalService = inject(ModalService);
 
 
@@ -151,10 +100,8 @@ export class CalendarComponent {
         eventOverlap: false,
         eventDurationEditable: false,
         datesSet: this.handleDatesSet.bind(this),
-        //select: this.handleDateSelect.bind(this),
         eventClick: this.handleEventClick.bind(this),
         eventsSet: this.handleEvents.bind(this),
-        //dayCellDidMount: this.handleDayCellDidMount.bind(this),
         eventChange: this.handleEventChange.bind(this),
 
 
@@ -196,18 +143,10 @@ export class CalendarComponent {
 
     // Handle event edit
     public handleEventClick(clickInfo: EventClickArg) {
-        clickInfo.event;
-        let start = new Date(String(clickInfo.event.start));
-        this.addNewEvent = {
-            title: clickInfo.event.title,
-            start: this.formatJsDateToFullcalendarString(start),
-            CalendarApi: clickInfo.view.calendar
-        };
-
-        this.modalService.toggle({
-            show: true,
-            id: 'editHolidayModal',
-        });
+        if (this.eventClick) {
+            this.eventClick.emit(clickInfo);
+            return;
+        }
         this.cdr.markForCheck();
     }
 
@@ -221,12 +160,6 @@ export class CalendarComponent {
         let date = DateTime.fromJSDate(jsDate);
         return date.toFormat('yyyy-MM-dd');
     }
-
-    public changeCountryCodeAndEmit(countryCode: string) {
-        this.countryCode = countryCode;
-        this.countryCodeChange.emit(this.countryCode);
-    }
-
 
     public handleDatesSet(dateInfo: { startStr: string, endStr: string, start: Date, end: Date, view: any }) {
         //console.log('handleDatesSet', dateInfo);
@@ -294,6 +227,10 @@ export class CalendarComponent {
 
 
     public triggerAddEventModal(arg: DayCellContentArg) {
+        if (this.onCreateClick) {
+            this.onCreateClick.emit(arg);
+            return;
+        }
         this.addNewEvent = {
             title: '',
             start: this.formatJsDateToFullcalendarString(arg.date),
