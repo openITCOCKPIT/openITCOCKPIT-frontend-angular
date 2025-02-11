@@ -47,6 +47,7 @@
         "@fullcalendar/list": "^6.1.15",
         "@fullcalendar/timegrid": "^6.1.15",
         "@jsverse/transloco": "^7.5.1",
+        "@katoid/angular-grid-layout": "^3.0.0",
         "@lezer/common": "^1.2.3",
         "@ng-select/ng-option-highlight": "^14.1.0",
         "@ng-select/ng-select": "^14.1.0",

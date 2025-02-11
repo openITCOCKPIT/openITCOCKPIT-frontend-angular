@@ -97,6 +97,9 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
+    public allSelected: boolean = true;
+    public allSelectedIndeterminate: boolean = false;
+
     public tmpFilter = {
         Models: {
             Command: true,
@@ -163,6 +166,7 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public onFilterChange(event: Event) {
         this.params.page = 1;
         this.loadChanges();
+        this.calculateIndeterminate();
     }
 
     public resetFilter() {
@@ -227,4 +231,32 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public onSortChange(sort: Sort) {
     }
+
+    public toggleSelectAllTypes(event: boolean) {
+        for (let model in this.tmpFilter.Models) {
+            console.log(event);
+            this.tmpFilter.Models[model as keyof typeof this.tmpFilter.Models] = event;
+        }
+
+        this.params.page = 1;
+        this.loadChanges();
+    }
+
+    public calculateIndeterminate() {
+        let allSelected = true;
+        let indeterminate = false;
+
+        for (let model in this.tmpFilter.Models) {
+            if (!this.tmpFilter.Models[model as keyof typeof this.tmpFilter.Models]) {
+                // At least one is not selected
+                indeterminate = true;
+                allSelected = false;
+                break;
+            }
+        }
+
+        this.allSelected = allSelected;
+        this.allSelectedIndeterminate = indeterminate;
+    }
+
 }

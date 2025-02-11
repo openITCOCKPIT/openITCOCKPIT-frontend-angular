@@ -1,0 +1,21 @@
+<ng-container *transloco="let t">
+    <c-modal #dashboardAddWidgetModal fullscreen="md" id="dashboardAddWidgetModal" size="lg">
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                {{ t('Add Widget') }}
+            </h5>
+            <button [cModalToggle]="dashboardAddWidgetModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button [cModalToggle]="dashboardAddWidgetModal.id" cButton color="default" class="ripple">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+
+</ng-container>

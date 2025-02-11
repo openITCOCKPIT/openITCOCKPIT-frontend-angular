@@ -105,3 +105,38 @@ body.dark-theme .btn-default .btn-default:disabled, body.dark-theme .btn.btn-def
     border-bottom-right-radius: 0.25rem !important;
 }
 
+
+.btn-icon {
+    /*line-height: 1.5rem;*/
+    text-align: center;
+    border: 1px solid transparent;
+    color: inherit;
+}
+
+.btn-icon.btn-sm {
+    width: calc(1.5rem + 2px);
+    border-radius: 4px;
+}
+
+.btn-icon:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-color: transparent;
+    color: #c3c3c3 !important;
+}
+
+body.dark-theme .btn-icon:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+
+/* add color types (btn-icon-primary, btn-icon-secondary, btn-icon-hover-$color etc) */
+@each $color-name, $color-value in $theme-colors {
+
+    .btn-icon-#{$color-name}:hover {
+        color: $color-value !important;
+    }
+
+    .btn-icon-hover-#{$color-name}:hover {
+        color: $color-value !important;
+    }
+}

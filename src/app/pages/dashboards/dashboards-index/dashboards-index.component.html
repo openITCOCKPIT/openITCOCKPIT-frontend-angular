@@ -1,0 +1,161 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'gauge-high']"></fa-icon>
+                {{ t('Dashboard') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 class="my-1">{{ t('Dashboard') }}</h5>
+            <oitc-dashboard-tabs [tabs]="tabs"
+                                 [currentTabId]="currentTabId"
+                                 (changeTabEvent)="onTabChange($event)"></oitc-dashboard-tabs>
+
+            <c-nav class="card-toolbar card-header-pills ms-auto">
+                <c-nav-item class="px-1">
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+
+
+        </c-card-header>
+        <c-card-body>
+            <div class="grid-container" *ngIf="layout.length > 0">
+                <ktd-grid [cols]="cols"
+                          [rowHeight]="rowHeight"
+                          [gap]="10"
+                          [layout]="layout"
+                          [compactType]="compactType"
+                          [preventCollision]="preventCollision"
+                          [scrollableParent]="autoScroll ? document : null"
+                          scrollSpeed="4"
+                          (dragStarted)="onDragStarted($event)"
+                          (resizeStarted)="onResizeStarted($event)"
+                          (dragEnded)="onDragEnded($event)"
+                          (resizeEnded)="onResizeEnded($event)"
+                          (layoutUpdated)="onLayoutUpdated($event)">
+                    <ktd-grid-item *ngFor="let widget of widgets; trackBy:WidgetTrackById"
+                                   [id]="widget.id"
+                                   [transition]="currentTransition"
+                                   [dragStartThreshold]="dragStartThreshold"
+                                   [draggable]="!disableDrag"
+                                   [resizable]="!disableResize"
+                                   class="overflow-visible">
+
+                        <!-- Optional Custom placeholder template -->
+                        <ng-template ktdGridItemPlaceholder>
+                            <!-- Custom placeholder content goes here -->
+
+                            <c-card class="w-100 h-100 justify-content-center widget-placeholder">
+                                <div class="align-self-center">
+                                    <fa-icon [icon]="['fas', 'up-down-left-right']" size="2x"></fa-icon>
+                                </div>
+                            </c-card>
+
+                        </ng-template>
+
+                        <div class="grid-item-content">
+
+                            <c-card class="w-100 h-100">
+                                <c-card-header [ngClass]="{'cursor-grab': !dashboardIsLocked}"
+                                               [class]="widget.color"
+                                               class="card-header-slim">
+                                    <h5 cCardTitle ktdGridDragHandle>
+                                        <!-- The icons are stored in the database to be backwards compatible we use the good old i-tag -->
+                                        <i [classList]="widget.icon"></i>
+                                        {{ widget.title }}
+                                    </h5>
+
+                                    <c-nav class="card-toolbar card-header-pills">
+
+                                        <c-nav-item class="px-1" *ngIf="!dashboardIsLocked">
+                                            <button class="btn btn-sm btn-icon ripple btn-icon-hover-danger"
+                                                    (click)="toggleRenameWidgetModal(widget)">
+                                                <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                                            </button>
+                                        </c-nav-item>
+
+                                        <c-nav-item class="px-1">
+                                            <oitc-dashboard-colorpicker
+                                                (selectedColor)="onColorChange($event, widget)"></oitc-dashboard-colorpicker>
+                                        </c-nav-item>
+
+                                        <c-nav-item class="px-1" *ngIf="!disableRemove">
+                                            <button class="btn btn-sm btn-icon ripple btn-icon-hover-danger"
+                                                    (mousedown)="stopEventPropagation($event)"
+                                                    (click)="removeItem(widget.id)">
+                                                <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                                            </button>
+                                        </c-nav-item>
+                                    </c-nav>
+
+                                </c-card-header>
+                                <c-card-body>
+                                    <h5 cCardTitle>Special title treatment</h5>
+                                    <p cCardText>
+
+                                        {{ widget.id }}
+
+                                        With supporting text below as a natural lead-in to additional content.
+                                    </p>
+
+                                </c-card-body>
+                            </c-card>
+
+                        </div>
+
+                    </ktd-grid-item>
+                </ktd-grid>
+            </div>
+        </c-card-body>
+    </c-card>
+
+</ng-container>

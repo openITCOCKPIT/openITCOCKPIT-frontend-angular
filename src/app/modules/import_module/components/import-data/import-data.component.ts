@@ -267,12 +267,12 @@ export class ImportDataComponent implements OnInit, OnDestroy {
         if (this.importer && !this.importer.id) {
             return;
         }
+
         if (this.importer) {
             this.showSpinner = true;
             this.showSynchronizingSpinner = true;
             this.errors = null;
-            /*
-            this.ExternalSystemService.startDataImport(this.externalSystem, this.ignoreExternalSystem).subscribe(data => {
+            this.ImporterService.startDataImport(this.importer, undefined).subscribe(data => {
                 this.cdr.markForCheck();
                 this.showSynchronizingSpinner = false;
                 this.showSpinner = false;
@@ -281,8 +281,6 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                     this.completed.emit(true);
                 }
             });
-
-             */
         }
     }
 }

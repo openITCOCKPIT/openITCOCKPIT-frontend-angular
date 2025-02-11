@@ -114,7 +114,6 @@ export class CustomalertRulesEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.CustomAlertRulesService.getEdit(customAlertRuleId)
             .subscribe((result: EditableCustomAlertRule) => {
-                // Then put post where it belongs. Also unpack that bullshit
                 this.post = result;
                 // Split the tags
 

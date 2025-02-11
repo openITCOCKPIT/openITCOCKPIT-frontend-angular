@@ -93,6 +93,9 @@ const coreRoutes: Routes = [{
     loadComponent: () => import('./pages/start-page/start-page.component').then(m => m.StartPageComponent),
     canActivate: [authGuard]
 }, {
+    path: 'dashboards/index',
+    loadComponent: () => import('./pages/dashboards/dashboards-index/dashboards-index.component').then(m => m.DashboardsIndexComponent)
+}, {
     path: 'macros/index',
     loadComponent: () => import('./pages/macros/macro-index/macro-index.component').then(m => m.MacroIndexComponent)
 }, {
