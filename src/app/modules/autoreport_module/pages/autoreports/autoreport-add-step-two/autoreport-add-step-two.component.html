@@ -26,7 +26,7 @@
         </ol>
     </nav>
     <form cForm (ngSubmit)="submitAddStepTwo()">
-        <c-card class="mb-3" id="stepone">
+        <c-card class="mb-3" id="steptwo">
             <c-card-header class="mb-3">
                 <h5 cCardTitle>{{ t('Create new autoreport:') }}
                     <small class="fw-300" *ngIf="autoreport">
@@ -117,7 +117,7 @@
                         optionValue="key"
                         optionLabel="value"
                         [searchCallback]="loadHosts"
-                        (onChange)="onSelectChange($event)"
+                        (onChange)="onHostChange($event)"
                         [options]="hosts"
                         [appendTo]="''"
                         oitcFormError [errors]="errors" errorField="report_send_interval">
@@ -125,7 +125,7 @@
                     <oitc-form-feedback [errors]="errors" errorField="report_send_interval"></oitc-form-feedback>
                 </c-row>
                 <c-row  class="mb-3">
-                    <label cLabel>
+                    <label cLabel for="min_availability">
                         {{ t('Service RegEx') }}
                     </label>
                     <c-input-group>
@@ -134,11 +134,12 @@
                         </span>
                         <input aria-describedby="check_availibility"
                                type="text"
+                               id="min_availability"
                                name="min_availability"
-                               aria-label=""
+                               aria-label="min_availability"
                                cFormControl
                                oitcDebounce
-                               (debouncedValue)="onSelectChange($event)"
+                               (debouncedValue)="onServiceChange($event)"
                                placeholder="{{t('Filter by service name')}}"
                                [(ngModel)]="servicenameRegex"
                                [disabled]="selectedHostIds.length === 0"
@@ -228,12 +229,14 @@
                                        oitcDebounce
                                        cFormCheckInput
                                        value="MIN"
+
                                        name="defaultOptionsgraphSettings">&nbsp;
                                 <input type="radio" [(ngModel)]="defaultOptionsGraphSettings"
                                        (debouncedValue)="onDefaultOptionsGraphSettingsChange($event)"
                                        oitcDebounce
                                        cFormCheckInput
                                        value="AVERAGE"
+
                                        name="defaultOptionsgraphSettings">&nbsp;
                                 <input type="radio" [(ngModel)]="defaultOptionsGraphSettings"
                                        (debouncedValue)="onDefaultOptionsGraphSettingsChange($event)"
@@ -270,7 +273,7 @@
                             </td>
                         </tr>
                         <ng-container *ngFor=" let host of hostsWithServices">
-                        <tr class="host_row report-table-bordered">
+                        <tr class="host_row report-table-bordered"  *ngIf="post.Autoreport.hosts[host.id]">
                             <td class="host_option ps-1">{{host.name}}</td>
                             <td class="text-center">
                                 <c-form-check>
@@ -339,8 +342,9 @@
                                 </c-form-check>
                             </td>
                         </tr>
-                        <tr class="service_row report-table-bordered"
+                        <ng-container
                             *ngFor="let service of host.services">
+                            <tr  class="service_row report-table-bordered" *ngIf="post.Autoreport.services[service.id]">
                             <td class="service_option ps-1">{{service.servicename}}</td>
                             <td class="text-center">
                                 <c-form-check>
@@ -385,15 +389,6 @@
                                 </c-form-check>
                             </td>
                             <td class="text-center">
-                                <!--<input type="radio"
-                                       ng-model="post.Autoreport.services[service.id].graphSettings"
-                                       name="graph_settings_service_{{service.id}}" value="MIN">
-                                <input type="radio"
-                                       ng-model="post.Autoreport.services[service.id].graphSettings"
-                                       name="graph_settings_service_{{service.id}}" value="AVERAGE">
-                                <input type="radio"
-                                       ng-model="post.Autoreport.services[service.id].graphSettings"
-                                       name="graph_settings_service_{{service.id}}" value="MAX">-->
 
                                 <c-form-check inline>
                                     <input type="radio" [(ngModel)]="post.Autoreport.services[service.id].graphSettings"
@@ -418,11 +413,6 @@
                                        [(ngModel)]="post.Autoreport.services[service.id].outage">
                             </td>
                             <td class="text-center">
-                                <!--<input
-                                    ng-model="post.Autoreport.services[service.id].allfailures"
-                                    ng-true-value="1"
-                                    ng-false-value="0"
-                                    type="checkbox">-->
                                 <c-form-check>
                                     <input
                                         id="service_failure_{{service.id}}"
@@ -436,7 +426,8 @@
                                         type="checkbox"/>
                                 </c-form-check>
                             </td>
-                        </tr>
+                            </tr>
+                        </ng-container>
                         </ng-container>
                     </table>
                 </c-row>

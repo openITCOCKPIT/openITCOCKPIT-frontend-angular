@@ -90,6 +90,28 @@ export class AutoreportsService {
         );
     }
 
+    public setAddStepTwo(id: number, post: any): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/autoreport_module/autoreports/addStepTwo/${id}.json?angular=true`,
+            post
+        ).pipe(
+            map((data: any) => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                const err = error.error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
+            })
+        );
+    }
+
     public getAddStepTwo(id: number): Observable<AutoreportObject> {
         const proxyPath = this.proxyPath;
         return this.http.get<{autoreport: AutoreportObject}>(`${proxyPath}/autoreport_module/autoreports/addStepTwo/${id}.json`, {

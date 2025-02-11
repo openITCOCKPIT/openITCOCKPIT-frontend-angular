@@ -19,18 +19,20 @@ import {
     AutoreportObject,
     HostServiceParams,
     AutoReportHostWithServicesObject,
-    PostAutoreport
+    PostAutoreport,
+    PostHost,
+    PostService
 } from '../autoreports.interface';
-import { SelectKeyValueExtended } from '../../../../../pages/statuspages/statuspage.interface';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { GenericValidationError } from '../../../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { NgForOf, NgIf } from '@angular/common';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import _ from 'lodash';
 
 @Component({
@@ -55,7 +57,6 @@ import _ from 'lodash';
         RequiredIconComponent,
         ColComponent,
         FormErrorDirective,
-        SelectComponent,
         FormFeedbackComponent,
         DebounceDirective,
         FormCheckComponent,
@@ -78,6 +79,7 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
     private route = inject(ActivatedRoute);
     private subscriptions: Subscription = new Subscription();
     private readonly AutoreportsService: AutoreportsService = inject(AutoreportsService);
+    private readonly notyService = inject(NotyService);
     private cdr = inject(ChangeDetectorRef);
 
     public errors: GenericValidationError | null = null;
@@ -89,7 +91,7 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
     public selectedSelectedIds: number[] = [];
     public post: PostAutoreport = {
         Autoreport: {
-            hosts: [],
+            hosts:  [],
             services: []
         }
     };
@@ -125,12 +127,16 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.AutoreportsService.loadHosts(this.autoreport.container_id, searchString, this.selectedHostIds)
             .subscribe((result) => {
                 this.hosts = result;
-                this.cdr.markForCheck();
+                //this.cdr.markForCheck();
             })
         );
     }
 
-    public onSelectChange(event: any) {
+    public onServiceChange(event: any) {
+        if(this.selectedHostIds.length === 0){
+            return;
+        }
+        this.selectedServices();
         const params: HostServiceParams = {
             'angular': true,
             'hostIds[]': this.selectedHostIds,
@@ -142,11 +148,53 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
                 this.hostsWithServices = result.hostsWithServices;
                 this.serviceIdsToConsider = result.serviceIdsList;
                 this.buildPost();
-
-
             })
         );
-        this.cdr.markForCheck();
+    }
+
+    public onHostChange(event: any){
+        if(this.selectedHostIds.length === 0){
+            this.post.Autoreport.hosts = [];
+            this.post.Autoreport.services = [];
+            this.selectedSelectedIds = [];
+            return;
+        } else{
+            let deletedHostIds = [];
+            for(let hostId in this.post.Autoreport.hosts){
+              //  hostId = parseInt(hostId, 10);
+                if(this.selectedHostIds.indexOf(Number(hostId)) === -1){
+                    delete this.post.Autoreport.hosts[hostId];
+                    deletedHostIds.push(hostId);
+                }
+            }
+
+            //Also delete services of deleted hosts
+            if(deletedHostIds.length > 0){
+                for(let serviceId in this.post.Autoreport.services){
+                  let hostId = Number(this.post.Autoreport.services[serviceId].host_id);
+                    if(this.selectedHostIds.indexOf(hostId) === -1){
+                        //host was removed from selectbox
+                        delete this.post.Autoreport.services[serviceId];
+                    }
+                }
+            }
+            //this.cdr.markForCheck();
+        }
+        this.selectedServices();
+        const params: HostServiceParams = {
+            'angular': true,
+            'hostIds[]': this.selectedHostIds,
+            'servicenameRegex': this.servicenameRegex,
+            'selected[]': this.selectedSelectedIds
+        };
+
+        this.subscriptions.add(this.AutoreportsService.loadServicesWithHostByHostIds(params)
+            .subscribe((result) => {
+                this.hostsWithServices = result.hostsWithServices;
+                this.serviceIdsToConsider = result.serviceIdsList;
+                this.buildPost();
+            })
+        );
     }
 
     public onDefaultOptionPercentChange(event: any) {
@@ -182,16 +230,20 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
             if(field === 'graphSettings') {
                 continue;
             }
-            // @ts-ignore
-            this.post.Autoreport.hosts[hostId][field] = value;
+
+            //this.post.Autoreport.hosts[hostId][field] = value;
+
+            (this.post.Autoreport.hosts[hostId] as Record<string, any>)[field] = value;
         }
 
         for(const serviceId in this.post.Autoreport.services) {
             if(field === 'alias') {
                 this.post.Autoreport.services[serviceId].graph = value;
             } else {
-                // @ts-ignore
-                this.post.Autoreport.services[serviceId][field] = value;
+
+               // this.post.Autoreport.services[serviceId][field] = value;
+
+                (this.post.Autoreport.services[serviceId] as Record<string, any>)[field] = value;
             }
         }
 
@@ -229,9 +281,25 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
                     };
                 }
             }
-            var idsToDelete = _.difference(_.map(_.keys(this.post.Autoreport.services), Number), this.serviceIdsToConsider);
+            let idsToDelete = _.difference(_.map(_.keys(this.post.Autoreport.services), Number), this.serviceIdsToConsider);
             this.cleanUpForServiceOptions(idsToDelete);
             this.cdr.markForCheck();
+        }
+    }
+
+    protected selectedServices() {
+
+        this.selectedSelectedIds = [];
+        if(this.post.Autoreport.services.length === 0){
+            return;
+        }
+        for(const index in this.post.Autoreport.services){
+            if(this.post.Autoreport.services[index]['percent'] || this.post.Autoreport.services[index]['minute']){
+                this.selectedSelectedIds.includes(this.post.Autoreport.services[index]['service_id']);
+                if(!this.selectedSelectedIds.includes(this.post.Autoreport.services[index]['service_id'])){
+                    this.selectedSelectedIds.push(this.post.Autoreport.services[index]['service_id']);
+                }
+            }
         }
     }
 
@@ -246,11 +314,26 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
                 delete this.post.Autoreport.services[serviceId];
             }
         }
-        this.cdr.markForCheck();
+        //this.cdr.markForCheck();
     }
 
 
     public submitAddStepTwo() {
+        this.errors = null;
+        this.subscriptions.add(this.AutoreportsService.setAddStepTwo(this.id, this.post).subscribe((result: GenericResponseWrapper): void => {
+                    if (result.success) {
+                        this.errors = null;
+                       // this.router.navigate(['/autoreport_module/autoreports/addStepTwo', result.data.autoreport.id]);
+                    } else {
+                        this.errors = result.data as GenericValidationError;
+                        this.notyService.genericError();
+                    }
+
+                    this.cdr.markForCheck();
+                }
+            )
+        );
+
     }
 
 }
