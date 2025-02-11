@@ -35,7 +35,6 @@ import { ChangecalendarsService } from '../changecalendars.service';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
 import { ChangecalendarEvent, EditChangecalendar, EditChangecalendarRoot } from '../changecalendars.interface';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { CalendarComponent } from '../../../../../pages/calendars/calendar/calendar.component';
 import { CalendarEvent } from '../../../../../pages/calendars/calendars.interface';
 import {
     ChangecalendarsEventEditorComponent
@@ -76,7 +75,6 @@ import {
         XsButtonDirective,
         RouterLink,
         FormLoaderComponent,
-        CalendarComponent,
         ChangecalendarsEventEditorComponent,
         ChangecalendarsCalendarComponent
     ],

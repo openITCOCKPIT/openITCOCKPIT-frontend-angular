@@ -24,7 +24,6 @@ import {
     ModalFooterComponent,
     ModalHeaderComponent,
     ModalService,
-    ModalToggleDirective,
     RowComponent
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../layouts/coreui/form-error.directive';
@@ -62,7 +61,6 @@ import { NgIf } from '@angular/common';
         TranslocoDirective,
         FormsModule,
         FaIconComponent,
-        ModalToggleDirective,
         XsButtonDirective,
         CardTitleDirective,
         CardBodyComponent,
