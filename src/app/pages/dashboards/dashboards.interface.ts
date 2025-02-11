@@ -49,3 +49,80 @@ export interface DashboardWidget {
         col: number
     }
 }
+
+
+export interface WidgetsForTabResponse {
+    widgets: {
+        DashboardTab: DashboardTabTabResponse,
+        User: any[], // unclear
+        Widget: WidgetGet[]
+    },
+    _csrfToken: string
+}
+
+export interface WidgetGet {
+    id: number
+    dashboard_tab_id: number
+    type_id: number
+    host_id?: number | null
+    service_id?: number | null
+    row: number
+    col: number
+    width: number
+    height: number
+    title: string
+    color: string
+    directive: string
+    icon: string
+    json_data?: string
+    created: string
+    modified: string
+}
+
+export interface DashboardTabTabResponse {
+    id: number
+    user_id: number
+    position: number
+    name: string
+    shared: boolean
+    source_tab_id?: any | null
+    check_for_updates: number
+    last_update: number
+    locked: boolean
+    created: string
+    modified: string
+    isOwner: boolean
+}
+
+// Used by the library to render the dasboards
+export interface WidgetGetForRender {
+    id: string // has to be a string to be tracked by ngFor
+    dashboard_tab_id: number
+    type_id: number
+    host_id?: number | null
+    service_id?: number | null
+    row: number
+    col: number
+    width: number
+    height: number
+    title: string
+    color: string
+    directive: string
+    icon: string
+    json_data?: string
+    created: string
+    modified: string
+}
+
+export interface WidgetSaveGrid {
+    Widget: {
+        id: number,
+        dashboard_tab_id: number
+        col: number,
+        row: number,
+        title: string,
+        width: number,
+        height: number
+        color: string
+    }
+}
