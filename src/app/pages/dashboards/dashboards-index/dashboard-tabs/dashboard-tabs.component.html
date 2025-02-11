@@ -1,11 +1,14 @@
 <ng-container *transloco="let t">
-    <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
+    <c-nav variant="underline" class="card-toolbar card-header-pills ms-3 tab-list" cdkDropList
+           cdkDropListOrientation="horizontal"
+           (cdkDropListDropped)="drop($event)">
 
-        @for (tab of tabs(); track $index) {
-            <c-nav-item>
+        @for (tab of localTabs; track $index) {
+            <c-nav-item cdkDrag [cdkDragDisabled]="tab.pinned">
                 <span class="nav-link"
                       [ngClass]="{'active': tab.id === currentTabId()}"
                       (click)="changeTab(tab.id)">
+                    <fa-icon [icon]="['fas', 'thumbtack']" *ngIf="tab.pinned"></fa-icon>
                     {{ tab.name }}
                 </span>
             </c-nav-item>
