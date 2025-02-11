@@ -9,7 +9,7 @@ import {
     OnInit,
     ViewChild
 } from '@angular/core';
-import { DOCUMENT, NgForOf, NgIf } from '@angular/common';
+import { DOCUMENT, NgClass, NgForOf, NgIf } from '@angular/common';
 
 import {
     KtdDragEnd,
@@ -21,8 +21,7 @@ import {
     KtdGridLayout,
     KtdGridLayoutItem,
     KtdResizeEnd,
-    KtdResizeStart,
-    ktdTrackById
+    KtdResizeStart
 } from '@katoid/angular-grid-layout';
 import { fromEvent, merge, Subscription } from 'rxjs';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
@@ -38,12 +37,15 @@ import {
     NavItemComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { DashboardColorpickerComponent } from './dashboard-colorpicker/dashboard-colorpicker.component';
-import { DashboardTab, DashboardWidget } from '../dashboards.interface';
+import { DashboardTab, DashboardWidget, WidgetGetForRender } from '../dashboards.interface';
 import { DashboardsService } from '../dashboards.service';
 import { DashboardTabsComponent } from './dashboard-tabs/dashboard-tabs.component';
+import { UUID } from '../../../classes/UUID';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-dashboards-index',
@@ -65,7 +67,9 @@ import { DashboardTabsComponent } from './dashboard-tabs/dashboard-tabs.componen
         KtdGridItemPlaceholder,
         KtdGridDragHandle,
         DashboardColorpickerComponent,
-        DashboardTabsComponent
+        DashboardTabsComponent,
+        NgClass,
+        XsButtonDirective
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
@@ -76,33 +80,33 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     public tabs: DashboardTab[] = [];
     public currentTabId: number = 0;
 
+    public isReadonly: boolean = false;
+    public dashboardIsLocked: boolean = false;
+    public disableDrag: boolean = false;
+    public disableResize: boolean = false;
+    public disableRemove: boolean = false;
+
     public availableWidgets: DashboardWidget[] = [];
+    public layout: KtdGridLayout = []; // used by the grid layout library
+    public widgets: WidgetGetForRender[] = []; // used by us to show the widgets
+
 
     private readonly subscriptions: Subscription = new Subscription();
     private readonly DashboardsService = inject(DashboardsService);
 
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
+
     private cdr = inject(ChangeDetectorRef);
 
-    @ViewChild(KtdGridComponent, {static: true}) grid?: KtdGridComponent;
-    trackById = ktdTrackById;
+    @ViewChild(KtdGridComponent, {static: false}) grid?: KtdGridComponent;
 
-    cols = 12;
-    rowHeight = 50;
+    // Docs: https://github.com/katoid/angular-grid-layout
+
+    public cols = 12;
+    public rowHeight = 15;
     compactType: 'vertical' | 'horizontal' | null = 'vertical';
-    layout: KtdGridLayout = [
-        {id: '0', x: 5, y: 0, w: 2, h: 3},
-        {id: '1', x: 2, y: 2, w: 1, h: 2},
-        {id: '2', x: 3, y: 7, w: 1, h: 2},
-        {id: '3', x: 2, y: 0, w: 3, h: 2},
-        {id: '4', x: 5, y: 3, w: 2, h: 3},
-        {id: '5', x: 0, y: 4, w: 1, h: 3},
-        {id: '6', x: 9, y: 0, w: 2, h: 4},
-        {id: '7', x: 9, y: 4, w: 2, h: 2},
-        {id: '8', x: 3, y: 2, w: 2, h: 5},
-        {id: '9', x: 7, y: 0, w: 1, h: 3},
-        {id: '10', x: 2, y: 4, w: 1, h: 4},
-        {id: '11', x: 0, y: 0, w: 2, h: 4}
-    ];
+
     transitions: { name: string, value: string }[] = [
         {name: 'ease', value: 'transform 500ms ease, width 500ms ease, height 500ms ease'},
         {name: 'ease-out', value: 'transform 500ms ease-out, width 500ms ease-out, height 500ms ease-out'},
@@ -119,10 +123,9 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
     dragStartThreshold = 0;
     autoScroll = true;
-    disableDrag = false;
-    disableResize = false;
-    disableRemove = false;
-    autoResize = true;
+
+
+    public autoResize = true;
     preventCollision = false;
     isDragging = false;
     isResizing = false;
@@ -141,8 +144,11 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
             debounceTime(50),
             filter(() => this.autoResize)
         ).subscribe(() => {
+            console.log(this.grid);
+
             if (this.grid) {
                 this.grid.resize();
+                console.log('machen resize dinge!');
             }
         });
 
@@ -163,16 +169,107 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                 this.currentTabId = data.tabs[0].id;
             }
 
+            this.loadTabContent(this.currentTabId);
+
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public loadTabContent(tabId: number): void {
+        this.layout = [];
+        this.widgets = [];
+        this.isReadonly = false;
+        this.cdr.markForCheck();
+
+        this.subscriptions.add(this.DashboardsService.getWidgetsForTab(tabId).subscribe(data => {
+            const widgets = data.widgets.Widget;
+            widgets.forEach(widget => {
+                const uuid = new UUID();
+
+                let widgetId = uuid.v4();
+                // All widgets should have an id from the database !
+                if (widget.id) {
+                    widgetId = widget.id.toString();
+                }
+
+                this.layout.push({
+                    id: widgetId,
+                    x: widget.col,
+                    y: widget.row,
+                    w: widget.width,
+                    h: widget.height
+                });
+
+                // Array for ngFor id has to be a string
+                const widgetForLayout: WidgetGetForRender = {...widget, id: widgetId}
+                this.widgets.push(widgetForLayout);
+            });
+
+            this.tabs.forEach(tab => {
+                if (tab.id === this.currentTabId) {
+                    if (tab.locked) {
+                        this.dashboardIsLocked = true;
+                        this.disableDrag = true;
+                        this.disableResize = true;
+                        this.disableRemove = true;
+                    } else {
+                        this.dashboardIsLocked = false;
+                        this.disableDrag = false;
+                        this.disableResize = false;
+                        this.disableRemove = false;
+                    }
+
+                    if (!tab.isOwner) {
+                        this.isReadonly = true;
+                        this.dashboardIsLocked = true;
+                        this.disableDrag = true;
+                        this.disableResize = true;
+                        this.disableRemove = true;
+                    }
+                }
+            });
+
 
             this.cdr.markForCheck();
         }));
     }
 
     public onTabChange(tabId: number): void {
-        console.log("todo implement onTabChange", tabId);
         this.currentTabId = tabId;
+
+        this.loadTabContent(this.currentTabId);
+
         this.cdr.markForCheck();
 
+    }
+
+    public onColorChange(color: string, widget: WidgetGetForRender): void {
+        this.widgets.forEach(w => {
+            if (w.id === widget.id) {
+                w.color = color;
+            }
+        });
+        this.saveGrid();
+    }
+
+    public saveGrid() {
+        if (this.dashboardIsLocked) {
+            return;
+        }
+
+        if (this.widgets.length === 0) {
+            return;
+        }
+
+        this.subscriptions.add(this.DashboardsService.saveGrid(this.widgets).subscribe(response => {
+            if (response.success) {
+                this.notyService.genericSuccess();
+                return;
+            }
+
+            // Error handling
+            this.notyService.genericError();
+        }));
     }
 
     public onDragStarted(event: KtdDragStart): void {
@@ -303,4 +400,9 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
         }
         return arrayCopy;
     }
+
+    public WidgetTrackById(index: number, item: WidgetGetForRender) {
+        return item.id;
+    }
+
 }

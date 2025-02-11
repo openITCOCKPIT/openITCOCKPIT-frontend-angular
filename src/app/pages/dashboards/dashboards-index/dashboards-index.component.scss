@@ -136,7 +136,7 @@
 
     // Add custom drag mouse styles
     ktd-grid-item {
-        cursor: grab;
+        /*cursor: grab;*/
 
         &.ktd-grid-item-dragging {
             cursor: grabbing;
