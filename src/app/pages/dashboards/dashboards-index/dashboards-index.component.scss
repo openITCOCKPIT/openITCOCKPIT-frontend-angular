@@ -91,6 +91,11 @@
         box-shadow: 0 0 13px 0 rgba(10, 71, 172, 0.08);
     }
 
+    ktd-grid-item:hover {
+        /* Fix z-index issue with the color picker */
+        z-index: 2;
+    }
+
     ktd-grid {
         transition: height 500ms ease;
     }

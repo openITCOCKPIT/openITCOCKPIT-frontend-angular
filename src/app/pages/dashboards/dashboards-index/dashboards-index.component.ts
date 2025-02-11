@@ -144,11 +144,8 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
             debounceTime(50),
             filter(() => this.autoResize)
         ).subscribe(() => {
-            console.log(this.grid);
-
             if (this.grid) {
                 this.grid.resize();
-                console.log('machen resize dinge!');
             }
         });
 
@@ -289,8 +286,19 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     }
 
     public onLayoutUpdated(layout: KtdGridLayout): void {
-        console.log('on layout updated', layout);
         this.layout = layout;
+
+        // Sync the layout with the widgets
+        this.widgets.forEach(widget => {
+            const layoutItem = layout.find(item => item.id === widget.id);
+            if (layoutItem) {
+                widget.row = layoutItem.y;
+                widget.col = layoutItem.x;
+                widget.width = layoutItem.w;
+                widget.height = layoutItem.h;
+            }
+        });
+        this.saveGrid();
     }
 
     public onCompactTypeChange(change: MatSelectChange): void {
@@ -403,6 +411,10 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
     public WidgetTrackById(index: number, item: WidgetGetForRender) {
         return item.id;
+    }
+
+    public toggleRenameWidgetModal(widget: WidgetGetForRender): void {
+        console.log('toggleRenameWidgetModal', widget);
     }
 
 }

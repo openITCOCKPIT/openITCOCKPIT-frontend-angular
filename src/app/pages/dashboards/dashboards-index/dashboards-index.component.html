@@ -116,6 +116,13 @@
 
                                     <c-nav class="card-toolbar card-header-pills">
 
+                                        <c-nav-item class="px-1" *ngIf="!dashboardIsLocked">
+                                            <button class="btn btn-sm btn-icon ripple btn-icon-hover-danger"
+                                                    (click)="toggleRenameWidgetModal(widget)">
+                                                <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                                            </button>
+                                        </c-nav-item>
+
                                         <c-nav-item class="px-1">
                                             <oitc-dashboard-colorpicker
                                                 (selectedColor)="onColorChange($event, widget)"></oitc-dashboard-colorpicker>
@@ -123,7 +130,6 @@
 
                                         <c-nav-item class="px-1" *ngIf="!disableRemove">
                                             <button class="btn btn-sm btn-icon ripple btn-icon-hover-danger"
-
                                                     (mousedown)="stopEventPropagation($event)"
                                                     (click)="removeItem(widget.id)">
                                                 <fa-icon [icon]="['fas', 'times']"></fa-icon>
