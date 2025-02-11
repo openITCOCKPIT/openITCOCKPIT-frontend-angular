@@ -1,10 +1,5 @@
 <ng-container *transloco="let t">
 
-    <button cButton class="ripple me-1" color="success" size="lg" cModalToggle="changeCalendarEditorModal"
-            (click)="showModal()">
-        <fa-icon [icon]="['fas', 'info']"></fa-icon>
-        {{ t('Open da fake editor bro') }}
-    </button>
     <c-modal #changeCalendarEditorModal fullscreen="md" id="changeCalendarEditorModal" size="xl">
         <c-modal-header>
             <h5 cCardTitle>

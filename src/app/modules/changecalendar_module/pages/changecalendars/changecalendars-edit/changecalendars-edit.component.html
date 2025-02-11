@@ -123,18 +123,15 @@
                     <oitc-form-feedback [errors]="errors" errorField="colour"></oitc-form-feedback>
                 </div>
 
-                <!-- Calendar here -->
                 <div class="mb-3">
                     <label cLabel for="post.changeCalendar.colour">
                         {{ t('Change calendar events') }}
                     </label>
                     <br/>
-                    <oitc-calendar
+                    <oitc-changecalendars-calendar
                             [(events)]="events"
                             (eventClick)="editEvent($event);"
-                            [showButtons]="false"
-                            (onCreateClick)="createEvent($event)"
-                    />
+                            (onCreateClick)="createEvent($event)"/>
                 </div>
             </c-card-body>
             <c-card-footer class="text-end">

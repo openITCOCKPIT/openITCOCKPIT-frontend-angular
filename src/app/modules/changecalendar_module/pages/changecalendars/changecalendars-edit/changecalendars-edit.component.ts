@@ -44,6 +44,9 @@ import { EventClickArg } from '@fullcalendar/core';
 import { TimezoneObject } from '../../../../../pages/services/timezone.interface';
 import { TimezoneService } from '../../../../../services/timezone.service';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import {
+    ChangecalendarsCalendarComponent
+} from '../../../components/changecalendars-calendar/changecalendars-calendar.component';
 
 @Component({
     selector: 'oitc-changecalendars-edit',
@@ -74,7 +77,8 @@ import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/de
         RouterLink,
         FormLoaderComponent,
         CalendarComponent,
-        ChangecalendarsEventEditorComponent
+        ChangecalendarsEventEditorComponent,
+        ChangecalendarsCalendarComponent
     ],
     templateUrl: './changecalendars-edit.component.html',
     styleUrl: './changecalendars-edit.component.css',
@@ -236,8 +240,6 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
         this.event.start = this.stripZone(new Date(this.event.start));
         this.event.end = this.stripZone(new Date(this.event.end));
 
-        console.warn(this.event);
-
         this.ModalService.toggle({
             show: true,
             id: 'changeCalendarEditorModal'
@@ -279,6 +281,13 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
             .subscribe((result: EditChangecalendar) => {
                 this.post = result;
                 this.events = result.events;
+
+                // Set the key "color" of every event from this.events to the colour from post.changeCalendar.color.
+                this.events.forEach((event: CalendarEvent) => {
+                    event.color = this.post.changeCalendar.colour;
+                });
+
+                console.warn(this.events );
                 this.cdr.markForCheck();
             }));
     }
