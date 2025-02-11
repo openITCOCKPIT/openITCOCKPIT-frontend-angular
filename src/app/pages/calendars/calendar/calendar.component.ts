@@ -109,20 +109,9 @@ export class CalendarComponent {
         return this._events;
     }
 
-    private _showButtons: boolean = true;
-    @Input()
-    set showButtons(showButtons: boolean) {
-        this._showButtons = showButtons;
-    }
-
-    get showButtons(): boolean {
-        return this._showButtons;
-    }
-
-    @Output() eventsChange = new EventEmitter<CalendarEvent[]>();
-
     @Input() public countries: Countries = {};
     @Input() public countryCode: string = 'de';
+    @Output() eventsChange = new EventEmitter<CalendarEvent[]>();
     @Output() countryCodeChange = new EventEmitter<string>();
 
     // Gets used by the add and edit holiday modal

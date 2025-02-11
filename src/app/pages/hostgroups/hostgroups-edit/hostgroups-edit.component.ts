@@ -117,12 +117,10 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
-        //First, load shit into the component.
         this.loadContainers();
         this.subscriptions.add(this.HostgroupsService.getEdit(id)
             .subscribe((result: HostgroupsEditGet) => {
 
-                // Then put post where it belongs. Also unpack that bullshit
                 this.post = result.hostgroup.Hostgroup;
                 this.cdr.markForCheck();
 

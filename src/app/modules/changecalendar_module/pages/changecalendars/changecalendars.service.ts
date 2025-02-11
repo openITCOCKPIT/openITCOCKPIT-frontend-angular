@@ -42,7 +42,9 @@ export class ChangecalendarsService {
                     returnData.events = [] as CalendarEvent[];
                     data.changeCalendar.changecalendar_events.forEach((event: ChangecalendarEvent) => {
                         returnData.events.push({
+                            originId: event.id as number,
                             start: event.start,
+                            end: event.end,
                             title: event.title,
                             default_holiday: false,
                             className: ''
@@ -71,7 +73,45 @@ export class ChangecalendarsService {
                     });
                 })
             );
+    }
 
+    public updateEvent(event: ChangecalendarEvent): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/changecalendar_module/changecalendars/events/${event.changecalendar_id}.json?angular=true`, {event: event})
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data.changeCalendar as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public addEvent(event: ChangecalendarEvent): Observable<GenericResponseWrapper> {
+        return this.http.post<any>(`${this.proxyPath}/changecalendar_module/changecalendars/events/${event.changecalendar_id}.json?angular=true`, {event: event})
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data.changeCalendar as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
     public addChangeCalendar(changeCalendar: AddChangeCalendar): Observable<GenericResponseWrapper> {
@@ -95,7 +135,15 @@ export class ChangecalendarsService {
     }
 
     public delete(item: DeleteAllItem): Observable<Object> {
-        return this.http.post(`${this.proxyPath}/changecalendar_module/changecalendars/delete/${item.id}.json`, {});
+        return this.http.post(`${this.proxyPath}/changecalendar_module/changecalendars/delete/${item.id}.json?angular=true`, {});
+    }
+
+    public deleteEvent(changecalendar: DeleteAllItem, event: DeleteAllItem): Observable<Object> {
+        return this.http.post(`${this.proxyPath}/changecalendar_module/changecalendars/deleteEvent/${changecalendar.id}.json?angular=true`, {
+            event: {
+                id: event.id
+            }
+        });
     }
 
     public getEvents(id: number): Observable<CalendarEvent[]> {

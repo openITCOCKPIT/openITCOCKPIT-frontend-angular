@@ -264,7 +264,6 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicegroupsService.loadServicegroupWithServicesById(this.servicegroupId, this.serviceParams)
             .subscribe((result: ServiceGroupExtendedRoot) => {
                 this.cdr.markForCheck();
-                // Then put post where it belongs. Also unpack that bullshit
                 this.servicegroupExtended = result;
                 this.userFullname = result.username;
             }));

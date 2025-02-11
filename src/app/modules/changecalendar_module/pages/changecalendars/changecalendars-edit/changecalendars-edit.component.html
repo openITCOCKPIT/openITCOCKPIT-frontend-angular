@@ -48,8 +48,12 @@
 
 
             <c-card-body>
-
-                <oitc-changecalendars-event-editor [event]="event"></oitc-changecalendars-event-editor>
+                <oitc-changecalendars-event-editor
+                        [event]="event"
+                        (onDeleteClick)="deleteEvent($event);"
+                        (onEventChange)="updateEvent($event)"
+                        (onEventCreate)="addEvent()"
+                ></oitc-changecalendars-event-editor>
                 <div class="mb-3">
                     <label cLabel for="post.changeCalendar.container_id">
                         {{ t('Container') }}
@@ -119,16 +123,15 @@
                     <oitc-form-feedback [errors]="errors" errorField="colour"></oitc-form-feedback>
                 </div>
 
-                <!-- Calendar here -->
                 <div class="mb-3">
                     <label cLabel for="post.changeCalendar.colour">
                         {{ t('Change calendar events') }}
                     </label>
                     <br/>
-                    <oitc-calendar
+                    <oitc-changecalendars-calendar
                             [(events)]="events"
-                            [showButtons]="false"
-                    />
+                            (eventClick)="editEvent($event);"
+                            (onCreateClick)="createEvent($event)"/>
                 </div>
             </c-card-body>
             <c-card-footer class="text-end">

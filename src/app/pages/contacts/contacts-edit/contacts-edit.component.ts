@@ -129,7 +129,6 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContactService.getEdit(this.contactId)
             .subscribe((result) => {
                 this.cdr.markForCheck();
-                // Then put post where it belongs. Also unpack that bullshit
                 this.post = result.contact.Contact;
                 this.requiredContainers = result.requiredContainers;
                 this.requiredContainersString = this.requiredContainers.join(',');
