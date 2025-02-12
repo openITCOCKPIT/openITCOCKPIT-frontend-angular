@@ -50,6 +50,7 @@ import {
     DashboardRenameWidgetModalComponent
 } from './dashboard-rename-widget-modal/dashboard-rename-widget-modal.component';
 import { DashboardRenameWidgetService } from './dashboard-rename-widget-modal/dashboard-rename-widget.service';
+import { DashboardAllocateModalComponent } from './dashboard-allocate-modal/dashboard-allocate-modal.component';
 
 @Component({
     selector: 'oitc-dashboards-index',
@@ -74,7 +75,8 @@ import { DashboardRenameWidgetService } from './dashboard-rename-widget-modal/da
         DashboardTabsComponent,
         NgClass,
         XsButtonDirective,
-        DashboardRenameWidgetModalComponent
+        DashboardRenameWidgetModalComponent,
+        DashboardAllocateModalComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',

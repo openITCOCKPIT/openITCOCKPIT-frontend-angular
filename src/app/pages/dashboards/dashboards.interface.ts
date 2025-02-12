@@ -21,14 +21,14 @@ export interface DashboardTab {
 }
 
 export interface DashboardTabAllocation {
-    id: number
+    id?: number                   // not present when creating
     name: string
     dashboard_tab_id: number
     container_id: number
-    user_id: number
+    user_id?: number            // not present when creating
     pinned: boolean
-    created: string
-    modified: string
+    created?: string            // not present when creating
+    modified?: string           // not present when creating
     usergroups: {
         _ids: number[]
     }

@@ -42,6 +42,7 @@ import { PermissionsService } from '../../../../permissions/permissions.service'
 import { FormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { DashboardAllocateModalService } from '../dashboard-allocate-modal/dashboard-allocate-modal.service';
 
 @Component({
     selector: 'oitc-dashboard-tabs',
@@ -103,6 +104,7 @@ export class DashboardTabsComponent implements OnDestroy {
 
     private readonly subscriptions: Subscription = new Subscription();
     private readonly DashboardsService = inject(DashboardsService);
+    private readonly DashboardAllocateModalService = inject(DashboardAllocateModalService);
 
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -232,6 +234,11 @@ export class DashboardTabsComponent implements OnDestroy {
                 }
             }));
         }
+    }
+
+    public allocateDashboard(tab: DashboardTab) {
+        // Pass the data to the modal
+        this.DashboardAllocateModalService.toggleAllocateModal(tab);
     }
 
 }
