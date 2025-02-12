@@ -69,7 +69,7 @@ import _ from 'lodash';
         NgForOf
     ],
     templateUrl: './autoreport-add-step-two.component.html',
-    styleUrl: './autoreport-add-step-two.component.css',
+    styleUrl: './../../../assets/autoreport.css', //'./autoreport-add-step-two.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
@@ -323,7 +323,7 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.AutoreportsService.setAddStepTwo(this.id, this.post).subscribe((result: GenericResponseWrapper): void => {
                     if (result.success) {
                         this.errors = null;
-                       // this.router.navigate(['/autoreport_module/autoreports/addStepTwo', result.data.autoreport.id]);
+                        this.router.navigate(['/autoreport_module/autoreports/editStepThree', result.data.autoreport.id]);
                     } else {
                         this.errors = result.data as GenericValidationError;
                         this.notyService.genericError();

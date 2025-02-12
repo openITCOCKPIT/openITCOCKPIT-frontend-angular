@@ -125,6 +125,19 @@ export class AutoreportsService {
         )
     }
 
+    public getEditStepThree(id: number): Observable<AutoreportObject> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{autoreport: AutoreportObject}>(`${proxyPath}/autoreport_module/autoreports/editStepThree/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.autoreport;
+            })
+        )
+    }
+
     public loadHosts (containerId: number, search: string, selected: number[]): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{

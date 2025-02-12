@@ -119,7 +119,6 @@
                         [searchCallback]="loadHosts"
                         (onChange)="onHostChange($event)"
                         [options]="hosts"
-                        [appendTo]="''"
                         oitcFormError [errors]="errors" errorField="report_send_interval">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="report_send_interval"></oitc-form-feedback>
@@ -272,7 +271,7 @@
                                 </c-form-check>
                             </td>
                         </tr>
-                        <ng-container *ngFor=" let host of hostsWithServices">
+                        <ng-container *ngFor="let host of hostsWithServices">
                         <tr class="host_row report-table-bordered"  *ngIf="post.Autoreport.hosts[host.id]">
                             <td class="host_option ps-1">{{host.name}}</td>
                             <td class="text-center">
@@ -431,7 +430,6 @@
                         </ng-container>
                     </table>
                 </c-row>
-
             </c-card-body>
         </c-card>
     </form>

@@ -1,6 +1,7 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 
 
+
 export interface AutoreportsIndexParams {
     angular: true,
     scroll: boolean,
@@ -70,12 +71,14 @@ export interface AutoreportObject {
     description?: string,
     container_id: number,
     timeperiod_id?: number,
+    timeperiod?: AutoreportTimeperiodEnity,
     report_interval?: string,
     report_send_interval?: string,
     consider_downtimes?: boolean,
     last_send_date?: string,
     min_availability_percent?: boolean,
     min_availability?: number,
+    min_availability_string?: string,
     check_hard_state?: boolean,
     use_start_time?: number,
     report_start_date?: string,
@@ -85,10 +88,13 @@ export interface AutoreportObject {
     last_number_of_outages?: number,
     failure_statistic?: number,
     consider_holidays?: number,
+    consider_holidays_string?: string,
     calendar_id?: number,
     max_number_of_outages?: number,
     created?: string
-    modified?: string
+    modified?: string,
+    users?: AutoreportUser[],
+    hostsWithServices?: AutoReportHostWithServicesObject[],
 }
 
 
@@ -122,15 +128,37 @@ export interface AutoreportServiceObject {
     id: number,
     host_id: number,
     servicename: string,
-    disabled: number
+    disabled?: number,
+    _joinData?: {
+        id: number,
+        "autoreport_id": number,
+        "host_id": number,
+        "service_id": number,
+        "outage_duration": number,
+        "configuration_option": number,
+        "graph_settings": string,
+        "created": string,
+        "modified": string
+    }
+
 
 }
 
 export interface AutoReportHostWithServicesObject {
     id: number,
     name: string,
+    _joinData?: {
+        id: number,
+        autoreport_id: number,
+        host_id: number,
+        outage_duration: number,
+        configuration_option: number,
+        created?: string,
+        modified?: string
+    },
     services: AutoreportServiceObject[]
 }
+
 
 export interface  PostHost {
     host_id: number,
@@ -157,4 +185,31 @@ export interface PostAutoreport {
         hosts: PostHost[],
         services: PostService[]
     }
+}
+
+export interface AutoreportUser {
+    id:number,
+    firstname: string,
+    lastname: string
+}
+
+export interface AutoreportTimeperiodEnity {
+    id: number
+    uuid: string
+    container_id: number
+    name: string
+    description: string
+    calendar_id: number
+    created: string
+    modified: string
+    timeperiod_timeranges?: Timerange[]
+}
+
+export interface Timerange {
+    day: string,
+    start: string,
+    end: string,
+    timeperiod_id?: number,
+    id?: number | null,
+    weekday?: string
 }

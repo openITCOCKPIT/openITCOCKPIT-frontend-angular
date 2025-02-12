@@ -86,7 +86,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         MultiSelectComponent,
     ],
   templateUrl: './autoreport-add-step-one.component.html',
-  styleUrl: './autoreport-add-step-one.component.css',
+  styleUrl: './../../../assets/autoreport.css', //'./autoreport-add-step-one.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
@@ -242,7 +242,7 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
 
     public submitStepOne() {
         this.errors = null;
-        this.AutoreportsService.setAddStepOne(this.post).subscribe((result: GenericResponseWrapper): void => {
+        this.subscriptions.add(this.AutoreportsService.setAddStepOne(this.post).subscribe((result: GenericResponseWrapper): void => {
                 if (result.success) {
                     this.errors = null;
                     this.router.navigate(['/autoreport_module/autoreports/addStepTwo', result.data.autoreport.id]);
@@ -252,7 +252,7 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
                 }
 
                 this.cdr.markForCheck();
-            }
+            })
         );
     }
 }
