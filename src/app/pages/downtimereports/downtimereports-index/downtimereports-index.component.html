@@ -69,20 +69,20 @@
                 </label>
                 <div class="mb-3">
                     <c-form-check [inline]="true">
-                        <input cFormCheckInput type="radio" [value]="1"
-                               id="evaluation_type1"
+                        <input cFormCheckInput type="radio" [value]="0"
+                               id="evaluation_type0"
                                [(ngModel)]="post.evaluation_type" name="evaluationType"/>
-                        <label cFormCheckLabel for="evaluation_type1">
+                        <label cFormCheckLabel for="evaluation_type0">
                             <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                             {{ t('Hosts') }}
                         </label>
                     </c-form-check>
 
                     <c-form-check [inline]="true">
-                        <input cFormCheckInput type="radio" [value]="2"
-                               id="evaluation_type2"
+                        <input cFormCheckInput type="radio" [value]="1"
+                               id="evaluation_type1"
                                [(ngModel)]="post.evaluation_type" name="evaluationType"/>
-                        <label cFormCheckLabel for="evaluation_type2">
+                        <label cFormCheckLabel for="evaluation_type1">
                             <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                             {{ t('Hosts and Services') }}
                         </label>
