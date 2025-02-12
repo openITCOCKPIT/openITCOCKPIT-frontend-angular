@@ -248,6 +248,31 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
     }
 
+    public onDeleteTab(tabId: number) {
+        if (this.dashboardIsLocked) {
+            return;
+        }
+
+        this.subscriptions.add(this.DashboardsService.deleteDashboardTab(tabId).subscribe(response => {
+            if (response.success) {
+
+                // Remove the tab from the local array
+                this.tabs = this.tabs.filter(tab => tab.id !== tabId);
+
+                if (this.tabs.length > 0) {
+                    this.loadTabContent(this.tabs[0].id);
+                    this.currentTabId = this.tabs[0].id;
+                } else {
+                    //All tabs where removed.
+                    //Reload page to get new default tab
+                    // todo improve this
+                    window.location.href = '/';
+                }
+            }
+        }));
+
+    }
+
     public onColorChange(color: string, widget: WidgetGetForRender): void {
         this.widgets.forEach(w => {
             if (w.id === widget.id) {
