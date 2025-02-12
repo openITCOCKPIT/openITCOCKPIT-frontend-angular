@@ -40,6 +40,7 @@
                             [ngClass]="{'active': selectedTab === DowntimereportsEnum.Edit}"
                             (click)="changeTab(DowntimereportsEnum.Edit)">
                         <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                        {{ t('Generator') }}
                     </button>
                 </c-nav-item>
                 <c-nav-item *ngIf="report">
@@ -48,6 +49,7 @@
                             [ngClass]="{'active': selectedTab === DowntimereportsEnum.Calendar}"
                             (click)="changeTab(DowntimereportsEnum.Calendar)">
                         <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
+                        {{ t('Calendar view') }}
                     </button>
                 </c-nav-item>
                 <c-nav-item *ngIf="report">
@@ -56,6 +58,7 @@
                             [ngClass]="{'active': selectedTab === DowntimereportsEnum.PieChart}"
                             (click)="changeTab(DowntimereportsEnum.PieChart)">
                         <fa-icon [icon]="['fas', 'pie-chart']"></fa-icon>
+                        {{ t('Chart view') }}
                     </button>
                 </c-nav-item>
             </c-nav>
@@ -219,6 +222,9 @@
                 </div>
             </ng-container>
             <ng-container *ngIf="selectedTab === DowntimereportsEnum.Calendar">
+
+                <full-calendar #fullCalendar [options]="calendarOptions()">
+                </full-calendar>
                 Calendar SH!T
             </ng-container>
             <ng-container *ngIf="selectedTab === DowntimereportsEnum.PieChart">

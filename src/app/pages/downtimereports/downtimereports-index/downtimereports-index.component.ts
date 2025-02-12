@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+    signal
+} from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -37,6 +45,14 @@ import { TimeperiodsService } from '../../timeperiods/timeperiods.service';
 import { TimeperiodIndex, TimeperiodsIndexParams } from '../../timeperiods/timeperiods.interface';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { DowntimereportsService } from '../downtimereports.service';
+import { CalendarEvent } from '../../calendars/calendars.interface';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarOptions } from '@fullcalendar/core';
+import interactionPlugin from '@fullcalendar/interaction';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
 
 @Component({
     selector: 'oitc-downtimereports-index',
@@ -67,7 +83,8 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         XsButtonDirective,
         TrueFalseDirective,
         BadgeComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        FullCalendarModule
     ],
     templateUrl: './downtimereports-index.component.html',
     styleUrl: './downtimereports-index.component.css',
@@ -78,6 +95,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
+    private readonly DowntimereportsService: DowntimereportsService = inject(DowntimereportsService);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly TimeperiodsService: TimeperiodsService = inject(TimeperiodsService);
 
@@ -90,12 +108,15 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
         {value: this.TranslocoService.translate('soft and hard state'), key: 1},
         {value: this.TranslocoService.translate('only hard state'), key: 2}
     ];
-    protected timeperiods: SelectKeyValue[] = [];
+
     protected selectedTab: DowntimereportsEnum = DowntimereportsEnum.Edit;
-    protected errors: GenericValidationError = {} as GenericValidationError;
+    protected timeperiods: SelectKeyValue[] = [];
     protected post: DowntimeReportsRequest = getDefaultDowntimeReportsRequest();
+    protected errors: GenericValidationError = {} as GenericValidationError;
     protected dynamicColour: boolean = false;
+
     protected report?: DowntimeReportsResponse;
+    protected events: CalendarEvent[] = [];
 
     public ngOnInit() {
         this.loadTimeperiods();
@@ -105,9 +126,65 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
+    calendarOptions = signal<CalendarOptions>({
+        plugins: [
+            interactionPlugin,
+            dayGridPlugin,
+            timeGridPlugin,
+            listPlugin,
+        ],
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        },
+        initialView: 'dayGridMonth',
+        //initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
+        events: this.events,
+        weekends: true,
+        editable: true,
+        selectable: true,
+        selectMirror: true,
+        businessHours: true,
+        weekNumbers: true,
+        weekNumberCalculation: 'ISO',
+        eventOverlap: false,
+        eventDurationEditable: false,
+        datesSet: this.handleDatesSet.bind(this),
+        droppable: false,
+        dragScroll: false,
+        eventDragMinDistance: 999999999,
+    });
+
+    public handleDatesSet(dateInfo: { startStr: string, endStr: string, start: Date, end: Date, view: any }) {
+        //console.log('handleDatesSet', dateInfo);
+        this.calendarOptions.update(options => ({...options, events: this.events}));
+    }
+
     protected submit(): void {
         console.log(this.post);
         this.report = {} as DowntimeReportsResponse;
+
+
+        this.subscriptions.add(this.DowntimereportsService.getIndex(this.post)
+            .subscribe((result: DowntimeReportsResponse) => {
+                this.report = result;
+
+                this.report.downtimeReport?.downtimes.Hosts.forEach((element) => {
+                    this.events.push({
+                        default_holiday: false,
+                        className: '',
+                        title: element.Hosts.name,
+                        start: element.scheduled_start_time,
+                        end: element.scheduled_end_time
+                    });
+                });
+
+                console.warn(this.report);
+                console.warn(this.events);
+                this.cdr.markForCheck();
+            })
+        );
     }
 
     private loadTimeperiods(): void {
