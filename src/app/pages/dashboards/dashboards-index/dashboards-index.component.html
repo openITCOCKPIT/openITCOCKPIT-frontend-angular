@@ -18,7 +18,9 @@
             <h5 class="my-1">{{ t('Dashboard') }}</h5>
             <oitc-dashboard-tabs [tabs]="tabs"
                                  [currentTabId]="currentTabId"
-                                 (changeTabEvent)="onTabChange($event)"></oitc-dashboard-tabs>
+                                 [dashboardIsLocked]="dashboardIsLocked"
+                                 (changeTabEvent)="onTabChange($event)"
+                                 (deleteTabEvent)="onDeleteTab($event)"></oitc-dashboard-tabs>
 
             <c-nav class="card-toolbar card-header-pills ms-auto">
                 <c-nav-item class="px-1">
@@ -117,7 +119,7 @@
                                     <c-nav class="card-toolbar card-header-pills">
 
                                         <c-nav-item class="px-1" *ngIf="!dashboardIsLocked">
-                                            <button class="btn btn-sm btn-icon ripple btn-icon-hover-danger"
+                                            <button class="btn btn-sm btn-icon ripple btn-icon-hover-primary"
                                                     (click)="toggleRenameWidgetModal(widget)">
                                                 <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
                                             </button>
@@ -159,3 +161,6 @@
     </c-card>
 
 </ng-container>
+
+<oitc-dashboard-rename-widget-modal
+    (titleChangedEvent)="onWidgetTitleChanged($event)"></oitc-dashboard-rename-widget-modal>

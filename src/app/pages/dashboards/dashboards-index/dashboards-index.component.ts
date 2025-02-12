@@ -46,6 +46,10 @@ import { DashboardTabsComponent } from './dashboard-tabs/dashboard-tabs.componen
 import { UUID } from '../../../classes/UUID';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {
+    DashboardRenameWidgetModalComponent
+} from './dashboard-rename-widget-modal/dashboard-rename-widget-modal.component';
+import { DashboardRenameWidgetService } from './dashboard-rename-widget-modal/dashboard-rename-widget.service';
 
 @Component({
     selector: 'oitc-dashboards-index',
@@ -69,7 +73,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         DashboardColorpickerComponent,
         DashboardTabsComponent,
         NgClass,
-        XsButtonDirective
+        XsButtonDirective,
+        DashboardRenameWidgetModalComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
@@ -93,6 +98,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
     private readonly subscriptions: Subscription = new Subscription();
     private readonly DashboardsService = inject(DashboardsService);
+    private readonly DashboardRenameWidgetService = inject(DashboardRenameWidgetService);
 
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -148,6 +154,8 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                 this.grid.resize();
             }
         });
+
+        this.subscriptions.add(this.resizeSubscription);
 
         this.loadDashboardsIndex();
     }
@@ -237,6 +245,31 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
         this.loadTabContent(this.currentTabId);
 
         this.cdr.markForCheck();
+
+    }
+
+    public onDeleteTab(tabId: number) {
+        if (this.dashboardIsLocked) {
+            return;
+        }
+
+        this.subscriptions.add(this.DashboardsService.deleteDashboardTab(tabId).subscribe(response => {
+            if (response.success) {
+
+                // Remove the tab from the local array
+                this.tabs = this.tabs.filter(tab => tab.id !== tabId);
+
+                if (this.tabs.length > 0) {
+                    this.loadTabContent(this.tabs[0].id);
+                    this.currentTabId = this.tabs[0].id;
+                } else {
+                    //All tabs where removed.
+                    //Reload page to get new default tab
+                    // todo improve this
+                    window.location.href = '/';
+                }
+            }
+        }));
 
     }
 
@@ -398,6 +431,15 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     public removeItem(id: string): void {
         // Important: Don't mutate the array. Let Angular know that the layout has changed creating a new reference.
         this.layout = this.ktdArrayRemoveItem(this.layout, (item) => item.id === id);
+        this.widgets = this.ktdArrayRemoveItem(this.widgets, (item) => item.id === id);
+
+        this.subscriptions.add(this.DashboardsService.removeWidget(Number(id), this.currentTabId).subscribe(response => {
+            if (response.success) {
+                this.notyService.genericSuccess();
+            } else {
+                this.notyService.genericError();
+            }
+        }));
     }
 
     public ktdArrayRemoveItem<T>(array: T[], condition: (item: T) => boolean) {
@@ -414,7 +456,17 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     }
 
     public toggleRenameWidgetModal(widget: WidgetGetForRender): void {
-        console.log('toggleRenameWidgetModal', widget);
+        // Toggle the modal through the service and pass data
+        this.DashboardRenameWidgetService.toggleRenameWidgetModal(widget.id, widget.title);
+    }
+
+    public onWidgetTitleChanged(event: { id: string, title: string }) {
+        // Widget title changed and also update in the database. All we need to do, is to update the title in the local array of widgets
+        this.widgets.forEach(widget => {
+            if (widget.id === event.id) {
+                widget.title = event.title;
+            }
+        });
     }
 
 }
