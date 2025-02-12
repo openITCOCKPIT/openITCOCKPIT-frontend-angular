@@ -106,7 +106,8 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     }
 
     protected submit(): void {
-        console.log('HAHA, Hier passiert noch nix, bro.');
+        console.log(this.post);
+        this.report = {} as DowntimeReportsResponse;
     }
 
     private loadTimeperiods(): void {
