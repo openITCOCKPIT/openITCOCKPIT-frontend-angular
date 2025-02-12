@@ -182,6 +182,9 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
 
                 console.warn(this.report);
                 console.warn(this.events);
+
+                this.changeTab(DowntimereportsEnum.Calendar);
+
                 this.cdr.markForCheck();
             })
         );
