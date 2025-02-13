@@ -1,0 +1,41 @@
+<ng-container *transloco="let t">
+    <c-modal #dashboardUpdateAvailableModal fullscreen="md" id="dashboardUpdateAvailableModal" size="lg">
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+                {{ t('For your dashboard is an update available') }}
+            </h5>
+            <button [cModalToggle]="dashboardUpdateAvailableModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+            <c-row>
+                <c-col [xs]="12" class="text-info">
+                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                    {{ t('You created this dashboard out of an "shared" dashboard. The original dashboard was updated.') }}
+                    <br/>
+                    {{ t('This means the original dashboard was reorder, new objects where added or existing objects gets deleted.') }}
+                    {{ t('You can now choose if you want to update your dashboard or keep your current dashboard.') }}
+                    <br/><br/>
+                    {{ t('Warning: By updating your dashboard, local modifications will get lost.') }}
+                </c-col>
+            </c-row>
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="neverPerformUpdates()"
+                    cButton color="danger" class="ripple me-auto" type="button">
+                {{ t('Never perform an update for this dashboard') }}
+            </button>
+
+            <button (click)="performUpdate()" cButton color="primary" class="ripple" type="button">
+                {{ t('Yes update') }}
+            </button>
+            <button [cModalToggle]="dashboardUpdateAvailableModal.id" cButton color="default" class="ripple"
+                    type="button">
+                {{ t('No thanks') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+
+</ng-container>
