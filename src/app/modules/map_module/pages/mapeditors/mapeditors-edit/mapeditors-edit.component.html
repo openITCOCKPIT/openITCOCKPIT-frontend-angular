@@ -927,9 +927,11 @@
                         <div class="mb-3">
                             <label cLabel for="mapGadgetMetric">
                                 {{ t('Select metric') }}
+                                <oitc-required-icon></oitc-required-icon>
                             </label>
 
                             <oitc-select
+                                required
                                 name="mapGadgetMetric"
                                 id="mapGadgetMetric"
                                 optionValue="key"
@@ -940,6 +942,29 @@
                                 oitcFormError [errors]="errors" errorField="metric">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="metric"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row [hidden]="!(currentItem.gadget == 'ServiceOutput')">
+                    <c-col lg="12" class="form-group">
+                        <div class="mb-3">
+                            <label cLabel for="mapGadgetOutputType">
+                                {{ t('Select output type') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+
+                            <oitc-select
+                                required
+                                name="mapGadgetOutputType"
+                                id="mapGadgetOutputType"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="currentItem.output_type"
+                                [options]="mapGadgetsOutputTypes"
+                                [appendTo]="addEditMapGadgetModal"
+                                oitcFormError [errors]="errors" errorField="output_type">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="output_type"></oitc-form-feedback>
                         </div>
                     </c-col>
                 </c-row>

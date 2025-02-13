@@ -262,6 +262,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         {key: 'servicegroup', value: this.TranslocoService.translate('Servicegroup')},
         {key: 'stateless', value: this.TranslocoService.translate('Stateless line')}
     ];
+    public mapGadgetsOutputTypes = [
+        {key: 'service_output', value: this.TranslocoService.translate('Service output')},
+        {key: 'service_long_output', value: this.TranslocoService.translate('Service long output')}
+    ];
     public requiredIcons: string[] = [];
     public gadgetPreviews: GadgetPreviews[] = [];
 
@@ -1014,6 +1018,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.MapeditorsService.getPerformanceDataMetrics(this.currentItem.object_id)
             .subscribe((result) => {
                 let metrics: { key: string, value: string }[] = [];
+                this.currentItem.metric = null;
 
                 let firstMetric = null;
 
