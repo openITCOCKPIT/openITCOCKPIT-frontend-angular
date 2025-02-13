@@ -1,42 +1,45 @@
-<button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())">
-    @if (flipped()) {
-        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-    } @else {
-        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-    }
-</button>
-
-<div [@flip]="flipped()" class="box-container">
-    <div class="box-x">
-        <div
-            [ngClass]="{'new-flame-bg': CustomalertsFilter.Customalerts.state === 0, 'bg-secondary': CustomalertsFilter.Customalerts.state === 1, 'bg-success': CustomalertsFilter.Customalerts.state === 2,'bg-primary-700': CustomalertsFilter.Customalerts.state === 3}"
-            class="w-100"
-            style="height:220px;">
-            <c-row *ngIf="statusCount !== null" class="h-100 align-items-center">
-                <c-col class="text-center text-white">
-                    {{ statusCount }}
-                </c-col>
-            </c-row>
-            @switch (CustomalertsFilter.Customalerts.state) {
-                @case (0) {
-                    <fa-icon [icon]="['fas', 'fire-flame-curved']"
-                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                }
-                @case (1) {
-                    <fa-icon [icon]="['fas', 'person-digging']"
-                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                }
-                @case (2) {
-                    <fa-icon [icon]="['fas', 'clipboard-check']"
-                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                }
-                @case (3) {
-                    <fa-icon [icon]="['fas', 'folder-closed']"
-                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                }
+<div class="d-flex h-100 flex-column" #boxContainer>
+    <div>
+        <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())">
+            @if (flipped()) {
+                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+            } @else {
+                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
             }
-        </div>
-
+        </button>
     </div>
-    <div class="box-x">Side B</div>
+
+    <div [@flip]="flipped()" class="box-container">
+        <div class="box-x">
+            <div [style.height.px]="boxHeight"
+                 [ngClass]="{'new-flame-bg': CustomalertsFilter.Customalerts.state === 0, 'bg-secondary': CustomalertsFilter.Customalerts.state === 1, 'bg-success': CustomalertsFilter.Customalerts.state === 2,'bg-primary-700': CustomalertsFilter.Customalerts.state === 3}"
+                 class="w-100">
+                <c-row *ngIf="statusCount !== null" class="h-100 align-items-center">
+                    <c-col class="text-center text-white">
+                        {{ statusCount }}
+                    </c-col>
+                </c-row>
+                @switch (CustomalertsFilter.Customalerts.state) {
+                    @case (0) {
+                        <fa-icon [icon]="['fas', 'fire-flame-curved']"
+                                 class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                    }
+                    @case (1) {
+                        <fa-icon [icon]="['fas', 'person-digging']"
+                                 class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                    }
+                    @case (2) {
+                        <fa-icon [icon]="['fas', 'clipboard-check']"
+                                 class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                    }
+                    @case (3) {
+                        <fa-icon [icon]="['fas', 'folder-closed']"
+                                 class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                    }
+                }
+            </div>
+
+        </div>
+        <div class="box-x">Side B</div>
+    </div>
 </div>

@@ -1,12 +1,15 @@
 import {
+    AfterViewInit,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    ElementRef,
     inject,
     Input,
     OnDestroy,
     OnInit,
-    signal
+    signal,
+    ViewChild
 } from '@angular/core';
 import { WidgetGetForRender } from '../../../../pages/dashboards/dashboards.interface';
 import { Subscription } from 'rxjs';
@@ -42,7 +45,7 @@ import { WidgetTypes } from '../../../../pages/dashboards/widgets/widgets.enum';
         ])
     ]
 })
-export class CustomalertsWidgetComponent implements OnInit, OnDestroy {
+export class CustomalertsWidgetComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() widget!: WidgetGetForRender;
     private readonly subscriptions: Subscription = new Subscription();
     private readonly CustomAlertsService = inject(CustomAlertsService);
@@ -50,12 +53,18 @@ export class CustomalertsWidgetComponent implements OnInit, OnDestroy {
     public statusCount: number | null = null;
     public readOnly: boolean = true;
     protected flipped = signal<boolean>(false);
+    public boxHeight: number = 0;
 
     private cdr = inject(ChangeDetectorRef);
 
+    @ViewChild('boxContainer') boxContainer?: ElementRef;
+
     public ngOnInit(): void {
+
+        const element = document.getElementById("HTML element");
         this.load();
     }
+
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -74,4 +83,9 @@ export class CustomalertsWidgetComponent implements OnInit, OnDestroy {
     }
 
     protected readonly WidgetTypes = WidgetTypes;
+
+    public ngAfterViewInit(): void {
+        this.boxHeight = this.boxContainer?.nativeElement.offsetHeight - 21; //21px height of button
+        this.cdr.markForCheck();
+    }
 }
