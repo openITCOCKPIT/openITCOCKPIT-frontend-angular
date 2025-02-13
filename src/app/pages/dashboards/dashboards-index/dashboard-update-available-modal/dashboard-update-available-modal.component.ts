@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -6,6 +6,7 @@ import {
     ModalComponent,
     ModalFooterComponent,
     ModalHeaderComponent,
+    ModalService,
     ModalTitleDirective,
     ModalToggleDirective,
     RowComponent
@@ -40,12 +41,24 @@ export class DashboardUpdateAvailableModalComponent {
 
     public decisionEvent = output<'PerformUpdate' | 'NeverPerformUpdate'>();
 
+    private readonly modalService = inject(ModalService);
+
     public neverPerformUpdates() {
         this.decisionEvent.emit('NeverPerformUpdate');
+
+        this.modalService.toggle({
+            show: false,
+            id: 'dashboardUpdateAvailableModal',
+        });
     }
 
     public performUpdate() {
         this.decisionEvent.emit('PerformUpdate');
+
+        this.modalService.toggle({
+            show: false,
+            id: 'dashboardUpdateAvailableModal',
+        });
     }
 
 }

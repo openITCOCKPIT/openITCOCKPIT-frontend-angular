@@ -33,6 +33,7 @@ import {
     CardHeaderComponent,
     CardTextDirective,
     CardTitleDirective,
+    ModalService,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -108,6 +109,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
+    private readonly modalService = inject(ModalService);
 
     private cdr = inject(ChangeDetectorRef);
 
@@ -486,8 +488,60 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.DashboardsService.checkForUpdates(tabId).subscribe(response => {
             if (response.updateAvailable) {
                 // For the tab is an update available - toggle the modal to inform the user
+                this.modalService.toggle({
+                    show: true,
+                    id: 'dashboardUpdateAvailableModal',
+                });
             }
         }));
+    }
+
+    public handleUpdateDecisionEvent(event: 'PerformUpdate' | 'NeverPerformUpdate') {
+        const tab = this.tabs.find(tab => tab.id === this.currentTabId);
+        if (!tab) {
+            return;
+        }
+
+        if (event === 'PerformUpdate') {
+            // Perform the update
+            this.subscriptions.add(this.DashboardsService.updateSharedTab(tab.id).subscribe(response => {
+                if (response.success) {
+
+                    // actually the server response with more fields but this is all we need
+                    const data = response.data as unknown as { DashboardTab: { locked: boolean } };
+
+                    this.notyService.genericSuccess(
+                        this.TranslocoService.translate('Dashboard has been updated.')
+                    );
+
+                    tab.locked = data.DashboardTab.locked;
+
+                    this.dashboardIsLocked = tab.locked;
+                    this.disableDrag = tab.locked;
+                    this.disableResize = tab.locked;
+                    this.disableRemove = tab.locked;
+
+                    this.loadTabContent(tab.id);
+                    return;
+                }
+
+                this.notyService.genericError(
+                    this.TranslocoService.translate('An error occurred while updating the dashboard.')
+                );
+            }));
+
+        } else {
+            // Never perform the update
+            // Disable the check for updates for this tab
+            this.subscriptions.add(this.DashboardsService.neverPerformUpdates(tab.id).subscribe(response => {
+                if (response.success) {
+                    tab.check_for_updates = false;
+                    this.notyService.genericSuccess(
+                        this.TranslocoService.translate('Updates have been disabled for this tab.')
+                    );
+                }
+            }));
+        }
     }
 
 }
