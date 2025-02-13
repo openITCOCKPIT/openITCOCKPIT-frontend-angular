@@ -49,7 +49,7 @@ export class CustomalertsWidgetComponent implements OnInit, OnDestroy {
     public CustomalertsFilter: CustomAlertsWidgetFilter = getCustomAlertsWidgetParams();
     public statusCount: number | null = null;
     public readOnly: boolean = true;
-    protected flipped = signal(false);
+    protected flipped = signal<boolean>(false);
 
     private cdr = inject(ChangeDetectorRef);
 
