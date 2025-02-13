@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject, Input, OnDestroy, OnInit, signal } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    signal
+} from '@angular/core';
 import { WidgetGetForRender } from '../../../../pages/dashboards/dashboards.interface';
 import { Subscription } from 'rxjs';
 import { CustomAlertsService } from '../../pages/customalerts/customalerts.service';
@@ -35,12 +44,14 @@ import { WidgetTypes } from '../../../../pages/dashboards/widgets/widgets.enum';
 })
 export class CustomalertsWidgetComponent implements OnInit, OnDestroy {
     @Input() widget!: WidgetGetForRender;
-    private subscriptions: Subscription = new Subscription();
+    private readonly subscriptions: Subscription = new Subscription();
     private readonly CustomAlertsService = inject(CustomAlertsService);
     public CustomalertsFilter: CustomAlertsWidgetFilter = getCustomAlertsWidgetParams();
     public statusCount: number | null = null;
     public readOnly: boolean = true;
     protected flipped = signal(false);
+
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.load();
@@ -57,6 +68,7 @@ export class CustomalertsWidgetComponent implements OnInit, OnDestroy {
                 this.CustomalertsFilter = data.config;
                 this.statusCount = data.statusCount;
                 //this.readOnly = this.widget.is;
+                this.cdr.markForCheck();
             })
         );
     }
