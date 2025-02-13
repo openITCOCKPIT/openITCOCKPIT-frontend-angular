@@ -35,45 +35,34 @@
         </c-card-header>
         <c-card-body>
 
-            <c-row class="m-0 text-center mb-3" style="min-height: 40px;">
+            <c-row class="m-0 text-center mb-3" style="min-height: 22px;">
                 <div
-                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center">
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
                     <span>
                         <!--<fa-icon [icon]="['fas', 'info-circle']"></fa-icon>-->
                         <c-badge color="secondary">1</c-badge>
                     </span>
-                    <span class="m-2">
+                    <span class="ms-1">
                         {{ t('Report configuration') }}
-                    </span>
-                    <span>
-                        <fa-icon [icon]="['fas', 'chevron-right']" size="2x"></fa-icon>
                     </span>
                 </div>
                 <div
-                    class="col-xs-12 col-md-4 col-lg-3 wizard-bg-inactive d-inline-flex align-items-center justify-content-center">
+                    class="col-xs-12 col-md-4 col-lg-3 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
                     <span>
-                        <!--<fa-icon [icon]="['fas', 'info-circle']"></fa-icon>-->
                         <c-badge color="secondary">2</c-badge>
                     </span>
-                    <span class="m-2">
+                    <span class="ms-1">
                         {{ t('Host and services configuration') }}
 
-                    </span>
-                    <span class="m-2">
-                        <fa-icon [icon]="['fas', 'chevron-right']" size="2x"></fa-icon>
                     </span>
                 </div>
                 <div
                     class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-border-right  wizard-active">
                     <span>
-                        <!--<fa-icon [icon]="['fas', 'info-circle']"></fa-icon>-->
-                        <c-badge color="info">3</c-badge>
+                        <c-badge color="secondary">3</c-badge>
                     </span>
-                    <span class="m-2">
+                    <span class="ms-1">
                         {{ t('Report details') }}
-                    </span>
-                    <span>
-                        <fa-icon [icon]="['fas', 'chevron-right']" size="2x"></fa-icon>
                     </span>
                 </div>
                 <div class="col-lg-3 wizard-bg-inactive d-inline-flex">
@@ -88,10 +77,10 @@
                             {{ t('Prev') }}
                         </button>
 
-                        <button type="submit" class="btn btn-success h-100"
+                        <button type="button" class="btn btn-success h-100"
                                 style="border-radius: 0;"
                                 [title]="'Next' | transloco"
-                        >
+                                [routerLink]="['/', 'autoreport_module', 'autoreports', 'index']">
                             {{ t('Next') }}
                             <i class="fa fa-arrow-right"></i>
                         </button>
