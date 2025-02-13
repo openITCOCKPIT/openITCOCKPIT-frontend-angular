@@ -82,9 +82,9 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
     constructor(parent: MapCanvasComponent) {
         super(parent);
         effect(() => {
+            this.onObjectIdChange();
             this.onSizeXShowLabelChange();
             this.onMetricChange();
-            this.onObjectIdChange();
         });
     }
 

@@ -74,8 +74,8 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
     constructor(parent: MapCanvasComponent, private renderer: Renderer2) {
         super(parent);
         effect(() => {
-            this.onSizeLabelChange();
             this.onObjectIdChange();
+            this.onSizeLabelChange();
         });
     }
 

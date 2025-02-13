@@ -134,8 +134,8 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
             this.cdr.markForCheck();
         }));
         effect(() => {
-            this.onItemSizeXShowLabel();
             this.onObjectIdChange();
+            this.onItemSizeXShowLabel();
             this.onMetricChange();
         });
     }

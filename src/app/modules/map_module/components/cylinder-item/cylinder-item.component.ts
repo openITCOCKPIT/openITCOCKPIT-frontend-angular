@@ -64,8 +64,8 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
     constructor(parent: MapCanvasComponent, private renderer: Renderer2) {
         super(parent);
         effect(() => {
-            this.onSizeXShowLabelMetricChange();
             this.onObjectIdChange();
+            this.onSizeXShowLabelMetricChange();
         });
     }
 

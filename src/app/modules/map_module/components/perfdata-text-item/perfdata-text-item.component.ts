@@ -57,8 +57,8 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
     constructor(parent: MapCanvasComponent) {
         super(parent);
         effect(() => {
-            this.onSizeLabelMetricChange();
             this.onObjectIdChange();
+            this.onSizeLabelMetricChange();
         });
     }
 

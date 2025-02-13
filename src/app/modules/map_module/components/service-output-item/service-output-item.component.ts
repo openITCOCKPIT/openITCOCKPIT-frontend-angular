@@ -56,8 +56,8 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
     constructor(parent: MapCanvasComponent) {
         super(parent);
         effect(() => {
-            this.onSizeXShowLabelOutputTypeChange();
             this.onObjectIdChange();
+            this.onSizeXShowLabelOutputTypeChange();
         });
     }
 

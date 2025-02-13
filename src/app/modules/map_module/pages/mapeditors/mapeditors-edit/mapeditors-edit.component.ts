@@ -298,8 +298,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 this.Mapeditor = result.config.Mapeditor;
                 this.maxUploadLimit = result.maxUploadLimit;
                 this.maxZIndex = result.max_z_index;
-                //this.requiredIcons = result.requiredIcons;
-                //this.gadgetPreviews = result.gadgetPreviews;
+                this.requiredIcons = result.requiredIcons;
+                this.gadgetPreviews = result.gadgetPreviews;
                 this.layers = [];
                 for (let layer in result.layers) {
                     this.layers.push({
@@ -437,8 +437,13 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     }
 
-    public onItemChange(objectName: keyof MapRoot) {
+    public onItemsChange(objectName: keyof MapRoot) {
         this.map[objectName] = [...this.map[objectName]];
+        this.cdr.markForCheck();
+    }
+
+    public onItemChange(objectName: keyof MapRoot, index: number) {
+        this.map[objectName][index] = {...this.map[objectName][index]};
         this.cdr.markForCheck();
     }
 
@@ -493,7 +498,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 for (let i in this.map[objectName as keyof MapRoot]) {
                     if (this.map[objectName as keyof MapRoot][i].z_index === key) {
                         this.map[objectName as keyof MapRoot][i].display = false;
-                        this.onItemChange(objectName);
+                        this.onItemsChange(objectName);
                     }
                 }
             }
@@ -517,7 +522,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 for (let i in this.map[objectName as keyof MapRoot]) {
                     if (this.map[objectName as keyof MapRoot][i].z_index === key) {
                         this.map[objectName as keyof MapRoot][i].display = true;
-                        this.onItemChange(objectName);
+                        this.onItemsChange(objectName);
                     }
                 }
             }
@@ -1109,13 +1114,18 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 //Update possition in current scope json data
                 if (this.currentItem.hasOwnProperty('id')) {
+                    let itemIndex: number | undefined;
                     for (let i in this.map.Mapitems) {
                         if (this.map.Mapitems[i].id == this.currentItem.id) {
+                            itemIndex = Number(i);
                             this.map.Mapitems[i].x = this.currentItem.x;
                             this.map.Mapitems[i].y = this.currentItem.y;
                             //We are done here
                             break;
                         }
+                    }
+                    if (itemIndex) {
+                        this.onItemChange('Mapitems', itemIndex);
                     }
                 } else {
                     //New created item
@@ -1240,8 +1250,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 //Update possition in current scope json data
                 if (this.currentItem.hasOwnProperty('id')) {
+                    let itemIndex: number | undefined;
                     for (let i in this.map.Maplines) {
                         if (this.map.Maplines[i].id == this.currentItem.id) {
+                            itemIndex = Number(i);
                             this.map.Maplines[i].startY = this.currentItem.startY;
                             this.map.Maplines[i].endX = this.currentItem.endX;
                             this.map.Maplines[i].endY = this.currentItem.endY;
@@ -1250,6 +1262,9 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                             //We are done here
                             break;
                         }
+                    }
+                    if (itemIndex) {
+                        this.onItemChange('Maplines', itemIndex);
                     }
                 } else {
                     //New created item
@@ -1371,14 +1386,19 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 //Update possition in current scope json data
                 if (this.currentItem.hasOwnProperty('id')) {
+                    let itemIndex: number | undefined;
                     for (let i in this.map.Mapsummaryitems) {
                         if (this.map.Mapsummaryitems[i].id == this.currentItem.id) {
+                            itemIndex = Number(i);
                             this.map.Mapsummaryitems[i].x = this.currentItem.x;
                             this.map.Mapsummaryitems[i].y = this.currentItem.y;
 
                             //We are done here
                             break;
                         }
+                    }
+                    if (itemIndex) {
+                        this.onItemChange('Mapsummaryitems', itemIndex);
                     }
                 } else {
                     //New created item
@@ -1498,9 +1518,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 //Update possition in current scope json data
                 if (this.currentItem.hasOwnProperty('id')) {
+                    let itemIndex: number | undefined;
                     for (let i in this.map.Mapgadgets) {
                         if (this.map.Mapgadgets[i].id == this.currentItem.id) {
-
+                            itemIndex = Number(i);
                             if (this.currentItem.object_id) {   // after edit
                                 this.map.Mapgadgets[i] = this.currentItem;
                             } else {                            // only after (draggable) position change
@@ -1511,6 +1532,9 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                             //We are done here
                             break;
                         }
+                    }
+                    if (itemIndex) {
+                        this.onItemChange('Mapgadgets', itemIndex);
                     }
                 } else {
                     //New created item
@@ -1632,8 +1656,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 //Update possition in current scope json data
                 if (this.currentItem.hasOwnProperty('id')) {
+                    let itemIndex: number | undefined;
                     for (let i in this.map.Maptexts) {
                         if (this.map.Maptexts[i].id == this.currentItem.id) {
+                            itemIndex = Number(i);
                             this.map.Maptexts[i].x = this.currentItem.x;
                             this.map.Maptexts[i].y = this.currentItem.y;
                             if (action === 'add_or_edit') {
@@ -1643,6 +1669,9 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                             //We are done here
                             break;
                         }
+                    }
+                    if (itemIndex) {
+                        this.onItemChange('Maptexts', itemIndex);
                     }
                 } else {
                     //New created item
@@ -1754,14 +1783,19 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 //Update possition in current scope json data
                 if (this.currentItem.hasOwnProperty('id')) {
+                    let itemIndex: number | undefined;
                     for (let i in this.map.Mapicons) {
                         if (this.map.Mapicons[i].id == this.currentItem.id) {
+                            itemIndex = Number(i);
                             this.map.Mapicons[i].x = this.currentItem.x;
                             this.map.Mapicons[i].y = this.currentItem.y;
 
                             //We are done here
                             break;
                         }
+                    }
+                    if (itemIndex) {
+                        this.onItemChange('Mapicons', itemIndex);
                     }
                 } else {
                     //New created item
