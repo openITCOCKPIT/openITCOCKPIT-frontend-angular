@@ -30,7 +30,7 @@ export interface Customalert {
         comment: any
         entry_time: any
     }
-    Servicetemplates:  {
+    Servicetemplates: {
         id: number
     }
     _matchingData: {
@@ -114,8 +114,7 @@ export interface LoadContainersRoot {
     _csrfToken: string
 }
 
-export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams
-{
+export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams {
     return {
         angular: true,
         scroll: true,
@@ -162,7 +161,7 @@ export function getDefaultCustomAlertsIndexFilter(): CustomAlertsIndexFilter {
 // ANNOTATE
 export interface AnnotateParams {
     setAnnotationAsHostAcknowledgement: boolean
-    setAnnotationAsServiceAcknowledgement : boolean
+    setAnnotationAsServiceAcknowledgement: boolean
 }
 
 export enum CustomAlertsState {
@@ -257,4 +256,29 @@ export interface CustomalertStatehistory {
     state: number
 }
 
+export interface CustomAlertsWidgetFilter {
+    Customalerts: {
+        state: number
+        state_since: string | null
+    }
+}
 
+export interface CustomAlertsWidget {
+    config: CustomAlertsWidgetFilter
+    statusCount: number
+    ACL: {
+        customalerts: {
+            index: boolean
+        }
+    }
+    _csrfToken: any
+}
+
+export function getCustomAlertsWidgetParams(): CustomAlertsWidgetFilter {
+    return {
+        Customalerts: {
+            state: 0,
+            state_since: null
+        }
+    };
+}
