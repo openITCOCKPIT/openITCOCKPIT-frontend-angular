@@ -13,7 +13,7 @@
         </ol>
     </nav>
 
-    <c-card class="mb-3">
+    <c-card class="mb-3" id="dashboard-container">
         <c-card-header>
             <h5 class="my-1">{{ t('Dashboard') }}</h5>
             <oitc-dashboard-tabs [tabs]="tabs"
@@ -66,7 +66,7 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
+                    <button (click)="toggleFullscreenMode()" cButton class="ripple" color="default"
                             size="xs" [cTooltip]="'Fullscreen mode'|transloco" cTooltipPlacement="bottom">
                         <fa-icon [icon]="['fas', 'expand-arrows-alt']"></fa-icon>
                     </button>
@@ -149,7 +149,8 @@
                                 <c-card-body>
 
                                     <oitc-widget-container
-                                        [widgetInput]="widget"></oitc-widget-container>
+                                        [widgetInput]="widget"
+                                        [isReadonly]="isReadonly"></oitc-widget-container>
 
                                 </c-card-body>
                             </c-card>
