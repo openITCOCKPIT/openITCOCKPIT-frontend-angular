@@ -24,10 +24,32 @@
 
             <c-nav class="card-toolbar card-header-pills ms-auto">
                 <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="primary"
+                            size="xs"
+                            [cTooltip]="'Setup tab rotation'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'arrows-spin']"></fa-icon>
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="danger"
+                            *ngIf="dashboardIsLocked"
+                            size="xs"
+                            [cTooltip]="'Unlock for edit'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                    </button>
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="primary"
+                            *ngIf="!dashboardIsLocked"
+                            size="xs"
+                            [cTooltip]="'Lock for edit'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'unlock']"></fa-icon>
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="success"
+                            [disabled]="dashboardIsLocked"
                             size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('Add Widget') }}
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
@@ -38,31 +60,15 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="success"
+                            size="xs" [cTooltip]="'Create new tab'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'folder-plus']"></fa-icon>
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
                     <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
+                            size="xs" [cTooltip]="'Fullscreen mode'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'expand-arrows-alt']"></fa-icon>
                     </button>
                 </c-nav-item>
             </c-nav>

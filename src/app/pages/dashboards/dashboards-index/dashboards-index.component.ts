@@ -34,10 +34,11 @@ import {
     CardTitleDirective,
     ModalService,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    TooltipDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { DashboardColorpickerComponent } from './dashboard-colorpicker/dashboard-colorpicker.component';
 import { DashboardTab, DashboardWidget, WidgetGetForRender } from '../dashboards.interface';
@@ -83,7 +84,9 @@ import { WidgetContainerComponent } from '../widgets/widget-container/widget-con
         DashboardRenameWidgetModalComponent,
         DashboardAllocateModalComponent,
         DashboardUpdateAvailableModalComponent,
-        WidgetContainerComponent
+        WidgetContainerComponent,
+        TooltipDirective,
+        TranslocoPipe
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
