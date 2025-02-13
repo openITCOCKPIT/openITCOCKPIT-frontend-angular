@@ -25,6 +25,10 @@ export const autoreportModuleRoutes: Routes = [
         loadComponent: () => import('./pages/autoreports/autoreport-add-step-two/autoreport-add-step-two.component').then(m => m.AutoreportAddStepTwoComponent)
     },
     {
+        path: 'autoreport_module/autoreports/editStepOne/:id',
+        loadComponent: () => import('./pages/autoreports/autoreport-edit-step-one/autoreport-edit-step-one.component').then(m => m.AutoreportEditStepOneComponent)
+    },
+    {
         path: 'autoreport_module/autoreports/editStepThree/:id',
         loadComponent: () => import('./pages/autoreports/autoreport-edit-step-three/autoreport-edit-step-three.component').then(m => m.AutoreportEditStepThreeComponent)
     },

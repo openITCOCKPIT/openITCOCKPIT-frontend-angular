@@ -14,7 +14,7 @@ import {
     CardTitleDirective, ColComponent, RowComponent
 } from '@coreui/angular';
 import { NgIf, NgFor, NgForOf, AsyncPipe } from '@angular/common';
-import { AutoreportObject } from '../autoreports.interface';
+import { AutoreportObject, AutoreportPost } from '../autoreports.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { AutoreportBitwiseIconComponent } from '../../../components/autoreport-bitwise-icon/autoreport-bitwise-icon.component';

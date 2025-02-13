@@ -41,29 +41,60 @@ export interface AutoreportIndex {
         allowEdit: boolean
 }
 
+
+export interface AutoreportPostObject {
+    container_id: number | null,
+    name: string | null,
+    description: string | null,
+    use_start_time: number,
+    report_start_date: string,
+    timeperiod_id: number | null,
+    report_interval: string| null,
+    report_send_interval: string | null,
+    min_availability_percent: boolean,
+    min_availability: string | null,
+    max_number_of_outages: number | null,
+    show_time: string, //SLA Graph - if true -> show availability in hours
+    check_hard_state: string, // if true -> consider only hard states from state history
+    consider_downtimes: number,
+    consider_holidays: number,
+    calendar_id: number | null,
+    users: {
+        _ids: number[]
+    }
+}
+
 export interface AutoreportPost {
-    Autoreport: {
-        container_id: number | null,
-        name: string | null,
-        description: string | null,
-        use_start_time: number,
-        report_start_date: string,
-        timeperiod_id: number | null,
-        report_interval: string| null,
-        report_send_interval: string | null,
-        min_availability_percent: boolean,
-        min_availability: string | null,
-        max_number_of_outages: number | null,
-        show_time: string, //SLA Graph - if true -> show availability in hours
-        check_hard_state: string, // if true -> consider only hard states from state history
-        consider_downtimes: number,
-        consider_holidays: number,
-        calendar_id: number | null,
-        users: {
-            _ids: number[]
+    Autoreport: AutoreportPostObject
+}
+
+export function getDefaultPost(): AutoreportPost {
+    return {
+        Autoreport: {
+            container_id: 0,
+            name: '',
+            description: null,
+            use_start_time: 0,
+            report_start_date: '',
+            timeperiod_id: null,
+            report_interval: null,
+            report_send_interval: null,
+            min_availability_percent: true,
+            min_availability: null,
+            max_number_of_outages: null,
+            show_time: '0', //SLA Graph - if true -> show availability in hours
+            check_hard_state: '0', // if true -> consider only hard states from state history
+            consider_downtimes: 0,
+            consider_holidays: 0,
+            calendar_id: null,
+            users: {
+                _ids: []
+            }
         }
     }
 }
+
+
 
 export interface AutoreportObject {
     id?: number,
@@ -77,7 +108,7 @@ export interface AutoreportObject {
     consider_downtimes?: boolean,
     last_send_date?: string,
     min_availability_percent?: boolean,
-    min_availability?: number,
+    min_availability?: number | null,
     min_availability_string?: string,
     check_hard_state?: boolean,
     use_start_time?: number,
@@ -89,11 +120,11 @@ export interface AutoreportObject {
     failure_statistic?: number,
     consider_holidays?: number,
     consider_holidays_string?: string,
-    calendar_id?: number,
-    max_number_of_outages?: number,
+    calendar_id?: number | null,
+    max_number_of_outages?: number | null,
     created?: string
     modified?: string,
-    users?: AutoreportUser[],
+    users: AutoreportUser[],
     hostsWithServices?: AutoReportHostWithServicesObject[],
 }
 

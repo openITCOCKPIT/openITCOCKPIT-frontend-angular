@@ -175,7 +175,7 @@
                                              [allowEdit]="autoreport.allowEdit">
                             <oitc-actions-button-element [permission]="'autoreportmodule.autoreports.edit'"
                                                          *ngIf="autoreport.allowEdit"
-                                                         [url]="'/autoreports/edit/' + autoreport.id">
+                                                         [url]="'/autoreport_module/autoreports/editStepOne/' + autoreport.id">
                                 <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                 {{ t('Edit') }}
                             </oitc-actions-button-element>

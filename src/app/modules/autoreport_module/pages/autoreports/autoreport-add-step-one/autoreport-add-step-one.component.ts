@@ -29,6 +29,7 @@ import { AutoreportsService } from '../autoreports.service';
 import {
     AutoreportPost,
     CalendarParams,
+    getDefaultPost,
     getDefaultCalendarParams
 } from '../autoreports.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -105,7 +106,7 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     public calendars: SelectKeyValue[] = [];
     public timeperiods: SelectKeyValue[] = [];
     public users: SelectKeyValue[] = [];
-    public post: AutoreportPost = this.getDefaultPost();
+    public post: AutoreportPost = getDefaultPost();
     protected calendarParams: CalendarParams = getDefaultCalendarParams();
     public setMinAvailability : boolean = false;
     public setMaxNumberOfOutages : boolean = false;
@@ -214,32 +215,6 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
         }));
     }
 
-    private getDefaultPost(): AutoreportPost {
-        return {
-            Autoreport: {
-                container_id: null,
-                name: null,
-                description: null,
-                use_start_time: 0,
-                report_start_date: '',
-                timeperiod_id: null,
-                report_interval: null,
-                report_send_interval: null,
-                min_availability_percent: true,
-                min_availability: null,
-                max_number_of_outages: null,
-                show_time: '0', //SLA Graph - if true -> show availability in hours
-                check_hard_state: '0', // if true -> consider only hard states from state history
-                consider_downtimes: 0,
-                consider_holidays: 0,
-                calendar_id: null,
-                users: {
-                    _ids: []
-                }
-            }
-        };
-    }
-
     public submitStepOne() {
         this.errors = null;
         this.subscriptions.add(this.AutoreportsService.setAddStepOne(this.post).subscribe((result: GenericResponseWrapper): void => {
@@ -250,7 +225,6 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
                     this.errors = result.data as GenericValidationError;
                     this.notyService.genericError();
                 }
-
                 this.cdr.markForCheck();
             })
         );
