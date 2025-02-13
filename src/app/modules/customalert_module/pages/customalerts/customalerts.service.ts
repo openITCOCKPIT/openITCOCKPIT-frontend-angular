@@ -11,9 +11,12 @@ import {
     CustomAlertsIndexFilter,
     CustomAlertsIndexParams,
     CustomAlertsState,
+    CustomAlertsWidget,
+    CustomAlertsWidgetFilter,
     LoadContainersRoot
 } from './customalerts.interface';
 import { formatDate } from '@angular/common';
+import { WidgetGetForRender } from '../../../../pages/dashboards/dashboards.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -75,7 +78,7 @@ export class CustomAlertsService {
         return this.http.get<LoadContainersRoot>(`${this.proxyPath}/customalert_module/customalerts/loadContainers.json?angular=true`);
     }
 
-    public getHistory(customAlertId: number) : Observable<CustomAlertHistory> {
+    public getHistory(customAlertId: number): Observable<CustomAlertHistory> {
         return this.http.get<CustomAlertHistory>(`${this.proxyPath}/customalert_module/customalerts/history/${customAlertId}.json?angular=true`);
     }
 
@@ -88,7 +91,7 @@ export class CustomAlertsService {
         // From: 30 days ago
         let fromStr: string = formatDate(new Date(now.getTime() - 86400000 * 30), 'yyyy-MM-ddTHH:mm', 'en-US');
         // To: Tomorrow
-        let toStr: string = formatDate(new Date(now.getTime()   + 86400000), 'yyyy-MM-ddTHH:mm', 'en-US');
+        let toStr: string = formatDate(new Date(now.getTime() + 86400000), 'yyyy-MM-ddTHH:mm', 'en-US');
         let params: object = {
             angular: true,
             sort: 'CustomalertStatehistory.state_time',
@@ -103,5 +106,22 @@ export class CustomAlertsService {
                 ...params
             }
         });
+    }
+
+    public loadWidget(widget: WidgetGetForRender, filter: CustomAlertsWidgetFilter): Observable<CustomAlertsWidget> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<CustomAlertsWidget>(`${proxyPath}/customalert_module/customalerts/customalertsWidget.json`, {
+            params: {
+                widgetId: widget.id,
+                'Customalerts.state': filter.Customalerts.state,
+                'Customalerts.state_since': filter.Customalerts.state_since ?? '',
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+
     }
 }

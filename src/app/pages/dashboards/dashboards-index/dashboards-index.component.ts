@@ -51,6 +51,9 @@ import {
 } from './dashboard-rename-widget-modal/dashboard-rename-widget-modal.component';
 import { DashboardRenameWidgetService } from './dashboard-rename-widget-modal/dashboard-rename-widget.service';
 import { DashboardAllocateModalComponent } from './dashboard-allocate-modal/dashboard-allocate-modal.component';
+import {
+    CustomalertsWidgetComponent
+} from '../../../modules/customalert_module/widgets/customalerts-widget/customalerts-widget.component';
 
 @Component({
     selector: 'oitc-dashboards-index',
@@ -76,7 +79,8 @@ import { DashboardAllocateModalComponent } from './dashboard-allocate-modal/dash
         NgClass,
         XsButtonDirective,
         DashboardRenameWidgetModalComponent,
-        DashboardAllocateModalComponent
+        DashboardAllocateModalComponent,
+        CustomalertsWidgetComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
