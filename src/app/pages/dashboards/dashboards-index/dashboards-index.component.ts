@@ -54,6 +54,10 @@ import { DashboardAllocateModalComponent } from './dashboard-allocate-modal/dash
 import {
     CustomalertsWidgetComponent
 } from '../../../modules/customalert_module/widgets/customalerts-widget/customalerts-widget.component';
+import {
+    DashboardUpdateAvailableModalComponent
+} from './dashboard-update-available-modal/dashboard-update-available-modal.component';
+
 
 @Component({
     selector: 'oitc-dashboards-index',
@@ -80,7 +84,8 @@ import {
         XsButtonDirective,
         DashboardRenameWidgetModalComponent,
         DashboardAllocateModalComponent,
-        CustomalertsWidgetComponent
+        CustomalertsWidgetComponent,
+        DashboardUpdateAvailableModalComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
@@ -240,6 +245,12 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                 }
             });
 
+            // If this is a shared tab, check for updates
+            this.tabs.forEach(tab => {
+                if (tab.id === this.currentTabId && tab.source_tab_id > 0 && tab.check_for_updates) {
+                    this.checkForUpdates(this.currentTabId);
+                }
+            });
 
             this.cdr.markForCheck();
         }));
@@ -475,4 +486,12 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
         });
     }
 
+    // Checks if an update is available for the given tab id
+    private checkForUpdates(tabId: number) {
+        this.subscriptions.add(this.DashboardsService.checkForUpdates(tabId).subscribe(response => {
+            if (response.updateAvailable) {
+                // For the tab is an update available - toggle the modal to inform the user
+            }
+        }));
+    }
 }

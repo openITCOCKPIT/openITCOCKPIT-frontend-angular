@@ -293,4 +293,21 @@ export class DashboardsService {
                 })
             );
     }
+
+    public checkForUpdates(tabId: number): Observable<{ updateAvailable: boolean, _csrfToken: string }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            updateAvailable: boolean,
+            _csrfToken: string
+        }>(`${proxyPath}/dashboards/checkForUpdates/${tabId}.json`, {
+            params: {
+                angular: true,
+                tabId: tabId.toString()
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
 }
