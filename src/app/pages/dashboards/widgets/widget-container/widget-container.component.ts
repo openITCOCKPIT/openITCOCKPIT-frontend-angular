@@ -21,6 +21,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 export class WidgetContainerComponent {
 
     widgetInput = input<WidgetGetForRender>();
+    isReadonly = input<boolean>(false);
 
     public widget?: WidgetGetForRender;
 

@@ -3,6 +3,7 @@ import {
     ChangeDetectorRef,
     Component,
     ElementRef,
+    HostListener,
     inject,
     Inject,
     OnDestroy,
@@ -107,6 +108,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     public layout: KtdGridLayout = []; // used by the grid layout library
     public widgets: WidgetGetForRender[] = []; // used by us to show the widgets
 
+    public isFullscreen: boolean = false;
 
     private readonly subscriptions: Subscription = new Subscription();
     private readonly DashboardsService = inject(DashboardsService);
@@ -118,10 +120,16 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
     private cdr = inject(ChangeDetectorRef);
 
+    @HostListener('fullscreenchange', ['$event'])
+    handleFullscreenchangeEvent(Event: Event) {
+        if (document.fullscreenElement === null) {
+            this.isFullscreen = false;
+        }
+    }
+
     @ViewChild(KtdGridComponent, {static: false}) grid?: KtdGridComponent;
 
     // Docs: https://github.com/katoid/angular-grid-layout
-
     public cols = 12;
     public rowHeight = 15;
     compactType: 'vertical' | 'horizontal' | null = 'vertical';
@@ -546,6 +554,24 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                     );
                 }
             }));
+        }
+    }
+
+    public toggleFullscreenMode() {
+        const elem = this.document.getElementById('dashboard-container');
+
+        if (this.isFullscreen) {
+            if (document.exitFullscreen) {
+                this.isFullscreen = false;
+                this.cdr.markForCheck();
+                document.exitFullscreen();
+            }
+        } else {
+            this.isFullscreen = true;
+            this.cdr.markForCheck();
+            if (elem && elem.requestFullscreen) {
+                elem.requestFullscreen();
+            }
         }
     }
 
