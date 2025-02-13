@@ -141,19 +141,9 @@
 
                                 </c-card-header>
                                 <c-card-body>
-                                    <h5 cCardTitle>Special title treatment</h5>
-                                    <p cCardText>
 
-                                        {{ widget.id }}
-                                        @switch (widget.directive) {
-                                            @case ("customalerts-widget") {
-                                                <oitc-customalerts-widget [widget]="widget"></oitc-customalerts-widget>
-                                            }
-                                        }
-                                        {{ widget.directive }}
-
-                                        With supporting text below as a natural lead-in to additional content.
-                                    </p>
+                                    <oitc-widget-container
+                                        [widgetInput]="widget"></oitc-widget-container>
 
                                 </c-card-body>
                             </c-card>

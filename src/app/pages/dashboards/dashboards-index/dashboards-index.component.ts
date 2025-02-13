@@ -31,7 +31,6 @@ import {
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
-    CardTextDirective,
     CardTitleDirective,
     ModalService,
     NavComponent,
@@ -53,11 +52,10 @@ import {
 import { DashboardRenameWidgetService } from './dashboard-rename-widget-modal/dashboard-rename-widget.service';
 import { DashboardAllocateModalComponent } from './dashboard-allocate-modal/dashboard-allocate-modal.component';
 import {
-    CustomalertsWidgetComponent
-} from '../../../modules/customalert_module/widgets/customalerts-widget/customalerts-widget.component';
-import {
     DashboardUpdateAvailableModalComponent
 } from './dashboard-update-available-modal/dashboard-update-available-modal.component';
+import { WidgetTypes } from '../widgets/widgets.enum';
+import { WidgetContainerComponent } from '../widgets/widget-container/widget-container.component';
 
 
 @Component({
@@ -67,7 +65,6 @@ import {
         KtdGridComponent,
         KtdGridItemComponent,
         NgIf,
-        CardTextDirective,
         CardTitleDirective,
         CardBodyComponent,
         CardHeaderComponent,
@@ -85,8 +82,8 @@ import {
         XsButtonDirective,
         DashboardRenameWidgetModalComponent,
         DashboardAllocateModalComponent,
-        CustomalertsWidgetComponent,
-        DashboardUpdateAvailableModalComponent
+        DashboardUpdateAvailableModalComponent,
+        WidgetContainerComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
@@ -549,4 +546,5 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
         }
     }
 
+    protected readonly WidgetTypes = WidgetTypes;
 }

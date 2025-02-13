@@ -1,0 +1,19 @@
+@if (widget) {
+
+    <!-- Add all new Widgets to the switch statement below -->
+
+    @switch (widget.type_id) {
+        @case (WidgetTypes.CustomalertsWidget) {
+            <oitc-customalerts-widget [widget]="widget"></oitc-customalerts-widget>
+        }
+        @default {
+            <oitc-alert
+                color="warning"
+                [baseIcon]="'square'"
+                [icon]="['fas', 'question']"
+                [errorHeadline]="'Unknown Widget Type'|transloco"
+                [errorText]="'The widget type '+widget.type_id+' ('+widget.directive+') is unknown and can not be displayed.'"
+            ></oitc-alert>
+        }
+    }
+}
