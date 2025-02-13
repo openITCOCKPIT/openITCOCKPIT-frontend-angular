@@ -288,6 +288,7 @@
                                                    [refreshInterval]="0"
                                                    [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
                                                    [layers]="layers"
+                                                   (dblclick)="editSummaryItem(summaryItem)"
                                                    (contextActionEvent)="onContextAction($event)"
                                                    (dropItemEvent)="onDropItem($event)"
                                                    (resizedEvent)="onResizeStop($event)"
@@ -1156,5 +1157,231 @@
         </form>
     </c-modal>
 
+
+    <!-- Add/Edit map summary modal -->
+    <c-modal #addEditSummaryItemModal fullscreen="md" size="xl" id="addEditSummaryItemModal">
+        <form cForm (ngSubmit)="saveSummaryItem()">
+            <c-modal-header>
+                <h5 cModalTitle>
+                    <fa-icon [icon]="['fas', 'dot-circle']"></fa-icon>
+                    {{ t('Add or edit summary state item') }}
+                </h5>
+                <button [cModalToggle]="addEditSummaryItemModal.id" cButtonClose></button>
+            </c-modal-header>
+            <c-modal-body>
+                <c-row>
+                    <c-col lg="12" class="form-group">
+                        <div class="mb-3">
+                            <label cLabel for="mapSummaryItemType">
+                                {{ t('Select object type') }}
+                            </label>
+
+                            <oitc-select
+                                name="mapSummaryItemType"
+                                id="mapSummaryItemType"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="currentItem.type"
+                                [options]="mapItemObjectTypes"
+                                (onChange)="onCurrentItemTypeObjectIdChange()"
+                                [appendTo]="addEditSummaryItemModal"
+                                oitcFormError [errors]="errors" errorField="type">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="type"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="12" class="form-group">
+                        <div class="mb-3">
+                            <label cLabel for="mapSummaryItemObjectId">
+                                {{ t('Select object') }}
+                            </label>
+
+                            <oitc-select
+                                name="mapSummaryItemObjectId"
+                                id="mapSummaryItemObjectId"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="currentItem.object_id"
+                                [options]="itemObjects"
+                                (onChange)="onCurrentItemTypeObjectIdChange()"
+                                [searchCallback]="loadMoreItemObjects"
+                                [appendTo]="addEditSummaryItemModal"
+                                oitcFormError [errors]="errors" errorField="object_id">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="object_id"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="mapSummaryItemPosX">
+                                {{ t('Position X') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="mapSummaryItemPosX"
+                                       type="number"
+                                       name="mapSummaryItemPosX"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.x"
+                                       oitcFormError [errors]="errors" errorField="x">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="x"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="mapSummaryItemPosY">
+                                {{ t('Position Y') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="mapSummaryItemPosY"
+                                       type="number"
+                                       name="mapSummaryItemPosY"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.y"
+                                       oitcFormError [errors]="errors" errorField="y">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="y"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="mapSummaryItemRadius">
+                                {{ t('Radius') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'ruler']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       id="mapSummaryItemRadius"
+                                       type="number"
+                                       name="mapSummaryItemRadius"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.size_x"
+                                       oitcFormError [errors]="errors" errorField="size_x">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="size_x"></oitc-form-feedback>
+                            <span class="help-block">
+                                {{ t('Keep blank for default radius') }}
+                            </span>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="10">
+                        <div class="mb-3">
+                            <label cLabel for="mapSummaryItemLayers">
+                                {{ t('Select layer') }}
+                            </label>
+
+                            <oitc-select
+                                name="mapSummaryItemLayers"
+                                id="mapSummaryItemLayers"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="currentItem.z_index"
+                                [options]="layers"
+                                [appendTo]="addEditSummaryItemModal"
+                                oitcFormError [errors]="errors" errorField="z_index">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
+                            <span class="help-block">
+                                {{ t('Layers could be used to stack items on a map. Empty layers will be deleted automatically.') }}
+                            </span>
+                        </div>
+                    </c-col>
+                    <c-col lg="2">
+                        <button (click)="addNewLayer()" cButton class="ripple mt-4" style="width: 100%"
+                                color="default">
+                            {{ t('Add new layer') }}
+                        </button>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col class="mb-3">
+                        <c-form-check>
+                            <input [(ngModel)]="currentItem.show_label" cFormCheckInput
+                                   id="addEditElShowLabel"
+                                   name="addEditElShowLabel"
+                                   oitcFormError [errors]="errors" errorField="show_label"
+                                   type="checkbox"/>
+                            <label cFormCheckLabel for="addEditElShowLabel">
+                                {{ t('Show Label') }}
+                            </label>
+                        </c-form-check>
+                        <oitc-form-feedback [errors]="errors" errorField="show_label"></oitc-form-feedback>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <div class="mb-3">
+                        <label cLabel for="addEditElLabelPos">
+                            {{ t('Label position') }}
+                        </label>
+                        <c-col lg="12" class="btn-toolbar">
+                            <div class="btn-group me-2" role="group" id="addEditElLabelPos">
+                                <button (click)="currentItem.label_possition = 4" cButton class="ripple"
+                                        color="default"
+                                        [ngClass]="{ 'btn-primary': currentItem.label_possition === 4, 'btn-default': currentItem.label_possition !== 4 }">
+                                    <fa-icon [icon]="['fas', 'arrow-circle-left']"></fa-icon>
+                                    {{ t('Left') }}
+                                </button>
+                                <button (click)="currentItem.label_possition = 1" cButton class="ripple"
+                                        color="default"
+                                        [ngClass]="{ 'btn-primary': currentItem.label_possition === 1, 'btn-default': currentItem.label_possition !== 1 }">
+                                    <fa-icon [icon]="['fas', 'arrow-circle-up']"></fa-icon>
+                                    {{ t('Top') }}
+                                </button>
+                                <button (click)="currentItem.label_possition = 2" cButton class="ripple"
+                                        color="default"
+                                        [ngClass]="{ 'btn-primary': currentItem.label_possition === 2, 'btn-default': currentItem.label_possition !== 2 }">
+                                    <fa-icon [icon]="['fas', 'arrow-circle-down']"></fa-icon>
+                                    {{ t('Bottom') }}
+                                </button>
+                                <button (click)="currentItem.label_possition = 3" cButton class="ripple"
+                                        color="default"
+                                        [ngClass]="{ 'btn-primary': currentItem.label_possition === 3, 'btn-default': currentItem.label_possition !== 3 }">
+                                    <fa-icon [icon]="['fas', 'arrow-circle-right']"></fa-icon>
+                                    {{ t('Right') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </div>
+                </c-row>
+            </c-modal-body>
+            <c-modal-footer>
+                <button cButton color="danger" class="ripple me-auto" (click)="deleteSummaryItem()">
+                    {{ t('Delete') }}
+                </button>
+                <button cButton color="success" type="submit" class="ripple">
+                    {{ t('Save') }}
+                </button>
+                <button [cModalToggle]="addEditSummaryItemModal.id" cButton color="default" class="ripple">
+                    {{ t('Close') }}
+                </button>
+            </c-modal-footer>
+        </form>
+    </c-modal>
 
 </ng-container>

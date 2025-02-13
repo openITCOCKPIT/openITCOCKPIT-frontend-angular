@@ -248,20 +248,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     private icons: string[] = [];
     public metrics: { key: string, value: string }[] = [];
     public itemObjects: SelectKeyValue[] = [];
-    public mapItemObjectTypes = [
-        {key: 'host', value: this.TranslocoService.translate('Host')},
-        {key: 'service', value: this.TranslocoService.translate('Service')},
-        {key: 'hostgroup', value: this.TranslocoService.translate('Hostgroup')},
-        {key: 'servicegroup', value: this.TranslocoService.translate('Servicegroup')},
-        {key: 'map', value: this.TranslocoService.translate('Map')}
-    ];
-    public mapLineObjectTypes = [
-        {key: 'host', value: this.TranslocoService.translate('Host')},
-        {key: 'service', value: this.TranslocoService.translate('Service')},
-        {key: 'hostgroup', value: this.TranslocoService.translate('Hostgroup')},
-        {key: 'servicegroup', value: this.TranslocoService.translate('Servicegroup')},
-        {key: 'stateless', value: this.TranslocoService.translate('Stateless line')}
-    ];
+    public mapItemObjectTypes: { key: string, value: string }[] = [];
+    public mapLineObjectTypes: { key: string, value: string }[] = [];
     public mapGadgetsOutputTypes = [
         {key: 'service_output', value: this.TranslocoService.translate('Service output')},
         {key: 'service_long_output', value: this.TranslocoService.translate('Service long output')}
@@ -286,6 +274,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.mapId = Number(this.route.snapshot.paramMap.get('id'));
+        this.initSelectOptions();
         this.load();
         this.loadIconsets();
         this.loadIcons();
@@ -329,6 +318,54 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 this.changeGridSize(this.Mapeditor.grid.size);
                 this.cdr.markForCheck();
             }));
+    }
+
+    private initSelectOptions(): void {
+        let selectItemObjectTypes: { value: string, key: string }[] = [];
+        this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['hosts', 'index']).subscribe(hasPermission => {
+            if (hasPermission) {
+                selectItemObjectTypes.push({
+                    key: 'host',
+                    value: this.TranslocoService.translate('Host')
+                });
+            }
+        }));
+        this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['services', 'index']).subscribe(hasPermission => {
+            if (hasPermission) {
+                selectItemObjectTypes.push({
+                    key: 'service',
+                    value: this.TranslocoService.translate('Service')
+                });
+            }
+        }));
+        this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['hostgroups', 'index']).subscribe(hasPermission => {
+            if (hasPermission) {
+                selectItemObjectTypes.push({
+                    key: 'hostgroup',
+                    value: this.TranslocoService.translate('Hostgroup')
+                });
+            }
+        }));
+        this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['servicegroups', 'index']).subscribe(hasPermission => {
+            if (hasPermission) {
+                selectItemObjectTypes.push({
+                    key: 'servicegroup',
+                    value: this.TranslocoService.translate('Servicegroup')
+                });
+            }
+        }));
+        selectItemObjectTypes.push({
+            key: 'map',
+            value: this.TranslocoService.translate('Map')
+        });
+        this.mapItemObjectTypes = selectItemObjectTypes;
+        this.mapLineObjectTypes = structuredClone(selectItemObjectTypes);
+        this.mapLineObjectTypes.push({
+            key: 'stateless',
+            value: this.TranslocoService.translate('Stateless line')
+        });
+        this.cdr.markForCheck();
+
     }
 
     public onDropItem(item: MapitemBaseActionObject) {
@@ -963,7 +1000,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 mapEditor.style.cursor = 'default';
                 this.addNewObject = false;
 
-                //$('#addEditSummaryItemModal').modal('show');
+                this.modalService.toggle({
+                    show: true,
+                    id: 'addEditSummaryItemModal',
+                });
 
                 // Create currentItem skeleton
                 // Set X and Y poss of the new object
@@ -1129,7 +1169,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                             break;
                         }
                     }
-                    if (itemIndex) {
+                    if (itemIndex !== undefined) {
                         this.onItemChange('Mapitems', itemIndex);
                     }
                 } else {
@@ -1268,7 +1308,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                             break;
                         }
                     }
-                    if (itemIndex) {
+                    if (itemIndex !== undefined) {
                         this.onItemChange('Maplines', itemIndex);
                     }
                 } else {
@@ -1363,11 +1403,15 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     public editSummaryItem(item: any) {
         this.action = 'summaryItem';
         this.currentItem = item;
-        //$('#addEditSummaryItemModal').modal('show');
+        this.onCurrentItemTypeObjectIdChange();
+        this.modalService.toggle({
+            show: true,
+            id: 'addEditSummaryItemModal',
+        });
         this.cdr.markForCheck();
     };
 
-    public saveSummaryItem(action: string) {
+    public saveSummaryItem(action?: string) {
         if (typeof action === 'undefined') {
             action = 'add_or_edit';
         }
@@ -1402,7 +1446,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                             break;
                         }
                     }
-                    if (itemIndex) {
+                    if (itemIndex !== undefined) {
                         this.onItemChange('Mapsummaryitems', itemIndex);
                     }
                 } else {
@@ -1414,7 +1458,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     this.map.Mapsummaryitems.push(result.data.Mapsummaryitem.Mapsummaryitem);
                 }
 
-                //$('#addEditSummaryItemModal').modal('hide');
+                this.modalService.toggle({
+                    show: false,
+                    id: 'addEditSummaryItemModal',
+                });
                 this.notyService.genericSuccess(msg, title);
                 return;
             }
@@ -1457,7 +1504,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 }
 
                 this.notyService.genericSuccess(msg, title);
-                //$('#addEditSummaryItemModal').modal('hide');
+                this.modalService.toggle({
+                    show: false,
+                    id: 'addEditSummaryItemModal',
+                });
                 this.currentItem = {};
                 delete this.currentDeletedItem;
                 return;
@@ -1538,7 +1588,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                             break;
                         }
                     }
-                    if (itemIndex) {
+                    if (itemIndex !== undefined) {
                         this.onItemChange('Mapgadgets', itemIndex);
                     }
                 } else {
@@ -1675,7 +1725,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                             break;
                         }
                     }
-                    if (itemIndex) {
+                    if (itemIndex !== undefined) {
                         this.onItemChange('Maptexts', itemIndex);
                     }
                 } else {
@@ -1799,7 +1849,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                             break;
                         }
                     }
-                    if (itemIndex) {
+                    if (itemIndex !== undefined) {
                         this.onItemChange('Mapicons', itemIndex);
                     }
                 } else {
