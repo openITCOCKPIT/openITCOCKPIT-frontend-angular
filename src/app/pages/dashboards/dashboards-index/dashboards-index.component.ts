@@ -51,6 +51,9 @@ import {
 } from './dashboard-rename-widget-modal/dashboard-rename-widget-modal.component';
 import { DashboardRenameWidgetService } from './dashboard-rename-widget-modal/dashboard-rename-widget.service';
 import { DashboardAllocateModalComponent } from './dashboard-allocate-modal/dashboard-allocate-modal.component';
+import {
+    DashboardUpdateAvailableModalComponent
+} from './dashboard-update-available-modal/dashboard-update-available-modal.component';
 
 @Component({
     selector: 'oitc-dashboards-index',
@@ -76,7 +79,8 @@ import { DashboardAllocateModalComponent } from './dashboard-allocate-modal/dash
         NgClass,
         XsButtonDirective,
         DashboardRenameWidgetModalComponent,
-        DashboardAllocateModalComponent
+        DashboardAllocateModalComponent,
+        DashboardUpdateAvailableModalComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
@@ -236,6 +240,12 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                 }
             });
 
+            // If this is a shared tab, check for updates
+            this.tabs.forEach(tab => {
+                if (tab.id === this.currentTabId && tab.source_tab_id > 0 && tab.check_for_updates) {
+                    this.checkForUpdates(this.currentTabId);
+                }
+            });
 
             this.cdr.markForCheck();
         }));
@@ -469,6 +479,15 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                 widget.title = event.title;
             }
         });
+    }
+
+    // Checks if an update is available for the given tab id
+    private checkForUpdates(tabId: number) {
+        this.subscriptions.add(this.DashboardsService.checkForUpdates(tabId).subscribe(response => {
+            if (response.updateAvailable) {
+                // For the tab is an update available - toggle the modal to inform the user
+            }
+        }));
     }
 
 }
