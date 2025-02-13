@@ -30,7 +30,7 @@
                         <fa-icon [icon]="['fas', 'arrows-spin']"></fa-icon>
                     </button>
                 </c-nav-item>
-                <c-nav-item class="px-1">
+                <c-nav-item class="px-1" *ngIf="!isReadonly">
                     <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="danger"
                             *ngIf="dashboardIsLocked"
                             size="xs"
@@ -44,7 +44,7 @@
                         <fa-icon [icon]="['fas', 'unlock']"></fa-icon>
                     </button>
                 </c-nav-item>
-                <c-nav-item class="px-1">
+                <c-nav-item class="px-1" *ngIf="!isReadonly">
                     <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="success"
                             [disabled]="dashboardIsLocked"
                             size="xs">
@@ -76,7 +76,28 @@
 
         </c-card-header>
         <c-card-body>
-            <div class="grid-container" *ngIf="layout.length > 0">
+            <!-- Loading animation -->
+            @if (isLoading) {
+                <c-row>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                        <oitc-block-loader height="15rem"></oitc-block-loader>
+                    </c-col>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                        <oitc-block-loader height="15rem"></oitc-block-loader>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                        <oitc-block-loader height="15rem"></oitc-block-loader>
+                    </c-col>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                        <oitc-block-loader height="15rem"></oitc-block-loader>
+                    </c-col>
+                </c-row>
+            }
+
+            <!-- Actual dashboard content -->
+            <div class="grid-container" *ngIf="layout.length > 0" [ngClass]="{'border-0': dashboardIsLocked}">
                 <ktd-grid [cols]="cols"
                           [rowHeight]="rowHeight"
                           [gap]="10"

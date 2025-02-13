@@ -33,9 +33,11 @@ import {
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
     ModalService,
     NavComponent,
     NavItemComponent,
+    RowComponent,
     TooltipDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -58,6 +60,7 @@ import {
 } from './dashboard-update-available-modal/dashboard-update-available-modal.component';
 import { WidgetTypes } from '../widgets/widgets.enum';
 import { WidgetContainerComponent } from '../widgets/widget-container/widget-container.component';
+import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 
 
 @Component({
@@ -87,13 +90,18 @@ import { WidgetContainerComponent } from '../widgets/widget-container/widget-con
         DashboardUpdateAvailableModalComponent,
         WidgetContainerComponent,
         TooltipDirective,
-        TranslocoPipe
+        TranslocoPipe,
+        RowComponent,
+        ColComponent,
+        BlockLoaderComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardsIndexComponent implements OnInit, OnDestroy {
+
+    public isLoading: boolean = true; // for skeleton loader
 
     public tabs: DashboardTab[] = [];
     public currentTabId: number = 0;
@@ -202,6 +210,8 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     }
 
     public loadTabContent(tabId: number): void {
+        this.isLoading = true;
+
         this.layout = [];
         this.widgets = [];
         this.isReadonly = false;
@@ -225,6 +235,8 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                     w: widget.width,
                     h: widget.height
                 });
+
+                //console.log('push', widget);
 
                 // Array for ngFor id has to be a string
                 const widgetForLayout: WidgetGetForRender = {...widget, id: widgetId}
@@ -262,6 +274,10 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                 }
             });
 
+            // Get a new reference of the layout array to trigger the change detection
+            this.layout = [...this.layout];
+
+            this.isLoading = false;
             this.cdr.markForCheck();
         }));
     }
