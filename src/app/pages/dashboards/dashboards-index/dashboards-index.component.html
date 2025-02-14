@@ -31,13 +31,13 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1" *ngIf="!isReadonly">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="danger"
+                    <button (click)="lockOrUnlock(false)" cButton class="ripple" color="danger"
                             *ngIf="dashboardIsLocked"
                             size="xs"
                             [cTooltip]="'Unlock for edit'|transloco" cTooltipPlacement="bottom">
                         <fa-icon [icon]="['fas', 'lock']"></fa-icon>
                     </button>
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="primary"
+                    <button (click)="lockOrUnlock(true)" cButton class="ripple" color="primary"
                             *ngIf="!dashboardIsLocked"
                             size="xs"
                             [cTooltip]="'Lock for edit'|transloco" cTooltipPlacement="bottom">

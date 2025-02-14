@@ -371,4 +371,35 @@ export class DashboardsService {
             );
     }
 
+    public lockOrUnlockTab(tabId: number, locked: boolean) {
+
+        const post: { DashboardTab: { id: number, locked: 'true' | 'false' } } = {
+            DashboardTab: {
+                id: tabId,
+                locked: (locked ? 'true' : 'false'),
+            }
+        };
+
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/dashboards/lockOrUnlockTab.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+
+                    return {
+                        success: true,
+                        data: data as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
 }

@@ -170,7 +170,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
 
     constructor(public elementRef: ElementRef, @Inject(DOCUMENT) public document: Document) {
-        
+
     }
 
     public ngOnInit(): void {
@@ -319,6 +319,10 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     }
 
     public onColorChange(color: string, widget: WidgetGetForRender): void {
+        if (this.dashboardIsLocked) {
+            return;
+        }
+
         this.widgets.forEach(w => {
             if (w.id === widget.id) {
                 w.color = color;
@@ -594,6 +598,33 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                 elem.requestFullscreen();
             }
         }
+    }
+
+    public lockOrUnlock(locked: boolean) {
+        const tab = this.tabs.find(tab => tab.id === this.currentTabId);
+        if (!tab) {
+            return;
+        }
+
+        this.subscriptions.add(this.DashboardsService.lockOrUnlockTab(this.currentTabId, locked).subscribe(response => {
+            if (response.success) {
+
+                tab.locked = locked;
+                this.dashboardIsLocked = locked;
+                this.disableDrag = locked;
+                this.disableResize = locked;
+                this.disableRemove = locked;
+
+                this.notyService.genericSuccess();
+
+                this.cdr.markForCheck();
+                return;
+            }
+
+            this.cdr.markForCheck();
+
+            this.notyService.genericError();
+        }));
     }
 
     protected readonly WidgetTypes = WidgetTypes;
