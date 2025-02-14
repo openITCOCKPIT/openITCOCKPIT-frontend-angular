@@ -53,7 +53,9 @@ export class CustomalertsWidgetComponent implements OnInit, OnDestroy, AfterView
     public statusCount: number | null = null;
     public readOnly: boolean = true;
     protected flipped = signal<boolean>(false);
-    public boxHeight: number = 0;
+    public widgetHeight: number = 0;
+    public fontSize: number = 0;
+    public fontSizeIcon: number = 0;
 
     private cdr = inject(ChangeDetectorRef);
 
@@ -76,7 +78,7 @@ export class CustomalertsWidgetComponent implements OnInit, OnDestroy, AfterView
             this.CustomAlertsService.loadWidget(this.widget, this.CustomalertsFilter).subscribe((data: CustomAlertsWidget) => {
                 this.CustomalertsFilter = data.config;
                 this.statusCount = data.statusCount;
-                //this.readOnly = this.widget.is;
+                //this.readOnly = this.widget.reandOnly;
                 this.cdr.markForCheck();
             })
         );
@@ -85,7 +87,9 @@ export class CustomalertsWidgetComponent implements OnInit, OnDestroy, AfterView
     protected readonly WidgetTypes = WidgetTypes;
 
     public ngAfterViewInit(): void {
-        this.boxHeight = this.boxContainer?.nativeElement.offsetHeight - 21; //21px height of button
+        this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight - 21; //21px height of button
+        this.fontSize = this.widgetHeight / 2;
+        this.fontSizeIcon = this.widgetHeight / 2.5;
         this.cdr.markForCheck();
     }
 }
