@@ -1,0 +1,95 @@
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    signal,
+    ViewChild
+} from '@angular/core';
+import { WidgetGetForRender } from '../../../../pages/dashboards/dashboards.interface';
+import { Subscription } from 'rxjs';
+import { CustomAlertsService } from '../../pages/customalerts/customalerts.service';
+import {
+    CustomAlertsWidget,
+    CustomAlertsWidgetFilter,
+    getCustomAlertsWidgetParams
+} from '../../pages/customalerts/customalerts.interface';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NgClass, NgIf } from '@angular/common';
+import { ColComponent, RowComponent } from '@coreui/angular';
+import { WidgetTypes } from '../../../../pages/dashboards/widgets/widgets.enum';
+
+@Component({
+    selector: 'oitc-customalerts-widget',
+    imports: [
+        FaIconComponent,
+        NgIf,
+        NgClass,
+        RowComponent,
+        ColComponent
+    ],
+    templateUrl: './customalerts-widget.component.html',
+    styleUrl: './customalerts-widget.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [
+        trigger('flip', [
+            state('false', style({transform: 'none'})),
+            state('true', style({transform: 'rotateY(180deg)'})),
+            transition('false <=> true', animate('0.8s ease-in-out'))
+        ])
+    ]
+})
+export class CustomalertsWidgetComponent implements OnInit, OnDestroy, AfterViewInit {
+    @Input() widget!: WidgetGetForRender;
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly CustomAlertsService = inject(CustomAlertsService);
+    public CustomalertsFilter: CustomAlertsWidgetFilter = getCustomAlertsWidgetParams();
+    public statusCount: number | null = null;
+    public readOnly: boolean = true;
+    protected flipped = signal<boolean>(false);
+    public widgetHeight: number = 0;
+    public fontSize: number = 0;
+    public fontSizeIcon: number = 0;
+
+    private cdr = inject(ChangeDetectorRef);
+
+    @ViewChild('boxContainer') boxContainer?: ElementRef;
+
+    public ngOnInit(): void {
+
+        const element = document.getElementById("HTML element");
+        this.load();
+    }
+
+
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
+
+    private load() {
+        this.subscriptions.add(
+            this.CustomAlertsService.loadWidget(this.widget, this.CustomalertsFilter).subscribe((data: CustomAlertsWidget) => {
+                this.CustomalertsFilter = data.config;
+                this.statusCount = data.statusCount;
+                //this.readOnly = this.widget.reandOnly;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    protected readonly WidgetTypes = WidgetTypes;
+
+    public ngAfterViewInit(): void {
+        this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight - 21; //21px height of button
+        this.fontSize = this.widgetHeight / 2;
+        this.fontSizeIcon = this.widgetHeight / 2.5;
+        this.cdr.markForCheck();
+    }
+}

@@ -3,6 +3,7 @@ import {
     ChangeDetectorRef,
     Component,
     ElementRef,
+    HostListener,
     inject,
     Inject,
     OnDestroy,
@@ -31,13 +32,16 @@ import {
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
-    CardTextDirective,
     CardTitleDirective,
+    ColComponent,
+    ModalService,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    RowComponent,
+    TooltipDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { DashboardColorpickerComponent } from './dashboard-colorpicker/dashboard-colorpicker.component';
 import { DashboardTab, DashboardWidget, WidgetGetForRender } from '../dashboards.interface';
@@ -50,6 +54,15 @@ import {
     DashboardRenameWidgetModalComponent
 } from './dashboard-rename-widget-modal/dashboard-rename-widget-modal.component';
 import { DashboardRenameWidgetService } from './dashboard-rename-widget-modal/dashboard-rename-widget.service';
+import { DashboardAllocateModalComponent } from './dashboard-allocate-modal/dashboard-allocate-modal.component';
+import {
+    DashboardUpdateAvailableModalComponent
+} from './dashboard-update-available-modal/dashboard-update-available-modal.component';
+import { WidgetTypes } from '../widgets/widgets.enum';
+import { WidgetContainerComponent } from '../widgets/widget-container/widget-container.component';
+import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
+import { WidgetsService } from '../widgets/widgets.service';
+
 
 @Component({
     selector: 'oitc-dashboards-index',
@@ -58,7 +71,6 @@ import { DashboardRenameWidgetService } from './dashboard-rename-widget-modal/da
         KtdGridComponent,
         KtdGridItemComponent,
         NgIf,
-        CardTextDirective,
         CardTitleDirective,
         CardBodyComponent,
         CardHeaderComponent,
@@ -74,13 +86,23 @@ import { DashboardRenameWidgetService } from './dashboard-rename-widget-modal/da
         DashboardTabsComponent,
         NgClass,
         XsButtonDirective,
-        DashboardRenameWidgetModalComponent
+        DashboardRenameWidgetModalComponent,
+        DashboardAllocateModalComponent,
+        DashboardUpdateAvailableModalComponent,
+        WidgetContainerComponent,
+        TooltipDirective,
+        TranslocoPipe,
+        RowComponent,
+        ColComponent,
+        BlockLoaderComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardsIndexComponent implements OnInit, OnDestroy {
+
+    public isLoading: boolean = true; // for skeleton loader
 
     public tabs: DashboardTab[] = [];
     public currentTabId: number = 0;
@@ -95,20 +117,29 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     public layout: KtdGridLayout = []; // used by the grid layout library
     public widgets: WidgetGetForRender[] = []; // used by us to show the widgets
 
+    public isFullscreen: boolean = false;
 
     private readonly subscriptions: Subscription = new Subscription();
     private readonly DashboardsService = inject(DashboardsService);
     private readonly DashboardRenameWidgetService = inject(DashboardRenameWidgetService);
+    private readonly WidgetsService = inject(WidgetsService);
 
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
+    private readonly modalService = inject(ModalService);
 
     private cdr = inject(ChangeDetectorRef);
+
+    @HostListener('fullscreenchange', ['$event'])
+    handleFullscreenchangeEvent(Event: Event) {
+        if (document.fullscreenElement === null) {
+            this.isFullscreen = false;
+        }
+    }
 
     @ViewChild(KtdGridComponent, {static: false}) grid?: KtdGridComponent;
 
     // Docs: https://github.com/katoid/angular-grid-layout
-
     public cols = 12;
     public rowHeight = 15;
     compactType: 'vertical' | 'horizontal' | null = 'vertical';
@@ -181,6 +212,8 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     }
 
     public loadTabContent(tabId: number): void {
+        this.isLoading = true;
+
         this.layout = [];
         this.widgets = [];
         this.isReadonly = false;
@@ -204,6 +237,8 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                     w: widget.width,
                     h: widget.height
                 });
+
+                //console.log('push', widget);
 
                 // Array for ngFor id has to be a string
                 const widgetForLayout: WidgetGetForRender = {...widget, id: widgetId}
@@ -234,7 +269,17 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                 }
             });
 
+            // If this is a shared tab, check for updates
+            this.tabs.forEach(tab => {
+                if (tab.id === this.currentTabId && tab.source_tab_id > 0 && tab.check_for_updates) {
+                    this.checkForUpdates(this.currentTabId);
+                }
+            });
 
+            // Get a new reference of the layout array to trigger the change detection
+            this.layout = [...this.layout];
+
+            this.isLoading = false;
             this.cdr.markForCheck();
         }));
     }
@@ -274,6 +319,10 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     }
 
     public onColorChange(color: string, widget: WidgetGetForRender): void {
+        if (this.dashboardIsLocked) {
+            return;
+        }
+
         this.widgets.forEach(w => {
             if (w.id === widget.id) {
                 w.color = color;
@@ -316,6 +365,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
     public onResizeEnded(event: KtdResizeEnd): void {
         this.isResizing = false;
+        this.WidgetsService.onResizeEnded(event);
     }
 
     public onLayoutUpdated(layout: KtdGridLayout): void {
@@ -332,6 +382,8 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
             }
         });
         this.saveGrid();
+
+        this.WidgetsService.onLayoutUpdated(layout);
     }
 
     public onCompactTypeChange(change: MatSelectChange): void {
@@ -469,4 +521,112 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
         });
     }
 
+    // Checks if an update is available for the given tab id
+    private checkForUpdates(tabId: number) {
+        this.subscriptions.add(this.DashboardsService.checkForUpdates(tabId).subscribe(response => {
+            if (response.updateAvailable) {
+                // For the tab is an update available - toggle the modal to inform the user
+                this.modalService.toggle({
+                    show: true,
+                    id: 'dashboardUpdateAvailableModal',
+                });
+            }
+        }));
+    }
+
+    public handleUpdateDecisionEvent(event: 'PerformUpdate' | 'NeverPerformUpdate') {
+        const tab = this.tabs.find(tab => tab.id === this.currentTabId);
+        if (!tab) {
+            return;
+        }
+
+        if (event === 'PerformUpdate') {
+            // Perform the update
+            this.subscriptions.add(this.DashboardsService.updateSharedTab(tab.id).subscribe(response => {
+                if (response.success) {
+
+                    // actually the server response with more fields but this is all we need
+                    const data = response.data as unknown as { DashboardTab: { locked: boolean } };
+
+                    this.notyService.genericSuccess(
+                        this.TranslocoService.translate('Dashboard has been updated.')
+                    );
+
+                    tab.locked = data.DashboardTab.locked;
+
+                    this.dashboardIsLocked = tab.locked;
+                    this.disableDrag = tab.locked;
+                    this.disableResize = tab.locked;
+                    this.disableRemove = tab.locked;
+
+                    this.loadTabContent(tab.id);
+                    return;
+                }
+
+                this.notyService.genericError(
+                    this.TranslocoService.translate('An error occurred while updating the dashboard.')
+                );
+            }));
+
+        } else {
+            // Never perform the update
+            // Disable the check for updates for this tab
+            this.subscriptions.add(this.DashboardsService.neverPerformUpdates(tab.id).subscribe(response => {
+                if (response.success) {
+                    tab.check_for_updates = false;
+                    this.notyService.genericSuccess(
+                        this.TranslocoService.translate('Updates have been disabled for this tab.')
+                    );
+                }
+            }));
+        }
+    }
+
+    public toggleFullscreenMode() {
+        const elem = this.document.getElementById('dashboard-container');
+
+        if (this.isFullscreen) {
+            if (document.exitFullscreen) {
+                this.isFullscreen = false;
+                this.cdr.markForCheck();
+                document.exitFullscreen();
+            }
+        } else {
+            this.isFullscreen = true;
+            this.cdr.markForCheck();
+            if (elem && elem.requestFullscreen) {
+                elem.requestFullscreen();
+            }
+        }
+    }
+
+    public lockOrUnlock(locked: boolean) {
+        const tab = this.tabs.find(tab => tab.id === this.currentTabId);
+        if (!tab) {
+            return;
+        }
+
+        this.subscriptions.add(this.DashboardsService.lockOrUnlockTab(this.currentTabId, locked).subscribe(response => {
+            if (response.success) {
+
+                tab.locked = locked;
+                this.dashboardIsLocked = locked;
+                this.disableDrag = locked;
+                this.disableResize = locked;
+                this.disableRemove = locked;
+
+                this.notyService.genericSuccess();
+
+                this.cdr.markForCheck();
+                return;
+            }
+
+            this.cdr.markForCheck();
+
+            this.notyService.genericError();
+        }));
+    }
+
+    protected readonly WidgetTypes = WidgetTypes;
 }
+

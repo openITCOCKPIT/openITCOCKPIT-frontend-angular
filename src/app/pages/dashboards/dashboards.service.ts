@@ -293,4 +293,113 @@ export class DashboardsService {
                 })
             );
     }
+
+    public checkForUpdates(tabId: number): Observable<{ updateAvailable: boolean, _csrfToken: string }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            updateAvailable: boolean,
+            _csrfToken: string
+        }>(`${proxyPath}/dashboards/checkForUpdates/${tabId}.json`, {
+            params: {
+                angular: true,
+                tabId: tabId.toString()
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public neverPerformUpdates(tabId: number) {
+
+        const post: { DashboardTab: { id: number } } = {
+            DashboardTab: {
+                id: tabId,
+            }
+        };
+
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/dashboards/neverPerformUpdates.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+
+                    return {
+                        success: true,
+                        data: data as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public updateSharedTab(tabId: number) {
+
+        const post: { DashboardTab: { id: number } } = {
+            DashboardTab: {
+                id: tabId,
+            }
+        };
+
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/dashboards/updateSharedTab.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+
+                    return {
+                        success: true,
+                        data: data as GenericResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public lockOrUnlockTab(tabId: number, locked: boolean) {
+
+        const post: { DashboardTab: { id: number, locked: 'true' | 'false' } } = {
+            DashboardTab: {
+                id: tabId,
+                locked: (locked ? 'true' : 'false'),
+            }
+        };
+
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/dashboards/lockOrUnlockTab.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+
+                    return {
+                        success: true,
+                        data: data as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
 }

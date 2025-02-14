@@ -97,3 +97,50 @@
     background-image: linear-gradient(40deg, #3647b3, #5ed1fc);
     color: #fff;
 }
+
+/*** widgets content rotation box**/
+
+.box-container {
+    display: grid;
+    font-size: 2em;
+    position: relative;
+    width: 100%;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+.box-x {
+    display: grid;
+    grid-row: 1;
+    grid-column: 1;
+    flex: 1 1 auto;
+
+    &:first-child {
+        z-index: 1;
+    }
+
+    &:last-child {
+        transform: rotateY(180deg);
+        backface-visibility: hidden;
+    }
+}
+
+.box-y {
+    display: grid;
+    grid-row: 1;
+    grid-column: 1;
+    flex: 1 1 auto;
+
+    &:first-child {
+        background-color: #6244b0;
+
+        z-index: 1;
+
+    }
+
+    &:last-child {
+        background-color: #ff495d;
+
+        transform: rotateX(180deg);
+    }
+}

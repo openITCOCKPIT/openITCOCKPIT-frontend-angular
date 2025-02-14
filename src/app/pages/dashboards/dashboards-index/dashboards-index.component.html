@@ -13,7 +13,7 @@
         </ol>
     </nav>
 
-    <c-card class="mb-3">
+    <c-card class="mb-3" id="dashboard-container">
         <c-card-header>
             <h5 class="my-1">{{ t('Dashboard') }}</h5>
             <oitc-dashboard-tabs [tabs]="tabs"
@@ -24,10 +24,32 @@
 
             <c-nav class="card-toolbar card-header-pills ms-auto">
                 <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="primary"
+                            size="xs"
+                            [cTooltip]="'Setup tab rotation'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'arrows-spin']"></fa-icon>
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1" *ngIf="!isReadonly">
+                    <button (click)="lockOrUnlock(false)" cButton class="ripple" color="danger"
+                            *ngIf="dashboardIsLocked"
+                            size="xs"
+                            [cTooltip]="'Unlock for edit'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                    </button>
+                    <button (click)="lockOrUnlock(true)" cButton class="ripple" color="primary"
+                            *ngIf="!dashboardIsLocked"
+                            size="xs"
+                            [cTooltip]="'Lock for edit'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'unlock']"></fa-icon>
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1" *ngIf="!isReadonly">
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="success"
+                            [disabled]="dashboardIsLocked"
                             size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('Add Widget') }}
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
@@ -38,31 +60,15 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
+                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="success"
+                            size="xs" [cTooltip]="'Create new tab'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'folder-plus']"></fa-icon>
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
+                    <button (click)="toggleFullscreenMode()" cButton class="ripple" color="default"
+                            size="xs" [cTooltip]="'Fullscreen mode'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'expand-arrows-alt']"></fa-icon>
                     </button>
                 </c-nav-item>
             </c-nav>
@@ -70,7 +76,28 @@
 
         </c-card-header>
         <c-card-body>
-            <div class="grid-container" *ngIf="layout.length > 0">
+            <!-- Loading animation -->
+            @if (isLoading) {
+                <c-row>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                        <oitc-block-loader height="15rem"></oitc-block-loader>
+                    </c-col>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                        <oitc-block-loader height="15rem"></oitc-block-loader>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                        <oitc-block-loader height="15rem"></oitc-block-loader>
+                    </c-col>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                        <oitc-block-loader height="15rem"></oitc-block-loader>
+                    </c-col>
+                </c-row>
+            }
+
+            <!-- Actual dashboard content -->
+            <div class="grid-container" *ngIf="layout.length > 0" [ngClass]="{'border-0': dashboardIsLocked}">
                 <ktd-grid [cols]="cols"
                           [rowHeight]="rowHeight"
                           [gap]="10"
@@ -125,7 +152,7 @@
                                             </button>
                                         </c-nav-item>
 
-                                        <c-nav-item class="px-1">
+                                        <c-nav-item class="px-1" *ngIf="!dashboardIsLocked">
                                             <oitc-dashboard-colorpicker
                                                 (selectedColor)="onColorChange($event, widget)"></oitc-dashboard-colorpicker>
                                         </c-nav-item>
@@ -140,14 +167,11 @@
                                     </c-nav>
 
                                 </c-card-header>
-                                <c-card-body>
-                                    <h5 cCardTitle>Special title treatment</h5>
-                                    <p cCardText>
+                                <c-card-body class="overflow-scroll">
 
-                                        {{ widget.id }}
-
-                                        With supporting text below as a natural lead-in to additional content.
-                                    </p>
+                                    <oitc-widget-container
+                                        [widgetInput]="widget"
+                                        [isReadonly]="isReadonly"></oitc-widget-container>
 
                                 </c-card-body>
                             </c-card>
@@ -164,3 +188,9 @@
 
 <oitc-dashboard-rename-widget-modal
     (titleChangedEvent)="onWidgetTitleChanged($event)"></oitc-dashboard-rename-widget-modal>
+
+<oitc-dashboard-allocate-modal
+    (triggerReloadEvent)="loadDashboardsIndex()"></oitc-dashboard-allocate-modal>
+
+<oitc-dashboard-update-available-modal
+    (decisionEvent)="handleUpdateDecisionEvent($event)"></oitc-dashboard-update-available-modal>

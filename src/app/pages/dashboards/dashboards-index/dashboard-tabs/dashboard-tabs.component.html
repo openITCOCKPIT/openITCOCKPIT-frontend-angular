@@ -25,10 +25,10 @@
                         <span class="nav-link active" cDropdownToggle
                               [ngClass]="{
                       'cursor-grab': !tab.pinned,
-                      'text-default': !tab.shared && !tab.dashboard_tab_allocation,
-                      'text-info': tab.shared,
-                      'tab-allocated': tab.dashboard_tab_allocation || !tab.isOwner,
-                      'tab-shared-and-allocated-gradient': tab.shared && tab.dashboard_tab_allocation
+                      'text-default': !tab.shared && !tab.dashboard_tab_allocation?.id,
+                      'text-primary': tab.shared,
+                      'tab-allocated': tab.dashboard_tab_allocation?.id || !tab.isOwner,
+                      'tab-shared-and-allocated-gradient': tab.shared && tab.dashboard_tab_allocation?.id
                       }">
                             <fa-icon [icon]="['fas', 'thumbtack']" *ngIf="tab.pinned"></fa-icon>
                             {{ tab.name }}
@@ -44,7 +44,8 @@
                                 </span>
                             </li>
                             @if (( PermissionsService.hasPermissionObservable(['DashboardAllocations', 'add'])|async ) && ( PermissionsService.hasPermissionObservable(['DashboardAllocations', 'edit'])|async )) {
-                                <li *ngIf="tab.isOwner" class="cursor-pointer">
+                                <li *ngIf="tab.isOwner" class="cursor-pointer"
+                                    (click)="allocateDashboard(tab)">
                                     <span cDropdownItem>
                                         <fa-icon [icon]="['fas', 'user']"></fa-icon>
                                         {{ t('Allocate Dashboard') }}
@@ -83,10 +84,10 @@
                     <span class="nav-link"
                           [ngClass]="{
                       'active': tab.id === currentTabId(), 'cursor-grab': !tab.pinned,
-                      'text-default': !tab.shared && !tab.dashboard_tab_allocation,
-                      'text-info': tab.shared,
-                      'tab-allocated': tab.dashboard_tab_allocation || !tab.isOwner,
-                      'tab-shared-and-allocated-gradient': tab.shared && tab.dashboard_tab_allocation
+                      'text-default': !tab.shared && !tab.dashboard_tab_allocation?.id,
+                      'text-primary': tab.shared,
+                      'tab-allocated': tab.dashboard_tab_allocation?.id || !tab.isOwner,
+                      'tab-shared-and-allocated-gradient': tab.shared && tab.dashboard_tab_allocation?.id
                       }"
                           (click)="changeTab(tab.id)">
                         <fa-icon [icon]="['fas', 'thumbtack']" *ngIf="tab.pinned"></fa-icon>
