@@ -247,7 +247,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     public maxUploadLimit?: MaxUploadLimit;
     public iconsets: Iconset[] = [];
-    private icons: string[] = [];
+    public icons: string[] = [];
     public metrics: { key: string, value: string }[] = [];
     public itemObjects: SelectKeyValue[] = [];
     public mapItemObjectTypes: { key: string, value: string }[] = [];
@@ -767,6 +767,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 const msg = this.TranslocoService.translate('saved successfully');
 
                 this.map.Map.background = background.image;
+                this.map.Map = {...this.map.Map};
 
                 this.notyService.genericSuccess(msg, title);
                 return;
@@ -986,7 +987,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 mapEditor.style.cursor = 'default';
                 this.addNewObject = false;
 
-                //$('#AddEditStatelessIconModal').modal('show');
+                this.modalService.toggle({
+                    show: true,
+                    id: 'AddEditStatelessIconModal',
+                });
 
                 // Create currentItem skeleton
                 // Set X and Y poss of the new object
@@ -1819,11 +1823,14 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     public editIcon(item: any) {
         this.action = 'icon';
         this.currentItem = item;
-        //$('#AddEditStatelessIconModal').modal('show');
+        this.modalService.toggle({
+            show: true,
+            id: 'AddEditStatelessIconModal',
+        });
         this.cdr.markForCheck();
     };
 
-    public saveIcon(action: string) {
+    public saveIcon(action?: string) {
         if (typeof action === 'undefined') {
             action = 'add_or_edit';
         }
@@ -1866,7 +1873,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     this.map.Mapicons.push(result.data.Mapicon.Mapicon);
                 }
 
-                //$('#AddEditStatelessIconModal').modal('hide');
+                this.modalService.toggle({
+                    show: false,
+                    id: 'AddEditStatelessIconModal',
+                });
                 this.notyService.genericSuccess(msg, title);
                 return;
             }
@@ -1909,7 +1919,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 }
 
                 this.notyService.genericSuccess(msg, title);
-                //$('#AddEditStatelessIconModal').modal('hide');
+                this.modalService.toggle({
+                    show: false,
+                    id: 'AddEditStatelessIconModal',
+                });
                 this.currentItem = {};
                 delete this.currentDeletedItem;
                 return;
@@ -2201,7 +2214,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 acceptedFiles: 'image/gif,image/jpeg,image/png', //mimetypes
                 paramName: "file",
                 clickable: true,
-                addRemoveLinks: true,
                 headers: {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },

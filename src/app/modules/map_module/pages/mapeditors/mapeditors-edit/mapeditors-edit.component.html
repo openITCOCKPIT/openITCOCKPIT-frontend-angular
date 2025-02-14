@@ -196,6 +196,7 @@
                             <oitc-map-icon *ngFor="let iconItem of map.Mapicons" [item]="iconItem"
                                            [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
                                            [layers]="layers"
+                                           (dblclick)="editIcon(iconItem)"
                                            (contextActionEvent)="onContextAction($event)"
                                            (dropItemEvent)="onDropItem($event)"
                                            [hidden]="!iconItem.display">
@@ -458,7 +459,7 @@
                     <c-row>
                         <c-col lg="6">
                             <div class="mb-3">
-                                <label cLabel for="addEditElPosX">
+                                <label cLabel for="mapItemPosX">
                                     {{ t('Position X') }}
                                 </label>
 
@@ -468,9 +469,9 @@
                                     </span>
                                     <input cFormControl
                                            required
-                                           id="addEditElPosX"
+                                           id="mapItemPosX"
                                            type="number"
-                                           name="addEditElPosX"
+                                           name="mapItemPosX"
                                            min="0"
                                            [placeholder]="'0' | transloco"
                                            [(ngModel)]="currentItem.x"
@@ -481,7 +482,7 @@
                         </c-col>
                         <c-col lg="6">
                             <div class="mb-3">
-                                <label cLabel for="addEditElPosY">
+                                <label cLabel for="mapItemPosY">
                                     {{ t('Position Y') }}
                                 </label>
 
@@ -491,9 +492,9 @@
                                     </span>
                                     <input cFormControl
                                            required
-                                           id="addEditElPosY"
+                                           id="mapItemPosY"
                                            type="number"
-                                           name="addEditElPosY"
+                                           name="mapItemPosY"
                                            min="0"
                                            [placeholder]="'0' | transloco"
                                            [(ngModel)]="currentItem.y"
@@ -537,11 +538,11 @@
                         <c-col class="mb-3">
                             <c-form-check>
                                 <input [(ngModel)]="currentItem.show_label" cFormCheckInput
-                                       id="addEditElShowLabel"
-                                       name="addEditElShowLabel"
+                                       id="mapItemShowLabel"
+                                       name="mapItemShowLabel"
                                        oitcFormError [errors]="errors" errorField="show_label"
                                        type="checkbox"/>
-                                <label cFormCheckLabel for="addEditElShowLabel">
+                                <label cFormCheckLabel for="mapItemShowLabel">
                                     {{ t('Show Label') }}
                                 </label>
                             </c-form-check>
@@ -550,11 +551,11 @@
                     </c-row>
                     <c-row>
                         <div class="mb-3">
-                            <label cLabel for="addEditElLabelPos">
+                            <label cLabel for="mapItemLabelPos">
                                 {{ t('Label position') }}
                             </label>
                             <c-col lg="12" class="btn-toolbar">
-                                <div class="btn-group me-2" role="group" id="addEditElLabelPos">
+                                <div class="btn-group me-2" role="group" id="mapItemLabelPos">
                                     <button (click)="currentItem.label_possition = 4" cButton class="ripple"
                                             color="default"
                                             [ngClass]="{ 'btn-primary': currentItem.label_possition === 4, 'btn-default': currentItem.label_possition !== 4 }">
@@ -708,7 +709,7 @@
                 <c-row>
                     <c-col lg="6">
                         <div class="mb-3">
-                            <label cLabel for="addEditLinePosStartX">
+                            <label cLabel for="mapLinePosStartX">
                                 {{ t('Start X') }}
                             </label>
 
@@ -718,9 +719,9 @@
                                 </span>
                                 <input cFormControl
                                        required
-                                       id="addEditLinePosStartX"
+                                       id="mapLinePosStartX"
                                        type="number"
-                                       name="addEditLinePosStartX"
+                                       name="mapLinePosStartX"
                                        min="0"
                                        [placeholder]="'0' | transloco"
                                        [(ngModel)]="currentItem.startX"
@@ -731,7 +732,7 @@
                     </c-col>
                     <c-col lg="6">
                         <div class="mb-3">
-                            <label cLabel for="addEditLinePosStartY">
+                            <label cLabel for="mapLinePosStartY">
                                 {{ t('Start Y') }}
                             </label>
 
@@ -741,9 +742,9 @@
                                 </span>
                                 <input cFormControl
                                        required
-                                       id="addEditLinePosStartY"
+                                       id="mapLinePosStartY"
                                        type="number"
-                                       name="addEditLinePosStartY"
+                                       name="mapLinePosStartY"
                                        min="0"
                                        [placeholder]="'0' | transloco"
                                        [(ngModel)]="currentItem.startY"
@@ -756,7 +757,7 @@
                 <c-row>
                     <c-col lg="6">
                         <div class="mb-3">
-                            <label cLabel for="addEditLinePosEndX">
+                            <label cLabel for="mapLinePosEndX">
                                 {{ t('End X') }}
                             </label>
 
@@ -766,9 +767,9 @@
                                 </span>
                                 <input cFormControl
                                        required
-                                       id="addEditLinePosEndX"
+                                       id="mapLinePosEndX"
                                        type="number"
-                                       name="addEditLinePosEndX"
+                                       name="mapLinePosEndX"
                                        min="0"
                                        [placeholder]="'0' | transloco"
                                        [(ngModel)]="currentItem.endX"
@@ -779,7 +780,7 @@
                     </c-col>
                     <c-col lg="6">
                         <div class="mb-3">
-                            <label cLabel for="addEditLinePosEndY">
+                            <label cLabel for="mapLinePosEndY">
                                 {{ t('End Y') }}
                             </label>
 
@@ -789,9 +790,9 @@
                                 </span>
                                 <input cFormControl
                                        required
-                                       id="addEditLinePosEndY"
+                                       id="mapLinePosEndY"
                                        type="number"
-                                       name="addEditLinePosEndY"
+                                       name="mapLinePosEndY"
                                        min="0"
                                        [placeholder]="'0' | transloco"
                                        [(ngModel)]="currentItem.endY"
@@ -835,11 +836,11 @@
                     <c-col class="mb-3">
                         <c-form-check>
                             <input [(ngModel)]="currentItem.show_label" cFormCheckInput
-                                   id="addEditElShowLabel"
-                                   name="addEditElShowLabel"
+                                   id="mapLineShowLabel"
+                                   name="mapLineShowLabel"
                                    oitcFormError [errors]="errors" errorField="show_label"
                                    type="checkbox"/>
-                            <label cFormCheckLabel for="addEditElShowLabel">
+                            <label cFormCheckLabel for="mapLineShowLabel">
                                 {{ t('Show Label') }}
                             </label>
                         </c-form-check>
@@ -972,7 +973,7 @@
                 <c-row [hidden]="!(currentItem.gadget == 'ServiceOutput')">
                     <c-col lg="12">
                         <div class="mb-3">
-                            <label cLabel for="addEditGadgetFontSize">
+                            <label cLabel for="mapGadgetFontSize">
                                 {{ t('Font size') }}
                             </label>
 
@@ -982,9 +983,9 @@
                                 </span>
                                 <input cFormControl
                                        required
-                                       id="addEditGadgetFontSize"
+                                       id="mapGadgetFontSize"
                                        type="number"
-                                       name="addEditGadgetFontSize"
+                                       name="mapGadgetFontSize"
                                        min="1"
                                        [placeholder]="'13' | transloco"
                                        [(ngModel)]="currentItem.font_size"
@@ -997,7 +998,7 @@
                 <c-row>
                     <c-col lg="6">
                         <div class="mb-3">
-                            <label cLabel for="addEditElPosX">
+                            <label cLabel for="mapGadgetPosX">
                                 {{ t('Position X') }}
                             </label>
 
@@ -1007,9 +1008,9 @@
                                 </span>
                                 <input cFormControl
                                        required
-                                       id="addEditElPosX"
+                                       id="mapGadgetPosX"
                                        type="number"
-                                       name="addEditElPosX"
+                                       name="mapGadgetPosX"
                                        min="0"
                                        [placeholder]="'0' | transloco"
                                        [(ngModel)]="currentItem.x"
@@ -1020,7 +1021,7 @@
                     </c-col>
                     <c-col lg="6">
                         <div class="mb-3">
-                            <label cLabel for="addEditElPosY">
+                            <label cLabel for="mapGadgetPosY">
                                 {{ t('Position Y') }}
                             </label>
 
@@ -1030,9 +1031,9 @@
                                 </span>
                                 <input cFormControl
                                        required
-                                       id="addEditElPosY"
+                                       id="mapGadgetPosY"
                                        type="number"
-                                       name="addEditElPosY"
+                                       name="mapGadgetPosY"
                                        min="0"
                                        [placeholder]="'0' | transloco"
                                        [(ngModel)]="currentItem.y"
@@ -1045,7 +1046,7 @@
                 <c-row>
                     <c-col lg="6">
                         <div class="mb-3">
-                            <label cLabel for="addEditGadgetWidth">
+                            <label cLabel for="mapGadgetWidth">
                                 {{ t('Width') }}
                             </label>
 
@@ -1055,9 +1056,9 @@
                                 </span>
                                 <input cFormControl
                                        required
-                                       id="addEditGadgetWidth"
+                                       id="mapGadgetWidth"
                                        type="number"
-                                       name="addEditGadgetWidth"
+                                       name="mapGadgetWidth"
                                        min="0"
                                        [placeholder]="'0' | transloco"
                                        [(ngModel)]="currentItem.size_x"
@@ -1071,7 +1072,7 @@
                     </c-col>
                     <c-col lg="6">
                         <div class="mb-3">
-                            <label cLabel for="addEditGadgetHeight">
+                            <label cLabel for="mapGadgetHeight">
                                 {{ t('Height') }}
                             </label>
 
@@ -1081,9 +1082,9 @@
                                 </span>
                                 <input cFormControl
                                        required
-                                       id="addEditGadgetHeight"
+                                       id="mapGadgetHeight"
                                        type="number"
-                                       name="addEditGadgetHeight"
+                                       name="mapGadgetHeight"
                                        min="0"
                                        [placeholder]="'0' | transloco"
                                        [(ngModel)]="currentItem.size_y"
@@ -1130,11 +1131,11 @@
                     <c-col class="mb-3">
                         <c-form-check>
                             <input [(ngModel)]="currentItem.show_label" cFormCheckInput
-                                   id="addEditElShowLabel"
-                                   name="addEditElShowLabel"
+                                   id="mapGadgetShowLabel"
+                                   name="mapGadgetShowLabel"
                                    oitcFormError [errors]="errors" errorField="show_label"
                                    type="checkbox"/>
-                            <label cFormCheckLabel for="addEditElShowLabel">
+                            <label cFormCheckLabel for="mapGadgetShowLabel">
                                 {{ t('Show Label') }}
                             </label>
                         </c-form-check>
@@ -1323,11 +1324,11 @@
                     <c-col class="mb-3">
                         <c-form-check>
                             <input [(ngModel)]="currentItem.show_label" cFormCheckInput
-                                   id="addEditElShowLabel"
-                                   name="addEditElShowLabel"
+                                   id="mapSummaryItemShowLabel"
+                                   name="mapSummaryItemShowLabel"
                                    oitcFormError [errors]="errors" errorField="show_label"
                                    type="checkbox"/>
-                            <label cFormCheckLabel for="addEditElShowLabel">
+                            <label cFormCheckLabel for="mapSummaryItemShowLabel">
                                 {{ t('Show Label') }}
                             </label>
                         </c-form-check>
@@ -1336,11 +1337,11 @@
                 </c-row>
                 <c-row>
                     <div class="mb-3">
-                        <label cLabel for="addEditElLabelPos">
+                        <label cLabel for="mapSummaryItemLabelPos">
                             {{ t('Label position') }}
                         </label>
                         <c-col lg="12" class="btn-toolbar">
-                            <div class="btn-group me-2" role="group" id="addEditElLabelPos">
+                            <div class="btn-group me-2" role="group" id="mapSummaryItemLabelPos">
                                 <button (click)="currentItem.label_possition = 4" cButton class="ripple"
                                         color="default"
                                         [ngClass]="{ 'btn-primary': currentItem.label_possition === 4, 'btn-default': currentItem.label_possition !== 4 }">
@@ -1467,7 +1468,7 @@
                             </c-col>
                         </c-row>
                     </c-col>
-                    <c-col lg="12">
+                    <c-col lg="12" class="mt-3">
                         {{ t('Upload new background image') }}
                     </c-col>
                     <c-col lg="12" class="text-info">
@@ -1491,6 +1492,157 @@
             </c-modal-body>
             <c-modal-footer>
                 <button [cModalToggle]="changeBackgroundModal.id" cButton color="default" class="ripple">
+                    {{ t('Close') }}
+                </button>
+            </c-modal-footer>
+        </form>
+    </c-modal>
+
+
+    <!-- Add/Edit stateless icon modal -->
+    <c-modal #AddEditStatelessIconModal fullscreen="md" size="xl" id="AddEditStatelessIconModal">
+        <form cForm (ngSubmit)="saveIcon()">
+            <c-modal-header>
+                <h5 cModalTitle>
+                    <fa-icon [icon]="['fas', 'object-ungroup']"></fa-icon>
+                    {{ t('Add or edit stateless icon') }}
+                </h5>
+                <button [cModalToggle]="AddEditStatelessIconModal.id" cButtonClose></button>
+            </c-modal-header>
+            <c-modal-body>
+
+                <c-row>
+                    <c-col lg="12" *ngIf="icons">
+                        <c-row style="max-height: 200px; overflow: auto;"
+                               [ngClass]="{'has-error-border': errors?.['icon']}">
+                            <c-col xs="12" md="6" lg="2" *ngFor="let icon of icons">
+                                <div class="card"
+                                     style="height: 155px; width: 175px;overflow: hidden;"
+                                     (click)="currentItem.icon = icon"
+                                     [ngClass]="{ 'selectedMapItem': currentItem.icon === icon}">
+                                    <button cButton size="xs" color="danger" class="ripple btn-icon text-white"
+                                            style="position: absolute; top: 2px; left: 130px;"
+                                            (click)="deleteIconImage(icon)">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    </button>
+                                    <img class="mx-auto my-auto"
+                                         [src]="'/map_module/img/icons/' + icon">
+                                </div>
+                            </c-col>
+                        </c-row>
+                        <oitc-form-feedback [errors]="errors" errorField="icon"></oitc-form-feedback>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="statelessIconPosX">
+                                {{ t('Position X') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="statelessIconPosX"
+                                       type="number"
+                                       name="statelessIconPosX"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.x"
+                                       oitcFormError [errors]="errors" errorField="x">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="x"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="statelessIconPosY">
+                                {{ t('Position Y') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="statelessIconPosY"
+                                       type="number"
+                                       name="statelessIconPosY"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.y"
+                                       oitcFormError [errors]="errors" errorField="y">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="y"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="10">
+                        <div class="mb-3">
+                            <label cLabel for="statelessIconLayers">
+                                {{ t('Select layer') }}
+                            </label>
+
+                            <oitc-select
+                                name="statelessIconLayers"
+                                id="statelessIconLayers"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="currentItem.z_index"
+                                [options]="layers"
+                                [appendTo]="AddEditStatelessIconModal"
+                                oitcFormError [errors]="errors" errorField="z_index">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
+                            <span class="help-block">
+                                {{ t('Layers could be used to stack items on a map. Empty layers will be deleted automatically.') }}
+                            </span>
+                        </div>
+                    </c-col>
+                    <c-col lg="2">
+                        <button (click)="addNewLayer()" cButton class="ripple mt-4" style="width: 100%"
+                                color="default">
+                            {{ t('Add new layer') }}
+                        </button>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="12" class="no-padding pt-3">
+                        <c-col lg="12">
+                            {{ t('Upload new icon') }}
+                        </c-col>
+                        <c-col lg="12" class="text-info">
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('Max allowed file size: ') }}
+                            {{ maxUploadLimit?.string }}
+                        </c-col>
+                        <c-col lg="12">
+                            <div id="iconDropzone"
+                                 class="profileImg-dropzone dropzone dropzoneStyle icon-dropzone">
+                                <div class="dz-message">
+                                    <fa-icon [icon]="['fas', 'cloud-upload-alt']" size="5x"
+                                             class="mb-3 text-muted"></fa-icon>
+                                    <br>
+                                    <span class="text-uppercase"> {{ t('Drop files here or click to upload.') }} </span>
+                                </div>
+                            </div>
+                        </c-col>
+                    </c-col>
+                </c-row>
+            </c-modal-body>
+            <c-modal-footer>
+                <button cButton color="danger" class="ripple me-auto" (click)="deleteIcon()">
+                    {{ t('Delete') }}
+                </button>
+                <button cButton color="success" type="submit" class="ripple">
+                    {{ t('Save') }}
+                </button>
+                <button [cModalToggle]="AddEditStatelessIconModal.id" cButton color="default" class="ripple">
                     {{ t('Close') }}
                 </button>
             </c-modal-footer>
