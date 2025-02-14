@@ -57,7 +57,7 @@ import {
     UserType
 } from '../users.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { LdapConfig } from '../../contacts/contacts.interface';
 import { ContainersLoadContainersByStringParams } from '../../containers/containers.interface';
 import { UsersService } from '../users.service';
@@ -318,6 +318,10 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         // For each containerPermissions object attach the containerId to this.containerRoleContainerIds.
         this.containerRoleContainerIds = [];
         this.containerPermissions = {} as LoadContainerPermissionsRoot;
+
+        if (this.post.User.usercontainerroles._ids.length === 0) {
+            return;
+        }
 
         let params: LoadContainerPermissionsRequest = {
             'usercontainerRoleIds[]': this.post.User.usercontainerroles._ids,
