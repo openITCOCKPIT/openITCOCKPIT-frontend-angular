@@ -4,6 +4,7 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
     DashboardsIndexResponse,
+    SharedTab,
     WidgetGetForRender,
     WidgetSaveGrid,
     WidgetsForTabResponse
@@ -431,4 +432,78 @@ export class DashboardsService {
             );
     }
 
+    public getSharedTabs(): Observable<SharedTab[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            tabs: SharedTab[],
+            _csrfToken: string
+        }>(`${proxyPath}/dashboards/getSharedTabs.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.tabs;
+            })
+        )
+    }
+
+    public addNewTab(name: string) {
+
+        const post: { DashboardTab: { name: string } } = {
+            DashboardTab: {
+                name: name
+            }
+        };
+
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/dashboards/addNewTab.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.DashboardTab.DashboardTab as GenericResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+
+    public createFromSharedTab(sharedTabId: number) {
+
+        const post: { DashboardTab: { id: number } } = {
+            DashboardTab: {
+                id: sharedTabId
+            }
+        };
+
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/dashboards/createFromSharedTab.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.DashboardTab.DashboardTab as GenericResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
 }

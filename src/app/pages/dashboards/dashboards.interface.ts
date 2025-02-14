@@ -126,3 +126,14 @@ export interface WidgetSaveGrid {
         color: string
     }
 }
+
+export interface SharedTab {
+    id: number
+    position: number
+    name: string
+    shared: boolean
+    source_tab_id: number
+    check_for_updates: boolean
+    last_update: number
+    locked: boolean
+}

@@ -1,0 +1,78 @@
+<ng-container *transloco="let t">
+    <c-modal #dashboardCreateNewTabModal fullscreen="md" id="dashboardCreateNewTabModal" size="lg">
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                {{ t('Create new tab') }}
+            </h5>
+            <button [cModalToggle]="dashboardCreateNewTabModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+            <c-row>
+                <c-col xs="12">
+                    <label cLabel for="TabNameModal" class="mt-3">
+                        {{ t('Tab name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                        </span>
+                        <input cFormControl id="TabNameModal" type="text"
+                               name="TabNameModal"
+                               [placeholder]="'Tab name' | transloco"
+                               [(ngModel)]="newTabName">
+                    </c-input-group>
+                </c-col>
+                <c-col xs="12" class="text-end mt-3">
+                    <button cButton color="primary" class="ripple" type="button"
+                            (click)="createNewTab()"
+                            [disabled]="newTabName === ''">
+                        {{ t('Create new tab') }}
+                    </button>
+                </c-col>
+            </c-row>
+
+            <hr class="border-dashed">
+            <c-row>
+                <c-col xs="12">
+                    <h5 cModalTitle>
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('Create from shared tab') }}
+                    </h5>
+                </c-col>
+                <c-col xs="12">
+                    <div class="mt-3">
+                        <label for="selectSharedTabModal" cLabel>
+                            {{ t('Select shared tab') }}
+                        </label>
+                        <oitc-select
+                            name="selectSharedTabModal"
+                            id="selectSharedTabModal"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="selectedSharedTabId"
+                            [options]="sharedTabs"
+                            [appendTo]="''">
+                        </oitc-select>
+                    </div>
+                </c-col>
+                <c-col xs="12" class="text-end mt-3">
+                    <button cButton color="primary" class="ripple" type="button"
+                            [disabled]="selectedSharedTabId === 0"
+                            (click)="createNewFromSharedTab()">
+                        {{ t('Create from shared tab') }}
+                    </button>
+                </c-col>
+            </c-row>
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button [cModalToggle]="dashboardCreateNewTabModal.id" cButton color="default" class="ripple" type="button">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+
+</ng-container>
