@@ -62,6 +62,9 @@ import { WidgetTypes } from '../widgets/widgets.enum';
 import { WidgetContainerComponent } from '../widgets/widget-container/widget-container.component';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { WidgetsService } from '../widgets/widgets.service';
+import {
+    DashboardTabRotationModalComponent
+} from './dashboard-tab-rotation-modal/dashboard-tab-rotation-modal.component';
 
 
 @Component({
@@ -94,7 +97,8 @@ import { WidgetsService } from '../widgets/widgets.service';
         TranslocoPipe,
         RowComponent,
         ColComponent,
-        BlockLoaderComponent
+        BlockLoaderComponent,
+        DashboardTabRotationModalComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
@@ -625,6 +629,13 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
             this.notyService.genericError();
         }));
+    }
+
+    public toggleTabRotationModal() {
+        this.modalService.toggle({
+            show: true,
+            id: 'dashboardTabRotationModal',
+        });
     }
 
     protected readonly WidgetTypes = WidgetTypes;

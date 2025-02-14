@@ -24,7 +24,7 @@
 
             <c-nav class="card-toolbar card-header-pills ms-auto">
                 <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="primary"
+                    <button (click)="toggleTabRotationModal()" cButton class="ripple" color="primary"
                             size="xs"
                             [cTooltip]="'Setup tab rotation'|transloco" cTooltipPlacement="bottom">
                         <fa-icon [icon]="['fas', 'arrows-spin']"></fa-icon>
@@ -194,3 +194,5 @@
 
 <oitc-dashboard-update-available-modal
     (decisionEvent)="handleUpdateDecisionEvent($event)"></oitc-dashboard-update-available-modal>
+
+<oitc-dashboard-tab-rotation-modal></oitc-dashboard-tab-rotation-modal>

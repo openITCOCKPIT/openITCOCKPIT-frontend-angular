@@ -1,0 +1,15 @@
+<input
+    type="range"
+    [ngClass]="class()"
+    [attr.id]="id()"
+    [name]="String(name())"
+    [min]="min()"
+    [max]="max()"
+    [step]="step()"
+    [disabled]="disabled"
+    [value]="value"
+    (input)="onInputChange($event)"
+/>
+<div class="help-block">
+    {{ sliderText }}
+</div>

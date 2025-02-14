@@ -68,6 +68,7 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
+import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
 
 @Component({
     selector: 'oitc-users-edit',
@@ -112,7 +113,8 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
         NgOptionHighlightDirective,
         FormLoaderComponent,
         KeyFilterModule,
-        BadgeOutlineComponent
+        BadgeOutlineComponent,
+        SliderTimeComponent
     ],
     templateUrl: './users-edit.component.html',
     styleUrl: './users-edit.component.css',
@@ -141,7 +143,6 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected containerPermissions: LoadContainerPermissionsRoot = {} as LoadContainerPermissionsRoot;
     protected containerRoleContainerIds: number[] = [];
-    protected tabRotationIntervalText: string = '';
     protected samaccountnames: LdapUser[] = [];
     protected ldapConfig: LdapConfig = {} as LdapConfig;
     protected serverTime: string = '';
@@ -249,7 +250,6 @@ export class UsersEditComponent implements OnDestroy, OnInit {
 
     public ngOnInit() {
         this.loadContainers();
-        this.updateTabRotationInterval();
         this.loadDateformats();
         this.loadLocaleOptions();
         this.loadContainerRoles('');
@@ -284,9 +284,6 @@ export class UsersEditComponent implements OnDestroy, OnInit {
                 let selectedContainerRoleIds = new Set(this.containers.map(item => item.key));
                 this.invisibleContainerRoleIds = this.post.User.usercontainerroles._ids.filter(key => !selectedContainerRoleIds.has(key));
                 // this.post.User.usercontainerroles._ids = this.post.User.usercontainerroles._ids.filter(key => selectedContainerRoleIds.has(key));
-
-                // Force the update of the rotation slider's text.
-                this.updateTabRotationInterval()
             }));
         this.selectedContainerIds = [];
         this.containerPermissions = {} as LoadContainerPermissionsRoot;
@@ -444,22 +441,6 @@ export class UsersEditComponent implements OnDestroy, OnInit {
                 this.ldapConfig = result.ldapConfig;
                 this.cdr.markForCheck();
             }))
-    }
-
-    protected updateTabRotationInterval(): void {
-        this.cdr.markForCheck();
-
-        if (this.post.User.dashboard_tab_rotation === 0) {
-            this.tabRotationIntervalText = 'disabled';
-            return;
-        }
-        let min = Math.floor(this.post.User.dashboard_tab_rotation / 60),
-            sec = Math.round(this.post.User.dashboard_tab_rotation % 60);
-        if (min > 0) {
-            this.tabRotationIntervalText = min + ' minutes, ' + sec + ' seconds';
-            return;
-        }
-        this.tabRotationIntervalText = sec + ' seconds';
     }
 
     protected deleteApiKey(index: number): void {
