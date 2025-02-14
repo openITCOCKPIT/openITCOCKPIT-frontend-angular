@@ -61,6 +61,7 @@ import {
 import { WidgetTypes } from '../widgets/widgets.enum';
 import { WidgetContainerComponent } from '../widgets/widget-container/widget-container.component';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
+import { WidgetsService } from '../widgets/widgets.service';
 
 
 @Component({
@@ -121,6 +122,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly DashboardsService = inject(DashboardsService);
     private readonly DashboardRenameWidgetService = inject(DashboardRenameWidgetService);
+    private readonly WidgetsService = inject(WidgetsService);
 
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -168,7 +170,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
 
     constructor(public elementRef: ElementRef, @Inject(DOCUMENT) public document: Document) {
-
+        
     }
 
     public ngOnInit(): void {
@@ -359,6 +361,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
     public onResizeEnded(event: KtdResizeEnd): void {
         this.isResizing = false;
+        this.WidgetsService.onResizeEnded(event);
     }
 
     public onLayoutUpdated(layout: KtdGridLayout): void {
@@ -375,6 +378,8 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
             }
         });
         this.saveGrid();
+
+        this.WidgetsService.onLayoutUpdated(layout);
     }
 
     public onCompactTypeChange(change: MatSelectChange): void {
@@ -593,3 +598,4 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
     protected readonly WidgetTypes = WidgetTypes;
 }
+

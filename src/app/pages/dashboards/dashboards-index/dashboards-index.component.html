@@ -152,7 +152,7 @@
                                             </button>
                                         </c-nav-item>
 
-                                        <c-nav-item class="px-1">
+                                        <c-nav-item class="px-1" *ngIf="!dashboardIsLocked">
                                             <oitc-dashboard-colorpicker
                                                 (selectedColor)="onColorChange($event, widget)"></oitc-dashboard-colorpicker>
                                         </c-nav-item>
