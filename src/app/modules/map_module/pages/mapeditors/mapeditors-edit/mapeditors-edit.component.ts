@@ -19,6 +19,7 @@ import { HistoryService } from '../../../../../history.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import {
+    AlertComponent,
     ButtonCloseDirective,
     CardBodyComponent,
     CardComponent,
@@ -164,7 +165,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
         ModalToggleDirective,
         FormFeedbackComponent,
         RequiredIconComponent,
-        XsButtonDirective
+        XsButtonDirective,
+        AlertComponent
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',
@@ -725,7 +727,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }
         }
 
-        //$('#changeBackgroundModal').modal('show');
+        this.modalService.toggle({
+            show: true,
+            id: 'changeBackgroundModal',
+        });
     };
 
     private loadBackgroundImages(selectedImage?: string) {
@@ -2118,7 +2123,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 acceptedFiles: 'image/gif,image/jpeg,image/png', //mimetypes
                 paramName: "file",
                 clickable: true,
-                addRemoveLinks: true,
                 headers: {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
@@ -2145,7 +2149,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                             this.notyService.genericSuccess(
                                 serverResponse.response.message
                             );
-                            this.loadBackgroundImages(response.response.filename);
+                            this.loadBackgroundImages(serverResponse.response.filename);
                             return;
                         }
 
@@ -2224,7 +2228,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                             this.notyService.genericSuccess(
                                 serverResponse.response.message
                             );
-                            this.loadIcons(response.response.filename);
+                            this.loadIcons(serverResponse.response.filename);
                             return;
                         }
 
@@ -2303,7 +2307,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                             this.notyService.genericSuccess(
                                 serverResponse.response.message
                             );
-                            this.loadIconsets(response.response.iconsetname);
+                            this.loadIconsets(serverResponse.response.iconsetname);
                             this.uploadIconSet = false;
                             return;
                         }

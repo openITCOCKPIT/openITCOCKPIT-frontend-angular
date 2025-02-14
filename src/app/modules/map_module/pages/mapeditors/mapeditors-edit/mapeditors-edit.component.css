@@ -68,11 +68,13 @@
 }
 
 .selectedLayer {
-    background-color: #0088cc;
+    /*background-color: #0088cc;*/
+    background-color: var(--cui-primary);
     color: #FFF;
 }
 
 .selectedMapItem {
     /** important is required due to DesignModule **/
-    background: #0088cc !important;
+    /*background: #0088cc !important;*/
+    background: var(--cui-primary);
 }

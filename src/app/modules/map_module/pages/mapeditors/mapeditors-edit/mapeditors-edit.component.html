@@ -1384,4 +1384,117 @@
         </form>
     </c-modal>
 
+
+    <!-- Change background image modal -->
+    <c-modal #changeBackgroundModal fullscreen="md" size="xl" id="changeBackgroundModal">
+        <form cForm (ngSubmit)="saveItem()">
+            <c-modal-header>
+                <h5 cModalTitle>
+                    <fa-icon [icon]="['fas', 'image']"></fa-icon>
+                    {{ t('Change background image') }}
+                </h5>
+                <button [cModalToggle]="changeBackgroundModal.id" cButtonClose></button>
+            </c-modal-header>
+            <c-modal-body>
+                <c-row [hidden]="brokenImageDetected === false">
+                    <c-col lg="12">
+                        <c-alert color="warning" class="alert bg-warning-500"
+                                 role="alert">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon width-xs me-2">
+                                    <div class="icon-stack icon-stack-xl">
+                                        <i class="fa-regular fa-image opacity-100"></i>
+                                        <i class="fa-solid fa-triangle-exclamation opacity-100 font-xs text-danger cornered cornered-lr"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="h5">
+                                        {{ t('Map background image is not available!') }}
+                                    </span>
+                                    <br>
+                                    {{ t('You can choose a new background or manually remove the orphaned link') }}
+                                </div>
+                                <button cButton color="primary" class="ripple" size="sm" (click)="resetBackground()">
+                                    {{ t('Remove the orphaned link') }}
+                                </button>
+                            </div>
+                        </c-alert>
+                    </c-col>
+                </c-row>
+                <c-row [hidden]="brokenImageDetected === false && map.Map.background === null" *ngIf="map && map.Map">
+                    <c-col lg="12">
+                        <c-alert class="alert bg-primary-500" role="alert">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon width-xs me-2">
+                                    <div class="icon-stack icon-stack-xl">
+                                        <i class="fa-regular fa-image opacity-100 text-white"></i>
+                                        <i class="fa-solid fa-xmark opacity-100 font-xs text-danger cornered cornered-lr"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 text-white">
+                                    <span class="h5">
+                                        {{ t('Remove background from map!') }}
+                                    </span>
+                                    <br>
+                                    {{ t('If no background image is desired, it can be removed here') }}
+                                </div>
+                                <button cButton color="danger" class="ripple" size="sm" (click)="resetBackground()">
+                                    {{ t('Remove background') }}
+                                </button>
+                            </div>
+                        </c-alert>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="12">
+                        {{ t('Choose background image') }}
+                    </c-col>
+                    <c-col lg="12">
+                        <c-row style="max-height: 400px; overflow: auto;">
+                            <c-col xs="12" md="6" lg="2" *ngFor="let background of backgrounds">
+                                <div class="card"
+                                     style="height: 155px; width: 175px;overflow: hidden;"
+                                     (click)="changeBackground(background)"
+                                     [ngClass]="{ 'selectedMapItem': background.image === map.Map.background }">
+                                    <button cButton color="danger" class="ripple btn-icon text-white" size="xs"
+                                            style="position: absolute; top: 3px; left: 130px;"
+                                            (click)="deleteBackground(background)">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    </button>
+                                    <img class="mx-auto my-auto"
+                                         [src]="background.thumbnail">
+                                </div>
+                            </c-col>
+                        </c-row>
+                    </c-col>
+                    <c-col lg="12">
+                        {{ t('Upload new background image') }}
+                    </c-col>
+                    <c-col lg="12" class="text-info">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Max allowed file size: ') }}
+                        {{ maxUploadLimit?.string }}
+                    </c-col>
+                    <c-col lg="12">
+                        <div id="backgroundDropzone"
+                             class="profileImg-dropzone dropzone dropzoneStyle background-dropzone">
+                            <div class="dz-message">
+                                <fa-icon [icon]="['fas', 'cloud-upload-alt']" size="5x"
+                                         class="mb-3 text-muted"></fa-icon>
+                                <br>
+                                <span class="text-uppercase"> {{ t('Drop files here or click to upload.') }} </span>
+                            </div>
+                        </div>
+                    </c-col>
+                </c-row>
+
+            </c-modal-body>
+            <c-modal-footer>
+                <button [cModalToggle]="changeBackgroundModal.id" cButton color="default" class="ripple">
+                    {{ t('Close') }}
+                </button>
+            </c-modal-footer>
+        </form>
+    </c-modal>
+
 </ng-container>
