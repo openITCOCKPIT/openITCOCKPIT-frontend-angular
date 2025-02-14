@@ -29,19 +29,96 @@ export function getDefaultDowntimeReportsRequest(): DowntimeReportsRequest {
 
 // RESPONSE
 export interface DowntimeReportsResponse {
-    downtimeReport?: DowntimeReport
+    downtimeReport: DowntimeReport
     _csrfToken: string
 }
 
 export interface DowntimeReport {
     hostsWithoutOutages: {
-        hosts: {
-            Host: Host
-            pieChartData: PieChartData
-        }[]
-    }
+        hosts: OutageHost[]
+    },
+    hostsWithOutages: HostsWithOutage[]
     totalTime: number
     downtimes: Downtimes
+}
+
+export interface OutageHost {
+    Host: Host
+    pieChartData: PieChartData
+    Services?: ServicesList
+}
+
+export interface ServicesList {
+    [key: string]: ServiceObject
+}
+export interface ServiceObject {
+    Service: {
+        id: number
+        uuid: string
+        name: string | null
+        servicetemplate_id: number
+        reportData: number[]
+    }
+    Host: {
+        id: number
+        uuid: string
+        name: string
+    }
+    Servicetemplate: {
+        id: number
+        name: string
+        template_name: string
+    }
+    pieChartData: {
+        labels: string[]
+        data: string[]
+        availability: string
+        widgetOverview: {
+            percent: string
+            human: string
+        }[]
+    }
+}
+
+export interface HostsWithOutage {
+    hosts: OutageHost[]
+    hostBarChartData: HostBarChartData
+}
+
+export interface HostBarChartData {
+    labels: string[]
+    datasets: Datasets
+}
+
+export interface Datasets {
+    "0": DATATATA
+    "1": DATATATA
+    "2": DATATATA
+    availability: Availability
+}
+
+export interface Availability {
+    label: string
+    type: string
+    data: string[]
+}
+
+
+export interface DATATATA {
+    label: string
+    type: string
+    data: [
+        string,
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        number
+    ]
 }
 
 
@@ -61,7 +138,7 @@ export interface PieChartData {
 }
 
 export interface WidgetOverview {
-    percent: string
+    percent: number
     human: string
 }
 

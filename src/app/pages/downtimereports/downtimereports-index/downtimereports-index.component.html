@@ -221,14 +221,56 @@
                     </c-form-check>
                 </div>
             </ng-container>
-            <ng-container *ngIf="selectedTab === DowntimereportsEnum.Calendar">
+            <ng-container *ngIf="report && selectedTab === DowntimereportsEnum.Calendar">
 
                 <full-calendar #fullCalendar [options]="calendarOptions()">
                 </full-calendar>
-                Calendar SH!T
             </ng-container>
-            <ng-container *ngIf="selectedTab === DowntimereportsEnum.PieChart">
-                PieChart SH!T
+            <ng-container *ngIf="report && selectedTab === DowntimereportsEnum.PieChart">
+                <c-card *ngIf="report.downtimeReport.hostsWithOutages" class="mb-3">
+                    <c-card-header>
+                        <h5 cCardTitle>
+                            <span class="fa-stack">
+                                <i class="fa fa-desktop fa-lg fa-stack-1x"></i>
+                                <i class="fa fa-exclamation-triangle fa-stack-1x fa-xs cornered cornered-lr text-danger padding-bottom-2"></i>
+                            </span>
+                            {{ t('Involved in outages (Hosts):') }}
+                        </h5>
+                    </c-card-header>
+                    <c-card-body>
+                        <ng-container *ngFor="let hostsWithOutages of report.downtimeReport.hostsWithOutages">
+<!--
+                            <hosts-bar-chart chart-id="chunkIndex"
+                                             bar-chart-data="hostsWithOutages.hostBarChartData"></hosts-bar-chart>
+-->
+                            <oitc-host-availability-overview
+                                    *ngFor="let host of hostsWithOutages.hosts"
+                                    [host]="host"
+                                    [evaluationType]="post.evaluation_type"
+                                    [dynamicColour]="dynamicColour"
+                            />
+                        </ng-container>
+                    </c-card-body>
+                </c-card>
+                <c-card *ngIf="report.downtimeReport.hostsWithoutOutages" class="mb-3">
+                    <c-card-header>
+                        <h5 cCardTitle>
+                            <span class="fa-stack">
+                                <i class="fa fa-desktop fa-lg fa-stack-1x"></i>
+                                <i class="fa fa-check-circle fa-stack-1x fa-xs cornered cornered-lr ok padding-bottom-2"></i>
+                            </span>
+                            {{ t('Hosts without outages:') }}
+                        </h5>
+                    </c-card-header>
+                    <c-card-body>
+                        <oitc-host-availability-overview
+                                *ngFor="let host of report.downtimeReport.hostsWithoutOutages.hosts"
+                                [host]="host"
+                                [evaluationType]="post.evaluation_type"
+                                [dynamicColour]="dynamicColour"
+                        />
+                    </c-card-body>
+                </c-card>
             </ng-container>
         </c-card-body>
         <c-card-footer class="text-end" *ngIf="selectedTab === DowntimereportsEnum.Edit">

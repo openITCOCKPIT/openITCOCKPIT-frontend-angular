@@ -26,7 +26,7 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { DowntimereportsEnum } from '../downtimereports.enum';
 import {
     DowntimeReportsRequest,
@@ -53,6 +53,9 @@ import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import {
+    HostAvailabilityOverviewComponent
+} from '../components/host-availability-overview/host-availability-overview.component';
 
 @Component({
     selector: 'oitc-downtimereports-index',
@@ -84,7 +87,9 @@ import listPlugin from '@fullcalendar/list';
         TrueFalseDirective,
         BadgeComponent,
         TranslocoPipe,
-        FullCalendarModule
+        FullCalendarModule,
+        HostAvailabilityOverviewComponent,
+        NgForOf
     ],
     templateUrl: './downtimereports-index.component.html',
     styleUrl: './downtimereports-index.component.css',
@@ -115,7 +120,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected dynamicColour: boolean = false;
 
-    protected report?: DowntimeReportsResponse;
+    protected report: DowntimeReportsResponse = {} as DowntimeReportsResponse;
     protected events: CalendarEvent[] = [];
 
     public ngOnInit() {

@@ -1,0 +1,56 @@
+<ng-container *transloco="let t">
+    <c-row>
+        <c-col md="4">
+
+            <oitc-host-radialbar-chart
+                    [statusDataPercentage]="[15,25,35]"
+            />
+        </c-col>
+        <c-col md="8">
+            <c-row ng-style="{'background':  color}"
+                   title="{{(service().Service.name === null)?service().Servicetemplate.name:service().Service.name}}">
+                <c-col md="12">
+                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                    <span *oitcPermission="['services', 'browser']; negate: true">
+                        {{ ( service().Service.name === null ) ? service().Servicetemplate.name : service().Service.name }}
+                    </span>
+                    <a *oitcPermission="['services', 'browser']"
+                       [routerLink]="['/', 'services', 'browser', service().Service.id]">
+                         {{ ( service().Service.name === null ) ? service().Servicetemplate.name : service().Service.name }}
+                    </a>
+                </c-col>
+            </c-row>
+
+            <c-row>
+                <c-col md="12">
+                    <i class="fa-solid fa-pen-to-square"> </i>
+                    {{ service().Servicetemplate.template_name }}
+                </c-col>
+            </c-row>
+            <c-row class="bg-ok">
+                <c-col md="12">
+                    {{ service().pieChartData.widgetOverview[0].percent }} %
+                    ({{ service().pieChartData.widgetOverview[0].human }})
+                </c-col>
+            </c-row>
+            <c-row class="bg-warning">
+                <c-col md="12">
+                    {{ service().pieChartData.widgetOverview[1].percent }} %
+                    ({{ service().pieChartData.widgetOverview[1].human }})
+                </c-col>
+            </c-row>
+            <c-row class="bg-critical">
+                <c-col md="12">
+                    {{ service().pieChartData.widgetOverview[1].percent }} %
+                    ({{ service().pieChartData.widgetOverview[2].human }})
+                </c-col>
+            </c-row>
+            <c-row class="bg-unknown">
+                <c-col md="12">
+                    {{ service().pieChartData.widgetOverview[1].percent }} %
+                    ({{ service().pieChartData.widgetOverview[3].human }})
+                </c-col>
+            </c-row>
+        </c-col>
+    </c-row>
+</ng-container>

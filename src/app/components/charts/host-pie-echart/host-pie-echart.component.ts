@@ -27,6 +27,8 @@ echarts.use([PieChart, LegendComponent, TitleComponent, TooltipComponent]);
 })
 export class HostPieEchartComponent implements OnDestroy {
 
+    public title = input<string>('Host availability');
+    public showLegend = input<boolean>(true);
     public chartData = input<PieChartMetric[]>([]);
 
     public theme: null | 'dark' = null;
@@ -67,11 +69,7 @@ export class HostPieEchartComponent implements OnDestroy {
 
     private renderChart() {
         this.chartOption = {
-            title: {
-                text: this.TranslocoService.translate('Host availability'),
-                //subtext: 'Fake Data',
-                left: 'center'
-            },
+            title: this.getTitle(),
             color: [
                 "#00bc4c", "#bf0000", "#6b737c"
             ],
@@ -87,10 +85,7 @@ export class HostPieEchartComponent implements OnDestroy {
                     return html;
                 }
             },
-            legend: {
-                orient: 'vertical',
-                left: 'left'
-            },
+            legend: this.getLegend(),
             series: [
                 {
                     //name: 'Access From',
@@ -116,5 +111,26 @@ export class HostPieEchartComponent implements OnDestroy {
             ]
         };
         this.cdr.markForCheck();
+    }
+
+    private getLegend(): any {
+        if (!this.showLegend()) {
+            return undefined;
+        }
+        return {
+            orient: 'vertical',
+            left: 'left'
+        };
+    }
+
+    private getTitle(): any {
+        if (this.title().length === 0) {
+            return undefined;
+        }
+        return {
+            text: this.TranslocoService.translate(this.title()),
+            //subtext: 'Fake Data',
+            left: 'center'
+        }
     }
 }
