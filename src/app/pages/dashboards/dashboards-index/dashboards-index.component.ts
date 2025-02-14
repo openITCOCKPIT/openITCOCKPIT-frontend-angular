@@ -134,6 +134,9 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
     private cdr = inject(ChangeDetectorRef);
 
+    public tabIntervalInSeconds: number = 0;
+    private tabRotationInterval: any = null;
+
     @HostListener('fullscreenchange', ['$event'])
     handleFullscreenchangeEvent(Event: Event) {
         if (document.fullscreenElement === null) {
@@ -198,11 +201,16 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.resizeSubscription.unsubscribe();
         this.subscriptions.unsubscribe();
+        if (this.tabRotationInterval) {
+            clearInterval(this.tabRotationInterval);
+        }
+
     }
 
     public loadDashboardsIndex(): void {
         this.subscriptions.add(this.DashboardsService.getIndex().subscribe(data => {
             this.tabs = data.tabs;
+            this.tabIntervalInSeconds = data.tabRotationInterval;
 
             if (this.currentTabId === 0 && data.tabs.length > 0) {
                 // Mark the first tab as active
@@ -210,6 +218,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
             }
 
             this.loadTabContent(this.currentTabId);
+            this.updateTabRotationInterval();
 
             this.cdr.markForCheck();
         }));
@@ -636,6 +645,43 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
             show: true,
             id: 'dashboardTabRotationModal',
         });
+    }
+
+    public saveTabRotateInterval(newInterval: number) {
+        this.subscriptions.add(this.DashboardsService.saveTabRotateInterval(newInterval).subscribe(response => {
+            if (response.success) {
+                this.tabIntervalInSeconds = newInterval;
+                this.updateTabRotationInterval();
+                this.notyService.genericSuccess();
+                this.cdr.markForCheck();
+                return;
+            }
+
+            this.notyService.genericError();
+        }));
+    }
+
+    private updateTabRotationInterval() {
+        if (this.tabRotationInterval) {
+            clearInterval(this.tabRotationInterval);
+            this.tabRotationInterval = null;
+        }
+
+        if (this.tabIntervalInSeconds > 0) {
+            this.tabRotationInterval = setInterval(() => {
+                const currentTabIndex = this.tabs.findIndex(tab => tab.id === this.currentTabId);
+                const nextTabIndex = currentTabIndex + 1;
+
+                if (nextTabIndex >= this.tabs.length) {
+                    // Start from the beginning
+                    this.onTabChange(this.tabs[0].id);
+                } else {
+                    this.onTabChange(this.tabs[nextTabIndex].id);
+                }
+
+            }, this.tabIntervalInSeconds * 1000);
+        }
+
     }
 
     protected readonly WidgetTypes = WidgetTypes;

@@ -402,4 +402,33 @@ export class DashboardsService {
             );
     }
 
+    public saveTabRotateInterval(interval: number) {
+
+        const post: { User: { dashboard_tab_rotation: number } } = {
+            User: {
+                dashboard_tab_rotation: interval
+            }
+        };
+
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/dashboards/saveTabRotateInterval.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
 }

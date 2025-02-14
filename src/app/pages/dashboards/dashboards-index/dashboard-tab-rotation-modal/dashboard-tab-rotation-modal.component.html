@@ -22,9 +22,7 @@
                     [max]="900"
                     [step]="10"
                     [(ngModel)]="interval"
-                    (ngModelChange)="logInterval()"></oitc-slider-time>
-
-                {{ interval }}
+                    (change)="emitTabRotationInterval()"></oitc-slider-time>
             </div>
 
 

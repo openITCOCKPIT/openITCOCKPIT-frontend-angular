@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, output } from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -47,9 +47,6 @@ export class DashboardTabRotationModalComponent {
     intervalUpdate = output<number>()
 
     public interval = 0;
-    public tabRotationIntervalText: string = '';
-
-    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
         effect(() => {
@@ -57,12 +54,8 @@ export class DashboardTabRotationModalComponent {
         });
     }
 
-    public updateTabRotationInterval() {
+    public emitTabRotationInterval() {
         this.intervalUpdate.emit(this.interval);
-    }
-
-    public logInterval(): void {
-        console.log('interval', this.interval);
     }
 
 }
