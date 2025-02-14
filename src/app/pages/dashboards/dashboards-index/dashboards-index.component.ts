@@ -68,6 +68,7 @@ import {
 import {
     DashboardCreateNewTabModalComponent
 } from './dashboard-create-new-tab-modal/dashboard-create-new-tab-modal.component';
+import { DashboardAddWidgetModalComponent } from './dashboard-add-widget-modal/dashboard-add-widget-modal.component';
 
 
 @Component({
@@ -102,7 +103,8 @@ import {
         ColComponent,
         BlockLoaderComponent,
         DashboardTabRotationModalComponent,
-        DashboardCreateNewTabModalComponent
+        DashboardCreateNewTabModalComponent,
+        DashboardAddWidgetModalComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
@@ -215,6 +217,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.DashboardsService.getIndex().subscribe(data => {
             this.tabs = data.tabs;
             this.tabIntervalInSeconds = data.tabRotationInterval;
+            this.availableWidgets = data.widgets;
 
             if (this.currentTabId === 0 && data.tabs.length > 0) {
                 // Mark the first tab as active
@@ -703,6 +706,13 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
         this.onTabChange(newTabId);
         // Update tab list
         this.loadDashboardsIndex();
+    }
+
+    public toggleAddWidgetModal() {
+        this.modalService.toggle({
+            show: true,
+            id: 'dashboardAddWidgetModal',
+        });
     }
 
     protected readonly WidgetTypes = WidgetTypes;

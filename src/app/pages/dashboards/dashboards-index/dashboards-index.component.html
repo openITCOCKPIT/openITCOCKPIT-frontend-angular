@@ -45,7 +45,7 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1" *ngIf="!isReadonly">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="success"
+                    <button (click)="toggleAddWidgetModal()" cButton class="ripple" color="success"
                             [disabled]="dashboardIsLocked"
                             size="xs">
                         <fa-icon [icon]="['fas', 'plus']"></fa-icon>
@@ -201,3 +201,6 @@
 
 <oitc-dashboard-create-new-tab-modal
     (newTabCreated)="onNewTabCreated($event)"></oitc-dashboard-create-new-tab-modal>
+
+<oitc-dashboard-add-widget-modal
+    [availableWidgets]="availableWidgets"></oitc-dashboard-add-widget-modal>
