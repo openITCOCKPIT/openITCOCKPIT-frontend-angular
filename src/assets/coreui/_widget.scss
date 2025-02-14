@@ -102,7 +102,6 @@
 
 .box-container {
     display: grid;
-    font-size: 2em;
     position: relative;
     width: 100%;
     transform-style: preserve-3d;
@@ -110,13 +109,12 @@
 }
 
 .box-x {
-    display: grid;
     grid-row: 1;
     grid-column: 1;
-    flex: 1 1 auto;
 
     &:first-child {
         z-index: 1;
+        flex: 1 1 auto;
     }
 
     &:last-child {
@@ -133,9 +131,7 @@
 
     &:first-child {
         background-color: #6244b0;
-
         z-index: 1;
-
     }
 
     &:last-child {
