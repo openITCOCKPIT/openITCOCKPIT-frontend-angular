@@ -1,1 +1,27 @@
-<p>parent-outages-widget works!</p>
+<ng-container *transloco="let t">
+    <c-input-group>
+        <span cInputGroupText>
+            <fa-icon [icon]="['fas', 'desktop']" class="text-secondary"></fa-icon>
+        </span>
+        <input [(ngModel)]="filter['Hosts.name']"
+               [placeholder]="'Filter by host name' | transloco"
+               aria-label="Hosts.name"
+               name="Hosts.name"
+               cFormControl
+               oitcDebounce
+               (debouncedValue)="onFilterChange($event)"
+               type="text"
+        />
+    </c-input-group>
+    <ul class="mt-2 list-unstyled">
+        <li *ngFor="let hostOutage of parentOutages">
+            <oitc-hoststatus-icon [hoststatus]="hostOutage.Hoststatus" class="me-2"></oitc-hoststatus-icon>
+            <oitc-label-link
+                [objectId]="hostOutage.id"
+                [route]="'/hosts/browser'"
+                [permissions]="'hosts.browser'">
+                {{ hostOutage.name }}
+            </oitc-label-link>
+        </li>
+    </ul>
+</ng-container>
