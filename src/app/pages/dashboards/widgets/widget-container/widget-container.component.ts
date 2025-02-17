@@ -6,13 +6,15 @@ import {
 } from '../../../../modules/customalert_module/widgets/customalerts-widget/customalerts-widget.component';
 import { OitcAlertComponent } from '../../../../components/alert/alert.component';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { WelcomeWidgetComponent } from '../welcome-widget/welcome-widget.component';
 
 @Component({
     selector: 'oitc-widget-container',
     imports: [
         CustomalertsWidgetComponent,
         OitcAlertComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        WelcomeWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

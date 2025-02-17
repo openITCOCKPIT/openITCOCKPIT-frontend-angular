@@ -1,3 +1,5 @@
+import { WidgetTypes } from './widgets/widgets.enum';
+
 export interface DashboardsIndexResponse {
     tabs: DashboardTab[]
     widgets: DashboardWidget[]
@@ -38,7 +40,7 @@ export interface DashboardTabAllocation {
 }
 
 export interface DashboardWidget {
-    type_id: number
+    type_id: WidgetTypes
     title: string
     icon: string
     directive: string
@@ -63,7 +65,7 @@ export interface WidgetsForTabResponse {
 export interface WidgetGet {
     id: number
     dashboard_tab_id: number
-    type_id: number
+    type_id: WidgetTypes
     host_id?: number | null
     service_id?: number | null
     row: number
@@ -98,7 +100,7 @@ export interface DashboardTabTabResponse {
 export interface WidgetGetForRender {
     id: string // has to be a string to be tracked by ngFor
     dashboard_tab_id: number
-    type_id: number
+    type_id: WidgetTypes
     host_id?: number | null
     service_id?: number | null
     row: number

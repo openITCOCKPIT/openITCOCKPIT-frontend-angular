@@ -203,4 +203,6 @@
     (newTabCreated)="onNewTabCreated($event)"></oitc-dashboard-create-new-tab-modal>
 
 <oitc-dashboard-add-widget-modal
-    [availableWidgets]="availableWidgets"></oitc-dashboard-add-widget-modal>
+    [availableWidgets]="availableWidgets"
+    (restoreDefault)="onRestoreDefaultWidgets($event)"
+    (addWidgetEvent)="onAddWidget($event)"></oitc-dashboard-add-widget-modal>
