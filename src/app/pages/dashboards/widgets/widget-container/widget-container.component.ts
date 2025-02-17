@@ -7,6 +7,7 @@ import {
 import { OitcAlertComponent } from '../../../../components/alert/alert.component';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { WelcomeWidgetComponent } from '../welcome-widget/welcome-widget.component';
+import { ParentOutagesWidgetComponent } from '../parent-outages-widget/parent-outages-widget.component';
 
 @Component({
     selector: 'oitc-widget-container',
@@ -14,7 +15,8 @@ import { WelcomeWidgetComponent } from '../welcome-widget/welcome-widget.compone
         CustomalertsWidgetComponent,
         OitcAlertComponent,
         TranslocoPipe,
-        WelcomeWidgetComponent
+        WelcomeWidgetComponent,
+        ParentOutagesWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

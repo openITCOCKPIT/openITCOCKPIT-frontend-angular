@@ -9,6 +9,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-welcome-widget>
         }
+        @case (WidgetTypes.ParentOutagesWidget) {
+            <oitc-parent-outages-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-parent-outages-widget>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {
