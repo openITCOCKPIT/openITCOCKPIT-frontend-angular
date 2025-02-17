@@ -23,18 +23,20 @@
     </c-row>
 
     <ul class="mt-2 list-unstyled">
-        <li *ngFor="let hostOutage of parentOutages">
-            <oitc-hoststatus-icon [hoststatus]="hostOutage.Hoststatus" class="me-2"></oitc-hoststatus-icon>
-            <oitc-label-link
-                [objectId]="hostOutage.id"
-                [route]="'/hosts/browser'"
-                [permissions]="'hosts.browser'">
-                {{ hostOutage.name }}
-            </oitc-label-link>
-        </li>
+        @for (hostOutage of parentOutages; track $index) {
+            <li>
+                <oitc-hoststatus-icon [hoststatus]="hostOutage.Hoststatus" class="me-2"></oitc-hoststatus-icon>
+                <oitc-label-link
+                    [objectId]="hostOutage.id"
+                    [route]="'/hosts/browser'"
+                    [permissions]="'hosts.browser'">
+                    {{ hostOutage.name }}
+                </oitc-label-link>
+            </li>
+        }
     </ul>
 
-    <c-row *ngIf="!showNoOuttagesText" class="text-danger text-center">
+    <c-row *ngIf="!showNoOuttagesText && parentOutages.length === 0" class="text-danger text-center">
         <c-col>
             {{ t('No entries match the selection') }}
         </c-col>

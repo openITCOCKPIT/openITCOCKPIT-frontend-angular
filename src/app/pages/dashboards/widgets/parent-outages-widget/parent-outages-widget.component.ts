@@ -14,7 +14,7 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { DashboardsService } from '../../dashboards.service';
 import { ParentOutage } from '../../dashboards.interface';
 import { HoststatusIconComponent } from '../../../hosts/hoststatus-icon/hoststatus-icon.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 
 @Component({
@@ -29,7 +29,6 @@ import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-
         TranslocoPipe,
         TranslocoDirective,
         HoststatusIconComponent,
-        NgForOf,
         LabelLinkComponent,
         NgIf,
         RowComponent,
@@ -48,6 +47,7 @@ export class ParentOutagesWidgetComponent extends BaseWidgetComponent {
 
     public override load() {
         if (this.widget) {
+            this.parentOutages = [];
             this.subscriptions.add(this.DashboardsService.getParentOutagesWidget(this.hostname)
                 .subscribe((result) => {
                     this.parentOutages = result.parent_outages;
@@ -60,7 +60,6 @@ export class ParentOutagesWidgetComponent extends BaseWidgetComponent {
                     this.cdr.markForCheck();
                 }));
         }
-        this.cdr.markForCheck();
     }
 
     public onFilterChange($event: any) {
