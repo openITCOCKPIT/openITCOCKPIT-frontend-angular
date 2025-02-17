@@ -98,8 +98,6 @@ import {
 export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     private readonly cdr = inject(ChangeDetectorRef);
     private readonly subscriptions: Subscription = new Subscription();
-    private readonly route = inject(ActivatedRoute);
-    private readonly router = inject(Router);
     private readonly DowntimereportsService: DowntimereportsService = inject(DowntimereportsService);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly TimeperiodsService: TimeperiodsService = inject(TimeperiodsService);

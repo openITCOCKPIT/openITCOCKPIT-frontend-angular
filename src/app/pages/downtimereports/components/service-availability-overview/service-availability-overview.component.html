@@ -1,28 +1,32 @@
 <ng-container *transloco="let t">
-    <c-row>
+    <c-row class="mb-3">
         <c-col md="4">
-
-            <oitc-host-radialbar-chart
-                    [statusDataPercentage]="[15,25,35]"
-            />
+            <oitc-service-pie-chart
+                    [statusDataPercentage]="[
+                        service().pieChartData.widgetOverview[0].percent,
+                        service().pieChartData.widgetOverview[1].percent,
+                        service().pieChartData.widgetOverview[2].percent,
+                        service().pieChartData.widgetOverview[3].percent
+                    ]"
+            ></oitc-service-pie-chart>
         </c-col>
         <c-col md="8">
-            <c-row ng-style="{'background':  color}"
+            <c-row [ngStyle]="{background: this.dynamicColour() ? this.AvailabilityColorCalculationService.getBackgroundColor(service().pieChartData.availability) : ''}"
                    title="{{(service().Service.name === null)?service().Servicetemplate.name:service().Service.name}}">
-                <c-col md="12">
+                <c-col md="12" [ngStyle]="{color: this.dynamicColour() ? 'white' : ''}">
                     <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                     <span *oitcPermission="['services', 'browser']; negate: true">
                         {{ ( service().Service.name === null ) ? service().Servicetemplate.name : service().Service.name }}
                     </span>
-                    <a *oitcPermission="['services', 'browser']"
+                    <span *oitcPermission="['services', 'browser']"
                        [routerLink]="['/', 'services', 'browser', service().Service.id]">
                          {{ ( service().Service.name === null ) ? service().Servicetemplate.name : service().Service.name }}
-                    </a>
+                    </span>
                 </c-col>
             </c-row>
 
             <c-row>
-                <c-col md="12">
+                <c-col md="12" [ngStyle]="{'color': dynamicColour() ?? 'white'}">
                     <i class="fa-solid fa-pen-to-square"> </i>
                     {{ service().Servicetemplate.template_name }}
                 </c-col>
@@ -41,13 +45,13 @@
             </c-row>
             <c-row class="bg-critical downtime-report-state-overview btn-danger shadow-danger">
                 <c-col md="12">
-                    {{ service().pieChartData.widgetOverview[1].percent }} %
+                    {{ service().pieChartData.widgetOverview[2].percent }} %
                     ({{ service().pieChartData.widgetOverview[2].human }})
                 </c-col>
             </c-row>
             <c-row class="bg-unknown downtime-report-state-overview btn-dark shadow-unknown">
                 <c-col md="12">
-                    {{ service().pieChartData.widgetOverview[1].percent }} %
+                    {{ service().pieChartData.widgetOverview[3].percent }} %
                     ({{ service().pieChartData.widgetOverview[3].human }})
                 </c-col>
             </c-row>

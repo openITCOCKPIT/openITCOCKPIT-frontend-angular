@@ -1,16 +1,16 @@
 <ng-container *transloco="let t">
 
     <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>
+        <c-card-header [ngStyle]="{background: this.dynamicColour() ? this.AvailabilityColorCalculationService.getBackgroundColor(host().pieChartData.availability) : ''}">
+            <h5 cCardTitle [ngStyle]="{color: this.dynamicColour() ? 'white' : ''}">
                 <i class="fa fa-desktop"></i>
                 <span *oitcPermission="['hosts', 'browser']; negate: true">
                     {{ host().Host.name }}
                 </span>
-                <a *oitcPermission="['hosts', 'browser']"
-                   [routerLink]="['/', 'browser', 'hosts', host().Host.id]">
+                <span *oitcPermission="['hosts', 'browser']"
+                   [routerLink]="['/', 'hosts', 'browser', host().Host.id]">
                     {{ host().Host.name }}
-                </a>
+                </span>
             </h5>
         </c-card-header>
         <c-card-body>
