@@ -39,7 +39,7 @@ export class HostsPiechartWidget180Component extends BaseWidgetComponent {
     }
 
     public override resizeWidget(event?: KtdResizeEnd) {
-        super.resizeWidget(event);
+ 
     }
 
     public override layoutUpdate(event: KtdGridLayout) {

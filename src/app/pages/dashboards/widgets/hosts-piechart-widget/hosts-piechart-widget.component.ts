@@ -103,7 +103,7 @@ export class HostsPiechartWidgetComponent extends BaseWidgetComponent {
                 // https://github.com/apexcharts/apexcharts.js/issues/1272#issuecomment-591388290
                 sparkline: {
                     enabled: true
-                },
+                }
             },
             plotOptions: {
                 radialBar: {
@@ -162,10 +162,11 @@ export class HostsPiechartWidgetComponent extends BaseWidgetComponent {
     }
 
     public override resizeWidget(event?: KtdResizeEnd) {
-        super.resizeWidget(event);
+        if (this.chart) {
+            this.chart.updateOptions(this.chartOptions);
+        }
     }
 
     public override layoutUpdate(event: KtdGridLayout) {
-        super.layoutUpdate(event);
     }
 }
