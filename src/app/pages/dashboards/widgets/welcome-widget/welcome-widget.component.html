@@ -1,14 +1,32 @@
 <ng-container *transloco="let t">
     <div class="d-flex flex-row">
         <div>
-            hier bild
+            @if (welcome && welcome.userImage) {
+                <!-- User with Image -->
+                <p-avatar
+                    class="d-flex"
+                    [image]="welcome.userImage"
+                    size="xlarge"
+                    [styleClass]="'avatar-size'"
+                    shape="circle"
+                ></p-avatar>
+            } @else {
+                <!-- User without Image -->
+                <p-avatar
+                    class="d-flex"
+                    size="xlarge"
+                    [label]="nameInitials"
+                    [styleClass]="'avatar-size'"
+                    [style]="{ 'background-color': 'var(--cui-primary)', color: 'var(--cui-white)' }"
+                    shape="circle"></p-avatar>
+            }
         </div>
+
         <div class="flex-grow-1 ms-2">
-            <strong>{{ statuscount?.hoststatusSum }}</strong>
-            <strong>{{ statuscount?.hoststatusSum }}</strong> {{ t('hosts are monitored') }}
+            <strong>{{ statuscount?.hoststatusSum |number }}</strong> {{ t('hosts are monitored') }}
 
             <br>
-            <strong>{{ statuscount?.servicestatusSum }}</strong> {{ t('services are monitored') }}
+            <strong>{{ statuscount?.servicestatusSum  |number }}</strong> {{ t('services are monitored') }}
             <br>
             <br>
             {{ t('Your selected Timezone is ') }} {{ welcome?.user_timezone }}

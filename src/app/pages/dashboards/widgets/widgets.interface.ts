@@ -4,6 +4,7 @@ export interface WelcomeWidgetResponse {
     server_timezone: string
     user_timezone: string
     userImage: string
+    user_fullname: string
     OPENITCOCKPIT_VERSION: string
     _csrfToken: string
 }
