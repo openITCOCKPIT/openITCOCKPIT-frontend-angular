@@ -65,7 +65,7 @@ import { NgIf } from '@angular/common';
 export class DashboardAddWidgetModalComponent implements OnDestroy {
 
     public availableWidgets = input<DashboardWidget[]>([]);
-    public localAvailableWidgets: DashboardWidget[] = [];
+    public availableWidgetsFiltered: DashboardWidget[] = [];
 
     public addWidgetEvent = output<number>();
     public restoreDefault = output<boolean>();
@@ -80,12 +80,15 @@ export class DashboardAddWidgetModalComponent implements OnDestroy {
 
     constructor() {
         effect(() => {
-            this.localAvailableWidgets = this.availableWidgets();
+            this.availableWidgetsFiltered = this.availableWidgets();
         });
 
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
             if (state.id === 'dashboardAddWidgetModal' && state.show === true) {
+
+                // Reset filter
                 this.searchString = '';
+                this.filterWidgets();
 
                 this.cdr.markForCheck();
             }
@@ -99,11 +102,11 @@ export class DashboardAddWidgetModalComponent implements OnDestroy {
 
     public filterWidgets(): void {
         if (this.searchString === '') {
-            this.localAvailableWidgets = this.availableWidgets();
+            this.availableWidgetsFiltered = this.availableWidgets();
             return;
         }
 
-        this.localAvailableWidgets = this.availableWidgets().filter((widget) => {
+        this.availableWidgetsFiltered = this.availableWidgets().filter((widget) => {
             return widget.title.toLowerCase().includes(this.searchString.toLowerCase());
         });
     }
