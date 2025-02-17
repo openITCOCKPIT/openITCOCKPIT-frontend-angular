@@ -102,18 +102,18 @@ export class CustomalertsWidgetComponent extends BaseWidgetComponent implements 
 
 
     public override resizeWidget(event?: KtdResizeEnd) {
-        let editButtonHeight = 21;
+        let editButtonHeight = 30;
         if (this.isReadonly()) {
             //edit button is not visible
             editButtonHeight = 0;
         }
-        this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight - editButtonHeight; //21px height of button
-        this.widgetWidth = this.boxContainer?.nativeElement.offsetWidth; //21px height of button
+        this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight - editButtonHeight; //21px height of button + padding
+        this.widgetWidth = this.boxContainer?.nativeElement.offsetWidth;
         const scaleValue = Math.min(this.widgetHeight, this.widgetWidth);
 
         this.fontSize = scaleValue / 3;
-        this.fontSizeIcon = scaleValue / 3;
-        this.iconTopPosition = this.widgetHeight - this.fontSizeIcon - 10; //10px padding from bottom
+        this.fontSizeIcon = scaleValue / 4;
+        this.iconTopPosition = this.widgetHeight - this.fontSizeIcon - editButtonHeight;
         this.cdr.markForCheck();
     }
 
