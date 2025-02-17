@@ -1664,8 +1664,8 @@
             <c-modal-body>
 
                 <c-row>
-                    <c-col [md]="12" [lg]="12" [xl]="6" class="mb-3">
-                        <oitc-bb-code-editor [(bbcode)]="currentItem.text"
+                    <c-col [lg]="12" class="mb-3">
+                        <oitc-bb-code-editor [(bbcode)]="currentItem.text" [isDisplayedAsModal]="false"
                                              id="statelessText"/>
                         <oitc-form-feedback [errors]="errors" errorField="text"></oitc-form-feedback>
                     </c-col>

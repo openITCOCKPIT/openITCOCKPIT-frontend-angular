@@ -1,4 +1,77 @@
 <ng-container *transloco="let t">
+    <div class="row mb-3" *ngIf="!isDisplayedAsModal && isLinkAreaOpen">
+        <div class="col-12">
+            <c-card>
+                <c-card-header>
+                    <h5 cCardTitle>
+                        <fa-icon [icon]="['fas', 'external-link-square']"></fa-icon>
+                        {{ t('Insert hyperlink') }}
+                    </h5>
+                    <button cButtonClose (click)="resetLink()"></button>
+                </c-card-header>
+                <c-card-body>
+                    <c-row>
+                        <c-col>
+                            <div class="mb-3">
+                                <label cLabel for="linkUrl">
+                                    {{ t('URL') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'external-link-square']"></fa-icon>
+                                    </span>
+                                    <input cFormControl id="linkUrl" required type="text"
+                                           name="linkUrl"
+                                           placeholder="https://openitcockpit.io"
+                                           [(ngModel)]="link.url">
+                                </c-input-group>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="linkDescription">
+                                    {{ t('Description Text') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'tag']"></fa-icon>
+                                    </span>
+                                    <input cFormControl id="linkDescription" type="text"
+                                           readonly
+                                           disabled
+                                           name="linkDescription"
+                                           [(ngModel)]="selectedText">
+                                </c-input-group>
+                            </div>
+
+                            <div class="mb-3">
+                                <c-form-check>
+                                    <input
+                                        [(ngModel)]="link.targetBlank"
+                                        cFormCheckInput
+                                        id="linkTarget"
+                                        name="linkTarget"
+                                        type="checkbox"/>
+                                    <label cFormCheckLabel
+                                           for="linkTarget">{{ t('Open in new tab') }}</label>
+                                </c-form-check>
+                            </div>
+
+                        </c-col>
+                    </c-row>
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton color="primary" class="ripple" (click)="insertLink()">
+                        {{ t('Insert') }}
+                    </button>
+                    <button cButton color="secondary" class="ms-1 ripple" (click)="resetLink()">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <oitc-dropdown-colorpicker [colors]="colors" (selectedColor)="surroundSelectedTextWithColor($event)"
@@ -70,7 +143,12 @@
             </div>
 
             <span class="ps-2"></span>
-            <button cButton size="xs" color="default" class="ripple" [cModalToggle]="insertLinkModal.id">
+            <button cButton size="xs" color="default" class="ripple" [cModalToggle]="insertLinkModal.id"
+                    *ngIf="isDisplayedAsModal">
+                <fa-icon [icon]="['fas', 'link']"></fa-icon>
+            </button>
+            <button cButton size="xs" color="default" class="ripple" (click)="isLinkAreaOpen = true"
+                    *ngIf="!isDisplayedAsModal">
                 <fa-icon [icon]="['fas', 'link']"></fa-icon>
             </button>
 

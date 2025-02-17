@@ -51,7 +51,7 @@ import {
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { FCanvasComponent, FFlowModule } from '@foblex/flow';
-import { DOCUMENT, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { DOCUMENT, NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MapItemComponent } from '../../../components/map-item/map-item.component';
 import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.component';
@@ -138,7 +138,6 @@ import { BbCodeEditorComponent } from '../../../../../pages/documentations/bb-co
         MapTextComponent,
         MapIconComponent,
         MapLineComponent,
-        KeyValuePipe,
         MapSummaryItemComponent,
         PerfdataTextItemComponent,
         TrafficlightItemComponent,
