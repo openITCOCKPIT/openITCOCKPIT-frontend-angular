@@ -52,11 +52,9 @@ export class WelcomeWidgetComponent extends BaseWidgetComponent {
     }
 
     public override resizeWidget(event: KtdResizeEnd) {
-        super.resizeWidget(event);
     }
 
     public override layoutUpdate(event: KtdGridLayout) {
-        super.layoutUpdate(event);
     }
 
 

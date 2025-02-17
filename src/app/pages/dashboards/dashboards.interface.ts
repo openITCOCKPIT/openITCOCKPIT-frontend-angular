@@ -1,4 +1,5 @@
 import { WidgetTypes } from './widgets/widgets.enum';
+import { HoststatusObject } from '../hosts/hosts.interface';
 
 export interface DashboardsIndexResponse {
     tabs: DashboardTab[]
@@ -138,4 +139,16 @@ export interface SharedTab {
     check_for_updates: boolean
     last_update: number
     locked: boolean
+}
+
+export interface ParentOutagesResponse{
+    parent_outages: ParentOutage[]
+    _csrfToken: string
+}
+
+export interface ParentOutage {
+    id: number
+    uuid: string
+    name: string
+    Hoststatus: HoststatusObject
 }

@@ -3,6 +3,8 @@ import { Subscription } from 'rxjs';
 import { WidgetGetForRender } from '../../dashboards.interface';
 import { WidgetsService } from '../widgets.service';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
+import { TranslocoService } from '@jsverse/transloco';
+import { PermissionsService } from '../../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-base-widget',
@@ -20,6 +22,8 @@ export abstract class BaseWidgetComponent implements OnDestroy {
     protected readonly subscriptions = new Subscription();
     protected readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     protected readonly WidgetsService = inject(WidgetsService);
+    public readonly PermissionsService = inject(PermissionsService);
+    protected readonly TranslocoService = inject(TranslocoService);
 
 
     public constructor() {
