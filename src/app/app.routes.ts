@@ -90,7 +90,7 @@ const moduleRoutes: Routes = [
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
     path: '',
-    loadComponent: () => import('./pages/start-page/start-page.component').then(m => m.StartPageComponent),
+    loadComponent: () => import('./pages/dashboards/dashboards-index/dashboards-index.component').then(m => m.DashboardsIndexComponent),
     canActivate: [authGuard]
 }, {
     path: 'dashboards/index',

@@ -3,6 +3,7 @@ import { DashboardWidget } from '../../dashboards.interface';
 import {
     ButtonCloseDirective,
     ColComponent,
+    FormCheckInputDirective,
     FormControlDirective,
     FormLabelDirective,
     InputGroupComponent,
@@ -43,7 +44,8 @@ import { Subscription } from 'rxjs';
         InputGroupComponent,
         InputGroupTextDirective,
         TranslocoPipe,
-        FormsModule
+        FormsModule,
+        FormCheckInputDirective
     ],
     templateUrl: './dashboard-add-widget-modal.component.html',
     styleUrl: './dashboard-add-widget-modal.component.scss',
@@ -53,8 +55,11 @@ export class DashboardAddWidgetModalComponent implements OnDestroy {
 
     public availableWidgets = input<DashboardWidget[]>([]);
     public addWidgetEvent = output<number>();
+    public restoreDefault = output<boolean>();
 
     public searchString: string = '';
+
+    public createAnother: boolean = false;
 
     private readonly modalService = inject(ModalService);
     private readonly subscriptions: Subscription = new Subscription();
@@ -77,6 +82,14 @@ export class DashboardAddWidgetModalComponent implements OnDestroy {
 
     public addWidget(widgetTypeId: number): void {
         this.addWidgetEvent.emit(widgetTypeId);
+    }
+
+    public restoreDefaultWidgets(): void {
+        this.restoreDefault.emit(true);
+        this.modalService.toggle({
+            id: 'dashboardAddWidgetModal',
+            show: false
+        });
     }
 
 }

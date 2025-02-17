@@ -506,4 +506,33 @@ export class DashboardsService {
                 })
             );
     }
+
+    public restoreDefault(tabId: number) {
+
+        const post: { DashboardTab: { id: number } } = {
+            DashboardTab: {
+                id: tabId
+            }
+        };
+
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/dashboards/restoreDefault.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
 }

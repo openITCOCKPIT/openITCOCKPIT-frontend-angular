@@ -40,6 +40,17 @@
 
         </c-modal-body>
         <c-modal-footer>
+            <button (click)="restoreDefaultWidgets()"
+                    cButton color="danger" class="ripple me-auto" type="button">
+                <fa-icon [icon]="['fas', 'recycle']"></fa-icon>
+                {{ t('Restore default') }}
+            </button>
+
+            <label class="me-2">
+                <input cFormCheckInput type="checkbox" name="createAnother"
+                       [(ngModel)]="createAnother">
+                {{ t('Create another') }}
+            </label>
             <button [cModalToggle]="dashboardAddWidgetModal.id" cButton color="default" class="ripple">
                 {{ t('Close') }}
             </button>

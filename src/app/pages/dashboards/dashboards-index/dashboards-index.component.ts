@@ -715,6 +715,20 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
         });
     }
 
+    public onRestoreDefaultWidgets(event: boolean) {
+        if (this.currentTabId > 0) {
+            this.subscriptions.add(this.DashboardsService.restoreDefault(this.currentTabId).subscribe(response => {
+                if (response.success) {
+                    this.loadTabContent(this.currentTabId);
+                    this.notyService.genericSuccess();
+                    return;
+                }
+
+                this.notyService.genericError();
+            }));
+        }
+    }
+
     protected readonly WidgetTypes = WidgetTypes;
 }
 
