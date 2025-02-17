@@ -39,6 +39,21 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-hosts-downtime-widget>
         }
+        @case (WidgetTypes.ServicesDowntimeWidget) {
+            <oitc-services-downtime-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-services-downtime-widget>
+        }
+        @case (WidgetTypes.CalendarWidget) {
+            <oitc-calendar-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-calendar-widget>
+        }
+        @case (WidgetTypes.TacticalOverviewHostsWidget) {
+            <oitc-tactical-overview-hosts-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-tactical-overview-hosts-widget>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {
