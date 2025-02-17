@@ -181,6 +181,7 @@
                             <oitc-map-text *ngFor="let textItem of map.Maptexts" [item]="textItem"
                                            [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
                                            [layers]="layers"
+                                           (dblclick)="editText(textItem)"
                                            (contextActionEvent)="onContextAction($event)"
                                            (dropItemEvent)="onDropItem($event)"
                                            [hidden]="!textItem.display">
@@ -1643,6 +1644,120 @@
                     {{ t('Save') }}
                 </button>
                 <button [cModalToggle]="AddEditStatelessIconModal.id" cButton color="default" class="ripple">
+                    {{ t('Close') }}
+                </button>
+            </c-modal-footer>
+        </form>
+    </c-modal>
+
+
+    <!-- Add/Edit stateless text modal -->
+    <c-modal #AddEditStatelessTextModal fullscreen="md" size="xl" id="AddEditStatelessTextModal">
+        <form cForm (ngSubmit)="saveText()">
+            <c-modal-header>
+                <h5 cModalTitle>
+                    <fa-icon [icon]="['fas', 'font']"></fa-icon>
+                    {{ t('Add or edit stateless text') }}
+                </h5>
+                <button [cModalToggle]="AddEditStatelessTextModal.id" cButtonClose></button>
+            </c-modal-header>
+            <c-modal-body>
+
+                <c-row>
+                    <c-col [md]="12" [lg]="12" [xl]="6" class="mb-3">
+                        <oitc-bb-code-editor [(bbcode)]="currentItem.text"
+                                             id="statelessText"/>
+                        <oitc-form-feedback [errors]="errors" errorField="text"></oitc-form-feedback>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="statelessTextPosX">
+                                {{ t('Position X') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="statelessTextPosX"
+                                       type="number"
+                                       name="statelessTextPosX"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.x"
+                                       oitcFormError [errors]="errors" errorField="x">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="x"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="statelessTextPosY">
+                                {{ t('Position Y') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="statelessTextPosY"
+                                       type="number"
+                                       name="statelessTextPosY"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="currentItem.y"
+                                       oitcFormError [errors]="errors" errorField="y">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="y"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="10">
+                        <div class="mb-3">
+                            <label cLabel for="statelessTextLayers">
+                                {{ t('Select layer') }}
+                            </label>
+
+                            <oitc-select
+                                name="statelessTextLayers"
+                                id="statelessTextLayers"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="currentItem.z_index"
+                                [options]="layers"
+                                [appendTo]="AddEditStatelessTextModal"
+                                oitcFormError [errors]="errors" errorField="z_index">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
+                            <span class="help-block">
+                                {{ t('Layers could be used to stack items on a map. Empty layers will be deleted automatically.') }}
+                            </span>
+                        </div>
+                    </c-col>
+                    <c-col lg="2">
+                        <button (click)="addNewLayer()" cButton class="ripple mt-4" style="width: 100%"
+                                color="default">
+                            {{ t('Add new layer') }}
+                        </button>
+                    </c-col>
+                </c-row>
+
+            </c-modal-body>
+            <c-modal-footer>
+                <button cButton color="danger" class="ripple me-auto" (click)="deleteText()">
+                    {{ t('Delete') }}
+                </button>
+                <button cButton color="success" type="submit" class="ripple">
+                    {{ t('Save') }}
+                </button>
+                <button [cModalToggle]="AddEditStatelessTextModal.id" cButton color="default" class="ripple">
                     {{ t('Close') }}
                 </button>
             </c-modal-footer>

@@ -103,6 +103,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import Dropzone from 'dropzone';
 import { AuthService } from '../../../../../auth/auth.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { BbCodeEditorComponent } from '../../../../../pages/documentations/bb-code-editor/bb-code-editor.component';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
@@ -166,7 +167,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
         FormFeedbackComponent,
         RequiredIconComponent,
         XsButtonDirective,
-        AlertComponent
+        AlertComponent,
+        BbCodeEditorComponent
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',
@@ -968,7 +970,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 mapEditor.style.cursor = 'default';
                 this.addNewObject = false;
 
-                //$('#AddEditStatelessTextModal').modal('show');
+                this.modalService.toggle({
+                    show: true,
+                    id: 'AddEditStatelessTextModal',
+                });
 
                 // Create currentItem skeleton
                 // Set X and Y poss of the new object
@@ -1686,7 +1691,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.addNewObject = true;
         this.action = 'text';
         this.addLink = false;
-        //$('#docuText').val('');
         this.cdr.markForCheck();
     };
 
@@ -1694,20 +1698,19 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.action = 'text';
         this.currentItem = item;
         this.addLink = false;
-        //$('#docuText').val(item.text);
-        //$('#AddEditStatelessTextModal').modal('show');
+        this.modalService.toggle({
+            show: true,
+            id: 'AddEditStatelessTextModal',
+        });
         this.cdr.markForCheck();
     };
 
-    public saveText(action: string) {
+    public saveText(action?: string) {
         if (typeof action === 'undefined') {
             action = 'add_or_edit';
         }
 
         this.currentItem.map_id = this.mapId.toString();
-        if (action === 'add_or_edit') {
-            //this.currentItem.text = $('#docuText').val();
-        }
 
         this.subscriptions.add(this.MapeditorsService.saveText({
             'Maptext': this.currentItem,
@@ -1746,7 +1749,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     this.map.Maptexts.push(result.data.Maptext.Maptext);
                 }
 
-                //$('#AddEditStatelessTextModal').modal('hide');
+                this.modalService.toggle({
+                    show: false,
+                    id: 'AddEditStatelessTextModal',
+                });
                 this.notyService.genericSuccess(msg, title);
                 return;
             }
@@ -1781,7 +1787,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 for (let i in this.map.Maptexts) {
                     if (this.map.Maptexts[i].id == this.currentItem.id) {
                         this.map.Maptexts.splice(Number(i), 1);
-                        //$('#docuText').val('');
 
                         //We are done here
                         break;
@@ -1789,7 +1794,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 }
 
                 this.notyService.genericSuccess(msg, title);
-                //$('#AddEditStatelessTextModal').modal('hide');
+                this.modalService.toggle({
+                    show: false,
+                    id: 'AddEditStatelessTextModal',
+                });
                 this.currentItem = {};
                 delete this.currentDeletedItem;
                 return;
