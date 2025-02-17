@@ -1,19 +1,13 @@
 import {
     AfterViewInit,
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
     ElementRef,
     inject,
-    input,
-    Input,
     OnDestroy,
-    OnInit,
     signal,
     ViewChild
 } from '@angular/core';
-import { WidgetGetForRender } from '../../../../pages/dashboards/dashboards.interface';
-import { Subscription } from 'rxjs';
 import { CustomAlertsService } from '../../pages/customalerts/customalerts.service';
 import {
     CustomAlertsWidget,
@@ -27,15 +21,21 @@ import {
     ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
-    FormCheckLabelDirective, FormControlDirective, InputGroupComponent, InputGroupTextDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     RowComponent
 } from '@coreui/angular';
-import { WidgetsService } from '../../../../pages/dashboards/widgets/widgets.service';
 import { PermissionsService } from '../../../../permissions/permissions.service';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { GenericValidationError } from '../../../../generic-responses';
+import { NotyService } from '../../../../layouts/coreui/noty.service';
+import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
+import { KtdResizeEnd } from '@katoid/angular-grid-layout';
 
 @Component({
     selector: 'oitc-customalerts-widget',
@@ -69,64 +69,51 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
         ])
     ]
 })
-export class CustomalertsWidgetComponent implements OnInit, OnDestroy, AfterViewInit {
-    @Input() widget!: WidgetGetForRender;
-    private readonly subscriptions: Subscription = new Subscription();
+export class CustomalertsWidgetComponent extends BaseWidgetComponent implements OnDestroy, AfterViewInit {
     private readonly CustomAlertsService = inject(CustomAlertsService);
-    private readonly WidgetsService = inject(WidgetsService);
     public CustomalertsFilter: CustomAlertsWidgetFilter = getCustomAlertsWidgetParams();
     public statusCount: number | null = null;
     protected flipped = signal<boolean>(false);
     public widgetHeight: number = 0;
+    public widgetWidth: number = 0;
     public fontSize: number = 0;
     public fontSizeIcon: number = 0;
     public iconTopPosition: number = 0;
-    isReadonly = input<boolean>(false);
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
-
-
-    private cdr = inject(ChangeDetectorRef);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
+    public errors: GenericValidationError | null = null;
 
     @ViewChild('boxContainer') boxContainer?: ElementRef;
 
-    constructor() {
-        this.subscriptions.add(this.WidgetsService.onResizeEnded$.subscribe(event => {
-            if (event.layoutItem.id === this.widget.id) {
-                // Yes ich wurde resized
-                this.resizeWidget();
-            }
-        }));
+
+    public override load() {
+        if (this.widget) {
+            this.subscriptions.add(
+                this.CustomAlertsService.loadWidget(this.widget, this.CustomalertsFilter).subscribe((data: CustomAlertsWidget) => {
+                    this.CustomalertsFilter = data.config;
+                    this.statusCount = data.statusCount;
+                    this.cdr.markForCheck();
+                })
+            );
+        }
 
     }
 
-    public ngOnInit(): void {
-        this.load();
-    }
 
-    public ngOnDestroy(): void {
-        this.subscriptions.unsubscribe();
-    }
-
-    private load() {
-        this.subscriptions.add(
-            this.CustomAlertsService.loadWidget(this.widget, this.CustomalertsFilter).subscribe((data: CustomAlertsWidget) => {
-                this.CustomalertsFilter = data.config;
-                this.statusCount = data.statusCount;
-                this.cdr.markForCheck();
-            })
-        );
-    }
-
-    public resizeWidget() {
-        let editButtonHeight = 21;
+    public override resizeWidget(event?: KtdResizeEnd) {
+        let editButtonHeight = 30;
         if (this.isReadonly()) {
             //edit button is not visible
             editButtonHeight = 0;
         }
-        this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight - editButtonHeight; //21px height of button
-        this.fontSize = this.widgetHeight / 2;
-        this.fontSizeIcon = this.widgetHeight / 2.5;
-        this.iconTopPosition = this.widgetHeight - this.fontSizeIcon -10; //10px padding from bottom
+        this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight - editButtonHeight; //21px height of button + padding
+        this.widgetWidth = this.boxContainer?.nativeElement.offsetWidth;
+        const scaleValue = Math.min(this.widgetHeight, this.widgetWidth);
+
+        this.fontSize = scaleValue / 3;
+        this.fontSizeIcon = scaleValue / 4;
+        this.iconTopPosition = this.widgetHeight - this.fontSizeIcon - editButtonHeight;
         this.cdr.markForCheck();
     }
 
@@ -134,7 +121,28 @@ export class CustomalertsWidgetComponent implements OnInit, OnDestroy, AfterView
         this.resizeWidget();
     }
 
-    public submit(){
-        console.log('Save this !!!');
+    public submit() {
+        if (!this.widget) {
+            return;
+        }
+        this.subscriptions.add(this.CustomAlertsService.saveWidget(this.widget, this.CustomalertsFilter)
+            .subscribe({
+                next: (result) => {
+                    this.cdr.markForCheck();
+                    const title = this.TranslocoService.translate('Success');
+                    const msg = this.TranslocoService.translate('Data saved successfully');
+
+                    this.notyService.genericSuccess(msg, title);
+                    this.notyService.scrollContentDivToTop();
+                    this.flipped.set(false);
+
+                    return;
+                },
+                // Error
+                error: (error) => {
+                    const errorResponse = error as GenericValidationError;
+                    this.notyService.genericError();
+                }
+            }));
     }
 }

@@ -17,6 +17,7 @@ import {
 } from './customalerts.interface';
 import { formatDate } from '@angular/common';
 import { WidgetGetForRender } from '../../../../pages/dashboards/dashboards.interface';
+import { GenericResponseWrapper } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -123,5 +124,23 @@ export class CustomAlertsService {
             })
         )
 
+    }
+
+    public saveWidget(widget: WidgetGetForRender, CustomalertsFilter: CustomAlertsWidgetFilter): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/customalert_module/customalerts/customalertsWidget.json`, {
+            Widget: {
+                id: widget.id
+            },
+            Customalerts: {
+                state: CustomalertsFilter.Customalerts.state,
+                state_since: CustomalertsFilter.Customalerts.state_since
+            },
+            angular: true
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 }

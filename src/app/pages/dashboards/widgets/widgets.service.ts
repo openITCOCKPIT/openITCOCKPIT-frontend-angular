@@ -1,6 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { map, Observable, Subject } from 'rxjs';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
+import { HttpClient } from '@angular/common/http';
+import { PROXY_PATH } from '../../../tokens/proxy-path.token';
+import { StatuscountResponse } from '../../browsers/browsers.interface';
+import { WelcomeWidgetResponse } from './widgets.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -12,6 +16,10 @@ export class WidgetsService {
 
     private readonly onLayoutUpdated$$ = new Subject<KtdGridLayout>();
     public readonly onLayoutUpdated$ = this.onLayoutUpdated$$.asObservable();
+
+
+    private readonly http = inject(HttpClient);
+    private readonly proxyPath = inject(PROXY_PATH);
 
     constructor() {
     }
@@ -31,6 +39,29 @@ export class WidgetsService {
      */
     onLayoutUpdated(event: KtdGridLayout) {
         this.onLayoutUpdated$$.next(event);
+    }
+
+    public loadStatusCount(recursive: boolean = true): Observable<StatuscountResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<StatuscountResponse>(`${proxyPath}/angular/statuscount.json`, {
+            params: {
+                angular: true,
+                recursive: recursive
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadWelcomeWidget(): Observable<WelcomeWidgetResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<WelcomeWidgetResponse>(`${proxyPath}/dashboards/welcomeWidget.json`).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 
 }

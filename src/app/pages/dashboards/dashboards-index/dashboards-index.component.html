@@ -167,7 +167,7 @@
                                     </c-nav>
 
                                 </c-card-header>
-                                <c-card-body class="overflow-scroll">
+                                <c-card-body class="overflow-scroll pt-2 pb-0">
 
                                     <oitc-widget-container
                                         [widgetInput]="widget"
@@ -203,4 +203,6 @@
     (newTabCreated)="onNewTabCreated($event)"></oitc-dashboard-create-new-tab-modal>
 
 <oitc-dashboard-add-widget-modal
-    [availableWidgets]="availableWidgets"></oitc-dashboard-add-widget-modal>
+    [availableWidgets]="availableWidgets"
+    (restoreDefault)="onRestoreDefaultWidgets($event)"
+    (addWidgetEvent)="onAddWidget($event)"></oitc-dashboard-add-widget-modal>

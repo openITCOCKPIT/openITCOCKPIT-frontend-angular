@@ -44,7 +44,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { DashboardColorpickerComponent } from './dashboard-colorpicker/dashboard-colorpicker.component';
-import { DashboardTab, DashboardWidget, WidgetGetForRender } from '../dashboards.interface';
+import { DashboardTab, DashboardWidget, WidgetGet, WidgetGetForRender } from '../dashboards.interface';
 import { DashboardsService } from '../dashboards.service';
 import { DashboardTabsComponent } from './dashboard-tabs/dashboard-tabs.component';
 import { UUID } from '../../../classes/UUID';
@@ -153,9 +153,10 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     @ViewChild(KtdGridComponent, {static: false}) grid?: KtdGridComponent;
 
     // Docs: https://github.com/katoid/angular-grid-layout
+    // Stackblitz: https://stackblitz.com/edit/angular-grid-layout-playground?file=src%2Fapp%2Fplayground%2Fplayground.component.ts
     public cols = 12;
     public rowHeight = 15;
-    compactType: 'vertical' | 'horizontal' | null = 'vertical';
+    public compactType: 'vertical' | 'horizontal' | null = 'vertical';
 
     transitions: { name: string, value: string }[] = [
         {name: 'ease', value: 'transform 500ms ease, width 500ms ease, height 500ms ease'},
@@ -713,6 +714,65 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
             show: true,
             id: 'dashboardAddWidgetModal',
         });
+    }
+
+    public onRestoreDefaultWidgets(event: boolean) {
+        if (this.currentTabId > 0) {
+            this.subscriptions.add(this.DashboardsService.restoreDefault(this.currentTabId).subscribe(response => {
+                if (response.success) {
+                    this.loadTabContent(this.currentTabId);
+                    this.notyService.genericSuccess();
+                    return;
+                }
+
+                this.notyService.genericError();
+            }));
+        }
+    }
+
+    public onAddWidget(widgetTypeId: WidgetTypes) {
+        if (this.currentTabId > 0) {
+            this.subscriptions.add(this.DashboardsService.addWidgetToTab(this.currentTabId, widgetTypeId).subscribe(response => {
+                if (response.success) {
+                    const data = response.data as unknown as { widget: { Widget: WidgetGet } };
+
+                    // Add the new widget to the local array
+
+                    const newLayoutWidget: KtdGridLayoutItem = {
+                        id: data.widget.Widget.id.toString(),
+                        x: data.widget.Widget.col,
+                        y: data.widget.Widget.row,
+                        w: data.widget.Widget.width,
+                        h: data.widget.Widget.height
+                    };
+
+                    // get new reference of the layout array to trigger the change detection
+                    this.layout = [newLayoutWidget, ...this.layout];
+
+                    // Array for ngFor id has to be a string
+                    const widgetForLayout: WidgetGetForRender = {
+                        ...data.widget.Widget,
+                        id: data.widget.Widget.id.toString()
+                    }
+
+                    // get new reference of the widgets array to trigger the change detection
+                    this.widgets = [widgetForLayout, ...this.widgets];
+
+                    this.notyService.genericSuccess();
+
+                    this.cdr.markForCheck();
+
+                    // Save the new grid
+                    this.subscriptions.add(this.DashboardsService.saveGrid(this.widgets).subscribe(response => {
+
+                    }));
+
+                    return;
+                }
+
+                this.notyService.genericError();
+            }));
+        }
     }
 
     protected readonly WidgetTypes = WidgetTypes;

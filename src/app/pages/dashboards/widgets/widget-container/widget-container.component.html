@@ -3,9 +3,19 @@
     <!-- Add all new Widgets to the switch statement below -->
 
     @switch (widget.type_id) {
-        @case (WidgetTypes.CustomalertsWidget) {
-            <oitc-customalerts-widget [widget]="widget" [isReadonly]="isReadonly()"></oitc-customalerts-widget>
+        <!-- Core Widgets -->
+        @case (WidgetTypes.WelcomeWidget) {
+            <oitc-welcome-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-welcome-widget>
         }
+
+        <!-- Module Widgets -->
+        @case (WidgetTypes.CustomalertsWidget) {
+            <oitc-customalerts-widget [widgetInput]="widget" [isReadonly]="isReadonly()"></oitc-customalerts-widget>
+        }
+
+        <!-- Fallback Widget -->
         @default {
             <oitc-alert
                 color="warning"

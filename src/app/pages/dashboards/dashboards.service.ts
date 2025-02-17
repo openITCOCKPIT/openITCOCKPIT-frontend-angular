@@ -16,6 +16,7 @@ import {
     GenericSuccessResponse,
     GenericValidationError
 } from '../../generic-responses';
+import { WidgetTypes } from './widgets/widgets.enum';
 
 @Injectable({
     providedIn: 'root'
@@ -495,6 +496,65 @@ export class DashboardsService {
                     return {
                         success: true,
                         data: data.DashboardTab.DashboardTab as GenericResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public restoreDefault(tabId: number) {
+
+        const post: { DashboardTab: { id: number } } = {
+            DashboardTab: {
+                id: tabId
+            }
+        };
+
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/dashboards/restoreDefault.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public addWidgetToTab(tabId: number, widgetTypeId: WidgetTypes) {
+
+        const post: { Widget: { dashboard_tab_id: number, typeId: WidgetTypes } } = {
+            Widget: {
+                dashboard_tab_id: tabId,
+                typeId: widgetTypeId
+            }
+        };
+
+        const proxyPath = this.proxyPath;
+
+        return this.http.post<any>(`${proxyPath}/dashboards/addWidgetToTab/.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericResponse
                     };
                 }),
                 catchError((error: any) => {
