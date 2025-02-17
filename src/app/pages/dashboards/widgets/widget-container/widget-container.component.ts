@@ -8,6 +8,7 @@ import { OitcAlertComponent } from '../../../../components/alert/alert.component
 import { TranslocoPipe } from '@jsverse/transloco';
 import { WelcomeWidgetComponent } from '../welcome-widget/welcome-widget.component';
 import { ParentOutagesWidgetComponent } from '../parent-outages-widget/parent-outages-widget.component';
+import { HostsPiechartWidgetComponent } from '../hosts-piechart-widget/hosts-piechart-widget.component';
 
 @Component({
     selector: 'oitc-widget-container',
@@ -16,7 +17,8 @@ import { ParentOutagesWidgetComponent } from '../parent-outages-widget/parent-ou
         OitcAlertComponent,
         TranslocoPipe,
         WelcomeWidgetComponent,
-        ParentOutagesWidgetComponent
+        ParentOutagesWidgetComponent,
+        HostsPiechartWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

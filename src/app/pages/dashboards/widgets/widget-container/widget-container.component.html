@@ -14,10 +14,17 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-parent-outages-widget>
         }
+        @case (WidgetTypes.HostsPiechartWidget) {
+            <oitc-hosts-piechart-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-hosts-piechart-widget>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {
-            <oitc-customalerts-widget [widgetInput]="widget" [isReadonly]="isReadonly()"></oitc-customalerts-widget>
+            <oitc-customalerts-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-customalerts-widget>
         }
 
         <!-- Fallback Widget -->
