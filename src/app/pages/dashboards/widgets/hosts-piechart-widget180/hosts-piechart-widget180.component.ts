@@ -25,6 +25,8 @@ import { RouterLink } from '@angular/router';
 export class HostsPiechartWidget180Component extends BaseWidgetComponent {
     public statusCounts?: StatuscountResponse;
 
+    public triggerChartUpdate: number = 0;
+
     public override load() {
         this.subscriptions.add(this.WidgetsService.loadStatusCount()
             .subscribe((result) => {
@@ -39,10 +41,11 @@ export class HostsPiechartWidget180Component extends BaseWidgetComponent {
     }
 
     public override resizeWidget(event?: KtdResizeEnd) {
- 
+        // This will trigger the input of the chart component to update
+        this.triggerChartUpdate++;
+        this.cdr.markForCheck();
     }
 
     public override layoutUpdate(event: KtdGridLayout) {
-        super.layoutUpdate(event);
     }
 }

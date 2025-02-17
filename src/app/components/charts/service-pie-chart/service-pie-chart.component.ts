@@ -2,7 +2,9 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    effect,
     inject,
+    input,
     Input,
     OnChanges,
     OnDestroy,
@@ -52,6 +54,8 @@ export class ServicePieChartComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() public statusDataPercentage: number[] = [0, 0, 0, 0];
 
+    public triggerUpdate = input<number>(0);
+
     private subscription: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
     private readonly LayoutService = inject(LayoutService);
@@ -83,6 +87,15 @@ export class ServicePieChartComponent implements OnInit, OnChanges, OnDestroy {
             }
 
         }));
+
+        effect(() => {
+            if (this.triggerUpdate() > 0) {
+                // External component has triggered an update
+                if (this.chart) {
+                    this.chart.updateOptions(this.chartOptions);
+                }
+            }
+        });
     }
 
     public ngOnInit(): void {

@@ -3,7 +3,8 @@
          *ngIf="statusCounts && statusCounts.servicestatusCount.length === 4">
 
         <oitc-service-pie-chart
-            [statusDataPercentage]="statusCounts.servicestatusCountPercentage"></oitc-service-pie-chart>
+            [statusDataPercentage]="statusCounts.servicestatusCountPercentage"
+            [triggerUpdate]="triggerChartUpdate"></oitc-service-pie-chart>
 
         <div class="row text-center font-xs">
             <div class="col-xs-12 col-md-3 no-padding">

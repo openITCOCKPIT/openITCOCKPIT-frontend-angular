@@ -163,10 +163,11 @@ export class ServicesPiechartWidgetComponent extends BaseWidgetComponent {
     }
 
     public override resizeWidget(event?: KtdResizeEnd) {
-        super.resizeWidget(event);
+        if (this.chart) {
+            this.chart.updateOptions(this.chartOptions);
+        }
     }
 
     public override layoutUpdate(event: KtdGridLayout) {
-        super.layoutUpdate(event);
     }
 }

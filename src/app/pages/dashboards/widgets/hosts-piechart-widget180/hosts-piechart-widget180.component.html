@@ -3,7 +3,8 @@
          *ngIf="statusCounts && statusCounts.hoststatusCount.length === 3">
 
         <oitc-host-pie-chart
-            [statusDataPercentage]="statusCounts.hoststatusCountPercentage"></oitc-host-pie-chart>
+            [statusDataPercentage]="statusCounts.hoststatusCountPercentage"
+            [triggerUpdate]="triggerChartUpdate"></oitc-host-pie-chart>
 
         <div class="row text-center font-xs">
             <div class="col-xs-12 col-md-4 no-padding">
