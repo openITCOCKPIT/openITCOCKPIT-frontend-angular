@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
-    DashboardsIndexResponse, ParentOutagesResponse,
+    DashboardsIndexResponse,
+    ParentOutagesResponse,
     SharedTab,
     WidgetGetForRender,
     WidgetSaveGrid,
@@ -17,7 +18,6 @@ import {
     GenericValidationError
 } from '../../generic-responses';
 import { WidgetTypes } from './widgets/widgets.enum';
-import { ParentOutagesWidgetComponent } from './widgets/parent-outages-widget/parent-outages-widget.component';
 
 @Injectable({
     providedIn: 'root'
@@ -568,7 +568,7 @@ export class DashboardsService {
             );
     }
 
-    public getParentOutagesWidget(hostname:string): Observable<ParentOutagesResponse> {
+    public getParentOutagesWidget(hostname: string): Observable<ParentOutagesResponse> {
         const proxyPath = this.proxyPath;
         return this.http.get<ParentOutagesResponse>(`${proxyPath}/dashboards/parentOutagesWidget.json`, {
             params: {
@@ -582,4 +582,17 @@ export class DashboardsService {
         )
     }
 
+    public getCalendarWidget(widget: WidgetGetForRender): Observable<ParentOutagesResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ParentOutagesResponse>(`${proxyPath}/dashboards/calendarWidget.json`, {
+            params: {
+                angular: true,
+                'widgetId': widget.id
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
 }
