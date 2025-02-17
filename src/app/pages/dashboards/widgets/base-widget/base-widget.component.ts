@@ -52,7 +52,7 @@ export abstract class BaseWidgetComponent implements OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public resizeWidget(event: KtdResizeEnd) {
+    public resizeWidget(event?: KtdResizeEnd) {
         console.log('Implement resizeWidget(event: KtdResizeEnd) method in your widget component');
     }
 
