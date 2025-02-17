@@ -277,6 +277,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
                 this.isLdapUser = result.isLdapUser;
                 if (this.isLdapUser) {
                     this.loadLdapUsers('');
+                    this.loadLdapUserDetails();
                 }
                 this.notPermittedContainerIds = result.notPermittedContainerIds;
 
