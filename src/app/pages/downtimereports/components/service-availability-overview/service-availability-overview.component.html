@@ -1,14 +1,15 @@
 <ng-container *transloco="let t">
     <c-row class="mb-3">
         <c-col md="4">
-            <oitc-service-pie-chart
-                    [statusDataPercentage]="[
-                        service().pieChartData.widgetOverview[0].percent,
-                        service().pieChartData.widgetOverview[1].percent,
-                        service().pieChartData.widgetOverview[2].percent,
-                        service().pieChartData.widgetOverview[3].percent
-                    ]"
-            ></oitc-service-pie-chart>
+            <oitc-service-pie-echart
+                    height="100"
+                    [title]="''"
+                    [showLegend]="false"
+                    [chartData]="[
+                                {name: 'OK',value: service().pieChartData.widgetOverview[0].percent},
+                                {name: 'WARNING',value: service().pieChartData.widgetOverview[1].percent},
+                                {name: 'CRITICAL',value: service().pieChartData.widgetOverview[2].percent},
+                                {name: 'UNKNOWN',value: service().pieChartData.widgetOverview[3].percent}]"/>
         </c-col>
         <c-col md="8">
             <c-row [ngStyle]="{background: this.dynamicColour() ? this.AvailabilityColorCalculationService.getBackgroundColor(service().pieChartData.availability) : ''}"

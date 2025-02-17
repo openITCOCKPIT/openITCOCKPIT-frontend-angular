@@ -8,6 +8,10 @@ import { RouterLink } from '@angular/router';
 import { ServicePieChartComponent } from '../../../../components/charts/service-pie-chart/service-pie-chart.component';
 import { NgStyle } from '@angular/common';
 import { AvailabilityColorCalculationService } from '../../AvailabilityColorCalculationService';
+import {
+    ServicePieEchartComponent
+} from '../../../../components/charts/service-pie-echart/service-pie-echart.component';
+import { HostPieEchartComponent } from '../../../../components/charts/host-pie-echart/host-pie-echart.component';
 
 @Component({
     selector: 'oitc-service-availability-overview',
@@ -19,7 +23,9 @@ import { AvailabilityColorCalculationService } from '../../AvailabilityColorCalc
         RouterLink,
         RowComponent,
         ServicePieChartComponent,
-        NgStyle
+        NgStyle,
+        ServicePieEchartComponent,
+        HostPieEchartComponent
     ],
     templateUrl: './service-availability-overview.component.html',
     styleUrl: './service-availability-overview.component.css',
