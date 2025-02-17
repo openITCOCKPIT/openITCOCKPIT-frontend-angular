@@ -68,7 +68,8 @@
                             </li>
                             <li cDropdownDivider></li>
                             <li>
-                                <span cDropdownItem class="text-danger cursor-pointer"
+                                <span cDropdownItem
+                                      [ngClass]="{'text-muted': dashboardIsLocked(), 'cursor-pointer text-danger': !dashboardIsLocked()}"
                                       (click)="deleteTab(tab.id)">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete') }}

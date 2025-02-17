@@ -4,7 +4,7 @@
 
     @switch (widget.type_id) {
         @case (WidgetTypes.CustomalertsWidget) {
-            <oitc-customalerts-widget [widget]="widget"></oitc-customalerts-widget>
+            <oitc-customalerts-widget [widget]="widget" [isReadonly]="isReadonly()"></oitc-customalerts-widget>
         }
         @default {
             <oitc-alert

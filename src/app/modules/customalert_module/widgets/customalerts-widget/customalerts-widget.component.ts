@@ -5,6 +5,7 @@ import {
     Component,
     ElementRef,
     inject,
+    input,
     Input,
     OnDestroy,
     OnInit,
@@ -21,9 +22,20 @@ import {
 } from '../../pages/customalerts/customalerts.interface';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgIf } from '@angular/common';
-import { ColComponent, RowComponent } from '@coreui/angular';
-import { WidgetTypes } from '../../../../pages/dashboards/widgets/widgets.enum';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import {
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective, FormControlDirective, InputGroupComponent, InputGroupTextDirective,
+    RowComponent
+} from '@coreui/angular';
+import { WidgetsService } from '../../../../pages/dashboards/widgets/widgets.service';
+import { PermissionsService } from '../../../../permissions/permissions.service';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { FormsModule } from '@angular/forms';
+import { DebounceDirective } from '../../../../directives/debounce.directive';
+import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-customalerts-widget',
@@ -32,7 +44,19 @@ import { WidgetTypes } from '../../../../pages/dashboards/widgets/widgets.enum';
         NgIf,
         NgClass,
         RowComponent,
-        ColComponent
+        ColComponent,
+        AsyncPipe,
+        TranslocoDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormsModule,
+        DebounceDirective,
+        FormControlDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TranslocoPipe,
+        XsButtonDirective
     ],
     templateUrl: './customalerts-widget.component.html',
     styleUrl: './customalerts-widget.component.css',
@@ -49,47 +73,68 @@ export class CustomalertsWidgetComponent implements OnInit, OnDestroy, AfterView
     @Input() widget!: WidgetGetForRender;
     private readonly subscriptions: Subscription = new Subscription();
     private readonly CustomAlertsService = inject(CustomAlertsService);
+    private readonly WidgetsService = inject(WidgetsService);
     public CustomalertsFilter: CustomAlertsWidgetFilter = getCustomAlertsWidgetParams();
     public statusCount: number | null = null;
-    public readOnly: boolean = true;
     protected flipped = signal<boolean>(false);
     public widgetHeight: number = 0;
     public fontSize: number = 0;
     public fontSizeIcon: number = 0;
+    public iconTopPosition: number = 0;
+    isReadonly = input<boolean>(false);
+    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
+
 
     private cdr = inject(ChangeDetectorRef);
 
     @ViewChild('boxContainer') boxContainer?: ElementRef;
 
-    public ngOnInit(): void {
+    constructor() {
+        this.subscriptions.add(this.WidgetsService.onResizeEnded$.subscribe(event => {
+            if (event.layoutItem.id === this.widget.id) {
+                // Yes ich wurde resized
+                this.resizeWidget();
+            }
+        }));
 
-        const element = document.getElementById("HTML element");
-        this.load();
     }
 
+    public ngOnInit(): void {
+        this.load();
+    }
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
-
 
     private load() {
         this.subscriptions.add(
             this.CustomAlertsService.loadWidget(this.widget, this.CustomalertsFilter).subscribe((data: CustomAlertsWidget) => {
                 this.CustomalertsFilter = data.config;
                 this.statusCount = data.statusCount;
-                //this.readOnly = this.widget.reandOnly;
                 this.cdr.markForCheck();
             })
         );
     }
 
-    protected readonly WidgetTypes = WidgetTypes;
-
-    public ngAfterViewInit(): void {
-        this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight - 21; //21px height of button
+    public resizeWidget() {
+        let editButtonHeight = 21;
+        if (this.isReadonly()) {
+            //edit button is not visible
+            editButtonHeight = 0;
+        }
+        this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight - editButtonHeight; //21px height of button
         this.fontSize = this.widgetHeight / 2;
         this.fontSizeIcon = this.widgetHeight / 2.5;
+        this.iconTopPosition = this.widgetHeight - this.fontSizeIcon -10; //10px padding from bottom
         this.cdr.markForCheck();
+    }
+
+    public ngAfterViewInit(): void {
+        this.resizeWidget();
+    }
+
+    public submit(){
+        console.log('Save this !!!');
     }
 }

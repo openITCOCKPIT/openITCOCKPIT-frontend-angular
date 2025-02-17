@@ -9,6 +9,34 @@
         </c-modal-header>
         <c-modal-body>
 
+            <c-row>
+                <c-col [xs]="12" class="mb-3">
+                    <label cLabel for="FilterWidgetListModal" class="mt-3">
+                        {{ t('Filter widgets') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        </span>
+                        <input cFormControl id="FilterWidgetListModal" type="text"
+                               name="FilterWidgetListModal"
+                               [placeholder]="'Filter widgets' | transloco"
+                               [(ngModel)]="searchString">
+                    </c-input-group>
+                </c-col>
+            </c-row>
+
+            <c-row>
+                @for (widget of availableWidgets(); track $index) {
+                    <c-col [xs]="12" [sm]="6" [lg]="6" class="mb-2">
+                        <button cButton color="default" class="ripple w-100 text-start" type="button"
+                                (click)="addWidget(widget.type_id)">
+                            <i [classList]="widget.icon"></i>
+                            {{ widget.title }}
+                        </button>
+                    </c-col>
+                }
+            </c-row>
 
         </c-modal-body>
         <c-modal-footer>

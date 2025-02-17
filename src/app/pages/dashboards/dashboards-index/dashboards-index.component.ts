@@ -62,6 +62,13 @@ import { WidgetTypes } from '../widgets/widgets.enum';
 import { WidgetContainerComponent } from '../widgets/widget-container/widget-container.component';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { WidgetsService } from '../widgets/widgets.service';
+import {
+    DashboardTabRotationModalComponent
+} from './dashboard-tab-rotation-modal/dashboard-tab-rotation-modal.component';
+import {
+    DashboardCreateNewTabModalComponent
+} from './dashboard-create-new-tab-modal/dashboard-create-new-tab-modal.component';
+import { DashboardAddWidgetModalComponent } from './dashboard-add-widget-modal/dashboard-add-widget-modal.component';
 
 
 @Component({
@@ -94,7 +101,10 @@ import { WidgetsService } from '../widgets/widgets.service';
         TranslocoPipe,
         RowComponent,
         ColComponent,
-        BlockLoaderComponent
+        BlockLoaderComponent,
+        DashboardTabRotationModalComponent,
+        DashboardCreateNewTabModalComponent,
+        DashboardAddWidgetModalComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
@@ -129,6 +139,9 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
 
     private cdr = inject(ChangeDetectorRef);
+
+    public tabIntervalInSeconds: number = 0;
+    private tabRotationInterval: any = null;
 
     @HostListener('fullscreenchange', ['$event'])
     handleFullscreenchangeEvent(Event: Event) {
@@ -194,11 +207,17 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.resizeSubscription.unsubscribe();
         this.subscriptions.unsubscribe();
+        if (this.tabRotationInterval) {
+            clearInterval(this.tabRotationInterval);
+        }
+
     }
 
     public loadDashboardsIndex(): void {
         this.subscriptions.add(this.DashboardsService.getIndex().subscribe(data => {
             this.tabs = data.tabs;
+            this.tabIntervalInSeconds = data.tabRotationInterval;
+            this.availableWidgets = data.widgets;
 
             if (this.currentTabId === 0 && data.tabs.length > 0) {
                 // Mark the first tab as active
@@ -206,6 +225,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
             }
 
             this.loadTabContent(this.currentTabId);
+            this.updateTabRotationInterval();
 
             this.cdr.markForCheck();
         }));
@@ -625,6 +645,74 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
             this.notyService.genericError();
         }));
+    }
+
+    public toggleTabRotationModal() {
+        this.modalService.toggle({
+            show: true,
+            id: 'dashboardTabRotationModal',
+        });
+    }
+
+    public saveTabRotateInterval(newInterval: number) {
+        this.subscriptions.add(this.DashboardsService.saveTabRotateInterval(newInterval).subscribe(response => {
+            if (response.success) {
+                this.tabIntervalInSeconds = newInterval;
+                this.updateTabRotationInterval();
+                this.notyService.genericSuccess();
+                this.cdr.markForCheck();
+                return;
+            }
+
+            this.notyService.genericError();
+        }));
+    }
+
+    private updateTabRotationInterval() {
+        if (this.tabRotationInterval) {
+            clearInterval(this.tabRotationInterval);
+            this.tabRotationInterval = null;
+        }
+
+        if (this.tabIntervalInSeconds > 0) {
+            this.tabRotationInterval = setInterval(() => {
+                const currentTabIndex = this.tabs.findIndex(tab => tab.id === this.currentTabId);
+                const nextTabIndex = currentTabIndex + 1;
+
+                if (nextTabIndex >= this.tabs.length) {
+                    // Start from the beginning
+                    this.onTabChange(this.tabs[0].id);
+                } else {
+                    this.onTabChange(this.tabs[nextTabIndex].id);
+                }
+
+            }, this.tabIntervalInSeconds * 1000);
+        }
+    }
+
+    public toggleCreateNewTabModal() {
+        this.modalService.toggle({
+            show: true,
+            id: 'dashboardCreateNewTabModal',
+        });
+    }
+
+    public onNewTabCreated(newTabId: number) {
+        if (newTabId === 0) {
+            return;
+        }
+
+        //Switch to the new tab
+        this.onTabChange(newTabId);
+        // Update tab list
+        this.loadDashboardsIndex();
+    }
+
+    public toggleAddWidgetModal() {
+        this.modalService.toggle({
+            show: true,
+            id: 'dashboardAddWidgetModal',
+        });
     }
 
     protected readonly WidgetTypes = WidgetTypes;
