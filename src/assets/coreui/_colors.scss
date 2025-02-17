@@ -43,3 +43,28 @@ $oitcgrays: (
 @include generate-color-classes($oitcgrays);
 @include generate-color-classes($primaries);
 @include generate-color-classes($warnings);
+
+
+.text-community {
+    color: #4085C6;
+}
+
+.bg-community {
+    background-color: #4085C6;
+}
+
+.btn-community:hover {
+    background: #143d5b;
+}
+
+.text-enterprise {
+    color: #DD0B2F;
+}
+
+.bg-enterprise {
+    background-color: #DD0B2F;
+}
+
+.btn-enterprise:hover {
+    background: #a61f1c;
+}

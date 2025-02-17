@@ -1,11 +1,46 @@
-<p>welcome-widget works!</p>
+<ng-container *transloco="let t">
+    <div class="d-flex flex-row">
+        <div>
+            hier bild
+        </div>
+        <div class="flex-grow-1 ms-2">
+            <strong>{{ statuscount?.hoststatusSum }}</strong>
+            <strong>{{ statuscount?.hoststatusSum }}</strong> {{ t('hosts are monitored') }}
 
-<div class="d-flex flex-row">
-    <div>
-        hier bild
-    </div>
-    <div class="flex-grow-1">
-        hier hosts monitored und sowas
-    </div>
+            <br>
+            <strong>{{ statuscount?.servicestatusSum }}</strong> {{ t('services are monitored') }}
+            <br>
+            <br>
+            {{ t('Your selected Timezone is ') }} {{ welcome?.user_timezone }}
+            @if (welcome?.user_timezone !== welcome?.server_timezone) {
+                <br>
+                {{ t('Server timezone is:') }}
+                {{ welcome?.server_timezone }}
+            }
+            <br>
+            {{
+                t('{0} version is {1},', {
+                    '0': SystemnameService.systemName$ | async,
+                    '1': welcome?.OPENITCOCKPIT_VERSION
+                })
+            }}
 
-</div>
+            @if (welcome) {
+                @if (!welcome.hasSubscription) {
+                    {{ t('No active subscription') }}
+                    🥺
+                } @else if (welcome.hasSubscription && welcome.isCommunityEdition) {
+                    <span class="text-community">
+                        {{ t('Community Edition') }}
+                    </span>
+                } @else {
+                    <span class="text-enterprise">
+                        {{ t('Enterprise Edition') }}
+                    </span>
+                }
+            }
+
+        </div>
+
+    </div>
+</ng-container>
