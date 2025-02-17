@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnDestroy, output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    effect,
+    inject,
+    input,
+    OnDestroy,
+    output
+} from '@angular/core';
 import { DashboardWidget } from '../../dashboards.interface';
 import {
     ButtonCloseDirective,
@@ -22,6 +31,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-dashboard-add-widget-modal',
@@ -45,7 +55,8 @@ import { Subscription } from 'rxjs';
         InputGroupTextDirective,
         TranslocoPipe,
         FormsModule,
-        FormCheckInputDirective
+        FormCheckInputDirective,
+        NgIf
     ],
     templateUrl: './dashboard-add-widget-modal.component.html',
     styleUrl: './dashboard-add-widget-modal.component.scss',
@@ -54,6 +65,8 @@ import { Subscription } from 'rxjs';
 export class DashboardAddWidgetModalComponent implements OnDestroy {
 
     public availableWidgets = input<DashboardWidget[]>([]);
+    public localAvailableWidgets: DashboardWidget[] = [];
+
     public addWidgetEvent = output<number>();
     public restoreDefault = output<boolean>();
 
@@ -66,6 +79,10 @@ export class DashboardAddWidgetModalComponent implements OnDestroy {
     private cdr = inject(ChangeDetectorRef);
 
     constructor() {
+        effect(() => {
+            this.localAvailableWidgets = this.availableWidgets();
+        });
+
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
             if (state.id === 'dashboardAddWidgetModal' && state.show === true) {
                 this.searchString = '';
@@ -80,8 +97,26 @@ export class DashboardAddWidgetModalComponent implements OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
+    public filterWidgets(): void {
+        if (this.searchString === '') {
+            this.localAvailableWidgets = this.availableWidgets();
+            return;
+        }
+
+        this.localAvailableWidgets = this.availableWidgets().filter((widget) => {
+            return widget.title.toLowerCase().includes(this.searchString.toLowerCase());
+        });
+    }
+
     public addWidget(widgetTypeId: number): void {
         this.addWidgetEvent.emit(widgetTypeId);
+
+        if (!this.createAnother) {
+            this.modalService.toggle({
+                id: 'dashboardAddWidgetModal',
+                show: false
+            });
+        }
     }
 
     public restoreDefaultWidgets(): void {

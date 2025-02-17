@@ -21,13 +21,17 @@
                         <input cFormControl id="FilterWidgetListModal" type="text"
                                name="FilterWidgetListModal"
                                [placeholder]="'Filter widgets' | transloco"
-                               [(ngModel)]="searchString">
+                               [(ngModel)]="searchString"
+                               (keyup)="filterWidgets()">
                     </c-input-group>
+                    <div class="text-danger" *ngIf="localAvailableWidgets.length === 0">
+                        {{ t('No matching widgets found.') }}
+                    </div>
                 </c-col>
             </c-row>
 
             <c-row>
-                @for (widget of availableWidgets(); track $index) {
+                @for (widget of localAvailableWidgets; track $index) {
                     <c-col [xs]="12" [sm]="6" [lg]="6" class="mb-2">
                         <button cButton color="default" class="ripple w-100 text-start" type="button"
                                 (click)="addWidget(widget.type_id)">
