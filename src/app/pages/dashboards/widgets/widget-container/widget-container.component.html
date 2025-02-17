@@ -34,6 +34,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-services-piechart-widget180>
         }
+        @case (WidgetTypes.HostsDowntimeWidget) {
+            <oitc-hosts-downtime-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-hosts-downtime-widget>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {
