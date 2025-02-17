@@ -181,9 +181,9 @@
                             </oitc-actions-button-element>
 
                             <oitc-actions-button-element [permission]="'autoreportmodule.autoreports.generate'"
-                                                         [url]="'/autoreport_module/autotreports/generate/' + autoreport.id">
+                                                         [url]="'/autoreport_module/autoreports/generate/' + autoreport.id">
                                 <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-                                {{ t('Generate') }}
+                                {{ t('Generate report') }}
                             </oitc-actions-button-element>
 
                             <li cDropdownDivider *ngIf="autoreport.allowEdit"></li>

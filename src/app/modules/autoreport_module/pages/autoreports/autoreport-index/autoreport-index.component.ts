@@ -126,7 +126,6 @@ export class AutoreportIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.autoreports = data;
             this.cdr.markForCheck();
         }));
-
     }
 
     public resetFilter(): void {

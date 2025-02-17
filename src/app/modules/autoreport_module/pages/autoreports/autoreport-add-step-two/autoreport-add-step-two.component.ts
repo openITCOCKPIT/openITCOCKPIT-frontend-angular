@@ -97,8 +97,6 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
     };
     public hostsWithServices: AutoReportHostWithServicesObject[] = [];
     public serviceIdsToConsider: number[] = [];
-
-
     public defaultOptionsPercent = 0;
     public defaultOptionsMinute = 0;
     public defaultOptionsAliasGraph = 0;
@@ -290,9 +288,6 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
     protected selectedServices() {
 
         this.selectedSelectedIds = [];
-        if(this.post.Autoreport.services.length === 0){
-            return;
-        }
         for(const index in this.post.Autoreport.services){
             if(this.post.Autoreport.services[index]['percent'] || this.post.Autoreport.services[index]['minute']){
                 this.selectedSelectedIds.includes(this.post.Autoreport.services[index]['service_id']);
@@ -302,7 +297,6 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
             }
         }
     }
-
 
     protected cleanUpForServiceOptions(serviceIdsToDelete: number[]) {
         if (serviceIdsToDelete.length === 0) {

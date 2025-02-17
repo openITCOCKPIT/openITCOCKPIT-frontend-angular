@@ -12,7 +12,8 @@ import {
     AutoreportPost,
     AutoreportObject,
     HostServiceParams,
-    AutoreportPostObject
+    AutoreportPostObject,
+    AtutoreportEditPost
 } from './autoreports.interface';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
@@ -38,6 +39,20 @@ export class AutoreportsService {
                 return data;
             })
         )
+    }
+
+    public getAutreportsGenerateIndex():Observable<AutoreportsIndexRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<AutoreportsIndexRoot>(`${proxyPath}/autoreport_module/autoreports/generate.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+
     }
 
     public delete(item: DeleteAllItem): Observable<Object> {
@@ -142,6 +157,40 @@ export class AutoreportsService {
     public setEditStepOne(id: number, post: any): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/autoreport_module/autoreports/editStepOne/${id}.json?angular=true`,
+            post
+        ).pipe(
+            map((data: any) => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                const err = error.error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
+            })
+        );
+    }
+
+    public getEditStepTwo(id: number): Observable<AtutoreportEditPost> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<AtutoreportEditPost>(`${proxyPath}/autoreport_module/autoreports/editStepTwo/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+    public setEditStepTwo(id: number, post: any): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/autoreport_module/autoreports/editStepTwo/${id}.json?angular=true`,
             post
         ).pipe(
             map((data: any) => {

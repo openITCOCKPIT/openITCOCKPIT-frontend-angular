@@ -72,6 +72,7 @@
                         <button type="button" class="btn btn-primary h-100"
                                 style="border-radius: 0;"
                                 [title]="'Prev' | transloco"
+                                [routerLink]="['/', 'autoreport_module', 'autoreports', 'editStepTwo', id]"
                         >
                             <i class="fa fa-arrow-left"></i>
                             {{ t('Prev') }}
@@ -308,6 +309,9 @@
                                 </div>
                             </div>
 
+                        </div>
+                        <div class="col-9 service_option text-left text-info" *ngIf="host.services.length === 0">
+                            <em>{{t('No Services selected. Report will considered only host state changes.')}}</em>
                         </div>
                         <div class="col-9 service_row" *ngFor="let service of host.services">
                             <div class="row show-grid report-details-bordered">

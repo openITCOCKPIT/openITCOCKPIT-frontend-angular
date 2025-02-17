@@ -94,6 +94,18 @@ export function getDefaultPost(): AutoreportPost {
     }
 }
 
+export interface DynamicHostObject {
+    [key: string]: {
+        host_id: number,
+        percent: number,
+        minute: number,
+        alias: number,
+        outage: string,
+        allfailures: number
+    }
+}
+
+
 
 
 export interface AutoreportObject {
@@ -124,8 +136,14 @@ export interface AutoreportObject {
     max_number_of_outages?: number | null,
     created?: string
     modified?: string,
-    users: AutoreportUser[],
+    users?: AutoreportUser[],
     hostsWithServices?: AutoReportHostWithServicesObject[],
+    POST?: any
+}
+
+export interface AtutoreportEditPost{
+    autoreport: AutoreportObject,
+    selectedHostIds?: number[],
 }
 
 

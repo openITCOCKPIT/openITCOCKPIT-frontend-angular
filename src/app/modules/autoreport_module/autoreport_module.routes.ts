@@ -29,7 +29,15 @@ export const autoreportModuleRoutes: Routes = [
         loadComponent: () => import('./pages/autoreports/autoreport-edit-step-one/autoreport-edit-step-one.component').then(m => m.AutoreportEditStepOneComponent)
     },
     {
+        path: 'autoreport_module/autoreports/editStepTwo/:id',
+        loadComponent: () => import('./pages/autoreports/autoreport-edit-step-two/autoreport-edit-step-two.component').then(m => m.AutoreportEditStepTwoComponent)
+    },
+    {
         path: 'autoreport_module/autoreports/editStepThree/:id',
         loadComponent: () => import('./pages/autoreports/autoreport-edit-step-three/autoreport-edit-step-three.component').then(m => m.AutoreportEditStepThreeComponent)
+    },
+    {
+        path: 'autoreport_module/autoreports/generate/:id',
+        loadComponent: () => import('./pages/autoreports/autoreport-generate/autoreport-generate.component').then(m => m.AutoreportGenerateComponent)
     },
 ];
