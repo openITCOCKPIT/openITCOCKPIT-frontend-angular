@@ -27,15 +27,20 @@ import {
     ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
-    FormCheckLabelDirective, FormControlDirective, InputGroupComponent, InputGroupTextDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     RowComponent
 } from '@coreui/angular';
 import { WidgetsService } from '../../../../pages/dashboards/widgets/widgets.service';
 import { PermissionsService } from '../../../../permissions/permissions.service';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { GenericValidationError } from '../../../../generic-responses';
+import { NotyService } from '../../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-customalerts-widget',
@@ -78,12 +83,15 @@ export class CustomalertsWidgetComponent implements OnInit, OnDestroy, AfterView
     public statusCount: number | null = null;
     protected flipped = signal<boolean>(false);
     public widgetHeight: number = 0;
+    public widgetWidth: number = 0;
     public fontSize: number = 0;
     public fontSizeIcon: number = 0;
     public iconTopPosition: number = 0;
     isReadonly = input<boolean>(false);
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
-
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
+    public errors: GenericValidationError | null = null;
 
     private cdr = inject(ChangeDetectorRef);
 
@@ -124,9 +132,12 @@ export class CustomalertsWidgetComponent implements OnInit, OnDestroy, AfterView
             editButtonHeight = 0;
         }
         this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight - editButtonHeight; //21px height of button
-        this.fontSize = this.widgetHeight / 2;
-        this.fontSizeIcon = this.widgetHeight / 2.5;
-        this.iconTopPosition = this.widgetHeight - this.fontSizeIcon -10; //10px padding from bottom
+        this.widgetWidth = this.boxContainer?.nativeElement.offsetWidth ; //21px height of button
+        const scaleValue = Math.min(this.widgetHeight, this.widgetWidth);
+
+        this.fontSize = scaleValue / 3;
+        this.fontSizeIcon = scaleValue / 3;
+        this.iconTopPosition = this.widgetHeight - this.fontSizeIcon - 10; //10px padding from bottom
         this.cdr.markForCheck();
     }
 
@@ -134,7 +145,25 @@ export class CustomalertsWidgetComponent implements OnInit, OnDestroy, AfterView
         this.resizeWidget();
     }
 
-    public submit(){
-        console.log('Save this !!!');
+    public submit() {
+        this.subscriptions.add(this.CustomAlertsService.saveWidget(this.widget, this.CustomalertsFilter)
+            .subscribe({
+                next: (result) => {
+                    this.cdr.markForCheck();
+                    const title = this.TranslocoService.translate('Success');
+                    const msg = this.TranslocoService.translate('Data saved successfully');
+
+                    this.notyService.genericSuccess(msg, title);
+                    this.notyService.scrollContentDivToTop();
+                    this.flipped.set(false);
+
+                    return;
+                },
+                // Error
+                error: (error) => {
+                    const errorResponse = error as GenericValidationError;
+                    this.notyService.genericError();
+                }
+            }));
     }
 }
