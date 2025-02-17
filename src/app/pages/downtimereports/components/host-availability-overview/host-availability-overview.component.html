@@ -46,19 +46,19 @@
                         <c-col md="3">
                             {{ t('Status') }}
                         </c-col>
-                        <c-col md="3" class="bg-ok downtime-report-state-overview font-sm padding-5">
+                        <c-col md="3" class="bg-up shadow-up downtime-report-state-overview font-sm padding-5">
                             <strong>
                                 {{ host().pieChartData.widgetOverview[0].percent }} %
                                 ({{ host().pieChartData.widgetOverview[0].human }})
                             </strong>
                         </c-col>
-                        <c-col md="3" class="bg-critical downtime-report-state-overview font-sm padding-5">
+                        <c-col md="3" class="bg-down shadow-down downtime-report-state-overview font-sm padding-5">
                             <strong>
                                 {{ host().pieChartData.widgetOverview[1].percent }} %
                                 ({{ host().pieChartData.widgetOverview[1].human }})
                             </strong>
                         </c-col>
-                        <c-col md="3" class="bg-unknown downtime-report-state-overview font-sm padding-5">
+                        <c-col md="3" class="bg-unreachable shadow-unreachable downtime-report-state-overview font-sm padding-5">
                             <strong>
                                 {{ host().pieChartData.widgetOverview[2].percent }} %
                                 ({{ host().pieChartData.widgetOverview[2].human }})
