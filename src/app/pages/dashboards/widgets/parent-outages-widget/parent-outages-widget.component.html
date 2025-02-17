@@ -1,9 +1,9 @@
 <ng-container *transloco="let t">
-    <h5 *ngIf="parentOutages.length === 0 && hostname===''" class="text-center pt-5 text-success">
+    <h5 *ngIf="showNoOuttagesText" class="text-center pt-5 text-success">
         <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
         {{ t('Currently are no network segment issues') }}
     </h5>
-    <c-row *ngIf="parentOutages.length > 0 || hostname">
+    <c-row *ngIf="!showNoOuttagesText">
         <c-col>
             <c-input-group>
                 <span cInputGroupText>
@@ -34,7 +34,7 @@
         </li>
     </ul>
 
-    <c-row *ngIf="parentOutages.length === 0 && hostname!=''" class="text-danger text-center">
+    <c-row *ngIf="!showNoOuttagesText" class="text-danger text-center">
         <c-col>
             {{ t('No entries match the selection') }}
         </c-col>

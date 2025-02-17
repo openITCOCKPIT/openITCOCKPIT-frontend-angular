@@ -44,11 +44,19 @@ export class ParentOutagesWidgetComponent extends BaseWidgetComponent {
     public readonly DashboardsService: DashboardsService = inject(DashboardsService);
     public parentOutages: ParentOutage[] = [];
 
+    public showNoOuttagesText: boolean = true;
+
     public override load() {
         if (this.widget) {
             this.subscriptions.add(this.DashboardsService.getParentOutagesWidget(this.hostname)
                 .subscribe((result) => {
                     this.parentOutages = result.parent_outages;
+                    this.showNoOuttagesText = true;
+
+                    if (this.hostname !== '' || this.parentOutages.length > 0) {
+                        this.showNoOuttagesText = false;
+                    }
+
                     this.cdr.markForCheck();
                 }));
         }
