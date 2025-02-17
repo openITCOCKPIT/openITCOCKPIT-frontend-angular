@@ -39,6 +39,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-calendar-widget>
         }
+        @case (WidgetTypes.TacticalOverviewHostsWidget) {
+            <oitc-tactical-overview-hosts-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-tactical-overview-hosts-widget>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {

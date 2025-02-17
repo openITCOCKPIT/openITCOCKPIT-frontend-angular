@@ -6,7 +6,7 @@ import {
     CalendarResponse,
     DashboardsIndexResponse,
     ParentOutagesResponse,
-    SharedTab,
+    SharedTab, TacticalOverviewHostsResponse,
     WidgetGetForRender,
     WidgetSaveGrid,
     WidgetsForTabResponse
@@ -596,4 +596,20 @@ export class DashboardsService {
             })
         )
     }
+
+    public getTacticalOverviewWidget(widget: WidgetGetForRender, widgetType:string): Observable<TacticalOverviewHostsResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<TacticalOverviewHostsResponse>(`${proxyPath}/dashboards/tacticalOverviewWidget.json`, {
+            params: {
+                angular: true,
+                'widgetId': widget.id,
+                'type': widgetType
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
 }

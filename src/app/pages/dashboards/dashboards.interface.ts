@@ -1,5 +1,6 @@
 import { WidgetTypes } from './widgets/widgets.enum';
 import { HoststatusObject } from '../hosts/hosts.interface';
+import { HostgroupSummaryStateHosts } from '../hosts/summary_state.interface';
 
 export interface DashboardsIndexResponse {
     tabs: DashboardTab[]
@@ -169,7 +170,7 @@ export interface CalendarDateDetails {
     start_timestamp: number
     end_timestamp: number
     days: CalendarDay[]
-    weekdayNames:  {
+    weekdayNames: {
         [key: string]: string
     }
 }
@@ -183,4 +184,68 @@ export interface CalendarDayDetails {
     day?: number
     weekday?: number
     timestamp?: number
+}
+
+export interface TacticalOverviewHostsResponse {
+    config: TacticalOverviewHostsConfig
+    hoststatusSummary: HostgroupSummaryStateHosts
+    servicestatusSummary: any[]
+    _csrfToken: string
+}
+
+export interface TacticalOverviewHostsConfig {
+    Host: TacticalOverviewHostConfig
+    Service: TacticalOverviewServiceConfig
+    Hostgroup: {
+        _ids: number | string[]
+    }
+    Servicegroup: {
+        _ids: number | string[]
+    }
+}
+
+export interface TacticalOverviewHostConfig {
+    name: string
+    name_regex: boolean
+    address: string
+    address_regex: boolean
+    keywords: string
+    not_keywords: string
+}
+
+export interface TacticalOverviewServiceConfig {
+    servicename: string
+    servicename_regex: boolean
+    keywords: string
+    not_keywords: string
+}
+
+export interface TacticalOverviewHostsFilter {
+    Host: {
+        name: string
+        name_regex: boolean
+        keywords: string
+        not_keywords: string
+        address: string
+        address_regex: boolean
+    },
+    Hostgroup: {
+        _ids: number | string[]
+    }
+}
+
+export function getTacticalOverviewHostsFilter(): TacticalOverviewHostsFilter {
+    return {
+        Host: {
+            name: '',
+            name_regex: false,
+            keywords: '',
+            not_keywords: '',
+            address: '',
+            address_regex: false
+        },
+        Hostgroup: {
+            _ids: []
+        }
+    }
 }
