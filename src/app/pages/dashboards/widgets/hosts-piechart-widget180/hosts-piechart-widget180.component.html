@@ -2,17 +2,8 @@
     <div class="w-100 text-center"
          *ngIf="statusCounts && statusCounts.hoststatusCount.length === 3">
 
-        <apx-chart
-            #chart
-            [series]="chartOptions.series!"
-            [chart]="chartOptions.chart!"
-            [plotOptions]="chartOptions.plotOptions!"
-            [labels]="chartOptions.labels!"
-            [legend]="chartOptions.legend!"
-            [colors]="chartOptions.colors!"
-            [grid]="apexGridOptions"
-        ></apx-chart>
-
+        <oitc-host-pie-chart
+            [statusDataPercentage]="statusCounts.hoststatusCountPercentage"></oitc-host-pie-chart>
 
         <div class="row text-center font-xs">
             <div class="col-xs-12 col-md-4 no-padding">

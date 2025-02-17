@@ -19,6 +19,21 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-hosts-piechart-widget>
         }
+        @case (WidgetTypes.HostsPiechart180Widget) {
+            <oitc-hosts-piechart-widget180
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-hosts-piechart-widget180>
+        }
+        @case (WidgetTypes.ServicesPiechartWidget) {
+            <oitc-services-piechart-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-services-piechart-widget>
+        }
+        @case (WidgetTypes.ServicesPiechart180Widget) {
+            <oitc-services-piechart-widget180
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-services-piechart-widget180>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {

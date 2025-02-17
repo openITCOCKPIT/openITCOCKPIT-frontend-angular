@@ -4,14 +4,14 @@ import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { RouterLink } from '@angular/router';
 import { StatuscountResponse } from '../../../browsers/browsers.interface';
-import { ApexGrid, ChartComponent } from "ng-apexcharts";
+import { RouterLink } from '@angular/router';
+import { ApexGrid, ChartComponent } from 'ng-apexcharts';
 import { ChartOptions } from '../../../../components/charts/host-pie-chart/host-pie-chart.component';
 import { LayoutService } from '../../../../layouts/coreui/layout.service';
 
 @Component({
-    selector: 'oitc-hosts-piechart-widget',
+    selector: 'oitc-services-piechart-widget',
     imports: [
         AsyncPipe,
         FaIconComponent,
@@ -20,12 +20,11 @@ import { LayoutService } from '../../../../layouts/coreui/layout.service';
         RouterLink,
         ChartComponent
     ],
-    templateUrl: './hosts-piechart-widget.component.html',
-    styleUrl: './hosts-piechart-widget.component.css',
+    templateUrl: './services-piechart-widget.component.html',
+    styleUrl: './services-piechart-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HostsPiechartWidgetComponent extends BaseWidgetComponent {
-
+export class ServicesPiechartWidgetComponent extends BaseWidgetComponent {
     public statusCounts?: StatuscountResponse;
 
     @ViewChild("chart") chart?: ChartComponent;
@@ -90,9 +89,10 @@ export class HostsPiechartWidgetComponent extends BaseWidgetComponent {
         let cuiSecondaryBg = getComputedStyle(document.documentElement).getPropertyValue('--cui-secondary-bg').trim();
         this.chartOptions = {
             series: [
-                this.statusCounts.hoststatusCountPercentage[0],
-                this.statusCounts.hoststatusCountPercentage[1],
-                this.statusCounts.hoststatusCountPercentage[2],
+                this.statusCounts.servicestatusCountPercentage[0],
+                this.statusCounts.servicestatusCountPercentage[1],
+                this.statusCounts.servicestatusCountPercentage[2],
+                this.statusCounts.servicestatusCountPercentage[3],
             ],
             chart: {
                 height: 180,
@@ -139,11 +139,12 @@ export class HostsPiechartWidgetComponent extends BaseWidgetComponent {
                     }
                 },
             },
-            colors: ["#00bc4c", "#bf0000", "#6b737c"],
+            colors: ["#00bc4c", '#efaf2f', "#bf0000", "#6b737c"],
             labels: [
-                this.TranslocoService.translate('Up'),
-                this.TranslocoService.translate('Down'),
-                this.TranslocoService.translate('Unreachable')
+                this.TranslocoService.translate('Ok'),
+                this.TranslocoService.translate('Warning'),
+                this.TranslocoService.translate('Critical'),
+                this.TranslocoService.translate('Unknown'),
             ],
             legend: {
                 show: false

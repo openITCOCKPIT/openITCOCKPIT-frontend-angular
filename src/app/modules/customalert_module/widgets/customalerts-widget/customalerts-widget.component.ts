@@ -27,8 +27,7 @@ import {
     InputGroupTextDirective,
     RowComponent
 } from '@coreui/angular';
-import { PermissionsService } from '../../../../permissions/permissions.service';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -79,8 +78,6 @@ export class CustomalertsWidgetComponent extends BaseWidgetComponent implements 
     public fontSize: number = 0;
     public fontSizeIcon: number = 0;
     public iconTopPosition: number = 0;
-    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
-    private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError | null = null;
 
