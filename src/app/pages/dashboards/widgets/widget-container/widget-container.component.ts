@@ -14,6 +14,7 @@ import { ServicesPiechartWidgetComponent } from '../services-piechart-widget/ser
 import {
     ServicesPiechartWidget180Component
 } from '../services-piechart-widget180/services-piechart-widget180.component';
+import { CalendarWidgetComponent } from '../calendar-widget/calendar-widget.component';
 
 @Component({
     selector: 'oitc-widget-container',
@@ -26,7 +27,8 @@ import {
         HostsPiechartWidgetComponent,
         HostsPiechartWidget180Component,
         ServicesPiechartWidgetComponent,
-        ServicesPiechartWidget180Component
+        ServicesPiechartWidget180Component,
+        CalendarWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

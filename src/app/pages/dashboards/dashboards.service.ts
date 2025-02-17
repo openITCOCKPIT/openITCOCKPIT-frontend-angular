@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
+    CalendarResponse,
     DashboardsIndexResponse,
     ParentOutagesResponse,
     SharedTab,
@@ -582,9 +583,9 @@ export class DashboardsService {
         )
     }
 
-    public getCalendarWidget(widget: WidgetGetForRender): Observable<ParentOutagesResponse> {
+    public getCalendarWidget(widget: WidgetGetForRender): Observable<CalendarResponse> {
         const proxyPath = this.proxyPath;
-        return this.http.get<ParentOutagesResponse>(`${proxyPath}/dashboards/calendarWidget.json`, {
+        return this.http.get<CalendarResponse>(`${proxyPath}/dashboards/calendarWidget.json`, {
             params: {
                 angular: true,
                 'widgetId': widget.id
