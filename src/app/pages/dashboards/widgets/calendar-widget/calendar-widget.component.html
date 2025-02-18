@@ -30,7 +30,8 @@
                 <tr *ngFor="let week of dateDetails?.days">
                     <th class="text-center">{{ week.cw }}</th>
                     <td *ngFor="let dayDetail of week.days"
-                        [ngClass]="{'bg-primary':  dayDetail.weekday === 6 || dayDetail.weekday === 7, 'bg-opacity-25': dayDetail.weekday === 6, 'bg-opacity-50': dayDetail.weekday === 7}">
+                        [ngClass]="{'bg-primary':  dayDetail.weekday === 6 || dayDetail.weekday === 7,
+                        'bg-opacity-25': dayDetail.weekday === 6, 'bg-opacity-50': dayDetail.weekday === 7}">
                         @if (dayDetail.day === dateDetails?.dayNumber) {
                             <c-badge cBgColor="primary">
                                 {{ dayDetail.day }}

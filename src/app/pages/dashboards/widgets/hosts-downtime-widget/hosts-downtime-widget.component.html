@@ -50,220 +50,227 @@
             </c-col>
         </c-row>
 
-        <div [@flip]="flipped()" class="box-container">
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container">
             <div class="box-x">
-                <!-- Downtime Area -->
-                <oitc-table-loader *ngIf="!hostDowntimes"></oitc-table-loader>
-                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                       (matSortChange)="onSortChange($event)"
-                       *ngIf="hostDowntimes && config"
-                       [matSortActive]="config.sort" [matSortDirection]="config.direction">
-                    <thead>
-                    <tr>
-                        <th>
-                            {{ t('Running') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Hosts.name">
-                            {{ t('Host') }}
-                        </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.author_name">
-                            {{ t('User') }}
-                        </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.comment_data">
-                            {{ t('Comment') }}
-                        </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.entry_time">
-                            {{ t('Created') }}
-                        </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.scheduled_start_time">
-                            {{ t('Start') }}
-                        </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.scheduled_end_time">
-                            {{ t('End') }}
-                        </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.duration">
-                            {{ t('Duration') }}
-                        </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.was_cancelled">
-                            {{ t('Was cancelled') }}
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody *ngIf="hostDowntimes">
-                        @for (hostDowntime of hostDowntimes.all_host_downtimes; track $index) {
-                            <tr>
-                                <td class="text-center">
-                                    <oitc-downtime-simple-icon
-                                        [downtime]="hostDowntime.DowntimeHost"></oitc-downtime-simple-icon>
-                                </td>
-                                <td>
-                                    <oitc-label-link
-                                        [objectId]="hostDowntime.Host.id"
-                                        [route]="'/hosts/browser'"
-                                        [permissions]="'hosts.browser'">
-                                        {{ hostDowntime.Host.hostname }}
-                                    </oitc-label-link>
-                                </td>
-                                <td>
-                                    {{ hostDowntime.DowntimeHost.authorName }}
-                                </td>
-                                <td>
-                                    {{ hostDowntime.DowntimeHost.commentData }}
-                                </td>
-                                <td>
-                                    {{ hostDowntime.DowntimeHost.entryTime }}
-                                </td>
-                                <td>
-                                    {{ hostDowntime.DowntimeHost.scheduledStartTime }}
-                                </td>
-                                <td>
-                                    {{ hostDowntime.DowntimeHost.scheduledEndTime }}
-                                </td>
-                                <td>
-                                    {{ hostDowntime.DowntimeHost.durationHuman }}
-                                </td>
-                                <td class="text-center">
-                                    <span class="badge bg-danger mx-1" title="{{ t('Yes') }}"
-                                          *ngIf="hostDowntime.DowntimeHost.wasCancelled">
-                                        {{ t('Yes') }}
-                                    </span>
-                                    <span class="badge bg-success mx-1" title="{{ t('No') }}"
-                                          *ngIf="!hostDowntime.DowntimeHost.wasCancelled">
-                                        {{ t('No') }}
-                                    </span>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-                <oitc-no-records
-                    *ngIf="hostDowntimes && hostDowntimes.all_host_downtimes.length === 0"></oitc-no-records>
+                <ng-container *ngIf="animationStateShowContent">
+                    <!-- Downtime Area -->
+                    <oitc-table-loader *ngIf="!hostDowntimes"></oitc-table-loader>
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                           (matSortChange)="onSortChange($event)"
+                           *ngIf="hostDowntimes && config"
+                           [matSortActive]="config.sort" [matSortDirection]="config.direction">
+                        <thead>
+                        <tr>
+                            <th>
+                                {{ t('Running') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Hosts.name">
+                                {{ t('Host') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeHosts.author_name">
+                                {{ t('User') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeHosts.comment_data">
+                                {{ t('Comment') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeHosts.entry_time">
+                                {{ t('Created') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeHosts.scheduled_start_time">
+                                {{ t('Start') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeHosts.scheduled_end_time">
+                                {{ t('End') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeHosts.duration">
+                                {{ t('Duration') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeHosts.was_cancelled">
+                                {{ t('Was cancelled') }}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="hostDowntimes">
+                            @for (hostDowntime of hostDowntimes.all_host_downtimes; track $index) {
+                                <tr>
+                                    <td class="text-center">
+                                        <oitc-downtime-simple-icon
+                                            [downtime]="hostDowntime.DowntimeHost"></oitc-downtime-simple-icon>
+                                    </td>
+                                    <td>
+                                        <oitc-label-link
+                                            [objectId]="hostDowntime.Host.id"
+                                            [route]="'/hosts/browser'"
+                                            [permissions]="'hosts.browser'">
+                                            {{ hostDowntime.Host.hostname }}
+                                        </oitc-label-link>
+                                    </td>
+                                    <td>
+                                        {{ hostDowntime.DowntimeHost.authorName }}
+                                    </td>
+                                    <td>
+                                        {{ hostDowntime.DowntimeHost.commentData }}
+                                    </td>
+                                    <td>
+                                        {{ hostDowntime.DowntimeHost.entryTime }}
+                                    </td>
+                                    <td>
+                                        {{ hostDowntime.DowntimeHost.scheduledStartTime }}
+                                    </td>
+                                    <td>
+                                        {{ hostDowntime.DowntimeHost.scheduledEndTime }}
+                                    </td>
+                                    <td>
+                                        {{ hostDowntime.DowntimeHost.durationHuman }}
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-danger mx-1" title="{{ t('Yes') }}"
+                                              *ngIf="hostDowntime.DowntimeHost.wasCancelled">
+                                            {{ t('Yes') }}
+                                        </span>
+                                        <span class="badge bg-success mx-1" title="{{ t('No') }}"
+                                              *ngIf="!hostDowntime.DowntimeHost.wasCancelled">
+                                            {{ t('No') }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <oitc-no-records
+                        *ngIf="hostDowntimes && hostDowntimes.all_host_downtimes.length === 0"></oitc-no-records>
 
-                <c-container
-                    [fluid]="true" class="pt-1 pb-0 mb-0">
-                    <c-row>
-                        <c-col>
-                            <!-- To save space we only use scroll index on dashboards -->
-                            <oitc-scroll-index
-                                *ngIf="hostDowntimes && hostDowntimes.scroll"
-                                (pageChange)="onPaginatorChange($event)"
-                                [scroll]="hostDowntimes.scroll">
-                            </oitc-scroll-index>
-                        </c-col>
-                    </c-row>
-                </c-container>
-                <!-- end downtime area -->
-            </div>
-            <div class="box-x">
-                <!-- Config area -->
-                <c-container class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true" *ngIf="widget">
-                    <c-row>
-                        <c-col>
-                            <h6 class="pb-2 mb-3 border-bottom">
-                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                {{ t('Filter') }}
-                            </h6>
-                        </c-col>
-                    </c-row>
-                    <form cForm>
-                        <c-row *ngIf="config">
-                            <c-col md="6" class="mb-2">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'comment']"></fa-icon>
-                                    </span>
-                                    <input
-                                        [(ngModel)]="config.DowntimeHost.comment_data"
-                                        [placeholder]="'Filter by comment' | transloco"
-                                        aria-label="name"
-                                        cFormControl
-                                        type="text"
-                                        [name]="'filter.comment_data_'+widget.id"
-                                        [attr.id]="'filter.comment_data_'+widget.id"
-                                    />
-                                </c-input-group>
-                            </c-col>
-                            <c-col md="6" class="mb-2">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                    </span>
-                                    <input
-                                        [(ngModel)]="config.Host.name"
-                                        [placeholder]="'Filter by host name' | transloco"
-                                        aria-label="name"
-                                        cFormControl
-                                        [name]="'filter.host_name_'+widget.id"
-                                        [attr.id]="'filter.host_name_'+widget.id"
-                                        type="text"
-                                    />
-                                </c-input-group>
-                            </c-col>
-                            <c-col md="12">
-                                <fieldset>
-                                    <h5>
-                                        {{ t('Options') }}
-                                    </h5>
-                                    <c-form-check>
-                                        <input
-                                            cFormCheckInput
-                                            class="checkbox-lg checkbox-primary"
-                                            [name]="'filter.isRunning_'+widget.id"
-                                            [attr.id]="'filter.isRunning_'+widget.id"
-                                            type="checkbox"
-                                            [(ngModel)]="config.isRunning"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1"
-                                               [for]="'filter.isRunning_'+widget.id">{{ t('Is running') }}</label>
-                                    </c-form-check>
-                                    <c-form-check>
-                                        <input
-                                            cFormCheckInput
-                                            class="checkbox-lg checkbox-primary"
-                                            [name]="'filter.was_not_cancelled_'+widget.id"
-                                            [attr.id]="'filter.was_not_cancelled_'+widget.id"
-                                            type="checkbox"
-                                            [(ngModel)]="config.DowntimeHost.was_not_cancelled"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1"
-                                               [for]="'filter.was_not_cancelled_'+widget.id">{{ t('Was not cancelled') }}</label>
-                                    </c-form-check>
-                                    <c-form-check>
-                                        <input
-                                            cFormCheckInput
-                                            class="checkbox-lg checkbox-primary"
-                                            [name]="'filter.was_cancelled_'+widget.id"
-                                            [attr.id]="'filter.was_cancelled_'+widget.id"
-                                            type="checkbox"
-                                            [(ngModel)]="config.DowntimeHost.was_cancelled"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1"
-                                               [for]="'filter.was_cancelled_'+widget.id">{{ t('Was cancelled') }}</label>
-                                    </c-form-check>
-                                    <c-form-check>
-                                        <input
-                                            cFormCheckInput
-                                            class="checkbox-lg checkbox-primary"
-                                            [name]="'filter.hideExpired_'+widget.id"
-                                            [attr.id]="'filter.hideExpired_'+widget.id"
-                                            type="checkbox"
-                                            [(ngModel)]="config.hideExpired"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1"
-                                               [for]="'filter.hideExpired_'+widget.id">{{ t('Hide expired') }}</label>
-                                    </c-form-check>
-                                </fieldset>
+                    <c-container
+                        [fluid]="true" class="pt-1 pb-0 mb-0">
+                        <c-row>
+                            <c-col>
+                                <!-- To save space we only use scroll index on dashboards -->
+                                <oitc-scroll-index
+                                    *ngIf="hostDowntimes && hostDowntimes.scroll"
+                                    (pageChange)="onPaginatorChange($event)"
+                                    [scroll]="hostDowntimes.scroll">
+                                </oitc-scroll-index>
                             </c-col>
                         </c-row>
+                    </c-container>
+                    <!-- end downtime area -->
+                </ng-container>
+            </div>
 
-                        <c-row class="mt-2">
-                            <c-col class="text-end">
-                                <button (click)="saveWidgetConfig()" type="button" cButton class="ripple"
-                                        color="primary">
-                                    {{ t('Save') }}
-                                </button>
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowConfig">
+                    <!-- Config area -->
+                    <c-container class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true" *ngIf="widget">
+                        <c-row>
+                            <c-col>
+                                <h6 class="pb-2 mb-3 border-bottom">
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    {{ t('Filter') }}
+                                </h6>
                             </c-col>
                         </c-row>
-                    </form>
-                </c-container>
-                <!-- End config area -->
+                        <form cForm>
+                            <c-row *ngIf="config">
+                                <c-col md="6" class="mb-2">
+                                    <c-input-group>
+                                        <span cInputGroupText>
+                                            <fa-icon [icon]="['fas', 'comment']"></fa-icon>
+                                        </span>
+                                        <input
+                                            [(ngModel)]="config.DowntimeHost.comment_data"
+                                            [placeholder]="'Filter by comment' | transloco"
+                                            aria-label="name"
+                                            cFormControl
+                                            type="text"
+                                            [name]="'filter.comment_data_'+widget.id"
+                                            [attr.id]="'filter.comment_data_'+widget.id"
+                                        />
+                                    </c-input-group>
+                                </c-col>
+                                <c-col md="6" class="mb-2">
+                                    <c-input-group>
+                                        <span cInputGroupText>
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                        </span>
+                                        <input
+                                            [(ngModel)]="config.Host.name"
+                                            [placeholder]="'Filter by host name' | transloco"
+                                            aria-label="name"
+                                            cFormControl
+                                            [name]="'filter.host_name_'+widget.id"
+                                            [attr.id]="'filter.host_name_'+widget.id"
+                                            type="text"
+                                        />
+                                    </c-input-group>
+                                </c-col>
+                                <c-col md="12">
+                                    <fieldset>
+                                        <h5>
+                                            {{ t('Options') }}
+                                        </h5>
+                                        <c-form-check>
+                                            <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'filter.isRunning_'+widget.id"
+                                                [attr.id]="'filter.isRunning_'+widget.id"
+                                                type="checkbox"
+                                                [(ngModel)]="config.isRunning"/>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   [for]="'filter.isRunning_'+widget.id">{{ t('Is running') }}</label>
+                                        </c-form-check>
+                                        <c-form-check>
+                                            <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'filter.was_not_cancelled_'+widget.id"
+                                                [attr.id]="'filter.was_not_cancelled_'+widget.id"
+                                                type="checkbox"
+                                                [(ngModel)]="config.DowntimeHost.was_not_cancelled"/>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   [for]="'filter.was_not_cancelled_'+widget.id">{{ t('Was not cancelled') }}</label>
+                                        </c-form-check>
+                                        <c-form-check>
+                                            <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'filter.was_cancelled_'+widget.id"
+                                                [attr.id]="'filter.was_cancelled_'+widget.id"
+                                                type="checkbox"
+                                                [(ngModel)]="config.DowntimeHost.was_cancelled"/>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   [for]="'filter.was_cancelled_'+widget.id">{{ t('Was cancelled') }}</label>
+                                        </c-form-check>
+                                        <c-form-check>
+                                            <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'filter.hideExpired_'+widget.id"
+                                                [attr.id]="'filter.hideExpired_'+widget.id"
+                                                type="checkbox"
+                                                [(ngModel)]="config.hideExpired"/>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   [for]="'filter.hideExpired_'+widget.id">{{ t('Hide expired') }}</label>
+                                        </c-form-check>
+                                    </fieldset>
+                                </c-col>
+                            </c-row>
+
+                            <c-row class="mt-2">
+                                <c-col class="text-end">
+                                    <button (click)="saveWidgetConfig()" type="button" cButton class="ripple"
+                                            color="primary">
+                                        {{ t('Save') }}
+                                    </button>
+                                </c-col>
+                            </c-row>
+                        </form>
+                    </c-container>
+                    <!-- End config area -->
+                </ng-container>
             </div>
+
         </div>
     </div>
 
