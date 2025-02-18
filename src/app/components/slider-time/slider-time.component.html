@@ -1,15 +1,36 @@
-<input
-    type="range"
-    [ngClass]="class()"
-    [attr.id]="id()"
-    [name]="String(name())"
-    [min]="min()"
-    [max]="max()"
-    [step]="step()"
-    [disabled]="disabled"
-    [value]="value"
-    (input)="onInputChange($event)"
-/>
-<div class="help-block">
-    {{ sliderText }}
-</div>
+@if (size() === 'normal') {
+    <input
+        type="range"
+        [ngClass]="class()"
+        [attr.id]="id()"
+        [name]="String(name())"
+        [min]="min()"
+        [max]="max()"
+        [step]="step()"
+        [disabled]="disabled"
+        [value]="value"
+        (input)="onInputChange($event)"
+    />
+    <div class="help-block">
+        {{ sliderText }}
+    </div>
+} @else {
+    <label cLabel [for]="id()" class="mb-1">
+        {{ label() }}
+        <span class="help-block">
+            {{ sliderText }}
+        </span>
+    </label>
+    <input
+        type="range"
+        [ngClass]="class()"
+        [attr.id]="id()"
+        [name]="String(name())"
+        [min]="min()"
+        [max]="max()"
+        [step]="step()"
+        [disabled]="disabled"
+        [value]="value"
+        (input)="onInputChange($event)"
+    />
+}

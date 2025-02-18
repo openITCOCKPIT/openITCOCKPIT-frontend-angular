@@ -1,15 +1,54 @@
 <ng-container *transloco="let t">
     <div class="d-flex h-100 flex-column" #boxContainer>
-        <div>
-            <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-                    *ngIf="!isReadonly()">
-                @if (flipped()) {
-                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                } @else {
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                }
-            </button>
-        </div>
+        <c-row>
+            <c-col [xs]="12" [md]="1">
+                <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
+                        *ngIf="!isReadonly()">
+                    @if (flipped()) {
+                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                    } @else {
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                    }
+                </button>
+            </c-col>
+
+            <c-col [xs]="12" [md]="11">
+                <c-row>
+                    <c-col [xs]="1" [offset]="{lg: 8}">
+                        @if (config && config.useScroll) {
+                            <button type="button" cButton class="ripple" color="primary" size="xs"
+                                    (click)="stopScroll()"
+                                    [cTooltip]="'Pause scrolling'|transloco" cTooltipPlacement="bottom">
+                                <fa-icon [icon]="['fas', 'pause']"></fa-icon>
+                            </button>
+                        }
+                        @if (config && !config.useScroll) {
+                            <button type="button" cButton class="ripple" color="primary" size="xs"
+                                    (click)="startScroll()"
+                                    [cTooltip]="'Start scrolling'|transloco" cTooltipPlacement="bottom">
+                                <fa-icon [icon]="['fas', 'play']"></fa-icon>
+                            </button>
+                        }
+                    </c-col>
+                    <c-col [xs]="11" [lg]="3" *ngIf="widget && config">
+                        <oitc-slider-time
+                            id="tabRotationIntervalModalSlider"
+                            name="tabRotationIntervalModalSlider"
+                            [name]="'scroll_interval_slider_'+widget.id"
+                            [attr.id]="'filter.scroll_interval_slider_'+widget.id"
+                            [unit]="'milliseconds'"
+                            [size]="'xs'"
+                            [label]="'Scroll interval:' | transloco"
+                            [disabled]="isReadonly()"
+                            [min]="0"
+                            [max]="300*1000"
+                            [step]="5*1000"
+                            [(ngModel)]="config.scroll_interval"
+                            (change)="onIntervalSliderChanged()"></oitc-slider-time>
+                    </c-col>
+                </c-row>
+            </c-col>
+        </c-row>
 
         <div [@flip]="flipped()" class="box-container">
             <div class="box-x">
@@ -51,48 +90,50 @@
                     </tr>
                     </thead>
                     <tbody *ngIf="hostDowntimes">
-                    <tr *ngFor="let hostDowntime of hostDowntimes.all_host_downtimes">
-                        <td class="text-center">
-                            <oitc-downtime-simple-icon
-                                [downtime]="hostDowntime.DowntimeHost"></oitc-downtime-simple-icon>
-                        </td>
-                        <td>
-                            <oitc-label-link
-                                [objectId]="hostDowntime.Host.id"
-                                [route]="'/hosts/browser'"
-                                [permissions]="'hosts.browser'">
-                                {{ hostDowntime.Host.hostname }}
-                            </oitc-label-link>
-                        </td>
-                        <td>
-                            {{ hostDowntime.DowntimeHost.authorName }}
-                        </td>
-                        <td>
-                            {{ hostDowntime.DowntimeHost.commentData }}
-                        </td>
-                        <td>
-                            {{ hostDowntime.DowntimeHost.entryTime }}
-                        </td>
-                        <td>
-                            {{ hostDowntime.DowntimeHost.scheduledStartTime }}
-                        </td>
-                        <td>
-                            {{ hostDowntime.DowntimeHost.scheduledEndTime }}
-                        </td>
-                        <td>
-                            {{ hostDowntime.DowntimeHost.durationHuman }}
-                        </td>
-                        <td class="text-center">
-                            <span class="badge bg-danger mx-1" title="{{ t('Yes') }}"
-                                  *ngIf="hostDowntime.DowntimeHost.wasCancelled">
-                                {{ t('Yes') }}
-                            </span>
-                            <span class="badge bg-success mx-1" title="{{ t('No') }}"
-                                  *ngIf="!hostDowntime.DowntimeHost.wasCancelled">
-                                {{ t('No') }}
-                            </span>
-                        </td>
-                    </tr>
+                        @for (hostDowntime of hostDowntimes.all_host_downtimes; track $index) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-downtime-simple-icon
+                                        [downtime]="hostDowntime.DowntimeHost"></oitc-downtime-simple-icon>
+                                </td>
+                                <td>
+                                    <oitc-label-link
+                                        [objectId]="hostDowntime.Host.id"
+                                        [route]="'/hosts/browser'"
+                                        [permissions]="'hosts.browser'">
+                                        {{ hostDowntime.Host.hostname }}
+                                    </oitc-label-link>
+                                </td>
+                                <td>
+                                    {{ hostDowntime.DowntimeHost.authorName }}
+                                </td>
+                                <td>
+                                    {{ hostDowntime.DowntimeHost.commentData }}
+                                </td>
+                                <td>
+                                    {{ hostDowntime.DowntimeHost.entryTime }}
+                                </td>
+                                <td>
+                                    {{ hostDowntime.DowntimeHost.scheduledStartTime }}
+                                </td>
+                                <td>
+                                    {{ hostDowntime.DowntimeHost.scheduledEndTime }}
+                                </td>
+                                <td>
+                                    {{ hostDowntime.DowntimeHost.durationHuman }}
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-danger mx-1" title="{{ t('Yes') }}"
+                                          *ngIf="hostDowntime.DowntimeHost.wasCancelled">
+                                        {{ t('Yes') }}
+                                    </span>
+                                    <span class="badge bg-success mx-1" title="{{ t('No') }}"
+                                          *ngIf="!hostDowntime.DowntimeHost.wasCancelled">
+                                        {{ t('No') }}
+                                    </span>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
                 <oitc-no-records

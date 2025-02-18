@@ -2,13 +2,15 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, inje
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { TranslocoService } from '@jsverse/transloco';
+import { FormLabelDirective } from '@coreui/angular';
 
 @Component({
     selector: 'oitc-slider-time',
     imports: [
         ReactiveFormsModule,
         NgClass,
-        FormsModule
+        FormsModule,
+        FormLabelDirective
     ],
     templateUrl: './slider-time.component.html',
     styleUrl: './slider-time.component.css',
@@ -27,6 +29,9 @@ export class SliderTimeComponent implements ControlValueAccessor {
 
     public id = input<string | undefined>(undefined);
     public name = input<string | undefined>(undefined);
+    public unit = input<'seconds' | 'milliseconds'>('seconds');
+    public size = input<'normal' | 'xs'>('normal');
+    public label = input<string>(''); // only used for xs size
 
     // ngClass compatible
     public class = input<string | string[] | Set<string> | { [p: string]: any } | null | undefined>('w-100');
@@ -80,6 +85,11 @@ export class SliderTimeComponent implements ControlValueAccessor {
         if (value === 0) {
             this.sliderText = this.TranslocoService.translate('disabled');
             return;
+        }
+
+        if (this.unit() === 'milliseconds') {
+            // Convert to seconds for the UI
+            value = value / 1000;
         }
 
         const minutesTrans = this.TranslocoService.translate('minutes');

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import {
     ColComponent,
     ContainerComponent,
@@ -21,7 +21,8 @@ import {
     InputGroupComponent,
     InputGroupTextDirective,
     RowComponent,
-    TableDirective
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
 import { DowntimeSimpleIconComponent } from '../../../downtimes/downtime-simple-icon/downtime-simple-icon.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -37,6 +38,7 @@ import { HostDowntimeWidgetParams, HostsDowntimeWidgetConfig } from './hosts-dow
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ScrollIndexComponent } from '../../../../layouts/coreui/paginator/scroll-index/scroll-index.component';
+import { SliderTimeComponent } from '../../../../components/slider-time/slider-time.component';
 
 
 @Component({
@@ -56,7 +58,6 @@ import { ScrollIndexComponent } from '../../../../layouts/coreui/paginator/scrol
         InputGroupTextDirective,
         MatSort,
         MatSortHeader,
-        NgForOf,
         NgIf,
         NoRecordsComponent,
         ReactiveFormsModule,
@@ -67,7 +68,9 @@ import { ScrollIndexComponent } from '../../../../layouts/coreui/paginator/scrol
         TranslocoPipe,
         XsButtonDirective,
         LabelLinkComponent,
-        ScrollIndexComponent
+        ScrollIndexComponent,
+        TooltipDirective,
+        SliderTimeComponent
     ],
     templateUrl: './hosts-downtime-widget.component.html',
     styleUrl: './hosts-downtime-widget.component.css',
@@ -101,14 +104,14 @@ export class HostsDowntimeWidgetComponent extends BaseWidgetComponent implements
     private readonly HostsDowntimeWidgetService = inject(HostsDowntimeWidgetService);
 
     public override load() {
-        this.loadWidgetConfig();
-
-
+        // Handled by ngAfterViewInit as we need the widget height for the correct limit
     }
 
     public ngAfterViewInit(): void {
         // Set initial limit on load
         this.setLimit();
+
+        this.loadWidgetConfig();
     }
 
     public override ngOnDestroy() {
@@ -122,17 +125,13 @@ export class HostsDowntimeWidgetComponent extends BaseWidgetComponent implements
     }
 
     private setLimit() {
-        let editButtonHeight = 30;
-        if (this.isReadonly()) {
-            //edit button is not visible
-            editButtonHeight = 0;
-        }
-        this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight - editButtonHeight; //21px height of button + padding
+        this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight;
 
-        let height = this.widgetHeight - 42 - 54 - 37; //Unit: px
+        let height = this.widgetHeight - 48 - 54 - 37 - 20; //Unit: px
         //                                        ^ Widget play/pause div
         //                                             ^ Paginator
         //                                                  ^ Table header
+        //                                                       ^ Some paddings and margins
 
         let limit = Math.floor(height / 36); // 36px = table row height;
         if (limit <= 0) {
@@ -147,10 +146,38 @@ export class HostsDowntimeWidgetComponent extends BaseWidgetComponent implements
     }
 
     public startScroll() {
+        if (this.config) {
+            this.config.useScroll = true;
+        }
 
+        // Clear any old interval
+        if (this.scrollIntervalId) {
+            clearInterval(this.scrollIntervalId);
+            this.scrollIntervalId = null;
+        }
+
+        let interval = 5000;
+        if (this.config?.scroll_interval) {
+            interval = this.config?.scroll_interval;
+        }
+
+        // Scroll to next page and load data
+        this.scrollIntervalId = setInterval(() => {
+            if (this.hostDowntimes && this.hostDowntimes.scroll && this.hostDowntimes.scroll.hasNextPage) {
+                this.currentPage++;
+                this.loadDowntimes();
+            } else {
+                this.currentPage = 1;
+                this.loadDowntimes();
+            }
+        }, interval);
     }
 
     public stopScroll() {
+        if (this.config) {
+            this.config.useScroll = false;
+        }
+
         if (this.scrollIntervalId) {
             clearInterval(this.scrollIntervalId);
             this.scrollIntervalId = null;
@@ -167,6 +194,11 @@ export class HostsDowntimeWidgetComponent extends BaseWidgetComponent implements
             this.config = config;
             this.loadDowntimes();
             this.cdr.markForCheck();
+
+            if (this.config.useScroll) {
+                this.startScroll();
+            }
+
         }));
     }
 
@@ -226,9 +258,28 @@ export class HostsDowntimeWidgetComponent extends BaseWidgetComponent implements
             if (sort.direction === 'asc' || sort.direction === 'desc') {
                 this.config.sort = sort.active;
                 this.config.direction = sort.direction;
-                this.saveWidgetConfig();
+                if (!this.isReadonly()) {
+                    this.saveWidgetConfig();
+                }
             }
         }
+
+        this.loadDowntimes();
+    }
+
+    public onIntervalSliderChanged() {
+        if (!this.config || this.isReadonly()) {
+            return;
+        }
+
+        if (this.config.scroll_interval === 0) {
+            this.stopScroll();
+        } else {
+            this.startScroll();
+        }
+
+        // Save the new interval
+        this.saveWidgetConfig();
     }
 
 }
