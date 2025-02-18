@@ -31,7 +31,7 @@ import { NgIf } from '@angular/common';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewInit {
-    @ViewChild('container', {static: true}) containerRef!: ElementRef<HTMLDivElement>;
+    @ViewChild('container', {static: false}) containerRef!: ElementRef<HTMLDivElement>;
 
     public item: InputSignal<T | undefined> = input<T | undefined>();
     public layers: InputSignal<{ key: string, value: string }[]> = input<{ key: string, value: string }[]>([]); // Layer options for context menu
@@ -68,12 +68,6 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     protected mapCanvasComponent: MapCanvasComponent;
 
     protected contextMenuItems: MenuItem[] = this.getContextMenuItems();
-
-    /**
-     * TODO: There is a bug on map items with resizable directive. When you drag the item, the drag starts only after release the mouse button.
-     * This is because when the item is resizable, you have to place the cdkDragHandle inside the content of the item, so you can drag the element and resize it in the corner.
-     * If you remove the cdkDragHandle from the content, the drag will work as expected, but you are not able to resize the item.
-     */
 
     constructor(protected parent: MapCanvasComponent) {
         this.mapCanvasComponent = parent;

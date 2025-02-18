@@ -160,8 +160,10 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
             }
 
             this.text = text;
-            this.width = this.item()!.size_x;
-            this.height = this.item()!.size_y;
+            if (this.item()!.size_x !== 0 && this.item()!.size_y !== 0) {
+                this.width = this.item()!.size_x;
+                this.height = this.item()!.size_y;
+            }
             this.cdr.markForCheck();
         }
     };

@@ -39,7 +39,7 @@ import { NgIf, NgStyle } from '@angular/common';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
-    @ViewChild('cylinderSvg', {static: true}) cylinderSvg!: ElementRef<SVGElement>;
+    @ViewChild('cylinderSvg', {static: false}) cylinderSvg!: ElementRef<SVGElement>;
 
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
