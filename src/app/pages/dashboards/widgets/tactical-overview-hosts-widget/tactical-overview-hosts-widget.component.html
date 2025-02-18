@@ -200,7 +200,7 @@
                         </c-col>
                     </c-row>
                     <c-row class="mb-2">
-                        <c-col [xs]="12" [lg]="6">*** {{ config['Host']['keywords'] }} ***
+                        <c-col [xs]="12" [lg]="6">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -260,7 +260,7 @@
                             </fieldset>
                         </c-col>
                     </c-row>
-                    <c-row>
+                    <c-row class="mt-2">
                         <c-col class="text-end">
                             <button cButton class="ripple" color="primary" (click)="submit()">
                                 {{ t('Save') }}

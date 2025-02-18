@@ -19,6 +19,9 @@ import { interval, Subscription } from 'rxjs';
 import { MapItemService } from './map-item.service';
 import { Mapitem } from '../../pages/mapeditors/Mapeditors.interface';
 import { ContextActionType, LabelPosition, MapItemType } from '../map-item-base/map-item-base.enum';
+import { MapItemReloadService } from '../../../../services/map-item-reload.service';
+import { BlinkService } from '../../../../services/blink.service';
+import { UUID } from '../../../../classes/UUID';
 
 @Component({
     selector: 'oitc-map-item',
@@ -35,6 +38,8 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
 
     private subscriptions: Subscription = new Subscription();
     private readonly MapItemService = inject(MapItemService);
+    private readonly MapItemReloadService = inject(MapItemReloadService);
+    private readonly BlinkService = inject(BlinkService);
     private blinkSubscription: Subscription = new Subscription();
 
     private uuidForServices: string | null = null;
@@ -44,6 +49,8 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
     protected icon_property: string = "";
     protected allowView: boolean = false;
     protected label: string = "";
+    private init: boolean = true;
+    private uuid!: UUID;
 
     protected override type = MapItemType.ITEM;
 
@@ -63,12 +70,13 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
     }
 
     public ngOnInit(): void {
+        this.uuid = new UUID();
         if (!this.isItemDeleted(this.type)) {
             this.load();
         }
-        if (this.refreshInterval()! > 0) {
-            /*MapItemReloadService.setRefreshInterval(this.refreshInterval());
-            MapItemReloadService.registerNewItem(uuidForServices, this.mapItem(), updateCallback);*/
+        if (this.refreshInterval()! > 0 && this.uuidForServices) {
+            this.MapItemReloadService.setRefreshInterval(this.refreshInterval() as number);
+            this.MapItemReloadService.registerNewItem(this.uuidForServices, this.item() as Mapitem, this.updateCallback);
         }
     }
 
@@ -81,22 +89,25 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         this.icon = result.data.icon;
         this.icon_property = result.data.icon_property;
         this.allowView = result.allowView;
+        this.init = false;
 
         this.getLabel(result.data);
 
         this.currentIcon = this.icon;
 
-        /*if (result.data.data.isAcknowledged === true || result.data.data.isInDowntime === true) {
-            BlinkService.registerNewObject(this.uuidForServices, $scope.blinkServiceCallback);
+        if ((result.data.isAcknowledged === true || result.data.isInDowntime === true) && this.uuidForServices) {
+            this.BlinkService.registerNewObject(this.uuidForServices, this.blinkServiceCallback);
         } else {
-            BlinkService.unregisterObject(this.uuidForServices);
-        }*/
+            if (this.uuidForServices) {
+                this.BlinkService.unregisterObject(this.uuidForServices);
+            }
+        }
         this.cdr.markForCheck();
     };
 
     private load() {
         if (this.uuidForServices === null) {
-            //this.uuidForServices = UuidService.v4();
+            this.uuidForServices = this.uuid.v4();
         }
 
         const params: MapItemRootParams = {
@@ -167,13 +178,14 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
     };
 
     private stop() {
-        /*BlinkService.unregisterObject(uuidForServices);
-        MapItemReloadService.unregisterItem(uuidForServices);*/
+        if (this.uuidForServices) {
+            this.BlinkService.unregisterObject(this.uuidForServices);
+            this.MapItemReloadService.unregisterItem(this.uuidForServices);
+        }
     };
 
     private onItemObjectIdChange() {
-        //if(this.init || $scope.item.object_id === null){
-        if (this.item()!.object_id === null) {
+        if (this.init || this.item()!.object_id === null) {
             //Avoid ajax error if user search a object in item config modal
             return;
         }

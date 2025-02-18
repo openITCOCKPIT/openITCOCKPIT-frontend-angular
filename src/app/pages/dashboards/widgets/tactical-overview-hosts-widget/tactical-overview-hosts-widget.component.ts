@@ -26,6 +26,8 @@ import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/m
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TacticalOverviewHostsWidgetService } from './tactical-overview-hosts-widget.service';
 import { TacticalOverviewHostsConfig } from './tactical-overview-hosts-widget.interface';
+import { GenericValidationError } from '../../../../generic-responses';
+import { NotyService } from '../../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-tactical-overview-hosts-widget',
@@ -63,6 +65,7 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     public keywords: string[] = [];
     public notKeywords: string[] = [];
     private readonly TacticalOverviewHostsWidgetService = inject(TacticalOverviewHostsWidgetService);
+    private readonly notyService = inject(NotyService);
 
 
     public override load() {
@@ -92,11 +95,14 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     }
 
     public submit() {
-        if (!this.widget) {
+        if (!this.widget || !this.config) {
             return;
         }
-        /*
-        this.subscriptions.add(this.CustomAlertsService.saveWidget(this.widget, this.CustomalertsFilter)
+
+        this.config.Host.keywords = this.keywords.join(',');
+        this.config.Host.not_keywords = this.notKeywords.join(',');
+
+        this.subscriptions.add(this.TacticalOverviewHostsWidgetService.saveWidget(this.widget, this.config)
             .subscribe({
                 next: (result) => {
                     this.cdr.markForCheck();
@@ -105,6 +111,7 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
 
                     this.notyService.genericSuccess(msg, title);
                     this.notyService.scrollContentDivToTop();
+                    this.load();
                     this.flipped.set(false);
 
                     return;
@@ -116,6 +123,5 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
                 }
             }));
 
-         */
     }
 }

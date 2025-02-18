@@ -1,14 +1,26 @@
-<div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
-     [draggable]="!isViewMode()"
-     (cdkDragEnded)="onDragEnd($event)"
-     (cdkDragMoved)="onDragMove($event)"
-     (resizeStop)="onResizeStop($event, type)"
-     cdkDragBoundary=".map-canvas">
-    <svg cdkDragHandle viewBox="0 0 85 18" [attr.width]="width" [attr.height]="height"
-         id="map-perfdatatext-{{item()!.id}}">
-        <text x="0" y="15" [attr.fill]="color">
-            {{ text }}
-        </text>
-    </svg>
-</div>
-<p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>
+<!-- has to be done with If instead of [draggable]=!viewMode because with cdkDragHandle it causes a drag delay bug -->
+@if (!isViewMode()) {
+    <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
+         (cdkDragEnded)="onDragEnd($event)"
+         (cdkDragMoved)="onDragMove($event)"
+         (resizeStop)="onResizeStop($event, type)"
+         cdkDragBoundary=".map-canvas">
+        <svg cdkDragHandle viewBox="0 0 85 18" [attr.width]="width" [attr.height]="height"
+             id="map-perfdatatext-{{item()!.id}}">
+            <text x="0" y="15" [attr.fill]="color">
+                {{ text }}
+            </text>
+        </svg>
+    </div>
+    <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
+                   appendTo="body"></p-contextMenu>
+} @else {
+    <div #container class="map-element-container">
+        <svg viewBox="0 0 85 18" [attr.width]="width" [attr.height]="height"
+             id="map-perfdatatext-{{item()!.id}}">
+            <text x="0" y="15" [attr.fill]="color">
+                {{ text }}
+            </text>
+        </svg>
+    </div>
+}

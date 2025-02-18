@@ -31,13 +31,13 @@ import { NgIf } from '@angular/common';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewInit {
-    @ViewChild('container', {static: true}) containerRef!: ElementRef<HTMLDivElement>;
+    @ViewChild('container', {static: false}) containerRef!: ElementRef<HTMLDivElement>;
 
     public item: InputSignal<T | undefined> = input<T | undefined>();
-    public layers: InputSignal<string[]> = input<string[]>([]); // Layer options for context menu
+    public layers: InputSignal<{ key: string, value: string }[]> = input<{ key: string, value: string }[]>([]); // Layer options for context menu
     public gridSize: InputSignal<{ x: number, y: number }> = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
     public gridEnabled: InputSignal<boolean> = input<boolean>(true);
-    public isViewMode: InputSignal<boolean> = input<boolean>(false);
+    public isViewMode: InputSignal<boolean> = input<boolean>(false); // View mode for disabling drag and drop and context menu
 
     @Output() resizedEvent = new EventEmitter<ResizedEvent>();
 
@@ -69,12 +69,6 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
     protected contextMenuItems: MenuItem[] = this.getContextMenuItems();
 
-    /**
-     * TODO: There is a bug on map items with resizable directive. When you drag the item, the drag starts only after release the mouse button.
-     * This is because when the item is resizable, you have to place the cdkDragHandle inside the content of the item, so you can drag the element and resize it in the corner.
-     * If you remove the cdkDragHandle from the content, the drag will work as expected, but you are not able to resize the item.
-     */
-
     constructor(protected parent: MapCanvasComponent) {
         this.mapCanvasComponent = parent;
         effect(() => {
@@ -101,30 +95,34 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     }
 
     public setLayer(layer: string): void {
-        this.containerRef.nativeElement.style.zIndex = layer;
+        if (this.containerRef !== undefined && this.containerRef.nativeElement !== undefined) {
+            this.containerRef.nativeElement.style.zIndex = layer;
+        }
         this.cdr.markForCheck();
     }
 
     public setPosition(): void {
-        let x;
-        let y;
-        if (this.isMapline(this.item())) {
-            x = this.startX!;
-            y = this.startY!;
-        } else {
-            x = this.x
-            y = this.y;
+        if (this.containerRef !== undefined && this.containerRef.nativeElement !== undefined) {
+            let x;
+            let y;
+            if (this.isMapline(this.item())) {
+                x = this.startX!;
+                y = this.startY!;
+            } else {
+                x = this.x
+                y = this.y;
+            }
+            this.containerRef.nativeElement.style.left = `${x}px`;
+            this.containerRef.nativeElement.style.top = `${y}px`;
         }
-        this.containerRef.nativeElement.style.left = `${x}px`;
-        this.containerRef.nativeElement.style.top = `${y}px`;
 
         this.cdr.markForCheck();
     }
 
     ngAfterViewInit() {
-        this.cdr.markForCheck();
         this.setLayer(this.zIndex);
         this.setPosition();
+        this.cdr.markForCheck();
     }
 
     // difference between mapline and all other item, cause maplines have no x and y
@@ -230,11 +228,12 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         let layerOptions: MenuItem[] = [];
         for (let key in this.layers()) {
             let icon = "";
-            if (key === this.item()!.z_index) {
+            if (this.layers()[key].key === this.item()!.z_index) {
                 icon = "fa fa-check";
             }
+            let layer = this.layers().find(layer => layer.key === this.layers()[key].key);
             layerOptions.push({
-                label: this.layers()[key],
+                label: layer?.value,
                 icon: icon,
                 command: () => {
                     this.contextActionEvent.emit({
@@ -244,7 +243,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                             x: this.x,
                             y: this.y,
                             map_id: this.mapId,
-                            z_index: key
+                            z_index: this.layers()[key].key
                         } as Mapitem,
                         itemType: this.type
                     });
@@ -259,6 +258,17 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                 label: this.TranslocoService.translate('Edit'),
                 icon: 'fa fa-cog',
                 command: () => {
+                    this.contextActionEvent.emit({
+                        type: ContextActionType.EDIT,
+                        data: {
+                            id: this.id,
+                            x: this.x,
+                            y: this.y,
+                            map_id: this.mapId,
+                        },
+                        itemType: this.type,
+                        item: this.item()
+                    });
                     this.cdr.markForCheck();
                 }
             },

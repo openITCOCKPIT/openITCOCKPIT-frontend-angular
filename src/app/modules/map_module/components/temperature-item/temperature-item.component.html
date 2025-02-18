@@ -1,9 +1,16 @@
-<div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
-     [draggable]="!isViewMode()"
-     (cdkDragEnded)="onDragEnd($event)"
-     (cdkDragMoved)="onDragMove($event)"
-     (resizeStop)="onResizeStop($event, type)"
-     cdkDragBoundary=".map-canvas">
-    <canvas cdkDragHandle [id]="'map-temperature-' + item()!.id"></canvas>
-</div>
-<p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>
+<!-- has to be done with If instead of [draggable]=!viewMode because with cdkDragHandle it causes a drag delay bug -->
+@if (!isViewMode()) {
+    <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
+         (cdkDragEnded)="onDragEnd($event)"
+         (cdkDragMoved)="onDragMove($event)"
+         (resizeStop)="onResizeStop($event, type)"
+         cdkDragBoundary=".map-canvas">
+        <canvas cdkDragHandle [id]="'map-temperature-' + item()!.id"></canvas>
+    </div>
+    <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
+                   appendTo="body"></p-contextMenu>
+} @else {
+    <div #container class="map-element-container">
+        <canvas [id]="'map-temperature-' + item()!.id"></canvas>
+    </div>
+}
