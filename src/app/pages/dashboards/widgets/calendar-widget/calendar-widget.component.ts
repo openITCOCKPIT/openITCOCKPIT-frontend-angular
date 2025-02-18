@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { DashboardsService } from '../../dashboards.service';
 import { CalendarDateDetails } from '../../dashboards.interface';
@@ -36,7 +36,7 @@ import { KtdResizeEnd } from '@katoid/angular-grid-layout';
     styleUrl: './calendar-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalendarWidgetComponent extends BaseWidgetComponent {
+export class CalendarWidgetComponent extends BaseWidgetComponent implements AfterViewInit {
     public readonly DashboardsService: DashboardsService = inject(DashboardsService);
     public dateDetails?: CalendarDateDetails;
     public widgetHeight: number = 0;
