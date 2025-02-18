@@ -128,11 +128,12 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
     private setLimit() {
         this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight;
 
-        let height = this.widgetHeight - 48 - 54 - 37 - 20; //Unit: px
+        let height = this.widgetHeight - 48 - 54 - 37 - 20 - 20; //Unit: px
         //                                        ^ Widget play/pause div
         //                                             ^ Paginator
         //                                                  ^ Table header
         //                                                       ^ Some paddings and margins
+        //                                                            ^ Alert status bar
 
         let limit = Math.floor(height / 36); // 36px = table row height;
         if (limit <= 0) {
