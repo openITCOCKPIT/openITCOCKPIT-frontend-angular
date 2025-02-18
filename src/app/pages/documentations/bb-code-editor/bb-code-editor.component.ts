@@ -10,6 +10,11 @@ import {
 import { DropdownColorpickerComponent } from '../dropdown-colorpicker/dropdown-colorpicker.component';
 import {
     ButtonCloseDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
     ColComponent,
     DropdownComponent,
     DropdownItemDirective,
@@ -39,39 +44,46 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { DocumentationLink } from '../documentations.interface';
+import { NgIf } from '@angular/common';
 
 
 @Component({
     selector: 'oitc-bb-code-editor',
     imports: [
-    DropdownColorpickerComponent,
-    FormControlDirective,
-    ReactiveFormsModule,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FaIconComponent,
-    XsButtonDirective,
-    TranslocoDirective,
-    FormsModule,
-    ModalToggleDirective,
-    ModalComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ButtonCloseDirective,
-    ModalBodyComponent,
-    RowComponent,
-    ColComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    ModalFooterComponent,
-    InputGroupComponent,
-    InputGroupTextDirective
-],
+        DropdownColorpickerComponent,
+        FormControlDirective,
+        ReactiveFormsModule,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        FaIconComponent,
+        XsButtonDirective,
+        TranslocoDirective,
+        FormsModule,
+        ModalToggleDirective,
+        ModalComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ButtonCloseDirective,
+        ModalBodyComponent,
+        RowComponent,
+        ColComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        ModalFooterComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NgIf
+    ],
     templateUrl: './bb-code-editor.component.html',
     styleUrl: './bb-code-editor.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -97,6 +109,7 @@ export class BbCodeEditorComponent {
     ];
 
     @Input() bbcode: string = '';
+    @Input() isDisplayedAsModal: boolean = true; // to display the editor as a modal or above the editor (because link modal is not working in modal)
     @Output() bbcodeChange = new EventEmitter<string>();
 
     private selectionStart: number = 0;
@@ -106,6 +119,7 @@ export class BbCodeEditorComponent {
         url: '',
         targetBlank: true
     };
+    public isLinkAreaOpen: boolean = false; //needed to show the link area if isDisplayedAsModal is false
 
     private cdr = inject(ChangeDetectorRef);
 
@@ -160,6 +174,7 @@ export class BbCodeEditorComponent {
     public insertLink() {
         const newTab = this.link.targetBlank ? 'tab' : '';
         this.updateBbcode(this.doSurrounding(`[url='${this.link.url}' ${newTab}]`, '[/url]'));
+        this.isLinkAreaOpen = false;
     }
 
     public resetLink() {
@@ -167,6 +182,7 @@ export class BbCodeEditorComponent {
             url: '',
             targetBlank: true
         }
+        this.isLinkAreaOpen = false;
     };
 
     public surroundSelectedTextWithFontSize(size: string) {
@@ -177,6 +193,13 @@ export class BbCodeEditorComponent {
         return this.bbcode.substring(0, this.selectionStart) +
             before + this.selectedText + after +
             this.bbcode.substring(this.selectionEnd)
+    }
+
+    protected onLinkUrlInputChange(newUrl: string) {
+        if (this.selectionStart === 0 && this.selectionEnd === 0) {
+            this.selectedText = newUrl;
+        }
+        this.cdr.markForCheck();
     }
 
 }

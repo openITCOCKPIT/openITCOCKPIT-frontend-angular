@@ -17,6 +17,7 @@ export interface ContextAction {
     type: ContextActionType
     data: MapitemBase
     itemType: MapItemType
+    item?: any // to send the item for edit
 }
 
 export interface MapitemBaseActionObject {

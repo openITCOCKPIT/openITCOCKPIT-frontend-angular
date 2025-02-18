@@ -29,7 +29,7 @@ export class MapCanvasComponent {
     private cdr = inject(ChangeDetectorRef);
 
     public helplines = input<Helplines>({enabled: true, size: 15});
-    public background = input<string>('');
+    public background = input<string | null>('');
     public isViewMode: InputSignal<boolean> = input<boolean>(true);
     public currentDeletedItem: InputSignal<{ id: number, type: MapItemType } | undefined> = input<{
         id: number,

@@ -77,9 +77,9 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     constructor(parent: MapCanvasComponent, private renderer: Renderer2) {
         super(parent);
         effect(() => {
+            this.onObjectIdChange();
             this.onSizeXShowLabelChange();
             this.onMetricChange();
-            this.onObjectIdChange();
         });
     }
 
@@ -89,7 +89,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     }
 
     public ngOnInit(): void {
-
+        
         this.item()!.size_x = parseInt(this.item()!.size_x.toString(), 10);
         this.item()!.size_y = parseInt(this.item()!.size_y.toString(), 10);
 
@@ -317,6 +317,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         this.height = this.width;
 
         this.renderGauge();
+        this.cdr.markForCheck();
     }
 
     private onMetricChange() {
@@ -326,6 +327,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
         this.processPerfdata();
         this.renderGauge();
+        this.cdr.markForCheck();
     }
 
     private onObjectIdChange() {
