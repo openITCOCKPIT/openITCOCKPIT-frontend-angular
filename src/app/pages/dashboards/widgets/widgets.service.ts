@@ -4,7 +4,8 @@ import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../tokens/proxy-path.token';
 import { StatuscountResponse } from '../../browsers/browsers.interface';
-import { WelcomeWidgetResponse } from './widgets.interface';
+import { TodayWidgetResponse, WelcomeWidgetResponse } from './widgets.interface';
+import { WidgetGetForRender } from '../dashboards.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -58,6 +59,20 @@ export class WidgetsService {
     public loadWelcomeWidget(): Observable<WelcomeWidgetResponse> {
         const proxyPath = this.proxyPath;
         return this.http.get<WelcomeWidgetResponse>(`${proxyPath}/dashboards/welcomeWidget.json`).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadTodayWidget(widget: WidgetGetForRender): Observable<TodayWidgetResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<TodayWidgetResponse>(`${proxyPath}/dashboards/todayWidget.json`, {
+            params: {
+                angular: true,
+                'widgetId': widget.id
+            }
+        }).pipe(
             map(data => {
                 return data;
             })

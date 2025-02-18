@@ -49,6 +49,16 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-calendar-widget>
         }
+        @case (WidgetTypes.TodayWidget) {
+            <oitc-today-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-today-widget>
+        }
+        @case (WidgetTypes.NoticeWidget) {
+            <oitc-notice-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-notice-widget>
+        }
         @case (WidgetTypes.TacticalOverviewHostsWidget) {
             <oitc-tactical-overview-hosts-widget
                 [widgetInput]="widget"
