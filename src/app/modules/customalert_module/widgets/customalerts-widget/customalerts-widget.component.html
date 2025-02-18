@@ -139,7 +139,7 @@
                                     <input [(ngModel)]="CustomalertsFilter.Customalerts.state_since"
                                            [placeholder]="'Leave empty for all alerts' | transloco"
                                            aria-label="state_since"
-                                           name="state_since"
+                                           [name]="'state_since-'+widget.id"
                                            cFormControl
                                            oitcDebounce
                                            type="number"

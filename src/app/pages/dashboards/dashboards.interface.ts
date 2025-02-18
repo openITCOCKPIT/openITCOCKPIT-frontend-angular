@@ -197,10 +197,10 @@ export interface TacticalOverviewHostsConfig {
     Host: TacticalOverviewHostConfig
     Service: TacticalOverviewServiceConfig
     Hostgroup: {
-        _ids: number | string[]
+        _ids: number[]
     }
     Servicegroup: {
-        _ids: number | string[]
+        _ids: number[]
     }
 }
 
@@ -230,7 +230,7 @@ export interface TacticalOverviewHostsFilter {
         address_regex: boolean
     },
     Hostgroup: {
-        _ids: number | string[]
+        _ids: number[]
     }
 }
 
