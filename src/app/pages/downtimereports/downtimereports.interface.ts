@@ -162,6 +162,36 @@ export interface Downtimes {
             container_id: number
         }
     }[]
+    Services:{
+        author_name: string
+        comment_data: string
+        entry_time: string
+        scheduled_start_time: string
+        scheduled_end_time: string
+        duration: number
+        was_started: number
+        internal_downtime_id: number
+        was_cancelled: number
+        Services: {
+            id: number
+            uuid: string
+            name: string
+            servicetemplate_id: number
+        }
+        Servicetemplates: {
+            id: number
+            name: string
+            template_name: number
+        }
+        Hosts: {
+            id: number
+            uuid: string
+            name: string
+        }
+        HostsToContainers: {
+            container_id: number
+        }
+    }[]
 }
 
 

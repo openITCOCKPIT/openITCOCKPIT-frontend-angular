@@ -189,7 +189,7 @@
                 </div>
 
                 <!-- Dynamic color -->
-                <div class="mb-3">
+                <div class="mb-3" *ngIf="post.report_format === 2">
 
                     <label cLabel for="post.reflection_state">
                         {{ t('Dynamic color') }}
@@ -224,6 +224,40 @@
             <ng-container *ngIf="report && selectedTab === DowntimereportsEnum.Calendar">
 
                 <full-calendar #fullCalendar [options]="calendarOptions()">
+
+                    <!-- eventContent Content Injection -->
+                    <!-- https://fullcalendar.io/docs/event-render-hooks-->
+                    <ng-template #eventContent let-arg>
+                        <div class="fc-event-title-container"
+                             [cPopover]="popoverHtml">
+                            <div class="fc-event-title fc-sticky" [className]="arg.event.classNames"
+                                 [title]="arg.event.title">
+                                {{ arg.event.title }}
+                            </div>
+
+                            <ng-template #popoverHtml>
+                                <c-card>
+                                    <c-card-header>
+                                        <h6 cCardTitle>
+                                            <i *ngIf="arg.event.extenedProps.type === 'host'"
+                                               class="fa fa-desktop"></i>
+                                            <i *ngIf="arg.event.extenedProps.type === 'service'"
+                                               class="fa fa-cog"></i>
+                                            {{ arg.event.title }}
+                                        </h6>
+                                    </c-card-header>
+                                    <c-card-body>
+                                        <i class="fa fa-hourglass-start fa-xs"></i> {{ formatDate(arg.event.start.getTime()) }}
+                                        <br/><i
+                                            class="fa fa-hourglass-end fa-xs"></i>   {{ formatDate(arg.event.end.getTime()) }}
+                                        <br/><i class="fa fa-user fa-xs"></i>  {{ arg.event.extendedProps.author }}
+                                        <br/><i class="fa fa-comment fa-xs"></i>  {{ arg.event.extendedProps.comment }}
+                                    </c-card-body>
+                                </c-card>
+                            </ng-template>
+                        </div>
+                    </ng-template>
+
                 </full-calendar>
             </ng-container>
             <ng-container *ngIf="report && selectedTab === DowntimereportsEnum.PieChart">

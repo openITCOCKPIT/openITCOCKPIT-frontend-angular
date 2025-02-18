@@ -24,7 +24,8 @@ import {
     FormControlDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    PopoverDirective
 } from '@coreui/angular';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { DowntimereportsEnum } from '../downtimereports.enum';
@@ -89,7 +90,8 @@ import {
         TranslocoPipe,
         FullCalendarModule,
         HostAvailabilityOverviewComponent,
-        NgForOf
+        NgForOf,
+        PopoverDirective
     ],
     templateUrl: './downtimereports-index.component.html',
     styleUrl: './downtimereports-index.component.css',
@@ -144,6 +146,14 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
         initialView: 'dayGridMonth',
         //initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
         events: this.events,
+        eventMaxStack: 25,
+        eventHint: 'HINT HIER JUNGE',
+        eventMouseEnter: function (params): void {
+            console.warn(params);
+        },
+        eventMouseLeave: function (params): void {
+            console.warn(params);
+        },
         weekends: true,
         editable: true,
         selectable: true,
@@ -182,7 +192,26 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
                         className: '',
                         title: element.Hosts.name,
                         start: element.scheduled_start_time,
-                        end: element.scheduled_end_time
+                        end: element.scheduled_end_time,
+                        extendedProps: {
+                            type: 'host',
+                            author: element.author_name,
+                            comment: element.comment_data
+                        }
+                    });
+                });
+                this.report.downtimeReport?.downtimes.Services.forEach((element) => {
+                    this.events.push({
+                        default_holiday: false,
+                        className: '',
+                        title: element.Services.name,
+                        start: element.scheduled_start_time,
+                        end: element.scheduled_end_time,
+                        extendedProps: {
+                            type: 'service',
+                            author: element.author_name,
+                            comment: element.comment_data
+                        }
                     });
                 });
 
@@ -201,6 +230,9 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
         );
     }
 
+    public formatDate(timestamp: number): string {
+        return new Date(timestamp).toLocaleDateString('en-GB');
+    }
     protected submit(): void {
         console.log(this.post);
 
