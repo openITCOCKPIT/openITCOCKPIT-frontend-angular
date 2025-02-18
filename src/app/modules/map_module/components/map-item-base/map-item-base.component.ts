@@ -95,30 +95,34 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     }
 
     public setLayer(layer: string): void {
-        this.containerRef.nativeElement.style.zIndex = layer;
+        if (this.containerRef !== undefined && this.containerRef.nativeElement !== undefined) {
+            this.containerRef.nativeElement.style.zIndex = layer;
+        }
         this.cdr.markForCheck();
     }
 
     public setPosition(): void {
-        let x;
-        let y;
-        if (this.isMapline(this.item())) {
-            x = this.startX!;
-            y = this.startY!;
-        } else {
-            x = this.x
-            y = this.y;
+        if (this.containerRef !== undefined && this.containerRef.nativeElement !== undefined) {
+            let x;
+            let y;
+            if (this.isMapline(this.item())) {
+                x = this.startX!;
+                y = this.startY!;
+            } else {
+                x = this.x
+                y = this.y;
+            }
+            this.containerRef.nativeElement.style.left = `${x}px`;
+            this.containerRef.nativeElement.style.top = `${y}px`;
         }
-        this.containerRef.nativeElement.style.left = `${x}px`;
-        this.containerRef.nativeElement.style.top = `${y}px`;
 
         this.cdr.markForCheck();
     }
 
     ngAfterViewInit() {
-        this.cdr.markForCheck();
         this.setLayer(this.zIndex);
         this.setPosition();
+        this.cdr.markForCheck();
     }
 
     // difference between mapline and all other item, cause maplines have no x and y

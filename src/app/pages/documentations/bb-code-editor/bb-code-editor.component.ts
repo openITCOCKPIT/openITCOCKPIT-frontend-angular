@@ -195,4 +195,11 @@ export class BbCodeEditorComponent {
             this.bbcode.substring(this.selectionEnd)
     }
 
+    protected onLinkUrlInputChange(newUrl: string) {
+        if (this.selectionStart === 0 && this.selectionEnd === 0) {
+            this.selectedText = newUrl;
+        }
+        this.cdr.markForCheck();
+    }
+
 }

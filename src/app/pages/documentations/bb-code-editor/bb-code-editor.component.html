@@ -24,6 +24,7 @@
                                     <input cFormControl id="linkUrl" required type="text"
                                            name="linkUrl"
                                            placeholder="https://openitcockpit.io"
+                                           (ngModelChange)="onLinkUrlInputChange($event)"
                                            [(ngModel)]="link.url">
                                 </c-input-group>
                             </div>
@@ -189,6 +190,7 @@
                             <input cFormControl id="linkUrl" required type="text"
                                    name="linkUrl"
                                    placeholder="https://openitcockpit.io"
+                                   (ngModelChange)="onLinkUrlInputChange($event)"
                                    [(ngModel)]="link.url">
                         </c-input-group>
                     </div>
