@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { WebsiteWidgetService } from './website-widget.service';
 import { WebsiteWidgetConfig } from './website-widget.interface';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-website-widget',
@@ -30,7 +31,8 @@ import { WebsiteWidgetConfig } from './website-widget.interface';
         XsButtonDirective,
         ColComponent,
         RowComponent,
-        AlertComponent
+        AlertComponent,
+        TranslocoDirective
     ],
     templateUrl: './website-widget.component.html',
     styleUrl: './website-widget.component.css',
@@ -40,7 +42,6 @@ export class WebsiteWidgetComponent extends BaseWidgetComponent implements After
     protected flipped = signal<boolean>(false);
     @ViewChild('boxContainer') boxContainer?: ElementRef;
     public widgetHeight: number = 0;
-    public textareaHeight: number = 100;
 
     public config?: WebsiteWidgetConfig;
 
@@ -49,30 +50,30 @@ export class WebsiteWidgetComponent extends BaseWidgetComponent implements After
     public override load() {
         if (this.widget) {
             this.WebsiteWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {
-                this.config = response.config;
+                this.config = {
+                    url: response.url
+                };
                 this.cdr.markForCheck();
             });
         }
     }
 
     public ngAfterViewInit(): void {
-        this.calcTextareaHeight();
+        this.calcIframeHeight();
     }
 
-    private calcTextareaHeight() {
+    private calcIframeHeight() {
         this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight;
 
-        let height = this.widgetHeight - 29 - 30 - 34 - 8; //Unit: px
+        let height = this.widgetHeight - 29 - 12; //Unit: px
         //                                        ^ Show / Hide Config button
-        //                                             ^ Label
-        //                                                  ^ Save Button
-        //                                                      ^ Some Padding
+        //                                            ^ Some Padding
 
         if (height < 15) {
             height = 15;
         }
 
-        this.textareaHeight = height;
+        this.widgetHeight = height;
         this.cdr.markForCheck();
     }
 
@@ -93,7 +94,7 @@ export class WebsiteWidgetComponent extends BaseWidgetComponent implements After
     }
 
     public override resizeWidget(event?: KtdResizeEnd) {
-        this.calcTextareaHeight();
+        this.calcIframeHeight();
     }
 
     public override layoutUpdate(event: KtdGridLayout) {

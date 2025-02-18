@@ -1,5 +1,6 @@
 export interface WebsiteWidgetResponse {
     config: WebsiteWidgetConfig
+    url: string
     _csrfToken: string
 }
 
