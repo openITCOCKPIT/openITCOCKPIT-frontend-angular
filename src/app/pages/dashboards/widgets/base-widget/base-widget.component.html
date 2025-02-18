@@ -22,13 +22,18 @@
             </div>
         </div>
 
-        <div [@flip]="flipped()" class="box-container">
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container">
             <div class="box-x">
-                Widget Content goes here
+                <ng-container *ngIf="animationStateShowContent">
+                    Widget Content goes here
+                </ng-container>
             </div>
 
             <div class="box-x">
-                Config Area Goes here
+                <ng-container *ngIf="animationStateShowConfig">
+                    Config Area Goes here
+                </ng-container>
             </div>
         </div>
     </div>
