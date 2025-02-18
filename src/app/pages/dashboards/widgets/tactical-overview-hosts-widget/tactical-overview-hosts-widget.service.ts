@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import { WidgetGetForRender } from '../../dashboards.interface';
-import { TacticalOverviewHostsResponse } from './tactical-overview-hosts-widget.interface';
+import { TacticalOverviewHostsConfig, TacticalOverviewHostsResponse } from './tactical-overview-hosts-widget.interface';
+import { GenericResponseWrapper } from '../../../../generic-responses';
 
 
 @Injectable({
@@ -24,6 +25,16 @@ export class TacticalOverviewHostsWidgetService {
                 'type': widgetType
             }
         }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public saveWidget(widget: WidgetGetForRender, config: TacticalOverviewHostsConfig): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/dashboards/tacticalOverviewWidget.json?angular=true&widgetId=${widget.id}`, config
+        ).pipe(
             map(data => {
                 return data;
             })
