@@ -59,6 +59,16 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-notice-widget>
         }
+        @case (WidgetTypes.HostsTopAlertsWidget) {
+            <oitc-hosts-top-alerts-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-hosts-top-alerts-widget>
+        }
+        @case (WidgetTypes.ServicesTopAlertsWidget) {
+            <oitc-services-top-alerts-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-services-top-alerts-widget>
+        }
         @case (WidgetTypes.TacticalOverviewHostsWidget) {
             <oitc-tactical-overview-hosts-widget
                 [widgetInput]="widget"
