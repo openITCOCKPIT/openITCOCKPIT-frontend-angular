@@ -8,7 +8,6 @@ import {
     ViewChild
 } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgIf } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -34,14 +33,7 @@ import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
     ],
     templateUrl: './notice-widget.component.html',
     styleUrl: './notice-widget.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('flip', [
-            state('false', style({transform: 'none'})),
-            state('true', style({transform: 'rotateY(180deg)'})),
-            transition('false <=> true', animate('0.8s ease-in-out'))
-        ])
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NoticeWidgetComponent extends BaseWidgetComponent implements AfterViewInit {
     protected flipped = signal<boolean>(false);
@@ -53,7 +45,6 @@ export class NoticeWidgetComponent extends BaseWidgetComponent implements AfterV
     public htmlContent: string = '';
 
     private readonly NoticeWidgetService = inject(NoticeWidgetService);
-
 
     public override load() {
         if (this.widget) {

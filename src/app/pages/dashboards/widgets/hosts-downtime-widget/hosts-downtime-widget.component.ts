@@ -36,7 +36,6 @@ import { DowntimeHostIndexRoot } from '../../../downtimes/downtimes.interface';
 import { HostsDowntimeWidgetService } from './hosts-downtime-widget.service';
 import { HostDowntimeWidgetParams, HostsDowntimeWidgetConfig } from './hosts-downtime-widget.interface';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ScrollIndexComponent } from '../../../../layouts/coreui/paginator/scroll-index/scroll-index.component';
 import { SliderTimeComponent } from '../../../../components/slider-time/slider-time.component';
 
@@ -74,14 +73,7 @@ import { SliderTimeComponent } from '../../../../components/slider-time/slider-t
     ],
     templateUrl: './hosts-downtime-widget.component.html',
     styleUrl: './hosts-downtime-widget.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('flip', [
-            state('false', style({transform: 'none'})),
-            state('true', style({transform: 'rotateY(180deg)'})),
-            transition('false <=> true', animate('0.8s ease-in-out'))
-        ])
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsDowntimeWidgetComponent extends BaseWidgetComponent implements AfterViewInit {
     protected flipped = signal<boolean>(false);

@@ -14,7 +14,6 @@ import {
     CustomAlertsWidgetFilter,
     getCustomAlertsWidgetParams
 } from '../../pages/customalerts/customalerts.interface';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import {
@@ -59,14 +58,7 @@ import { KtdResizeEnd } from '@katoid/angular-grid-layout';
     ],
     templateUrl: './customalerts-widget.component.html',
     styleUrl: './customalerts-widget.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('flip', [
-            state('false', style({transform: 'none'})),
-            state('true', style({transform: 'rotateY(180deg)'})),
-            transition('false <=> true', animate('0.8s ease-in-out'))
-        ])
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomalertsWidgetComponent extends BaseWidgetComponent implements OnDestroy, AfterViewInit {
     private readonly CustomAlertsService = inject(CustomAlertsService);

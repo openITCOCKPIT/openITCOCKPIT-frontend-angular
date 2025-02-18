@@ -38,7 +38,6 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { DowntimeServiceIndexRoot } from '../../../downtimes/downtimes.interface';
 import { ServicesDowntimeWidgetService } from './services-downtime-widget.service';
 import { ServiceDowntimeWidgetParams, ServicesDowntimeWidgetConfig } from './services-downtime-widget.interface';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
     selector: 'oitc-services-downtime-widget',
@@ -72,14 +71,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
     ],
     templateUrl: './services-downtime-widget.component.html',
     styleUrl: './services-downtime-widget.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('flip', [
-            state('false', style({transform: 'none'})),
-            state('true', style({transform: 'rotateY(180deg)'})),
-            transition('false <=> true', animate('0.8s ease-in-out'))
-        ])
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesDowntimeWidgetComponent extends BaseWidgetComponent implements AfterViewInit {
     protected flipped = signal<boolean>(false);
