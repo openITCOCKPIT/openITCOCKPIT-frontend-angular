@@ -1,0 +1,314 @@
+<ng-container *transloco="let t">
+    <div class="d-flex h-100 flex-column" *ngIf="widget">
+        <div>
+            <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
+                    *ngIf="!isReadonly()">
+                @if (flipped()) {
+                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                } @else {
+                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                }
+            </button>
+        </div>
+
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container">
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowContent">
+                    <ng-container *ngIf="servicestatusSummary">
+                        <div class="d-flex justify-content-end fs-5">
+                            {{ t('Total services') }}: {{ servicestatusSummary.total }}
+                        </div>
+                        <div class="d-flex text-center border border-secondary border-opacity-25 border-bottom-0">
+                            <div
+                                class="p1 bg-dark text-white tactical-overview-first-flex-item">
+                                <fa-icon [icon]="['fas', 'cog']" class="px-1"></fa-icon>
+                            </div>
+                            <div class="p1 bg-success text-white tactical-overview-flex-item py-5 display-6">
+                                @if (servicestatusSummary.state[0] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                       [queryParams]="{id: servicestatusSummary.state.serviceIds[0], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                        {{ servicestatusSummary.state[0] }}
+                                    </a>
+                                } @else {
+                                    {{ servicestatusSummary.state[0] }}
+                                }
+                            </div>
+                            <div class="bg-warning text-white tactical-overview-flex-item py-5 display-6">
+                                @if (servicestatusSummary.state[1] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                       [queryParams]="{id: servicestatusSummary.state.serviceIds[1], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                        {{ servicestatusSummary.state[1] }}
+                                    </a>
+                                } @else {
+                                    {{ servicestatusSummary.state[1] }}
+                                }
+                            </div>
+                            <div class="bg-danger text-white tactical-overview-flex-item py-5 display-6">
+                                @if (servicestatusSummary.state[2] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                       [queryParams]="{id: servicestatusSummary.state.serviceIds[2], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                        {{ servicestatusSummary.state[2] }}
+                                    </a>
+                                } @else {
+                                    {{ servicestatusSummary.state[2] }}
+                                }
+                            </div>
+                            <div class="bg-secondary text-white tactical-overview-flex-item py-5 display-6">
+                                @if (servicestatusSummary.state[3] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                       [queryParams]="{id: servicestatusSummary.state.serviceIds[3], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                        {{ servicestatusSummary.state[3] }}
+                                    </a>
+                                } @else {
+                                    {{ servicestatusSummary.state[2] }}
+                                }
+                            </div>
+                        </div>
+                        <div
+                            class="d-flex fs-5 border border-secondary border-opacity-25 border-start border-top-0">
+                            <div class="p-1 bg-dark text-white tactical-overview-first-flex-item ">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-warning"></fa-icon>
+                            </div>
+                            <div class="bg-dark tactical-overview-flex-item text-white">
+                                {{ t('Unhandled Services') }}
+                            </div>
+                            <div class="bg-warning-soft tactical-overview-flex-item text-white text-center">
+                                @if (servicestatusSummary.not_handled[1] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                       [queryParams]="{id: servicestatusSummary.not_handled.serviceIds[1], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                        {{ servicestatusSummary.not_handled[1] }}
+                                    </a>
+                                } @else {
+                                    {{ servicestatusSummary.not_handled[1] }}
+                                }
+                            </div>
+                            <div class="bg-critical-soft tactical-overview-flex-item text-white text-center">
+                                @if (servicestatusSummary.not_handled[2] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                       [queryParams]="{id: servicestatusSummary.not_handled.serviceIds[2], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                        {{ servicestatusSummary.not_handled[2] }}
+                                    </a>
+                                } @else {
+                                    {{ servicestatusSummary.not_handled[2] }}
+                                }
+                            </div>
+                            <div class="bg-unknown-soft tactical-overview-flex-item text-white text-center">
+                                @if (servicestatusSummary.not_handled[3] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                       [queryParams]="{id: servicestatusSummary.not_handled.serviceIds[3], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                        {{ servicestatusSummary.not_handled[3] }}
+                                    </a>
+                                } @else {
+                                    {{ servicestatusSummary.not_handled[3] }}
+                                }
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row  fs-5">
+                            <div class="p-1 tactical-overview-first-flex-item">
+                                <fa-icon [icon]="['fas', 'user']" class="text-primary"
+                                         title="{{ t('is acknowledged') }}"></fa-icon>
+                            </div>
+                            <div class="tactical-overview-flex-item">
+                                {{ t('Acknowledgments') }}
+                            </div>
+                            <div class="warning tactical-overview-flex-item text-center">
+                                @if (servicestatusSummary.acknowledged[1] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'services', 'index']" class="text-warning"
+                                       [queryParams]="{id: servicestatusSummary.acknowledged.serviceIds[1], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                        {{ servicestatusSummary.acknowledged[1] }}
+                                    </a>
+                                } @else {
+                                    {{ servicestatusSummary.acknowledged[1] }}
+                                }
+                            </div>
+                            <div class="critical tactical-overview-flex-item text-center">
+                                @if (servicestatusSummary.acknowledged[2] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'services', 'index']" class="text-danger"
+                                       [queryParams]="{id: servicestatusSummary.acknowledged.serviceIds[2], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                        {{ servicestatusSummary.acknowledged[2] }}
+                                    </a>
+                                } @else {
+                                    {{ servicestatusSummary.acknowledged[2] }}
+                                }
+                            </div>
+                            <div class="unknown tactical-overview-flex-item text-center">
+                                @if (servicestatusSummary.acknowledged[3] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'services', 'index']" class="text-secondary"
+                                       [queryParams]="{id: servicestatusSummary.acknowledged.serviceIds[3], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                        {{ servicestatusSummary.acknowledged[3] }}
+                                    </a>
+                                } @else {
+                                    {{ servicestatusSummary.acknowledged[3] }}
+                                }
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row fs-5">
+                            <div class="p-1 tactical-overview-first-flex-item">
+                                <fa-icon [icon]="['fas', 'power-off']" class="text-primary"
+                                         title="{{ t('is in downtime') }}"></fa-icon>
+                            </div>
+                            <div class="tactical-overview-flex-item">
+                                {{ t('Downtimes') }}
+                            </div>
+                            <div class="warning tactical-overview-flex-item text-center">
+                                @if (servicestatusSummary.in_downtime[1] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'services', 'index']" class="text-warning"
+                                       [queryParams]="{id: servicestatusSummary.in_downtime.serviceIds[1], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                        {{ servicestatusSummary.in_downtime[1] }}
+                                    </a>
+                                } @else {
+                                    {{ servicestatusSummary.in_downtime[1] }}
+                                }
+                            </div>
+                            <div class="critical tactical-overview-flex-item text-center">
+                                @if (servicestatusSummary.in_downtime[2] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'services', 'index']" class="text-danger"
+                                       [queryParams]="{id: servicestatusSummary.in_downtime.serviceIds[2], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                        {{ servicestatusSummary.in_downtime[2] }}
+                                    </a>
+                                } @else {
+                                    {{ servicestatusSummary.in_downtime[2] }}
+                                }
+                            </div>
+                            <div class="unknown tactical-overview-flex-item text-center">
+                                @if (servicestatusSummary.in_downtime[3] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'services', 'index']" class="text-secondary"
+                                       [queryParams]="{id: servicestatusSummary.in_downtime.serviceIds[3], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                        {{ servicestatusSummary.in_downtime[3] }}
+                                    </a>
+                                } @else {
+                                    {{ servicestatusSummary.in_downtime[3] }}
+                                }
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowConfig && config">
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [lg]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                </span>
+                                <input [(ngModel)]="config['Host']['name']"
+                                       [placeholder]="'Filter by host name' | transloco"
+                                       cFormControl
+                                       [name]="'Hosts.name-'+widget.id"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                                <span cInputGroupText>
+                                    <label>
+                                        {{ t('Enable RegEx') }}
+                                        <input type="checkbox"
+                                               cFormCheckInput
+                                               name="filter.Host.name_regex"
+                                               [(ngModel)]="config['Host']['name_regex']"
+                                        />
+                                        <oitc-regex-helper-tooltip/>
+                                    </label>
+                                </span>
+                            </c-input-group>
+                        </c-col>
+
+                        <c-col [xs]="12" [lg]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input [(ngModel)]="config['Service']['servicename']"
+                                       [placeholder]="'Filter by service name' | transloco"
+                                       cFormControl
+                                       [name]="'Service.servicename-'+widget.id"
+                                       type="text"
+                                />
+                                <span cInputGroupText>
+                                    <label>
+                                        {{ t('Enable RegEx') }}
+                                        <input type="checkbox"
+                                               cFormCheckInput
+                                               [name]="'Service.servicename_regex-'+widget.id"
+                                               [(ngModel)]="config['Service']['servicename_regex']"
+                                        />
+                                        <oitc-regex-helper-tooltip/>
+                                    </label>
+                                </span>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [lg]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <ng-select
+                                    [id]="'ServiceKeywordsInput-'+widget.id"
+                                    [name]="'ServiceKeywordsInput-'+widget.id"
+                                    [items]="[]"
+                                    [(ngModel)]="keywords"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by tags'|transloco"
+                                    [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+
+                        <c-col [xs]="12" [lg]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <ng-select
+                                    [id]="'ServiceNotKeywordsInput-'+widget.id"
+                                    [name]="'ServiceNotKeywordsInput-'+widget.id"
+                                    [items]="[]"
+                                    [(ngModel)]="notKeywords"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by excluded tags'|transloco"
+                                    [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col>
+                            <fieldset class="mt-2">
+                                <legend class="fs-5">
+                                    {{ t('Service groups') }}
+                                </legend>
+                                <c-input-group>
+                                    <oitc-multi-select
+                                        [id]="'Servicegroups-'+widget.id"
+                                        [name]="'Servicegroups-'+widget.id"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [options]="servicegroups"
+                                        [(ngModel)]="config['Servicegroup']['_ids']"
+                                        [searchCallback]="loadServicegroups"
+                                        [appendTo]="'body'"
+                                        class="flex-1">
+                                    </oitc-multi-select>
+                                </c-input-group>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button cButton class="ripple" color="primary" (click)="submit()">
+                                {{ t('Save') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</ng-container>
