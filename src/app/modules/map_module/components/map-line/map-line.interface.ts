@@ -104,11 +104,10 @@ export interface Service {
 }
 
 export interface Perfdata {
-    rta: Rta
-    pl: Pl
+    [key: string]: PerformanceData
 }
 
-export interface Rta {
+export interface PerformanceData {
     current: string
     unit: string
     warning: string
@@ -150,17 +149,6 @@ export interface Warn {
 export interface Crit {
     low: number
     high: any
-}
-
-export interface Pl {
-    current: string
-    unit: string
-    warning: string
-    critical: string
-    min: string
-    max: any
-    metric: string
-    datasource: Datasource
 }
 
 export interface Servicestatus {

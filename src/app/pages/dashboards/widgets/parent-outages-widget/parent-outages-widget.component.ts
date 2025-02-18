@@ -6,16 +6,18 @@ import {
     ColComponent,
     FormControlDirective,
     InputGroupComponent,
-    InputGroupTextDirective, ListGroupDirective, ListGroupItemDirective,
+    InputGroupTextDirective,
+    ListGroupDirective,
+    ListGroupItemDirective,
     RowComponent
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { DashboardsService } from '../../dashboards.service';
-import { ParentOutage } from '../../dashboards.interface';
 import { HoststatusIconComponent } from '../../../hosts/hoststatus-icon/hoststatus-icon.component';
 import { NgIf } from '@angular/common';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
+import { ParentOutagesWidgetService } from './parent-outages-widget.service';
+import { ParentOutage } from './parent-outages-widget.interface';
 
 @Component({
     selector: 'oitc-parent-outages-widget',
@@ -42,15 +44,16 @@ import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-
 })
 export class ParentOutagesWidgetComponent extends BaseWidgetComponent {
     public hostname: string = '';
-    public readonly DashboardsService: DashboardsService = inject(DashboardsService);
     public parentOutages: ParentOutage[] = [];
+    private readonly ParentOutagesWidgetService = inject(ParentOutagesWidgetService);
+
 
     public showNoOuttagesText: boolean = true;
 
     public override load() {
         if (this.widget) {
             this.parentOutages = [];
-            this.subscriptions.add(this.DashboardsService.getParentOutagesWidget(this.hostname)
+            this.subscriptions.add(this.ParentOutagesWidgetService.getParentOutagesWidget(this.hostname)
                 .subscribe((result) => {
                     this.parentOutages = result.parent_outages;
                     this.showNoOuttagesText = true;

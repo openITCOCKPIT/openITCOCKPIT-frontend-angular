@@ -63,12 +63,10 @@ export interface Service {
 }
 
 export interface Perfdata {
-    load1: Load1
-    load5: Load5
-    load15: Load15
+    [key: string]: PerformanceData
 }
 
-export interface Load1 {
+export interface PerformanceData {
     current: string
     unit: any
     warning: string
@@ -108,94 +106,6 @@ export interface Warn {
 }
 
 export interface Crit {
-    low: number
-    high: any
-}
-
-export interface Load5 {
-    current: string
-    unit: any
-    warning: string
-    critical: string
-    min: string
-    max: any
-    metric: string
-    datasource: Datasource2
-}
-
-export interface Datasource2 {
-    setup: Setup2
-}
-
-export interface Setup2 {
-    metric: Metric2
-    scale: Scale2
-    warn: Warn2
-    crit: Crit2
-}
-
-export interface Metric2 {
-    value: number
-    unit: string
-    name: string
-}
-
-export interface Scale2 {
-    min: any
-    max: any
-    type: string
-}
-
-export interface Warn2 {
-    low: number
-    high: any
-}
-
-export interface Crit2 {
-    low: number
-    high: any
-}
-
-export interface Load15 {
-    current: string
-    unit: any
-    warning: string
-    critical: string
-    min: string
-    max: any
-    metric: string
-    datasource: Datasource3
-}
-
-export interface Datasource3 {
-    setup: Setup3
-}
-
-export interface Setup3 {
-    metric: Metric3
-    scale: Scale3
-    warn: Warn3
-    crit: Crit3
-}
-
-export interface Metric3 {
-    value: number
-    unit: string
-    name: string
-}
-
-export interface Scale3 {
-    min: any
-    max: any
-    type: string
-}
-
-export interface Warn3 {
-    low: number
-    high: any
-}
-
-export interface Crit3 {
     low: number
     high: any
 }
