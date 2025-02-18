@@ -27,6 +27,7 @@ import { ServicesTopAlertsWidgetComponent } from '../services-top-alerts-widget/
 import {
     TacticalOverviewServicesWidgetComponent
 } from '../tactical-overview-services-widget/tactical-overview-services-widget.component';
+import { WebsiteWidgetComponent } from '../website-widget/website-widget.component';
 
 @Component({
     selector: 'oitc-widget-container',
@@ -48,7 +49,8 @@ import {
         NoticeWidgetComponent,
         HostsTopAlertsWidgetComponent,
         ServicesTopAlertsWidgetComponent,
-        TacticalOverviewServicesWidgetComponent
+        TacticalOverviewServicesWidgetComponent,
+        WebsiteWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',
