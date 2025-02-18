@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, input } from '@angular/core';
-import { WidgetGetForRender } from '../../dashboards.interface';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { WidgetTypes } from '../widgets.enum';
 import {
     CustomalertsWidgetComponent
@@ -28,6 +27,10 @@ import {
     TacticalOverviewServicesWidgetComponent
 } from '../tactical-overview-services-widget/tactical-overview-services-widget.component';
 import { WebsiteWidgetComponent } from '../website-widget/website-widget.component';
+import {
+    HostStatusOverviewWidgetComponent
+} from '../host-status-overview-widget/host-status-overview-widget.component';
+import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 
 @Component({
     selector: 'oitc-widget-container',
@@ -50,24 +53,16 @@ import { WebsiteWidgetComponent } from '../website-widget/website-widget.compone
         HostsTopAlertsWidgetComponent,
         ServicesTopAlertsWidgetComponent,
         TacticalOverviewServicesWidgetComponent,
-        WebsiteWidgetComponent
+        WebsiteWidgetComponent,
+        HostStatusOverviewWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WidgetContainerComponent {
+export class WidgetContainerComponent extends BaseWidgetComponent {
 
-    widgetInput = input<WidgetGetForRender>();
-    isReadonly = input<boolean>(false);
-
-    public widget?: WidgetGetForRender;
 
     protected readonly WidgetTypes = WidgetTypes;
 
-    constructor() {
-        effect(() => {
-            this.widget = this.widgetInput();
-        });
-    }
 }
