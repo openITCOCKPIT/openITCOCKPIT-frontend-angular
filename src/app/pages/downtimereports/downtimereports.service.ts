@@ -11,6 +11,34 @@ export class DowntimereportsService {
     private readonly http: HttpClient = inject(HttpClient);
     private readonly proxyPath: string = inject(PROXY_PATH);
 
+
+    public generateReport(data: DowntimeReportsRequest): Observable<any> {
+        data.from_date = data.from_date.split('-').reverse().join('.');
+        data.to_date = data.to_date.split('-').reverse().join('.');
+// https://master/downtimereports/createPdfReport.pdf?angular=true&data%5Bevaluation_type%5D=1&data%5Bfrom_date%5D=19.01.2025&data%5Breflection_state%5D=1&data%5Btimeperiod_id%5D=1&data%5Bto_date%5D=18.02.2025
+        let a: Record<string, string> = {
+            'angular': 'true',
+            'data[from_date]': data.from_date,
+            'data[to_date]': data.to_date,
+            'data[evaluation_type]': data.evaluation_type.toString(),
+            'data[reflection_state]': data.reflection_state.toString(),
+            'data[timeperiod_id]': data.timeperiod_id.toString()
+        };
+        return this.http.get<any>(`${this.proxyPath}/downtimereports/index.json`, {
+            params: {
+                ...a
+            }
+        }).pipe(
+            map((result: any): any => {
+                let queryParams: string = new URLSearchParams(a).toString()
+                // serialize the given result into HTTP Query parameters.
+                window.location.href = `/downtimereports/createPdfReport.pdf?${queryParams}`;
+                console.warn(data);
+                return data;
+            })
+        );
+    }
+
     public getIndex(params: DowntimeReportsRequest): Observable<DowntimeReportsResponse> {
         // format params.from_date and params.to_date from the "yyyy-mm-dd" date to "dd.mm.yyyy" date.
         // OGODWHY...

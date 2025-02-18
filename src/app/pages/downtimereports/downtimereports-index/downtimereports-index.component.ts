@@ -10,7 +10,7 @@ import {
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import {
     BadgeComponent,
     CardBodyComponent,
@@ -164,8 +164,11 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
         this.calendarOptions.update(options => ({...options, events: this.events}));
     }
 
-    protected submit(): void {
-        console.log(this.post);
+    protected isGenerating: boolean = false;
+
+    private fetchReport(): void {
+
+
         this.report = {} as DowntimeReportsResponse;
 
 
@@ -183,14 +186,28 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
                     });
                 });
 
-                console.warn(this.report);
-                console.warn(this.events);
-
                 this.changeTab(DowntimereportsEnum.Calendar);
 
                 this.cdr.markForCheck();
             })
         );
+    }
+
+    private downloadReport(): void {
+        this.subscriptions.add(this.DowntimereportsService.generateReport(this.post)
+            .subscribe((result: any) => {
+                console.warn(result);
+            })
+        );
+    }
+
+    protected submit(): void {
+        console.log(this.post);
+
+        if (this.post.report_format === 1) {
+            this.downloadReport();
+        }
+        this.fetchReport();
     }
 
     private loadTimeperiods(): void {

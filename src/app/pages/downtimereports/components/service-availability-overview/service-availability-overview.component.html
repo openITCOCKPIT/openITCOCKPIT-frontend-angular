@@ -12,7 +12,7 @@
                                 {name: 'UNKNOWN',value: service().pieChartData.widgetOverview[3].percent}]"/>
         </c-col>
         <c-col md="8">
-            <c-row [ngStyle]="{background: this.dynamicColour() ? this.AvailabilityColorCalculationService.getBackgroundColor(service().pieChartData.availability) : ''}"
+            <c-row class="downtime-report-state-overview" [ngStyle]="{background: this.dynamicColour() ? this.AvailabilityColorCalculationService.getBackgroundColor(service().pieChartData.availability) : ''}"
                    title="{{(service().Service.name === null)?service().Servicetemplate.name:service().Service.name}}">
                 <c-col md="12" [ngStyle]="{color: this.dynamicColour() ? 'white' : ''}">
                     <fa-icon [icon]="['fas', 'cog']"></fa-icon>
@@ -26,8 +26,8 @@
                 </c-col>
             </c-row>
 
-            <c-row>
-                <c-col md="12" [ngStyle]="{'color': dynamicColour() ?? 'white'}">
+            <c-row class="downtime-report-state-overview">
+                <c-col md="12">
                     <i class="fa-solid fa-pen-to-square"> </i>
                     {{ service().Servicetemplate.template_name }}
                 </c-col>

@@ -68,7 +68,7 @@
                 </c-col>
             </c-row>
             <c-row *ngIf="host().Services && evaluationType() === 1">
-                <c-col md="4"
+                <c-col md="3"
                        *ngFor="let service of host().Services | keyvalue">
                     <oitc-service-availability-overview
                             [service]="service.value"
