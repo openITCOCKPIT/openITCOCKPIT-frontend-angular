@@ -22,9 +22,9 @@
         </c-col>
     </c-row>
 
-    <ul class="mt-2 list-unstyled">
+    <ul class="mt-2 list-unstyled" cListGroup>
         @for (hostOutage of parentOutages; track $index) {
-            <li>
+            <li cListGroupItem>
                 <oitc-hoststatus-icon [hoststatus]="hostOutage.Hoststatus" class="me-2"></oitc-hoststatus-icon>
                 <oitc-label-link
                     [objectId]="hostOutage.id"

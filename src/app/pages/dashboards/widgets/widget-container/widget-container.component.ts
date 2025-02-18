@@ -14,6 +14,12 @@ import { ServicesPiechartWidgetComponent } from '../services-piechart-widget/ser
 import {
     ServicesPiechartWidget180Component
 } from '../services-piechart-widget180/services-piechart-widget180.component';
+import { HostsDowntimeWidgetComponent } from '../hosts-downtime-widget/hosts-downtime-widget.component';
+import { CalendarWidgetComponent } from '../calendar-widget/calendar-widget.component';
+import {
+    TacticalOverviewHostsWidgetComponent
+} from '../tactical-overview-hosts-widget/tactical-overview-hosts-widget.component';
+import { ServicesDowntimeWidgetComponent } from '../services-downtime-widget/services-downtime-widget.component';
 
 @Component({
     selector: 'oitc-widget-container',
@@ -26,7 +32,11 @@ import {
         HostsPiechartWidgetComponent,
         HostsPiechartWidget180Component,
         ServicesPiechartWidgetComponent,
-        ServicesPiechartWidget180Component
+        ServicesPiechartWidget180Component,
+        HostsDowntimeWidgetComponent,
+        CalendarWidgetComponent,
+        TacticalOverviewHostsWidgetComponent,
+        ServicesDowntimeWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

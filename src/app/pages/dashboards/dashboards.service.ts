@@ -3,8 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
-    DashboardsIndexResponse, ParentOutagesResponse,
-    SharedTab,
+    CalendarResponse,
+    DashboardsIndexResponse,
+    ParentOutagesResponse,
+    SharedTab, TacticalOverviewHostsResponse,
     WidgetGetForRender,
     WidgetSaveGrid,
     WidgetsForTabResponse
@@ -17,7 +19,6 @@ import {
     GenericValidationError
 } from '../../generic-responses';
 import { WidgetTypes } from './widgets/widgets.enum';
-import { ParentOutagesWidgetComponent } from './widgets/parent-outages-widget/parent-outages-widget.component';
 
 @Injectable({
     providedIn: 'root'
@@ -568,12 +569,41 @@ export class DashboardsService {
             );
     }
 
-    public getParentOutagesWidget(hostname:string): Observable<ParentOutagesResponse> {
+    public getParentOutagesWidget(hostname: string): Observable<ParentOutagesResponse> {
         const proxyPath = this.proxyPath;
         return this.http.get<ParentOutagesResponse>(`${proxyPath}/dashboards/parentOutagesWidget.json`, {
             params: {
                 angular: true,
                 'filter[Hosts.name]': hostname
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getCalendarWidget(widget: WidgetGetForRender): Observable<CalendarResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<CalendarResponse>(`${proxyPath}/dashboards/calendarWidget.json`, {
+            params: {
+                angular: true,
+                'widgetId': widget.id
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getTacticalOverviewWidget(widget: WidgetGetForRender, widgetType:string): Observable<TacticalOverviewHostsResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<TacticalOverviewHostsResponse>(`${proxyPath}/dashboards/tacticalOverviewWidget.json`, {
+            params: {
+                angular: true,
+                'widgetId': widget.id,
+                'type': widgetType
             }
         }).pipe(
             map(data => {

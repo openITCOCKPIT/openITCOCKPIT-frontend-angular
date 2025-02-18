@@ -6,7 +6,7 @@ import {
     ColComponent,
     FormControlDirective,
     InputGroupComponent,
-    InputGroupTextDirective,
+    InputGroupTextDirective, ListGroupDirective, ListGroupItemDirective,
     RowComponent
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
@@ -32,7 +32,9 @@ import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-
         LabelLinkComponent,
         NgIf,
         RowComponent,
-        ColComponent
+        ColComponent,
+        ListGroupDirective,
+        ListGroupItemDirective
     ],
     templateUrl: './parent-outages-widget.component.html',
     styleUrl: './parent-outages-widget.component.css',
