@@ -12,7 +12,7 @@ import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { IframeComponent } from '../../../../components/iframe/iframe.component';
 import { NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormControlDirective, FormLabelDirective } from '@coreui/angular';
+import { AlertComponent, ColComponent, FormControlDirective, FormLabelDirective, RowComponent } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { WebsiteWidgetService } from './website-widget.service';
@@ -27,7 +27,10 @@ import { WebsiteWidgetConfig } from './website-widget.interface';
         FormLabelDirective,
         FormControlDirective,
         FormsModule,
-        XsButtonDirective
+        XsButtonDirective,
+        ColComponent,
+        RowComponent,
+        AlertComponent
     ],
     templateUrl: './website-widget.component.html',
     styleUrl: './website-widget.component.css',

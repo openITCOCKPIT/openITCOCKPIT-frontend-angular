@@ -28,20 +28,32 @@
                     <!-- Config area -->
                     @if (config && widget) {
 
+                        <c-col>
+                            <c-row [xs]="12">
+                                <c-alert color="info">
+                                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                    {{
+                                        t('To embed a website the {0} HTML tag is used.', {
+                                            '0': '&lt;iframe&gt;'
+                                        })
+                                    }}
+                                    <br>
+                                    {{ t('Most websites have restrictions for embedding and my not work. Depending on the security settings of the web browser mixing of http and https connections can cause issues.') }}
+                                </c-alert>
+                            </c-row>
+                        </c-col>
+
                         <div>
-                            <label cLabel [for]="'notice_content_'+widget.id">
-                                <fa-icon [icon]="['fas', 'code']" class="text-primary"></fa-icon>
-                                {{ t('Insert text, html or markdown code') }}
+                            <label cLabel [for]="'url_'+widget.id">
+                                {{ t('URL') }}
                             </label>
-                            <textarea cFormControl
-                                      [style.height.px]="textareaHeight"
-                                      [attr.id]="'notice_content_'+widget.id"
-                                      [name]="'notice_content_'+widget.id"
-                                      class="code-font"
-                                      [(ngModel)]="config.note"
-                                      maxlength="4000"
-                                      rows="6"></textarea>
+                            <input cFormControl type="text"
+                                   [attr.id]="'url_'+widget.id"
+                                   [name]="'url_'+widget.id"
+                                   [(ngModel)]="config.url"
+                                   [placeholder]="'https://itsm.love'">
                         </div>
+
                         <div class="mt-1 text-end">
                             <button cButton type="button" class="ripple" (click)="saveConfig()">
                                 {{ t('Save') }}
