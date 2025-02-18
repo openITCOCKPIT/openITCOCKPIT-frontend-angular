@@ -51,15 +51,15 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                            name="samaccountname"
-                            id="samaccountname"
-                            optionValue="samaccountname"
-                            optionLabel="display_name"
-                            [(ngModel)]="this.post.User.samaccountname"
-                            [searchCallback]="loadLdapUsers"
-                            (onChange)="onLdapUserChange($event)"
-                            [options]="samaccountnames"
-                            oitcFormError [errors]="errors" errorField="samaccountname">
+                        name="samaccountname"
+                        id="samaccountname"
+                        optionValue="samaccountname"
+                        optionLabel="display_name"
+                        [(ngModel)]="this.post.User.samaccountname"
+                        [searchCallback]="loadLdapUsers"
+                        (onChange)="onLdapUserChange($event)"
+                        [options]="samaccountnames"
+                        oitcFormError [errors]="errors" errorField="samaccountname">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="samaccountname"></oitc-form-feedback>
                 </div>
@@ -89,14 +89,14 @@
                         {{ t('LDAP Groups') }}
                     </label>
                     <oitc-multi-select
-                            name="ldapUserDetails.ldapgroups"
-                            id="ldapUserDetails.ldapgroups"
-                            optionValue="id"
-                            optionLabel="cn"
-                            [disabled]="true"
-                            [(ngModel)]="ldapUserDetails.ldapgroupIds"
-                            [options]="ldapUserDetails.ldapgroups"
-                            oitcFormError [errors]="errors" errorField="containerroles">
+                        name="ldapUserDetails.ldapgroups"
+                        id="ldapUserDetails.ldapgroups"
+                        optionValue="id"
+                        optionLabel="cn"
+                        [disabled]="true"
+                        [(ngModel)]="ldapUserDetails.ldapgroupIds"
+                        [options]="ldapUserDetails.ldapgroups"
+                        oitcFormError [errors]="errors" errorField="containerroles">
                     </oitc-multi-select>
                 </div>
 
@@ -123,14 +123,14 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-multi-select
-                            name="post.User.usercontainerroles_ldap._ids"
-                            id="post.User.usercontainerroles_ldap._ids"
-                            optionValue="key"
-                            optionLabel="value"
-                            [disabled]="true"
-                            [(ngModel)]="post.User.usercontainerroles_ldap._ids"
-                            [options]="containerRoles.usercontainerroles"
-                            oitcFormError [errors]="errors" errorField="containerroles">
+                        name="post.User.usercontainerroles_ldap._ids"
+                        id="post.User.usercontainerroles_ldap._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [disabled]="true"
+                        [(ngModel)]="post.User.usercontainerroles_ldap._ids"
+                        [options]="containerRoles.usercontainerroles"
+                        oitcFormError [errors]="errors" errorField="containerroles">
                     </oitc-multi-select>
                     <div class="help-block text-info">
                         <fa-icon [icon]="['fas', 'info-circle']"/>
@@ -141,8 +141,8 @@
                 <!-- for all the selected containerroles by ldap -->
                 <ng-container *ngIf="this.ldapUserDetails.userContainerRoleContainerPermissionsLdap">
                     <c-row
-                            *ngFor="let userContainerRole of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap | keyvalue"
-                            class="containerRoleInheritance mb-3">
+                        *ngFor="let userContainerRole of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap | keyvalue"
+                        class="containerRoleInheritance mb-3">
                         <c-col md="1">
                         </c-col>
                         <c-col md="11">
@@ -188,7 +188,7 @@
                                 </c-col>
                                 <c-col md="9">
                                     <ng-container
-                                            *ngFor="let userRole of userContainerRole.value.user_roles | keyvalue">
+                                        *ngFor="let userRole of userContainerRole.value.user_roles | keyvalue">
                                         <button *oitcPermission="['usercontainerroles', 'edit']"
                                                 [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
                                                 cButton size="xs" color="primary" variant="outline">
@@ -205,7 +205,7 @@
                         </c-col>
                     </c-row>
                     <c-row
-                            *ngIf="post.User.usercontainerroles._ids.length > 0 && (selectedContainerIds.length > 0 || post.User.usercontainerroles._ids.length > 0 )">
+                        *ngIf="post.User.usercontainerroles._ids.length > 0 && (selectedContainerIds.length > 0 || post.User.usercontainerroles._ids.length > 0 )">
                         <c-col md="4" class="text-end div-bottom-arrow font-xs text-primary italic">
                             {{ t('The user permissions will be extended or adapted with additional user roles or containers') }}
                         </c-col>
@@ -218,15 +218,15 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-multi-select
-                            name="post.User.usercontainerroles._ids"
-                            id="post.User.usercontainerroles._ids"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.User.usercontainerroles._ids"
-                            [searchCallback]="loadContainerRoles"
-                            (onChange)="onContainerRolesChange($event)"
-                            [options]="containerRoles.usercontainerroles"
-                            oitcFormError [errors]="errors" errorField="containerroles">
+                        name="post.User.usercontainerroles._ids"
+                        id="post.User.usercontainerroles._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.User.usercontainerroles._ids"
+                        [searchCallback]="loadContainerRoles"
+                        (onChange)="onContainerRolesChange($event)"
+                        [options]="containerRoles.usercontainerroles"
+                        oitcFormError [errors]="errors" errorField="containerroles">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="containerroles"></oitc-form-feedback>
                     <div class="help-block text-info">
@@ -237,8 +237,8 @@
 
                 <ng-container *ngIf="containerPermissions">
                     <c-row
-                            *ngFor="let userContainerRole of containerPermissions.userContainerRoleContainerPermissions | keyvalue"
-                            class="containerRoleInheritance mb-3">
+                        *ngFor="let userContainerRole of containerPermissions.userContainerRoleContainerPermissions | keyvalue"
+                        class="containerRoleInheritance mb-3">
                         <c-col md="1">
                         </c-col>
                         <c-col md="11">
@@ -284,7 +284,7 @@
                                 </c-col>
                                 <c-col md="9">
                                     <ng-container
-                                            *ngFor="let userRole of userContainerRole.value.user_roles | keyvalue">
+                                        *ngFor="let userRole of userContainerRole.value.user_roles | keyvalue">
                                         <button *oitcPermission="['usercontainerroles', 'edit']"
                                                 [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
                                                 cButton size="xs" color="primary" variant="outline">
@@ -306,9 +306,6 @@
                         </c-col>
                     </c-row>
                 </ng-container>
-                <!--
-                Containerrole shit (READ / READ&WRITE) ETC
-                 -->
 
 
                 <div class="mb-3">
@@ -317,14 +314,14 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-multi-select
-                            name="selectedContainerIds"
-                            id="selectedContainerIds"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="selectedContainerIds"
-                            [options]="containers"
-                            (onChange)="onSelectedContainerIdsChange()"
-                            oitcFormError [errors]="errors" errorField="containers">
+                        name="selectedContainerIds"
+                        id="selectedContainerIds"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="selectedContainerIds"
+                        [options]="containers"
+                        (onChange)="onSelectedContainerIdsChange()"
+                        oitcFormError [errors]="errors" errorField="containers">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
                     <div class="help-block text-info">
@@ -390,14 +387,14 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                            name="ldapUserDetails.usergroupLdap.id"
-                            id="ldapUserDetails.usergroupLdap.id"
-                            optionValue="key"
-                            optionLabel="value"
-                            [disabled]="true"
-                            [(ngModel)]="ldapUserDetails.usergroupLdap.id"
-                            [options]="usergroups"
-                            oitcFormError [errors]="errors" errorField="usergroup_id">
+                        name="ldapUserDetails.usergroupLdap.id"
+                        id="ldapUserDetails.usergroupLdap.id"
+                        optionValue="key"
+                        optionLabel="value"
+                        [disabled]="true"
+                        [(ngModel)]="ldapUserDetails.usergroupLdap.id"
+                        [options]="usergroups"
+                        oitcFormError [errors]="errors" errorField="usergroup_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="usergroup_id"></oitc-form-feedback>
                 </div>
@@ -409,13 +406,13 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                            name="post.User.usergroup_id"
-                            id="post.User.usergroup_id"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.User.usergroup_id"
-                            [options]="usergroups"
-                            oitcFormError [errors]="errors" errorField="usergroup_id">
+                        name="post.User.usergroup_id"
+                        id="post.User.usergroup_id"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.User.usergroup_id"
+                        [options]="usergroups"
+                        oitcFormError [errors]="errors" errorField="usergroup_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="usergroup_id"></oitc-form-feedback>
                     <div class="help-block text-info">
@@ -609,18 +606,11 @@
                     <label cLabel for="post.User.dashboard_tab_rotation">
                         {{ t('Tab rotation interval') }}
                     </label>
-                    <input
-                            name="post.User.dashboard_tab_rotation"
-                            id="post.User.dashboard_tab_rotation"
-                            type="range"
-                            class="w-100"
-                            min="0" max="900" step="10"
-                            (ngModelChange)="updateTabRotationInterval()"
-                            [(ngModel)]="post.User.dashboard_tab_rotation"/>
+                    <oitc-slider-time
+                        id="post.User.dashboard_tab_rotation"
+                        name="post.User.dashboard_tab_rotation"
+                        [(ngModel)]="post.User.dashboard_tab_rotation"></oitc-slider-time>
                     <oitc-form-feedback [errors]="errors" errorField="dashboard_tab_rotation"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ tabRotationIntervalText }}
-                    </div>
                 </div>
 
                 <!-- DATE FORMAT -->
@@ -630,13 +620,13 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                            name="post.User.dateformat"
-                            id="post.User.dateformat"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.User.dateformat"
-                            [options]="dateformats"
-                            oitcFormError [errors]="errors" errorField="dateformat">
+                        name="post.User.dateformat"
+                        id="post.User.dateformat"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.User.dateformat"
+                        [options]="dateformats"
+                        oitcFormError [errors]="errors" errorField="dateformat">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="dateformat"></oitc-form-feedback>
                 </div>
@@ -680,13 +670,13 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                            name="post.User.i18n"
-                            id="post.User.i18n"
-                            optionValue="i18n"
-                            optionLabel="name"
-                            [(ngModel)]="post.User.i18n"
-                            [options]="localeOptions"
-                            oitcFormError [errors]="errors" errorField="i18n">
+                        name="post.User.i18n"
+                        id="post.User.i18n"
+                        optionValue="i18n"
+                        optionLabel="name"
+                        [(ngModel)]="post.User.i18n"
+                        [options]="localeOptions"
+                        oitcFormError [errors]="errors" errorField="i18n">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="i18n"></oitc-form-feedback>
                     <div class="help-block">
@@ -696,63 +686,65 @@
                     </div>
                 </div>
 
-                    <!-- API KEYS -->
-                    <h4>
-                        {{ t('Api keys') }}
-                    </h4>
-                    <c-row *ngFor="let apiKey of post.User.apikeys; let i = index; trackBy: trackByIndex">
-                        <c-col md="3">
-                            <div class="mb-3">
-                                <label cLabel [for]="post.User.apikeys[i].description">
-                                    {{ t('Description') }}
-                                    <oitc-required-icon/>
-                                </label>
+                <!-- API KEYS -->
+                <h4>
+                    {{ t('Api keys') }}
+                </h4>
+                <c-row *ngFor="let apiKey of post.User.apikeys; let i = index; trackBy: trackByIndex">
+                    <c-col md="3">
+                        <div class="mb-3">
+                            <label cLabel [for]="post.User.apikeys[i].description">
+                                {{ t('Description') }}
+                                <oitc-required-icon/>
+                            </label>
+                            <input cFormControl
+                                   required
+                                   [id]="post.User.apikeys[i].description"
+                                   type="text"
+                                   [name]="post.User.apikeys[i].description"
+                                   [ngModelOptions]="{standalone: true}"
+                                   [(ngModel)]="post.User.apikeys[i].description"
+                                   oitcFormError [errors]="errors"
+                                   errorField="apikeys.{{i}}.description">
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="apikeys.{{i}}.description"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Last used:') }}
+                                <span class="text-info"
+                                      *ngIf="post.User.apikeys[i].last_use === null">{{ t('never') }}</span>
+                                <span class="text-info"
+                                      *ngIf="post.User.apikeys[i].last_use !== null">{{ post.User.apikeys[i].last_use }}</span>
+                            </div>
+                        </div>
+                    </c-col>
+                    <c-col md="8">
+                        <div class="mb-3">
+                            <label cLabel [for]="post.User.apikeys[i].apikey">
+                                {{ t('Api key') }}
+                                <oitc-required-icon/>
+                            </label>
+
+                            <c-input-group>
                                 <input cFormControl
                                        required
-                                       [id]="post.User.apikeys[i].description"
+                                       disabled
+                                       [id]="post.User.apikeys[i].apikey"
                                        type="text"
-                                       [name]="post.User.apikeys[i].description"
+                                       [name]="post.User.apikeys[i].apikey"
                                        [ngModelOptions]="{standalone: true}"
-                                       [(ngModel)]="post.User.apikeys[i].description"
-                                       oitcFormError [errors]="errors"
-                                       errorField="apikeys.{{i}}.description">
-                                <oitc-form-feedback [errors]="errors"
-                                                    errorField="apikeys.{{i}}.description"></oitc-form-feedback>
-                                <div class="help-block">
-                                    {{ t('Last used:') }}
-                                    <span class="text-info" *ngIf="post.User.apikeys[i].last_use === null">{{t('never')}}</span>
-                                    <span class="text-info" *ngIf="post.User.apikeys[i].last_use !== null">{{post.User.apikeys[i].last_use}}</span>
-                                </div>
-                            </div>
-                        </c-col>
-                        <c-col md="8">
-                            <div class="mb-3">
-                                <label cLabel [for]="post.User.apikeys[i].apikey">
-                                    {{ t('Api key') }}
-                                    <oitc-required-icon/>
-                                </label>
-
-                                <c-input-group>
-                                    <input cFormControl
-                                           required
-                                           disabled
-                                           [id]="post.User.apikeys[i].apikey"
-                                           type="text"
-                                           [name]="post.User.apikeys[i].apikey"
-                                           [ngModelOptions]="{standalone: true}"
-                                           disabled
-                                           [(ngModel)]="post.User.apikeys[i].apikey">
-                                    <button cButton color="success" (click)="refreshApiKey(i)">
-                                        <fa-icon [icon]="['fas', 'key']"></fa-icon>
-                                        {{ t('Generate new API key') }}
-                                    </button>
-                                    <button cButton color="danger" (click)="deleteApiKey(i)">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    </button>
-                                </c-input-group>
-                            </div>
-                        </c-col>
-                    </c-row>
+                                       disabled
+                                       [(ngModel)]="post.User.apikeys[i].apikey">
+                                <button cButton color="success" (click)="refreshApiKey(i)">
+                                    <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                                    {{ t('Generate new API key') }}
+                                </button>
+                                <button cButton color="danger" (click)="deleteApiKey(i)">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                </button>
+                            </c-input-group>
+                        </div>
+                    </c-col>
+                </c-row>
                 <c-row>
                     <c-col md="12" class="text-end">
 

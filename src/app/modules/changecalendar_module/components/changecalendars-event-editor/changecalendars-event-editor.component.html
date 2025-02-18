@@ -1,10 +1,5 @@
 <ng-container *transloco="let t">
 
-    <button cButton class="ripple me-1" color="success" size="lg" cModalToggle="changeCalendarEditorModal"
-            (click)="showModal()">
-        <fa-icon [icon]="['fas', 'info']"></fa-icon>
-        {{ t('Open da fake editor bro') }}
-    </button>
     <c-modal #changeCalendarEditorModal fullscreen="md" id="changeCalendarEditorModal" size="xl">
         <c-modal-header>
             <h5 cCardTitle>
@@ -94,13 +89,16 @@
             </c-row>
         </c-modal-body>
         <c-modal-footer>
-            <button cButton color="danger">
+            <button *ngIf="event.id" cButton color="danger" (click)="onDeleteClick.emit(event)" style="margin-right: auto;">
                 {{ t('Delete') }}
             </button>
-            <button cButton color="success">
+            <button *ngIf="event.id" cButton color="success" (click)="onEventChange.emit(event)">
                 {{ t('Save') }}
             </button>
-            <button cButton color="default">
+            <button *ngIf="! event.id" cButton color="success" (click)="onEventCreate.emit(event)">
+                {{ t('Create') }}
+            </button>
+            <button cButton color="default" (click)="hideModal()">
                 {{ t('Close') }}
             </button>
         </c-modal-footer>

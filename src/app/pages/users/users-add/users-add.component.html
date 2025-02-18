@@ -134,9 +134,6 @@
                         </c-col>
                     </c-row>
                 </ng-container>
-                <!--
-                Containerrole shit (READ / READ&WRITE) ETC
-                 -->
 
 
                 <div class="mb-3">
@@ -409,18 +406,11 @@
                     <label cLabel for="post.User.dashboard_tab_rotation">
                         {{ t('Tab rotation interval') }}
                     </label>
-                    <input
-                        name="post.User.dashboard_tab_rotation"
+                    <oitc-slider-time
                         id="post.User.dashboard_tab_rotation"
-                        type="range"
-                        class="w-100"
-                        min="0" max="900" step="10"
-                        (ngModelChange)="updateTabRotationInterval()"
-                        [(ngModel)]="post.User.dashboard_tab_rotation"/>
+                        name="post.User.dashboard_tab_rotation"
+                        [(ngModel)]="post.User.dashboard_tab_rotation"></oitc-slider-time>
                     <oitc-form-feedback [errors]="errors" errorField="dashboard_tab_rotation"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ tabRotationIntervalText }}
-                    </div>
                 </div>
 
                 <!-- DATE FORMAT -->
@@ -554,8 +544,10 @@
                                                 errorField="apikeys.{{i}}.description"></oitc-form-feedback>
                             <div class="help-block">
                                 {{ t('Last used:') }}
-                                <span class="text-info" *ngIf="post.User.apikeys[i].last_use === null">{{t('never')}}</span>
-                                <span class="text-info" *ngIf="post.User.apikeys[i].last_use !== null">{{post.User.apikeys[i].last_use}}</span>
+                                <span class="text-info"
+                                      *ngIf="post.User.apikeys[i].last_use === null">{{ t('never') }}</span>
+                                <span class="text-info"
+                                      *ngIf="post.User.apikeys[i].last_use !== null">{{ post.User.apikeys[i].last_use }}</span>
                             </div>
                         </div>
                     </c-col>

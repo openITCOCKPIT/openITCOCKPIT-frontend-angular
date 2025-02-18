@@ -4,25 +4,24 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
-  AlertComponent,
-  AlertHeadingDirective,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TextColorDirective
+    AlertComponent,
+    AlertHeadingDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -63,50 +62,51 @@ import { ContactsService } from '../../contacts/contacts.service';
 import { LdapConfig } from '../../contacts/contacts.interface';
 import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
+import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
 
 @Component({
     selector: 'oitc-users-ldap',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    BackButtonDirective,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    CardFooterComponent,
-    FormCheckInputDirective,
-    ReactiveFormsModule,
-    FormsModule,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    MultiSelectComponent,
-    RequiredIconComponent,
-    SelectComponent,
-    FormCheckComponent,
-    FormCheckLabelDirective,
-    TrueFalseDirective,
-    FormControlDirective,
-    RowComponent,
-    ColComponent,
-    NgIf,
-    NgForOf,
-    KeyValuePipe,
-    FormDirective,
-    InputGroupComponent,
-    TextColorDirective,
-    AlertComponent,
-    AlertHeadingDirective,
-    NgOptionTemplateDirective,
-    NgSelectComponent,
-    NgOptionHighlightDirective
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        BackButtonDirective,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        CardFooterComponent,
+        FormCheckInputDirective,
+        ReactiveFormsModule,
+        FormsModule,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        MultiSelectComponent,
+        RequiredIconComponent,
+        SelectComponent,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        FormControlDirective,
+        RowComponent,
+        ColComponent,
+        NgIf,
+        NgForOf,
+        KeyValuePipe,
+        FormDirective,
+        InputGroupComponent,
+        AlertComponent,
+        AlertHeadingDirective,
+        NgOptionTemplateDirective,
+        NgSelectComponent,
+        NgOptionHighlightDirective,
+        SliderTimeComponent
+    ],
     templateUrl: './users-ldap.component.html',
     styleUrl: './users-ldap.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -134,7 +134,6 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected containerPermissions: LoadContainerPermissionsRoot = {} as LoadContainerPermissionsRoot;
     protected containerRoleContainerIds: number[] = [];
-    protected tabRotationIntervalText: string = '';
     protected samaccountnames: LdapUser[] = [];
     protected ldapConfig: LdapConfig = {} as LdapConfig;
     protected serverTime: string = '';
@@ -248,7 +247,6 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         this.containerPermissions = {} as LoadContainerPermissionsRoot;
         this.containerRoles = {} as LoadContainerRolesRoot;
 
-        this.updateTabRotationInterval();
         this.loadContainers();
         this.loadDateformats();
         this.loadLocaleOptions();
@@ -410,21 +408,6 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
                 this.ldapConfig = result.ldapConfig;
                 this.cdr.markForCheck();
             }))
-    }
-
-    protected updateTabRotationInterval(): void {
-        this.cdr.markForCheck();
-        if (this.post.User.dashboard_tab_rotation === 0) {
-            this.tabRotationIntervalText = 'disabled';
-            return;
-        }
-        let min = Math.floor(this.post.User.dashboard_tab_rotation / 60),
-            sec = Math.round(this.post.User.dashboard_tab_rotation % 60);
-        if (min > 0) {
-            this.tabRotationIntervalText = min + ' minutes, ' + sec + ' seconds';
-            return;
-        }
-        this.tabRotationIntervalText = sec + ' seconds';
     }
 
     protected deleteApiKey(index: number): void {

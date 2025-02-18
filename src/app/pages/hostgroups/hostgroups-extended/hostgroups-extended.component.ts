@@ -320,7 +320,6 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostgroupsService.loadHostgroupWithHostsById(this.hostgroupId, this.hostParams)
             .subscribe((result: HostgroupExtendedRoot) => {
                 this.cdr.markForCheck();
-                // Then put post where it belongs. Also unpack that bullshit
                 this.hostgroupExtended = result.hostgroup;
                 this.userFullname = result.username;
                 this.hostgroupExtended.Hosts.forEach((host: HostGroupExtendedHost) => {

@@ -1,0 +1,96 @@
+@if (widget) {
+
+    <!-- Add all new Widgets to the switch statement below -->
+
+    @switch (widget.type_id) {
+        <!-- Core Widgets -->
+        @case (WidgetTypes.WelcomeWidget) {
+            <oitc-welcome-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-welcome-widget>
+        }
+        @case (WidgetTypes.ParentOutagesWidget) {
+            <oitc-parent-outages-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-parent-outages-widget>
+        }
+        @case (WidgetTypes.HostsPiechartWidget) {
+            <oitc-hosts-piechart-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-hosts-piechart-widget>
+        }
+        @case (WidgetTypes.HostsPiechart180Widget) {
+            <oitc-hosts-piechart-widget180
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-hosts-piechart-widget180>
+        }
+        @case (WidgetTypes.ServicesPiechartWidget) {
+            <oitc-services-piechart-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-services-piechart-widget>
+        }
+        @case (WidgetTypes.ServicesPiechart180Widget) {
+            <oitc-services-piechart-widget180
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-services-piechart-widget180>
+        }
+        @case (WidgetTypes.HostsDowntimeWidget) {
+            <oitc-hosts-downtime-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-hosts-downtime-widget>
+        }
+        @case (WidgetTypes.ServicesDowntimeWidget) {
+            <oitc-services-downtime-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-services-downtime-widget>
+        }
+        @case (WidgetTypes.CalendarWidget) {
+            <oitc-calendar-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-calendar-widget>
+        }
+        @case (WidgetTypes.TodayWidget) {
+            <oitc-today-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-today-widget>
+        }
+        @case (WidgetTypes.NoticeWidget) {
+            <oitc-notice-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-notice-widget>
+        }
+        @case (WidgetTypes.HostsTopAlertsWidget) {
+            <oitc-hosts-top-alerts-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-hosts-top-alerts-widget>
+        }
+        @case (WidgetTypes.ServicesTopAlertsWidget) {
+            <oitc-services-top-alerts-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-services-top-alerts-widget>
+        }
+        @case (WidgetTypes.TacticalOverviewHostsWidget) {
+            <oitc-tactical-overview-hosts-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-tactical-overview-hosts-widget>
+        }
+
+        <!-- Module Widgets -->
+        @case (WidgetTypes.CustomalertsWidget) {
+            <oitc-customalerts-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-customalerts-widget>
+        }
+
+        <!-- Fallback Widget -->
+        @default {
+            <oitc-alert
+                color="warning"
+                [baseIcon]="'square'"
+                [icon]="['fas', 'question']"
+                [errorHeadline]="'Unknown Widget Type'|transloco"
+                [errorText]="'The widget type '+widget.type_id+' ('+widget.directive+') is unknown and can not be displayed.'"
+            ></oitc-alert>
+        }
+    }
+}

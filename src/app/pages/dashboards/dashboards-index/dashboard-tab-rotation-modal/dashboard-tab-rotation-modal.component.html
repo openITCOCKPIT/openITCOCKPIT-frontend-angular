@@ -1,0 +1,45 @@
+<ng-container *transloco="let t">
+    <c-modal #dashboardTabRotationModal fullscreen="md" id="dashboardTabRotationModal" size="lg">
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'arrows-spin']"></fa-icon>
+                {{ t('Tab rotation interval') }}
+            </h5>
+            <button [cModalToggle]="dashboardTabRotationModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+
+            <!-- TAB ROTATION INTERVAL SLIDER -->
+            <div class="mb-3">
+                <label cLabel for="tabRotationIntervalModalSlider">
+                    {{ t('Tab rotation interval') }}
+                </label>
+                <oitc-slider-time
+                    id="tabRotationIntervalModalSlider"
+                    name="tabRotationIntervalModalSlider"
+                    [min]="0"
+                    [max]="900"
+                    [step]="10"
+                    [(ngModel)]="interval"
+                    (change)="emitTabRotationInterval()"></oitc-slider-time>
+            </div>
+
+
+            <c-row>
+                <c-col [xs]="12" class="text-info">
+                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                    {{ t('If you only have one tab, the rotation will just refresh the data of your current tab.') }}
+                </c-col>
+            </c-row>
+
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button [cModalToggle]="dashboardTabRotationModal.id" cButton color="default" class="ripple" type="button">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+
+</ng-container>

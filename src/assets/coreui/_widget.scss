@@ -1,4 +1,8 @@
 
+.card-header-slim {
+    padding: 0.25rem 0.5rem;
+}
+
 .widget-statusRed {
     background-image: linear-gradient(-250deg, #CC0000, #db4c4c);
     color: #FFF;
@@ -92,4 +96,47 @@
 .widget-blue {
     background-image: linear-gradient(40deg, #3647b3, #5ed1fc);
     color: #fff;
+}
+
+/*** widgets content rotation box**/
+
+.box-container {
+    display: grid;
+    position: relative;
+    width: 100%;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+.box-x {
+    grid-row: 1;
+    grid-column: 1;
+
+    &:first-child {
+        z-index: 1;
+        flex: 1 1 auto;
+    }
+
+    &:last-child {
+        transform: rotateY(180deg);
+        backface-visibility: hidden;
+    }
+}
+
+.box-y {
+    display: grid;
+    grid-row: 1;
+    grid-column: 1;
+    flex: 1 1 auto;
+
+    &:first-child {
+        background-color: #6244b0;
+        z-index: 1;
+    }
+
+    &:last-child {
+        background-color: #ff495d;
+
+        transform: rotateX(180deg);
+    }
 }

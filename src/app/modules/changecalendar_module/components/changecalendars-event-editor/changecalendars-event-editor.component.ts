@@ -2,10 +2,12 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    EventEmitter,
     inject,
     Input,
     OnChanges,
     OnInit,
+    Output,
     SimpleChanges
 } from '@angular/core';
 import {
@@ -22,7 +24,6 @@ import {
     ModalFooterComponent,
     ModalHeaderComponent,
     ModalService,
-    ModalToggleDirective,
     RowComponent
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../layouts/coreui/form-error.directive';
@@ -36,6 +37,7 @@ import { BbCodeParserService } from '../../../../services/bb-code-parser.service
 import { GenericValidationError } from '../../../../generic-responses';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-changecalendars-event-editor',
@@ -59,11 +61,11 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
         TranslocoDirective,
         FormsModule,
         FaIconComponent,
-        ModalToggleDirective,
         XsButtonDirective,
         CardTitleDirective,
         CardBodyComponent,
-        CardComponent
+        CardComponent,
+        NgIf
     ],
     templateUrl: './changecalendars-event-editor.component.html',
     styleUrl: './changecalendars-event-editor.component.css',
@@ -74,6 +76,10 @@ export class ChangecalendarsEventEditorComponent implements OnInit, OnChanges {
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly BbCodeParserService: BbCodeParserService = inject(BbCodeParserService);
     private _event: ChangecalendarEvent = {} as ChangecalendarEvent;
+
+    @Output() onDeleteClick = new EventEmitter<ChangecalendarEvent>();
+    @Output() onEventChange = new EventEmitter<ChangecalendarEvent>();
+    @Output() onEventCreate = new EventEmitter<ChangecalendarEvent>();
 
     protected html: string = '';
     protected errors?: GenericValidationError;
@@ -105,5 +111,12 @@ export class ChangecalendarsEventEditorComponent implements OnInit, OnChanges {
 
     public ngOnChanges(changes: SimpleChanges) {
         this.html = this.BbCodeParserService.parse(this.event.description);
+    }
+
+    public hideModal(): void {
+        this.ModalService.toggle({
+            show: false,
+            id: 'changeCalendarEditorModal'
+        })
     }
 }

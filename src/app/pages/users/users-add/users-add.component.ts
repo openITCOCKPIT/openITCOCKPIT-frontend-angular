@@ -13,23 +13,22 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TextColorDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -57,55 +56,56 @@ import { ContainersLoadContainersByStringParams } from '../../containers/contain
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { HistoryService } from '../../../history.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../../profile/profile.service';
 import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
+import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
 
 @Component({
     selector: 'oitc-users-add',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    BackButtonDirective,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    CardFooterComponent,
-    FormCheckInputDirective,
-    ReactiveFormsModule,
-    FormsModule,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    MultiSelectComponent,
-    RequiredIconComponent,
-    SelectComponent,
-    FormCheckComponent,
-    FormCheckLabelDirective,
-    TrueFalseDirective,
-    FormControlDirective,
-    RowComponent,
-    ColComponent,
-    NgIf,
-    NgForOf,
-    KeyValuePipe,
-    FormDirective,
-    InputGroupComponent,
-    TextColorDirective,
-    NgOptionTemplateDirective,
-    NgSelectComponent,
-    NgOptionHighlightDirective
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        BackButtonDirective,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        CardFooterComponent,
+        FormCheckInputDirective,
+        ReactiveFormsModule,
+        FormsModule,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        MultiSelectComponent,
+        RequiredIconComponent,
+        SelectComponent,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        FormControlDirective,
+        RowComponent,
+        ColComponent,
+        NgIf,
+        NgForOf,
+        KeyValuePipe,
+        FormDirective,
+        InputGroupComponent,
+        NgOptionTemplateDirective,
+        NgSelectComponent,
+        NgOptionHighlightDirective,
+        SliderTimeComponent
+    ],
     templateUrl: './users-add.component.html',
     styleUrl: './users-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -131,7 +131,6 @@ export class UsersAddComponent implements OnDestroy, OnInit {
     protected usergroups: SelectKeyValue[] = [];
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected containerPermissions: LoadContainerPermissionsRoot = {} as LoadContainerPermissionsRoot;
-    protected tabRotationIntervalText: string = '';
     protected serverTime: string = '';
     protected serverTimeZone: string = '';
     private cdr = inject(ChangeDetectorRef);
@@ -224,7 +223,6 @@ export class UsersAddComponent implements OnDestroy, OnInit {
         this.containerPermissions = {} as LoadContainerPermissionsRoot;
         this.containerRoles = {} as LoadContainerRolesRoot;
 
-        this.updateTabRotationInterval();
         this.loadContainers();
         this.loadDateformats();
         this.loadLocaleOptions();
@@ -315,21 +313,6 @@ export class UsersAddComponent implements OnDestroy, OnInit {
                 this.cdr.markForCheck();
             })
         );
-    }
-
-    protected updateTabRotationInterval(): void {
-        this.cdr.markForCheck();
-        if (this.post.User.dashboard_tab_rotation === 0) {
-            this.tabRotationIntervalText = 'disabled';
-            return;
-        }
-        let min = Math.floor(this.post.User.dashboard_tab_rotation / 60),
-            sec = Math.round(this.post.User.dashboard_tab_rotation % 60);
-        if (min > 0) {
-            this.tabRotationIntervalText = min + ' minutes, ' + sec + ' seconds';
-            return;
-        }
-        this.tabRotationIntervalText = sec + ' seconds';
     }
 
     protected deleteApiKey(index: number): void {

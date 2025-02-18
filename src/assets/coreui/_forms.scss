@@ -57,3 +57,9 @@
     background: var(--cui-card-cap-bg);
     color: var(--cui-body-color);
 }
+
+
+/** Make range sliders use the primary color **/
+input[type="range"] {
+    accent-color: $primary;
+}

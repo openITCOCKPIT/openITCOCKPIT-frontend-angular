@@ -1,0 +1,64 @@
+<ng-container *transloco="let t">
+    <c-modal #dashboardAddWidgetModal fullscreen="md" id="dashboardAddWidgetModal" size="lg">
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                {{ t('Add Widget') }}
+            </h5>
+            <button [cModalToggle]="dashboardAddWidgetModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+            <c-row>
+                <c-col [xs]="12" class="mb-3">
+                    <label cLabel for="FilterWidgetListModal" class="mt-3">
+                        {{ t('Filter widgets') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        </span>
+                        <input cFormControl id="FilterWidgetListModal" type="text"
+                               name="FilterWidgetListModal"
+                               [placeholder]="'Filter widgets' | transloco"
+                               [(ngModel)]="searchString"
+                               (keyup)="filterWidgets()">
+                    </c-input-group>
+                    <div class="pt-1 text-invalid" *ngIf="availableWidgetsFiltered.length === 0">
+                        {{ t('No matching widgets found.') }}
+                    </div>
+                </c-col>
+            </c-row>
+
+            <c-row>
+                @for (widget of availableWidgetsFiltered; track $index) {
+                    <c-col [xs]="12" [sm]="6" [lg]="6" class="mb-2">
+                        <button cButton color="default" class="ripple w-100 text-start" type="button"
+                                (click)="addWidget(widget.type_id)">
+                            <i [classList]="widget.icon"></i>
+                            {{ widget.title }}
+                        </button>
+                    </c-col>
+                }
+            </c-row>
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="restoreDefaultWidgets()"
+                    cButton color="danger" class="ripple me-auto" type="button">
+                <fa-icon [icon]="['fas', 'recycle']"></fa-icon>
+                {{ t('Restore default') }}
+            </button>
+
+            <label class="me-2">
+                <input cFormCheckInput type="checkbox" name="createAnother"
+                       [(ngModel)]="createAnother">
+                {{ t('Create another') }}
+            </label>
+            <button [cModalToggle]="dashboardAddWidgetModal.id" cButton color="default" class="ripple">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+
+</ng-container>

@@ -1,0 +1,42 @@
+<p>
+    Use this Widget as a base Widget in your TypeScript code like:
+    <code>export class WidgetContainerComponent extends BaseWidgetComponent</code>
+    <br>
+    See the file <code>base-widget.component.html</code> to get a starting template for a new Widget!
+</p>
+
+<!-- Example Start template for a widget -->
+<!--
+<ng-container *transloco="let t">
+    <div class="d-flex h-100 flex-column" #boxContainer>
+        <div>
+            <div>
+                <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
+                        *ngIf="!isReadonly()">
+                    @if (flipped()) {
+                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                    } @else {
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                    }
+                </button>
+            </div>
+        </div>
+
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container">
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowContent">
+                    Widget Content goes here
+                </ng-container>
+            </div>
+
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowConfig">
+                    Config Area Goes here
+                </ng-container>
+            </div>
+        </div>
+    </div>
+
+</ng-container>
+-->

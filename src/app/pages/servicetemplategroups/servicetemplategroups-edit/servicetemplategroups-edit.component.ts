@@ -107,12 +107,10 @@ export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         const id = Number(this.route.snapshot.paramMap.get('id'));
-        //First, load shit into the component.
         this.loadContainers();
         this.subscriptions.add(this.ServicetemplateGroupsService.getServicetemplategroupEdit(id)
             .subscribe((result: ServiceTemplateGroupsGetEditRoot) => {
 
-                // Then put post where it belongs. Also unpack that bullshit
                 this.post = result.servicetemplategroup.Servicetemplategroup;
 
                 // Then force containerChange!
