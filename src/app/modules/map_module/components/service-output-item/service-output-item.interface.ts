@@ -1,12 +1,13 @@
-export interface TrafficlightItemRootParams {
+export interface ServiceOutputItemRootParams {
     angular: true,
     disableGlobalLoader: true,
     objectId: number,
     mapId: number,
-    type: string
+    type: string,
+    includeServiceOutput: true
 }
 
-export interface TrafficlightItemRoot {
+export interface ServiceOutputItemRoot {
     type: string
     allowView: boolean
     data: Data
@@ -127,8 +128,8 @@ export interface Servicestatus {
     flap_detection_enabled: any
     notifications_enabled: any
     current_check_attempt: any
-    output: any
-    long_output: any
+    output: string
+    long_output: string
     perfdata: string
     latency: any
     max_check_attempts: any
@@ -140,4 +141,7 @@ export interface Servicestatus {
     cssClass: string
     textClass: string
     outputHtml: string
+    longOutputHtml: string
 }
+
+

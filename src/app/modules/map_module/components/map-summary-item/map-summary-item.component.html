@@ -1,25 +1,48 @@
-<div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
-     [draggable]="!isViewMode()"
-     (cdkDragEnded)="onDragEnd($event)"
-     (cdkDragMoved)="onDragMove($event)"
-     (resizeStop)="onResizeStop($event, type)"
-     cdkDragBoundary=".map-canvas">
-    <div cdkDragHandle class="text-center"
-         *ngIf="allowView && (item()!.label_possition == 1 || item()!.label_possition == 2)">
-        <div [hidden]="!(item()!.show_label && item()!.label_possition == 1)">{{ label }}</div>
-        <img
-            [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
-            onerror="this.src='/map_module/img/items/missing.png';"/>
-        <div [hidden]="!(item()!.show_label && item()!.label_possition == 2)">{{ label }}</div>
-    </div>
+<!-- has to be done with If instead of [draggable]=!viewMode because with cdkDragHandle it causes a drag delay bug -->
+@if (!isViewMode()) {
+    <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
+         (cdkDragEnded)="onDragEnd($event)"
+         (cdkDragMoved)="onDragMove($event)"
+         (resizeStop)="onResizeStop($event, type)"
+         cdkDragBoundary=".map-canvas">
+        <div cdkDragHandle class="text-center"
+             *ngIf="allowView && (item()!.label_possition == 1 || item()!.label_possition == 2)">
+            <div [hidden]="!(item()!.show_label && item()!.label_possition == 1)">{{ label }}</div>
+            <img
+                [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
+                onerror="this.src='/map_module/img/items/missing.png';"/>
+            <div [hidden]="!(item()!.show_label && item()!.label_possition == 2)">{{ label }}</div>
+        </div>
 
-    <div cdkDragHandle class="text-center"
-         *ngIf="allowView && (item()!.label_possition == 3 || item()!.label_possition == 4)">
-        <span [hidden]="!(item()!.show_label && item()!.label_possition == 4)">{{ label }}</span>
-        <img
-            [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
-            onerror="this.src='/map_module/img/items/missing.png';"/>
-        <span [hidden]="!(item()!.show_label && item()!.label_possition == 3)">{{ label }}</span>
+        <div cdkDragHandle class="text-center"
+             *ngIf="allowView && (item()!.label_possition == 3 || item()!.label_possition == 4)">
+            <span [hidden]="!(item()!.show_label && item()!.label_possition == 4)">{{ label }}</span>
+            <img
+                [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
+                onerror="this.src='/map_module/img/items/missing.png';"/>
+            <span [hidden]="!(item()!.show_label && item()!.label_possition == 3)">{{ label }}</span>
+        </div>
     </div>
-</div>
-<p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>
+    <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
+                   appendTo="body"></p-contextMenu>
+} @else {
+    <div #container class="map-element-container">
+        <div class="text-center"
+             *ngIf="allowView && (item()!.label_possition == 1 || item()!.label_possition == 2)">
+            <div [hidden]="!(item()!.show_label && item()!.label_possition == 1)">{{ label }}</div>
+            <img
+                [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
+                onerror="this.src='/map_module/img/items/missing.png';"/>
+            <div [hidden]="!(item()!.show_label && item()!.label_possition == 2)">{{ label }}</div>
+        </div>
+
+        <div class="text-center"
+             *ngIf="allowView && (item()!.label_possition == 3 || item()!.label_possition == 4)">
+            <span [hidden]="!(item()!.show_label && item()!.label_possition == 4)">{{ label }}</span>
+            <img
+                [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
+                onerror="this.src='/map_module/img/items/missing.png';"/>
+            <span [hidden]="!(item()!.show_label && item()!.label_possition == 3)">{{ label }}</span>
+        </div>
+    </div>
+}
