@@ -76,9 +76,8 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
             this.subscriptions.add(this.DashboardsService.getTacticalOverviewWidget(this.widget, 'hosts')
                 .subscribe((result) => {
                     this.filter.Host = result.config.Host;
-                    this.keywords = this.filter.Host.keywords.split(',');
-                    this.notKeywords = this.filter.Host.not_keywords.split(',');
-                    console.log(this.notKeywords);
+                    this.keywords = this.filter.Host.keywords.split(',').filter(Boolean);
+                    this.notKeywords = this.filter.Host.not_keywords.split(',').filter(Boolean);
                     this.filter.Hostgroup._ids = result.config.Hostgroup._ids;
                     this.hoststatusSummary = result.hoststatusSummary;
                     this.cdr.markForCheck();
@@ -88,7 +87,7 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     }
 
     protected loadHostgroups = (search: string) => {
-        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({'filter[Containers.name]':search} as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({'filter[Containers.name]': search} as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
             this.hostgroups = data;
             this.cdr.markForCheck();
         }));
