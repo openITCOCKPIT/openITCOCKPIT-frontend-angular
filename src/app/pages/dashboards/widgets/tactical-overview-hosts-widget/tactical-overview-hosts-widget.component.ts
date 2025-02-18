@@ -3,7 +3,6 @@ import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DashboardsService } from '../../dashboards.service';
 import { HostgroupSummaryStateHosts } from '../../../hosts/summary_state.interface';
 import { getTacticalOverviewHostsFilter, TacticalOverviewHostsFilter } from '../../dashboards.interface';
@@ -51,14 +50,7 @@ import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/m
     ],
     templateUrl: './tactical-overview-hosts-widget.component.html',
     styleUrl: './tactical-overview-hosts-widget.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('flip', [
-            state('false', style({transform: 'none'})),
-            state('true', style({transform: 'rotateY(180deg)'})),
-            transition('false <=> true', animate('0.8s ease-in-out'))
-        ])
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     protected flipped = signal<boolean>(false);
@@ -88,7 +80,7 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     }
 
     protected loadHostgroups = (search: string) => {
-        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({'filter[Containers.name]':search} as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({'filter[Containers.name]': search} as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
             this.hostgroups = data;
             this.cdr.markForCheck();
         }));
