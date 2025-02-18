@@ -146,14 +146,14 @@
                 </ng-container>
             </div>
             <div class="box-x">
-                <ng-container *ngIf="animationStateShowConfig">
+                <ng-container *ngIf="animationStateShowConfig && config">
                     <c-row class="mb-2">
                         <c-col [xs]="12" [lg]="6">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                 </span>
-                                <input [(ngModel)]="filter['Host']['name']"
+                                <input [(ngModel)]="config['Host']['name']"
                                        [placeholder]="'Filter by host name' | transloco"
                                        cFormControl
                                        [name]="'Hosts.name-'+widget.id"
@@ -166,7 +166,7 @@
                                         <input type="checkbox"
                                                cFormCheckInput
                                                name="filter.Host.name_regex"
-                                               [(ngModel)]="filter['Host']['name_regex']"
+                                               [(ngModel)]="config['Host']['name_regex']"
                                         />
                                         <oitc-regex-helper-tooltip/>
                                     </label>
@@ -179,7 +179,7 @@
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
-                                <input [(ngModel)]="filter['Host']['address']"
+                                <input [(ngModel)]="config['Host']['address']"
                                        [placeholder]="'Filter by IP address' | transloco"
                                        cFormControl
                                        [name]="'Hosts.address-'+widget.id"
@@ -191,7 +191,7 @@
                                         <input type="checkbox"
                                                cFormCheckInput
                                                [name]="'Hosts.address_regex-'+widget.id"
-                                               [(ngModel)]="filter['Host']['address_regex']"
+                                               [(ngModel)]="config['Host']['address_regex']"
                                         />
                                         <oitc-regex-helper-tooltip/>
                                     </label>
@@ -200,7 +200,7 @@
                         </c-col>
                     </c-row>
                     <c-row class="mb-2">
-                        <c-col [xs]="12" [lg]="6">*** {{ filter['Host']['keywords'] }} ***
+                        <c-col [xs]="12" [lg]="6">*** {{ config['Host']['keywords'] }} ***
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -251,13 +251,20 @@
                                         optionValue="key"
                                         optionLabel="value"
                                         [options]="hostgroups"
-                                        [(ngModel)]="filter['Hostgroup']['_ids']"
+                                        [(ngModel)]="config['Hostgroup']['_ids']"
                                         [searchCallback]="loadHostgroups"
                                         [appendTo]="'body'"
                                         class="flex-1">
                                     </oitc-multi-select>
                                 </c-input-group>
                             </fieldset>
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col class="text-end">
+                            <button cButton class="ripple" color="primary" (click)="submit()">
+                                {{ t('Save') }}
+                            </button>
                         </c-col>
                     </c-row>
                 </ng-container>

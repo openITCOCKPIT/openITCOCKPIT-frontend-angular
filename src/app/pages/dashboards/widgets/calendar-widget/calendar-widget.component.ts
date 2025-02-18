@@ -1,7 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
-import { DashboardsService } from '../../dashboards.service';
-import { CalendarDateDetails } from '../../dashboards.interface';
+
 import {
     BadgeComponent,
     BgColorDirective,
@@ -15,6 +14,8 @@ import {
 } from '@coreui/angular';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { KtdResizeEnd } from '@katoid/angular-grid-layout';
+import { CalendarWidgetService } from './calendar-widget.service';
+import { CalendarDateDetails } from './calendar-widget.interface';
 
 @Component({
     selector: 'oitc-calendar-widget',
@@ -37,16 +38,16 @@ import { KtdResizeEnd } from '@katoid/angular-grid-layout';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarWidgetComponent extends BaseWidgetComponent implements AfterViewInit {
-    public readonly DashboardsService: DashboardsService = inject(DashboardsService);
     public dateDetails?: CalendarDateDetails;
     public widgetHeight: number = 0;
     public fontSize: number = 0;
     @ViewChild('calendarContainer') calendarContainer?: ElementRef;
+    private readonly CalendarWidgetService = inject(CalendarWidgetService);
 
 
     public override load() {
         if (this.widget) {
-            this.subscriptions.add(this.DashboardsService.getCalendarWidget(this.widget)
+            this.subscriptions.add(this.CalendarWidgetService.getCalendarWidget(this.widget)
                 .subscribe((result) => {
                     this.dateDetails = result.dateDetails;
                     this.cdr.markForCheck();

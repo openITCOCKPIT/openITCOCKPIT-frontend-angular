@@ -3,9 +3,7 @@ import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { DashboardsService } from '../../dashboards.service';
 import { HostgroupSummaryStateHosts } from '../../../hosts/summary_state.interface';
-import { getTacticalOverviewHostsFilter, TacticalOverviewHostsFilter } from '../../dashboards.interface';
 import { HostgroupsLoadHostgroupsByStringParams } from '../../../hostgroups/hostgroups.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { HostgroupsService } from '../../../hostgroups/hostgroups.service';
@@ -25,6 +23,9 @@ import {
 } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { TacticalOverviewHostsWidgetService } from './tactical-overview-hosts-widget.service';
+import { TacticalOverviewHostsConfig } from './tactical-overview-hosts-widget.interface';
 
 @Component({
     selector: 'oitc-tactical-overview-hosts-widget',
@@ -46,7 +47,8 @@ import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/m
         TranslocoPipe,
         FormsModule,
         NgSelectComponent,
-        MultiSelectComponent
+        MultiSelectComponent,
+        XsButtonDirective
     ],
     templateUrl: './tactical-overview-hosts-widget.component.html',
     styleUrl: './tactical-overview-hosts-widget.component.css',
@@ -54,23 +56,22 @@ import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/m
 })
 export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     protected flipped = signal<boolean>(false);
-    public readonly DashboardsService: DashboardsService = inject(DashboardsService);
     public readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
     public hoststatusSummary?: HostgroupSummaryStateHosts;
-    public filter: TacticalOverviewHostsFilter = getTacticalOverviewHostsFilter();
+    public config?: TacticalOverviewHostsConfig;
     protected hostgroups: SelectKeyValue[] = [];
     public keywords: string[] = [];
     public notKeywords: string[] = [];
+    private readonly TacticalOverviewHostsWidgetService = inject(TacticalOverviewHostsWidgetService);
 
 
     public override load() {
         if (this.widget) {
-            this.subscriptions.add(this.DashboardsService.getTacticalOverviewWidget(this.widget, 'hosts')
+            this.subscriptions.add(this.TacticalOverviewHostsWidgetService.getTacticalOverviewWidget(this.widget, 'hosts')
                 .subscribe((result) => {
-                    this.filter.Host = result.config.Host;
-                    this.keywords = this.filter.Host.keywords.split(',').filter(Boolean);
-                    this.notKeywords = this.filter.Host.not_keywords.split(',').filter(Boolean);
-                    this.filter.Hostgroup._ids = result.config.Hostgroup._ids;
+                    this.config = result.config;
+                    this.keywords = this.config.Host.keywords.split(',').filter(Boolean);
+                    this.notKeywords = this.config.Host.not_keywords.split(',').filter(Boolean);
                     this.hoststatusSummary = result.hoststatusSummary;
                     this.cdr.markForCheck();
                 }));
@@ -88,5 +89,33 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     public onFilterChange($event: any) {
         this.cdr.markForCheck();
         this.load();
+    }
+
+    public submit() {
+        if (!this.widget) {
+            return;
+        }
+        /*
+        this.subscriptions.add(this.CustomAlertsService.saveWidget(this.widget, this.CustomalertsFilter)
+            .subscribe({
+                next: (result) => {
+                    this.cdr.markForCheck();
+                    const title = this.TranslocoService.translate('Success');
+                    const msg = this.TranslocoService.translate('Data saved successfully');
+
+                    this.notyService.genericSuccess(msg, title);
+                    this.notyService.scrollContentDivToTop();
+                    this.flipped.set(false);
+
+                    return;
+                },
+                // Error
+                error: (error) => {
+                    const errorResponse = error as GenericValidationError;
+                    this.notyService.genericError();
+                }
+            }));
+
+         */
     }
 }
