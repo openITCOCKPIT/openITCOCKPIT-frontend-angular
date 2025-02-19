@@ -18,10 +18,11 @@
             <div class="box-x">
                 <ng-container *ngIf="animationStateShowContent">
                     <!-- Widget Content -->
-                    <div class="ps-2 text-info" *ngIf="!host_id">
+                    <div class="ps-2 text-info" *ngIf="!grafana_userdashboard_id">
                         {{ t('No element selected') }}
                     </div>
-                    <oitc-iframe [url]="iframe_url" *ngIf="host_id" [height]="widgetHeight+'px'"></oitc-iframe>
+                    <oitc-iframe [url]="iframe_url" *ngIf="grafana_userdashboard_id"
+                                 [height]="widgetHeight+'px'"></oitc-iframe>
                     <!-- End Widget Content -->
                 </ng-container>
             </div>
@@ -32,20 +33,19 @@
                     @if (widget) {
 
                         <div class="mb-3">
-                            <label cLabel [for]="'grafana_dashboard_id_'+widget.id">
-                                {{ t('Grafana dashboard') }}
+                            <label cLabel [for]="'grafana_userdashboard_id_'+widget.id">
+                                {{ t('Select user defined Grafana dashboard') }}
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
 
                             <oitc-select
-                                [id]="'grafana_dashboard_id_'+widget.id"
-                                [name]="'grafana_dashboard_id_'+widget.id"
-                                [attr.id]="'grafana_dashboard_id_'+widget.id"
+                                [id]="'grafana_userdashboard_id_'+widget.id"
+                                [name]="'grafana_userdashboard_id_'+widget.id"
+                                [attr.id]="'grafana_userdashboard_id_'+widget.id"
                                 optionValue="key"
                                 optionLabel="value"
-                                [(ngModel)]="host_id"
+                                [(ngModel)]="grafana_userdashboard_id"
                                 [options]="grafanaDashboards"
-                                [searchCallback]="loadGrafanaDashboards"
                                 [appendTo]="''">
                             </oitc-select>
                         </div>
