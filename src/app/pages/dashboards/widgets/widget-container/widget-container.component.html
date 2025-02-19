@@ -90,6 +90,12 @@
                 [isReadonly]="isReadonly()"></oitc-host-status-overview-widget>
         }
 
+        @case (WidgetTypes.ServiceStatusOverviewWidget) {
+            <oitc-service-status-overview-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-service-status-overview-widget>
+        }
+
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {
             <oitc-customalerts-widget
