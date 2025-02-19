@@ -316,3 +316,16 @@ export interface MapsByStringMap {
     key: number
     value: string
 }
+
+/********************************
+ * Mapeditors View
+ ********************************/
+
+export interface MapDetailsRoot {
+    map: MapeditorsViewMap
+    _csrfToken: string
+}
+
+export interface MapeditorsViewMap {
+    Map: Map
+}

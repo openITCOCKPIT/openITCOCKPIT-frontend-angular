@@ -6,6 +6,7 @@ import {
     BackgroundImagesRoot,
     IconsetRoot,
     IconsRoot,
+    MapDetailsRoot,
     MapeditorsEditRoot,
     MapeditorSettingsPost,
     MapgadgetPost,
@@ -448,6 +449,15 @@ export class MapeditorsService {
         return this.http.get<any>(`${proxyPath}/map_module/mapeditors/loadMapsByString.json`, {
             params: params as {}
         }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadMapDetails(id: number): Observable<MapDetailsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/map_module/mapeditors/mapDetails/${id}.json?angular=true`, {}).pipe(
             map(data => {
                 return data;
             })
