@@ -41,6 +41,10 @@ import {
 import {
     ServicesStatusListWidgetComponent
 } from '../services-status-list-widget/services-status-list-widget.component';
+import {
+    HostStatusOverviewExtendedWidget
+} from '../host-status-overview-extended-widget/host-status-overview-extended-widget.component';
+
 
 @Component({
     selector: 'oitc-widget-container',
@@ -68,7 +72,8 @@ import {
         ServiceStatusOverviewWidgetComponent,
         HostsStatusListWidgetComponent,
         HostsStatusListExtendedWidgetComponent,
-        ServicesStatusListWidgetComponent
+        ServicesStatusListWidgetComponent,
+        HostStatusOverviewExtendedWidget
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

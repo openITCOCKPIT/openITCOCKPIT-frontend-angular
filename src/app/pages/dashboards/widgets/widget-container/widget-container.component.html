@@ -109,6 +109,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-service-status-overview-widget>
         }
+        @case (WidgetTypes.HostStatusOverviewExtendedWidget) {
+            <oitc-host-status-overview-extended-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-host-status-overview-extended-widget>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {
