@@ -32,8 +32,6 @@
                     </c-col>
                     <c-col [xs]="11" [lg]="3" *ngIf="widget && config">
                         <oitc-slider-time
-                            id="tabRotationIntervalModalSlider"
-                            name="tabRotationIntervalModalSlider"
                             [name]="'scroll_interval_slider_'+widget.id"
                             [attr.id]="'filter.scroll_interval_slider_'+widget.id"
                             [unit]="'milliseconds'"
@@ -201,7 +199,6 @@
                                                 {{ t('Enable RegEx') }}
                                                 <input type="checkbox"
                                                        cFormCheckInput
-                                                       name="filter.Host.name_regex"
                                                        [name]="'Hosts.name_regex_'+widget.id"
                                                        [attr.id]="'Hosts.name_regex_'+widget.id"
                                                        [(ngModel)]="config.Host.name_regex"

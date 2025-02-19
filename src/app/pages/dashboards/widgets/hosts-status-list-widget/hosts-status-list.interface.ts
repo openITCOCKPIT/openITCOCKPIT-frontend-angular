@@ -1,6 +1,6 @@
-// See HostStatusListJson.php for source of data
 import { HostStatusNames } from '../../../hosts/hosts.enum';
 
+// See HostStatusListJson.php for source of data
 export interface HostsStatusListWidgetConfig {
     Hoststatus: {
         current_state: {
