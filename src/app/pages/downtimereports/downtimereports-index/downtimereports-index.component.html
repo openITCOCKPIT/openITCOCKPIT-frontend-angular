@@ -277,10 +277,11 @@
                     </c-card-header>
                     <c-card-body>
                         <ng-container *ngFor="let hostsWithOutages of report.downtimeReport.hostsWithOutages">
-<!--
-                            <hosts-bar-chart chart-id="chunkIndex"
-                                             bar-chart-data="hostsWithOutages.hostBarChartData"></hosts-bar-chart>
--->
+
+                            <oitc-hosts-bar-chart
+                                    [chartId]="42"
+                                    [barChartData]="hostsWithOutages.hostBarChartData"></oitc-hosts-bar-chart>
+
                             <oitc-host-availability-overview
                                     *ngFor="let host of hostsWithOutages.hosts"
                                     [host]="host"

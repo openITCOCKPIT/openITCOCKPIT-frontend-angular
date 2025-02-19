@@ -57,6 +57,7 @@ import listPlugin from '@fullcalendar/list';
 import {
     HostAvailabilityOverviewComponent
 } from '../components/host-availability-overview/host-availability-overview.component';
+import { HostsBarChartComponent } from '../../../components/charts/hosts-bar-chart/hosts-bar-chart.component';
 
 @Component({
     selector: 'oitc-downtimereports-index',
@@ -91,7 +92,8 @@ import {
         FullCalendarModule,
         HostAvailabilityOverviewComponent,
         NgForOf,
-        PopoverDirective
+        PopoverDirective,
+        HostsBarChartComponent
     ],
     templateUrl: './downtimereports-index.component.html',
     styleUrl: './downtimereports-index.component.css',
