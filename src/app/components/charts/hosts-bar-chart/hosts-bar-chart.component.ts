@@ -7,9 +7,8 @@ import { Subscription } from 'rxjs';
 import { PieChartMetric } from '../charts.interface';
 import { TranslocoService } from '@jsverse/transloco';
 import { LayoutService } from '../../../layouts/coreui/layout.service';
-import { GridComponent } from 'echarts/components';
-import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
-import { LineChart, BarChart } from 'echarts/charts';
+import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+import { BarChart, LineChart } from 'echarts/charts';
 import { HostBarChartData } from '../../../pages/downtimereports/downtimereports.interface';
 
 echarts.use([LineChart, BarChart, LegendComponent, TitleComponent, TooltipComponent, GridComponent]);
@@ -90,16 +89,19 @@ export class HostsBarChartComponent implements OnDestroy {
                     data: this.barChartData().datasets['availability'].data
                 },
                 {
+                    stack: 'true',
                     type: 'bar',
                     name: this.barChartData().datasets[0].label,
                     data: this.barChartData().datasets[0].data
                 },
                 {
+                    stack: 'true',
                     type: 'bar',
                     name: this.barChartData().datasets[1].label,
                     data: this.barChartData().datasets[1].data
                 },
                 {
+                    stack: 'true',
                     type: 'bar',
                     name: this.barChartData().datasets[2].label,
                     data: this.barChartData().datasets[2].data
@@ -118,12 +120,9 @@ export class HostsBarChartComponent implements OnDestroy {
                 }
             },
             xAxis: {
-                type: 'value',
+                type: 'category',
                 min: 0,
-                max: 100,
-                axisLabel: {
-                    formatter: '{value}%'
-                }
+                max: 10
             }
         };
         console.warn('chartOption', this.chartOption);
