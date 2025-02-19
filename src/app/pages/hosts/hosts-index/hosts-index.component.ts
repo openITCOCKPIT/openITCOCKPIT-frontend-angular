@@ -312,7 +312,6 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
                 this.filter['Hosts.name_regex'] = true;
             }
 
-
             let address = params['address'] || undefined;
             if (address) {
                 this.filter['Hosts.address'] = address;

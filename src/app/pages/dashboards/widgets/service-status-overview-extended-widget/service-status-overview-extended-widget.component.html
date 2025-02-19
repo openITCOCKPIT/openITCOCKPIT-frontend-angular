@@ -17,10 +17,10 @@
                 <ng-container *ngIf="animationStateShowContent">
                     <div class="position-absolute top-0 end-0 p-1 fs-5 fw-light text-white" *ngIf="config">
                         <fa-icon [icon]="['fas', 'business-time']" class="text-white"></fa-icon>
-                        <span class="italic px-2 ">{{ t('State older than') }}:
-                            @if (config && config.Hoststatus.state_older_than && config.Hoststatus.state_older_than_unit) {
-                                {{ config.Hoststatus.state_older_than }}
-                                @switch (config.Hoststatus.state_older_than_unit) {
+                        <span class="italic px-2">{{ t('State older than') }}:
+                            @if (config && config.Servicestatus.state_older_than && config.Servicestatus.state_older_than_unit) {
+                                {{ config.Servicestatus.state_older_than }}
+                                @switch (config.Servicestatus.state_older_than_unit) {
                                     @case ('SECOND') {
                                         {{ t('second(s)') }}
                                     }
@@ -40,17 +40,18 @@
                         </span>
                     </div>
                     <div [style.height.px]="widgetHeight"
-                         [ngClass]="{'bg-up': config?.Hoststatus?.current_state === 0,
-                         'bg-down': config?.Hoststatus?.current_state === 1,
-                         'bg-unreachable': config?.Hoststatus?.current_state === 2}"
+                         [ngClass]="{'bg-ok': config?.Servicestatus?.current_state === 0,
+                         'bg-warning': config?.Servicestatus?.current_state === 1,
+                         'bg-critical': config?.Servicestatus?.current_state === 2,
+                         'bg-unknown': config?.Servicestatus?.current_state === 3}"
                          class="w-100">
 
                         <c-row *ngIf="statusCount !== null" class="h-100 align-items-center">
-                            @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
+                            @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
                                 <c-col class="text-center text-white" [style.font-size.px]="fontSize">
-                                    @if (statusCount > 0 && config && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                                        <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
-                                           [queryParams]="{'id': hostIds,  'hoststate': config.Hoststatus.current_state ,'hostname': config.Host.name, 'name_regex': config.Host.name_regex, 'address': config.Host.address, 'address_regex': config.Host.address_regex, 'acknowledged': config.Hoststatus.acknowledged,'not_acknowledged': config.Hoststatus.not_acknowledged,'in_downtime': config.Hoststatus.in_downtime,'not_in_downtime': config.Hoststatus.not_in_downtime,sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                    @if (statusCount > 0 && config && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                        <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                           [queryParams]="{'id': serviceIds,  'servicestate': config.Servicestatus.current_state, 'hostname': config.Host.name, 'name_regex': config.Host.name_regex ,'servicename': config.Service.servicename, 'servicename_regex': config.Service.servicename_regex, 'address': config.Service.address, 'address_regex': config.Service.address_regex, 'acknowledged': config.Servicestatus.acknowledged,'not_acknowledged': config.Servicestatus.not_acknowledged,'in_downtime': config.Servicestatus.in_downtime,'not_in_downtime': config.Servicestatus.not_in_downtime,sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
                                             {{ statusCount }}
                                         </a>
                                     } @else {
@@ -67,18 +68,23 @@
                             }
                         </c-row>
 
-                        @switch (config?.Hoststatus?.current_state) {
+                        @switch (config?.Servicestatus?.current_state) {
                             @case (0) {
                                 <fa-icon [icon]="['fas', 'check-circle']" [style.font-size.px]="fontSizeIcon"
                                          [style.top.px]="iconTopPosition"
                                          class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
                             }
                             @case (1) {
-                                <fa-icon [icon]="['fas', 'exclamation-circle']" [style.font-size.px]="fontSizeIcon"
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']" [style.font-size.px]="fontSizeIcon"
                                          [style.top.px]="iconTopPosition"
                                          class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
                             }
                             @case (2) {
+                                <fa-icon [icon]="['fas', 'exclamation-circle']" [style.font-size.px]="fontSizeIcon"
+                                         [style.top.px]="iconTopPosition"
+                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                            }
+                            @case (3) {
                                 <fa-icon [icon]="['fas', 'question-circle']" [style.font-size.px]="fontSizeIcon"
                                          [style.top.px]="iconTopPosition"
                                          class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
@@ -123,13 +129,14 @@
                             <c-col [xs]="12" [lg]="12">
                                 <c-input-group>
                                     <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                     </span>
-                                    <input [(ngModel)]="config.Host.address"
-                                           [placeholder]="'Filter by IP address' | transloco"
+                                    <input [(ngModel)]="config.Service.servicename"
+                                           [placeholder]="'Filter by service name' | transloco"
                                            cFormControl
-                                           [id]="'Hosts.address-'+widget.id"
-                                           [name]="'Hosts.address-'+widget.id"
+                                           [id]="'Services.name-'+widget.id"
+                                           [name]="'Services.name-'+widget.id"
+                                           oitcDebounce
                                            type="text"
                                     />
                                     <span cInputGroupText>
@@ -137,9 +144,9 @@
                                             {{ t('Enable RegEx') }}
                                             <input type="checkbox"
                                                    cFormCheckInput
-                                                   [id]="'Hosts.address_regex-'+widget.id"
-                                                   [name]="'Hosts.address_regex-'+widget.id"
-                                                   [(ngModel)]="config.Host.address_regex"
+                                                   [id]="'filter.Service.name_regex-'+widget.id"
+                                                   [name]="'filter.Service.name_regex-'+widget.id"
+                                                   [(ngModel)]="config.Service.servicename_regex"
                                             />
                                             <oitc-regex-helper-tooltip/>
                                         </label>
@@ -161,11 +168,11 @@
                                         [id]="'HostKeywordsInput-'+widget.id"
                                         [name]="'HostKeywordsInput-'+widget.id"
                                         [items]="[]"
-                                        [(ngModel)]="keywords"
+                                        [(ngModel)]="keywordsHost"
                                         [addTag]="true"
                                         [multiple]="true"
                                         [selectOnTab]="true"
-                                        [placeholder]="'Filter by tags'|transloco"
+                                        [placeholder]="'Filter by host tags'|transloco"
                                         [isOpen]="false">
                                     </ng-select>
                                 </c-input-group>
@@ -185,11 +192,59 @@
                                         [id]="'HostNotKeywordsInput-'+widget.id"
                                         [name]="'HostNotKeywordsInput-'+widget.id"
                                         [items]="[]"
+                                        [(ngModel)]="notKeywordsHost"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by excluded host tags'|transloco"
+                                        [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <div class="icon-stack">
+                                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']"
+                                                     class="text-success cornered cornered-lr"></fa-icon>
+                                        </div>
+                                    </span>
+                                    <ng-select
+                                        [id]="'ServiceKeywordsInput-'+widget.id"
+                                        [name]="'ServiceKeywordsInput-'+widget.id"
+                                        [items]="[]"
+                                        [(ngModel)]="keywords"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by service tags'|transloco"
+                                        [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <div class="icon-stack">
+                                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']"
+                                                     class="text-danger cornered cornered-lr"></fa-icon>
+                                        </div>
+                                    </span>
+                                    <ng-select
+                                        [id]="'ServiceNotKeywordsInput-'+widget.id"
+                                        [name]="'ServiceNotKeywordsInput-'+widget.id"
+                                        [items]="[]"
                                         [(ngModel)]="notKeywords"
                                         [addTag]="true"
                                         [multiple]="true"
                                         [selectOnTab]="true"
-                                        [placeholder]="'Filter by excluded tags'|transloco"
+                                        [placeholder]="'Filter by excluded service tags'|transloco"
                                         [isOpen]="false">
                                     </ng-select>
                                 </c-input-group>
@@ -199,17 +254,17 @@
                             <c-col [xs]="12" [lg]="12">
                                 <fieldset class="mt-2">
                                     <legend class="fs-5">
-                                        {{ t('Host groups') }}
+                                        {{ t('Service groups') }}
                                     </legend>
                                     <c-input-group>
                                         <oitc-multi-select
-                                            [id]="'Hostgroups-'+widget.id"
-                                            [name]="'Hostgroups-'+widget.id"
+                                            [id]="'Servicegroups-'+widget.id"
+                                            [name]="'Servicegroups-'+widget.id"
                                             optionValue="key"
                                             optionLabel="value"
-                                            [options]="hostgroups"
-                                            [(ngModel)]="hostgroupsIds"
-                                            [searchCallback]="loadHostgroups"
+                                            [options]="servicegroups"
+                                            [(ngModel)]="servicegroupsIds"
+                                            [searchCallback]="loadServicegroups"
                                             [appendTo]="'body'"
                                             class="flex-1">
                                         </oitc-multi-select>
@@ -220,7 +275,7 @@
                             <c-col [xs]="12" [md]="6" [lg]="6">
                                 <fieldset>
                                     <legend class="fs-5">
-                                        {{ t('Host status') }}
+                                        {{ t('Service status') }}
                                     </legend>
                                     <c-form-check>
                                         <input cFormCheckInput
@@ -229,44 +284,58 @@
                                                [id]="'widget-radio0-'+widget.id"
                                                [name]="'widget-radio0-'+widget.id"
                                                [value]="0"
-                                               [(ngModel)]="config.Hoststatus.current_state"
+                                               [(ngModel)]="config.Servicestatus.current_state"
                                         />
                                         <label cFormCheckLabel class="ms-1 mt-1"
                                                [for]="'widget-radio0-'+widget.id">
-                                            {{ t('Up') }}
+                                            {{ t('Ok') }}
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input cFormCheckInput
+                                               class="radio-lg radio-warning border-warning"
+                                               type="radio"
+                                               [id]="'widget-radio1-'+widget.id"
+                                               [name]="'widget-radio1-'+widget.id"
+                                               [value]="1"
+                                               [(ngModel)]="config.Servicestatus.current_state"
+                                        />
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'widget-radio0-'+widget.id">
+                                            {{ t('Warning') }}
                                         </label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input cFormCheckInput
                                                class="radio-lg radio-danger border-danger"
                                                type="radio"
-                                               [id]="'widget-radio1-'+widget.id"
-                                               [name]="'widget-radio1-'+widget.id"
-                                               [value]="1"
-                                               [(ngModel)]="config.Hoststatus.current_state"
+                                               [id]="'widget-radio2-'+widget.id"
+                                               [name]="'widget-radio2-'+widget.id"
+                                               [value]="2"
+                                               [(ngModel)]="config.Servicestatus.current_state"
                                         />
                                         <label cFormCheckLabel class="ms-1 mt-1"
-                                               [for]="'widget-radio1-'+widget.id">
-                                            {{ t('Down') }}
+                                               [for]="'widget-radio2-'+widget.id">
+                                            {{ t('Critical') }}
                                         </label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input cFormCheckInput
                                                class="radio-lg radio-secondary border-secondary"
                                                type="radio"
-                                               [id]="'widget-radio2-'+widget.id"
-                                               [name]="'widget-radio2-'+widget.id"
-                                               [value]="2"
-                                               [(ngModel)]="config.Hoststatus.current_state"
+                                               [id]="'widget-radio3-'+widget.id"
+                                               [name]="'widget-radio3-'+widget.id"
+                                               [value]="3"
+                                               [(ngModel)]="config.Servicestatus.current_state"
                                         />
                                         <label cFormCheckLabel class="ms-1 mt-1"
-                                               [for]="'widget-radio2-'+widget.id">
-                                            {{ t('Unreachable') }}
+                                               [for]="'widget-radio3-'+widget.id">
+                                            {{ t('Unknown') }}
                                         </label>
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
-                            <c-col [xs]="12" [md]="6" [lg]="6" *ngIf="config.Hoststatus.current_state > 0">
+                            <c-col [xs]="12" [md]="6" [lg]="6" *ngIf="config.Servicestatus.current_state > 0">
                                 <fieldset class="mt-2">
                                     <legend class="fs-5">
                                         {{ t('Acknowledgements') }}
@@ -275,14 +344,14 @@
                                         <input
                                             cFormCheckInput
                                             class="checkbox-lg checkbox-primary"
-                                            [id]="'Hosts.acknowledged-'+widget.id"
-                                            [name]="'Hosts.acknowledged-'+widget.id"
+                                            [id]="'Services.acknowledged-'+widget.id"
+                                            [name]="'Services.acknowledged-'+widget.id"
                                             type="checkbox"
                                             trueFalseValue
-                                            [(ngModel)]="config.Hoststatus.acknowledged"/>
+                                            [(ngModel)]="config.Servicestatus.acknowledged"/>
 
                                         <label cFormCheckLabel class="ms-1 mt-1"
-                                               [for]="'Hosts.acknowledged-'+widget.id">
+                                               [for]="'Services.acknowledged-'+widget.id">
                                             {{ t('Acknowledged') }}
                                         </label>
                                     </c-form-check>
@@ -290,13 +359,13 @@
                                         <input
                                             cFormCheckInput
                                             class="checkbox-lg checkbox-primary"
-                                            [id]="'Hosts.not_acknowledged-'+widget.id"
-                                            [name]="'Hosts.not_acknowledged-'+widget.id"
+                                            [id]="'Services.not_acknowledged-'+widget.id"
+                                            [name]="'Services.not_acknowledged-'+widget.id"
                                             type="checkbox"
                                             trueFalseValue
-                                            [(ngModel)]="config.Hoststatus.not_acknowledged"/>
+                                            [(ngModel)]="config.Servicestatus.not_acknowledged"/>
                                         <label cFormCheckLabel class="ms-1 mt-1"
-                                               [for]="'Hosts.not_acknowledged-'+widget.id">
+                                               [for]="'Services.not_acknowledged-'+widget.id">
                                             {{ t('Not Acknowledged') }}
                                         </label>
                                     </c-form-check>
@@ -309,13 +378,14 @@
                                         <input
                                             cFormCheckInput
                                             class="checkbox-lg checkbox-primary"
-                                            [id]="'Hosts.in_downtime-'+widget.id"
-                                            [name]="'Hosts.in_downtime-'+widget.id"
+                                            [id]="'Services.in_downtime-'+widget.id"
+                                            [name]="'Services.in_downtime-'+widget.id"
                                             type="checkbox"
                                             trueFalseValue
-                                            [(ngModel)]="config.Hoststatus.in_downtime"/>
+                                            [(ngModel)]="config.Servicestatus.in_downtime"/>
 
-                                        <label cFormCheckLabel class="ms-1 mt-1" [for]="'Hosts.in_downtime-'+widget.id">
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'Services.in_downtime-'+widget.id">
                                             {{ t('In Downtime') }}
                                         </label>
                                     </c-form-check>
@@ -323,13 +393,13 @@
                                         <input
                                             cFormCheckInput
                                             class="checkbox-lg checkbox-primary"
-                                            [id]="'Hosts.not_in_downtime-'+widget.id"
-                                            [name]="'Hosts.not_in_downtime-'+widget.id"
+                                            [id]="'Services.not_in_downtime-'+widget.id"
+                                            [name]="'Services.not_in_downtime-'+widget.id"
                                             type="checkbox"
                                             trueFalseValue
-                                            [(ngModel)]="config.Hoststatus.not_in_downtime"/>
+                                            [(ngModel)]="config.Servicestatus.not_in_downtime"/>
                                         <label cFormCheckLabel class="ms-1 mt-1"
-                                               [for]="'Hosts.not_in_downtime-'+widget.id">
+                                               [for]="'Services.not_in_downtime-'+widget.id">
                                             {{ t('Not in Downtime') }}
                                         </label>
                                     </c-form-check>
@@ -346,7 +416,7 @@
                                         <span cInputGroupText>
                                             <fa-icon [icon]="['fas', 'history']" class="text-secondary"></fa-icon>
                                         </span>
-                                        <input [(ngModel)]="config.Hoststatus.state_older_than"
+                                        <input [(ngModel)]="config.Servicestatus.state_older_than"
                                                [placeholder]="'Leave empty for all' | transloco"
                                                [name]="'state_older_than-'+widget.id"
                                                [id]="'state_older_than-'+widget.id"
@@ -355,7 +425,7 @@
                                         />
                                         <c-dropdown alignment="end">
                                             <button cButton cDropdownToggle color="primary">
-                                                @switch (config.Hoststatus.state_older_than_unit) {
+                                                @switch (config.Servicestatus.state_older_than_unit) {
                                                     @case ('SECOND') {
                                                         {{ t('seconds') }}
                                                     }
@@ -372,19 +442,19 @@
                                             </button>
                                             <ul cDropdownMenu>
                                                 <li cDropdownItem
-                                                    (click)="config.Hoststatus.state_older_than_unit = 'SECOND'">
+                                                    (click)="config.Servicestatus.state_older_than_unit = 'SECOND'">
                                                     {{ t('seconds') }}
                                                 </li>
                                                 <li cDropdownItem
-                                                    (click)="config.Hoststatus.state_older_than_unit = 'MINUTE'">
+                                                    (click)="config.Servicestatus.state_older_than_unit = 'MINUTE'">
                                                     {{ t('minutes') }}
                                                 </li>
                                                 <li cDropdownItem
-                                                    (click)="config.Hoststatus.state_older_than_unit = 'HOUR'">
+                                                    (click)="config.Servicestatus.state_older_than_unit = 'HOUR'">
                                                     {{ t('hours') }}
                                                 </li>
                                                 <li cDropdownItem
-                                                    (click)="config.Hoststatus.state_older_than_unit = 'DAY'">
+                                                    (click)="config.Servicestatus.state_older_than_unit = 'DAY'">
                                                     {{ t('days') }}
                                                 </li>
                                             </ul>
