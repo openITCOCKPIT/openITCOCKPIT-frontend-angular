@@ -94,7 +94,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-hosts-status-list-widget>
         }
-
+        @case (WidgetTypes.HostsStatusExtendedWidget) {
+            <oitc-hosts-status-list-extended-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-hosts-status-list-extended-widget>
+        }
         @case (WidgetTypes.ServiceStatusOverviewWidget) {
             <oitc-service-status-overview-widget
                 [widgetInput]="widget"
