@@ -34,6 +34,16 @@ import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import {
     ServiceStatusOverviewWidgetComponent
 } from '../service-status-overview-widget/service-status-overview-widget.component';
+import { HostsStatusListWidgetComponent } from '../hosts-status-list-widget/hosts-status-list-widget.component';
+
+<<<<<<< HEAD
+
+======
+=
+
+>>>>>>>
+8
+fe907191c7e2df548ac67b19a8d547c1f13ac8b
 
 @Component({
     selector: 'oitc-widget-container',
@@ -58,7 +68,8 @@ import {
         TacticalOverviewServicesWidgetComponent,
         WebsiteWidgetComponent,
         HostStatusOverviewWidgetComponent,
-        ServiceStatusOverviewWidgetComponent
+        ServiceStatusOverviewWidgetComponent,
+        HostsStatusListWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',
