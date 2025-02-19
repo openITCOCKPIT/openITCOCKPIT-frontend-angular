@@ -225,9 +225,9 @@
                                                 {{ t('Enable RegEx') }}
                                                 <input type="checkbox"
                                                        cFormCheckInput
-                                                       [name]="'Hosts.name_regex_'+widget.id"
-                                                       [attr.id]="'Hosts.name_regex_'+widget.id"
-                                                       [(ngModel)]="config.Host.name_regex"
+                                                       [name]="'servicename_regex_'+widget.id"
+                                                       [attr.id]="'servicename_regex_'+widget.id"
+                                                       [(ngModel)]="config.Service.name_regex"
                                                 />
                                                 <oitc-regex-helper-tooltip/>
                                             </label>
@@ -255,11 +255,13 @@
                             <c-row *ngIf="config" class="mb-2">
                                 <c-col [xs]="12" [lg]="6">
                                     <c-input-group>
-                                        <div class="icon-stack">
-                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'tags']"
-                                                     class="text-success cornered cornered-lr"></fa-icon>
-                                        </div>
+                                        <span cInputGroupText>
+                                            <div class="icon-stack">
+                                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'tags']"
+                                                         class="text-success cornered cornered-lr"></fa-icon>
+                                            </div>
+                                        </span>
                                         <ng-select
                                             [name]="'Hosts.HostKeywordsInput_'+widget.id"
                                             [attr.id]="'Hosts.HostKeywordsInput_'+widget.id"
@@ -276,11 +278,13 @@
 
                                 <c-col [xs]="12" [lg]="6">
                                     <c-input-group>
-                                        <div class="icon-stack">
-                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'tags']"
-                                                     class="text-danger cornered cornered-lr"></fa-icon>
-                                        </div>
+                                        <span cInputGroupText>
+                                            <div class="icon-stack">
+                                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'tags']"
+                                                         class="text-danger cornered cornered-lr"></fa-icon>
+                                            </div>
+                                        </span>
                                         <ng-select
                                             [name]="'Hosts.HostNotKeywordsInput_'+widget.id"
                                             [attr.id]="'Hosts.HostNotKeywordsInput_'+widget.id"
@@ -299,11 +303,13 @@
                             <c-row *ngIf="config" class="mb-2">
                                 <c-col [xs]="12" [lg]="6">
                                     <c-input-group>
-                                        <div class="icon-stack">
-                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'tags']"
-                                                     class="text-success cornered cornered-lr"></fa-icon>
-                                        </div>
+                                        <span cInputGroupText>
+                                            <div class="icon-stack">
+                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'tags']"
+                                                         class="text-success cornered cornered-lr"></fa-icon>
+                                            </div>
+                                        </span>
                                         <ng-select
                                             [name]="'Services.ServiceKeywordsInput_'+widget.id"
                                             [attr.id]="'Services.ServiceKeywordsInput_'+widget.id"
@@ -320,11 +326,13 @@
 
                                 <c-col [xs]="12" [lg]="6">
                                     <c-input-group>
-                                        <div class="icon-stack">
-                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'tags']"
-                                                     class="text-danger cornered cornered-lr"></fa-icon>
-                                        </div>
+                                        <span cInputGroupText>
+                                            <div class="icon-stack">
+                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'tags']"
+                                                         class="text-danger cornered cornered-lr"></fa-icon>
+                                            </div>
+                                        </span>
                                         <ng-select
                                             [name]="'Services.ServiceNotKeywordsInput_'+widget.id"
                                             [attr.id]="'Services.ServiceNotKeywordsInput_'+widget.id"
