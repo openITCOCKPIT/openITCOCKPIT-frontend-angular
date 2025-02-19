@@ -144,16 +144,9 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
         },
         initialView: 'dayGridMonth',
-        //initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
         events: this.events,
-        eventMaxStack: 25,
-        eventHint: 'HINT HIER JUNGE',
-        eventMouseEnter: function (params): void {
-            console.warn(params);
-        },
-        eventMouseLeave: function (params): void {
-            console.warn(params);
-        },
+        dayMaxEvents: 10,
+        dayMaxEventRows: 10,
         weekends: true,
         editable: true,
         selectable: true,
@@ -178,7 +171,6 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
 
     private fetchReport(): void {
 
-
         this.report = {} as DowntimeReportsResponse;
 
 
@@ -200,11 +192,11 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
                         }
                     });
                 });
-                this.report.downtimeReport?.downtimes.Services.forEach((element) => {
+                this.report.downtimeReport?.downtimes.Services?.forEach((element) => {
                     this.events.push({
                         default_holiday: false,
                         className: '',
-                        title: element.Services.name,
+                        title: element.Hosts.name + ' | ' + element.Servicetemplates.name,
                         start: element.scheduled_start_time,
                         end: element.scheduled_end_time,
                         extendedProps: {
@@ -231,7 +223,13 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     }
 
     public formatDate(timestamp: number): string {
-        return new Date(timestamp).toLocaleDateString('en-GB');
+        const date = new Date(timestamp);
+        const formattedDate = date.toLocaleDateString('de-DE');
+        const formattedTime = date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+        return `${formattedDate} - ${formattedTime}`;
+    }
+    public formatTime(timestamp: number): string {
+        return new Date(timestamp).getHours() + ":" + new Date(timestamp).getMinutes();
     }
     protected submit(): void {
         console.log(this.post);

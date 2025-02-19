@@ -232,16 +232,20 @@
                              [cPopover]="popoverHtml">
                             <div class="fc-event-title fc-sticky" [className]="arg.event.classNames"
                                  [title]="arg.event.title">
+                                {{ formatTime(arg.event.start.getTime()) }} - {{ formatTime(arg.event.end.getTime()) }}
+                                <i *ngIf="arg.event.extendedProps.type === 'host'"
+                                   class="fa fa-desktop"></i>
+                                <i *ngIf="arg.event.extendedProps.type === 'service'"
+                                   class="fa fa-cog"></i>
                                 {{ arg.event.title }}
                             </div>
-
                             <ng-template #popoverHtml>
                                 <c-card>
                                     <c-card-header>
                                         <h6 cCardTitle>
-                                            <i *ngIf="arg.event.extenedProps.type === 'host'"
+                                            <i *ngIf="arg.event.extendedProps.type === 'host'"
                                                class="fa fa-desktop"></i>
-                                            <i *ngIf="arg.event.extenedProps.type === 'service'"
+                                            <i *ngIf="arg.event.extendedProps.type === 'service'"
                                                class="fa fa-cog"></i>
                                             {{ arg.event.title }}
                                         </h6>

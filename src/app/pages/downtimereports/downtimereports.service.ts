@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import { DowntimeReportsRequest, DowntimeReportsResponse } from './downtimereports.interface';
+import { formatDate } from '@angular/common';
 
 @Injectable({
     providedIn: 'root'
@@ -40,10 +41,8 @@ export class DowntimereportsService {
     }
 
     public getIndex(params: DowntimeReportsRequest): Observable<DowntimeReportsResponse> {
-        // format params.from_date and params.to_date from the "yyyy-mm-dd" date to "dd.mm.yyyy" date.
-        // OGODWHY...
-        params.from_date = params.from_date.split('-').reverse().join('.');
-        params.to_date = params.to_date.split('-').reverse().join('.');
+        params.from_date = formatDate(new Date(params.from_date), 'dd.MM.y', 'en-US');
+        params.to_date = formatDate(new Date(params.to_date), 'dd.MM.y', 'en-US');
 
         return this.http.post<DowntimeReportsResponse>(`${this.proxyPath}/downtimereports/index.json`, params).pipe(
             map((data: DowntimeReportsResponse): DowntimeReportsResponse => {

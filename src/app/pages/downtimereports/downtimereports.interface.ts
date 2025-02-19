@@ -191,7 +191,7 @@ export interface Downtimes {
         HostsToContainers: {
             container_id: number
         }
-    }[]
+    }[] | undefined
 }
 
 
