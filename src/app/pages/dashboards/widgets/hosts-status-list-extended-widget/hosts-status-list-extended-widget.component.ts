@@ -55,6 +55,7 @@ import { HostStatusNames } from '../../../hosts/hosts.enum';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { HostsStatusListWidgetService } from '../hosts-status-list-widget/hosts-status-list-widget.service';
 import { RouterLink } from '@angular/router';
+import { HostsBrowserModalService } from '../../../hosts/hosts-browser/hosts-browser-modal/hosts-browser-modal.service';
 
 @Component({
     selector: 'oitc-hosts-status-list-extended-widget',
@@ -125,6 +126,7 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
 
 
     private readonly HostsStatusListWidgetService = inject(HostsStatusListWidgetService);
+    private readonly HostsBrowserModalService = inject(HostsBrowserModalService);
 
     public override load() {
         // Handled by ngAfterViewInit as we need the widget height for the correct limit
@@ -350,6 +352,12 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
 
         // Save the new interval
         this.saveWidgetConfig();
+    }
+
+    public toggleHostBrowserModal(hostId: number | undefined) {
+        if (hostId) {
+            this.HostsBrowserModalService.openHostBrowserModal(hostId);
+        }
     }
 
     protected readonly String = String;

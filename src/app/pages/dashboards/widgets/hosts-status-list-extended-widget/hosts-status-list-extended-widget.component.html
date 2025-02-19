@@ -138,7 +138,8 @@
                                         @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                             <button cButton color="info" class="ripple" size="xs"
                                                     [cTooltip]="'Show more information'|transloco"
-                                                    cTooltipPlacement="bottom">
+                                                    cTooltipPlacement="bottom"
+                                                    (click)="toggleHostBrowserModal(host.Host.id)">
                                                 <fa-icon [icon]="['fas', 'plus']"></fa-icon>
                                             </button>
                                         }
@@ -304,7 +305,7 @@
                                                 <ul cDropdownMenu>
                                                     <li cDropdownItem
                                                         (click)="config.Hoststatus.state_older_than_unit = 'SECOND'">
-                                                        {{ t('minutes') }}
+                                                        {{ t('seconds') }}
                                                     </li>
                                                     <li cDropdownItem
                                                         (click)="config.Hoststatus.state_older_than_unit = 'MINUTE'">
