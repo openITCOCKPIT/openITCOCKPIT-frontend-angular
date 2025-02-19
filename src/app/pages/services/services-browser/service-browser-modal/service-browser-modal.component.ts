@@ -4,29 +4,28 @@ import {
     Component,
     EventEmitter,
     inject,
-    Input,
     OnDestroy,
     OnInit,
     Output
 } from '@angular/core';
 import {
-  AlertComponent,
-  BorderDirective,
-  ButtonCloseDirective,
-  ButtonGroupComponent,
-  ButtonToolbarComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  ColComponent,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective,
-  RowComponent,
-  TooltipDirective
+    AlertComponent,
+    BorderDirective,
+    ButtonCloseDirective,
+    ButtonGroupComponent,
+    ButtonToolbarComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    ColComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    RowComponent,
+    TooltipDirective
 } from '@coreui/angular';
 import {
     DeleteAcknowledgementsModalComponent
@@ -95,62 +94,64 @@ import {
 import {
     CancelServicedowntimeModalComponent
 } from '../../../downtimes/cancel-servicedowntime-modal/cancel-servicedowntime-modal.component';
+import { ServiceBrowserModalService } from './service-browser-modal.service';
 
 @Component({
     selector: 'oitc-service-browser-modal',
     imports: [
-    ButtonCloseDirective,
-    ButtonGroupComponent,
-    ButtonToolbarComponent,
-    ColComponent,
-    DeleteAcknowledgementsModalComponent,
-    DeleteAllModalComponent,
-    FaIconComponent,
-    HostsDisableFlapdetectionModalComponent,
-    HostsEnableFlapdetectionModalComponent,
-    HostsSendCustomNotificationModalComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    NgIf,
-    RowComponent,
-    ServiceAcknowledgeModalComponent,
-    ServiceMaintenanceModalComponent,
-    ServiceResetChecktimeModalComponent,
-    ServiceStatusNamePipe,
-    ServicesProcessCheckresultModalComponent,
-    TranslocoPipe,
-    XsButtonDirective,
-    TranslocoDirective,
-    NgClass,
-    BlockLoaderComponent,
-    TooltipDirective,
-    TrustAsHtmlPipe,
-    ServicesBrowserChartComponent,
-    AlertComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    PermissionDirective,
-    BorderDirective,
-    RouterLink,
-    CancelHostdowntimeModalComponent,
-    CancelServicedowntimeModalComponent,
-    AsyncPipe
-],
+        ButtonCloseDirective,
+        ButtonGroupComponent,
+        ButtonToolbarComponent,
+        ColComponent,
+        DeleteAcknowledgementsModalComponent,
+        DeleteAllModalComponent,
+        FaIconComponent,
+        HostsDisableFlapdetectionModalComponent,
+        HostsEnableFlapdetectionModalComponent,
+        HostsSendCustomNotificationModalComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        NgIf,
+        RowComponent,
+        ServiceAcknowledgeModalComponent,
+        ServiceMaintenanceModalComponent,
+        ServiceResetChecktimeModalComponent,
+        ServiceStatusNamePipe,
+        ServicesProcessCheckresultModalComponent,
+        TranslocoPipe,
+        XsButtonDirective,
+        TranslocoDirective,
+        NgClass,
+        BlockLoaderComponent,
+        TooltipDirective,
+        TrustAsHtmlPipe,
+        ServicesBrowserChartComponent,
+        AlertComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        PermissionDirective,
+        BorderDirective,
+        RouterLink,
+        CancelHostdowntimeModalComponent,
+        CancelServicedowntimeModalComponent,
+        AsyncPipe
+    ],
     templateUrl: './service-browser-modal.component.html',
     styleUrl: './service-browser-modal.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService }, // Inject the DowntimesService into the CancelAllModalComponent
-        { provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService } // Inject the DowntimesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService}, // Inject the DowntimesService into the CancelAllModalComponent
+        {provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService} // Inject the DowntimesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
 
-    @Input() public serviceId: number = 0;
+    public serviceId: number = 0;
+
     @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     public timezone!: TimezoneObject;
@@ -172,6 +173,7 @@ export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private readonly DowntimesService = inject(DowntimesService);
     private readonly AcknowledgementsService = inject(AcknowledgementsService);
+    private readonly ServiceBrowserModalService = inject(ServiceBrowserModalService);
     private cdr = inject(ChangeDetectorRef);
 
     public hideModal() {
@@ -192,14 +194,29 @@ export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.getUserTimezone();
 
-        this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
-            if (state.id === 'automapServiceDetailsModal') {
-                this.resetModal();
-                this.loadService();
-                this.cdr.markForCheck();
-            }
+        this.subscriptions.add(this.ServiceBrowserModalService.serviceId$.subscribe((serviceId) => {
+            this.serviceId = serviceId;
 
+            this.resetModal();
+            this.loadService();
+            this.cdr.markForCheck();
+
+            // open modal
+            this.modalService.toggle({
+                show: true,
+                id: 'automapServiceDetailsModal'
+
+            });
         }));
+
+
+        //this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
+        //    if (state.id === 'automapServiceDetailsModal') {
+        //        this.resetModal();
+        //        this.loadService();
+        //        this.cdr.markForCheck();
+        //    }
+        //}));
 
 
     }

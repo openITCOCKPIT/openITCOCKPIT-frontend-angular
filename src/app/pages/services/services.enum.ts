@@ -19,3 +19,10 @@ export enum ServiceBrowserTabs {
     CustomAlerts = 'CustomAlerts',
     SLA = 'SLA',
 }
+
+export enum ServiceStatusNames {
+    ok = 'ok',
+    warning = 'warning',
+    critical = 'critical',
+    unknown = 'unknown',
+}

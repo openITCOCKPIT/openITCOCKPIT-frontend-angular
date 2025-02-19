@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, input } from '@angular/core';
-import { WidgetGetForRender } from '../../dashboards.interface';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { WidgetTypes } from '../widgets.enum';
 import {
     CustomalertsWidgetComponent
@@ -24,6 +23,21 @@ import { TodayWidgetComponent } from '../today-widget/today-widget.component';
 import { NoticeWidgetComponent } from '../notice-widget/notice-widget.component';
 import { HostsTopAlertsWidgetComponent } from '../hosts-top-alerts-widget/hosts-top-alerts-widget.component';
 import { ServicesTopAlertsWidgetComponent } from '../services-top-alerts-widget/services-top-alerts-widget.component';
+import {
+    TacticalOverviewServicesWidgetComponent
+} from '../tactical-overview-services-widget/tactical-overview-services-widget.component';
+import { WebsiteWidgetComponent } from '../website-widget/website-widget.component';
+import {
+    HostStatusOverviewWidgetComponent
+} from '../host-status-overview-widget/host-status-overview-widget.component';
+import { BaseWidgetComponent } from '../base-widget/base-widget.component';
+import {
+    ServiceStatusOverviewWidgetComponent
+} from '../service-status-overview-widget/service-status-overview-widget.component';
+import { HostsStatusListWidgetComponent } from '../hosts-status-list-widget/hosts-status-list-widget.component';
+import {
+    HostsStatusListExtendedWidgetComponent
+} from '../hosts-status-list-extended-widget/hosts-status-list-extended-widget.component';
 
 @Component({
     selector: 'oitc-widget-container',
@@ -44,24 +58,21 @@ import { ServicesTopAlertsWidgetComponent } from '../services-top-alerts-widget/
         TodayWidgetComponent,
         NoticeWidgetComponent,
         HostsTopAlertsWidgetComponent,
-        ServicesTopAlertsWidgetComponent
+        ServicesTopAlertsWidgetComponent,
+        TacticalOverviewServicesWidgetComponent,
+        WebsiteWidgetComponent,
+        HostStatusOverviewWidgetComponent,
+        ServiceStatusOverviewWidgetComponent,
+        HostsStatusListWidgetComponent,
+        HostsStatusListExtendedWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WidgetContainerComponent {
+export class WidgetContainerComponent extends BaseWidgetComponent {
 
-    widgetInput = input<WidgetGetForRender>();
-    isReadonly = input<boolean>(false);
-
-    public widget?: WidgetGetForRender;
 
     protected readonly WidgetTypes = WidgetTypes;
 
-    constructor() {
-        effect(() => {
-            this.widget = this.widgetInput();
-        });
-    }
 }

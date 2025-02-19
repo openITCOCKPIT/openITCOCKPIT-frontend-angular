@@ -83,15 +83,17 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     }
 
     protected loadHostgroups = (search: string) => {
-        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({'filter[Containers.name]': search} as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+        let hostgroupIds:number[] = [];
+        if (this.config?.Hostgroup._ids) {
+            hostgroupIds = this.config.Hostgroup._ids;
+        }
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({
+            'filter[Containers.name]': search,
+            'selected[]': hostgroupIds
+        } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
             this.hostgroups = data;
             this.cdr.markForCheck();
         }));
-    }
-
-    public onFilterChange($event: any) {
-        this.cdr.markForCheck();
-        this.load();
     }
 
     public submit() {

@@ -74,6 +74,36 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-tactical-overview-hosts-widget>
         }
+        @case (WidgetTypes.TacticalOverviewServicesWidget) {
+            <oitc-tactical-overview-services-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-tactical-overview-services-widget>
+        }
+        @case (WidgetTypes.WebsiteWidget) {
+            <oitc-website-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-website-widget>
+        }
+        @case (WidgetTypes.HostStatusOverviewWidget) {
+            <oitc-host-status-overview-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-host-status-overview-widget>
+        }
+        @case (WidgetTypes.HostsStatusWidget) {
+            <oitc-hosts-status-list-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-hosts-status-list-widget>
+        }
+        @case (WidgetTypes.HostsStatusExtendedWidget) {
+            <oitc-hosts-status-list-extended-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-hosts-status-list-extended-widget>
+        }
+        @case (WidgetTypes.ServiceStatusOverviewWidget) {
+            <oitc-service-status-overview-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-service-status-overview-widget>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {
