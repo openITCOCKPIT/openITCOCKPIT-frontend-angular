@@ -89,18 +89,21 @@ export class HostsBarChartComponent implements OnDestroy {
                     data: this.barChartData().datasets['availability'].data
                 },
                 {
+                    color: '#00C851',
                     stack: 'true',
                     type: 'bar',
                     name: this.barChartData().datasets[0].label,
                     data: this.barChartData().datasets[0].data
                 },
                 {
+                    color: '#CC0000',
                     stack: 'true',
                     type: 'bar',
                     name: this.barChartData().datasets[1].label,
                     data: this.barChartData().datasets[1].data
                 },
                 {
+                    color: '#727b84',
                     stack: 'true',
                     type: 'bar',
                     name: this.barChartData().datasets[2].label,
