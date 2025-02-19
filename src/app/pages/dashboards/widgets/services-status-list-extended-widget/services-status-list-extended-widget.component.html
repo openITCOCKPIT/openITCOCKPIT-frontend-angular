@@ -93,6 +93,10 @@
                             <th mat-sort-header="Servicestatus.output">
                                 {{ t('Service output') }}
                             </th>
+
+                            <th class="no-sort text-center width-50">
+                                <fa-icon [icon]="['fas', 'plus-square']"></fa-icon>
+                            </th>
                         </tr>
                         </thead>
                         <tbody *ngIf="services">
@@ -139,6 +143,16 @@
                                     <td>
                                         <div class="word-break"
                                              [innerHTML]="String(service.Servicestatus.outputHtml) | trustAsHtml "></div>
+                                    </td>
+                                    <td>
+                                        @if (PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                            <button cButton color="info" class="ripple" size="xs"
+                                                    [cTooltip]="'Show more information'|transloco"
+                                                    cTooltipPlacement="bottom"
+                                                    (click)="toggleServiceBrowserModal(service.Service.id)">
+                                                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                            </button>
+                                        }
                                     </td>
                                 </tr>
                             }

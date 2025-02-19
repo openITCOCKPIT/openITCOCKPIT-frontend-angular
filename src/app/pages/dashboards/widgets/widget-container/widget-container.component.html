@@ -104,6 +104,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-services-status-list-widget>
         }
+        @case (WidgetTypes.ServicesStatusExtendedWidget) {
+            <oitc-services-status-list-extended-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-services-status-list-extended-widget>
+        }
         @case (WidgetTypes.ServiceStatusOverviewWidget) {
             <oitc-service-status-overview-widget
                 [widgetInput]="widget"

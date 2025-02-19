@@ -44,6 +44,9 @@ import {
 import {
     HostStatusOverviewExtendedWidget
 } from '../host-status-overview-extended-widget/host-status-overview-extended-widget.component';
+import {
+    ServicesStatusListExtendedWidgetComponent
+} from '../services-status-list-extended-widget/services-status-list-extended-widget.component';
 
 
 @Component({
@@ -73,7 +76,8 @@ import {
         HostsStatusListWidgetComponent,
         HostsStatusListExtendedWidgetComponent,
         ServicesStatusListWidgetComponent,
-        HostStatusOverviewExtendedWidget
+        HostStatusOverviewExtendedWidget,
+        ServicesStatusListExtendedWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',
