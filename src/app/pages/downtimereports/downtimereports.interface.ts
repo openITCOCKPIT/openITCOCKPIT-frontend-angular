@@ -1,3 +1,5 @@
+import { GenericValidationError } from '../../generic-responses';
+
 export interface DowntimeReportsRequest {
     evaluation_type: number
     reflection_state: number
@@ -30,6 +32,7 @@ export function getDefaultDowntimeReportsRequest(): DowntimeReportsRequest {
 // RESPONSE
 export interface DowntimeReportsResponse {
     downtimeReport: DowntimeReport
+    error?: GenericValidationError
     _csrfToken: string
 }
 

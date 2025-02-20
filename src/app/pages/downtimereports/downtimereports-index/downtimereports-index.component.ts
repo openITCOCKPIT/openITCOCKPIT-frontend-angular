@@ -12,6 +12,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
 import {
+    AlertComponent,
     BadgeComponent,
     CardBodyComponent,
     CardComponent,
@@ -58,6 +59,7 @@ import {
 } from '../components/host-availability-overview/host-availability-overview.component';
 import { HostsBarChartComponent } from '../../../components/charts/hosts-bar-chart/hosts-bar-chart.component';
 import { AvailabilityColorCalculationService } from '../AvailabilityColorCalculationService';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-downtimereports-index',
@@ -92,7 +94,8 @@ import { AvailabilityColorCalculationService } from '../AvailabilityColorCalcula
         HostAvailabilityOverviewComponent,
         NgForOf,
         PopoverDirective,
-        HostsBarChartComponent
+        HostsBarChartComponent,
+        AlertComponent
     ],
     templateUrl: './downtimereports-index.component.html',
     styleUrl: './downtimereports-index.component.css',
@@ -104,6 +107,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     private readonly DowntimereportsService: DowntimereportsService = inject(DowntimereportsService);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly TimeperiodsService: TimeperiodsService = inject(TimeperiodsService);
+    private readonly NotyService: NotyService = inject(NotyService);
 
     protected readonly DowntimereportsEnum = DowntimereportsEnum;
     protected readonly reportFormats: SelectKeyValue[] = [
@@ -164,7 +168,6 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     });
 
     public handleDatesSet(dateInfo: { startStr: string, endStr: string, start: Date, end: Date, view: any }) {
-        //console.log('handleDatesSet', dateInfo);
         this.calendarOptions.update(options => ({...options, events: this.events}));
     }
 
@@ -195,8 +198,14 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
         this.report = {} as DowntimeReportsResponse;
 
         this.subscriptions.add(this.DowntimereportsService.getIndex(this.post)
-            .subscribe((result: DowntimeReportsResponse) => {
-                this.report = result;
+            .subscribe((result) => {
+                if (!result.success) {
+                    this.NotyService.genericError();
+                    this.errors = result.data;
+                    this.cdr.markForCheck();
+                    return;
+                }
+                this.report = result.data;
 
                 this.applyColour();
 
@@ -240,7 +249,6 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     private downloadReport(): void {
         this.subscriptions.add(this.DowntimereportsService.generateReport(this.post)
             .subscribe((result: any) => {
-                console.warn(result);
             })
         );
     }
@@ -257,8 +265,6 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     }
 
     protected submit(): void {
-        console.log(this.post);
-
         if (this.post.report_format === 1) {
             this.downloadReport();
         }

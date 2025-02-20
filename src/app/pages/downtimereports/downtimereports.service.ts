@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
-import { DowntimeReportsRequest, DowntimeReportsResponse } from './downtimereports.interface';
+import { catchError, map, Observable, of } from 'rxjs';
+import { DowntimeReportsRequest } from './downtimereports.interface';
 import { formatDate } from '@angular/common';
+import { GenericIdResponse, GenericValidationError } from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -38,17 +39,29 @@ export class DowntimereportsService {
         );
     }
 
-    public getIndex(params: DowntimeReportsRequest): Observable<DowntimeReportsResponse> {
+    public getIndex(params: DowntimeReportsRequest): Observable<any> {
         let newParams = {...params};
         newParams.from_date = formatDate(new Date(params.from_date), 'dd.MM.y', 'en-US');
         newParams.to_date = formatDate(new Date(params.to_date), 'dd.MM.y', 'en-US');
 
 
-        return this.http.post<DowntimeReportsResponse>(`${this.proxyPath}/downtimereports/index.json`, newParams).pipe(
-            map((data: DowntimeReportsResponse): DowntimeReportsResponse => {
-                return data;
-            })
-        );
+        return this.http.post<any>(`${this.proxyPath}/downtimereports/index.json`, newParams)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
 }
