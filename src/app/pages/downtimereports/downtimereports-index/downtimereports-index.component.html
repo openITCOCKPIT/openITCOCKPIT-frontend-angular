@@ -115,7 +115,7 @@
                     <label cLabel for="post.timeperiod_id">
                         <ng-container *ngIf="post.timeperiod_id">
                             <a *oitcPermission="['timeperiods', 'edit']"
-                                  [routerLink]="['/', 'timeperiods', 'edit', post.timeperiod_id]">
+                               [routerLink]="['/', 'timeperiods', 'edit', post.timeperiod_id]">
                                 {{ t('Timeperiod') }}
                             </a>
                             <span *oitcPermission="['timeperiods', 'edit']; negate: true">

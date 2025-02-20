@@ -51,6 +51,7 @@ export interface OutageHost {
 export interface ServicesList {
     [key: string]: ServiceObject
 }
+
 export interface ServiceObject {
     Service: {
         id: number
@@ -91,9 +92,54 @@ export interface HostBarChartData {
 }
 
 export interface Datasets {
-    "0": DATATATA
-    "1": DATATATA
-    "2": DATATATA
+    "0": {
+        label: string
+        type: string
+        data: [
+            string,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number
+        ]
+    }
+    "1": {
+        label: string
+        type: string
+        data: [
+            string,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number
+        ]
+    }
+    "2": {
+        label: string
+        type: string
+        data: [
+            string,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number,
+            number
+        ]
+    }
     availability: Availability
 }
 
@@ -104,22 +150,6 @@ export interface Availability {
 }
 
 
-export interface DATATATA {
-    label: string
-    type: string
-    data: [
-        string,
-        number,
-        number,
-        number,
-        number,
-        number,
-        number,
-        number,
-        number,
-        number
-    ]
-}
 
 
 export interface Host {
@@ -162,7 +192,7 @@ export interface Downtimes {
             container_id: number
         }
     }[]
-    Services:{
+    Services: {
         author_name: string
         comment_data: string
         entry_time: string

@@ -1,14 +1,14 @@
 <ng-container *transloco="let t">
-
     <c-card class="mb-3">
-        <c-card-header [ngStyle]="{background: this.dynamicColour() ? this.AvailabilityColorCalculationService.getBackgroundColor(host().pieChartData.availability) : ''}">
+        <c-card-header
+                [ngStyle]="{background: this.dynamicColour() ? this.AvailabilityColorCalculationService.getBackgroundColor(host().pieChartData.availability) : ''}">
             <h5 cCardTitle [ngStyle]="{color: this.dynamicColour() ? 'white' : ''}">
                 <i class="fa fa-desktop"></i>
                 <span *oitcPermission="['hosts', 'browser']; negate: true">
                     {{ host().Host.name }}
                 </span>
                 <span *oitcPermission="['hosts', 'browser']"
-                   [routerLink]="['/', 'hosts', 'browser', host().Host.id]">
+                      [routerLink]="['/', 'hosts', 'browser', host().Host.id]">
                     {{ host().Host.name }}
                 </span>
             </h5>
@@ -23,7 +23,7 @@
                             [chartData]="[
                                 {name: 'UP',value: host().pieChartData.widgetOverview[0].percent},
                                 {name: 'DOWN',value: host().pieChartData.widgetOverview[1].percent},
-                                {name: 'UNKNOWN',value: host().pieChartData.widgetOverview[2].percent}]" />
+                                {name: 'UNKNOWN',value: host().pieChartData.widgetOverview[2].percent}]"/>
                 </c-col>
                 <c-col md="11">
                     <c-row *ngIf="host().Host.description">
@@ -58,7 +58,8 @@
                                 ({{ host().pieChartData.widgetOverview[1].human }})
                             </strong>
                         </c-col>
-                        <c-col md="3" class="bg-unreachable shadow-unreachable downtime-report-state-overview font-sm padding-5">
+                        <c-col md="3"
+                               class="bg-unreachable shadow-unreachable downtime-report-state-overview font-sm padding-5">
                             <strong>
                                 {{ host().pieChartData.widgetOverview[2].percent }} %
                                 ({{ host().pieChartData.widgetOverview[2].human }})
@@ -77,5 +78,4 @@
             </c-row>
         </c-card-body>
     </c-card>
-
 </ng-container>

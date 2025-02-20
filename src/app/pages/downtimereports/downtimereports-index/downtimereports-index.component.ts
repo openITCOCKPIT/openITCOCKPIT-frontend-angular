@@ -227,12 +227,14 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     public formatDate(timestamp: number): string {
         const date = new Date(timestamp);
         const formattedDate = date.toLocaleDateString('de-DE');
-        const formattedTime = date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+        const formattedTime = date.toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
         return `${formattedDate} - ${formattedTime}`;
     }
+
     public formatTime(timestamp: number): string {
         return new Date(timestamp).getHours() + ":" + new Date(timestamp).getMinutes();
     }
+
     protected submit(): void {
         console.log(this.post);
 
