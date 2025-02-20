@@ -89,6 +89,7 @@ export class HostsBarChartComponent implements OnDestroy {
                     data: this.barChartData().datasets['availability'].data
                 },
                 {
+                    showBackground: true,
                     color: '#00C851',
                     stack: 'true',
                     type: 'bar',
@@ -96,6 +97,7 @@ export class HostsBarChartComponent implements OnDestroy {
                     data: this.barChartData().datasets[0].data
                 },
                 {
+                    showBackground: true,
                     color: '#CC0000',
                     stack: 'true',
                     type: 'bar',
@@ -103,6 +105,7 @@ export class HostsBarChartComponent implements OnDestroy {
                     data: this.barChartData().datasets[1].data
                 },
                 {
+                    showBackground: true,
                     color: '#727b84',
                     stack: 'true',
                     type: 'bar',
@@ -124,6 +127,7 @@ export class HostsBarChartComponent implements OnDestroy {
             },
             xAxis: {
                 type: 'category',
+                data: this.barChartData().labels,
                 min: 0,
                 max: 10
             }

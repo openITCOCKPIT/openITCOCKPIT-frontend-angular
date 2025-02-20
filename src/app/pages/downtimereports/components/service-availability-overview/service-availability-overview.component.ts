@@ -22,10 +22,8 @@ import { HostPieEchartComponent } from '../../../../components/charts/host-pie-e
         PermissionDirective,
         RouterLink,
         RowComponent,
-        ServicePieChartComponent,
         NgStyle,
         ServicePieEchartComponent,
-        HostPieEchartComponent
     ],
     templateUrl: './service-availability-overview.component.html',
     styleUrl: './service-availability-overview.component.css',
