@@ -135,25 +135,4 @@ export class HostsBarChartComponent implements OnDestroy {
         console.warn('chartOption', this.chartOption);
         this.cdr.markForCheck();
     }
-
-    private getLegend(): any {
-        if (!this.showLegend()) {
-            return undefined;
-        }
-        return {
-            orient: 'vertical',
-            left: 'left'
-        };
-    }
-
-    private getTitle(): any {
-        if (this.title().length === 0) {
-            return undefined;
-        }
-        return {
-            text: this.TranslocoService.translate(this.title()),
-            //subtext: 'Fake Data',
-            left: 'center'
-        }
-    }
 }
