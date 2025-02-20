@@ -9,6 +9,7 @@ import {
     MapDetailsRoot,
     MapeditorsEditRoot,
     MapeditorSettingsPost,
+    MapeditorsViewRoot,
     MapgadgetPost,
     MapiconPost,
     MapItemMultiPost,
@@ -458,6 +459,15 @@ export class MapeditorsService {
     public loadMapDetails(id: number): Observable<MapDetailsRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<any>(`${proxyPath}/map_module/mapeditors/mapDetails/${id}.json?angular=true`, {}).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadMapView(id: number): Observable<MapeditorsViewRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/map_module/mapeditors/view/${id}.json?angular=true`, {}).pipe(
             map(data => {
                 return data;
             })

@@ -11,13 +11,14 @@ import {
 import { NgClass, NgIf } from '@angular/common';
 import { Helplines } from './map-canvas.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-map-canvas',
     standalone: true,
     imports: [
         NgClass,
-        NgIf
+        NgIf,
     ],
     templateUrl: './map-canvas.component.html',
     styleUrl: './map-canvas.component.css',
@@ -27,6 +28,7 @@ export class MapCanvasComponent {
     @ViewChild('mapCanvasContainer', {static: true}) canvasContainerRef!: ElementRef<HTMLDivElement>;
 
     private cdr = inject(ChangeDetectorRef);
+    private readonly TranslocoService = inject(TranslocoService);
 
     public helplines = input<Helplines>({enabled: true, size: 15});
     public background = input<string | null>('');
@@ -35,6 +37,8 @@ export class MapCanvasComponent {
         id: number,
         type: MapItemType
     }>();
+
+    protected invalidBackgroundMessage: string = this.TranslocoService.translate('{0} Map background image is not available!!!', {0: '⚠'});
 
     constructor() {
     }

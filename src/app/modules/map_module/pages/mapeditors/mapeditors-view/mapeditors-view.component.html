@@ -79,17 +79,12 @@
 
         </c-card-header>
         <c-card-body>
-
-            <h1>Hello World</h1>
+            
             @if (map) {
                 <!-- start map-editor -->
-                <div id="map-editor" class="map-editor" #mapEditor>
-                    <!--<div class="widget-body"
-                         style="overflow: auto;min-height:600px;position:relative;"
-                         mapeditor-view=""
-                         map-id="map.Map.id"
-                         ng-if="map"
-                    ></div>-->
+                <div id="map-editor" class="map-editor">
+                    <oitc-map-view class="widget-body" [mapId]="map.Map.id" *ngIf="map">
+                    </oitc-map-view>
                 </div>
                 <!-- end map-editor -->
             }

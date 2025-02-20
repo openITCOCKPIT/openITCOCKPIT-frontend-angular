@@ -29,6 +29,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 import { DOCUMENT, NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { parseInt } from 'lodash';
+import { MapViewComponent } from '../../../components/map-view/map-view.component';
 
 @Component({
     selector: 'oitc-mapeditors-view',
@@ -46,6 +47,7 @@ import { parseInt } from 'lodash';
         TranslocoDirective,
         NgIf,
         XsButtonDirective,
+        MapViewComponent
     ],
     templateUrl: './mapeditors-view.component.html',
     styleUrl: './mapeditors-view.component.css',

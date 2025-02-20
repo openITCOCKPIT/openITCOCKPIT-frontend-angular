@@ -329,3 +329,38 @@ export interface MapDetailsRoot {
 export interface MapeditorsViewMap {
     Map: Map
 }
+
+/********************************
+ * Map View Component
+ ********************************/
+
+export interface MapeditorsViewRoot {
+    map: MapRoot
+    ACL: Acl
+    _csrfToken: string
+}
+
+export interface Acl {
+    hosts: Hosts
+    services: Services
+    hostgroups: Hostgroups
+    servicegroups: Servicegroups
+}
+
+export interface Hosts {
+    browser: boolean
+    index: boolean
+}
+
+export interface Services {
+    browser: boolean
+    index: boolean
+}
+
+export interface Hostgroups {
+    extended: boolean
+}
+
+export interface Servicegroups {
+    extended: boolean
+}
