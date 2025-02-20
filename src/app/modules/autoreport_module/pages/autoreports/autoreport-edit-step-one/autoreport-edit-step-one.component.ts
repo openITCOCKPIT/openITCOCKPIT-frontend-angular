@@ -34,7 +34,7 @@ import {
 } from '../autoreports.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
+import { NgIf, formatDate } from '@angular/common';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
@@ -175,7 +175,7 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
 
     public onStartChange($event: any) {
         if($event === 0){
-            this.post.Autoreport.report_start_date = '';
+            this.post.Autoreport.report_start_date = null;
             this.cdr.markForCheck();
         }
     }
@@ -222,6 +222,12 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.AutoreportsService.getEditStepOne(this.id).subscribe((result) => {
 
             this.post.Autoreport = result;
+
+            if(this.post.Autoreport.report_start_date !== null){
+                this.post.Autoreport.report_start_date = formatDate(this.post.Autoreport.report_start_date, 'yyyy-dd-MM', 'en-US');
+            }
+
+
             //think itis an issue that calendar_id comes with 0 an d not null whenn not set
             if(this.post.Autoreport.calendar_id === 0){
                 this.post.Autoreport.calendar_id = null;
@@ -248,6 +254,9 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
 
     public submitStepOne() {
         this.errors = null;
+        if(this.post.Autoreport.report_start_date !== null){
+            this.post.Autoreport.report_start_date = formatDate(this.post.Autoreport.report_start_date, 'dd.MM.y', 'en-US');
+        }
         this.subscriptions.add(this.AutoreportsService.setEditStepOne(this.id, this.post).subscribe((result: GenericResponseWrapper): void => {
                     if (result.success) {
                         this.errors = null;

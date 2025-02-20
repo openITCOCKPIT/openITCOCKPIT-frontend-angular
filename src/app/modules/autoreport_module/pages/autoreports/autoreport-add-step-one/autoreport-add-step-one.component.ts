@@ -34,7 +34,7 @@ import {
 } from '../autoreports.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
+import { formatDate, NgIf } from '@angular/common';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
@@ -179,7 +179,7 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
 
     public onStartChange($event: any) {
         if($event === 0){
-            this.post.Autoreport.report_start_date = '';
+            this.post.Autoreport.report_start_date = null;
             this.cdr.markForCheck();
         }
     }
@@ -217,6 +217,9 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
 
     public submitStepOne() {
         this.errors = null;
+        if(this.post.Autoreport.report_start_date !== null){
+            this.post.Autoreport.report_start_date = formatDate(this.post.Autoreport.report_start_date, 'dd.MM.y', 'en-US');
+        }
         this.subscriptions.add(this.AutoreportsService.setAddStepOne(this.post).subscribe((result: GenericResponseWrapper): void => {
                 if (result.success) {
                     this.errors = null;

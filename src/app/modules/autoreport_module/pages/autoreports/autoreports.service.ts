@@ -17,6 +17,7 @@ import {
 } from './autoreports.interface';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { InstantreportGenerateResponse } from '../../../../pages/instantreports/instantreports.interface';
 
 
 @Injectable({
@@ -252,7 +253,28 @@ export class AutoreportsService {
                 return data
             })
         );
+    }
 
+    public generateHtmlReport(post: any):Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/autoreport_module/autoreports/generate.json`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+
+            );
     }
 
 }

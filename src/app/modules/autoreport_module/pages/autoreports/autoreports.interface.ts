@@ -47,7 +47,7 @@ export interface AutoreportPostObject {
     name: string | null,
     description: string | null,
     use_start_time: number,
-    report_start_date: string,
+    report_start_date: string | null,
     timeperiod_id: number | null,
     report_interval: string| null,
     report_send_interval: string | null,
@@ -75,7 +75,7 @@ export function getDefaultPost(): AutoreportPost {
             name: '',
             description: null,
             use_start_time: 0,
-            report_start_date: '',
+            report_start_date: null,
             timeperiod_id: null,
             report_interval: null,
             report_send_interval: null,
@@ -262,3 +262,11 @@ export interface Timerange {
     id?: number | null,
     weekday?: string
 }
+
+export interface ReportError {
+    error: boolean
+    message: string
+    objects: any[]
+}
+
+

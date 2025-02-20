@@ -301,3 +301,15 @@ div[class*='autoreport_status_'] {
 .bg-color-lightGray-with-opacity{
     background-color: #EEEEEE22 !important;
 }
+/*
+.img-fluid {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain
+}
+
+ */
+
+.img-fluid {
+    max-width: 100%;
+    height: auto; }
