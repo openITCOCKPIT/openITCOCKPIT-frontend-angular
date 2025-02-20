@@ -87,8 +87,7 @@
                                  optionValue="id"
                                  optionLabel="name"
                                  [(ngModel)]="post.Autoreport.id"
-                                 [options]="autoreports"
-                                 (onChange)="onReportChange()">
+                                 [options]="autoreports">
                     </oitc-select>
                 </c-row>
 
@@ -103,8 +102,7 @@
                         optionValue="key"
                         optionLabel="value"
                         [(ngModel)]="post.Autoreport.format"
-                        [options]="formatOptions"
-                        (onChange)="onFormatChange()">
+                        [options]="formatOptions">
                     </oitc-select>
                 </c-row>
                 <c-row class="mb-3">
@@ -139,6 +137,7 @@
                 <c-row class="text-end">
                     <c-col>
                         <button cButton class="ripple" color="primary" type="submit">
+                            <fa-icon [icon]="['fas', 'spinner']" [hidden]="!isGenerating" animation="spin"></fa-icon>
                             {{ t('Generate report') }}
                         </button>
                     </c-col>
@@ -579,13 +578,13 @@
                                     <c-col lg="12" xs="12" md="9" class="offset-md-3">
                                         <c-row
                                             *ngFor="let downtime of report.autoreport_data.hosts[host].Host.frontend.downtimes">
-                                            <c-col xs="12" md="4">
+                                            <c-col xs="12" md="3">
                                                 {{downtime.start}} - {{downtime.end}}
                                             </c-col>
-                                            <c-col xs="12" md="3">
+                                            <c-col xs="12" md="2">
                                                 {{downtime.duration_str}}
                                             </c-col>
-                                            <c-col xs="12" md="5">
+                                            <c-col xs="12" md="4">
                                                 {{downtime.comment_data}}
                                             </c-col>
                                         </c-row>
@@ -733,7 +732,7 @@
                                         <c-col lg="12" xs="12" md="9" class="offset-md-3">
                                             <c-row>
                                                 <c-col xs="12" md="8" class="report-font-weight-500">
-                                                    <i class="far fa-clock"></i>
+                                                    <fa-icon [icon]="['far', 'clock']"></fa-icon>
                                                     <span
                                                         *ngIf="report.autoreport_data.hosts[host].Services[service].Service.outage_duration !== null">
                                                         t{{('Service outage in downtime exceeding the permitted limit')}}
@@ -761,10 +760,10 @@
                                 <c-col lg="12"
                                      *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_DOWNTIMES.value) &&
                                     report.autoreport_data.hosts[host].Services[service].Service.frontend.downtimes.length > 0">
-                                    <c-row class="padt-2 pb-2">
-                                        <c-col lg="12" xs="12" md="9" class="offset-md-3">
+                                    <c-row class="pb-2">
+                                        <c-col lg="12" xs="12" md="9">
                                             <c-row>
-                                                <c-col xs="12" md="8" class="report-font-weight-500">
+                                                <c-col lg="12" xs="12" md="9" class="report-font-weight-500">
                                                     <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                                                     {{t('Service downtimes')}}
                                                 </c-col>
@@ -773,15 +772,15 @@
                                         <c-col lg="12" xs="12" md="9" class="offset-md-3">
                                             <c-row
                                                  *ngFor="let downtime of report.autoreport_data.hosts[host].Services[service].Service.frontend.downtimes">
-                                                <c-col xs="12" md="4">
+                                                <c-col xs="12" md="3">
                                                     {{downtime.start}} - {{downtime.end}}
                                                 </c-col>
-                                                <c-col xs="12" md="3">
+                                                <c-col xs="12" md="2">
                                                     {{downtime.duration_str}}
                                                 </c-col>
-                                                <div class="col-xs-12 col-md-5">
+                                                <c-col xs="12" md="4">
                                                     {{downtime.comment_data}}
-                                                </div>
+                                                </c-col>
                                             </c-row>
                                         </c-col>
                                     </c-row>

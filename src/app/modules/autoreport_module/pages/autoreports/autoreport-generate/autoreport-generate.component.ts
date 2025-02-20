@@ -98,12 +98,12 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
     public id: number = 0;
     public tabName: string = 'reportConfig';
     public reportWasGenerated:boolean = false;
-    public isGenerating: boolean = true;
+    public isGenerating: boolean = false;
     public errors: GenericValidationError | null = null;
     public report_error: ReportError | null = null;
 
     public autoreports!: AutoreportIndex[];
-    public report:any;
+    public report:any = null;
     public reportHostIds: number[] = [];
     public logoUrl:string = '';
     private now = DateTime.now();
@@ -138,22 +138,16 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
     }
 
     public loadAutoreports(): void {
-
         this.subscriptions.add(this.AutoreportsService.getAutreportsGenerateIndex().subscribe(data => {
             this.autoreports = data.autoreports;
             this.cdr.markForCheck();
         }));
     }
 
-    public onReportChange() {
-
-    }
-    public onFormatChange() {
-
-    }
-
     public submitReport() {
         this.report_error = null;
+        this.report = null;
+        this.cdr.markForCheck();
         this.post.Autoreport.from_date = formatDate(this.from, 'dd.MM.y', 'en-US');
         this.post.Autoreport.to_date = formatDate(this.to, 'dd.MM.y', 'en-US');
 
@@ -167,22 +161,23 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.AutoreportsService.generateHtmlReport(this.post).subscribe((result: GenericResponseWrapper): void => {
                         if (result.success) {
                             this.errors = null;
-                            this.tabName = 'showReport';
+
                             this.reportWasGenerated = true;
                             this.isGenerating = false;
                             this.report = result.data.report;
                             this.logoUrl = result.data.logoUrl;
-
+                            this.reportHostIds = [];
                             for(var hostIndex in this.report.autoreport.hosts){
                                 this.reportHostIds.push(this.report.autoreport.hosts[hostIndex].id);
                             }
                             this.notyService.genericSuccess(this.TranslocoService.translate('Report created successfully'));
+                            this.cdr.markForCheck();
+                            this.tabName = 'showReport';
 
 
                         } else {
                             this.isGenerating = false;
                             this.notyService.genericError(this.TranslocoService.translate('Report could not be created'));
-                            console.log(result.data)
                             if (result.data.hasOwnProperty('error')) {
                                 this.errors = result.data.error;
                                 this.cdr.markForCheck();
@@ -192,12 +187,8 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
                                 this.report_error = result.data.report_error;
                                 this.cdr.markForCheck();
                             }
-
-                           /* this.errors = result.data as GenericValidationError;
-                            this.notyService.genericError(); */
                         }
 
-                        this.cdr.markForCheck();
                     }
                 )
             );
