@@ -1,4 +1,4 @@
-import { TimeperiodEnity } from '../../../../pages/timeperiods/timeperiods.interface';
+import { TimeperiodEnity } from '../../../pages/timeperiods/timeperiods.interface';
 
 export interface SlaSummaryWidgetResponse {
     sla: SlaSummary
@@ -11,14 +11,19 @@ export interface SlaSummaryWidgetResponse {
     _csrfToken: any
 }
 
-export interface SlaConfig {
-    Sla: {
-        id: number
+export interface SlaWidgetResponse {
+    sla: SlaSimpleWidget
+    config: SlaConfig
+    ACL: {
+        sla: {
+            viewDetails: boolean
+        }
     }
+    _csrfToken: any
 }
 
 export interface SlaSummary {
-    id: string|number
+    id: string
     name: string
     description: string
     container_id: string
@@ -41,11 +46,41 @@ export interface SlaSummary {
     servicesCount: number
 }
 
-export interface SlaHostsAndServicesOverview {
-    [key: string]: SlaHostsAndServices
+export interface SlaSimpleWidget {
+    id: string
+    name: string
+    description: string
+    container_id: string
+    timeperiod_id: string
+    start_date: any
+    evaluation_interval: string
+    consider_downtimes: string
+    hard_state_only: string
+    minimal_availability: string
+    warning_threshold: string
+    report_send_interval: string
+    report_format: string
+    report_evaluation: string
+    last_send_date: string
+    created: string
+    modified: string
+    timeperiod: TimeperiodEnity
+    hostsAndServicesOverview: SlaHostsAndServices
 }
 
-export interface SlaHostsAndServices {
+
+export interface SlaConfig {
+    Sla: {
+        id: number
+    }
+}
+
+export interface SlaHostsAndServicesOverview {
+    [key: string]: SlaHostsAndServicesWithContainer
+}
+
+
+export interface SlaHostsAndServicesWithContainer {
     container: {
         name: string
         full_path: string
@@ -54,9 +89,15 @@ export interface SlaHostsAndServices {
     services: SlaServicesOverview
 }
 
+export interface SlaHostsAndServices {
+    hosts: SlaHostsOverview
+    services: SlaServicesOverview
+}
+
 export interface SlaHostsOverview {
     totalHosts: number
     failed: ObjectsSummary
+    warning: ObjectsSummary
     passed: ObjectsSummary
     not_calculated: ObjectsSummary
 }
@@ -64,6 +105,7 @@ export interface SlaHostsOverview {
 export interface SlaServicesOverview {
     totalServices: number
     failed: ObjectsSummary
+    warning: ObjectsSummary
     passed: ObjectsSummary
     not_calculated: ObjectsSummary
 }

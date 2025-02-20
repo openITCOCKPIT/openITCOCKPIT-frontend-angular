@@ -146,6 +146,10 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-sla-summary-widget>
         }
+        @case (WidgetTypes.SlaWidget) {
+            <oitc-sla-widget [widgetInput]="widget" [isReadonly]="isReadonly()">
+            </oitc-sla-widget>
+        }
 
         <!-- Fallback Widget -->
         @default {

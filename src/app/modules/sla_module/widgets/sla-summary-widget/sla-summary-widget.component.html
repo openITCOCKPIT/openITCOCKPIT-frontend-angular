@@ -43,7 +43,7 @@
                                     {{ t('Number of services') }}
                                 </c-col>
                             </c-row>
-                            <c-row class="fieldset-legend-border-bottom border-1 text-end bold">
+                            <c-row class="fieldset-legend-border-bottom text-end bold">
                                 <c-col [xs]="12" [md]="4" [lg]="4">
                                     {{ t('Total') }}
                                 </c-col>
@@ -206,7 +206,7 @@
                     <!-- Config area -->
                     @if (widget) {
                         <div class="mb-3">
-                            <label cLabel [for]="'grafana_userdashboard_id_'+widget.id">
+                            <label cLabel [for]="'config_sla_id_'+widget.id">
                                 {{ t('Sla') }}
                             </label>
 
