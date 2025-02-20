@@ -45,7 +45,6 @@ import { Subscription } from 'rxjs';
 import { TimeperiodsService } from '../../timeperiods/timeperiods.service';
 import { TimeperiodIndex, TimeperiodsIndexParams } from '../../timeperiods/timeperiods.interface';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { DowntimereportsService } from '../downtimereports.service';
 import { CalendarEvent } from '../../calendars/calendars.interface';
 import { FullCalendarModule } from '@fullcalendar/angular';
@@ -58,6 +57,7 @@ import {
     HostAvailabilityOverviewComponent
 } from '../components/host-availability-overview/host-availability-overview.component';
 import { HostsBarChartComponent } from '../../../components/charts/hosts-bar-chart/hosts-bar-chart.component';
+import { AvailabilityColorCalculationService } from '../AvailabilityColorCalculationService';
 
 @Component({
     selector: 'oitc-downtimereports-index',
@@ -86,7 +86,6 @@ import { HostsBarChartComponent } from '../../../components/charts/hosts-bar-cha
         FormCheckInputDirective,
         FormCheckLabelDirective,
         XsButtonDirective,
-        TrueFalseDirective,
         BadgeComponent,
         TranslocoPipe,
         FullCalendarModule,
@@ -170,17 +169,39 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     }
 
     protected isGenerating: boolean = false;
+    private readonly AvailabilityColorCalculationService: AvailabilityColorCalculationService = inject(AvailabilityColorCalculationService);
 
+    private applyColour(): void {
+        this.report.downtimeReport.hostsWithOutages.forEach((outageHostElement, outageHostIndex) => {
+            outageHostElement.hosts.forEach((hostElement, hostIndex) => {
+                // Put colour for all services.
+                Object.keys(hostElement.Services ?? {}).forEach((serviceKey) => {
+                    if (hostElement.Services) {
+                        const service = hostElement.Services[serviceKey];
+                        if (service && service.pieChartData && service.pieChartData.availability) {
+                            service.pieChartData.background = this.AvailabilityColorCalculationService.getBackgroundColor(service.pieChartData.availability);
+                        }
+                    }
+                });
+
+                // Put colour for the host.
+                hostElement.pieChartData.background = this.AvailabilityColorCalculationService.getBackgroundColor(hostElement.pieChartData.availability);
+            });
+
+        });
+    }
     private fetchReport(): void {
 
         this.report = {} as DowntimeReportsResponse;
-
 
         this.subscriptions.add(this.DowntimereportsService.getIndex(this.post)
             .subscribe((result: DowntimeReportsResponse) => {
                 this.report = result;
 
-                this.report.downtimeReport?.downtimes.Hosts.forEach((element) => {
+                this.applyColour();
+
+                this.report.downtimeReport?.downtimes.Hosts.forEach((element, index) => {
+
                     this.events.push({
                         default_holiday: false,
                         className: '',

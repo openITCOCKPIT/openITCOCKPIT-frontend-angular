@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
     <c-card class="mb-3">
         <c-card-header
-                [ngStyle]="{background: this.dynamicColour() ? this.AvailabilityColorCalculationService.getBackgroundColor(host().pieChartData.availability) : ''}">
+                [ngStyle]="{background: this.dynamicColour() ? host().pieChartData.background : ''}">
             <h5 cCardTitle [ngStyle]="{color: this.dynamicColour() ? 'white' : ''}">
                 <i class="fa fa-desktop"></i>
                 <span *oitcPermission="['hosts', 'browser']; negate: true">

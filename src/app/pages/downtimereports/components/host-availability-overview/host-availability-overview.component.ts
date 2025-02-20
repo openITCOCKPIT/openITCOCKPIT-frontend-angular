@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -16,7 +16,6 @@ import {
     ServiceAvailabilityOverviewComponent
 } from '../service-availability-overview/service-availability-overview.component';
 import { HostPieEchartComponent } from '../../../../components/charts/host-pie-echart/host-pie-echart.component';
-import { AvailabilityColorCalculationService } from '../../AvailabilityColorCalculationService';
 
 @Component({
     selector: 'oitc-host-availability-overview',
@@ -42,7 +41,6 @@ import { AvailabilityColorCalculationService } from '../../AvailabilityColorCalc
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostAvailabilityOverviewComponent {
-    protected readonly AvailabilityColorCalculationService: AvailabilityColorCalculationService = inject(AvailabilityColorCalculationService);
 
     public host = input.required<OutageHost>();
 

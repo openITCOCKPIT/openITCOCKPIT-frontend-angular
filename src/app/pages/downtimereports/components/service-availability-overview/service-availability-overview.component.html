@@ -13,22 +13,24 @@
         </c-col>
         <c-col md="8">
             <c-row class="downtime-report-state-overview"
-                   [ngStyle]="{background: this.dynamicColour() ? this.AvailabilityColorCalculationService.getBackgroundColor(service().pieChartData.availability) : ''}"
+                   [ngStyle]="{background: this.dynamicColour() ? service().pieChartData.background : ''}"
                    title="{{(service().Service.name === null)?service().Servicetemplate.name:service().Service.name}}">
                 <c-col md="12" [ngStyle]="{color: this.dynamicColour() ? 'white' : ''}">
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    <span *oitcPermission="['services', 'browser']; negate: true">
-                        {{ ( service().Service.name === null ) ? service().Servicetemplate.name : service().Service.name }}
-                    </span>
-                    <span *oitcPermission="['services', 'browser']"
-                          [routerLink]="['/', 'services', 'browser', service().Service.id]">
-                        {{ ( service().Service.name === null ) ? service().Servicetemplate.name : service().Service.name }}
-                    </span>
+                    <h5 class="ellipsis">
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span style="text-overflow: ellipsis;" *oitcPermission="['services', 'browser']; negate: true">
+                            {{ ( service().Service.name === null ) ? service().Servicetemplate.name : service().Service.name }}
+                        </span>
+                        <span style="text-overflow: ellipsis;" *oitcPermission="['services', 'browser']"
+                              [routerLink]="['/', 'services', 'browser', service().Service.id]">
+                            {{ ( service().Service.name === null ) ? service().Servicetemplate.name : service().Service.name }}
+                        </span>
+                    </h5>
                 </c-col>
             </c-row>
 
             <c-row class="downtime-report-state-overview">
-                <c-col md="12">
+                <c-col class="ellipsis" md="12">
                     <i class="fa-solid fa-pen-to-square"> </i>
                     {{ service().Servicetemplate.template_name }}
                 </c-col>

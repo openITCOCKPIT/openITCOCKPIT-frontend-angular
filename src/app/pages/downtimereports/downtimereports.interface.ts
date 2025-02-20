@@ -74,6 +74,7 @@ export interface ServiceObject {
         labels: string[]
         data: string[]
         availability: number
+        background?: string,
         widgetOverview: {
             percent: number
             human: string
@@ -163,6 +164,7 @@ export interface Host {
 export interface PieChartData {
     labels: string[]
     data: string[]
+    background?: string
     availability: number
     widgetOverview: WidgetOverview[]
 }
