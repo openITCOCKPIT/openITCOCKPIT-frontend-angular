@@ -60,6 +60,9 @@ import {
     SlaSummaryWidgetComponent
 } from '../../../../modules/sla_module/widgets/sla-summary-widget/sla-summary-widget.component';
 import { SlaWidgetComponent } from '../../../../modules/sla_module/widgets/sla-widget/sla-widget.component';
+import {
+    SlaCalendarWidgetComponent
+} from '../../../../modules/sla_module/widgets/sla-calendar-widget/sla-calendar-widget.component';
 
 
 
@@ -101,7 +104,8 @@ import { SlaWidgetComponent } from '../../../../modules/sla_module/widgets/sla-w
         SlaSummaryWidgetComponent,
         SlaSummaryWidgetComponent,
         SlaSummaryWidgetComponent,
-        SlaWidgetComponent
+        SlaWidgetComponent,
+        SlaCalendarWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',
