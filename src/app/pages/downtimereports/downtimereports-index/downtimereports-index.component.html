@@ -43,7 +43,7 @@
                         {{ t('Generator') }}
                     </button>
                 </c-nav-item>
-                <c-nav-item *ngIf="report">
+                <c-nav-item *ngIf="report.downtimeReport">
                     <button
                             class="nav-link"
                             [ngClass]="{'active': selectedTab === DowntimereportsEnum.Calendar}"
@@ -52,7 +52,7 @@
                         {{ t('Calendar view') }}
                     </button>
                 </c-nav-item>
-                <c-nav-item *ngIf="report">
+                <c-nav-item *ngIf="report.downtimeReport">
                     <button
                             class="nav-link"
                             [ngClass]="{'active': selectedTab === DowntimereportsEnum.PieChart}"
@@ -200,7 +200,6 @@
                                name="dynamicColour"
                                id="dynamicColour"
                                type="checkbox"
-                               trueFalseValue
                                [(ngModel)]="dynamicColour"/>
                         <label cFormCheckLabel for="dynamicColour">
                             {{ t('Yes') }}
