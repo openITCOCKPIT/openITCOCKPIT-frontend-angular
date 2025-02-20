@@ -66,9 +66,6 @@ export class SlaSummaryWidgetComponent extends BaseWidgetComponent implements On
         });
     }
 
-    public override ngOnDestroy() {
-        super.ngOnDestroy();
-    }
 
     public override load() {
         if (this.widget) {
@@ -82,6 +79,10 @@ export class SlaSummaryWidgetComponent extends BaseWidgetComponent implements On
                 })
             );
         }
+    }
+
+    public override ngOnDestroy() {
+        super.ngOnDestroy();
     }
 
     public ngAfterViewInit() {
