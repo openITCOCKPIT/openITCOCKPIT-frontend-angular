@@ -141,6 +141,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-grafana-userdefined-widget>
         }
+        @case (WidgetTypes.SlaSummaryWidget) {
+            <oitc-sla-summary-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-sla-summary-widget>
+        }
 
         <!-- Fallback Widget -->
         @default {
