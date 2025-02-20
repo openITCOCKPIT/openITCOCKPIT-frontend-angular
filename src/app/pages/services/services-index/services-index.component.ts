@@ -298,9 +298,19 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
                 this.filter.Hosts.name = hostname;
             }
 
+            let name_regex = params['name_regex'];
+            if (name_regex === 'true') {
+                this.filter.Hosts.name_regex = true;
+            }
+
             let servicename = params['servicename'] || undefined;
             if (servicename) {
                 this.filter.Services.name = servicename;
+            }
+
+            let servicename_regex = params['servicename_regex'];
+            if (servicename_regex === 'true') {
+                this.filter.Services.name_regex = true;
             }
 
             let servicedescription = params['servicedescription'] || undefined;

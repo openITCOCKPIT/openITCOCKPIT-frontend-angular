@@ -7,10 +7,20 @@ import {
     signal,
     ViewChild
 } from '@angular/core';
+import { BaseWidgetComponent } from '../base-widget/base-widget.component';
+import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { ServicesIndexRoot } from '../../../services/services.interface';
+import { ServicesStatusListWidgetService } from './services-status-list-widget.service';
+import {
+    ServicesStatusListWidgetConfig,
+    ServicesStatusListWidgetParams
+} from './services-status-list-widget.interface';
+import { ServiceStatusNames } from '../../../services/services.enum';
 import {
     AcknowledgementIconComponent
 } from '../../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import {
     ColComponent,
     ContainerComponent,
@@ -32,8 +42,6 @@ import {
 import { DowntimeIconComponent } from '../../../downtimes/downtime-icon/downtime-icon.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HoststatusIconComponent } from '../../../hosts/hoststatus-icon/hoststatus-icon.component';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -45,20 +53,13 @@ import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { HostsIndexRoot } from '../../../hosts/hosts.interface';
 import {
-    HostsStatusListWidgetConfig,
-    HostsStatusListWidgetParams
-} from '../hosts-status-list-widget/hosts-status-list.interface';
-import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
-import { HostStatusNames } from '../../../hosts/hosts.enum';
-import { BaseWidgetComponent } from '../base-widget/base-widget.component';
-import { HostsStatusListWidgetService } from '../hosts-status-list-widget/hosts-status-list-widget.service';
+    ServicestatusIconComponent
+} from '../../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { RouterLink } from '@angular/router';
-import { HostsBrowserModalService } from '../../../hosts/hosts-browser/hosts-browser-modal/hosts-browser-modal.service';
 
 @Component({
-    selector: 'oitc-hosts-status-list-extended-widget',
+    selector: 'oitc-services-status-list-widget',
     imports: [
         AcknowledgementIconComponent,
         AsyncPipe,
@@ -76,7 +77,6 @@ import { HostsBrowserModalService } from '../../../hosts/hosts-browser/hosts-bro
         FormControlDirective,
         FormDirective,
         FormsModule,
-        HoststatusIconComponent,
         InputGroupComponent,
         InputGroupTextDirective,
         MatSort,
@@ -96,20 +96,19 @@ import { HostsBrowserModalService } from '../../../hosts/hosts-browser/hosts-bro
         TrustAsHtmlPipe,
         XsButtonDirective,
         TooltipDirective,
-        RouterLink
+        ServicestatusIconComponent,
+        RouterLink,
+        NgClass
     ],
-    templateUrl: './hosts-status-list-extended-widget.component.html',
-    styleUrl: './hosts-status-list-extended-widget.component.css',
+    templateUrl: './services-status-list-widget.component.html',
+    styleUrl: './services-status-list-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent implements AfterViewInit {
-
-    // Basically this is the same widget as the HostsStatusListWidgetComponent, but with a modal to show more details
-
+export class ServicesStatusListWidgetComponent extends BaseWidgetComponent implements AfterViewInit {
     protected flipped = signal<boolean>(false);
     @ViewChild('boxContainer') boxContainer?: ElementRef;
 
-    public hosts?: HostsIndexRoot;
+    public services?: ServicesIndexRoot;
 
     private scrollIntervalId: any = null;
 
@@ -120,13 +119,14 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
 
 
     // widget config will be loaded from the server
-    public config?: HostsStatusListWidgetConfig;
-    public configKeyWords: string[] = [];
-    public configNotKeyWords: string[] = [];
+    public config?: ServicesStatusListWidgetConfig;
+    public configHostKeyWords: string[] = [];
+    public configHostNotKeyWords: string[] = [];
+    public configServiceKeyWords: string[] = [];
+    public configServiceNotKeyWords: string[] = [];
 
 
-    private readonly HostsStatusListWidgetService = inject(HostsStatusListWidgetService);
-    private readonly HostsBrowserModalService = inject(HostsBrowserModalService);
+    private readonly ServicesStatusListWidgetService = inject(ServicesStatusListWidgetService);
 
     public override load() {
         // Handled by ngAfterViewInit as we need the widget height for the correct limit
@@ -146,7 +146,7 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
 
     public override resizeWidget(event?: KtdResizeEnd) {
         this.setLimit();
-        this.loadHosts();
+        this.loadServices();
     }
 
     private setLimit() {
@@ -188,12 +188,12 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
 
         // Scroll to next page and load data
         this.scrollIntervalId = setInterval(() => {
-            if (this.hosts && this.hosts.scroll && this.hosts.scroll.hasNextPage) {
+            if (this.services && this.services.scroll && this.services.scroll.hasNextPage) {
                 this.currentPage++;
-                this.loadHosts();
+                this.loadServices();
             } else {
                 this.currentPage = 1;
-                this.loadHosts();
+                this.loadServices();
             }
         }, interval);
     }
@@ -214,19 +214,23 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
             return;
         }
 
-        this.configKeyWords = [];
-        this.configNotKeyWords = [];
+        this.configHostKeyWords = [];
+        this.configHostNotKeyWords = [];
+        this.configServiceKeyWords = [];
+        this.configServiceNotKeyWords = [];
 
-        this.subscriptions.add(this.HostsStatusListWidgetService.loadWidgetConfig(this.widget.id).subscribe(config => {
+        this.subscriptions.add(this.ServicesStatusListWidgetService.loadWidgetConfig(this.widget.id).subscribe(config => {
             // Save the widget config
             this.config = config;
 
             // "".split() returns [''] instead of [] like in php
-            this.configKeyWords = (config.Host.keywords !== '') ? config.Host.keywords.split(',') : [];
-            this.configNotKeyWords = (config.Host.not_keywords !== '') ? config.Host.not_keywords.split(',') : [];
+            this.configHostKeyWords = (config.Host.keywords !== '') ? config.Host.keywords.split(',') : [];
+            this.configHostNotKeyWords = (config.Host.not_keywords !== '') ? config.Host.not_keywords.split(',') : [];
+            this.configServiceKeyWords = (config.Service.keywords !== '') ? config.Service.keywords.split(',') : [];
+            this.configServiceNotKeyWords = (config.Service.not_keywords !== '') ? config.Service.not_keywords.split(',') : [];
 
 
-            this.loadHosts();
+            this.loadServices();
             this.cdr.markForCheck();
 
             if (this.config.useScroll) {
@@ -241,61 +245,65 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
             return;
         }
 
-        this.config.Host.keywords = this.configKeyWords.join(',');
-        this.config.Host.not_keywords = this.configNotKeyWords.join(',');
+        this.config.Host.keywords = this.configHostKeyWords.join(',');
+        this.config.Host.not_keywords = this.configHostNotKeyWords.join(',');
+        this.config.Service.keywords = this.configServiceKeyWords.join(',');
+        this.config.Service.not_keywords = this.configServiceNotKeyWords.join(',');
 
-        this.subscriptions.add(this.HostsStatusListWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
+        this.subscriptions.add(this.ServicesStatusListWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
             this.flipped.set(false);
 
-            // Reload the hosts
-            this.loadHosts();
+            // Reload the services
+            this.loadServices();
         }));
     }
 
-    public loadHosts(): void {
+    public loadServices(): void {
         if (!this.config) {
             return;
         }
 
         let hasBeenAcknowledged: '' | boolean = '';
-        if (this.config.Hoststatus.acknowledged != this.config.Hoststatus.not_acknowledged) {
-            hasBeenAcknowledged = this.config.Hoststatus.acknowledged;
+        if (this.config.Servicestatus.acknowledged != this.config.Servicestatus.not_acknowledged) {
+            hasBeenAcknowledged = this.config.Servicestatus.acknowledged;
         }
 
         let inDowntime: '' | boolean = '';
-        if (this.config.Hoststatus.in_downtime != this.config.Hoststatus.not_in_downtime) {
-            inDowntime = this.config.Hoststatus.in_downtime;
+        if (this.config.Servicestatus.in_downtime != this.config.Servicestatus.not_in_downtime) {
+            inDowntime = this.config.Servicestatus.in_downtime;
         }
 
         // "".split() returns [''] instead of [] like in php
-        const keyWordsForRequest = (this.config.Host.keywords !== '') ? this.config.Host.keywords.split(',') : [];
-        const notKeyWordsForRequest = (this.config.Host.not_keywords !== '') ? this.config.Host.not_keywords.split(',') : [];
+        const hostKkeyWordsForRequest = (this.config.Host.keywords !== '') ? this.config.Host.keywords.split(',') : [];
+        const hostNotKeyWordsForRequest = (this.config.Host.not_keywords !== '') ? this.config.Host.not_keywords.split(',') : [];
+        const serviceKeyWordsForRequest = (this.config.Service.keywords !== '') ? this.config.Service.keywords.split(',') : [];
+        const serviceNotKeyWordsForRequest = (this.config.Service.not_keywords !== '') ? this.config.Service.not_keywords.split(',') : [];
 
         let lastStateChange: [
                 number | null,
                 'SECOND' | 'MINUTE' | 'HOUR' | 'DAY' | null
         ] = [null, 'MINUTE'];
-        if (this.config.Hoststatus.state_older_than && this.config.Hoststatus.state_older_than_unit && this.config.Hoststatus.state_older_than > 0) {
+        if (this.config.Servicestatus.state_older_than && this.config.Servicestatus.state_older_than_unit && this.config.Servicestatus.state_older_than > 0) {
             lastStateChange = [
-                this.config.Hoststatus.state_older_than, // Important, has to be array index 0 (see Filter.php)
-                this.config.Hoststatus.state_older_than_unit // Important, has to be array index 1 (see Filter.php)
+                this.config.Servicestatus.state_older_than, // Important, has to be array index 0 (see Filter.php)
+                this.config.Servicestatus.state_older_than_unit // Important, has to be array index 1 (see Filter.php)
             ];
         }
 
         // currentState is an array of ['up', 'down', 'unreachable']
-        let currentState: HostStatusNames[] = [];
-        for (let key in this.config.Hoststatus.current_state) {
-            const keyName = key as keyof typeof HostStatusNames;
-            if (this.config.Hoststatus.current_state[keyName]) {
+        let currentState: ServiceStatusNames[] = [];
+        for (let key in this.config.Servicestatus.current_state) {
+            const keyName = key as keyof typeof ServiceStatusNames;
+            if (this.config.Servicestatus.current_state[keyName]) {
                 currentState.push(
-                    HostStatusNames[key as keyof typeof HostStatusNames]
+                    ServiceStatusNames[key as keyof typeof ServiceStatusNames]
                 );
             }
         }
 
         // Apply the config to the filter
-        const params: HostsStatusListWidgetParams = {
+        const params: ServicesStatusListWidgetParams = {
             angular: true,
             sort: this.config.sort,
             direction: this.config.direction,
@@ -304,24 +312,28 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
             limit: this.limit,
             'filter[Hosts.name]': this.config.Host.name,
             'filter[Hosts.name_regex]': this.config.Host.name_regex,
-            'filter[Hosts.keywords][]': keyWordsForRequest,
-            'filter[Hosts.not_keywords][]': notKeyWordsForRequest,
-            'filter[Hoststatus.output]': this.config.Hoststatus.output,
-            'filter[Hoststatus.current_state][]': currentState,
-            'filter[Hoststatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
-            'filter[Hoststatus.scheduled_downtime_depth]': inDowntime,
-            'filter[Hoststatus.last_state_change][]': lastStateChange
+            'filter[servicename]': this.config.Service.name,
+            'filter[servicename_regex]': this.config.Service.name_regex,
+            'filter[Hosts.keywords][]': hostKkeyWordsForRequest,
+            'filter[Hosts.not_keywords][]': hostNotKeyWordsForRequest,
+            'filter[keywords][]': serviceKeyWordsForRequest,
+            'filter[not_keywords][]': serviceNotKeyWordsForRequest,
+            'filter[Servicestatus.output]': this.config.Servicestatus.output,
+            'filter[Servicestatus.current_state][]': currentState,
+            'filter[Servicestatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
+            'filter[Servicestatus.scheduled_downtime_depth]': inDowntime,
+            'filter[Servicestatus.last_state_change][]': lastStateChange
         };
 
-        this.subscriptions.add(this.HostsStatusListWidgetService.loadHosts(params).subscribe(hosts => {
-            this.hosts = hosts;
+        this.subscriptions.add(this.ServicesStatusListWidgetService.loadServices(params).subscribe(services => {
+            this.services = services;
             this.cdr.markForCheck();
         }));
     }
 
     public onPaginatorChange(page: number): void {
         this.currentPage = page;
-        this.loadHosts();
+        this.loadServices();
     }
 
     public onSortChange(sort: Sort): void {
@@ -336,7 +348,7 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
             }
         }
 
-        this.loadHosts();
+        this.loadServices();
     }
 
     public onIntervalSliderChanged() {
@@ -352,12 +364,6 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
 
         // Save the new interval
         this.saveWidgetConfig();
-    }
-
-    public toggleHostBrowserModal(hostId: number | undefined) {
-        if (hostId) {
-            this.HostsBrowserModalService.openHostBrowserModal(hostId);
-        }
     }
 
     protected readonly String = String;

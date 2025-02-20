@@ -32,8 +32,6 @@
                     </c-col>
                     <c-col [xs]="11" [lg]="3" *ngIf="widget && config">
                         <oitc-slider-time
-                            id="tabRotationIntervalModalSlider"
-                            name="tabRotationIntervalModalSlider"
                             [name]="'scroll_interval_slider_'+widget.id"
                             [attr.id]="'filter.scroll_interval_slider_'+widget.id"
                             [unit]="'milliseconds'"
@@ -138,7 +136,8 @@
                                         @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                             <button cButton color="info" class="ripple" size="xs"
                                                     [cTooltip]="'Show more information'|transloco"
-                                                    cTooltipPlacement="bottom">
+                                                    cTooltipPlacement="bottom"
+                                                    (click)="toggleHostBrowserModal(host.Host.id)">
                                                 <fa-icon [icon]="['fas', 'plus']"></fa-icon>
                                             </button>
                                         }
@@ -200,7 +199,6 @@
                                                 {{ t('Enable RegEx') }}
                                                 <input type="checkbox"
                                                        cFormCheckInput
-                                                       name="filter.Host.name_regex"
                                                        [name]="'Hosts.name_regex_'+widget.id"
                                                        [attr.id]="'Hosts.name_regex_'+widget.id"
                                                        [(ngModel)]="config.Host.name_regex"
@@ -304,7 +302,7 @@
                                                 <ul cDropdownMenu>
                                                     <li cDropdownItem
                                                         (click)="config.Hoststatus.state_older_than_unit = 'SECOND'">
-                                                        {{ t('minutes') }}
+                                                        {{ t('seconds') }}
                                                     </li>
                                                     <li cDropdownItem
                                                         (click)="config.Hoststatus.state_older_than_unit = 'MINUTE'">

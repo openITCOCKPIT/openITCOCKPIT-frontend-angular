@@ -206,3 +206,8 @@
     [availableWidgets]="availableWidgets"
     (restoreDefault)="onRestoreDefaultWidgets($event)"
     (addWidgetEvent)="onAddWidget($event)"></oitc-dashboard-add-widget-modal>
+
+
+<!-- Only load the modals once, so all Widgets can toggle them -->
+<oitc-hosts-browser-modal (completed)="onBrowserModalCompleted($event)"></oitc-hosts-browser-modal>
+<oitc-service-browser-modal (completed)="onBrowserModalCompleted($event)"></oitc-service-browser-modal>
