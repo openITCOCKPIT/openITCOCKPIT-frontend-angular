@@ -1,3 +1,7 @@
+import { WidgetTypes } from './widgets/widgets.enum';
+import { HoststatusObject } from '../hosts/hosts.interface';
+import { HostgroupSummaryStateHosts } from '../hosts/summary_state.interface';
+
 export interface DashboardsIndexResponse {
     tabs: DashboardTab[]
     widgets: DashboardWidget[]
@@ -21,14 +25,14 @@ export interface DashboardTab {
 }
 
 export interface DashboardTabAllocation {
-    id: number
+    id?: number                   // not present when creating
     name: string
     dashboard_tab_id: number
     container_id: number
-    user_id: number
+    user_id?: number            // not present when creating
     pinned: boolean
-    created: string
-    modified: string
+    created?: string            // not present when creating
+    modified?: string           // not present when creating
     usergroups: {
         _ids: number[]
     }
@@ -38,7 +42,7 @@ export interface DashboardTabAllocation {
 }
 
 export interface DashboardWidget {
-    type_id: number
+    type_id: WidgetTypes
     title: string
     icon: string
     directive: string
@@ -63,7 +67,7 @@ export interface WidgetsForTabResponse {
 export interface WidgetGet {
     id: number
     dashboard_tab_id: number
-    type_id: number
+    type_id: WidgetTypes
     host_id?: number | null
     service_id?: number | null
     row: number
@@ -98,7 +102,7 @@ export interface DashboardTabTabResponse {
 export interface WidgetGetForRender {
     id: string // has to be a string to be tracked by ngFor
     dashboard_tab_id: number
-    type_id: number
+    type_id: WidgetTypes
     host_id?: number | null
     service_id?: number | null
     row: number
@@ -125,4 +129,15 @@ export interface WidgetSaveGrid {
         height: number
         color: string
     }
+}
+
+export interface SharedTab {
+    id: number
+    position: number
+    name: string
+    shared: boolean
+    source_tab_id: number
+    check_for_updates: boolean
+    last_update: number
+    locked: boolean
 }

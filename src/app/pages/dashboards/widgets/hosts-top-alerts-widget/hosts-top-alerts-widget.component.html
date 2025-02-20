@@ -1,0 +1,283 @@
+<ng-container *transloco="let t">
+    <div class="d-flex h-100 flex-column" #boxContainer>
+        <c-row>
+            <c-col [xs]="12" [md]="1">
+                <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
+                        *ngIf="!isReadonly()">
+                    @if (flipped()) {
+                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                    } @else {
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                    }
+                </button>
+            </c-col>
+
+            <c-col [xs]="12" [md]="11">
+                <c-row>
+                    <c-col [xs]="1" [offset]="{lg: 8}">
+                        @if (config && config.useScroll) {
+                            <button type="button" cButton class="ripple" color="primary" size="xs"
+                                    (click)="stopScroll()"
+                                    [cTooltip]="'Pause scrolling'|transloco" cTooltipPlacement="bottom">
+                                <fa-icon [icon]="['fas', 'pause']"></fa-icon>
+                            </button>
+                        }
+                        @if (config && !config.useScroll) {
+                            <button type="button" cButton class="ripple" color="primary" size="xs"
+                                    (click)="startScroll()"
+                                    [cTooltip]="'Start scrolling'|transloco" cTooltipPlacement="bottom">
+                                <fa-icon [icon]="['fas', 'play']"></fa-icon>
+                            </button>
+                        }
+                    </c-col>
+                    <c-col [xs]="11" [lg]="3" *ngIf="widget && config">
+                        <oitc-slider-time
+                            [name]="'scroll_interval_slider_'+widget.id"
+                            [attr.id]="'filter.scroll_interval_slider_'+widget.id"
+                            [unit]="'milliseconds'"
+                            [size]="'xs'"
+                            [label]="'Scroll interval:' | transloco"
+                            [disabled]="isReadonly()"
+                            [min]="0"
+                            [max]="300*1000"
+                            [step]="5*1000"
+                            [(ngModel)]="config.scroll_interval"
+                            (change)="onIntervalSliderChanged()"></oitc-slider-time>
+                    </c-col>
+                </c-row>
+            </c-col>
+            <c-col [xs]="12">
+                <c-row *ngIf="config">
+                    <c-col [xs]="12" [md]="6">
+                        {{ t('Alert status') }}
+                        @switch (config.state) {
+                            @case ('up') {
+                                <c-badge color="success">
+                                    {{ t('Up') }}
+                                </c-badge>
+                            }
+                            @case ('down') {
+                                <c-badge color="danger">
+                                    {{ t('Down') }}
+                                </c-badge>
+                            }
+                            @case ('unreachable') {
+                                <c-badge color="secondary">
+                                    {{ t('Unreachable') }}
+                                </c-badge>
+                            }
+                        }
+                    </c-col>
+                    <c-col [xs]="12" [md]="6" class="text-end">
+                        <span class="pull-right">
+                            {{ t('Period: Last') }} {{ config.not_older_than }}
+                            @switch (config.not_older_than_unit) {
+                                @case ('MINUTE') {
+                                    {{ t('minute(s)') }}
+                                }
+                                @case ('HOUR') {
+                                    {{ t('hour(s)') }}
+                                }
+                                @case ('DAY') {
+                                    {{ t('day(s)') }}
+                                }
+                            }
+                        </span>
+                    </c-col>
+                </c-row>
+            </c-col>
+        </c-row>
+
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container">
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowContent">
+                    <!-- Top Alerts Area -->
+                    <oitc-table-loader *ngIf="!hostAlerts"></oitc-table-loader>
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped
+                           *ngIf="hostAlerts && config">
+                        <thead>
+                        <tr>
+                            <th class="text-white" [ngClass]="{
+                        'bg-up': config.state === 'up',
+                        'bg-down': config.state === 'down',
+                        'bg-unreachable': config.state === 'unreachable'}">
+                                {{ t('State') }}
+                            </th>
+                            <th scope="col" class="text-white" [ngClass]="{
+                        'bg-up': config.state === 'up',
+                        'bg-down': config.state === 'down',
+                        'bg-unreachable': config.state === 'unreachable'}">
+                                {{ t('Host') }}
+                            </th>
+                            <th class="text-white" [ngClass]="{
+                        'bg-up': config.state === 'up',
+                        'bg-down': config.state === 'down',
+                        'bg-unreachable': config.state === 'unreachable'}">
+                                {{ t('Last date') }}
+                            </th>
+                            <th class="text-white" [ngClass]="{
+                        'bg-up': config.state === 'up',
+                        'bg-down': config.state === 'down',
+                        'bg-unreachable': config.state === 'unreachable'}">
+                                {{ t('Count') }}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="hostAlerts">
+                            @for (hostAlert of hostAlerts.all_notifications; track $index) {
+                                <tr>
+                                    <td class="text-center">
+                                        <oitc-hoststatus-simple-icon
+                                            [hoststatus]="hostAlert.NotificationHost.state"></oitc-hoststatus-simple-icon>
+                                    </td>
+                                    <td>
+                                        @if (PermissionsService.hasPermissionObservable(['notifications', 'index'])|async) {
+                                            <a [routerLink]="['/', 'notifications', 'hostNotification', hostAlert.Host.id]">
+                                                {{ hostAlert.Host.hostname }}
+                                            </a>
+                                        } @else {
+                                            {{ hostAlert.Host.name }}
+                                        }
+                                    </td>
+                                    <td>
+                                        {{ hostAlert.NotificationHost.start_time }}
+                                    </td>
+                                    <td>
+                                        {{ hostAlert.count }}
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <oitc-no-records
+                        *ngIf="hostAlerts && hostAlerts.all_notifications.length === 0"></oitc-no-records>
+
+                    <c-container
+                        [fluid]="true" class="pt-1 pb-0 mb-0">
+                        <c-row>
+                            <c-col>
+                                <!-- To save space we only use scroll index on dashboards -->
+                                <oitc-scroll-index
+                                    *ngIf="hostAlerts && hostAlerts.scroll"
+                                    (pageChange)="onPaginatorChange($event)"
+                                    [scroll]="hostAlerts.scroll">
+                                </oitc-scroll-index>
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                    <!-- End Top Alerts Area -->
+                </ng-container>
+            </div>
+
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowConfig">
+                    <!-- Config Area -->
+                    <c-row class="mb-2" *ngIf="config && widget">
+                        <c-col>
+                            <fieldset>
+                                <legend class="fs-5">
+                                    {{ t('Host status') }}
+                                </legend>
+                                <c-form-check class="mb-1">
+                                    <input cFormCheckInput
+                                           class="radio-lg radio-success border-success"
+                                           type="radio"
+                                           [id]="'hoststatus-up-'+widget.id"
+                                           [name]="'hoststatus-up-'+widget.id"
+                                           [value]="'up'"
+                                           [(ngModel)]="config.state"
+                                    />
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           [for]="'hoststatus-up-'+widget.id">
+                                        {{ t('Up') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check class="mb-1">
+                                    <input cFormCheckInput
+                                           class="radio-lg radio-danger border-danger"
+                                           type="radio"
+                                           [id]="'hoststatus-down-'+widget.id"
+                                           [name]="'hoststatus-down-'+widget.id"
+                                           [value]="'down'"
+                                           [(ngModel)]="config.state"
+                                    />
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           [for]="'hoststatus-down-'+widget.id">
+                                        {{ t('Down') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check class="mb-1">
+                                    <input cFormCheckInput
+                                           class="radio-lg radio-secondary border-secondary"
+                                           type="radio"
+                                           [id]="'hoststatus-unreachable-'+widget.id"
+                                           [name]="'hoststatus-unreachable-'+widget.id"
+                                           [value]="'unreachable'"
+                                           [(ngModel)]="config.state"
+                                    />
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           [for]="'hoststatus-unreachable-'+widget.id">
+                                        {{ t('Unreachable') }}
+                                    </label>
+                                </c-form-check>
+                            </fieldset>
+                            <fieldset class="mt-2">
+                                <legend class="fs-5">
+                                    {{ t('Not older than interval') }}
+                                </legend>
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'history']" class="text-secondary"></fa-icon>
+                                    </span>
+                                    <input [(ngModel)]="config.not_older_than"
+                                           [placeholder]="'min value 1' | transloco"
+                                           [name]="'not_older_than-'+widget.id"
+                                           cFormControl
+                                           type="number"
+                                           min="1"
+                                    />
+                                    <c-dropdown alignment="end">
+                                        <button cButton cDropdownToggle color="primary">
+                                            @switch (config.not_older_than_unit) {
+                                                @case ('MINUTE') {
+                                                    {{ t('minutes') }}
+                                                }
+                                                @case ('HOUR') {
+                                                    {{ t('hours') }}
+                                                }
+                                                @case ('DAY') {
+                                                    {{ t('days') }}
+                                                }
+                                            }
+                                        </button>
+                                        <ul cDropdownMenu>
+                                            <li cDropdownItem (click)="config.not_older_than_unit = 'MINUTE'">
+                                                {{ t('minutes') }}
+                                            </li>
+                                            <li cDropdownItem (click)="config.not_older_than_unit = 'HOUR'">
+                                                {{ t('hours') }}
+                                            </li>
+                                            <li cDropdownItem (click)="config.not_older_than_unit = 'DAY'">
+                                                {{ t('days') }}
+                                            </li>
+                                        </ul>
+                                    </c-dropdown>
+                                </c-input-group>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col class="text-end">
+                            <button cButton class="ripple" color="primary" type="button" (click)="saveWidgetConfig()">
+                                {{ t('Save') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                    <!-- End Config Area -->
+                </ng-container>
+            </div>
+        </div>
+    </div>
+
+</ng-container>

@@ -24,3 +24,9 @@ export enum HostBrowserTabs {
     SLA = 'SLA',
     IsarFlow = 'IsarFlow',
 }
+
+export enum HostStatusNames {
+    up = 'up',
+    down = 'down',
+    unreachable = 'unreachable',
+}

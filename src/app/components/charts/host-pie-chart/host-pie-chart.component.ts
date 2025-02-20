@@ -2,7 +2,9 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    effect,
     inject,
+    input,
     Input,
     OnChanges,
     OnDestroy,
@@ -40,8 +42,8 @@ export type ChartOptions = {
 @Component({
     selector: 'oitc-host-pie-chart',
     imports: [
-    NgApexchartsModule
-],
+        NgApexchartsModule
+    ],
     templateUrl: './host-pie-chart.component.html',
     styleUrl: './host-pie-chart.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -52,6 +54,8 @@ export class HostPieChartComponent implements OnInit, OnChanges, OnDestroy {
     public chartOptions!: Partial<ChartOptions>;
 
     @Input() public statusDataPercentage: number[] = [0, 0, 0];
+
+    public triggerUpdate = input<number>(0);
 
     private subscription: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
@@ -81,8 +85,16 @@ export class HostPieChartComponent implements OnInit, OnChanges, OnDestroy {
                 });
             }
             this.cdr.markForCheck();
-
         }));
+
+        effect(() => {
+            if (this.triggerUpdate() > 0) {
+                // External component has triggered an update
+                if (this.chart) {
+                    this.chart.updateOptions(this.chartOptions);
+                }
+            }
+        });
     }
 
     public ngOnInit(): void {

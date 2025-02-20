@@ -1,0 +1,301 @@
+<ng-container *transloco="let t">
+    <div class="d-flex h-100 flex-column" #boxContainer>
+        <c-row>
+            <c-col [xs]="12" [md]="1">
+                <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
+                        *ngIf="!isReadonly()">
+                    @if (flipped()) {
+                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                    } @else {
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                    }
+                </button>
+            </c-col>
+
+            <c-col [xs]="12" [md]="11">
+                <c-row>
+                    <c-col [xs]="1" [offset]="{lg: 8}">
+                        @if (config && config.useScroll) {
+                            <button type="button" cButton class="ripple" color="primary" size="xs"
+                                    (click)="stopScroll()"
+                                    [cTooltip]="'Pause scrolling'|transloco" cTooltipPlacement="bottom">
+                                <fa-icon [icon]="['fas', 'pause']"></fa-icon>
+                            </button>
+                        }
+                        @if (config && !config.useScroll) {
+                            <button type="button" cButton class="ripple" color="primary" size="xs"
+                                    (click)="startScroll()"
+                                    [cTooltip]="'Start scrolling'|transloco" cTooltipPlacement="bottom">
+                                <fa-icon [icon]="['fas', 'play']"></fa-icon>
+                            </button>
+                        }
+                    </c-col>
+                    <c-col [xs]="11" [lg]="3" *ngIf="widget && config">
+                        <oitc-slider-time
+                            [name]="'scroll_interval_slider_'+widget.id"
+                            [attr.id]="'filter.scroll_interval_slider_'+widget.id"
+                            [unit]="'milliseconds'"
+                            [size]="'xs'"
+                            [label]="'Scroll interval:' | transloco"
+                            [disabled]="isReadonly()"
+                            [min]="0"
+                            [max]="300*1000"
+                            [step]="5*1000"
+                            [(ngModel)]="config.scroll_interval"
+                            (change)="onIntervalSliderChanged()"></oitc-slider-time>
+                    </c-col>
+                </c-row>
+            </c-col>
+        </c-row>
+
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container">
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowContent">
+                    <!-- Downtime Area -->
+                    <oitc-table-loader *ngIf="!serviceDowntimes"></oitc-table-loader>
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                           (matSortChange)="onSortChange($event)"
+                           *ngIf="serviceDowntimes && config"
+                           [matSortActive]="config.sort" [matSortDirection]="config.direction">
+                        <thead>
+                        <tr>
+                            <th>
+                                {{ t('Running') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Hosts.name">
+                                {{ t('Host') }}
+                            </th>
+                            <th scope="col" mat-sort-header="servicename">
+                                {{ t('Service') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeServices.author_name">
+                                {{ t('User') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeServices.comment_data">
+                                {{ t('Comment') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeServices.entry_time">
+                                {{ t('Created') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeServices.scheduled_start_time">
+                                {{ t('Start') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeServices.scheduled_end_time">
+                                {{ t('End') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeServices.duration">
+                                {{ t('Duration') }}
+                            </th>
+                            <th scope="col" mat-sort-header="DowntimeServices.was_cancelled">
+                                {{ t('Was cancelled') }}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="serviceDowntimes">
+                            @for (serviceDowntime of serviceDowntimes.all_service_downtimes; track $index) {
+                                <tr>
+                                    <td class="text-center">
+                                        <oitc-downtime-simple-icon
+                                            [downtime]="serviceDowntime.DowntimeService"></oitc-downtime-simple-icon>
+                                    </td>
+                                    <td>
+                                        <oitc-label-link
+                                            [objectId]="serviceDowntime.Host.id"
+                                            [route]="'/hosts/browser'"
+                                            [permissions]="'hosts.browser'">
+                                            {{ serviceDowntime.Host.hostname }}
+                                        </oitc-label-link>
+                                    </td>
+                                    <td>
+                                        <oitc-label-link
+                                            [objectId]="serviceDowntime.Service.id"
+                                            [route]="'/services/browser'"
+                                            [permissions]="'services.browser'">
+                                            {{ serviceDowntime.Service.servicename }}
+                                        </oitc-label-link>
+                                    </td>
+                                    <td>
+                                        {{ serviceDowntime.DowntimeService.authorName }}
+                                    </td>
+                                    <td>
+                                        {{ serviceDowntime.DowntimeService.commentData }}
+                                    </td>
+                                    <td>
+                                        {{ serviceDowntime.DowntimeService.entryTime }}
+                                    </td>
+                                    <td>
+                                        {{ serviceDowntime.DowntimeService.scheduledStartTime }}
+                                    </td>
+                                    <td>
+                                        {{ serviceDowntime.DowntimeService.scheduledEndTime }}
+                                    </td>
+                                    <td>
+                                        {{ serviceDowntime.DowntimeService.durationHuman }}
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-danger mx-1" title="{{ t('Yes') }}"
+                                              *ngIf="serviceDowntime.DowntimeService.wasCancelled">
+                                            {{ t('Yes') }}
+                                        </span>
+                                        <span class="badge bg-success mx-1" title="{{ t('No') }}"
+                                              *ngIf="!serviceDowntime.DowntimeService.wasCancelled">
+                                            {{ t('No') }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <oitc-no-records
+                        *ngIf="serviceDowntimes && serviceDowntimes.all_service_downtimes.length === 0"></oitc-no-records>
+
+                    <c-container
+                        [fluid]="true" class="pt-1 pb-0 mb-0">
+                        <c-row>
+                            <c-col>
+                                <!-- To save space we only use scroll index on dashboards -->
+                                <oitc-scroll-index
+                                    *ngIf="serviceDowntimes && serviceDowntimes.scroll"
+                                    (pageChange)="onPaginatorChange($event)"
+                                    [scroll]="serviceDowntimes.scroll">
+                                </oitc-scroll-index>
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                    <!-- end downtime area -->
+                </ng-container>
+            </div>
+
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowConfig">
+                    <!-- Config area -->
+                    <c-container class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true" *ngIf="widget">
+                        <c-row>
+                            <c-col>
+                                <h6 class="pb-2 mb-3 border-bottom">
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    {{ t('Filter') }}
+                                </h6>
+                            </c-col>
+                        </c-row>
+                        <form cForm>
+                            <c-row *ngIf="config">
+                                <c-col md="6" class="mb-2">
+                                    <c-input-group>
+                                        <span cInputGroupText>
+                                            <fa-icon [icon]="['fas', 'comment']"></fa-icon>
+                                        </span>
+                                        <input
+                                            [(ngModel)]="config.DowntimeService.comment_data"
+                                            [placeholder]="'Filter by comment' | transloco"
+                                            aria-label="name"
+                                            cFormControl
+                                            type="text"
+                                            [name]="'filter.comment_data_'+widget.id"
+                                            [attr.id]="'filter.comment_data_'+widget.id"
+                                        />
+                                    </c-input-group>
+                                </c-col>
+                                <c-col md="6" class="mb-2">
+                                    <c-input-group>
+                                        <span cInputGroupText>
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                        </span>
+                                        <input
+                                            [(ngModel)]="config.Host.name"
+                                            [placeholder]="'Filter by host name' | transloco"
+                                            aria-label="name"
+                                            cFormControl
+                                            [name]="'filter.host_name_'+widget.id"
+                                            [attr.id]="'filter.host_name_'+widget.id"
+                                            type="text"
+                                        />
+                                    </c-input-group>
+                                </c-col>
+                                <c-col md="6" class="mb-2">
+                                    <c-input-group>
+                                        <span cInputGroupText>
+                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                        </span>
+                                        <input
+                                            [(ngModel)]="config.Service.name"
+                                            [placeholder]="'Filter by service name' | transloco"
+                                            aria-label="name"
+                                            cFormControl
+                                            [name]="'filter.service_name_'+widget.id"
+                                            [attr.id]="'filter.service_name_'+widget.id"
+                                            type="text"
+                                        />
+                                    </c-input-group>
+                                </c-col>
+                                <c-col md="12">
+                                    <fieldset>
+                                        <h5>
+                                            {{ t('Options') }}
+                                        </h5>
+                                        <c-form-check>
+                                            <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'filter.isRunning_'+widget.id"
+                                                [attr.id]="'filter.isRunning_'+widget.id"
+                                                type="checkbox"
+                                                [(ngModel)]="config.isRunning"/>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   [for]="'filter.isRunning_'+widget.id">{{ t('Is running') }}</label>
+                                        </c-form-check>
+                                        <c-form-check>
+                                            <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'filter.was_not_cancelled_'+widget.id"
+                                                [attr.id]="'filter.was_not_cancelled_'+widget.id"
+                                                type="checkbox"
+                                                [(ngModel)]="config.DowntimeService.was_not_cancelled"/>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   [for]="'filter.was_not_cancelled_'+widget.id">{{ t('Was not cancelled') }}</label>
+                                        </c-form-check>
+                                        <c-form-check>
+                                            <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'filter.was_cancelled_'+widget.id"
+                                                [attr.id]="'filter.was_cancelled_'+widget.id"
+                                                type="checkbox"
+                                                [(ngModel)]="config.DowntimeService.was_cancelled"/>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   [for]="'filter.was_cancelled_'+widget.id">{{ t('Was cancelled') }}</label>
+                                        </c-form-check>
+                                        <c-form-check>
+                                            <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'filter.hideExpired_'+widget.id"
+                                                [attr.id]="'filter.hideExpired_'+widget.id"
+                                                type="checkbox"
+                                                [(ngModel)]="config.hideExpired"/>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   [for]="'filter.hideExpired_'+widget.id">{{ t('Hide expired') }}</label>
+                                        </c-form-check>
+                                    </fieldset>
+                                </c-col>
+                            </c-row>
+
+                            <c-row class="mt-2">
+                                <c-col class="text-end">
+                                    <button (click)="saveWidgetConfig()" type="button" cButton class="ripple"
+                                            color="primary">
+                                        {{ t('Save') }}
+                                    </button>
+                                </c-col>
+                            </c-row>
+                        </form>
+                    </c-container>
+                    <!-- End config area -->
+                </ng-container>
+            </div>
+        </div>
+    </div>
+
+</ng-container>

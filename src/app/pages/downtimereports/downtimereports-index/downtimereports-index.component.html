@@ -1,0 +1,236 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['downtimereports', 'index']" [routerLink]="['/', 'downtimereports', 'index']">
+                    <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                    {{ t('Downtime report') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card>
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Downtime report') }}:
+                <small class="fw-300" *ngIf="selectedTab === DowntimereportsEnum.Edit">
+                    {{ t('Generator') }}
+                </small>
+                <small class="fw-300" *ngIf="report && selectedTab === DowntimereportsEnum.Calendar">
+                    {{ t('Calendar view') }}
+                </small>
+                <small class="fw-300" *ngIf="report && selectedTab === DowntimereportsEnum.PieChart">
+                    {{ t('Chart view') }}
+                </small>
+            </h5>
+
+            <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
+                <c-nav-item>
+                    <button
+                            class="nav-link"
+                            [ngClass]="{'active': selectedTab === DowntimereportsEnum.Edit}"
+                            (click)="changeTab(DowntimereportsEnum.Edit)">
+                        <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                    </button>
+                </c-nav-item>
+                <c-nav-item *ngIf="report">
+                    <button
+                            class="nav-link"
+                            [ngClass]="{'active': selectedTab === DowntimereportsEnum.Calendar}"
+                            (click)="changeTab(DowntimereportsEnum.Calendar)">
+                        <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
+                    </button>
+                </c-nav-item>
+                <c-nav-item *ngIf="report">
+                    <button
+                            class="nav-link"
+                            [ngClass]="{'active': selectedTab === DowntimereportsEnum.PieChart}"
+                            (click)="changeTab(DowntimereportsEnum.PieChart)">
+                        <fa-icon [icon]="['fas', 'pie-chart']"></fa-icon>
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <ng-container *ngIf="selectedTab === DowntimereportsEnum.Edit">
+                <!-- EVALUATION -->
+                <label cLabel>
+                    {{ t('Evaluation') }}
+                    <oitc-required-icon/>
+                </label>
+                <div class="mb-3">
+                    <c-form-check [inline]="true">
+                        <input cFormCheckInput type="radio" [value]="1"
+                               id="evaluation_type1"
+                               [(ngModel)]="post.evaluation_type" name="evaluationType"/>
+                        <label cFormCheckLabel for="evaluation_type1">
+                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                            {{ t('Hosts') }}
+                        </label>
+                    </c-form-check>
+
+                    <c-form-check [inline]="true">
+                        <input cFormCheckInput type="radio" [value]="2"
+                               id="evaluation_type2"
+                               [(ngModel)]="post.evaluation_type" name="evaluationType"/>
+                        <label cFormCheckLabel for="evaluation_type2">
+                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                            {{ t('Hosts and Services') }}
+                        </label>
+                    </c-form-check>
+                </div>
+
+                <!-- REPORT FORMAT DROPDOWN -->
+                <div class="mb-3">
+                    <label cLabel for="post.report_format">
+                        {{ t('Report format') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <oitc-select
+                            name="post.report_format"
+                            id="post.report_format"
+                            [(ngModel)]="post.report_format"
+                            [options]="reportFormats"
+                            optionValue="key"
+                            optionLabel="value"
+                            oitcFormError [errors]="errors" errorField="report_format">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="report_format"></oitc-form-feedback>
+                </div>
+
+                <!-- TIMEPERIOD DROPDOWN" -->
+                <div class="mb-3">
+                    <label cLabel for="post.timeperiod_id">
+                        <ng-container *ngIf="post.timeperiod_id">
+                            <a *oitcPermission="['timeperiods', 'edit']"
+                                  [routerLink]="['/', 'timeperiods', 'edit', post.timeperiod_id]">
+                                {{ t('Timeperiod') }}
+                            </a>
+                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                {{ t('Timeperiod') }}
+                            </span>
+                        </ng-container>
+                        <ng-container *ngIf="!post.timeperiod_id">
+                            {{ t('Timeperiod') }}
+                        </ng-container>
+                        <oitc-required-icon/>
+                    </label>
+                    <oitc-select
+                            name="post.timeperiod_id"
+                            id="post.timeperiod_id"
+                            [(ngModel)]="post.timeperiod_id"
+                            [options]="timeperiods"
+                            [placeholder]="'Please choose a timeperiod' | transloco"
+                            optionValue="key"
+                            optionLabel="value"
+                            oitcFormError [errors]="errors" errorField="timeperiod_id">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="timeperiod_id"></oitc-form-feedback>
+                </div>
+
+                <!-- FROM DATE -->
+                <div class="mb-3">
+                    <label cLabel for="post.from_date">
+                        {{ t('From') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.from_date"
+                           type="date"
+                           name="post.from_date"
+                           oitcFormError [errors]="errors" errorField="from_date"
+                           [(ngModel)]="post.from_date">
+                    <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
+                </div>
+
+                <!-- TO DATE -->
+                <div class="mb-3">
+                    <label cLabel for="post.to_date">
+                        {{ t('To') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.to_date"
+                           type="date"
+                           name="post.to_date"
+                           oitcFormError [errors]="errors" errorField="to_date"
+                           [(ngModel)]="post.to_date">
+                    <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
+                </div>
+
+                <!-- REFLECTION STATE -->
+                <div class="mb-3">
+                    <label cLabel for="post.reflection_state">
+                        {{ t('Reflection state') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <oitc-select
+                            name="post.reflection_state"
+                            id="post.reflection_state"
+                            [(ngModel)]="post.reflection_state"
+                            [options]="reflectionStates"
+                            optionValue="key"
+                            optionLabel="value"
+                            oitcFormError [errors]="errors" errorField="reflection_state">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="reflection_state"></oitc-form-feedback>
+                </div>
+
+                <!-- Dynamic color -->
+                <div class="mb-3">
+
+                    <label cLabel for="post.reflection_state">
+                        {{ t('Dynamic color') }}
+                    </label>
+
+                    <c-form-check>
+                        <input cFormCheckInput
+                               name="dynamicColour"
+                               id="dynamicColour"
+                               type="checkbox"
+                               trueFalseValue
+                               [(ngModel)]="dynamicColour"/>
+                        <label cFormCheckLabel for="dynamicColour">
+                            {{ t('Yes') }}
+                            <span class="margin-left-10 label-group-width-auto">
+                                <c-badge class="badge-medium" style="background:#00c851;">100%</c-badge>
+                                <c-badge class="badge-medium" style="background:#33c54b;">90%</c-badge>
+                                <c-badge class="badge-medium" style="background:#66c345;">80%</c-badge>
+                                <c-badge class="badge-medium" style="background:#94c140;">70%</c-badge>
+                                <c-badge class="badge-medium" style="background:#cabe3a;">60%</c-badge>
+                                <c-badge class="badge-medium" style="background:#ffbb33;">50%</c-badge>
+                                <c-badge class="badge-medium" style="background:#f79d2b;">40%</c-badge>
+                                <c-badge class="badge-medium" style="background:#eb721f;">30%</c-badge>
+                                <c-badge class="badge-medium" style="background:#e14c15;">20%</c-badge>
+                                <c-badge class="badge-medium" style="background:#d7260b;">10%</c-badge>
+                                <c-badge class="badge-medium" style="background:#cc0000;">0%</c-badge>
+                            </span>
+                        </label>
+                    </c-form-check>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="selectedTab === DowntimereportsEnum.Calendar">
+                Calendar SH!T
+            </ng-container>
+            <ng-container *ngIf="selectedTab === DowntimereportsEnum.PieChart">
+                PieChart SH!T
+            </ng-container>
+        </c-card-body>
+        <c-card-footer class="text-end" *ngIf="selectedTab === DowntimereportsEnum.Edit">
+
+            <button cButton type="button" color="primary" (click)="submit()">
+                {{ t('Create downtime report') }}
+            </button>
+        </c-card-footer>
+    </c-card>
+
+</ng-container>

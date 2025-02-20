@@ -1,0 +1,8 @@
+.avatar-size {
+    width: 6rem;
+    height: 6rem;
+
+    padding: 2px;
+    border: 2px solid var(--cui-primary);
+
+}

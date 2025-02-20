@@ -70,6 +70,7 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
             this.background = 'bg-color-black';
             this.allowView = true;
             this.init = false;
+            this.cdr.markForCheck();
         } else {
             if (!this.isItemDeleted(this.type)) {
                 this.load();

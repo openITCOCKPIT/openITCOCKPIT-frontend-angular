@@ -25,7 +25,6 @@
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -58,30 +57,30 @@ import {
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownComponent,
-  DropdownDividerDirective,
-  DropdownItemDirective,
-  DropdownMenuDirective,
-  DropdownToggleDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective,
-  TooltipDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownComponent,
+    DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -144,76 +143,76 @@ import { IndexPage } from '../../../pages.interface';
 @Component({
     selector: 'oitc-services-index',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    PermissionDirective,
-    DebounceDirective,
-    DisableModalComponent,
-    RouterLink,
-    RouterModule,
-    CardComponent,
-    CardHeaderComponent,
-    CardBodyComponent,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardTitleDirective,
-    MatSort,
-    MatSortHeader,
-    TableDirective,
-    NgIf,
-    ItemSelectComponent,
-    RowComponent,
-    NoRecordsComponent,
-    ColComponent,
-    ContainerComponent,
-    PaginateOrScrollComponent,
-    NgClass,
-    TooltipDirective,
-    FaStackComponent,
-    FaStackItemSizeDirective,
-    ServicestatusIconComponent,
-    HoststatusIconComponent,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    SelectAllComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownToggleDirective,
-    DropdownMenuDirective,
-    PopoverGraphComponent,
-    DeleteAllModalComponent,
-    ServiceMaintenanceModalComponent,
-    ServiceAcknowledgeModalComponent,
-    TranslocoPipe,
-    DowntimeIconComponent,
-    AcknowledgementIconComponent,
-    CopyToClipboardComponent,
-    CardFooterComponent,
-    FilterBookmarkComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    MultiSelectComponent,
-    NgSelectModule,
-    ReactiveFormsModule,
-    RegexHelperTooltipComponent,
-    FormsModule,
-    ColumnsConfigExportModalComponent,
-    ColumnsConfigImportModalComponent,
-    DropdownDividerDirective,
-    TableLoaderComponent,
-    ServiceAddToServicegroupModalComponent,
-    AsyncPipe
-],
+        TranslocoDirective,
+        FaIconComponent,
+        PermissionDirective,
+        DebounceDirective,
+        DisableModalComponent,
+        RouterLink,
+        RouterModule,
+        CardComponent,
+        CardHeaderComponent,
+        CardBodyComponent,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardTitleDirective,
+        MatSort,
+        MatSortHeader,
+        TableDirective,
+        NgIf,
+        ItemSelectComponent,
+        RowComponent,
+        NoRecordsComponent,
+        ColComponent,
+        ContainerComponent,
+        PaginateOrScrollComponent,
+        NgClass,
+        TooltipDirective,
+        FaStackComponent,
+        FaStackItemSizeDirective,
+        ServicestatusIconComponent,
+        HoststatusIconComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        SelectAllComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        PopoverGraphComponent,
+        DeleteAllModalComponent,
+        ServiceMaintenanceModalComponent,
+        ServiceAcknowledgeModalComponent,
+        TranslocoPipe,
+        DowntimeIconComponent,
+        AcknowledgementIconComponent,
+        CopyToClipboardComponent,
+        CardFooterComponent,
+        FilterBookmarkComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        MultiSelectComponent,
+        NgSelectModule,
+        ReactiveFormsModule,
+        RegexHelperTooltipComponent,
+        FormsModule,
+        ColumnsConfigExportModalComponent,
+        ColumnsConfigImportModalComponent,
+        DropdownDividerDirective,
+        TableLoaderComponent,
+        ServiceAddToServicegroupModalComponent,
+        AsyncPipe
+    ],
     templateUrl: './services-index.component.html',
     styleUrl: './services-index.component.css',
     providers: [
-        { provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService },
-        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService }
+        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService},
+        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService}
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -294,9 +293,24 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
                 this.params.BrowserContainerId = parseInt(containerId, 10);
             }
 
+            let hostname = params['hostname'] || undefined;
+            if (hostname) {
+                this.filter.Hosts.name = hostname;
+            }
+
+            let name_regex = params['name_regex'];
+            if (name_regex === 'true') {
+                this.filter.Hosts.name_regex = true;
+            }
+
             let servicename = params['servicename'] || undefined;
             if (servicename) {
                 this.filter.Services.name = servicename;
+            }
+
+            let servicename_regex = params['servicename_regex'];
+            if (servicename_regex === 'true') {
+                this.filter.Services.name_regex = true;
             }
 
             let servicedescription = params['servicedescription'] || undefined;

@@ -7,10 +7,10 @@ export interface MapItemRootParams {
 }
 
 export interface MapItemRoot {
-    type: string
-    allowView: boolean
+    type?: string
+    allowView?: boolean
     data: Data
-    _csrfToken: string
+    _csrfToken?: string
 }
 
 export interface Data {
@@ -97,10 +97,10 @@ export interface Service {
 }
 
 export interface Perfdata {
-    "/": GeneratedType
+    [key: string]: PerformanceData
 }
 
-export interface GeneratedType {
+export interface PerformanceData {
     current: string
     unit: string
     warning: string

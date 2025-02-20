@@ -1,0 +1,37 @@
+<ng-container *transloco="let t">
+    <c-modal #dashboardRenameWidgetModal fullscreen="md" id="dashboardRenameWidgetModal" size="lg">
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                {{ t('Edit widget title') }}
+            </h5>
+            <button [cModalToggle]="dashboardRenameWidgetModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+            <label cLabel for="WidgetTitleModal" class="mt-3">
+                {{ t('Widget Title') }}
+                <oitc-required-icon></oitc-required-icon>
+            </label>
+            <c-input-group>
+                <span cInputGroupText>
+                    <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                </span>
+                <input cFormControl id="WidgetTitleModal" type="text"
+                       name="WidgetTitleModal"
+                       [placeholder]="'Edit widget title' | transloco"
+                       [(ngModel)]="widgetTitle">
+            </c-input-group>
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="submit()" cButton color="primary" class="ripple" type="button">
+                {{ t('Save widget Title') }}
+            </button>
+            <button [cModalToggle]="dashboardRenameWidgetModal.id" cButton color="default" class="ripple" type="button">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+
+</ng-container>

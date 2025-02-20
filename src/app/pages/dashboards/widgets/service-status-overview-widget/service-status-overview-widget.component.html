@@ -1,0 +1,247 @@
+<ng-container *transloco="let t">
+    <div class="d-flex h-100 flex-column" #boxContainer *ngIf="widget">
+        <div>
+            <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
+                    *ngIf="!isReadonly()">
+                @if (flipped()) {
+                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                } @else {
+                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                }
+            </button>
+        </div>
+
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container">
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowContent">
+                    <div [style.height.px]="widgetHeight"
+                         [ngClass]="{'bg-ok': config?.Servicestatus?.current_state === 0,
+                         'bg-warning': config?.Servicestatus?.current_state === 1,
+                         'bg-critical': config?.Servicestatus?.current_state === 2,
+                         'bg-unknown': config?.Servicestatus?.current_state === 3}"
+                         class="w-100">
+
+                        <c-row *ngIf="statusCount !== null" class="h-100 align-items-center">
+                            @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
+                                <c-col class="text-center text-white" [style.font-size.px]="fontSize">
+                                    @if (statusCount > 0 && config && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                        <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                           [queryParams]="{'servicestate': config.Servicestatus.current_state ,'servicename': config.Service.name,'hostname': config.Host.name,'acknowledged': config.Servicestatus.acknowledged,'not_acknowledged': config.Servicestatus.not_acknowledged,'in_downtime': config.Servicestatus.in_downtime,'not_in_downtime': config.Servicestatus.not_in_downtime,sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                            {{ statusCount }}
+                                        </a>
+                                    } @else {
+                                        {{ statusCount }}
+                                    }
+                                </c-col>
+                            } @else {
+                                <c-col class="text-center text-white h5">
+                                    <small>
+                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                        {{ t('You are not permitted to access this object') }}
+                                    </small>
+                                </c-col>
+                            }
+                        </c-row>
+
+                        @switch (config?.Servicestatus?.current_state) {
+                            @case (0) {
+                                <fa-icon [icon]="['fas', 'check-circle']" [style.font-size.px]="fontSizeIcon"
+                                         [style.top.px]="iconTopPosition"
+                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                            }
+                            @case (1) {
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']" [style.font-size.px]="fontSizeIcon"
+                                         [style.top.px]="iconTopPosition"
+                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                            }
+                            @case (2) {
+                                <fa-icon [icon]="['fas', 'exclamation-circle']" [style.font-size.px]="fontSizeIcon"
+                                         [style.top.px]="iconTopPosition"
+                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                            }
+                            @case (3) {
+                                <fa-icon [icon]="['fas', 'question-circle']" [style.font-size.px]="fontSizeIcon"
+                                         [style.top.px]="iconTopPosition"
+                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                            }
+                        }
+                    </div>
+                </ng-container>
+            </div>
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowConfig">
+                    <c-row class="mb-2" *ngIf="config">
+                        <c-col [xs]="12" [md]="12" [lg]="12">
+                            <div class="mb-3">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    </span>
+                                    <input cFormControl
+                                           type="text"
+                                           [id]="'hostname-'+widget.id"
+                                           [name]="'hostname-'+widget.id"
+                                           [placeholder]="'Filter by host name' | transloco"
+                                           [(ngModel)]="config.Host.name">
+                                </c-input-group>
+                            </div>
+                        </c-col>
+                        <c-col [xs]="12" [md]="12" [lg]="12">
+                            <div class="mb-3">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    </span>
+                                    <input cFormControl
+                                           type="text"
+                                           [id]="'servicename-'+widget.id"
+                                           [name]="'servicename-'+widget.id"
+                                           [placeholder]="'Filter by service name' | transloco"
+                                           [(ngModel)]="config.Service.name">
+                                </c-input-group>
+                            </div>
+                        </c-col>
+                        <c-col [xs]="12" [md]="6" [lg]="6">
+                            <fieldset>
+                                <legend class="fs-5">
+                                    {{ t('Service status') }}
+                                </legend>
+                                <c-form-check>
+                                    <input cFormCheckInput
+                                           class="radio-lg radio-success border-success"
+                                           type="radio"
+                                           [id]="'widget-radio0-'+widget.id"
+                                           [name]="'widget-radio0-'+widget.id"
+                                           [value]="0"
+                                           [(ngModel)]="config.Servicestatus.current_state"
+                                    />
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           [for]="'widget-radio0-'+widget.id">
+                                        {{ t('Ok') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input cFormCheckInput
+                                           class="radio-lg radio-warning border-warning"
+                                           type="radio"
+                                           [id]="'widget-radio1-'+widget.id"
+                                           [name]="'widget-radio1-'+widget.id"
+                                           [value]="1"
+                                           [(ngModel)]="config.Servicestatus.current_state"
+                                    />
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           [for]="'widget-radio1-'+widget.id">
+                                        {{ t('Warning') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input cFormCheckInput
+                                           class="radio-lg radio-danger border-danger"
+                                           type="radio"
+                                           [id]="'widget-radio2-'+widget.id"
+                                           [name]="'widget-radio2-'+widget.id"
+                                           [value]="2"
+                                           [(ngModel)]="config.Servicestatus.current_state"
+                                    />
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           [for]="'widget-radio2-'+widget.id">
+                                        {{ t('Critical') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input cFormCheckInput
+                                           class="radio-lg radio-secondary border-secondary"
+                                           type="radio"
+                                           [id]="'widget-radio3-'+widget.id"
+                                           [name]="'widget-radio3-'+widget.id"
+                                           [value]="3"
+                                           [(ngModel)]="config.Servicestatus.current_state"
+                                    />
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           [for]="'widget-radio3-'+widget.id">
+                                        {{ t('Unknown') }}
+                                    </label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                        <c-col [xs]="12" [md]="6" [lg]="6" *ngIf="config.Servicestatus.current_state > 0">
+                            <fieldset class="mt-2">
+                                <legend class="fs-5">
+                                    {{ t('Acknowledgements') }}
+                                </legend>
+                                <c-form-check>
+                                    <input
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        [id]="'Hosts.acknowledged-'+widget.id"
+                                        [name]="'Hosts.acknowledged-'+widget.id"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        [(ngModel)]="config.Servicestatus.acknowledged"/>
+
+                                    <label cFormCheckLabel class="ms-1 mt-1" [for]="'Hosts.acknowledged-'+widget.id">
+                                        {{ t('Acknowledged') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        [id]="'Hosts.not_acknowledged-'+widget.id"
+                                        [name]="'Hosts.not_acknowledged-'+widget.id"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        [(ngModel)]="config.Servicestatus.not_acknowledged"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           [for]="'Hosts.not_acknowledged-'+widget.id">
+                                        {{ t('Not Acknowledged') }}
+                                    </label>
+                                </c-form-check>
+                            </fieldset>
+                            <fieldset class="mt-2">
+                                <legend class="fs-5">
+                                    {{ t('Downtimes') }}
+                                </legend>
+                                <c-form-check>
+                                    <input
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        [id]="'Hosts.in_downtime-'+widget.id"
+                                        [name]="'Hosts.in_downtime-'+widget.id"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        [(ngModel)]="config.Servicestatus.in_downtime"/>
+
+                                    <label cFormCheckLabel class="ms-1 mt-1" [for]="'Hosts.in_downtime-'+widget.id">
+                                        {{ t('In Downtime') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        [id]="'Hosts.not_in_downtime-'+widget.id"
+                                        [name]="'Hosts.not_in_downtime-'+widget.id"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        [(ngModel)]="config.Servicestatus.not_in_downtime"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1" [for]="'Hosts.not_in_downtime-'+widget.id">
+                                        {{ t('Not in Downtime') }}
+                                    </label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col class="text-end">
+                            <button cButton class="ripple" color="primary" (click)="submit()">
+                                {{ t('Save') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</ng-container>

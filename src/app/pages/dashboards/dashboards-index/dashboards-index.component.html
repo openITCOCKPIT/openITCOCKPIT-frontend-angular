@@ -13,19 +13,43 @@
         </ol>
     </nav>
 
-    <c-card class="mb-3">
+    <c-card class="mb-3" id="dashboard-container">
         <c-card-header>
             <h5 class="my-1">{{ t('Dashboard') }}</h5>
             <oitc-dashboard-tabs [tabs]="tabs"
                                  [currentTabId]="currentTabId"
-                                 (changeTabEvent)="onTabChange($event)"></oitc-dashboard-tabs>
+                                 [dashboardIsLocked]="dashboardIsLocked"
+                                 (changeTabEvent)="onTabChange($event)"
+                                 (deleteTabEvent)="onDeleteTab($event)"></oitc-dashboard-tabs>
 
             <c-nav class="card-toolbar card-header-pills ms-auto">
                 <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
+                    <button (click)="toggleTabRotationModal()" cButton class="ripple" color="primary"
+                            size="xs"
+                            [cTooltip]="'Setup tab rotation'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'arrows-spin']"></fa-icon>
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1" *ngIf="!isReadonly">
+                    <button (click)="lockOrUnlock(false)" cButton class="ripple" color="danger"
+                            *ngIf="dashboardIsLocked"
+                            size="xs"
+                            [cTooltip]="'Unlock for edit'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                    </button>
+                    <button (click)="lockOrUnlock(true)" cButton class="ripple" color="primary"
+                            *ngIf="!dashboardIsLocked"
+                            size="xs"
+                            [cTooltip]="'Lock for edit'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'unlock']"></fa-icon>
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1" *ngIf="!isReadonly">
+                    <button (click)="toggleAddWidgetModal()" cButton class="ripple" color="success"
+                            [disabled]="dashboardIsLocked"
                             size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('Add Widget') }}
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
@@ -36,31 +60,15 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
+                    <button (click)="toggleCreateNewTabModal()" cButton class="ripple" color="success"
+                            size="xs" [cTooltip]="'Create new tab'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'folder-plus']"></fa-icon>
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
+                    <button (click)="toggleFullscreenMode()" cButton class="ripple" color="default"
+                            size="xs" [cTooltip]="'Fullscreen mode'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'expand-arrows-alt']"></fa-icon>
                     </button>
                 </c-nav-item>
             </c-nav>
@@ -68,7 +76,28 @@
 
         </c-card-header>
         <c-card-body>
-            <div class="grid-container" *ngIf="layout.length > 0">
+            <!-- Loading animation -->
+            @if (isLoading) {
+                <c-row>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                        <oitc-block-loader height="15rem"></oitc-block-loader>
+                    </c-col>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                        <oitc-block-loader height="15rem"></oitc-block-loader>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                        <oitc-block-loader height="15rem"></oitc-block-loader>
+                    </c-col>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                        <oitc-block-loader height="15rem"></oitc-block-loader>
+                    </c-col>
+                </c-row>
+            }
+
+            <!-- Actual dashboard content -->
+            <div class="grid-container" *ngIf="layout.length > 0" [ngClass]="{'border-0': dashboardIsLocked}">
                 <ktd-grid [cols]="cols"
                           [rowHeight]="rowHeight"
                           [gap]="10"
@@ -117,13 +146,13 @@
                                     <c-nav class="card-toolbar card-header-pills">
 
                                         <c-nav-item class="px-1" *ngIf="!dashboardIsLocked">
-                                            <button class="btn btn-sm btn-icon ripple btn-icon-hover-danger"
+                                            <button class="btn btn-sm btn-icon ripple btn-icon-hover-primary"
                                                     (click)="toggleRenameWidgetModal(widget)">
                                                 <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
                                             </button>
                                         </c-nav-item>
 
-                                        <c-nav-item class="px-1">
+                                        <c-nav-item class="px-1" *ngIf="!dashboardIsLocked">
                                             <oitc-dashboard-colorpicker
                                                 (selectedColor)="onColorChange($event, widget)"></oitc-dashboard-colorpicker>
                                         </c-nav-item>
@@ -138,14 +167,11 @@
                                     </c-nav>
 
                                 </c-card-header>
-                                <c-card-body>
-                                    <h5 cCardTitle>Special title treatment</h5>
-                                    <p cCardText>
+                                <c-card-body class="overflow-scroll pt-2 pb-0">
 
-                                        {{ widget.id }}
-
-                                        With supporting text below as a natural lead-in to additional content.
-                                    </p>
+                                    <oitc-widget-container
+                                        [widgetInput]="widget"
+                                        [isReadonly]="isReadonly"></oitc-widget-container>
 
                                 </c-card-body>
                             </c-card>
@@ -159,3 +185,29 @@
     </c-card>
 
 </ng-container>
+
+<oitc-dashboard-rename-widget-modal
+    (titleChangedEvent)="onWidgetTitleChanged($event)"></oitc-dashboard-rename-widget-modal>
+
+<oitc-dashboard-allocate-modal
+    (triggerReloadEvent)="loadDashboardsIndex()"></oitc-dashboard-allocate-modal>
+
+<oitc-dashboard-update-available-modal
+    (decisionEvent)="handleUpdateDecisionEvent($event)"></oitc-dashboard-update-available-modal>
+
+<oitc-dashboard-tab-rotation-modal
+    [intervalInput]="tabIntervalInSeconds"
+    (intervalUpdate)="saveTabRotateInterval($event)"></oitc-dashboard-tab-rotation-modal>
+
+<oitc-dashboard-create-new-tab-modal
+    (newTabCreated)="onNewTabCreated($event)"></oitc-dashboard-create-new-tab-modal>
+
+<oitc-dashboard-add-widget-modal
+    [availableWidgets]="availableWidgets"
+    (restoreDefault)="onRestoreDefaultWidgets($event)"
+    (addWidgetEvent)="onAddWidget($event)"></oitc-dashboard-add-widget-modal>
+
+
+<!-- Only load the modals once, so all Widgets can toggle them -->
+<oitc-hosts-browser-modal (completed)="onBrowserModalCompleted($event)"></oitc-hosts-browser-modal>
+<oitc-service-browser-modal (completed)="onBrowserModalCompleted($event)"></oitc-service-browser-modal>
