@@ -82,6 +82,12 @@ export class HostsBarChartComponent implements OnDestroy {
                 }
             },
             type: 'bar',
+            grid: {
+                left: 200,
+                top: 15,
+                right: 15,
+                bottom: 30
+            },
             series: [
                 {
                     type: 'line',
