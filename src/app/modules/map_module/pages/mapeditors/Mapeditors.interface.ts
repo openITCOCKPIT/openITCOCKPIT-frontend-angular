@@ -364,3 +364,123 @@ export interface Hostgroups {
 export interface Servicegroups {
     extended: boolean
 }
+
+/********************************
+ * Map Summary Toaster Component
+ ********************************/
+
+export interface MapSummaryRoot {
+    summary: Summary
+    _csrfToken: any
+}
+
+export interface Summary {
+    Host: HostSummary
+    Hoststatus: HoststatusSummary
+    Service: ServiceSummary
+    Servicestatus: ServicestatusSummary
+}
+
+export interface HostSummary {
+    id: number
+    uuid: string
+    hostname: string
+    address: any
+    description: any
+    hosttemplate_id: any
+    active_checks_enabled: any
+    satelliteId: any
+    containerId: any
+    containerIds: number[]
+    tags: any
+    usageFlag: any
+    allow_edit: boolean
+    disabled: boolean
+    priority: any
+    notes: any
+    is_satellite_host: boolean
+    name: string
+}
+
+export interface HoststatusSummary {
+    currentState: number
+    isFlapping: any
+    problemHasBeenAcknowledged: boolean
+    scheduledDowntimeDepth: number
+    lastCheck: string
+    nextCheck: string
+    activeChecksEnabled: any
+    lastHardState: any
+    lastHardStateChange: string
+    last_state_change: string
+    output: any
+    long_output: any
+    acknowledgement_type: any
+    state_type: boolean
+    flap_detection_enabled: any
+    notifications_enabled: any
+    current_check_attempt: any
+    max_check_attempts: any
+    latency: any
+    last_time_up: string
+    lastHardStateChangeInWords: string
+    last_state_change_in_words: string
+    lastCheckInWords: string
+    nextCheckInWords: string
+    isHardstate: boolean
+    isInMonitoring: boolean
+    humanState: string
+    cssClass: string
+    textClass: string
+    outputHtml: string
+}
+
+export interface ServiceSummary {
+    id: number
+    uuid: string
+    servicename: string
+    hostname: string
+    description: any
+    active_checks_enabled: any
+    tags: any
+    host_id: number
+    allow_edit: boolean
+    disabled: boolean
+    serviceType: number
+    priority: any
+}
+
+export interface ServicestatusSummary {
+    currentState: number
+    lastHardState: any
+    isFlapping: any
+    problemHasBeenAcknowledged: boolean
+    scheduledDowntimeDepth: number
+    lastCheck: string
+    nextCheck: string
+    activeChecksEnabled: any
+    lastHardStateChange: string
+    last_state_change: string
+    processPerformanceData: any
+    state_type: boolean
+    acknowledgement_type: any
+    flap_detection_enabled: any
+    notifications_enabled: any
+    current_check_attempt: number
+    output: string
+    long_output: any
+    perfdata: string
+    latency: any
+    max_check_attempts: number
+    last_time_ok: string
+    lastHardStateChangeInWords: string
+    last_state_change_in_words: string
+    lastCheckInWords: string
+    nextCheckInWords: string
+    isHardstate: boolean
+    isInMonitoring: boolean
+    humanState: string
+    cssClass: string
+    textClass: string
+    outputHtml: string
+}

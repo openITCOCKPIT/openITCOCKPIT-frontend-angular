@@ -29,6 +29,8 @@ import { MapTextComponent } from '../map-text/map-text.component';
 import { MapItemComponent } from '../map-item/map-item.component';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { NgForOf, NgIf } from '@angular/common';
+import { MapSummaryToasterService } from '../map-summary-toaster/map-summary-toaster.service';
+import { MapSummaryToasterComponent } from '../map-summary-toaster/map-summary-toaster.component';
 
 @Component({
     selector: 'oitc-map-view',
@@ -48,7 +50,8 @@ import { NgForOf, NgIf } from '@angular/common';
         MapItemComponent,
         MapCanvasComponent,
         NgForOf,
-        NgIf
+        NgIf,
+        MapSummaryToasterComponent
     ],
     templateUrl: './map-view.component.html',
     styleUrl: './map-view.component.css',
@@ -63,12 +66,14 @@ export class MapViewComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private intervalSubscription: Subscription = new Subscription();
     private MapeditorsService: MapeditorsService = inject(MapeditorsService);
+    private readonly MapSummaryToasterService = inject(MapSummaryToasterService);
     private route = inject(ActivatedRoute);
     public errors: GenericValidationError | null = null;
     private cdr = inject(ChangeDetectorRef);
 
     private init = true;
     protected refreshInterval: number = 0;
+    private toasterTimeout: any = null;
 
     /*private timer;
     private interval;*/
@@ -121,16 +126,22 @@ export class MapViewComponent implements OnInit, OnDestroy {
         }
     }
 
-    protected showSummaryStateDelayed(item: any, summary: any) { //--> is summary item (true / false)
-        /*timer = $timeout(function(){
-            //Method is in MapSummaryDirective
-            $scope.showSummaryState(item, summary);
-        }, 500);*/
-    };
+    public showSummaryStateDelayed(item: any, summary: boolean): void { //--> is summary item (true / false)
+        this.cancelTimer();
+        if (item) {
+            this.toasterTimeout = setTimeout(() => {
+                this.MapSummaryToasterService.setItemToaster(item, summary);
+            }, 500);
+        }
+    }
 
-    protected cancelTimer() {
-        //$timeout.cancel(timer);
-    };
+    public cancelTimer() {
+        if (this.toasterTimeout) {
+            clearTimeout(this.toasterTimeout);
+        }
+
+        this.toasterTimeout = null;
+    }
 
     protected navigate(item: any) {
 
