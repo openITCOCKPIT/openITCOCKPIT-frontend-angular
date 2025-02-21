@@ -66,7 +66,6 @@ export class HostsBarChartComponent implements OnDestroy {
 
     onChartInit(ec: any) {
         this.echartsInstance = ec;
-        console.warn(this.echartsInstance);
         this.cdr.markForCheck();
     }
 
@@ -138,7 +137,6 @@ export class HostsBarChartComponent implements OnDestroy {
                 max: 9
             }
         };
-        console.warn('chartOption', this.chartOption);
         this.cdr.markForCheck();
     }
 }

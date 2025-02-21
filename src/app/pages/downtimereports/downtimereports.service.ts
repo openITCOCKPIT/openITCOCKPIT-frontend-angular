@@ -33,7 +33,6 @@ export class DowntimereportsService {
                 let queryParams: string = new URLSearchParams(a).toString()
                 // serialize the given result into HTTP Query parameters.
                 window.location.href = `/downtimereports/createPdfReport.pdf?${queryParams}`;
-                console.warn(data);
                 return data;
             })
         );

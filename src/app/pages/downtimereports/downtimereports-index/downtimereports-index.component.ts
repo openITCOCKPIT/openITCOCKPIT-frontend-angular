@@ -108,6 +108,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly TimeperiodsService: TimeperiodsService = inject(TimeperiodsService);
     private readonly NotyService: NotyService = inject(NotyService);
+    private readonly AvailabilityColorCalculationService: AvailabilityColorCalculationService = inject(AvailabilityColorCalculationService);
 
     protected readonly DowntimereportsEnum = DowntimereportsEnum;
     protected readonly reportFormats: SelectKeyValue[] = [
@@ -124,7 +125,6 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     protected post: DowntimeReportsRequest = getDefaultDowntimeReportsRequest();
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected dynamicColour: boolean = false;
-
     protected report: DowntimeReportsResponse = {} as DowntimeReportsResponse;
     protected events: CalendarEvent[] = [];
 
@@ -171,9 +171,6 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
         this.calendarOptions.update(options => ({...options, events: this.events}));
     }
 
-    protected isGenerating: boolean = false;
-    private readonly AvailabilityColorCalculationService: AvailabilityColorCalculationService = inject(AvailabilityColorCalculationService);
-
     private applyColour(): void {
         this.report.downtimeReport.hostsWithOutages.forEach((outageHostElement, outageHostIndex) => {
             outageHostElement.hosts.forEach((hostElement, hostIndex) => {
@@ -193,15 +190,26 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
 
         });
     }
+
+    private downloadReport(): void {
+        this.subscriptions.add(this.DowntimereportsService.generateReport(this.post)
+            .subscribe((result: any) => {
+            })
+        );
+    }
+
     private fetchReport(): void {
 
         this.report = {} as DowntimeReportsResponse;
 
         this.subscriptions.add(this.DowntimereportsService.getIndex(this.post)
             .subscribe((result) => {
+                console.warn(result);
                 if (!result.success) {
-                    this.NotyService.genericError();
-                    this.errors = result.data;
+                    if (result.data) {
+                        this.NotyService.genericError();
+                        this.errors = result.data;
+                    }
                     this.cdr.markForCheck();
                     return;
                 }
@@ -239,16 +247,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
                     });
                 });
 
-                this.changeTab(DowntimereportsEnum.Calendar);
-
                 this.cdr.markForCheck();
-            })
-        );
-    }
-
-    private downloadReport(): void {
-        this.subscriptions.add(this.DowntimereportsService.generateReport(this.post)
-            .subscribe((result: any) => {
             })
         );
     }
@@ -265,10 +264,17 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     }
 
     protected submit(): void {
+        this.errors = {} as GenericValidationError;
+        this.fetchReport();
+        if (Object.keys(this.errors).length > 0) {
+            alert('FEHLER VORHANDEN');
+            return;
+        }
         if (this.post.report_format === 1) {
             this.downloadReport();
+        } else {
+            this.changeTab(DowntimereportsEnum.Calendar);
         }
-        this.fetchReport();
     }
 
     private loadTimeperiods(): void {
