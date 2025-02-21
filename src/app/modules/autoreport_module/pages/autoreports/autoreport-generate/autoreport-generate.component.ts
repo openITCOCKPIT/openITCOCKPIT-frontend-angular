@@ -6,7 +6,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
     AlertComponent,
     CardBodyComponent,
-    CardComponent, CardFooterComponent,
+    CardComponent,
     CardHeaderComponent,
     CardTitleDirective, ColComponent, ContainerComponent, FormControlDirective, FormDirective, FormLabelDirective,
     NavComponent,
@@ -14,22 +14,19 @@ import {
 } from '@coreui/angular';
 import {
     AsyncPipe,
-    DatePipe,
     DecimalPipe,
     formatDate,
     NgClass,
     NgForOf,
     NgIf,
-    NgOptimizedImage
 } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AutoreportsService } from '../autoreports.service';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
-    AutoreportsIndexRoot,
     AutoreportIndex,
-    ReportError
+    ReportError,
 } from '../autoreports.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -41,6 +38,7 @@ import { GenericResponseWrapper, GenericValidationError } from '../../../../../g
 import { DateTime } from 'luxon';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'oitc-autoreport-generate',
@@ -68,10 +66,7 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
         FormControlDirective,
         ReactiveFormsModule,
         FormsModule,
-        CardFooterComponent,
         ColComponent,
-        FormDirective,
-        ContainerComponent,
         NgForOf,
         DecimalPipe,
         AlertComponent,
@@ -118,12 +113,10 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
     public from = "";
     public to = "";
     public formatOptions: SelectKeyValueString[] = [
-        {key: 'pdf', value: this.TranslocoService.translate('PDV')},
+        {key: 'pdf', value: this.TranslocoService.translate('PDF')},
         {key: 'html', value: this.TranslocoService.translate('HTML')},
-        {key: 'csv', value: this.TranslocoService.translate('CSV')},
+        {key: 'zip', value: this.TranslocoService.translate('CSV')},
     ];
-
-
 
     public ngOnInit(): void {
         this.from = this.post.Autoreport.from_date;
@@ -152,13 +145,71 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
         this.post.Autoreport.to_date = formatDate(this.to, 'dd.MM.y', 'en-US');
 
         if (this.post.Autoreport.format === 'pdf' || this.post.Autoreport.format === 'zip') {
+            this.isGenerating = true;
+            this.reportWasGenerated = false;
+            this.subscriptions.add(this.AutoreportsService.generateReport(this.post).subscribe((POSTresult: GenericResponseWrapper): void => {
+                this.cdr.markForCheck();
+                if (POSTresult.success) {
+                    this.errors = null;
+                    this.report_error = null;
+
+                    //Download PDF Report
+                    let GETParams = {
+                        angular: true,
+                        'data[id]': this.post.Autoreport.id,
+                        'data[from_date]': this.post.Autoreport.from_date,
+                        'data[to_date]': this.post.Autoreport.to_date
+                    };
+                    if (this.post.Autoreport.format === 'pdf') {
+                        this.subscriptions.add(this.AutoreportsService.generateReportPdf({
+                            params: GETParams,
+                            responseType: 'blob'
+                        }).subscribe((res) => {
+                            this.cdr.markForCheck();
+                            this.isGenerating = false;
+                            let blob = new Blob([res], {type: "application/pdf"});
+                            saveAs(blob, POSTresult.data.filename);
+                        }))
+                    }
+                    if (this.post.Autoreport.format === 'zip') { //zip => csv
+
+                        this.subscriptions.add(this.AutoreportsService.generateReportZip({
+                            params: GETParams,
+                            responseType: 'blob'
+                        }).subscribe((res) => {
+                            this.cdr.markForCheck();
+                            this.isGenerating = false;
+                            let blob = new Blob([res], {type: "application/zip"});
+                            saveAs(blob, POSTresult.data.filename);
+                        }))
+                    }
+                    return;
+                }
+                const errorResponse = POSTresult.data as GenericValidationError;
+                this.notyService.genericError(this.TranslocoService.translate('Report could not be created'));
+                if (POSTresult) {
+                    this.isGenerating = false;
+
+                    if (POSTresult.data.hasOwnProperty('error')) {
+                        this.errors = POSTresult.data.error;
+                        this.cdr.markForCheck();
+                    }
+
+                    if (POSTresult.data.hasOwnProperty('report_error')) {
+                        this.report_error = POSTresult.data.report_error;
+                        this.cdr.markForCheck();
+                    }
+                }
+
+            }));
+
+
+
         } else {
             this.reportWasGenerated = false;
             this.isGenerating = true;
             this.errors = null;
-
-
-            this.subscriptions.add(this.AutoreportsService.generateHtmlReport(this.post).subscribe((result: GenericResponseWrapper): void => {
+            this.subscriptions.add(this.AutoreportsService.generateReport(this.post).subscribe((result: GenericResponseWrapper): void => {
                         if (result.success) {
                             this.errors = null;
 
@@ -204,7 +255,6 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
     }
 
     public getServiceKeys(servicesObject: any) {
-        //console.log(Object.keys(servicesObject));
         return Object.keys(servicesObject);
     }
 

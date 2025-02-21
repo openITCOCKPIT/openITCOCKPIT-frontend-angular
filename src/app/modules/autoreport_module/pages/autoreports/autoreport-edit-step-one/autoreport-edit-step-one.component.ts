@@ -17,7 +17,7 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective, FormTextDirective,
+    FormLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
     RowComponent
@@ -257,6 +257,7 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
         if(this.post.Autoreport.report_start_date !== null){
             this.post.Autoreport.report_start_date = formatDate(this.post.Autoreport.report_start_date, 'dd.MM.y', 'en-US');
         }
+
         this.subscriptions.add(this.AutoreportsService.setEditStepOne(this.id, this.post).subscribe((result: GenericResponseWrapper): void => {
                     if (result.success) {
                         this.errors = null;

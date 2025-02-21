@@ -12,6 +12,16 @@ export interface AutoreportsIndexParams {
     'filter[Autoreports.description]': string
 }
 
+export interface AutoreportDownloadParams {
+    params: {
+        'angular': boolean,
+        'data[id]': number,
+        'data[from_date]': string,
+        'data[to_date]': string
+    }
+    responseType: 'blob'
+}
+
 export function getDefaultAutoreportsIndexParams(): AutoreportsIndexParams {
     return {
         angular: true,
@@ -55,7 +65,7 @@ export interface AutoreportPostObject {
     min_availability: string | null,
     max_number_of_outages: number | null,
     show_time: string, //SLA Graph - if true -> show availability in hours
-    check_hard_state: string, // if true -> consider only hard states from state history
+    check_hard_state: number, // if true -> consider only hard states from state history
     consider_downtimes: number,
     consider_holidays: number,
     calendar_id: number | null,
@@ -83,7 +93,7 @@ export function getDefaultPost(): AutoreportPost {
             min_availability: null,
             max_number_of_outages: null,
             show_time: '0', //SLA Graph - if true -> show availability in hours
-            check_hard_state: '0', // if true -> consider only hard states from state history
+            check_hard_state: 0, // if true -> consider only hard states from state history
             consider_downtimes: 0,
             consider_holidays: 0,
             calendar_id: null,

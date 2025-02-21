@@ -13,11 +13,12 @@ import {
     AutoreportObject,
     HostServiceParams,
     AutoreportPostObject,
-    AtutoreportEditPost
+    AtutoreportEditPost,
+    AutoreportDownloadParams
 } from './autoreports.interface';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
-import { InstantreportGenerateResponse } from '../../../../pages/instantreports/instantreports.interface';
+
 
 
 @Injectable({
@@ -255,26 +256,43 @@ export class AutoreportsService {
         );
     }
 
-    public generateHtmlReport(post: any):Observable<GenericResponseWrapper> {
+    public generateReport(post: any):Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/autoreport_module/autoreports/generate.json`, post)
-            .pipe(
-                map(data => {
-                    // Return true on 200 Ok
-                    return {
-                        success: true,
-                        data: data
-                    };
-                }),
-                catchError((error: any) => {
-                    const err = error.error as GenericValidationError;
-                    return of({
-                        success: false,
-                        data: err
-                    });
-                })
+        .pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data as GenericIdResponse
+                };
+            }),
+            catchError((error: any) => {
+                const err = error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
+            })
+        );
+    }
 
-            );
+    public generateReportPdf(params: AutoreportDownloadParams): Observable<Blob> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<Blob>(`${proxyPath}/autoreport_module/autoreports/generate.pdf`, params as {}).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public generateReportZip(params: AutoreportDownloadParams): Observable<Blob> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<Blob>(`${proxyPath}/autoreport_module/autoreports/generate.zip`, params as {}).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 
 }
