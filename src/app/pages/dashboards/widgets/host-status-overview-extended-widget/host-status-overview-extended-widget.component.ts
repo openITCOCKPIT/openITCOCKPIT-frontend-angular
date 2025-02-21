@@ -2,6 +2,7 @@ import {
     AfterViewInit,
     ChangeDetectionStrategy,
     Component,
+    effect,
     ElementRef,
     inject,
     OnDestroy,
@@ -102,6 +103,16 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
 
     @ViewChild('boxContainer') boxContainer?: ElementRef;
 
+    constructor() {
+        super();
+        effect(() => {
+            if (this.flipped()) {
+                this.loadHostgroups('');
+            }
+            this.cdr.markForCheck();
+        });
+    }
+
 
     public override load() {
         if (this.widget) {
@@ -115,7 +126,6 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
                     this.hostIds = result.hostIds;
                     this.cdr.markForCheck();
                 }));
-            this.loadHostgroups('');
         }
     }
 

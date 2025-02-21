@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { HostgroupSummaryStateServices } from '../../../hosts/summary_state.interface';
 import { HostgroupsLoadHostgroupsByStringParams } from '../../../hostgroups/hostgroups.interface';
@@ -15,7 +15,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { RouterLink } from '@angular/router';
 import {
     ButtonDirective,
-    ColComponent, FormCheckInputDirective,
+    ColComponent,
+    FormCheckInputDirective,
     FormControlDirective,
     InputGroupComponent,
     InputGroupTextDirective,
@@ -67,6 +68,15 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
     private readonly TacticalOverviewServicesWidgetService = inject(TacticalOverviewServicesWidgetService);
     private readonly notyService = inject(NotyService);
 
+    constructor() {
+        super();
+        effect(() => {
+            if (this.flipped()) {
+                this.loadServicegroups('');
+            }
+            this.cdr.markForCheck();
+        });
+    }
 
     public override load() {
         if (this.widget) {
@@ -78,7 +88,6 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
                     this.servicestatusSummary = result.servicestatusSummary;
                     this.cdr.markForCheck();
                 }));
-            this.loadServicegroups('');
         }
     }
 

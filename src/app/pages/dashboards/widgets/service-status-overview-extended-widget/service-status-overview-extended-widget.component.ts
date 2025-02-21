@@ -2,6 +2,7 @@ import {
     AfterViewInit,
     ChangeDetectionStrategy,
     Component,
+    effect,
     ElementRef,
     inject,
     OnDestroy,
@@ -104,6 +105,16 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
 
     @ViewChild('boxContainer') boxContainer?: ElementRef;
 
+    constructor() {
+        super();
+        effect(() => {
+            if (this.flipped()) {
+                this.loadServicegroups('');
+            }
+            this.cdr.markForCheck();
+        });
+    }
+
 
     public override load() {
         if (this.widget) {
@@ -119,7 +130,6 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
                     this.serviceIds = result.serviceIds;
                     this.cdr.markForCheck();
                 }));
-            this.loadServicegroups('');
         }
     }
 

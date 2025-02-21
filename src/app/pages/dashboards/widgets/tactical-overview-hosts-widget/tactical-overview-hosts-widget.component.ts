@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { AsyncPipe, NgIf } from '@angular/common';
@@ -68,6 +68,16 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     private readonly notyService = inject(NotyService);
 
 
+    constructor() {
+        super();
+        effect(() => {
+            if (this.flipped()) {
+                this.loadHostgroups('');
+            }
+            this.cdr.markForCheck();
+        });
+    }
+
     public override load() {
         if (this.widget) {
             this.subscriptions.add(this.TacticalOverviewHostsWidgetService.getTacticalOverviewWidget(this.widget, 'hosts')
@@ -78,12 +88,11 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
                     this.hoststatusSummary = result.hoststatusSummary;
                     this.cdr.markForCheck();
                 }));
-            this.loadHostgroups('');
         }
     }
 
     protected loadHostgroups = (search: string) => {
-        let hostgroupIds:number[] = [];
+        let hostgroupIds: number[] = [];
         if (this.config?.Hostgroup._ids) {
             hostgroupIds = this.config.Hostgroup._ids;
         }
