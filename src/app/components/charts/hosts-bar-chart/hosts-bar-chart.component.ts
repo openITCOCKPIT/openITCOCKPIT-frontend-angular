@@ -135,7 +135,7 @@ export class HostsBarChartComponent implements OnDestroy {
                 type: 'category',
                 data: this.barChartData().labels,
                 min: 0,
-                max: 10
+                max: 9
             }
         };
         console.warn('chartOption', this.chartOption);
