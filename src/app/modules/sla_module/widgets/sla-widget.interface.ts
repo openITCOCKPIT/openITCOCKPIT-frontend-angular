@@ -133,7 +133,10 @@ export interface SlaCalendarWidgetResponse {
 
 
 export interface SlaCalendarStatusLog {
-    [key: string]: SlaCalendarStatusLogEntry[]
+    [key: string]: {
+        lowestValue: number
+        class: string
+    }
 }
 
 export interface SlaCalendarStatusLogEntry {
