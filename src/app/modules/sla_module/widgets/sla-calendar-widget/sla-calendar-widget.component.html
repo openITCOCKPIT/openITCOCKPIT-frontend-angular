@@ -37,23 +37,40 @@
 
                             <c-row class="h-75">
                                 <c-col [xs]="4" [md]="4" [lg]="4" class="flex-1">
-                                    <c-card class="h-100">
-                                        <c-card-header cBgColor="primary"
-                                                       class="text-white h-25 flex-align-items-center d-flex justify-content-center">
-                                            {{ dateDetails?.monthName }}
-                                        </c-card-header>
+                                    <c-card class="h-100" *ngIf="dateDetails">
+                                        @if (dateDetails.yesterday_timestamp && slaResponse.slaStatusLog[dateDetails.yesterday_timestamp]) {
+                                            <c-card-header
+                                                [cBgColor]="slaResponse.slaStatusLog[dateDetails.yesterday_timestamp].class"
+                                                class="text-white h-25 flex-align-items-center d-flex justify-content-center">
+                                                {{ dateDetails.monthName }}
+                                            </c-card-header>
+                                        } @else {
+                                            <c-card-header cBgColor="primary"
+                                                           class="text-white h-25 flex-align-items-center d-flex justify-content-center">
+                                                {{ dateDetails.monthName }}
+                                            </c-card-header>
+                                        }
                                         <c-card-body [id]="'day-'+widget.id"
                                                      class="flex-align-items-center justify-content-center d-flex p-0"
                                                      [style.font-size.px]="fontSize">
-                                            {{ dateDetails?.dayNumber }}
+                                            {{ dateDetails.dayNumber }}
                                         </c-card-body>
-                                        <c-card-footer cBgColor="primary"
-                                                       class="text-white text-center flex-align-items-center justify-content-center d-flex">
-                                            <small>{{ dateDetails?.weekday }}</small>
-                                            <div *ngIf="slaResponse && slaResponse.slaStatusLog">
-
-                                            </div>
-                                        </c-card-footer>
+                                        @if (dateDetails.yesterday_timestamp && slaResponse.slaStatusLog[dateDetails.yesterday_timestamp]) {
+                                            <c-card-footer
+                                                [cBgColor]="slaResponse.slaStatusLog[dateDetails.yesterday_timestamp].class"
+                                                class="text-white text-center flex-align-items-center justify-content-center p-0">
+                                                <small>{{ dateDetails.weekday }}</small>
+                                                <div class="fs-5">
+                                                    {{ slaResponse.slaStatusLog[dateDetails.yesterday_timestamp].lowestValue }}
+                                                    %
+                                                </div>
+                                            </c-card-footer>
+                                        } @else {
+                                            <c-card-footer cBgColor="primary"
+                                                           class="text-white text-center flex-align-items-center justify-content-center d-flex">
+                                                <small>{{ dateDetails.weekday }}</small>
+                                            </c-card-footer>
+                                        }
                                     </c-card>
                                 </c-col>
                                 <c-col [xs]="8" [md]="8" [lg]="8">
@@ -74,6 +91,12 @@
                         'bg-opacity-25': dayDetail.weekday === 6, 'bg-opacity-50': dayDetail.weekday === 7}">
                                                 @if (dayDetail.day === dateDetails?.dayNumber) {
                                                     <c-badge cBgColor="primary">
+                                                        {{ dayDetail.day }}
+                                                    </c-badge>
+                                                } @else if (dayDetail.timestamp && slaResponse.slaStatusLog[dayDetail.timestamp]) {
+                                                    <c-badge class="w-100"
+                                                             [cBgColor]="slaResponse.slaStatusLog[dayDetail.timestamp].class"
+                                                             [title]="slaResponse.slaStatusLog[dayDetail.timestamp].lowestValue + '%'">
                                                         {{ dayDetail.day }}
                                                     </c-badge>
                                                 } @else {
