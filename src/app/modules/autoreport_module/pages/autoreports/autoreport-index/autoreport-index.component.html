@@ -1,0 +1,244 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'index']"
+                   *oitcPermission="['AutoreportModule', 'autoreports', 'index']">
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Autoreport Module') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Auto Reports Overview') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Auto reports') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadAutoreports()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['AutoreportModule', 'autoreports', 'add']"
+                            [routerLink]="['/', 'autoreport_module', 'autoreports', 'addStepOne']" cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Autoreports.name]']"
+                                       [placeholder]="'Filter by auto report name' | transloco"
+                                       aria-label="name"
+                                       cFormControl
+                                       name="name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Autoreports.description]']"
+                                       [placeholder]="'Filter by auto report description' | transloco"
+                                       aria-label="description"
+                                       cFormControl
+                                       name="description"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            <oitc-table-loader *ngIf="!autoreports"></oitc-table-loader>
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                   *ngIf="autoreports"
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th class="width-50 text-center" scope="col">
+                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                    </th>
+                    <th scope="col" mat-sort-header="Autoreports.name">
+                        {{ t('Name') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Autoreports.description">
+                        {{ t('Description') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Autoreports.report_interval">
+                        {{ t('Report interval') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Autoreports.report_send_interval">
+                        {{ t('Report send interval') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Autoreports.min_availability">
+                        {{ t('Min. availability') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Autoreports.max_number_of_outages">
+                        {{ t('Max number of outages') }}
+                    </th>
+                    <th class="text-center width-50" scope="col">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let autoreport of autoreports.autoreports">
+                    <td class="text-center">
+                        <oitc-item-select
+                            *oitcPermission="['AutoreportModule', 'autoreports', 'delete']"
+                            [disabled]="!autoreport.allowEdit"
+                            [item]="autoreport"></oitc-item-select>
+                    </td>
+                    <td>
+                        {{ autoreport.name }}
+                    </td>
+                    <td>
+                        {{ autoreport.description }}
+                    </td>
+                    <td>
+                        {{ autoreport.report_interval }}
+                    </td>
+                    <td>
+                        {{ autoreport.report_send_interval }}
+                    </td>
+                    <td>
+                        {{ autoreport.min_availability | number:'1.3-3' }}
+                    </td>
+                    <td>
+                        {{ autoreport.max_number_of_outages }}
+                    </td>
+                    <td class="width-50">
+                        <oitc-actions-button [permission]="'autoreportmodule.autoreports.edit'"
+                                             [url]="'/autoreport_module/autoreports/editStepOne/' + autoreport.id"
+                                             [allowEdit]="autoreport.allowEdit">
+                            <oitc-actions-button-element [permission]="'autoreportmodule.autoreports.edit'"
+                                                         *ngIf="autoreport.allowEdit"
+                                                         [url]="'/autoreport_module/autoreports/editStepOne/' + autoreport.id">
+                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                {{ t('Edit') }}
+                            </oitc-actions-button-element>
+
+                            <oitc-actions-button-element [permission]="'autoreportmodule.autoreports.generate'"
+                                                         [url]="'/autoreport_module/autoreports/generate/' + autoreport.id">
+                                <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                                {{ t('Generate report') }}
+                            </oitc-actions-button-element>
+
+                            <li cDropdownDivider *ngIf="autoreport.allowEdit"></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(autoreport)"
+                                                         [permission]="'autoreportmodule.autoreports.delete'"
+                                                         *ngIf="autoreport.allowEdit">
+                                <span class="text-danger">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete') }}
+                                </span>
+                            </oitc-actions-button-element>
+                        </oitc-actions-button>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <oitc-no-records *ngIf="autoreports && autoreports.autoreports.length === 0"></oitc-no-records>
+
+            <ng-container *ngIf="autoreports && autoreports.autoreports">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="autoreports.autoreports.length"></oitc-select-all>
+                        </c-col>
+                        <c-col>
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </ng-container>
+
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="autoreports"
+                            [paginateOrScroll]="autoreports"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+
+        </c-card-body>
+    </c-card>
+</ng-container>
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
