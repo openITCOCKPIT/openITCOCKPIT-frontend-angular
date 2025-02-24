@@ -1,5 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { IndexPage } from '../../../../../pages.interface';
+import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
+    getResourcegroupsIndexParams,
+    Resourcegroup,
+    ResourcegroupsIndex,
+    ResourcegroupsIndexParams
+} from '../resourcegroups.interface';
+import {
+    ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -17,45 +29,37 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import {
-    getDefaultImportersIndexParams,
-    Importer,
-    ImportersIndexParams,
-    ImportersIndexRoot
-} from '../importers.interface';
-import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { forkJoin, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
-import { ImportersService } from '../importers.service';
-import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { ResourcegroupsService } from '../resourcegroups.service';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
+import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
+import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
-import { IndexPage } from '../../../../../pages.interface';
-import { Hostdefault } from '../../hostdefaults/hostdefaults.interface';
+import { PermissionsService } from '../../../../../permissions/permissions.service';
+import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
-    selector: 'oitc-importers-index',
+    selector: 'oitc-resourcegroups-index',
     imports: [
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
@@ -63,94 +67,85 @@ import { Hostdefault } from '../../hostdefaults/hostdefaults.interface';
         ColComponent,
         ContainerComponent,
         DebounceDirective,
+        DeleteAllModalComponent,
+        DropdownDividerDirective,
         FaIconComponent,
         FormControlDirective,
         FormDirective,
         FormsModule,
         InputGroupComponent,
         InputGroupTextDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
         NavComponent,
         NavItemComponent,
+        NgForOf,
         NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
         PermissionDirective,
-        ReactiveFormsModule,
         RowComponent,
+        SelectAllComponent,
+        TableDirective,
         TableLoaderComponent,
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        DeleteAllModalComponent,
-        DropdownDividerDirective,
-        ItemSelectComponent,
-        MatSort,
-        MatSortHeader,
-        NgForOf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        SelectAllComponent,
-        TableDirective
+        AsyncPipe,
+        ButtonGroupComponent,
+        NgClass,
+        BadgeOutlineComponent
     ],
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: ImportersService } // Inject the ImportersService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ResourcegroupsService} // Inject the ResourcegroupsService into the DeleteAllModalComponent
     ],
-    templateUrl: './importers-index.component.html',
-    styleUrl: './importers-index.component.css',
+    templateUrl: './resourcegroups-index.component.html',
+    styleUrl: './resourcegroups-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImportersIndexComponent implements OnInit, OnDestroy, IndexPage {
+export class ResourcegroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    public params: ImportersIndexParams = getDefaultImportersIndexParams();
+    public params: ResourcegroupsIndexParams = getResourcegroupsIndexParams();
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
-    public importers?: ImportersIndexRoot;
-    public hostdefaults: Hostdefault[] = [];
-
+    public resourcegroups?: ResourcegroupsIndex;
 
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
-    private readonly ImportersService = inject(ImportersService);
+    private readonly ResourcegroupsService = inject(ResourcegroupsService);
+    public readonly PermissionsService = inject(PermissionsService);
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
-        this.load();
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            //console.log(params);
+            this.load();
+        }));
     }
 
     public load() {
-        let request = {
-            importers: this.ImportersService.getImporters(this.params),
-            hostdefaults: this.ImportersService.getHostdefaults()
-        };
-
-        forkJoin(request).subscribe(
-            (result) => {
-                this.importers = result.importers;
-                this.hostdefaults = result.hostdefaults;
+        this.SelectionServiceService.deselectAll();
+        this.subscriptions.add(this.ResourcegroupsService.getResourcegroups(this.params)
+            .subscribe((result) => {
+                this.resourcegroups = result;
                 this.cdr.markForCheck();
-            });
+            })
+        );
     }
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
 
-
-    public toggleFilter() {
-        this.hideFilter = !this.hideFilter;
-    }
-
-    public resetFilter() {
-        this.params = getDefaultImportersIndexParams();
-        this.load();
-    }
-
-    public onPaginatorChange(importer: PaginatorChangeEvent): void {
-        this.params.page = importer.page;
-        this.params.scroll = importer.scroll;
+    public onPaginatorChange(resourcegroup: PaginatorChangeEvent): void {
+        this.params.page = resourcegroup.page;
+        this.params.scroll = resourcegroup.scroll;
         this.load();
     }
 
@@ -167,22 +162,31 @@ export class ImportersIndexComponent implements OnInit, OnDestroy, IndexPage {
         }
     }
 
+    public toggleFilter() {
+        this.hideFilter = !this.hideFilter;
+    }
+
+    public resetFilter() {
+        this.params = getResourcegroupsIndexParams();
+        this.load();
+    }
+
     // Open the Delete All Modal
-    public toggleDeleteAllModal(importer?: Importer) {
+    public toggleDeleteAllModal(resourcegroup?: Resourcegroup) {
         let items: DeleteAllItem[] = [];
 
-        if (importer) {
+        if (resourcegroup) {
             // User just want to delete a single calendar
             items = [{
-                id: importer.id,
-                displayName: importer.name
+                id: resourcegroup.id,
+                displayName: resourcegroup.container.name
             }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: item.name
+                    displayName: item.container.name
                 };
             });
         }
