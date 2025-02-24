@@ -351,3 +351,8 @@ export interface LoadContainersResponse {
     containers: SelectKeyValue[]
     containerIdsWithWritePermissions: number[]
 }
+
+export interface UserIdAndUsername {
+    id: number;
+    username: string;
+}
