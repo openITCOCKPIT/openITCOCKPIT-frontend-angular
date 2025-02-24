@@ -89,7 +89,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     }
 
     public ngOnInit(): void {
-        
+
         this.item()!.size_x = parseInt(this.item()!.size_x.toString(), 10);
         this.item()!.size_y = parseInt(this.item()!.size_y.toString(), 10);
 
@@ -191,7 +191,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         let label = setup.metric.name;
 
         if (label.length > 20) {
-            label = label.substr(0, 20);
+            label = label.substring(0, 20);
             label += '...';
         }
 
@@ -203,7 +203,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
             }
             label = this.Host.hostname + '/' + this.Service.servicename;
             if (label.length > 20) {
-                label = label.substr(0, 20);
+                label = label.substring(0, 20);
                 label += '...';
             }
         }

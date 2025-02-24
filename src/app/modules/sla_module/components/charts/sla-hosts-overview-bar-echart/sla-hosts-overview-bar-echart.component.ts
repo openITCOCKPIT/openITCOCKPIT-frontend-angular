@@ -145,7 +145,7 @@ export class SlaHostsOverviewBarEchartComponent implements OnDestroy {
                     fontSize: 10,
                     rotate: 15,
                     formatter: function (value: string) {
-                        return value.length > 20 ? value.substr(0, 20) + '...' : value;
+                        return value.length > 20 ? value.substring(0, 20) + '...' : value;
                     }
                 }
             },
