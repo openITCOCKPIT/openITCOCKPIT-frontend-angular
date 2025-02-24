@@ -9,6 +9,7 @@
             <div class="d-flex">
                 <c-toast-body class="w-100">
 
+                    <oitc-toaster-loader *ngIf="!summaryState"></oitc-toaster-loader>
                     <section>
                         <article *ngIf="iconType == 'host'">
                             <div class="bg-color-white pt-2 pl-2 pb-2">
@@ -21,7 +22,7 @@
                                             {{ t(' (DISABLED)') }}
                                         </span>
                                     </h2>
-                                    <c-col lg="12" class="no-padding no-margin">
+                                    <c-col lg="12" class="p-0 no-margin">
                                         <c-progress thin>
                                             <c-progress-bar [value]="toastPercentage"></c-progress-bar>
                                         </c-progress>
@@ -32,7 +33,7 @@
                                         <c-col lg="3">
                                             {{ t('Hostname') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             <a [routerLink]="['/', 'hosts', 'browser', summaryState.Host.id]">
                                                 {{ summaryState.Host.hostname }}
                                             </a>
@@ -42,7 +43,7 @@
                                         <c-col lg="3">
                                             {{ t('Description') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             {{ summaryState.Host.description }}
                                         </c-col>
                                     </c-row>
@@ -51,7 +52,7 @@
                                             {{ t('State') }}
                                         </c-col>
                                         <c-col lg="8" [hidden]="!summaryState.Hoststatus.isInMonitoring"
-                                               class="text-center txt-color-white text-capitalize bg-{{(summaryState.Hoststatus.isHardstate)?summaryState.Hoststatus.humanState:summaryState.Hoststatus.humanState+'-soft'}}">
+                                               class="text-center text-white text-capitalize bg-{{(summaryState.Hoststatus.isHardstate)?summaryState.Hoststatus.humanState:summaryState.Hoststatus.humanState+'-soft'}}">
                                             <span class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
                                             <fa-icon [icon]="['fas', 'user']"
                                                      [hidden]="!summaryState.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
@@ -59,7 +60,7 @@
                                                      [hidden]="summaryState.Hoststatus.scheduledDowntimeDepth === 0"></fa-icon>
                                         </c-col>
                                         <c-col lg="8" [hidden]="summaryState.Hoststatus.isInMonitoring"
-                                               class="text-center txt-color-white bg-primary">
+                                               class="text-center text-white bg-primary">
                                             {{ t('Not in monitoring') }}
                                             <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
                                         </c-col>
@@ -69,7 +70,7 @@
                                             <c-col lg="3">
                                                 {{ t('Output') }}
                                             </c-col>
-                                            <c-col lg="8" class="no-padding">
+                                            <c-col lg="8" class="p-0">
                                                 <div class="cropText"
                                                      [innerHTML]="summaryState.Hoststatus.outputHtml | trustAsHtml"></div>
                                             </c-col>
@@ -78,7 +79,7 @@
                                             <c-col lg="3">
                                                 {{ t('Perfdata') }}
                                             </c-col>
-                                            <c-col lg="8" class="no-padding">
+                                            <c-col lg="8" class="p-0">
                                                 {{ summaryState.Hoststatus.perfdata }}
                                             </c-col>
                                         </c-row>
@@ -86,7 +87,7 @@
                                             <c-col lg="3">
                                                 {{ t('Current attempt') }}
                                             </c-col>
-                                            <c-col lg="8" class="no-padding">
+                                            <c-col lg="8" class="p-0">
                                                 {{ summaryState.Hoststatus.current_check_attempt }}
                                                 /{{ summaryState.Hoststatus.max_check_attempts }}
                                             </c-col>
@@ -95,7 +96,7 @@
                                             <c-col lg="3">
                                                 {{ t('Last check') }}
                                             </c-col>
-                                            <c-col lg="8" class="no-padding">
+                                            <c-col lg="8" class="p-0">
                                                 {{ summaryState.Hoststatus.lastCheck }}
                                             </c-col>
                                         </c-row>
@@ -103,7 +104,7 @@
                                             <c-col lg="3">
                                                 {{ t('Next check') }}
                                             </c-col>
-                                            <c-col lg="8" class="no-padding">
+                                            <c-col lg="8" class="p-0">
                                                 {{ summaryState.Hoststatus.nextCheck }}
                                             </c-col>
                                         </c-row>
@@ -113,7 +114,7 @@
                                             {{ t('Summary State') }}
                                         </c-col>
                                         <c-col lg="8" *ngIf="summaryState.Services.length > 0"
-                                               class="text-center txt-color-white text-capitalize bg-{{summaryState.Services[0].Servicestatus.humanState}}">
+                                               class="text-center text-white text-capitalize bg-{{summaryState.Services[0].Servicestatus.humanState}}">
                                             {{ summaryState.Services[0].Servicestatus.humanState }}
 
                                         </c-col>
@@ -124,29 +125,29 @@
                                         </c-col>
                                         <c-col lg="9">
                                             <c-row>
-                                                <c-col lg="12" class="no-padding">
+                                                <c-col lg="12" class="p-0">
                                                     {{ t('Services: ') }} {{ summaryState.ServiceSummary.total }}
                                                 </c-col>
                                                 <c-col lg="11">
                                                     <div class="btn-group btn-group-xs btn-group-justified w-100"
                                                          role="group"
                                                          [hidden]="summaryState.ServiceSummary.total === 0">
-                                                        <a class="btn btn-success state-button-small"
+                                                        <a class="btn btn-success "
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
                                                             {{ summaryState.ServiceSummary.state[0] }}
                                                         </a>
-                                                        <a class="btn btn-warning state-button-small"
+                                                        <a class="btn btn-warning "
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
                                                             {{ summaryState.ServiceSummary.state[1] }}
                                                         </a>
-                                                        <a class="btn btn-danger state-button-small"
+                                                        <a class="btn btn-danger "
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
                                                             {{ summaryState.ServiceSummary.state[2] }}
                                                         </a>
-                                                        <a class="btn btn-secondary state-button-small"
+                                                        <a class="btn btn-secondary "
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
                                                             {{ summaryState.ServiceSummary.state[3] }}
@@ -160,7 +161,7 @@
                                         <c-col lg="4">
                                             {{ t('Service') }}
                                         </c-col>
-                                        <c-col lg="3" class="no-padding">
+                                        <c-col lg="3" class="p-0">
                                             {{ t('State') }}
                                         </c-col>
                                         <c-col lg="4">
@@ -176,7 +177,7 @@
                                         </c-col>
                                         <!-- State -->
                                         <c-col lg="3" [hidden]="!service.Servicestatus.isInMonitoring"
-                                               class="text-center txt-color-white text-capitalize bg-{{(service.Servicestatus.isHardstate)?service.Servicestatus.humanState:service.Servicestatus.humanState+'-soft'}}">
+                                               class="text-center text-white text-capitalize bg-{{(service.Servicestatus.isHardstate)?service.Servicestatus.humanState:service.Servicestatus.humanState+'-soft'}}">
                                             {{ service.Servicestatus.humanState }}
                                             <fa-icon [icon]="['fas', 'user']"
                                                      [hidden]="!service.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
@@ -184,7 +185,7 @@
                                                      [hidden]="service.Servicestatus.scheduledDowntimeDepth === 0"></fa-icon>
                                         </c-col>
                                         <c-col lg="3" [hidden]="service.Servicestatus.isInMonitoring"
-                                               class="text-center txt-color-white bg-primary">
+                                               class="text-center text-white bg-primary">
                                             {{ t('Not in monitoring') }}
                                             <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
                                         </c-col>
@@ -207,7 +208,7 @@
                                             {{ t(' (DISABLED)') }}
                                         </span>
                                     </h2>
-                                    <c-col lg="12" class="no-padding">
+                                    <c-col lg="12" class="p-0">
                                         <c-progress thin>
                                             <c-progress-bar [value]="toastPercentage"></c-progress-bar>
                                         </c-progress>
@@ -218,7 +219,7 @@
                                         <c-col lg="3">
                                             {{ t('Hostname') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             <a [routerLink]="['/', 'hosts', 'browser', summaryState.Host.id]">
                                                 {{ summaryState.Host.hostname }}
                                             </a>
@@ -229,7 +230,7 @@
                                             {{ t('Host state') }}
                                         </c-col>
                                         <c-col lg="8" [hidden]="!summaryState.Hoststatus.isInMonitoring"
-                                               class="text-center txt-color-white text-capitalize bg-{{(summaryState.Hoststatus.isHardstate)?summaryState.Hoststatus.humanState:summaryState.Hoststatus.humanState+'-soft'}}">
+                                               class="text-center text-white text-capitalize bg-{{(summaryState.Hoststatus.isHardstate)?summaryState.Hoststatus.humanState:summaryState.Hoststatus.humanState+'-soft'}}">
                                             <span class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
                                             <fa-icon [icon]="['fas', 'user']"
                                                      [hidden]="!summaryState.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
@@ -237,7 +238,7 @@
                                                      [hidden]="summaryState.Hoststatus.scheduledDowntimeDepth === 0"></fa-icon>
                                         </c-col>
                                         <c-col lg="8" [hidden]="summaryState.Hoststatus.isInMonitoring"
-                                               class="text-center txt-color-white bg-primary">
+                                               class="text-center text-white bg-primary">
                                             {{ t('Not in monitoring') }}
                                             <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
                                         </c-col>
@@ -246,7 +247,7 @@
                                         <c-col lg="3">
                                             {{ t('Service') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             <a [routerLink]="['/', 'services', 'browser', summaryState.Service.id]">
                                                 {{ summaryState.Service.servicename }}
                                             </a>
@@ -256,7 +257,7 @@
                                         <c-col lg="3">
                                             {{ t('Description') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             {{ summaryState.Service.description }}
                                         </c-col>
                                     </c-row>
@@ -265,7 +266,7 @@
                                             {{ t('State') }}
                                         </c-col>
                                         <c-col lg="8" [hidden]="!summaryState.Servicestatus.isInMonitoring"
-                                               class="text-center txt-color-white text-capitalize bg-{{(summaryState.Servicestatus.isHardstate)?summaryState.Servicestatus.humanState:summaryState.Servicestatus.humanState+'-soft'}}">
+                                               class="text-center text-white text-capitalize bg-{{(summaryState.Servicestatus.isHardstate)?summaryState.Servicestatus.humanState:summaryState.Servicestatus.humanState+'-soft'}}">
                                             <span class="padding-5">{{ summaryState.Servicestatus.humanState }}</span>
                                             <fa-icon [icon]="['fas', 'user']"
                                                      [hidden]="!summaryState.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
@@ -273,7 +274,7 @@
                                                      [hidden]="summaryState.Servicestatus.scheduledDowntimeDepth === 0"></fa-icon>
                                         </c-col>
                                         <c-col lg="8" [hidden]="summaryState.Servicestatus.isInMonitoring"
-                                               class="text-center txt-color-white bg-primary">
+                                               class="text-center text-white bg-primary">
                                             {{ t('Not in monitoring') }}
                                             <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
                                         </c-col>
@@ -283,7 +284,7 @@
                                             <c-col lg="3">
                                                 {{ t('Output') }}
                                             </c-col>
-                                            <c-col lg="8" class="no-padding">
+                                            <c-col lg="8" class="p-0">
                                                 <div class="cropText"
                                                      [innerHTML]="summaryState.Servicestatus.outputHtml | trustAsHtml"></div>
                                             </c-col>
@@ -292,7 +293,7 @@
                                             <c-col lg="3">
                                                 {{ t('Perfdata') }}
                                             </c-col>
-                                            <c-col lg="8" class="no-padding">
+                                            <c-col lg="8" class="p-0">
                                                 {{ summaryState.Servicestatus.perfdata }}
                                             </c-col>
                                         </c-row>
@@ -300,7 +301,7 @@
                                             <c-col lg="3">
                                                 {{ t('Current attempt') }}
                                             </c-col>
-                                            <c-col lg="8" class="no-padding">
+                                            <c-col lg="8" class="p-0">
                                                 {{ summaryState.Servicestatus.current_check_attempt }}
                                                 /{{ summaryState.Servicestatus.max_check_attempts }}
                                             </c-col>
@@ -309,7 +310,7 @@
                                             <c-col lg="3">
                                                 {{ t('Last check') }}
                                             </c-col>
-                                            <c-col lg="8" class="no-padding">
+                                            <c-col lg="8" class="p-0">
                                                 {{ summaryState.Servicestatus.lastCheck }}
                                             </c-col>
                                         </c-row>
@@ -317,7 +318,7 @@
                                             <c-col lg="3">
                                                 {{ t('Next check') }}
                                             </c-col>
-                                            <c-col lg="8" class="no-padding">
+                                            <c-col lg="8" class="p-0">
                                                 {{ summaryState.Servicestatus.nextCheck }}
                                             </c-col>
                                         </c-row>
@@ -325,7 +326,7 @@
                                             <c-col lg="3">
                                                 {{ t('Last state change') }}
                                             </c-col>
-                                            <c-col lg="8" class="no-padding">
+                                            <c-col lg="8" class="p-0">
                                                 {{ summaryState.Servicestatus.last_state_change }}
                                             </c-col>
                                         </c-row>
@@ -337,11 +338,11 @@
                             <div class="bg-color-white pt-2 pl-2 pb-2">
                                 <header>
                                     <h2 class="bold txt-color-blueDark">
-                                        <fa-icon [icon]="['fas', 'fa-sitemap']" size="lg"
+                                        <fa-icon [icon]="['fas', 'sitemap']" size="lg"
                                                  class="txt-color-blueDark"></fa-icon>
                                         {{ t('Host group') }}
                                     </h2>
-                                    <c-col lg="12" class="no-padding">
+                                    <c-col lg="12" class="p-0">
                                         <c-progress thin>
                                             <c-progress-bar [value]="toastPercentage"></c-progress-bar>
                                         </c-progress>
@@ -352,7 +353,7 @@
                                         <c-col lg="3">
                                             {{ t('Host group name') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             <a [routerLink]="['/', 'hostgroups', 'extended', summaryState.Hostgroup.id]">
                                                 {{ summaryState.Hostgroup.name }}
                                             </a>
@@ -362,7 +363,7 @@
                                         <c-col lg="3">
                                             {{ t('Description') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             {{ summaryState.Hostgroup.description }}
                                         </c-col>
                                     </c-row>
@@ -370,9 +371,9 @@
                                         <c-col lg="3">
                                             {{ t('Summary state') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             <div
-                                                class="text-center txt-color-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
                                                 {{ summaryState.CumulatedHumanState }}
                                             </div>
                                         </c-col>
@@ -381,10 +382,10 @@
                                         <c-col lg="4">
                                             {{ t('Summary output') }}
                                         </c-col>
-                                        <c-col lg="4" class="no-padding">
+                                        <c-col lg="4" class="p-0">
                                             {{ t('Hosts: ') }}{{ summaryState.Hostgroup.HostSummary.total }}
                                         </c-col>
-                                        <c-col lg="4" class="no-padding">
+                                        <c-col lg="4" class="p-0">
                                             {{ t('Services: ') }}{{ summaryState.Hostgroup.TotalServiceSummary.total }}
                                         </c-col>
                                     </c-row>
@@ -393,19 +394,19 @@
                                         <c-col lg="3">
                                             {{ t('Hosts overview') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             <div class="btn-group btn-group-xs btn-group-justified w-100" role="group">
-                                                <a class="btn btn-success state-button-small"
+                                                <a class="btn btn-success "
                                                    [routerLink]="['/', 'hosts', 'index']"
                                                    [queryParams]="{'id': summaryState.HostIdsGroupByState[0]}">
                                                     {{ summaryState.Hostgroup.HostSummary.state[0] }}
                                                 </a>
-                                                <a class="btn btn-danger state-button-small"
+                                                <a class="btn btn-danger "
                                                    [routerLink]="['/', 'hosts', 'index']"
                                                    [queryParams]="{'id': summaryState.HostIdsGroupByState[1]}">
                                                     {{ summaryState.Hostgroup.HostSummary.state[1] }}
                                                 </a>
-                                                <a class="btn btn-secondary state-button-small"
+                                                <a class="btn btn-secondary "
                                                    [routerLink]="['/', 'hosts', 'index']"
                                                    [queryParams]="{'id': summaryState.HostIdsGroupByState[2]}">
                                                     {{ summaryState.Hostgroup.HostSummary.state[2] }}
@@ -418,24 +419,24 @@
                                         <c-col lg="3">
                                             {{ t('Services overview') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             <div class="btn-group btn-group-xs btn-group-justified w-100" role="group">
-                                                <a class="btn btn-success state-button-small"
+                                                <a class="btn btn-success "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
                                                     {{ summaryState.Hostgroup.TotalServiceSummary.state[0] }}
                                                 </a>
-                                                <a class="btn btn-warning state-button-small"
+                                                <a class="btn btn-warning "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
                                                     {{ summaryState.Hostgroup.TotalServiceSummary.state[1] }}
                                                 </a>
-                                                <a class="btn btn-danger state-button-small"
+                                                <a class="btn btn-danger "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
                                                     {{ summaryState.Hostgroup.TotalServiceSummary.state[2] }}
                                                 </a>
-                                                <a class="btn btn-secondary state-button-small"
+                                                <a class="btn btn-secondary "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
                                                     {{ summaryState.Hostgroup.TotalServiceSummary.state[3] }}
@@ -450,7 +451,7 @@
                                             </a>
                                         </c-col>
                                         <c-col lg="4" [hidden]="!host.Hoststatus.isInMonitoring"
-                                               class="text-center txt-color-white text-capitalize bg-{{(host.Hoststatus.isHardstate)?host.Hoststatus.humanState:host.Hoststatus.humanState+'-soft'}}">
+                                               class="text-center text-white text-capitalize bg-{{(host.Hoststatus.isHardstate)?host.Hoststatus.humanState:host.Hoststatus.humanState+'-soft'}}">
                                             {{ host.Hoststatus.humanState }}
                                             <fa-icon [icon]="['fas', 'user']"
                                                      [hidden]="!host.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
@@ -458,12 +459,12 @@
                                                      [hidden]="host.Hoststatus.scheduledDowntimeDepth === 0"></fa-icon>
                                         </c-col>
                                         <c-col lg="4" [hidden]="host.Hoststatus.isInMonitoring"
-                                               class="text-center txt-color-white bg-primary">
+                                               class="text-center text-white bg-primary">
                                             {{ t('Not in monitoring') }}
                                             <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
                                         </c-col>
-                                        <c-col lg="4" class="offset-lg-1 no-padding">
-                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group">
+                                        <c-col lg="4" class="offset-lg-1 p-0">
+                                            <div class="btn-group btn-group-xs btn-group-justified" role="group">
                                                 <a class="btn btn-success state-button-small font-sm"
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': host.ServiceIdsGroupByState[0]}">
@@ -498,7 +499,7 @@
                                                  class="txt-color-blueDark"></fa-icon>
                                         {{ t('Service group') }}
                                     </h2>
-                                    <c-col lg="12" class="no-padding">
+                                    <c-col lg="12" class="p-0">
                                         <c-progress thin>
                                             <c-progress-bar [value]="toastPercentage"></c-progress-bar>
                                         </c-progress>
@@ -509,7 +510,7 @@
                                         <c-col lg="3">
                                             {{ t('Service group name') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             <a [routerLink]="['/', 'servicegroups', 'extended', summaryState.Servicegroup.id]">
                                                 {{ summaryState.Servicegroup.name }}
                                             </a>
@@ -519,7 +520,7 @@
                                         <c-col lg="3">
                                             {{ t('Description') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             {{ summaryState.Servicegroup.description }}
                                         </c-col>
                                     </c-row>
@@ -527,16 +528,16 @@
                                         <c-col lg="3">
                                             {{ t('Summary state') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding"
+                                        <c-col lg="8" class="p-0"
                                                [hidden]="summaryState.ServiceSummary.total === 0">
                                             <div
-                                                class="text-center txt-color-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
                                                 {{ summaryState.CumulatedHumanState }}
                                             </div>
                                         </c-col>
-                                        <c-col lg="8" class="no-padding"
+                                        <c-col lg="8" class="p-0"
                                                [hidden]="summaryState.ServiceSummary.total > 0">
-                                            <div class="text-center txt-color-white text-capitalize bg-primary">
+                                            <div class="text-center text-white text-capitalize bg-primary">
                                                 {{ summaryState.CumulatedHumanState }}
                                             </div>
                                         </c-col>
@@ -545,7 +546,7 @@
                                         <c-col lg="3">
                                             {{ t('Summary output') }}
                                         </c-col>
-                                        <c-col lg="4" class="no-padding">
+                                        <c-col lg="4" class="p-0">
                                             {{ t('Services: ') }}{{ summaryState.ServiceSummary.total }}
                                         </c-col>
                                     </c-row>
@@ -553,25 +554,25 @@
                                         <c-col lg="3">
                                             {{ t('Services overview') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
                                                  [hidden]="summaryState.ServiceSummary.total === 0">
-                                                <a class="btn btn-success state-button-small"
+                                                <a class="btn btn-success "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
                                                     {{ summaryState.ServiceSummary.state[0] }}
                                                 </a>
-                                                <a class="btn btn-warning state-button-small"
+                                                <a class="btn btn-warning "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
                                                     {{ summaryState.ServiceSummary.state[1] }}
                                                 </a>
-                                                <a class="btn btn-danger state-button-small"
+                                                <a class="btn btn-danger "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
                                                     {{ summaryState.ServiceSummary.state[2] }}
                                                 </a>
-                                                <a class="btn btn-secondary state-button-small"
+                                                <a class="btn btn-secondary "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
                                                     {{ summaryState.ServiceSummary.state[3] }}
@@ -583,7 +584,7 @@
                                         <c-col lg="5">
                                             {{ t('Service') }}
                                         </c-col>
-                                        <c-col lg="2" class="no-padding">
+                                        <c-col lg="2" class="p-0">
                                             {{ t('State') }}
                                         </c-col>
                                         <c-col lg="4">
@@ -599,7 +600,7 @@
                                             </a>
                                         </c-col>
                                         <c-col lg="2" [hidden]="!service.Servicestatus.isInMonitoring"
-                                               class="text-center txt-color-white text-capitalize bg-{{(service.Servicestatus.isHardstate)?service.Servicestatus.humanState:service.Servicestatus.humanState+'-soft'}}">
+                                               class="text-center text-white text-capitalize bg-{{(service.Servicestatus.isHardstate)?service.Servicestatus.humanState:service.Servicestatus.humanState+'-soft'}}">
                                             {{ service.Servicestatus.humanState }}
                                             <fa-icon [icon]="['fas', 'user']"
                                                      [hidden]="!service.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
@@ -607,7 +608,7 @@
                                                      [hidden]="service.Servicestatus.scheduledDowntimeDepth === 0"></fa-icon>
                                         </c-col>
                                         <c-col lg="2" [hidden]="service.Servicestatus.isInMonitoring"
-                                               class="text-center txt-color-white bg-primary">
+                                               class="text-center text-white bg-primary">
                                             <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
                                         </c-col>
                                         <div class="col-lg-4 cropText">
@@ -626,7 +627,7 @@
                                                  class="txt-color-blueDark"></fa-icon>
                                         {{ t('Map') }}
                                     </h2>
-                                    <c-col lg="12" class="no-padding">
+                                    <c-col lg="12" class="p-0">
                                         <c-progress thin>
                                             <c-progress-bar [value]="toastPercentage"></c-progress-bar>
                                         </c-progress>
@@ -637,8 +638,8 @@
                                         <c-col lg="3">
                                             {{ t('Map name') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
-                                            <a [routerLink]="['/', 'map_module', 'mapeditors', 'view', summaryState.Map.object_id]">
+                                        <c-col lg="8" class="p-0">
+                                            <a [routerLink]="['/', 'map_module', 'mapeditors', 'view', summaryState.Map.object_id, false]">
                                                 {{ summaryState.Map.name }}
                                             </a>
                                         </c-col>
@@ -647,7 +648,7 @@
                                         <c-col lg="3">
                                             {{ t('Map title') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             {{ summaryState.Map.title }}
                                         </c-col>
                                     </c-row>
@@ -655,16 +656,16 @@
                                         <c-col lg="3">
                                             {{ t('Summary state') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding"
+                                        <c-col lg="8" class="p-0"
                                                [hidden]="summaryState.HostSummary.total === 0|| summaryState.ServiceSummary.total === 0">
                                             <div
-                                                class="text-center txt-color-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
                                                 {{ summaryState.CumulatedHumanState }}
                                             </div>
                                         </c-col>
-                                        <c-col lg="8" class="no-padding"
+                                        <c-col lg="8" class="p-0"
                                                [hidden]="summaryState.HostSummary.total > 0 && summaryState.ServiceSummary.total > 0">
-                                            <div class="text-center txt-color-white text-capitalize bg-primary">
+                                            <div class="text-center text-white text-capitalize bg-primary">
                                                 {{ summaryState.CumulatedHumanState }}
                                             </div>
                                         </c-col>
@@ -673,10 +674,10 @@
                                         <c-col lg="3">
                                             {{ t('Summary output') }}
                                         </c-col>
-                                        <c-col lg="4" class="no-padding">
+                                        <c-col lg="4" class="p-0">
                                             {{ t('Hosts: ') }}{{ summaryState.HostSummary.total }}
                                         </c-col>
-                                        <c-col lg="4" class="no-padding">
+                                        <c-col lg="4" class="p-0">
                                             {{ t('Services: ') }}{{ summaryState.ServiceSummary.total }}
                                         </c-col>
                                     </c-row>
@@ -684,20 +685,20 @@
                                         <c-col lg="3">
                                             {{ t('Hosts overview') }}
                                         </c-col>
-                                        <c-col lg="8" class="no-padding">
+                                        <c-col lg="8" class="p-0">
                                             <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
                                                  [hidden]="summaryState.ServiceSummary.total === 0">
-                                                <a class="btn btn-success state-button-small"
+                                                <a class="btn btn-success "
                                                    [routerLink]="['/', 'hosts', 'index']"
                                                    [queryParams]="{'id': summaryState.HostIdsGroupByState[0]}">
                                                     {{ summaryState.HostSummary.state[0] }}
                                                 </a>
-                                                <a class="btn btn-danger state-button-small"
+                                                <a class="btn btn-danger "
                                                    [routerLink]="['/', 'hosts', 'index']"
                                                    [queryParams]="{'id': summaryState.HostIdsGroupByState[1]}">
                                                     {{ summaryState.HostSummary.state[1] }}
                                                 </a>
-                                                <a class="btn btn-secondary state-button-small"
+                                                <a class="btn btn-secondary "
                                                    [routerLink]="['/', 'hosts', 'index']"
                                                    [queryParams]="{'id': summaryState.HostIdsGroupByState[2]}">
                                                     {{ summaryState.HostSummary.state[2] }}
@@ -710,26 +711,26 @@
                                         <c-col lg="3">
                                             {{ t('Services overview') }}
                                         </c-col>
-                                        <div class="col-lg-8 no-padding">
+                                        <div class="col-lg-8 p-0">
                                             <div class="btn-group btn-group-xs btn-group-justified w-100"
                                                  role="group"
                                                  [hidden]="summaryState.ServiceSummary.total === 0">
-                                                <a class="btn btn-success state-button-small"
+                                                <a class="btn btn-success "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
                                                     {{ summaryState.ServiceSummary.state[0] }}
                                                 </a>
-                                                <a class="btn btn-warning state-button-small"
+                                                <a class="btn btn-warning "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
                                                     {{ summaryState.ServiceSummary.state[1] }}
                                                 </a>
-                                                <a class="btn btn-danger state-button-small"
+                                                <a class="btn btn-danger "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
                                                     {{ summaryState.ServiceSummary.state[2] }}
                                                 </a>
-                                                <a class="btn btn-secondary state-button-small"
+                                                <a class="btn btn-secondary "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
                                                     {{ summaryState.ServiceSummary.state[3] }}
@@ -754,7 +755,7 @@
                                             <c-col lg="4">
                                                 {{ t('Host') }}
                                             </c-col>
-                                            <c-col lg="3" class="no-padding">
+                                            <c-col lg="3" class="p-0">
                                                 {{ t('State') }}
                                             </c-col>
                                             <c-col lg="4">
@@ -768,7 +769,7 @@
                                                 </a>
                                             </c-col>
                                             <c-col lg="3" [hidden]="!notOkHost.Hoststatus.isInMonitoring"
-                                                   class="text-center txt-color-white text-capitalize bg-{{(notOkHost.Hoststatus.isHardstate)?notOkHost.Hoststatus.humanState:notOkHost.Hoststatus.humanState+'-soft'}}">
+                                                   class="text-center text-white text-capitalize bg-{{(notOkHost.Hoststatus.isHardstate)?notOkHost.Hoststatus.humanState:notOkHost.Hoststatus.humanState+'-soft'}}">
                                                 {{ notOkHost.Hoststatus.humanState }}
                                                 <fa-icon [icon]="['fas', 'user']"
                                                          [hidden]="!notOkHost.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
@@ -776,7 +777,7 @@
                                                          [hidden]="notOkHost.Hoststatus.scheduledDowntimeDepth === 0"></fa-icon>
                                             </c-col>
                                             <c-col lg="3" [hidden]="notOkHost.Hoststatus.isInMonitoring"
-                                                   class="text-center txt-color-white bg-primary">
+                                                   class="text-center text-white bg-primary">
                                                 {{ t('Not in monitoring') }}
                                                 <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
                                             </c-col>
@@ -789,7 +790,7 @@
                                             <c-col lg="4">
                                                 {{ t('Service') }}
                                             </c-col>
-                                            <c-col lg="3" class="no-padding">
+                                            <c-col lg="3" class="p-0">
                                                 {{ t('State') }}
                                             </c-col>
                                             <c-col lg="4">
@@ -805,7 +806,7 @@
                                                 </a>
                                             </c-col>
                                             <c-col lg="3" [hidden]="!notOkService.Servicestatus.isInMonitoring"
-                                                   class="text-center txt-color-white text-capitalize bg-{{(notOkService.Servicestatus.isHardstate)?notOkService.Servicestatus.humanState:notOkService.Servicestatus.humanState+'-soft'}}">
+                                                   class="text-center text-white text-capitalize bg-{{(notOkService.Servicestatus.isHardstate)?notOkService.Servicestatus.humanState:notOkService.Servicestatus.humanState+'-soft'}}">
                                                 {{ notOkService.Servicestatus.humanState }}
                                                 <fa-icon [icon]="['fas', 'user']"
                                                          [hidden]="!notOkService.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
@@ -813,7 +814,7 @@
                                                          [hidden]="notOkService.Servicestatus.scheduledDowntimeDepth === 0"></fa-icon>
                                             </c-col>
                                             <c-col lg="3" [hidden]="notOkService.Servicestatus.isInMonitoring"
-                                                   class="text-center txt-color-white bg-primary">
+                                                   class="text-center text-white bg-primary">
                                                 {{ t('Not in monitoring') }}
                                                 <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
                                             </c-col>

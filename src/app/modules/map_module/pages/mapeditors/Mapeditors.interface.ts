@@ -371,17 +371,29 @@ export interface Servicegroups {
 
 export interface MapSummaryRoot {
     summary: Summary
-    _csrfToken: any
+    _csrfToken: string
 }
 
 export interface Summary {
-    Host: HostSummary
-    Hoststatus: HoststatusSummary
-    Service: ServiceSummary
-    Servicestatus: ServicestatusSummary
+    Map: MapForSummary
+    Host: HostForSummary
+    Hosts: HostForSummaryRoot[]
+    Hoststatus: HoststatusForSummary
+    Hostgroup: HostgroupForSummary
+    HostSummary: HostSummary
+    HostIdsGroupByState: number[][]
+    NotOkHosts: any[]
+    Service: ServiceForSummary
+    Services: ServicesForSummaryRoot[]
+    Servicestatus: ServicestatusForSummary
+    Servicegroup: ServicegroupForSummary
+    ServiceSummary: ServiceSummary
+    ServiceIdsGroupByState: number[][]
+    NotOkServices: any[]
+    CumulatedHumanState: string
 }
 
-export interface HostSummary {
+export interface HostForSummary {
     id: number
     uuid: string
     hostname: string
@@ -402,7 +414,7 @@ export interface HostSummary {
     name: string
 }
 
-export interface HoststatusSummary {
+export interface HoststatusForSummary {
     currentState: number
     isFlapping: any
     problemHasBeenAcknowledged: boolean
@@ -415,6 +427,7 @@ export interface HoststatusSummary {
     last_state_change: string
     output: any
     long_output: any
+    perfdata?: string
     acknowledgement_type: any
     state_type: boolean
     flap_detection_enabled: any
@@ -423,10 +436,11 @@ export interface HoststatusSummary {
     max_check_attempts: any
     latency: any
     last_time_up: string
-    lastHardStateChangeInWords: string
-    last_state_change_in_words: string
-    lastCheckInWords: string
-    nextCheckInWords: string
+    UserTime?: any
+    lastHardStateChangeInWords?: string
+    last_state_change_in_words?: string
+    lastCheckInWords?: string
+    nextCheckInWords?: string
     isHardstate: boolean
     isInMonitoring: boolean
     humanState: string
@@ -435,7 +449,7 @@ export interface HoststatusSummary {
     outputHtml: string
 }
 
-export interface ServiceSummary {
+export interface ServiceForSummary {
     id: number
     uuid: string
     servicename: string
@@ -450,7 +464,7 @@ export interface ServiceSummary {
     priority: any
 }
 
-export interface ServicestatusSummary {
+export interface ServicestatusForSummary {
     currentState: number
     lastHardState: any
     isFlapping: any
@@ -483,4 +497,56 @@ export interface ServicestatusSummary {
     cssClass: string
     textClass: string
     outputHtml: string
+}
+
+export interface ServicesForSummaryRoot {
+    Service: ServiceForSummary
+    Servicestatus: ServicestatusForSummary
+    Host: HostForSummary
+}
+
+export interface HostForSummaryRoot {
+    Host: HostForSummary
+    Hoststatus: HoststatusForSummary
+    ServiceSummary: ServiceSummary
+    ServiceIdsGroupByState: number[][]
+}
+
+export interface MapForSummary {
+    id: number
+    name: string
+    title: string
+    object_id: number
+}
+
+export interface HostSummary {
+    state: number[]
+    acknowledged: number[]
+    in_downtime: number[]
+    not_handled: number[]
+    total: number
+}
+
+export interface ServiceSummary {
+    state: number[]
+    total: number
+}
+
+export interface ServicegroupForSummary {
+    id: number
+    name: string
+    description: string
+}
+
+export interface HostgroupForSummary {
+    id: number
+    name: string
+    description: string
+    HostSummary: HostSummary
+    TotalServiceSummary: TotalServiceSummary
+}
+
+export interface TotalServiceSummary {
+    state: number[]
+    total: number
 }

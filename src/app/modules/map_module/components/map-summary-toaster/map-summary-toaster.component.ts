@@ -1,16 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, ViewChild } from '@angular/core';
 
-import { NgIf, TitleCasePipe } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import {
     ColComponent,
     ProgressBarComponent,
     ProgressComponent,
     RowComponent,
-    TableDirective,
     ToastBodyComponent,
     ToastComponent,
-    ToasterComponent,
-    ToastHeaderComponent
+    ToasterComponent
 } from '@coreui/angular';
 import { Subscription } from 'rxjs';
 import { MapSummaryToasterService } from './map-summary-toaster.service';
@@ -29,20 +27,18 @@ import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
     selector: 'oitc-map-summary-toaster',
     imports: [
         NgIf,
+        NgForOf,
         ProgressBarComponent,
         ProgressComponent,
         ToastBodyComponent,
         ToastComponent,
-        ToastHeaderComponent,
         ToasterComponent,
-        TableDirective,
         FaIconComponent,
         TranslocoDirective,
         SkeletonModule,
         ToasterLoaderComponent,
         RowComponent,
         ColComponent,
-        TitleCasePipe,
         RouterLink,
         TrustAsHtmlPipe
     ],
@@ -79,8 +75,10 @@ export class MapSummaryToasterComponent implements OnDestroy {
 
                     // Reset the toast timer when the item changes.
                     // (user hovers over a different service)
-                    this.toast.clearTimer();
-                    this.toast.setTimer();
+                    if (this.toast) {
+                        this.toast.clearTimer();
+                        this.toast.setTimer();
+                    }
 
                     this.cdr.markForCheck();
                 }));

@@ -7,7 +7,8 @@ import {
     InputSignal,
     OnDestroy,
     OnInit,
-    Renderer2
+    Renderer2,
+    ViewChild
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
@@ -31,6 +32,8 @@ import { RadialGauge } from 'canvas-gauges';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
+    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
+
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
 
@@ -89,7 +92,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     }
 
     public ngOnInit(): void {
-        
+
         this.item()!.size_x = parseInt(this.item()!.size_x.toString(), 10);
         this.item()!.size_y = parseInt(this.item()!.size_y.toString(), 10);
 
@@ -127,6 +130,9 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
                 this.initRefreshTimer();
                 this.init = false;
+                if (this.resizableDirective) {
+                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
+                }
                 this.cdr.markForCheck();
             }));
     };

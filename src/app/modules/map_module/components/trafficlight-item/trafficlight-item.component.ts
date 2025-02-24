@@ -35,6 +35,7 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
     @ViewChild('redLightGroup') redLightGroupElement!: ElementRef;
     @ViewChild('yellowLightGroup') yellowLightGroupElement!: ElementRef;
     @ViewChild('greenLightGroup') greenLightGroupElement!: ElementRef;
+    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
 
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
@@ -154,6 +155,9 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
                 this.initRefreshTimer();
 
                 this.init = false;
+                if (this.resizableDirective) {
+                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
+                }
                 this.cdr.markForCheck();
             }));
     };
