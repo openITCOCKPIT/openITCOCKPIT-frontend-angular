@@ -6,7 +6,6 @@ Alternative solution in case this makes any trouble:
 https://stackoverflow.com/a/76688561
 -->
 
-
 <p-select
     [attr.id]="id"
     [name]="String(name)"
@@ -31,7 +30,14 @@ https://stackoverflow.com/a/76688561
     </ng-template>
     <ng-template let-group #group>
         <div class="flex items-center">
-            <span>{{ group.value }}</span>
+            <span>
+                @if (group.label) {
+                    {{ group.label }}
+                } @else {
+                    <!-- Grafana Editor has no label -->
+                    {{ group.value }}
+                }
+            </span>
         </div>
     </ng-template>
 </p-select>
