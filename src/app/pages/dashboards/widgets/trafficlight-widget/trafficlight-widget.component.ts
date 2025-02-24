@@ -202,7 +202,7 @@ export class TrafficlightWidgetComponent extends BaseWidgetComponent implements 
 
     private checkUserPermissions() {
         forkJoin([
-            this.PermissionsService.hasPermissionObservable(['Services', 'bhujikol']),
+            this.PermissionsService.hasPermissionObservable(['Services', 'browser']),
             this.PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'view'])
         ]).subscribe(result => {
             this.isLink = result[0] || result[1];
