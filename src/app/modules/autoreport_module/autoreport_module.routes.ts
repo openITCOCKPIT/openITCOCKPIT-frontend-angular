@@ -1,10 +1,5 @@
 import { Routes } from '@angular/router';
-import {
-    AutoreportSettingsIndexComponent
-} from './pages/autoreport-settings/autoreport-settings-index/autoreport-settings-index.component';
-import {
-    AutoreportAddStepOneComponent
-} from './pages/autoreports/autoreport-add-step-one/autoreport-add-step-one.component';
+
 
 export const autoreportModuleRoutes: Routes = [
 
@@ -40,4 +35,12 @@ export const autoreportModuleRoutes: Routes = [
         path: 'autoreport_module/autoreports/generate/:id',
         loadComponent: () => import('./pages/autoreports/autoreport-generate/autoreport-generate.component').then(m => m.AutoreportGenerateComponent)
     },
-];
+    {
+        path: 'autoreport_module/autoreports/serviceUsedBy/:id',
+        loadComponent: () => import('./pages/autoreports/autoreport-service-used-by/autoreport-service-used-by.component').then(m => m.AutoreportServiceUsedByComponent)
+    },
+    {
+        path: 'autoreport_module/autoreports/hostUsedBy/:id',
+        loadComponent: () => import('./pages/autoreports/autoreport-host-used-by/autoreport-host-used-by.component').then(m => m.AutoreportHostUsedByComponent)
+    },
+]

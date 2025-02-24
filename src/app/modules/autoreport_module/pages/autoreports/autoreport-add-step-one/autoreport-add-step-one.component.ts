@@ -125,13 +125,13 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
         {key: 'WEEK', value: this.TranslocoService.translate('weekly')},
         {key: 'DAY', value: this.TranslocoService.translate('daily')}
     ];
-    public graphoptions: SelectKeyValueString[] = [
-        {key: '0', value: this.TranslocoService.translate('in %')},
-        {key: '1', value: this.TranslocoService.translate('in h')}
+    public graphoptions: SelectKeyValue[] = [
+        {key: 0, value: this.TranslocoService.translate('in %')},
+        {key: 1, value: this.TranslocoService.translate('in h')}
     ];
-    public checkstates: SelectKeyValueString[] = [
-        {key: '0', value: this.TranslocoService.translate('soft and hard state')},
-        {key: '1', value: this.TranslocoService.translate('only hard state')}
+    public checkstates: SelectKeyValue[] = [
+        {key: 0, value: this.TranslocoService.translate('soft and hard state')},
+        {key: 1, value: this.TranslocoService.translate('only hard state')}
     ];
 
 

@@ -17,7 +17,8 @@ import {
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
-    InputGroupTextDirective, ModalService,
+    InputGroupTextDirective,
+    ModalService,
     NavComponent,
     NavItemComponent,
     RowComponent, TableDirective

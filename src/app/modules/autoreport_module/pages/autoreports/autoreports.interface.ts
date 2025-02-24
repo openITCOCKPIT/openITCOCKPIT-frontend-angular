@@ -119,8 +119,8 @@ export interface DynamicHostObject {
 
 
 export interface AutoreportObject {
-    id?: number,
-    name?: string,
+    id: number,
+    name: string,
     description?: string,
     container_id: number,
     timeperiod_id?: number,
@@ -137,7 +137,7 @@ export interface AutoreportObject {
     report_start_date?: string,
     last_percent_value?: number,
     last_absolut_value?: number,
-    show_time: number,
+    show_time?: number,
     last_number_of_outages?: number,
     failure_statistic?: number,
     consider_holidays?: number,
@@ -146,6 +146,7 @@ export interface AutoreportObject {
     max_number_of_outages?: number | null,
     created?: string
     modified?: string,
+    allowEdit?: boolean,
     users?: AutoreportUser[],
     hostsWithServices?: AutoReportHostWithServicesObject[],
     POST?: any
@@ -277,6 +278,39 @@ export interface ReportError {
     error: boolean
     message: string
     objects: any[]
+}
+
+export interface AutoreportServiceUsedByResponse {
+    service: {
+        id: number,
+        uuid?: string,
+        name: string | null,
+        servicename: string | null,
+        servicetemplate_id?: number,
+        servicetemplate?: any,
+        host?:  {
+            id: number,
+            uuid?: string,
+            name: string | null,
+            container_id?: number,
+            satellite_id?: number,
+            hosts_to_containers_sharing?: any[]
+        }
+    },
+    autoreports: AutoreportObject[]
+}
+
+export interface AutoreportHostUsedByResponse {
+    host:  {
+        id: number,
+        uuid?: string,
+        name: string | null,
+        address?: string | null
+        container_id?: number,
+        satellite_id?: number,
+        hosts_to_containers_sharing?: any[]
+    },
+    autoreports: AutoreportObject[]
 }
 
 

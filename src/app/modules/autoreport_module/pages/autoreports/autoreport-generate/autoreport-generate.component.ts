@@ -78,7 +78,6 @@ import { saveAs } from 'file-saver';
 })
 export class AutoreportGenerateComponent implements OnInit, OnDestroy {
 
-    private nowDate = new Date();
     private route = inject(ActivatedRoute);
     private router = inject(Router);
     private subscriptions: Subscription = new Subscription();
@@ -222,8 +221,8 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
                                 this.reportHostIds.push(this.report.autoreport.hosts[hostIndex].id);
                             }
                             this.notyService.genericSuccess(this.TranslocoService.translate('Report created successfully'));
-                            this.cdr.markForCheck();
                             this.tabName = 'showReport';
+                            this.cdr.markForCheck();
 
 
                         } else {

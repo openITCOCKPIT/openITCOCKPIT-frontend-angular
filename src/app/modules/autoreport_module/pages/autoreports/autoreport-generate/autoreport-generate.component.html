@@ -509,9 +509,12 @@
                                             <c-col xs="12" md="4" class="report-font-weight-500">
                                                 <span
                                                     *ngIf="report.autoreport_data.hosts[host].Host.outage_duration !== null">
-                                                    {{ t('Outage time exceeding the permitted limit') }}(
-                                                    {{ report.autoreport_data.hosts[host].Host.outage_duration }}
-                                                    {{t('min')}})
+
+                                                    {{
+                                                        t('Outage time exceeding the permitted limit ({0} min)', {
+                                                            '0': report.autoreport_data.hosts[host].Host.outage_duration
+                                                        })
+                                                    }}
                                                 </span>
                                             </c-col>
                                         </c-row>
@@ -540,9 +543,14 @@
                                                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                                                 <span
                                                     *ngIf="report.autoreport_data.hosts[host].Host.outage_duration !== null">
-                                                    {{t('Host outage in downtime exceeding the permitted limit') }}
-                                                    {{report.autoreport_data.hosts[host].Host.outage_duration}}
-                                                    {{t('min')}} </span>
+
+                                                    {{
+                                                        t('Outage time exceeding the permitted limit ({0} min)', {
+                                                            '0': report.autoreport_data.hosts[host].Host.outage_duration
+                                                        })
+                                                    }}
+
+                                                </span>
                                                 <span
                                                     *ngIf="report.autoreport_data.hosts[host].Host.outage_duration === null">
                                                     {{t('Host outage in downtime')}}</span>
@@ -704,9 +712,11 @@
                                                 </c-col>
                                                 <c-col xs="12" md="4" class="report-font-weight-500"
                                                     *ngIf="report.autoreport_data.hosts[host].Services[service].Service.outage_duration !== null">
-                                                    {{t('Outage time exceeding the permitted limit')}}(
-                                                    {{report.autoreport_data.hosts[host].Services[service].Service.outage_duration}}
-                                                    {{t('min')}})
+                                                    {{
+                                                        t('Outage time exceeding the permitted limit ({0} min)', {
+                                                            '0': report.autoreport_data.hosts[host].Services[service].Service.outage_duration
+                                                        })
+                                                    }}
                                                 </c-col>
                                             </c-row>
                                         </c-col>

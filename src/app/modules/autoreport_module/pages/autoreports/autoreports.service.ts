@@ -14,7 +14,9 @@ import {
     HostServiceParams,
     AutoreportPostObject,
     AtutoreportEditPost,
-    AutoreportDownloadParams
+    AutoreportDownloadParams,
+    AutoreportServiceUsedByResponse,
+    AutoreportHostUsedByResponse
 } from './autoreports.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
@@ -289,6 +291,32 @@ export class AutoreportsService {
     public generateReportZip(params: AutoreportDownloadParams): Observable<Blob> {
         const proxyPath = this.proxyPath;
         return this.http.get<Blob>(`${proxyPath}/autoreport_module/autoreports/generate.zip`, params as {}).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public serviceUsedByAutoreport(id:number): Observable<AutoreportServiceUsedByResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<AutoreportServiceUsedByResponse>(`${proxyPath}/autoreport_module/autoreports/serviceUsedBy/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public hostUsedByAutoreport(id:number): Observable<AutoreportHostUsedByResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<AutoreportHostUsedByResponse>(`${proxyPath}/autoreport_module/autoreports/hostUsedBy/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
             map(data => {
                 return data;
             })
