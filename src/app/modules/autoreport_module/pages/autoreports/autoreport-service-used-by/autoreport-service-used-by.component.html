@@ -1,0 +1,105 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+
+            <li class="breadcrumb-item active">
+                <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'index']"
+                   *oitcPermission="['AutoreportModule', 'autoreports', 'index']">
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Autoreport Module') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Service used by') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3 mt-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Service') }}
+
+            <span class="fw-300"><i>{{ autoreportsWithService.service.host?.name }}/{{ autoreportsWithService.service.servicename }}</i></span>
+                {{ t('is used by') }} {{ autoreportsWithService.autoreports.length }} {{ t('autoreports') }}
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="['services', 'index']" cButton class="ripple"
+                            color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <oitc-table-loader *ngIf="!autoreportsWithService"></oitc-table-loader>
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                   *ngIf="autoreportsWithService">
+                <thead>
+                <tr>
+                    <th scope="col">
+                        {{ t('Auto report name') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Description') }}
+                    </th>
+                    <th class="text-center width-50" scope="col">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let autoreport of autoreportsWithService.autoreports">
+                    <td>
+                        {{ autoreport.name }}
+                    </td>
+                    <td>
+                        {{ autoreport.description }}
+                    </td>
+                    <td class="width-50">
+                        <oitc-actions-button [permission]="'autoreportmodule.autoreports.edit'"
+                                             [url]="'/autoreport_module/autoreports/editStepOne/' + autoreport.id"
+                                             [allowEdit]="autoreport.allowEdit">
+                            <oitc-actions-button-element [permission]="'autoreportmodule.autoreports.edit'"
+                                                         *ngIf="autoreport.allowEdit"
+                                                         [url]="'/autoreport_module/autoreports/editStepTwo/' + autoreport.id">
+                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                {{ t('Edit') }}
+                            </oitc-actions-button-element>
+
+                            <oitc-actions-button-element [permission]="'autoreportmodule.autoreports.generate'"
+                                                         [url]="'/autoreport_module/autoreports/generate/' + autoreport.id">
+                                <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                                {{ t('Generate report') }}
+                            </oitc-actions-button-element>
+
+                            <li cDropdownDivider *ngIf="autoreport.allowEdit"></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(autoreport)"
+                                                         [permission]="'autoreportmodule.autoreports.delete'"
+                                                         *ngIf="autoreport.allowEdit">
+                                <span class="text-danger">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete') }}
+                                </span>
+                            </oitc-actions-button-element>
+                        </oitc-actions-button>
+
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </c-card-body>
+    </c-card>
+</ng-container>
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

@@ -69,6 +69,16 @@ import {
     DashboardCreateNewTabModalComponent
 } from './dashboard-create-new-tab-modal/dashboard-create-new-tab-modal.component';
 import { DashboardAddWidgetModalComponent } from './dashboard-add-widget-modal/dashboard-add-widget-modal.component';
+import {
+    HostsBrowserModalComponent
+} from '../../hosts/hosts-browser/hosts-browser-modal/hosts-browser-modal.component';
+import {
+    ServiceBrowserModalComponent
+} from '../../services/services-browser/service-browser-modal/service-browser-modal.component';
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN } from '../../../tokens/delete-acknowledgement-injection.token';
+import { AcknowledgementsService } from '../../acknowledgements/acknowledgements.service';
+import { DowntimesService } from '../../downtimes/downtimes.service';
 
 
 @Component({
@@ -104,10 +114,16 @@ import { DashboardAddWidgetModalComponent } from './dashboard-add-widget-modal/d
         BlockLoaderComponent,
         DashboardTabRotationModalComponent,
         DashboardCreateNewTabModalComponent,
-        DashboardAddWidgetModalComponent
+        DashboardAddWidgetModalComponent,
+        HostsBrowserModalComponent,
+        ServiceBrowserModalComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
+    providers: [
+        {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService}, // Inject the DowntimesService into the CancelAllModalComponent
+        {provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService} // Inject the DowntimesService into the DeleteAllModalComponent
+    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardsIndexComponent implements OnInit, OnDestroy {
@@ -137,6 +153,9 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly modalService = inject(ModalService);
+
+    private readonly DowntimesService = inject(DowntimesService);
+    private readonly AcknowledgementsService = inject(AcknowledgementsService);
 
     private cdr = inject(ChangeDetectorRef);
 
@@ -773,6 +792,17 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
             }));
         }
+    }
+
+    // A host or service browser modal wants to trigger an refresh
+    // probably because a downtime or acknowledgement was added
+    public onBrowserModalCompleted(success: boolean) {
+        if (success) {
+            if (this.currentTabId > 0) {
+                this.loadTabContent(this.currentTabId);
+            }
+        }
+
     }
 
     protected readonly WidgetTypes = WidgetTypes;

@@ -198,7 +198,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         let label = setup.metric.name;
 
         if (label.length > 20) {
-            label = label.substr(0, 20);
+            label = label.substring(0, 20);
             label += '...';
         }
 
@@ -210,7 +210,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
             }
             label = this.Host.hostname + '/' + this.Service.servicename;
             if (label.length > 20) {
-                label = label.substr(0, 20);
+                label = label.substring(0, 20);
                 label += '...';
             }
         }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { AsyncPipe, NgIf } from '@angular/common';
@@ -26,6 +26,8 @@ import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/m
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TacticalOverviewHostsWidgetService } from './tactical-overview-hosts-widget.service';
 import { TacticalOverviewHostsConfig } from './tactical-overview-hosts-widget.interface';
+import { GenericValidationError } from '../../../../generic-responses';
+import { NotyService } from '../../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-tactical-overview-hosts-widget',
@@ -63,7 +65,18 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     public keywords: string[] = [];
     public notKeywords: string[] = [];
     private readonly TacticalOverviewHostsWidgetService = inject(TacticalOverviewHostsWidgetService);
+    private readonly notyService = inject(NotyService);
 
+
+    constructor() {
+        super();
+        effect(() => {
+            if (this.flipped()) {
+                this.loadHostgroups('');
+            }
+            this.cdr.markForCheck();
+        });
+    }
 
     public override load() {
         if (this.widget) {
@@ -75,28 +88,32 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
                     this.hoststatusSummary = result.hoststatusSummary;
                     this.cdr.markForCheck();
                 }));
-            this.loadHostgroups('');
         }
     }
 
     protected loadHostgroups = (search: string) => {
-        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({'filter[Containers.name]': search} as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+        let hostgroupIds: number[] = [];
+        if (this.config?.Hostgroup._ids) {
+            hostgroupIds = this.config.Hostgroup._ids;
+        }
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({
+            'filter[Containers.name]': search,
+            'selected[]': hostgroupIds
+        } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
             this.hostgroups = data;
             this.cdr.markForCheck();
         }));
     }
 
-    public onFilterChange($event: any) {
-        this.cdr.markForCheck();
-        this.load();
-    }
-
     public submit() {
-        if (!this.widget) {
+        if (!this.widget || !this.config) {
             return;
         }
-        /*
-        this.subscriptions.add(this.CustomAlertsService.saveWidget(this.widget, this.CustomalertsFilter)
+
+        this.config.Host.keywords = this.keywords.join(',');
+        this.config.Host.not_keywords = this.notKeywords.join(',');
+
+        this.subscriptions.add(this.TacticalOverviewHostsWidgetService.saveWidget(this.widget, this.config)
             .subscribe({
                 next: (result) => {
                     this.cdr.markForCheck();
@@ -105,6 +122,7 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
 
                     this.notyService.genericSuccess(msg, title);
                     this.notyService.scrollContentDivToTop();
+                    this.load();
                     this.flipped.set(false);
 
                     return;
@@ -116,6 +134,5 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
                 }
             }));
 
-         */
     }
 }

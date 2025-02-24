@@ -1,0 +1,348 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+
+            <li class="breadcrumb-item active">
+                <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'index']"
+                   *oitcPermission="['AutoreportModule', 'autoreports', 'index']">
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Autoreport Module') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Edit auto report') }}
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Step 3') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3" id="stepthree" *ngIf="autoreport">
+        <c-card-header class="mb-3">
+            <h5 cCardTitle>{{ t('Autoreport configuration overview:') }}
+                <small class="fw-300">
+                    {{ autoreport.name }}
+                </small>
+            </h5>
+        </c-card-header>
+        <c-card-body>
+
+            <c-row class="m-0 text-center mb-3" style="min-height: 22px;">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                    <span>
+                        <!--<fa-icon [icon]="['fas', 'info-circle']"></fa-icon>-->
+                        <c-badge color="secondary">1</c-badge>
+                    </span>
+                    <span class="ms-1">
+                        {{ t('Report configuration') }}
+                    </span>
+                </div>
+                <div
+                    class="col-xs-12 col-md-4 col-lg-3 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                    <span>
+                        <c-badge color="secondary">2</c-badge>
+                    </span>
+                    <span class="ms-1">
+                        {{ t('Host and services configuration') }}
+
+                    </span>
+                </div>
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-border-right  wizard-active">
+                    <span>
+                        <c-badge color="secondary">3</c-badge>
+                    </span>
+                    <span class="ms-1">
+                        {{ t('Report details') }}
+                    </span>
+                </div>
+                <div class="col-lg-3 wizard-bg-inactive d-inline-flex">
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+                    <div class="btn-group btn-group-xs w-100 h-100">
+                        <button type="button" class="btn btn-primary h-100"
+                                style="border-radius: 0;"
+                                [title]="'Prev' | transloco"
+                                [routerLink]="['/', 'autoreport_module', 'autoreports', 'editStepTwo', id]"
+                        >
+                            <i class="fa fa-arrow-left"></i>
+                            {{ t('Prev') }}
+                        </button>
+
+                        <button type="button" class="btn btn-success h-100"
+                                style="border-radius: 0;"
+                                [title]="'Next' | transloco"
+                                [routerLink]="['/', 'autoreport_module', 'autoreports', 'index']">
+                            {{ t('Next') }}
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </c-row>
+            <c-row class="mb-3">
+                <c-col class="fs-5">
+                    {{ t('Report overview') }}:
+                    <span class="text-primary">{{ autoreport.name }} </span>
+                </c-col>
+            </c-row>
+            <fieldset>
+                <c-row>
+                    <div class="col col-3 text-end">
+                        <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
+                        {{ t('Time period') }}:
+                    </div>
+                    <div class="col col-9" *ngIf="autoreport.timeperiod">
+                        {{ autoreport.timeperiod.name }}
+                        <div *ngFor="let timerange of autoreport.timeperiod.timeperiod_timeranges"
+                             class="row show-grid">
+                            <div class="col-2">
+                                {{ timerange.weekday }}
+                            </div>
+                            <div class="col-4">
+                                {{ timerange.start }} - {{ timerange.end }}
+                            </div>
+                        </div>
+                    </div>
+                </c-row>
+                <c-row class="show-grid pt-10">
+                    <div class="col col-3 text-end">
+                        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                        {{ t('Report interval') }}:
+                    </div>
+                    <div class="col col-9">
+                        <div class="row show-grid">
+                            <div class="col col-4">
+                                {{ autoreport.report_interval }}
+                            </div>
+                        </div>
+                    </div>
+                </c-row>
+                <c-row class="show-grid pt-10">
+                    <div class="col col-3 text-end">
+                        <fa-icon [icon]="['far', 'envelope']"></fa-icon>
+                        {{ t('Report send interval') }}:
+                    </div>
+                    <div class="col col-9">
+                        <div class="row show-grid">
+                            <div class="col col-4">
+                                {{ autoreport.report_send_interval }}
+                            </div>
+                        </div>
+                    </div>
+                </c-row>
+                <c-row class="show-grid">
+                    <div class="col col-3 text-end">
+                        <fa-icon [icon]="['fas', 'line-chart']"></fa-icon>
+                        {{ t('Min. availibility') }}:
+                    </div>
+                    <div class="col col-9">
+                        <div class="row show-grid">
+                            <div *ngIf="!autoreport.min_availability_string" class="col-4">
+                                <fa-icon [icon]="['fas', 'ban']" class="text-danger"></fa-icon>
+                            </div>
+                            <div class="col-4" *ngIf="autoreport.min_availability_string">
+                                {{ autoreport.min_availability_string }}
+                            </div>
+                        </div>
+                    </div>
+                </c-row>
+            </fieldset>
+            <c-row class="pt-3">
+                <div class="col col-3 text-end">
+                    <fa-icon [icon]="['fas', 'bolt']"></fa-icon>{{t('Max. number of outages')}}:
+                </div>
+                <div class="col col-9">
+                    <div class="row show-grid">
+                        <div class="col-4">
+                            {{autoreport.max_number_of_outages}}
+                        </div>
+                    </div>
+                </div>
+            </c-row>
+            <c-row>
+                <div class="col-3 text-end">
+                    <fa-icon [icon]="['fas', 'chain']"/> {{t('Use start time')}}:
+                </div>
+                <div class="col-9">
+                    <div class="row show-grid">
+                        <div class="col-4" *ngIf="autoreport.use_start_time">
+                            {{autoreport.report_start_date}}
+                        </div>
+                        <div class="col-4" *ngIf="!autoreport.use_start_time">
+                            <fa-icon [icon]="['fas', 'ban']" class="text-danger"/>
+                        </div>
+                    </div>
+                </div>
+            </c-row>
+            <c-row>
+                <div class="col col-3 text-end">
+                    <fa-icon [icon]="['fas', 'filter']"/> {{t('Reflection state')}}:
+                </div>
+                <div class="col col-9">
+                    <div class="row show-grid">
+                        <div class="col-4" *ngIf="autoreport.check_hard_state">
+                            {{t('hard')}}
+                        </div>
+                        <div class="col-4" *ngIf="!autoreport.check_hard_state">
+                            {{t('hard and soft')}}
+                        </div>
+                    </div>
+                </div>
+            </c-row>
+            <c-row>
+                <div class="col-3 text-end">
+                    <fa-icon [icon]="['fas', 'medkit']"/> {{t('Consider downtimes')}}:
+                </div>
+                <div class="col-9">
+                    <div class="row show-grid">
+                        <div class="col-4" *ngIf="autoreport.consider_downtimes">
+                            <fa-icon [icon]="['fas', 'check']" class="text-success"/>
+                        </div>
+                        <div class="col-4" *ngIf="!autoreport.consider_downtimes">
+                            <fa-icon [icon]="['fas', 'ban']" class="text-danger"/>
+                        </div>
+                    </div>
+                </div>
+            </c-row>
+            <c-row>
+                <div class="col-3 text-end">
+                    <fa-icon [icon]="['fas', 'star']"/> {{t('Consider holidays')}}:
+                </div>
+                <div class="col-9">
+                    <div class="row show-grid">
+                        <div *ngIf="!autoreport.consider_holidays_string" class="col-9">
+                            <fa-icon [icon]="['fas', 'ban']" class="text-danger"/>
+                        </div>
+
+                        <div class="col-9" *ngIf="autoreport.consider_holidays_string">
+                            @if (PermissionsService.hasPermissionObservable(['calendars', 'edit'])|async) {
+                                <a [routerLink]="['/', 'calendars', 'edit', autoreport.calendar_id]">
+                                    {{autoreport.consider_holidays_string}}
+                                </a>
+                            } @else {
+                                {{autoreport.consider_holidays_string}}
+                            }
+                        </div>
+                    </div>
+                </div>
+            </c-row>
+            <c-row>
+                <div class="col-3 text-end">
+                    <fa-icon [icon]="['fas', 'users']"/> {{t('Users')}}:
+                </div>
+                <div class="col-9">
+                    <div class="row show-grid">
+                        <div *ngIf="autoreport.users?.length === 0" class="col-9">
+                            <fa-icon [icon]="['fas', 'ban']" class="text-danger"/>
+                        </div>
+
+                        <div *ngIf="autoreport.users && autoreport.users.length > 0" class="col-9">
+                            <span *ngFor="let user of autoreport.users">
+                                @if (PermissionsService.hasPermissionObservable(['users', 'edit'])|async) {
+                                    <a [routerLink]="['/', 'users', 'edit', user.id]">
+                                        {{user.firstname}} {{user.lastname}}
+                                    </a>
+                                } @else {
+                                    {{user.firstname}} {{user.lastname}}
+                                }
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </c-row>
+            <c-row>
+                <div class="col-3 text-end">
+                    <fa-icon [icon]="['fas', 'cogs']"/> {{t('Host and service options')}}:
+                </div>
+                <div class="col-9">
+                    <div class="col-9 text-center">
+                        <div class="row show-grid report-details-header_bordered">
+                            <div class="col-3 table-half-half-background">
+                                <div class="half">{{t('Host')}}</div>
+                                <div class="half">{{t('Service')}}</div>
+                            </div>
+                            <div class="col-1">{{t('in %')}}</div>
+                            <div class="col-1">{{t('in h')}}</div>
+                            <div class="col-2 table-half-half-background">
+                                <div class="half">{{t('Alias')}}</div>
+                                <div class="half">{{t('Graph')}}</div>
+                            </div>
+                            <div class="col-3">{{t('Max. outage duration')}}</div>
+                            <div class="col-2">{{t('All failures')}}</div>
+                        </div>
+                    </div>
+                    <ng-container *ngFor="let host of autoreport.hostsWithServices">
+                        <div class="col-9 host_row">
+                            <div class="row show-grid report-details-bordered">
+                                <div class="col-3 host_option ">
+                                    {{host.name}}
+                                </div>
+                                <div class="col-1 text-center" *ngIf="host._joinData">
+                                    <oitc-autoreport-bitwise-icon [optionValue]="host._joinData.configuration_option" [compareValue]="1"/>
+                                        <!-- percent = 1 -->
+
+                                </div>
+                                <div class="col-1 text-center" *ngIf="host._joinData">
+                                    <oitc-autoreport-bitwise-icon [optionValue]="host._joinData.configuration_option" [compareValue]="2"/>
+                                        <!-- minute = 2 -->
+
+                                </div>
+                                <div class="col-2 host_option text-center" *ngIf="host._joinData">
+                                    <oitc-autoreport-bitwise-icon [optionValue]="host._joinData.configuration_option" [compareValue]="4"/>
+                                        <!-- alias = 4 -->
+                                </div>
+                                <div class="col-3 text-center">
+                                    {{host._joinData?.outage_duration}}
+                                </div>
+                                <div class="col-2 text-center" *ngIf="host._joinData">
+                                    <oitc-autoreport-bitwise-icon [optionValue]="host._joinData.configuration_option" [compareValue]="8"/>
+                                        <!-- outage = 8 -->
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-9 service_option text-left text-info" *ngIf="host.services.length === 0">
+                            <em>{{t('No Services selected. Report will considered only host state changes.')}}</em>
+                        </div>
+                        <div class="col-9 service_row" *ngFor="let service of host.services">
+                            <div class="row show-grid report-details-bordered">
+                                <div class="col-3 service_option ">
+                                    {{service.servicename}}
+                                </div>
+                                <div class="col-1 text-center"  *ngIf="service._joinData">
+                                    <oitc-autoreport-bitwise-icon [optionValue]="service._joinData.configuration_option" [compareValue]="1"/>
+                                        <!-- percent = 1 -->
+                                </div>
+                                <div class="col-1 text-center" *ngIf="service._joinData">
+                                    <oitc-autoreport-bitwise-icon [optionValue]="service._joinData.configuration_option" [compareValue]="2"/>
+                                        <!-- minute = 2 -->
+                                </div>
+                                <div class="col-2 service_option text-center" *ngIf="service._joinData">
+                                    <oitc-autoreport-bitwise-icon [optionValue]="service._joinData.configuration_option" [compareValue]="4"/>
+                                        <!-- graph = 4 -->
+                                </div>
+                                <div class="col-3 text-center" *ngIf="service._joinData">
+                                    {{service._joinData.outage_duration}}
+                                </div>
+                                <div class="col-2 text-center"*ngIf="service._joinData">
+                                    <oitc-autoreport-bitwise-icon [optionValue]="service._joinData.configuration_option" [compareValue]="8"/>
+                                        <!-- outage = 8 -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </ng-container>
+                </div>
+            </c-row>
+        </c-card-body>
+    </c-card>
+</ng-container>

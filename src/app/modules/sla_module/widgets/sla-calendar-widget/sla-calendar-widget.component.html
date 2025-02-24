@@ -1,0 +1,160 @@
+<ng-container *transloco="let t">
+    <div class="d-flex h-100 flex-column" #slaCalendarContainer *ngIf="widget">
+        <div>
+            <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
+                    *ngIf="!isReadonly()">
+                @if (flipped()) {
+                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                } @else {
+                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                }
+            </button>
+        </div>
+
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container">
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowContent">
+                    <div *ngIf="!slaId" class="text-info">
+                        {{ t('No element selected') }}
+                    </div>
+                    @if (PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'viewDetails'])|async) {
+                        <div *ngIf="slaResponse && slaId">
+                            <c-row>
+                                <c-col>
+                                    <oitc-label-link
+                                        [objectId]="slaId"
+                                        [route]="'/sla_module/slas/viewDetails'"
+                                        [permissions]="'slamodule.slas.viewDetails'">
+                                        {{ slaResponse.sla.name }}
+                                    </oitc-label-link>
+
+                                    <span class="fw-300">
+                                        <i> {{ slaResponse.sla.description }}</i>
+                                    </span>
+                                </c-col>
+                            </c-row>
+
+                            <c-row class="h-75">
+                                <c-col [xs]="4" [md]="4" [lg]="4" class="flex-1">
+                                    <c-card class="h-100" *ngIf="dateDetails">
+                                        @if (dateDetails.yesterday_timestamp && slaResponse.slaStatusLog[dateDetails.yesterday_timestamp]) {
+                                            <c-card-header
+                                                [cBgColor]="slaResponse.slaStatusLog[dateDetails.yesterday_timestamp].class"
+                                                class="text-white h-25 flex-align-items-center d-flex justify-content-center">
+                                                {{ dateDetails.monthName }}
+                                            </c-card-header>
+                                        } @else {
+                                            <c-card-header cBgColor="primary"
+                                                           class="text-white h-25 flex-align-items-center d-flex justify-content-center">
+                                                {{ dateDetails.monthName }}
+                                            </c-card-header>
+                                        }
+                                        <c-card-body [id]="'day-'+widget.id"
+                                                     class="flex-align-items-center justify-content-center d-flex p-0"
+                                                     [style.font-size.px]="fontSize">
+                                            {{ dateDetails.dayNumber }}
+                                        </c-card-body>
+                                        @if (dateDetails.yesterday_timestamp && slaResponse.slaStatusLog[dateDetails.yesterday_timestamp]) {
+                                            <c-card-footer
+                                                [cBgColor]="slaResponse.slaStatusLog[dateDetails.yesterday_timestamp].class"
+                                                class="text-white text-center flex-align-items-center justify-content-center p-0">
+                                                <small>{{ dateDetails.weekday }}</small>
+                                                <div class="fs-5">
+                                                    {{ slaResponse.slaStatusLog[dateDetails.yesterday_timestamp].lowestValue }}
+                                                    %
+                                                </div>
+                                            </c-card-footer>
+                                        } @else {
+                                            <c-card-footer cBgColor="primary"
+                                                           class="text-white text-center flex-align-items-center justify-content-center d-flex">
+                                                <small>{{ dateDetails.weekday }}</small>
+                                            </c-card-footer>
+                                        }
+                                    </c-card>
+                                </c-col>
+                                <c-col [xs]="8" [md]="8" [lg]="8">
+                                    <table cTable bordered hover small [striped]="true" class="small pt-1 h-100">
+                                        <thead>
+                                        <tr *ngIf="dateDetails?.weekdayNames">
+                                            <th></th>
+                                            <th *ngFor="let weekName of Object.values(dateDetails?.weekdayNames ?? {})">
+                                                {{ weekName }}
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let week of dateDetails?.days">
+                                            <th class="text-center">{{ week.cw }}</th>
+                                            <td *ngFor="let dayDetail of week.days"
+                                                [ngClass]="{'bg-primary':  dayDetail.weekday === 6 || dayDetail.weekday === 7,
+                        'bg-opacity-25': dayDetail.weekday === 6, 'bg-opacity-50': dayDetail.weekday === 7}">
+                                                @if (dayDetail.day === dateDetails?.dayNumber) {
+                                                    <c-badge cBgColor="primary">
+                                                        {{ dayDetail.day }}
+                                                    </c-badge>
+                                                } @else if (dayDetail.timestamp && slaResponse.slaStatusLog[dayDetail.timestamp]) {
+                                                    <c-badge class="w-100"
+                                                             [cBgColor]="slaResponse.slaStatusLog[dayDetail.timestamp].class"
+                                                             [title]="slaResponse.slaStatusLog[dayDetail.timestamp].lowestValue + '%'">
+                                                        {{ dayDetail.day }}
+                                                    </c-badge>
+                                                } @else {
+                                                    {{ dayDetail.day }}
+                                                }
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </c-col>
+                            </c-row>
+                        </div>
+                    } @else {
+                        <c-row>
+                            <c-col>
+                                <c-alert color="danger" class="my-3 p-1 h-100">
+                                    <h4 cAlertHeading> {{ t('Attention!') }}</h4>
+                                    <p>
+                                        <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
+                                        {{ t('You are not permitted to access this object') }}
+                                    </p>
+                                </c-alert>
+                            </c-col>
+                        </c-row>
+                    }
+
+                </ng-container>
+            </div>
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowConfig">
+                    <!-- Config area -->
+                    @if (widget) {
+                        <div class="mb-3">
+                            <label cLabel [for]="'config_sla_id_'+widget.id">
+                                {{ t('Sla') }}
+                            </label>
+
+                            <oitc-select
+                                [id]="'config_sla_id'+widget.id"
+                                [name]="'config_sla_id_'+widget.id"
+                                optionValue="key"
+                                optionLabel="value"
+                                [placeholder]="'Please choose' | transloco"
+                                [(ngModel)]="slaId"
+                                [options]="slas"
+                                [appendTo]="'body'">
+                            </oitc-select>
+                        </div>
+
+                        <div class="mt-1 text-end">
+                            <button cButton type="button" class="ripple" (click)="saveWidgetConfig()">
+                                {{ t('Save') }}
+                            </button>
+                        </div>
+                    }
+                    <!-- End Config area -->
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</ng-container>

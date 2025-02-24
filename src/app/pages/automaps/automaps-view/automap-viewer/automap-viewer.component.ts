@@ -9,12 +9,7 @@ import {
 } from '@angular/core';
 import { AutomapsViewRoot } from '../../automaps.interface';
 import { PaginatorChangeEvent } from '../../../../layouts/coreui/paginator/paginator.interface';
-import {
-  ColComponent,
-  ContainerComponent,
-  ModalService,
-  RowComponent
-} from '@coreui/angular';
+import { ColComponent, ContainerComponent, ModalService, RowComponent } from '@coreui/angular';
 import { NgForOf, NgIf } from '@angular/common';
 import {
     PaginateOrScrollComponent
@@ -30,35 +25,29 @@ import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-
 import { PermissionsService } from '../../../../permissions/permissions.service';
 
 
-
-
-
-
-
-
-
-
-
 import {
     ServiceBrowserModalComponent
 } from '../../../services/services-browser/service-browser-modal/service-browser-modal.component';
+import {
+    ServiceBrowserModalService
+} from '../../../services/services-browser/service-browser-modal/service-browser-modal.service';
 
 @Component({
     selector: 'oitc-automap-viewer',
     imports: [
-    ColComponent,
-    ContainerComponent,
-    NgIf,
-    PaginateOrScrollComponent,
-    RowComponent,
-    TranslocoDirective,
-    BadgeOutlineComponent,
-    ServicestatusIconAutomapComponent,
-    FaIconComponent,
-    LabelLinkComponent,
-    NgForOf,
-    ServiceBrowserModalComponent
-],
+        ColComponent,
+        ContainerComponent,
+        NgIf,
+        PaginateOrScrollComponent,
+        RowComponent,
+        TranslocoDirective,
+        BadgeOutlineComponent,
+        ServicestatusIconAutomapComponent,
+        FaIconComponent,
+        LabelLinkComponent,
+        NgForOf,
+        ServiceBrowserModalComponent
+    ],
     templateUrl: './automap-viewer.component.html',
     styleUrl: './automap-viewer.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -69,10 +58,9 @@ export class AutomapViewerComponent {
     @Output() paginatorChange = new EventEmitter<PaginatorChangeEvent>();
     @Output() reload = new EventEmitter<boolean>();
 
-    public serviceIdForBrowser: number = 0;
-
     private readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly modalService: ModalService = inject(ModalService);
+    private readonly ServiceBrowserModalService: ServiceBrowserModalService = inject(ServiceBrowserModalService);
     private cdr = inject(ChangeDetectorRef);
 
     // Pass reload event to parent component
@@ -87,18 +75,19 @@ export class AutomapViewerComponent {
 
     public showServiceStatusDetails(serviceId: number) {
         this.PermissionsService.hasPermissionObservable(['services', 'browser']).subscribe(hasPermission => {
-            this.serviceIdForBrowser = serviceId;
+
+            this.ServiceBrowserModalService.openServiceBrowserModal(serviceId);
             this.cdr.markForCheck();
 
             // Give angular some time to pass the service id to the template which passed it to the modal
             // this is probably wrong
-            setTimeout(() => {
-                this.cdr.markForCheck();
-                this.modalService.toggle({
-                    show: true,
-                    id: 'automapServiceDetailsModal'
-                });
-            }, 150);
+            //setTimeout(() => {
+            //    this.cdr.markForCheck();
+            //    this.modalService.toggle({
+            //        show: true,
+            //        id: 'automapServiceDetailsModal'
+            //    });
+            //}, 150);
 
 
         });

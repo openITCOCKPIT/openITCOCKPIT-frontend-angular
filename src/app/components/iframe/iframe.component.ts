@@ -15,6 +15,8 @@ import { NgIf } from '@angular/common';
 export class IframeComponent {
 
     public url = input<string>('');
+    public height = input<string>('100vh');
+
     public trustedUrl: SafeResourceUrl | null = null;
 
     private cdr = inject(ChangeDetectorRef);

@@ -147,8 +147,8 @@
             </div>
             <div class="box-x">
                 <ng-container *ngIf="animationStateShowConfig && config">
-                    <c-row class="mb-2">
-                        <c-col [xs]="12" [lg]="6">
+                    <c-row class="mb-1">
+                        <c-col [xs]="12" [lg]="12">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
@@ -156,6 +156,7 @@
                                 <input [(ngModel)]="config['Host']['name']"
                                        [placeholder]="'Filter by host name' | transloco"
                                        cFormControl
+                                       [id]="'Hosts.name-'+widget.id"
                                        [name]="'Hosts.name-'+widget.id"
                                        oitcDebounce
                                        type="text"
@@ -165,7 +166,8 @@
                                         {{ t('Enable RegEx') }}
                                         <input type="checkbox"
                                                cFormCheckInput
-                                               name="filter.Host.name_regex"
+                                               [id]="'filter.Host.name_regex-'+widget.id"
+                                               [name]="'filter.Host.name_regex-'+widget.id"
                                                [(ngModel)]="config['Host']['name_regex']"
                                         />
                                         <oitc-regex-helper-tooltip/>
@@ -173,8 +175,9 @@
                                 </span>
                             </c-input-group>
                         </c-col>
-
-                        <c-col [xs]="12" [lg]="6">
+                    </c-row>
+                    <c-row class="mb-1">
+                        <c-col [xs]="12" [lg]="12">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -182,6 +185,7 @@
                                 <input [(ngModel)]="config['Host']['address']"
                                        [placeholder]="'Filter by IP address' | transloco"
                                        cFormControl
+                                       [id]="'Hosts.address-'+widget.id"
                                        [name]="'Hosts.address-'+widget.id"
                                        type="text"
                                 />
@@ -190,6 +194,7 @@
                                         {{ t('Enable RegEx') }}
                                         <input type="checkbox"
                                                cFormCheckInput
+                                               [id]="'Hosts.address_regex-'+widget.id"
                                                [name]="'Hosts.address_regex-'+widget.id"
                                                [(ngModel)]="config['Host']['address_regex']"
                                         />
@@ -199,11 +204,15 @@
                             </c-input-group>
                         </c-col>
                     </c-row>
-                    <c-row class="mb-2">
-                        <c-col [xs]="12" [lg]="6">*** {{ config['Host']['keywords'] }} ***
+                    <c-row class="mb-1">
+                        <c-col [xs]="12" [lg]="12">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    <div class="icon-stack">
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']"
+                                                 class="text-success cornered cornered-lr"></fa-icon>
+                                    </div>
                                 </span>
                                 <ng-select
                                     [id]="'HostKeywordsInput-'+widget.id"
@@ -218,11 +227,16 @@
                                 </ng-select>
                             </c-input-group>
                         </c-col>
-
-                        <c-col [xs]="12" [lg]="6">
+                    </c-row>
+                    <c-row class="mb-1">
+                        <c-col [xs]="12" [lg]="12">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    <div class="icon-stack">
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']"
+                                                 class="text-danger cornered cornered-lr"></fa-icon>
+                                    </div>
                                 </span>
                                 <ng-select
                                     [id]="'HostNotKeywordsInput-'+widget.id"
@@ -260,7 +274,7 @@
                             </fieldset>
                         </c-col>
                     </c-row>
-                    <c-row>
+                    <c-row class="mt-2">
                         <c-col class="text-end">
                             <button cButton class="ripple" color="primary" (click)="submit()">
                                 {{ t('Save') }}

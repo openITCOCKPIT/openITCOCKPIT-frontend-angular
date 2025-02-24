@@ -217,7 +217,7 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
 
         // shorten label if required.
         if (label.length > 20) {
-            label = label.substr(0, 20);
+            label = label.substring(0, 20);
             label += '...';
         }
 
