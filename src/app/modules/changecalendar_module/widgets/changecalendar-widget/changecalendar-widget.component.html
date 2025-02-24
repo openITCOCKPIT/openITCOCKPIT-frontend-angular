@@ -1,0 +1,95 @@
+<ng-container *transloco="let t">
+    <div class="d-flex h-100 flex-column" #changecalendarContainer *ngIf="widget">
+        <div>
+            <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
+                    *ngIf="!isReadonly()">
+                @if (flipped()) {
+                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                } @else {
+                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                }
+            </button>
+        </div>
+
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container">
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowContent">
+                    <div *ngIf="!EditableChangecalendar" class="text-info">
+                        {{ t('No element selected') }}
+                    </div>
+                    @if (PermissionsService.hasPermissionObservable(['changecalendarmodule', 'changecalendars', 'edit'])|async) {
+                        <div *ngIf="EditableChangecalendar">
+                            <c-row class="h-75">
+                                <c-col [xs]="12" [md]="12" [lg]="12">
+                                    <oitc-changecalendars-calendar
+                                            [(events)]="events"
+                                            [editable]="false"
+                                            (eventClick)="toggleChangecalendarModal($event)"/>
+                                </c-col>
+                            </c-row>
+                        </div>
+                    } @else {
+                        <c-row>
+                            <c-col>
+                                <c-alert color="danger" class="my-3 p-1 h-100">
+                                    <h4 cAlertHeading> {{ t('Attention!') }}</h4>
+                                    <p>
+                                        <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
+                                        {{ t('You are not permitted to access this object') }}
+                                    </p>
+                                </c-alert>
+                            </c-col>
+                        </c-row>
+                    }
+
+                </ng-container>
+            </div>
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowConfig">
+                    <!-- Config area -->
+                    @if (widget) {
+                        <div class="mb-3">
+                            <label cLabel [for]="'config_changecalendar_id_'+widget.id">
+                                {{ t('Change Calendar') }}
+                            </label>
+
+                            <oitc-multi-select
+                                    [id]="'config_changecalendar_id_'+widget.id"
+                                    [name]="'config_changecalendar_id_'+widget.id"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [placeholder]="'Please choose' | transloco"
+                                    [(ngModel)]="widgetConfig.changecalendar_ids"
+                                    [options]="ChangeCalendars">
+                            </oitc-multi-select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label cLabel [for]="'config_changecalendar_type_'+widget.id">
+                                {{ t('Display Type') }}
+                            </label>
+
+                            <oitc-select
+                                    [id]="'config_changecalendar_type_'+widget.id"
+                                    [name]="'config_changecalendar_type_'+widget.id"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [placeholder]="'Please choose' | transloco"
+                                    [(ngModel)]="widgetConfig.displayType"
+                                    [options]="DisplayTypes">
+                            </oitc-select>
+                        </div>
+
+                        <div class="mt-1 text-end">
+                            <button cButton type="button" class="ripple" (click)="saveWidgetConfig()">
+                                {{ t('Save') }}
+                            </button>
+                        </div>
+                    }
+                    <!-- End Config area -->
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</ng-container>

@@ -79,6 +79,9 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN } from '../../../tokens/delete-acknowledgement-injection.token';
 import { AcknowledgementsService } from '../../acknowledgements/acknowledgements.service';
 import { DowntimesService } from '../../downtimes/downtimes.service';
+import {
+    ChangecalendarsEventEditorComponent
+} from '../../../modules/changecalendar_module/components/changecalendars-event-editor/changecalendars-event-editor.component';
 
 
 @Component({
@@ -116,7 +119,8 @@ import { DowntimesService } from '../../downtimes/downtimes.service';
         DashboardCreateNewTabModalComponent,
         DashboardAddWidgetModalComponent,
         HostsBrowserModalComponent,
-        ServiceBrowserModalComponent
+        ServiceBrowserModalComponent,
+        ChangecalendarsEventEditorComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',

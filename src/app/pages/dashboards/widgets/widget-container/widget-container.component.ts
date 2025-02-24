@@ -63,7 +63,9 @@ import { SlaWidgetComponent } from '../../../../modules/sla_module/widgets/sla-w
 import {
     SlaCalendarWidgetComponent
 } from '../../../../modules/sla_module/widgets/sla-calendar-widget/sla-calendar-widget.component';
-
+import {
+    ChangecalendarWidgetComponent
+} from '../../../../modules/changecalendar_module/widgets/changecalendar-widget/changecalendar-widget.component';
 
 
 @Component({
@@ -105,7 +107,8 @@ import {
         SlaSummaryWidgetComponent,
         SlaSummaryWidgetComponent,
         SlaWidgetComponent,
-        SlaCalendarWidgetComponent
+        SlaCalendarWidgetComponent,
+        ChangecalendarWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

@@ -15,7 +15,8 @@
                     <label cLabel for="event.title">
                         {{ t('Title') }}
                     </label>
-                    <input cFormControl
+                    <input [disabled]="!editable"
+                           cFormControl
                            required
                            id="event.title"
                            type="text"
@@ -34,7 +35,8 @@
                         <span cInputGroupText>
                             <fa-icon [icon]="['fas', 'edit']"></fa-icon>
                         </span>
-                        <input [(ngModel)]="event.start"
+                        <input [disabled]="!editable"
+                               [(ngModel)]="event.start"
                                [placeholder]="'Start date' | transloco"
                                aria-label="event.start"
                                name="event.start"
@@ -52,7 +54,8 @@
                         <span cInputGroupText>
                             <fa-icon [icon]="['fas', 'edit']"></fa-icon>
                         </span>
-                        <input [(ngModel)]="event.end"
+                        <input [disabled]="!editable"
+                               [(ngModel)]="event.end"
                                [placeholder]="'End date' | transloco"
                                aria-label="event.end"
                                name="event.end"
@@ -64,7 +67,7 @@
                 </c-col>
             </c-row>
             <c-row class="mb-2">
-                <c-col md="6">
+                <c-col md="6" *ngIf="editable">
                     <label cLabel for="event.description">
                         {{ t('Description') }}
                     </label>
@@ -89,13 +92,13 @@
             </c-row>
         </c-modal-body>
         <c-modal-footer>
-            <button *ngIf="event.id" cButton color="danger" (click)="onDeleteClick.emit(event)" style="margin-right: auto;">
+            <button *ngIf="editable && event.id" cButton color="danger" (click)="onDeleteClick.emit(event)" style="margin-right: auto;">
                 {{ t('Delete') }}
             </button>
-            <button *ngIf="event.id" cButton color="success" (click)="onEventChange.emit(event)">
+            <button *ngIf="editable && event.id" cButton color="success" (click)="onEventChange.emit(event)">
                 {{ t('Save') }}
             </button>
-            <button *ngIf="! event.id" cButton color="success" (click)="onEventCreate.emit(event)">
+            <button *ngIf="editable && ! event.id" cButton color="success" (click)="onEventCreate.emit(event)">
                 {{ t('Create') }}
             </button>
             <button cButton color="default" (click)="hideModal()">

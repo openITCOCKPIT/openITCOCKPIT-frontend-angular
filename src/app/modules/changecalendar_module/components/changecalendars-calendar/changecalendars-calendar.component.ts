@@ -18,6 +18,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
@@ -26,7 +27,8 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
         TranslocoDirective,
         FullCalendarModule,
         FaIconComponent,
-        XsButtonDirective
+        XsButtonDirective,
+        NgIf
     ],
     templateUrl: './changecalendars-calendar.component.html',
     styleUrl: './changecalendars-calendar.component.css',
@@ -35,6 +37,7 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 export class ChangecalendarsCalendarComponent {
     private readonly cdr = inject(ChangeDetectorRef);
     private _events: CalendarEvent[] = [];
+    private _editable: boolean = true;
 
     @ViewChild('fullCalendar') fullCalendar!: FullCalendarComponent;
 
@@ -46,6 +49,15 @@ export class ChangecalendarsCalendarComponent {
 
     public get events(): CalendarEvent[] {
         return this._events;
+    }
+
+    @Input()
+    public set editable(editable: boolean) {
+        this._editable = editable;
+    }
+
+    public get editable(): boolean {
+        return this._editable;
     }
 
     @Output() eventsChange = new EventEmitter<CalendarEvent[]>();
@@ -92,6 +104,13 @@ export class ChangecalendarsCalendarComponent {
             return;
         }
         this.cdr.markForCheck();
+    }
+
+    public formatTime(timestamp: number): string {
+        let date = new Date(timestamp),
+            hours = date.getHours().toString().padStart(2, '0'),
+            minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
     }
 
     public handleEvents(events: EventApi[]) {
