@@ -1,58 +1,50 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, effect, inject, OnDestroy, signal } from '@angular/core';
 import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
-import { SlaSummaryWidgetService } from './sla-summary-widget.service';
+import { SlaWidgetService } from './sla-widget.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SlasService } from '../../pages/slas/Slas.service';
-import {
-    AlertComponent,
-    AlertHeadingDirective,
-    BadgeComponent,
-    ColComponent,
-    FormLabelDirective,
-    RowComponent
-} from '@coreui/angular';
-import _ from 'lodash';
+import { AlertComponent, AlertHeadingDirective, ColComponent, FormLabelDirective, RowComponent } from '@coreui/angular';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import { RouterLink } from '@angular/router';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { FormsModule } from '@angular/forms';
-import { SlaConfig, SlaHostsAndServicesWithContainer, SlaSummaryWidgetResponse } from '../sla-widget.interface';
+import { SlaConfig, SlaHostsAndServices, SlaWidgetResponse } from '../sla-widget.interface';
 
 @Component({
-    selector: 'oitc-sla-summary-widget',
+    selector: 'oitc-sla-widget',
     imports: [
         FaIconComponent,
         NgIf,
         TranslocoDirective,
         RowComponent,
         ColComponent,
-        BadgeComponent,
         LabelLinkComponent,
         AsyncPipe,
-        RouterLink,
         AlertComponent,
         AlertHeadingDirective,
         FormLabelDirective,
         SelectComponent,
         XsButtonDirective,
         FormsModule,
-        TranslocoPipe
+        TranslocoPipe,
+        NgClass,
+        RouterLink
     ],
-    templateUrl: './sla-summary-widget.component.html',
-    styleUrl: './sla-summary-widget.component.css',
+    templateUrl: './sla-widget.component.html',
+    styleUrl: './sla-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SlaSummaryWidgetComponent extends BaseWidgetComponent implements OnDestroy, AfterViewInit {
+export class SlaWidgetComponent extends BaseWidgetComponent implements OnDestroy, AfterViewInit {
     protected flipped = signal<boolean>(false);
-    private readonly SlaSummaryWidgetService = inject(SlaSummaryWidgetService);
+    private readonly SlaWidgetService = inject(SlaWidgetService);
     private readonly SlasService = inject(SlasService);
     public slaId: number | null = null;
-    public slaResponse?: SlaSummaryWidgetResponse;
-    public SlaAvailabilityView?: SlaHostsAndServicesWithContainer[];
+    public slaResponse?: SlaWidgetResponse;
+    public SlaAvailabilityView?: SlaHostsAndServices;
     public config?: SlaConfig;
     protected slas: SelectKeyValue[] = [];
 
@@ -66,23 +58,22 @@ export class SlaSummaryWidgetComponent extends BaseWidgetComponent implements On
         });
     }
 
+    public override ngOnDestroy() {
+        super.ngOnDestroy();
+    }
 
     public override load() {
         if (this.widget) {
             this.subscriptions.add(
-                this.SlaSummaryWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {
+                this.SlaWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {
                     this.slaResponse = response;
-                    this.SlaAvailabilityView = _.toArray(this.slaResponse.sla.hostsAndServicesOverview);
+                    this.SlaAvailabilityView = response.sla.hostsAndServicesOverview;
                     this.config = response.config;
                     this.slaId = this.config.Sla.id;
                     this.cdr.markForCheck();
                 })
             );
         }
-    }
-
-    public override ngOnDestroy() {
-        super.ngOnDestroy();
     }
 
     public ngAfterViewInit() {
@@ -99,11 +90,11 @@ export class SlaSummaryWidgetComponent extends BaseWidgetComponent implements On
         if (!this.widget || !this.slaId) {
             return;
         }
-        this.subscriptions.add(this.SlaSummaryWidgetService.saveWidgetConfig(this.widget.id, this.slaId).subscribe((response) => {
+        this.subscriptions.add(this.SlaWidgetService.saveWidgetConfig(this.widget.id, this.slaId).subscribe((response) => {
             // Close config
             this.flipped.set(false);
 
-            // Reload sla summary widget
+            // Reload sla widget
             this.load();
         }));
     }

@@ -2,25 +2,22 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
+import { SlaCalendarWidgetResponse, SlaWidgetResponse } from '../sla-widget.interface';
 import { GenericResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
-import { SlaSummaryWidgetResponse } from '../sla-widget.interface';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
-export class SlaSummaryWidgetService {
-
+export class SlaCalendarWidgetService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    constructor() {
-    }
+  constructor() { }
 
-
-    public loadWidgetConfig(widgetId: string): Observable<SlaSummaryWidgetResponse> {
+    public loadWidgetConfig(widgetId: string): Observable<SlaCalendarWidgetResponse> {
         const proxyPath = this.proxyPath;
 
-        return this.http.get<SlaSummaryWidgetResponse>(`${proxyPath}/sla_module/slas/slaSummaryWidget.json`, {
+        return this.http.get<SlaCalendarWidgetResponse>(`${proxyPath}/sla_module/slas/slaCalendarWidget.json`, {
             params: {
                 angular: true,
                 widgetId: widgetId
@@ -34,7 +31,7 @@ export class SlaSummaryWidgetService {
 
     public saveWidgetConfig(widgetId: string, slaId: number): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/sla_module/slas/slaSummaryWidget.json?angular=true`, {
+        return this.http.post<any>(`${proxyPath}/sla_module/slas/slaCalendarWidget.json?angular=true`, {
             Widget: {
                 id: widgetId
             },
