@@ -60,7 +60,9 @@ import { MapSummaryToasterComponent } from '../map-summary-toaster/map-summary-t
 export class MapViewComponent implements OnInit, OnDestroy {
 
     public mapId: InputSignal<number> = input<number>(0);
-    public rotate: InputSignal<boolean | undefined> = input<boolean | undefined>();
+    // default value is false, because to prevent to start reload interval on normal map view (too many item requests)
+    // map item request are handled by map item component and the reload service
+    public rotate: InputSignal<boolean | undefined> = input<boolean | undefined>(false);
 
     private readonly router = inject(Router);
     private subscriptions: Subscription = new Subscription();

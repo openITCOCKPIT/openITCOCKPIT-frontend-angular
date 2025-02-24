@@ -56,6 +56,7 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
 
     constructor(parent: MapCanvasComponent) {
         super(parent);
+        this.blinkServiceCallback = this.blinkServiceCallback.bind(this);
         effect(() => {
             if (!this.isItemDeleted(this.type)) {
                 this.onItemObjectIdChange();
@@ -74,10 +75,10 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         if (!this.isItemDeleted(this.type)) {
             this.load();
         }
-        /*if (this.refreshInterval()! > 0 && this.uuidForServices) {
+        if (this.refreshInterval()! > 0 && this.uuidForServices) {
             this.MapItemReloadService.setRefreshInterval(this.refreshInterval() as number);
             this.MapItemReloadService.registerNewItem(this.uuidForServices, this.item() as Mapitem, this.updateCallback);
-        }*/
+        }
     }
 
     public updateCallback(result: MapItemRoot) {
@@ -180,7 +181,7 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
     private stop() {
         if (this.uuidForServices) {
             this.BlinkService.unregisterObject(this.uuidForServices);
-            //this.MapItemReloadService.unregisterItem(this.uuidForServices);
+            this.MapItemReloadService.unregisterItem(this.uuidForServices);
         }
     };
 

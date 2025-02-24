@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 
 interface CallbackObject {
     [key: string]: () => void;
@@ -32,7 +32,7 @@ interface CallbackObject {
 @Injectable({
     providedIn: 'root'
 })
-export class BlinkService {
+export class BlinkService implements OnDestroy {
 
     private objects: CallbackObject = {};
     private interval: number | null = null;
@@ -61,6 +61,12 @@ export class BlinkService {
                 this.objects[uuid]();
             }
         }, this.period);
+    }
+
+    public ngOnDestroy(): void {
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
     }
 
 }
