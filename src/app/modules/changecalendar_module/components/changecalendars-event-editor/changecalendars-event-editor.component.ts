@@ -38,9 +38,6 @@ import { GenericValidationError } from '../../../../generic-responses';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { NgIf } from '@angular/common';
-import { ChangecalendarWidgetModalService } from '../../widgets/changecalendar-widget-modal.service';
-import { Subscription } from 'rxjs';
-import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../../services/timezone.service';
 
 @Component({
     selector: 'oitc-changecalendars-event-editor',
@@ -78,21 +75,14 @@ export class ChangecalendarsEventEditorComponent implements OnInit, OnChanges {
     private readonly ModalService: ModalService = inject(ModalService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly BbCodeParserService: BbCodeParserService = inject(BbCodeParserService);
-    private readonly ChangecalendarWidgetModalService: ChangecalendarWidgetModalService = inject(ChangecalendarWidgetModalService);
-    private readonly subscriptions = new Subscription();
-    private readonly TimezoneService: TimezoneService = inject(TimezoneService);
     private _event: ChangecalendarEvent = {} as ChangecalendarEvent;
-    private _editable: boolean = true;
 
     @Output() onDeleteClick = new EventEmitter<ChangecalendarEvent>();
     @Output() onEventChange = new EventEmitter<ChangecalendarEvent>();
     @Output() onEventCreate = new EventEmitter<ChangecalendarEvent>();
-    @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     protected html: string = '';
     protected errors?: GenericValidationError;
-    protected timezone!: TimezoneObject;
-
 
     @Input()
     public set event(event: ChangecalendarEvent) {
@@ -101,15 +91,6 @@ export class ChangecalendarsEventEditorComponent implements OnInit, OnChanges {
 
     public get event(): ChangecalendarEvent {
         return this._event;
-    }
-
-    @Input()
-    public set editable(editable: boolean) {
-        this._editable = editable;
-    }
-
-    public get editable(): boolean {
-        return this._editable;
     }
 
     protected onChangeOfBbCode(event: any): void {
@@ -124,52 +105,12 @@ export class ChangecalendarsEventEditorComponent implements OnInit, OnChanges {
         this.cdr.markForCheck();
     }
 
-    private getUserTimezone() {
-        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
-            this.timezone = data;
-            this.cdr.markForCheck();
-        }));
-    }
-
-    private stripZone(date: Date): string {
-
-        let ZeroForMonth = (date.getMonth() + 1) < 10 ? '0' : '', ZeroForDay = date.getDate() < 10 ? '0' : '',
-            ZeroForHour = date.getHours() < 10 ? '0' : '', ZeroForMinute = date.getMinutes() < 10 ? '0' : '',
-            ZeroForSecond = date.getSeconds() < 10 ? '0' : '', Year = date.getFullYear(),
-            Month = ZeroForMonth + (date.getMonth() + 1), Day = ZeroForDay + date.getDate(),
-            Hour = ZeroForHour + date.getHours(), Minute = ZeroForMinute + date.getMinutes(),
-            Second = ZeroForSecond + date.getSeconds(), Zone = this.timezone.user_offset / 60 / 60,
-            ZeroForZone = Zone < 10 ? '0' : '', TimeZone = "+" + ZeroForZone + Zone,
-            dS = Year + "-" + Month + "-" + Day + "T" + Hour + ":" + Minute + ":" + Second;
-
-        return dS;
-    }
-
     public ngOnInit() {
-        this.getUserTimezone();
-        this.subscriptions.add(this.ChangecalendarWidgetModalService.event$.subscribe((event) => {
-            this.event = event;
-            this.event.start = this.stripZone(new Date(this.event.start));
-            this.event.end = this.stripZone(new Date(this.event.end));
-
-            console.warn(this.event);
-
-            this.cdr.markForCheck();
-
-            // open modal
-            // no idea why we need setTimeout here, but otherwise you can not open the modal on the dashboard
-            // more than once
-            setTimeout(() => {
-                this.ModalService.toggle({
-                    show: true,
-                    id: 'changeCalendarEditorModal'
-                });
-            }, 150);
-        }));
+        this.html = this.BbCodeParserService.parse(this.event.description);
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        this.html = this.BbCodeParserService.parse(this.event.description || '');
+        this.html = this.BbCodeParserService.parse(this.event.description);
     }
 
     public hideModal(): void {

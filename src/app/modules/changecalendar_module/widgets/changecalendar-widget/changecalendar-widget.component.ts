@@ -165,6 +165,7 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
                                 originId: event.id,
                                 title: event.title,
                                 start: event.start,
+                                description: event.description,
                                 end: event.end,
                                 default_holiday: false,
                                 color: this.EditableChangecalendar?.changeCalendars[changeCalendarId].colour

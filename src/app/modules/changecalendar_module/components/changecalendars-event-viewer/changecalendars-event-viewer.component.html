@@ -1,21 +1,22 @@
 <ng-container *transloco="let t">
 
-    <c-modal #changeCalendarEditorModal fullscreen="md" id="changeCalendarEditorModal" size="xl">
+    <c-modal #changeCalendarViewerModal fullscreen="md" id="changeCalendarViewerModal" size="lg">
         <c-modal-header>
-            <h5 cCardTitle>
-                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                {{ t('Modify date') }}
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
+                {{ t('Change calendar event') }}
             </h5>
         </c-modal-header>
         <c-modal-body>
-            <c-row class="mb-2">
+            <c-row class="mb-3">
 
                 <c-col md="12">
 
                     <label cLabel for="event.title">
                         {{ t('Title') }}
                     </label>
-                    <input cFormControl
+                    <input disabled
+                           cFormControl
                            required
                            id="event.title"
                            type="text"
@@ -25,7 +26,7 @@
                     <oitc-form-feedback [errors]="errors" errorField="title"></oitc-form-feedback>
                 </c-col>
             </c-row>
-            <c-row class="mb-2">
+            <c-row class="mb-3">
                 <c-col md="6">
                     <label cLabel for="event.start">
                         {{ t('Start') }}
@@ -34,7 +35,8 @@
                         <span cInputGroupText>
                             <fa-icon [icon]="['fas', 'edit']"></fa-icon>
                         </span>
-                        <input [(ngModel)]="event.start"
+                        <input disabled
+                               [(ngModel)]="event.start"
                                [placeholder]="'Start date' | transloco"
                                aria-label="event.start"
                                name="event.start"
@@ -52,7 +54,8 @@
                         <span cInputGroupText>
                             <fa-icon [icon]="['fas', 'edit']"></fa-icon>
                         </span>
-                        <input [(ngModel)]="event.end"
+                        <input disabled
+                               [(ngModel)]="event.end"
                                [placeholder]="'End date' | transloco"
                                aria-label="event.end"
                                name="event.end"
@@ -64,40 +67,15 @@
                 </c-col>
             </c-row>
             <c-row class="mb-2">
-                <c-col md="6">
-                    <label cLabel for="event.description">
-                        {{ t('Description') }}
-                    </label>
-                    <c-card>
-                        <c-card-body>
-                            <oitc-bb-code-editor [(bbcode)]="event.description"
-                                                 (bbcodeChange)="onChangeOfBbCode($event)"
-                                                 id="event.description"/>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-                <c-col md="6">
-                    <label cLabel for="event.description">
+                <c-col md="12">
+                    <label cLabel>
                         {{ t('Preview') }}
                     </label>
-                    <c-card>
-                        <c-card-body>
-                            <div class="text-break" [innerHTML]="html | trustAsHtml"></div>
-                        </c-card-body>
-                    </c-card>
+                    <div class="text-break" [innerHTML]="html | trustAsHtml"></div>
                 </c-col>
             </c-row>
         </c-modal-body>
         <c-modal-footer>
-            <button *ngIf="event.id" cButton color="danger" (click)="onDeleteClick.emit(event)" style="margin-right: auto;">
-                {{ t('Delete') }}
-            </button>
-            <button *ngIf="event.id" cButton color="success" (click)="onEventChange.emit(event)">
-                {{ t('Save') }}
-            </button>
-            <button *ngIf="! event.id" cButton color="success" (click)="onEventCreate.emit(event)">
-                {{ t('Create') }}
-            </button>
             <button cButton color="default" (click)="hideModal()">
                 {{ t('Close') }}
             </button>

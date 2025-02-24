@@ -80,8 +80,8 @@ import { DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN } from '../../../tokens/delete-ack
 import { AcknowledgementsService } from '../../acknowledgements/acknowledgements.service';
 import { DowntimesService } from '../../downtimes/downtimes.service';
 import {
-    ChangecalendarsEventEditorComponent
-} from '../../../modules/changecalendar_module/components/changecalendars-event-editor/changecalendars-event-editor.component';
+    ChangecalendarsEventViewerComponent
+} from '../../../modules/changecalendar_module/components/changecalendars-event-viewer/changecalendars-event-viewer.component';
 
 
 @Component({
@@ -120,7 +120,7 @@ import {
         DashboardAddWidgetModalComponent,
         HostsBrowserModalComponent,
         ServiceBrowserModalComponent,
-        ChangecalendarsEventEditorComponent
+        ChangecalendarsEventViewerComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
