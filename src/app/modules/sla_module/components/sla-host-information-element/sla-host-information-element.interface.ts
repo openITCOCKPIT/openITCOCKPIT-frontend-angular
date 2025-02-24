@@ -1,4 +1,4 @@
-import { Sla, SlaAvailabilityStatusService } from '../../pages/slas/Slas.interface';
+import { Sla, SlaAvailabilityStatusService } from '../../pages/slas/slas.interface';
 
 export interface SlaHostInformationElementRoot {
     response: Response
@@ -54,6 +54,3 @@ export interface EvaluationDateDetails {
     start_user_format: string
     end_user_format: string
 }
-
-
-

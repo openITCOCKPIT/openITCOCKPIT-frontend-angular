@@ -7,7 +7,6 @@ import { GenericIdResponse, GenericValidationError } from '../../../../../generi
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { HistoryService } from '../../../../../history.service';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   AlertComponent,
@@ -37,18 +36,9 @@ import {
   TableDirective
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { HostMappingRulesService } from '../HostMappingRules.service';
-import {
-    getDefaultHostMappingRulesLoadHostsParams,
-    getDefaultHostMappingRulesPost,
-    HostMappingRulesAssignToHostsRoot,
-    HostMappingRulesLoadHostsParams,
-    HostMappingRulesPost,
-    LoadHostsRoot
-} from '../HostMappingRules.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
-import { Sla } from '../../slas/Slas.interface';
+import { Sla } from '../../slas/slas.interface';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { FormsModule } from '@angular/forms';
 import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
@@ -67,6 +57,14 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { HostMappingRulesService } from '../host-mapping-rules.service';
+import {
+    getDefaultHostMappingRulesLoadHostsParams,
+    getDefaultHostMappingRulesPost, HostMappingRulesAssignToHostsRoot,
+    HostMappingRulesLoadHostsParams,
+    HostMappingRulesPost,
+    LoadHostsRoot
+} from '../host-mapping-rules.interface';
 
 @Component({
     selector: 'oitc-host-mapping-rules-assign-to-hosts',

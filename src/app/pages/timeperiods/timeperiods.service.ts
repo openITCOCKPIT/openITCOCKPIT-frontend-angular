@@ -54,9 +54,17 @@ export class TimeperiodsService {
 
     public getEdit(id: number): Observable<TimeperiodsEditRoot> {
         const proxyPath = this.proxyPath;
-        return this.http.get<any>(`${proxyPath}/timeperiods/edit/${id}.json?angular=true`, {}).pipe(
+        return this.http.get<TimeperiodsEditRoot>(`${proxyPath}/timeperiods/edit/${id}.json?angular=true`, {}).pipe(
             map(data => {
-                return data;
+
+                // The server response the "day" as integer, but the Frontend expects a string
+                let result:TimeperiodsEditRoot = data;
+                result.timeperiod.timeperiod_timeranges.forEach((timerange) => {
+                    const day = timerange.day;
+                    timerange.day = day.toString() as '1'|'2'|'3'|'4'|'5'|'6'|'7';
+                });
+
+                return result;
             })
         )
     }

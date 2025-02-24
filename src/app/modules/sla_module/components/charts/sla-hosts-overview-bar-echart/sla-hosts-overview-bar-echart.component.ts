@@ -6,7 +6,7 @@ import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
 import { LayoutService } from '../../../../../layouts/coreui/layout.service';
-import { Sla } from '../../../pages/slas/Slas.interface';
+import { Sla } from '../../../pages/slas/slas.interface';
 
 import {
     GridComponent,

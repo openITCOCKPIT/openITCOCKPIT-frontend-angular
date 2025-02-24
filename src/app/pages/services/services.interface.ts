@@ -309,6 +309,8 @@ export interface ServiceEntity {
     modified?: string
     servicetemplate?: ServicetemplateEntity
     host?: HostEntity
+    servicename?: string
+    is_sla_relevant?: boolean
 }
 
 /**

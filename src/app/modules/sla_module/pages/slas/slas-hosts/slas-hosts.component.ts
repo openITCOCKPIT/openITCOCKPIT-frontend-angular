@@ -1,32 +1,30 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
-import { SlasService } from '../Slas.service';
+import { SlasService } from '../slas.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { getDefaultSlasHostsParams, SlasHostsParams, SlasHostsRoot } from '../Slas.interface';
+import { getDefaultSlasHostsParams, SlasHostsParams, SlasHostsRoot } from '../slas.interface';
 import {
-  AlertComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    AlertComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 
-
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -48,52 +46,51 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 @Component({
     selector: 'oitc-slas-hosts',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    MatSort,
-    MatSortHeader,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RowComponent,
-    TableDirective,
-    TableLoaderComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    RouterLink,
-    BackButtonDirective,
-    AlertComponent,
-    AsyncPipe
-],
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        TableDirective,
+        TableLoaderComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        RouterLink,
+        BackButtonDirective,
+        AlertComponent,
+        AsyncPipe
+    ],
     templateUrl: './slas-hosts.component.html',
     styleUrl: './slas-hosts.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: SlasService } // Inject the ContactsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: SlasService} // Inject the ContactsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SlasHostsComponent implements OnInit, OnDestroy {
 
     private readonly SlasService: SlasService = inject(SlasService);
-    private readonly TranslocoService = inject(TranslocoService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
 
     private subscriptions: Subscription = new Subscription();

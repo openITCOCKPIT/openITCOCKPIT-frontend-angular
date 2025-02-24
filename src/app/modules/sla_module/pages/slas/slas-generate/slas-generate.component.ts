@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
-import { SlasService } from '../Slas.service';
+import { SlasService } from '../slas.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AsyncPipe, formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { Report, ReportError, Sla, SlasGeneratePost, SlasGeneratePostResponse } from '../Slas.interface';
+import { Report, ReportError, Sla, SlasGeneratePost, SlasGeneratePostResponse } from '../slas.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { SlasGenerateReportFormatEnum, SlasGenerateTabs } from '../slas.enum';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -91,6 +91,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
 
     private readonly SlasService: SlasService = inject(SlasService);
     private readonly TranslocoService = inject(TranslocoService);
+
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly notyService = inject(NotyService);
     private subscriptions: Subscription = new Subscription();
@@ -104,13 +105,23 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
     public tabName: string = SlasGenerateTabs.ReportConfig;
     public reportWasGenerated: boolean = false;
     public isGenerating: boolean = false;
-    public report: Report = {} as Report;
-    public sla: Sla = {} as Sla;
+    public report?: Report;
+    public sla?: Sla;
     public slas: Sla[] = [];
     public logoUrl: string = '';
     public reportMessage: { successMessage: string, errorMessage: string } = {
         successMessage: this.TranslocoService.translate('Report created successfully'),
         errorMessage: this.TranslocoService.translate('Report could not be created')
+    };
+
+    public weekdayNames = {
+        '1': this.TranslocoService.translate('Monday'),
+        '2': this.TranslocoService.translate('Tuesday'),
+        '3': this.TranslocoService.translate('Wednesday'),
+        '4': this.TranslocoService.translate('Thursday'),
+        '5': this.TranslocoService.translate('Friday'),
+        '6': this.TranslocoService.translate('Saturday'),
+        '7': this.TranslocoService.translate('Sunday')
     };
 
     protected reportFormats = [
@@ -241,8 +252,6 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
                     if (result.success) {
 
                         const response = result.data as SlasGeneratePostResponse;
-
-                        this.report = {} as Report;
                         this.errors = null;
                         this.report_error = null;
                         this.tabName = 'showReport';

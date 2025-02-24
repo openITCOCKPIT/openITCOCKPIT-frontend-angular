@@ -5,10 +5,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, Sort } from '@angular/material/sort';
 import {
-    getDefaultSlaAvailabilityStatusServicesLogIndexParams,
-    SlaAvailabilityStatusServicesLogIndexParams,
-    SlaAvailabilityStatusServicesLogIndexRoot
-} from '../SlaAvailabilityStatusServicesLog.interface';
+    getDefaultSlaAvailabilityStatusServicesLogIndexParams, SlaAvailabilityStatusServicesLogIndexRoot
+} from '../sla-availability-status-services-log.interface';
 import {
   BadgeComponent,
   CardBodyComponent,
@@ -43,11 +41,12 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { IndexPage } from '../../../../../pages.interface';
-import { SlaAvailabilityStatusServicesLogService } from '../SlaAvailabilityStatusServicesLog.service';
+import { SlaAvailabilityStatusServicesLogService } from '../sla-availability-status-services-log.service';
 import { SkeletonModule } from 'primeng/skeleton';
 
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { FilterPipe } from '../../../../../pipes/filter.pipe';
+import { SlaAvailabilityStatusLogIndexParams } from '../../slas/slas.interface';
 
 @Component({
     selector: 'oitc-sla-availability-status-services-log-index',
@@ -110,7 +109,7 @@ export class SlaAvailabilityStatusServicesLogIndexComponent implements OnInit, O
     private toParam: number | null = null;
 
     public slaServiceAndStatusLog: SlaAvailabilityStatusServicesLogIndexRoot = {} as SlaAvailabilityStatusServicesLogIndexRoot;
-    public params: SlaAvailabilityStatusServicesLogIndexParams = getDefaultSlaAvailabilityStatusServicesLogIndexParams(this.fromParam, this.toParam);
+    public params: SlaAvailabilityStatusLogIndexParams = getDefaultSlaAvailabilityStatusServicesLogIndexParams(this.fromParam, this.toParam);
     public declineValues: number[] = [];
 
     public from_time: string = this.params['filter[from]'];

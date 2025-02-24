@@ -7,7 +7,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { SlaSettingsIndexRoot, SlaSettingsPost } from '../SlaSettings.interface';
+import { SlaSettingsIndexRoot, SlaSettingsPost } from '../sla-settings.interface';
 import { HistoryService } from '../../../../../history.service';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
