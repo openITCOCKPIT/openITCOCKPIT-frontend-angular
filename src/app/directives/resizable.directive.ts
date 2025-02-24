@@ -66,7 +66,7 @@ export class ResizableDirective implements AfterViewInit {
                 newHeight = newWidth / aspectRatio;
             }
         }
-        
+
         if ((newWidth !== this.lastWidth || newHeight !== this.lastHeight) && (this.lastWidth !== 0 && this.lastHeight !== 0)) {
             this.lastWidth = newWidth;
             this.lastHeight = newHeight;
@@ -77,6 +77,7 @@ export class ResizableDirective implements AfterViewInit {
         this.lastHeight = newHeight;
     }
 
+    // its important to put this function in the init of the item to make sure that the lastWidth and lastHeight are set
     public setLastWidthHeight(width: number, height: number) {
         this.lastWidth = width;
         this.lastHeight = height;

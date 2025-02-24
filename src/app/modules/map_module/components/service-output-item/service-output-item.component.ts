@@ -6,7 +6,8 @@ import {
     input,
     InputSignal,
     OnDestroy,
-    OnInit
+    OnInit,
+    ViewChild
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
@@ -30,6 +31,7 @@ import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
+    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
 
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
@@ -111,6 +113,9 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
                 this.initRefreshTimer();
 
                 this.init = false;
+                if (this.resizableDirective) {
+                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
+                }
                 this.cdr.markForCheck();
             }));
     };

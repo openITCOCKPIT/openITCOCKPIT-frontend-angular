@@ -20,5 +20,21 @@ export const mapModuleRoutes: Routes = [
     {
         path: 'map_module/mapeditors/edit/:id',
         loadComponent: () => import('./pages/mapeditors/mapeditors-edit/mapeditors-edit.component').then(m => m.MapeditorsEditComponent)
-    }
+    },
+    {
+        path: 'map_module/mapeditors/view/:id/:fullscreen/:rotation/{interval:int}',
+        loadComponent: () => import('./pages/mapeditors/mapeditors-view/mapeditors-view.component').then(m => m.MapeditorsViewComponent),
+    },
+    {
+        path: 'map_module/mapeditors/view/:id/:fullscreen/:rotation',
+        loadComponent: () => import('./pages/mapeditors/mapeditors-view/mapeditors-view.component').then(m => m.MapeditorsViewComponent),
+    },
+    {
+        path: 'map_module/mapeditors/view/:id/:fullscreen',
+        loadComponent: () => import('./pages/mapeditors/mapeditors-view/mapeditors-view.component').then(m => m.MapeditorsViewComponent),
+    },
+    {
+        path: 'map_module/mapeditors/view/:id',
+        loadComponent: () => import('./pages/mapeditors/mapeditors-view/mapeditors-view.component').then(m => m.MapeditorsViewComponent),
+    },
 ];

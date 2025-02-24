@@ -88,7 +88,9 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
                     this.getLabel(result.data);
                 }
                 this.initRefreshTimer();
-                this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
+                if (this.resizableDirective) {
+                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
+                }
                 this.cdr.markForCheck();
             }));
     };

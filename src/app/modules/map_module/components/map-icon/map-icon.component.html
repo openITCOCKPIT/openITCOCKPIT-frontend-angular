@@ -1,5 +1,6 @@
 <div cdkDrag #container class="map-element-container"
      [draggable]="!isViewMode()"
+     [ngClass]="{'cursor-pointer': isViewMode()}"
      (cdkDragEnded)="onDragEnd($event)"
      (cdkDragMoved)="onDragMove($event)"
      cdkDragBoundary=".map-canvas">
