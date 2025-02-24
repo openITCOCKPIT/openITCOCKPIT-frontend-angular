@@ -3,13 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
-    LoadContainersRoot,
-    LoadTimeperiodsParams,
-    LoadTimeperiodsRoot,
-    LoadUsersParams,
-    LoadUsersRoot,
+    SlaEditGet,
     SlaPost,
-    SlasEditRoot,
     SlasGenerateDownloadParams,
     SlasGeneratePost,
     SlasGenerateRoot,
@@ -19,7 +14,7 @@ import {
     SlasIndexRoot,
     SlasViewDetailsParams,
     SlasViewDetailsRoot
-} from './Slas.interface';
+} from './slas.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
@@ -48,36 +43,6 @@ export class SlasService {
         return this.http.post(`${proxyPath}/sla_module/slas/delete/${item.id}.json?angular=true`, {});
     }
 
-    public loadContainers(): Observable<LoadContainersRoot> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.get<LoadContainersRoot>(`${proxyPath}/containers/loadContainers.json?angular=true`).pipe(
-            map((data: LoadContainersRoot) => {
-                return data;
-            })
-        )
-    }
-
-    public loadUsers(params: LoadUsersParams): Observable<LoadUsersRoot> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.get<LoadUsersRoot>(`${proxyPath}/users/loadUsersByContainerId.json?angular=true`, {
-            params: params as {}
-        }).pipe(
-            map((data: LoadUsersRoot) => {
-                return data;
-            })
-        )
-    }
-
-    public loadTimeperiods(params: LoadTimeperiodsParams): Observable<LoadTimeperiodsRoot> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.get<LoadTimeperiodsRoot>(`${proxyPath}/timeperiods/loadTimeperiodsByContainerId.json?angular=true`, {
-            params: params as {}
-        }).pipe(
-            map((data: LoadTimeperiodsRoot) => {
-                return data;
-            })
-        )
-    }
 
     public add(sla: SlaPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
@@ -100,9 +65,9 @@ export class SlasService {
             );
     }
 
-    public getEdit(id: number): Observable<SlasEditRoot> {
+    public getEdit(id: number): Observable<SlaEditGet> {
         const proxyPath = this.proxyPath;
-        return this.http.get<SlasEditRoot>(`${proxyPath}/sla_module/slas/edit/${id}.json?angular=true`).pipe(
+        return this.http.get<SlaEditGet>(`${proxyPath}/sla_module/slas/edit/${id}.json?angular=true`).pipe(
             map(data => {
                 return data;
             })

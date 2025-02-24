@@ -5,12 +5,12 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Mapicon } from '../../pages/mapeditors/Mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-map-icon',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, NgIf],
+    imports: [CdkDrag, ContextMenuModule, NgIf, NgClass],
     templateUrl: './map-icon.component.html',
     styleUrl: './map-icon.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

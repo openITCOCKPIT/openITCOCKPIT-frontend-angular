@@ -6,7 +6,8 @@ import {
     input,
     InputSignal,
     OnDestroy,
-    OnInit
+    OnInit,
+    ViewChild
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
@@ -27,6 +28,7 @@ import {
 import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { NgIf } from '@angular/common';
 import { LinearGauge } from 'canvas-gauges';
+import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 
 @Component({
     selector: 'oitc-temperature-item',
@@ -37,6 +39,7 @@ import { LinearGauge } from 'canvas-gauges';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
+    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
 
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
@@ -131,6 +134,9 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
                 this.initRefreshTimer();
 
                 this.init = false;
+                if (this.resizableDirective) {
+                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
+                }
                 this.cdr.markForCheck();
             }));
     };
@@ -138,33 +144,33 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
     private getThresholdAreas(setup: Setup) {
         let thresholdAreas: any[] = [];
         switch (setup.scale.type) {
-            case "W<O":
+            case ScaleTypes.W_O:
                 thresholdAreas = [
                     {from: setup.crit.low, to: setup.warn.low, color: '#DF8F1D'},
                     {from: setup.warn.low, to: setup.scale.max, color: '#449D44'}
                 ];
                 break;
-            case "C<W<O":
+            case ScaleTypes.C_W_O:
                 thresholdAreas = [
                     {from: setup.scale.min, to: setup.crit.low, color: '#C9302C'},
                     {from: setup.crit.low, to: setup.warn.low, color: '#DF8F1D'},
                     {from: setup.warn.low, to: setup.scale.max, color: '#449D44'}
                 ];
                 break;
-            case "O<W":
+            case ScaleTypes.O_W:
                 thresholdAreas = [
                     {from: setup.scale.min, to: setup.warn.low, color: '#449D44'},
                     {from: setup.warn.low, to: setup.scale.max, color: '#DF8F1D'}
                 ];
                 break;
-            case "O<W<C":
+            case ScaleTypes.O_W_C:
                 thresholdAreas = [
                     {from: setup.scale.min, to: setup.warn.low, color: '#449D44'},
                     {from: setup.warn.low, to: setup.crit.low, color: '#DF8F1D'},
                     {from: setup.crit.low, to: setup.scale.max, color: '#C9302C'}
                 ];
                 break;
-            case "C<W<O<W<C":
+            case ScaleTypes.C_W_O_W_C:
                 thresholdAreas = [
                     {from: setup.scale.min, to: setup.crit.low, color: '#C9302C'},
                     {from: setup.crit.low, to: setup.warn.low, color: '#DF8F1D'},
@@ -173,7 +179,7 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
                     {from: setup.crit.high, to: setup.scale.max, color: '#C9302C'}
                 ];
                 break;
-            case "O<W<C<W<O":
+            case ScaleTypes.O_W_C_W_O:
                 thresholdAreas = [
                     {from: setup.scale.min, to: setup.crit.low, color: '#449D44'},
                     {from: setup.crit.low, to: setup.warn.low, color: '#DF8F1D'},
@@ -182,7 +188,7 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
                     {from: setup.crit.high, to: setup.scale.max, color: '#449D44'}
                 ];
                 break;
-            case "O":
+            case ScaleTypes.O:
             default:
                 break;
         }

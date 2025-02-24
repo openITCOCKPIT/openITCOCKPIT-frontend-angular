@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
-import { SlasService } from '../Slas.service';
+import { SlasService } from '../slas.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { getDefaultSlasIndexParams, Sla, SlasIndexParams, SlasIndexRoot } from '../Slas.interface';
+import { getDefaultSlasIndexParams, Sla, SlasIndexParams, SlasIndexRoot } from '../slas.interface';
 import {
     BadgeComponent,
     CardBodyComponent,

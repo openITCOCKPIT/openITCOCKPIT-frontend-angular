@@ -63,6 +63,7 @@ import { SlaWidgetComponent } from '../../../../modules/sla_module/widgets/sla-w
 import {
     SlaCalendarWidgetComponent
 } from '../../../../modules/sla_module/widgets/sla-calendar-widget/sla-calendar-widget.component';
+import { TrafficlightWidgetComponent } from '../trafficlight-widget/trafficlight-widget.component';
 import {
     ChangecalendarWidgetComponent
 } from '../../../../modules/changecalendar_module/widgets/changecalendar-widget/changecalendar-widget.component';
@@ -108,6 +109,7 @@ import {
         SlaSummaryWidgetComponent,
         SlaWidgetComponent,
         SlaCalendarWidgetComponent,
+        TrafficlightWidgetComponent,
         ChangecalendarWidgetComponent
     ],
     templateUrl: './widget-container.component.html',

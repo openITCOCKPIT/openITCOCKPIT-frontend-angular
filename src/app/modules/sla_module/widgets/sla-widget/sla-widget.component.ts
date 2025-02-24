@@ -4,7 +4,7 @@ import { SlaWidgetService } from './sla-widget.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { SlasService } from '../../pages/slas/Slas.service';
+import { SlasService } from '../../pages/slas/slas.service';
 import { AlertComponent, AlertHeadingDirective, ColComponent, FormLabelDirective, RowComponent } from '@coreui/angular';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import { RouterLink } from '@angular/router';

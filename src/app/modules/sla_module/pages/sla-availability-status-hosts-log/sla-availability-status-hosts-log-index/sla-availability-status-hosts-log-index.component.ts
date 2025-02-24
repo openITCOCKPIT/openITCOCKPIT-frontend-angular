@@ -6,9 +6,8 @@ import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/pa
 import { MatSort, Sort } from '@angular/material/sort';
 import {
     getDefaultSlaAvailabilityStatusHostsLogIndexParams,
-    SlaAvailabilityStatusHostsLogIndexParams,
     SlaAvailabilityStatusHostsLogIndexRoot
-} from '../SlaAvailabilityStatusHostsLog.interface';
+} from '../sla-availability-status-hosts-log.interface';
 import {
   BadgeComponent,
   CardBodyComponent,
@@ -43,11 +42,12 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { IndexPage } from '../../../../../pages.interface';
-import { SlaAvailabilityStatusHostsLogService } from '../SlaAvailabilityStatusHostsLog.service';
+import { SlaAvailabilityStatusHostsLogService } from '../sla-availability-status-hosts-log.service';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CopyToClipboardComponent } from '../../../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { FilterPipe } from '../../../../../pipes/filter.pipe';
+import { SlaAvailabilityStatusLogIndexParams } from '../../slas/slas.interface';
 
 @Component({
     selector: 'oitc-sla-availability-status-hosts-log-index',
@@ -111,7 +111,7 @@ export class SlaAvailabilityStatusHostsLogIndexComponent implements OnInit, OnDe
     private toParam: number | null = null;
 
     public slaHostAndStatusLog: SlaAvailabilityStatusHostsLogIndexRoot = {} as SlaAvailabilityStatusHostsLogIndexRoot;
-    public params: SlaAvailabilityStatusHostsLogIndexParams = getDefaultSlaAvailabilityStatusHostsLogIndexParams(this.fromParam, this.toParam);
+    public params: SlaAvailabilityStatusLogIndexParams = getDefaultSlaAvailabilityStatusHostsLogIndexParams(this.fromParam, this.toParam);
     public declineValues: number[] = [];
 
     public from_time: string = this.params['filter[from]'];
