@@ -6,7 +6,8 @@ import {
     input,
     InputSignal,
     OnDestroy,
-    OnInit
+    OnInit,
+    ViewChild
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
@@ -34,6 +35,7 @@ import { NgIf } from '@angular/common';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
+    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
 
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
@@ -120,6 +122,9 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
                 this.initRefreshTimer();
 
                 this.init = false;
+                if (this.resizableDirective) {
+                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
+                }
                 this.cdr.markForCheck();
             }));
     };

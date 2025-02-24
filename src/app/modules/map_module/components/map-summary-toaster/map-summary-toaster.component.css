@@ -1,0 +1,22 @@
+.toaster-min-width {
+    min-width: 30%;
+}
+
+.txt-color-blueDark {
+    color: #4c4f53 !important;
+}
+
+.cropText {
+    /*width: 20px;*/
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.padding-5 {
+    padding: 5px;
+}
+
+.font-xs {
+    font-size: 85% !important;
+}

@@ -11,7 +11,7 @@ import {
 import { Data, MapItemRoot, MapItemRootParams } from './map-item.interface';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
@@ -26,7 +26,7 @@ import { UUID } from '../../../../classes/UUID';
 @Component({
     selector: 'oitc-map-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, NgIf],
+    imports: [CdkDrag, ContextMenuModule, NgIf, NgClass],
     templateUrl: './map-item.component.html',
     styleUrl: './map-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -74,10 +74,10 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         if (!this.isItemDeleted(this.type)) {
             this.load();
         }
-        if (this.refreshInterval()! > 0 && this.uuidForServices) {
+        /*if (this.refreshInterval()! > 0 && this.uuidForServices) {
             this.MapItemReloadService.setRefreshInterval(this.refreshInterval() as number);
             this.MapItemReloadService.registerNewItem(this.uuidForServices, this.item() as Mapitem, this.updateCallback);
-        }
+        }*/
     }
 
     public updateCallback(result: MapItemRoot) {
@@ -180,7 +180,7 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
     private stop() {
         if (this.uuidForServices) {
             this.BlinkService.unregisterObject(this.uuidForServices);
-            this.MapItemReloadService.unregisterItem(this.uuidForServices);
+            //this.MapItemReloadService.unregisterItem(this.uuidForServices);
         }
     };
 
