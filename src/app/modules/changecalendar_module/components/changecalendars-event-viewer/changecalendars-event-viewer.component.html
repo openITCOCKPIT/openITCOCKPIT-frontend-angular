@@ -66,10 +66,10 @@
                     </c-input-group>
                 </c-col>
             </c-row>
-            <c-row class="mb-2">
+            <c-row class="mb-2" *ngIf="html.length > 0">
                 <c-col md="12">
                     <label cLabel>
-                        {{ t('Preview') }}
+                        {{ t('Description') }}
                     </label>
                     <div class="text-break" [innerHTML]="html | trustAsHtml"></div>
                 </c-col>

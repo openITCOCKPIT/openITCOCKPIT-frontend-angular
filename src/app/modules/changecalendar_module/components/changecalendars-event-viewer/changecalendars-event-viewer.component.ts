@@ -37,6 +37,7 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { ChangecalendarWidgetModalService } from '../../widgets/changecalendar-widget-modal.service';
 import { Subscription } from 'rxjs';
 import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../../services/timezone.service';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-changecalendars-event-viewer',
@@ -61,6 +62,7 @@ import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../
         FaIconComponent,
         XsButtonDirective,
         ModalTitleDirective,
+        NgIf,
     ],
     templateUrl: './changecalendars-event-viewer.component.html',
     styleUrl: './changecalendars-event-viewer.component.css',
