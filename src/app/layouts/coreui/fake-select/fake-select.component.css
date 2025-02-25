@@ -1,4 +1,4 @@
-.p-dropdown-label-fix-flex {
+.p-select-label-fix-flex {
     display: block;
     white-space: nowrap;
     overflow: hidden;
@@ -8,7 +8,7 @@
     cursor: pointer;
 }
 
-.p-dropdown-trigger-fix-flex {
+.p-select-trigger-fix-flex {
     display: flex;
     align-items: center;
     justify-content: center;

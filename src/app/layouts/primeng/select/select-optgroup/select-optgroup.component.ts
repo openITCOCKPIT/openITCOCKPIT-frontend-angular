@@ -20,7 +20,6 @@ import { MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primeng/multisel
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslocoService } from '@jsverse/transloco';
 import { debounceTime } from 'rxjs/operators';
-import { JsonPipe } from '@angular/common';
 
 @Component({
     selector: 'oitc-select-optgroup',
@@ -28,8 +27,7 @@ import { JsonPipe } from '@angular/common';
         HighlightSearchPipe,
         PrimeTemplate,
         Select,
-        FormsModule,
-        JsonPipe
+        FormsModule
     ],
     providers: [
         {
