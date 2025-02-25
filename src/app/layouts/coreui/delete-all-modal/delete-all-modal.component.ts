@@ -50,7 +50,6 @@ import { RouterLink } from '@angular/router';
         ProgressComponent,
         NgIf,
         XsButtonDirective,
-        PermissionDirective,
         RouterLink
     ],
     templateUrl: './delete-all-modal.component.html',

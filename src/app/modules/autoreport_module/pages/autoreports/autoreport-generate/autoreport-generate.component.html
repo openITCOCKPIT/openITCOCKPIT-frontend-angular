@@ -781,6 +781,8 @@
                                 </c-col> <!-- end of outages in downtimes -->
                                 <c-col lg="12"
                                      *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_DOWNTIMES.value) &&
+                                    report.autoreport_data.hosts[host].Services[service].Service.frontend &&
+                                    report.autoreport_data.hosts[host].Services[service].Service.frontend.downtimes &&
                                     report.autoreport_data.hosts[host].Services[service].Service.frontend.downtimes.length > 0">
                                     <c-row class="pb-2">
                                         <c-col lg="12" xs="12" md="9">
