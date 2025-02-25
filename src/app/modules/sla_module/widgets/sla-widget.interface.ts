@@ -1,5 +1,6 @@
 import { TimeperiodEnity } from '../../../pages/timeperiods/timeperiods.interface';
 import { CalendarDateDetails } from '../../../pages/dashboards/widgets/calendar-widget/calendar-widget.interface';
+import { ObjectsSummary } from '../pages/slas/slas.interface';
 
 export interface SlaSummaryWidgetResponse {
     sla: SlaSummary
@@ -112,12 +113,6 @@ export interface SlaServicesOverview {
 }
 
 
-export interface ObjectsSummary {
-    count: number
-    percentage: string
-    ids: number[]
-}
-
 export interface SlaCalendarWidgetResponse {
     sla: SlaSimpleWidget
     dateDetails: CalendarDateDetails
@@ -137,9 +132,4 @@ export interface SlaCalendarStatusLog {
         lowestValue: number
         class: string
     }
-}
-
-export interface SlaCalendarStatusLogEntry {
-    lowestValue: number
-    class: string
 }

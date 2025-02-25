@@ -29,12 +29,10 @@
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle *ngIf="!reportWasGenerated">{{ t('Generate sla report') }}</h5>
-                <h5 cCardTitle *ngIf="reportWasGenerated">
+                <h5 cCardTitle *ngIf="reportWasGenerated && sla">
                     {{ sla.name }}
-                    <small class="fw-300">
-                        <i>{{ report.evaluation_time.start_human }}</i>
-                        -
-                        <i>{{ report.evaluation_time.end_human }}</i>
+                    <small class="fw-300" *ngIf="report?.evaluation_time">
+
                     </small>
                 </h5>
 
@@ -210,7 +208,7 @@
 
                 <div *ngIf="tabName === SlasGenerateTabs.ShowReport">
 
-                    <c-row>
+                    <c-row *ngIf="report">
                         <c-col xs="12" md="6" lg="6">
                             <c-row>
                                 <c-col xs="12" md="6" lg="4">
@@ -233,7 +231,8 @@
                                     </c-row>
                                     <c-row *ngFor="let timerange of report.timeperiod.timeperiod_timeranges">
                                         <c-col xs="12" md="6" lg="2">
-                                            {{ timerange.weekday }}
+                                            {{ weekdayNames[timerange.day] }}
+
                                         </c-col>
                                         <c-col xs="12" md="6" lg="10">
                                             {{ timerange.start }}
@@ -257,255 +256,257 @@
                             </h4>
                         </c-col>
                     </c-row>
+                    @if (report && report.date_ranges) {
 
-                    <fieldset class="margin-top-20" *ngFor="let date_range of report.date_ranges; index as i">
-                        <legend class="fieldset-legend-border-bottom mb-3">
-                            <h5>
-                                <fa-icon [icon]="['fas', 'calendar-days']" class="text-primary"></fa-icon>
-                                {{ date_range.title }}
-                                <small class="fw-300 font-xs italic ps-5">
-                                    {{ date_range.start_human }}
-                                    <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
-                                    {{ date_range.end_human }}
-                                </small>
-                            </h5>
-                        </legend>
 
-                        <div *ngIf="post.Sla.evaluation !== 3" class="mt-2">
-                            <oitc-table-loader *ngIf="!report.hosts"></oitc-table-loader>
-                            <table *ngIf="report.hosts" bordered cTable class="mt-2 mb-0 table-sm" hover striped>
-                                <thead>
-                                <tr>
-                                    <th scope="col">
-                                        {{ t('Host') }} / {{ t('Service') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Total time') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Uptime') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Outage time') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Outages') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Goal(%)') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Achieved(%)') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Status') }}
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <ng-container
-                                    *ngFor="let host of report.hosts[i]">
-                                    <tr *ngIf="host.sla_log.last_log_entry.evaluation_total_time_human_readable">
-                                        <td>
-                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                            {{ host.host.name }}
-                                        </td>
-                                        <td>
-                                            {{ host.sla_log.last_log_entry.evaluation_total_time_human_readable }}
-                                        </td>
-                                        <td>
-                                            {{ host.sla_log.last_log_entry.determined_availability_time_human_readable }}
-                                        </td>
-                                        <td>
-                                            {{ host.sla_log.last_log_entry.determined_outage_time_human_readable }}
-                                        </td>
-                                        <td>
-                                            @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'SlaAvailabilityStatusHostsLog', 'index'])|async) {
-                                                <a [routerLink]="['/', 'sla_module', 'sla_availability_status_hosts_log', 'index', host.host.id]"
-                                                   [queryParams]="{from:date_range.start, to:date_range.end}"
-                                                   [ngClass]="{'text-danger': host.sla_log.outages.length > 0}">
-                                                    {{ host.sla_log.outages.length }}
-                                                </a>
-                                            } @else {
-                                                {{ host.sla_log.outages.length }}
-                                            }
-                                        </td>
-                                        <td>
-                                            {{ host.sla_log.last_log_entry.minimal_availability_percent }}%
-                                        </td>
-                                        <td [ngClass]="{'text-danger': !host.sla_log.last_log_entry.passed}">
-                                            @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'SlaAvailabilityStatusHostsLog', 'index'])|async) {
-                                                <a [routerLink]="['/', 'sla_module', 'sla_availability_status_hosts_log', 'index', host.host.id]"
-                                                   [queryParams]="{from:date_range.start, to:date_range.end}"
-                                                   [ngClass]="{'text-danger': !host.sla_log.last_log_entry.passed}">
-                                                    {{ host.sla_log.last_log_entry.determined_availability_percent }}
-                                                    %
-                                                </a>
-                                            } @else {
-                                                {{ host.sla_log.last_log_entry.determined_availability_percent }}%
-                                            }
-                                        </td>
-                                        <td>
-                                            <c-badge [hidden]="!host.sla_log.last_log_entry.passed"
-                                                     textColor="success"
-                                                     class="badge-border w-100">
-                                                {{ t('PASSED') }}
-                                            </c-badge>
-                                            <c-badge [hidden]="host.sla_log.last_log_entry.passed"
-                                                     textColor="danger"
-                                                     class="badge-border w-100">
-                                                {{ t('FAILED') }}
-                                            </c-badge>
-                                        </td>
+                        <fieldset class="margin-top-20" *ngFor="let date_range of report.date_ranges; index as i">
+                            <legend class="fieldset-legend-border-bottom mb-3">
+                                <h5>
+                                    <fa-icon [icon]="['fas', 'calendar-days']" class="text-primary"></fa-icon>
+                                    {{ date_range.title }}
+                                    <small class="fw-300 font-xs italic ps-5">
+                                        {{ date_range.start_human }}
+                                        <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
+                                        {{ date_range.end_human }}
+                                    </small>
+                                </h5>
+                            </legend>
+
+                            <div *ngIf="post.Sla.evaluation !== 3" class="mt-2">
+                                <oitc-table-loader *ngIf="!report.hosts"></oitc-table-loader>
+                                <table *ngIf="report.hosts" bordered cTable class="mt-2 mb-0 table-sm" hover striped>
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            {{ t('Host') }} / {{ t('Service') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Total time') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Uptime') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Outage time') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Outages') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Goal(%)') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Achieved(%)') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Status') }}
+                                        </th>
                                     </tr>
-                                    <ng-container *ngFor="let service of host.services">
-                                        <tr *ngIf="service.sla_log.last_log_entry.evaluation_total_time_human_readable">
-                                            <td class="ps-3">
-                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                                {{ service.service.servicename }}
+                                    </thead>
+                                    <tbody>
+                                    <ng-container
+                                        *ngFor="let host of report.hosts[i]">
+                                        <tr *ngIf="host.sla_log.last_log_entry.evaluation_total_time_human_readable">
+                                            <td>
+                                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                {{ host.host.name }}
                                             </td>
                                             <td>
-                                                {{ service.sla_log.last_log_entry.evaluation_total_time_human_readable }}
+                                                {{ host.sla_log.last_log_entry.evaluation_total_time_human_readable }}
                                             </td>
                                             <td>
-                                                {{ service.sla_log.last_log_entry.determined_availability_time_human_readable }}
+                                                {{ host.sla_log.last_log_entry.determined_availability_time_human_readable }}
                                             </td>
                                             <td>
-                                                {{ service.sla_log.last_log_entry.determined_outage_time_human_readable }}
+                                                {{ host.sla_log.last_log_entry.determined_outage_time_human_readable }}
                                             </td>
-                                            <td [ngClass]="{'text-danger': service.sla_log.outages.length > 0}">
-                                                @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'SlaAvailabilityStatusServicesLog', 'index'])|async) {
-                                                    <a [routerLink]="['/', 'sla_module', 'sla_availability_status_services_log', 'index', service.service.id]"
+                                            <td>
+                                                @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'SlaAvailabilityStatusHostsLog', 'index'])|async) {
+                                                    <a [routerLink]="['/', 'sla_module', 'sla_availability_status_hosts_log', 'index', host.host.id]"
                                                        [queryParams]="{from:date_range.start, to:date_range.end}"
-                                                       [ngClass]="{'text-danger': service.sla_log.outages.length > 0}">
-                                                        {{ service.sla_log.outages.length }}
+                                                       [ngClass]="{'text-danger': host.sla_log.outages.length > 0}">
+                                                        {{ host.sla_log.outages.length }}
                                                     </a>
                                                 } @else {
-                                                    {{ service.sla_log.outages.length }}
+                                                    {{ host.sla_log.outages.length }}
                                                 }
                                             </td>
                                             <td>
-                                                {{ service.sla_log.last_log_entry.minimal_availability_percent }}
-                                                %
+                                                {{ host.sla_log.last_log_entry.minimal_availability_percent }}%
                                             </td>
-                                            <td [ngClass]="{'text-danger': !service.sla_log.last_log_entry.passed}">
-                                                @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'SlaAvailabilityStatusServicesLog', 'index'])|async) {
-                                                    <a [routerLink]="['/', 'sla_module', 'sla_availability_status_services_log', 'index', service.service.id]"
+                                            <td [ngClass]="{'text-danger': !host.sla_log.last_log_entry.passed}">
+                                                @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'SlaAvailabilityStatusHostsLog', 'index'])|async) {
+                                                    <a [routerLink]="['/', 'sla_module', 'sla_availability_status_hosts_log', 'index', host.host.id]"
                                                        [queryParams]="{from:date_range.start, to:date_range.end}"
-                                                       [ngClass]="{'text-danger': !service.sla_log.last_log_entry.passed}">
-                                                        {{ service.sla_log.last_log_entry.determined_availability_percent }}
+                                                       [ngClass]="{'text-danger': !host.sla_log.last_log_entry.passed}">
+                                                        {{ host.sla_log.last_log_entry.determined_availability_percent }}
                                                         %
                                                     </a>
                                                 } @else {
-                                                    {{ service.sla_log.last_log_entry.determined_availability_percent }}
-                                                    %
+                                                    {{ host.sla_log.last_log_entry.determined_availability_percent }}%
                                                 }
                                             </td>
                                             <td>
-                                                <c-badge [hidden]="!service.sla_log.last_log_entry.passed"
+                                                <c-badge [hidden]="!host.sla_log.last_log_entry.passed"
                                                          textColor="success"
                                                          class="badge-border w-100">
                                                     {{ t('PASSED') }}
                                                 </c-badge>
-                                                <c-badge [hidden]="service.sla_log.last_log_entry.passed"
+                                                <c-badge [hidden]="host.sla_log.last_log_entry.passed"
                                                          textColor="danger"
                                                          class="badge-border w-100">
                                                     {{ t('FAILED') }}
                                                 </c-badge>
                                             </td>
                                         </tr>
+                                        <ng-container *ngFor="let service of host.services">
+                                            <tr *ngIf="service.sla_log.last_log_entry.evaluation_total_time_human_readable">
+                                                <td class="ps-3">
+                                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                    {{ service.service.servicename }}
+                                                </td>
+                                                <td>
+                                                    {{ service.sla_log.last_log_entry.evaluation_total_time_human_readable }}
+                                                </td>
+                                                <td>
+                                                    {{ service.sla_log.last_log_entry.determined_availability_time_human_readable }}
+                                                </td>
+                                                <td>
+                                                    {{ service.sla_log.last_log_entry.determined_outage_time_human_readable }}
+                                                </td>
+                                                <td [ngClass]="{'text-danger': service.sla_log.outages.length > 0}">
+                                                    @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'SlaAvailabilityStatusServicesLog', 'index'])|async) {
+                                                        <a [routerLink]="['/', 'sla_module', 'sla_availability_status_services_log', 'index', service.service.id]"
+                                                           [queryParams]="{from:date_range.start, to:date_range.end}"
+                                                           [ngClass]="{'text-danger': service.sla_log.outages.length > 0}">
+                                                            {{ service.sla_log.outages.length }}
+                                                        </a>
+                                                    } @else {
+                                                        {{ service.sla_log.outages.length }}
+                                                    }
+                                                </td>
+                                                <td>
+                                                    {{ service.sla_log.last_log_entry.minimal_availability_percent }}
+                                                    %
+                                                </td>
+                                                <td [ngClass]="{'text-danger': !service.sla_log.last_log_entry.passed}">
+                                                    @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'SlaAvailabilityStatusServicesLog', 'index'])|async) {
+                                                        <a [routerLink]="['/', 'sla_module', 'sla_availability_status_services_log', 'index', service.service.id]"
+                                                           [queryParams]="{from:date_range.start, to:date_range.end}"
+                                                           [ngClass]="{'text-danger': !service.sla_log.last_log_entry.passed}">
+                                                            {{ service.sla_log.last_log_entry.determined_availability_percent }}
+                                                            %
+                                                        </a>
+                                                    } @else {
+                                                        {{ service.sla_log.last_log_entry.determined_availability_percent }}
+                                                        %
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <c-badge [hidden]="!service.sla_log.last_log_entry.passed"
+                                                             textColor="success"
+                                                             class="badge-border w-100">
+                                                        {{ t('PASSED') }}
+                                                    </c-badge>
+                                                    <c-badge [hidden]="service.sla_log.last_log_entry.passed"
+                                                             textColor="danger"
+                                                             class="badge-border w-100">
+                                                        {{ t('FAILED') }}
+                                                    </c-badge>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
                                     </ng-container>
-                                </ng-container>
-                                </tbody>
-                            </table>
-                        </div>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                        <div *ngIf="post.Sla.evaluation === 3" class="mt-2">
-                            <table bordered cTable class="mt-2 mb-0 table-sm" hover striped>
-                                <thead>
-                                <tr>
-                                    <th scope="col">
-                                        {{ t('Host') }} / {{ t('Service') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Total time') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Uptime') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Outage time') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Outages') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Goal(%)') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Achieved(%)') }}
-                                    </th>
-                                    <th scope="col">
-                                        {{ t('Status') }}
-                                    </th>
-                                </tr>
-
-                                </thead>
-                                <tbody>
-                                <ng-container *ngFor="let host of report.hosts[i]">
+                            <div *ngIf="post.Sla.evaluation === 3" class="mt-2">
+                                <table bordered cTable class="mt-2 mb-0 table-sm" hover striped>
+                                    <thead>
                                     <tr>
-                                        <td colspan="8">
-                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                            {{ host.host.name }}
-                                        </td>
+                                        <th scope="col">
+                                            {{ t('Host') }} / {{ t('Service') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Total time') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Uptime') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Outage time') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Outages') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Goal(%)') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Achieved(%)') }}
+                                        </th>
+                                        <th scope="col">
+                                            {{ t('Status') }}
+                                        </th>
                                     </tr>
-                                    <ng-container *ngFor="let service of host.services">
-                                        <tr *ngIf="service.sla_log.last_log_entry.evaluation_total_time_human_readable">
-                                            <td class="ps-3">
-                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                                {{ service.service.servicename }}
-                                            </td>
-                                            <td>
-                                                {{ service.sla_log.last_log_entry.evaluation_total_time_human_readable }}
-                                            </td>
-                                            <td>
-                                                {{ service.sla_log.last_log_entry.determined_availability_time_human_readable }}
-                                            </td>
-                                            <td>
-                                                {{ service.sla_log.last_log_entry.determined_outage_time_human_readable }}
-                                            </td>
-                                            <td>
-                                                {{ service.sla_log.outages.length }}
-                                            </td>
-                                            <td>
-                                                {{ service.sla_log.last_log_entry.minimal_availability_percent }}%
-                                            </td>
-                                            <td>
-                                                {{ service.sla_log.last_log_entry.determined_availability_percent }}
-                                                %
-                                            </td>
-                                            <td>
-                                                <c-badge
-                                                    [hidden]="!(service.sla_log.last_log_entry.determined_availability_percent < service.sla_log.last_log_entry.minimal_availability_percent)"
-                                                    textColor="danger"
-                                                    class="badge-border w-100">
-                                                    {{ t('FAILED') }}
-                                                </c-badge>
-                                                <c-badge
-                                                    [hidden]="service.sla_log.last_log_entry.determined_availability_percent < service.sla_log.last_log_entry.minimal_availability_percent"
-                                                    textColor="success"
-                                                    class="badge-border w-100">
-                                                    {{ t('PASSED') }}
-                                                </c-badge>
+
+                                    </thead>
+                                    <tbody>
+                                    <ng-container *ngFor="let host of report.hosts[i]">
+                                        <tr>
+                                            <td colspan="8">
+                                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                {{ host.host.name }}
                                             </td>
                                         </tr>
+                                        <ng-container *ngFor="let service of host.services">
+                                            <tr *ngIf="service.sla_log.last_log_entry.evaluation_total_time_human_readable">
+                                                <td class="ps-3">
+                                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                    {{ service.service.servicename }}
+                                                </td>
+                                                <td>
+                                                    {{ service.sla_log.last_log_entry.evaluation_total_time_human_readable }}
+                                                </td>
+                                                <td>
+                                                    {{ service.sla_log.last_log_entry.determined_availability_time_human_readable }}
+                                                </td>
+                                                <td>
+                                                    {{ service.sla_log.last_log_entry.determined_outage_time_human_readable }}
+                                                </td>
+                                                <td>
+                                                    {{ service.sla_log.outages.length }}
+                                                </td>
+                                                <td>
+                                                    {{ service.sla_log.last_log_entry.minimal_availability_percent }}%
+                                                </td>
+                                                <td>
+                                                    {{ service.sla_log.last_log_entry.determined_availability_percent }}
+                                                    %
+                                                </td>
+                                                <td>
+                                                    <c-badge
+                                                        [hidden]="!(service.sla_log.last_log_entry.determined_availability_percent < service.sla_log.last_log_entry.minimal_availability_percent)"
+                                                        textColor="danger"
+                                                        class="badge-border w-100">
+                                                        {{ t('FAILED') }}
+                                                    </c-badge>
+                                                    <c-badge
+                                                        [hidden]="service.sla_log.last_log_entry.determined_availability_percent < service.sla_log.last_log_entry.minimal_availability_percent"
+                                                        textColor="success"
+                                                        class="badge-border w-100">
+                                                        {{ t('PASSED') }}
+                                                    </c-badge>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
                                     </ng-container>
-                                </ng-container>
-                                </tbody>
-                            </table>
-                        </div>
-                    </fieldset>
-
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    }
                 </div>
 
             </c-card-body>

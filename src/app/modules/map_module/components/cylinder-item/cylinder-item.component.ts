@@ -40,6 +40,7 @@ import { NgIf, NgStyle } from '@angular/common';
 })
 export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
     @ViewChild('cylinderSvg', {static: false}) cylinderSvg!: ElementRef<SVGElement>;
+    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
 
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
@@ -115,6 +116,9 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
 
                 this.init = false;
 
+                if (this.resizableDirective) {
+                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
+                }
                 this.cdr.markForCheck();
             }));
     };

@@ -127,7 +127,7 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
         for (let key in this.post.timeperiod_timeranges) {
             this.timeperiod.ranges.push({
                 id: <number>this.post.timeperiod_timeranges[key].id,
-                day: this.post.timeperiod_timeranges[key].day.toString(),
+                day: this.post.timeperiod_timeranges[key].day,
                 start: this.post.timeperiod_timeranges[key].start,
                 end: this.post.timeperiod_timeranges[key].end,
                 index: Number(key)

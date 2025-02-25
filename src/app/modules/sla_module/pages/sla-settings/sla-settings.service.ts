@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
-import { SlaSettingsIndexRoot, SlaSettingsPost } from './SlaSettings.interface';
+import { SlaSettingsIndexRoot, SlaSettingsPost } from './sla-settings.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({

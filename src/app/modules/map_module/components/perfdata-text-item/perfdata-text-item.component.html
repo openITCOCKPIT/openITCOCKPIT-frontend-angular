@@ -15,7 +15,7 @@
     <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
                    appendTo="body"></p-contextMenu>
 } @else {
-    <div #container class="map-element-container">
+    <div #container class="map-element-container cursor-pointer">
         <svg viewBox="0 0 85 18" [attr.width]="width" [attr.height]="height"
              id="map-perfdatatext-{{item()!.id}}">
             <text x="0" y="15" [attr.fill]="color">

@@ -1,33 +1,28 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
-import { SlasService } from '../Slas.service';
+import { SlasService } from '../slas.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { getDefaultSlasViewDetailsParams, SlasViewDetailsParams, SlasViewDetailsRoot } from '../slas.interface';
 import {
-    getDefaultSlasViewDetailsParams,
-    LoadContainersRoot,
-    SlasViewDetailsParams,
-    SlasViewDetailsRoot
-} from '../Slas.interface';
-import {
-  BadgeComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    BadgeComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
 import {
@@ -60,56 +55,57 @@ import {
     SlaHostsOverviewBarEchartComponent
 } from '../../../components/charts/sla-hosts-overview-bar-echart/sla-hosts-overview-bar-echart.component';
 import { SkeletonModule } from 'primeng/skeleton';
+import { ContainersService } from '../../../../../pages/containers/containers.service';
 
 @Component({
     selector: 'oitc-slas-view-details',
     imports: [
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    BadgeComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    MatSort,
-    MatSortHeader,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RowComponent,
-    TableDirective,
-    TableLoaderComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    RouterLink,
-    NgClass,
-    FaStackComponent,
-    FaStackItemSizeDirective,
-    MultiSelectComponent,
-    BackButtonDirective,
-    AsyncPipe,
-    BadgeOutlineComponent,
-    KeyValuePipe,
-    SlaAvailabilityOverviewPieEchartComponent,
-    SlaHostsOverviewBarEchartComponent,
-    SkeletonModule
-],
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        BadgeComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        TableDirective,
+        TableLoaderComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        RouterLink,
+        NgClass,
+        FaStackComponent,
+        FaStackItemSizeDirective,
+        MultiSelectComponent,
+        BackButtonDirective,
+        AsyncPipe,
+        BadgeOutlineComponent,
+        KeyValuePipe,
+        SlaAvailabilityOverviewPieEchartComponent,
+        SlaHostsOverviewBarEchartComponent,
+        SkeletonModule
+    ],
     templateUrl: './slas-view-details.component.html',
     styleUrl: './slas-view-details.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -120,6 +116,7 @@ export class SlasViewDetailsComponent implements OnInit, OnDestroy {
     public PermissionsService: PermissionsService = inject(PermissionsService);
 
     private readonly SlasService: SlasService = inject(SlasService);
+    private readonly ContainersService: ContainersService = inject(ContainersService);
     private subscriptions: Subscription = new Subscription();
 
     public readonly route = inject(ActivatedRoute);
@@ -196,12 +193,11 @@ export class SlasViewDetailsComponent implements OnInit, OnDestroy {
 
     }
 
-    private loadContainers(): void {
-        this.subscriptions.add(this.SlasService.loadContainers()
-            .subscribe((result: LoadContainersRoot) => {
-                this.containers = result.containers;
-                this.cdr.markForCheck();
-            }))
+    private loadContainers() {
+        this.subscriptions.add(this.ContainersService.loadAllContainers().subscribe((result) => {
+            this.containers = result;
+            this.cdr.markForCheck();
+        }));
     }
 
     // Show or hide the filter

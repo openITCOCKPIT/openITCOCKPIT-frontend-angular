@@ -124,6 +124,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-service-status-overview-extended-widget>
         }
+        @case (WidgetTypes.TrafficlightWidget) {
+            <oitc-trafficlight-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-trafficlight-widget>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {

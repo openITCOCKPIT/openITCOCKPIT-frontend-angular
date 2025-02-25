@@ -6,7 +6,7 @@ import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
 import { LayoutService } from '../../../../../layouts/coreui/layout.service';
-import { Sla } from '../../../pages/slas/Slas.interface';
+import { Sla } from '../../../pages/slas/slas.interface';
 
 import {
     GridComponent,
@@ -145,7 +145,7 @@ export class SlaHostsOverviewBarEchartComponent implements OnDestroy {
                     fontSize: 10,
                     rotate: 15,
                     formatter: function (value: string) {
-                        return value.length > 20 ? value.substr(0, 20) + '...' : value;
+                        return value.length > 20 ? value.substring(0, 20) + '...' : value;
                     }
                 }
             },

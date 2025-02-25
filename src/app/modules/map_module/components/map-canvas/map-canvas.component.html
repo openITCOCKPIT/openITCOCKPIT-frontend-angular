@@ -1,6 +1,6 @@
 <div #mapCanvasContainer class="map-canvas">
     <div id="mapContent" *ngIf="this.helplines().enabled && !this.isViewMode()" [ngClass]="getHelplinesClass()"></div>
-    <img [src]="'/map_module/img/backgrounds/' + background()"
-         *ngIf="background()"/>
+    <img [src]="'/map_module/img/backgrounds/' + background()" class="invalid-image-src"
+         *ngIf="background()" [alt]="invalidBackgroundMessage"/>
     <ng-content></ng-content>
 </div>

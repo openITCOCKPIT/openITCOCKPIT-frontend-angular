@@ -10,7 +10,7 @@
     <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
                    appendTo="body"></p-contextMenu>
 } @else {
-    <div #container class="map-element-container">
+    <div #container class="map-element-container cursor-pointer">
         <canvas [id]="'map-tacho-' + item()!.id"></canvas>
     </div>
 }

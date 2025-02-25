@@ -5,7 +5,7 @@ import 'echarts/theme/dark.js';
 import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
-import { Availability } from '../../../pages/slas/Slas.interface';
+import { Availability } from '../../../pages/slas/slas.interface';
 import { PieChartMetric } from '../../../../../components/charts/charts.interface';
 import { LayoutService } from '../../../../../layouts/coreui/layout.service';
 

@@ -318,4 +318,5 @@ export interface HosttemplateEntity {
     sla_id: any
     created: string
     modified: string
+    allowEdit?: boolean
 }

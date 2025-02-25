@@ -22,7 +22,7 @@
     <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
                    appendTo="body"></p-contextMenu>
 } @else {
-    <div #container class="map-element-container">
+    <div #container class="map-element-container cursor-pointer">
         <div class="bg-light" *ngIf="allowView && hasEnoughData" [style.width.px]="width">
             <div [id]="'mapgraph-' + item()!.id" [style.height.px]="height" style="padding:0; position:relative;"
                  echarts [options]="chartOption"

@@ -1,0 +1,92 @@
+<oitc-map-canvas [background]="map.Map.background" *ngIf="map"
+                 [isViewMode]="true">
+    <oitc-map-item *ngFor="let item of map.Mapitems" [item]="item" [refreshInterval]="refreshInterval"
+                   [isViewMode]="true"
+                   (mouseenter)="showSummaryStateDelayed(item, false)"
+                   (mouseleave)="cancelTimer()"
+                   (click)="navigate(item)">
+    </oitc-map-item>
+    <oitc-map-text *ngFor="let textItem of map.Maptexts" [item]="textItem"
+                   [isViewMode]="true">
+    </oitc-map-text>
+    <oitc-map-line *ngFor="let lineItem of map.Maplines" [item]="lineItem"
+                   [hidden]="lineItem.type === 'stateless'"
+                   [refreshInterval]="refreshInterval"
+                   [isViewMode]="true"
+                   (mouseenter)="showSummaryStateDelayed(lineItem, false)"
+                   (mouseleave)="cancelTimer()"
+                   (click)="navigate(lineItem)">
+    </oitc-map-line>
+    <oitc-map-line *ngFor="let lineItem of map.Maplines" [item]="lineItem"
+                   [hidden]="lineItem.type !== 'stateless'"
+                   [refreshInterval]="0"
+                   [isViewMode]="true">
+    </oitc-map-line>
+    <oitc-map-icon *ngFor="let iconItem of map.Mapicons" [item]="iconItem"
+                   [isViewMode]="true">
+    </oitc-map-icon>
+
+    <ng-container *ngFor="let gadgetItem of map.Mapgadgets">
+        <oitc-graph-item *ngIf="gadgetItem.gadget === 'RRDGraph'" [item]="gadgetItem"
+                         [refreshInterval]="refreshInterval"
+                         [isViewMode]="true"
+                         (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                         (mouseleave)="cancelTimer()"
+                         (click)="navigate(gadgetItem)">
+        </oitc-graph-item>
+        <oitc-perfdata-text-item *ngIf="gadgetItem.gadget === 'Text'" [item]="gadgetItem"
+                                 [refreshInterval]="refreshInterval"
+                                 [isViewMode]="true"
+                                 (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                                 (mouseleave)="cancelTimer()"
+                                 (click)="navigate(gadgetItem)">
+        </oitc-perfdata-text-item>
+        <oitc-tacho-item *ngIf="gadgetItem.gadget === 'Tacho'" [item]="gadgetItem"
+                         [refreshInterval]="refreshInterval"
+                         [isViewMode]="true"
+                         (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                         (mouseleave)="cancelTimer()"
+                         (click)="navigate(gadgetItem)">
+        </oitc-tacho-item>
+        <oitc-cylinder-item *ngIf="gadgetItem.gadget === 'Cylinder'" [item]="gadgetItem"
+                            [refreshInterval]="refreshInterval"
+                            [isViewMode]="true"
+                            (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                            (mouseleave)="cancelTimer()"
+                            (click)="navigate(gadgetItem)">
+        </oitc-cylinder-item>
+        <oitc-trafficlight-item *ngIf="gadgetItem.gadget === 'TrafficLight'"
+                                [item]="gadgetItem"
+                                [refreshInterval]="refreshInterval"
+                                [isViewMode]="true"
+                                (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                                (mouseleave)="cancelTimer()"
+                                (click)="navigate(gadgetItem)">
+        </oitc-trafficlight-item>
+        <oitc-temperature-item *ngIf="gadgetItem.gadget === 'Temperature'"
+                               [item]="gadgetItem"
+                               [refreshInterval]="refreshInterval"
+                               [isViewMode]="true"
+                               (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                               (mouseleave)="cancelTimer()"
+                               (click)="navigate(gadgetItem)">
+        </oitc-temperature-item>
+        <oitc-service-output-item *ngIf="gadgetItem.gadget === 'ServiceOutput'"
+                                  [item]="gadgetItem"
+                                  [refreshInterval]="refreshInterval"
+                                  [isViewMode]="true"
+                                  (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                                  (mouseleave)="cancelTimer()"
+                                  (click)="navigate(gadgetItem)">
+        </oitc-service-output-item>
+    </ng-container>
+    <oitc-map-summary-item *ngFor="let summaryItem of map.Mapsummaryitems" [item]="summaryItem"
+                           [refreshInterval]="refreshInterval"
+                           [isViewMode]="true"
+                           (mouseenter)="showSummaryStateDelayed(summaryItem, true)"
+                           (mouseleave)="cancelTimer()"
+                           (click)="navigate(summaryItem)">
+    </oitc-map-summary-item>
+</oitc-map-canvas>
+
+<oitc-map-summary-toaster></oitc-map-summary-toaster>

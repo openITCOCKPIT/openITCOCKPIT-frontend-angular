@@ -32,7 +32,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 
 import { FormsModule } from '@angular/forms';
-import { Sla } from '../../pages/slas/Slas.interface';
+import { Sla } from '../../pages/slas/slas.interface';
 import { WeekDays } from '../timeperiod-details-tooltip/timeperiod-details-tooltip.interface';
 
 import { BadgeOutlineComponent } from '../../../../layouts/coreui/badge-outline/badge-outline.component';
