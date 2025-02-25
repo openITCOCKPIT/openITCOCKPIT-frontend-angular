@@ -6,5 +6,8 @@ export const scmModuleRoutes: Routes = [{
 }, {
     path: 'scm_module/resourcegroups/add',
     loadComponent: () => import('./pages/resourcegroups/resourcegroups-add/resourcegroups-add.component').then(m => m.ResourcegroupsAddComponent)
+}, {
+    path: 'scm_module/resourcegroups/edit/:id',
+    loadComponent: () => import('./pages/resourcegroups/resourcegroups-edit/resourcegroups-edit.component').then(m => m.ResourcegroupsEditComponent)
 }
 ];
