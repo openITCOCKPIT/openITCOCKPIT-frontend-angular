@@ -130,6 +130,10 @@ export class TachometerWidgetComponent extends BaseWidgetComponent implements Af
             // "true" means show config.
             // Load initial Services
             this.loadServicesByString('');
+            if (this.service_id) {
+                // User has selected a service, load metrics
+                this.loadMetricsByServiceId();
+            }
         }
 
         super.onAnimationStart(event);
@@ -373,7 +377,7 @@ export class TachometerWidgetComponent extends BaseWidgetComponent implements Af
             value: setup.metric.value,
             minValue: setup.scale.min || 0,
             maxValue: setup.scale.max || 100,
-            units: String(units),
+            units: units ? units : '',
             strokeTicks: true,
             title: label,
             valueInt: intergetDigits,
