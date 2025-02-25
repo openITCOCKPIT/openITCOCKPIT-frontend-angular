@@ -234,7 +234,14 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
                             }
 
                             if (result.data.hasOwnProperty('report_error')) {
-                                this.report_error = result.data.report_error;
+                                let error: ReportError = {
+                                    error: result.data.report_error.error,
+                                    message: result.data.report_error.message,
+                                    objects: (result.data.report_error.objects) ? Object.values(result.data.report_error.objects) : []
+                                }
+                                this.report_error = error;
+                                //this.report_error = result.data.report_error;
+
                                 this.cdr.markForCheck();
                             }
                         }

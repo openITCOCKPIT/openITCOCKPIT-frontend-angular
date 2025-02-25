@@ -4,7 +4,7 @@ import { SlaSummaryWidgetService } from './sla-summary-widget.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { SlasService } from '../../pages/slas/Slas.service';
+import { SlasService } from '../../pages/slas/slas.service';
 import {
     AlertComponent,
     AlertHeadingDirective,

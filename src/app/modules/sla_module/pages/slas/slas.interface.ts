@@ -1,7 +1,11 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
-import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { GenericIdResponse } from '../../../../generic-responses';
-import { HostMappingRulesPost } from '../host-mapping-rules/HostMappingRules.interface';
+import { HostMappingRulesPost } from '../host-mapping-rules/host-mapping-rules.interface';
+import { Timeperiod, ViewDetailsTimeperiod } from '../../../../pages/timeperiods/timeperiods.interface';
+import { GenericIdAndName } from '../../../../generic.interfaces';
+import { ServiceEntity } from '../../../../pages/services/services.interface';
+import { HosttemplateEntity } from '../../../../pages/hosttemplates/hosttemplates.interface';
+import { HostsToContainersSharing } from '../../../../pages/hosts/hosts.interface';
 
 export interface SlasIndexRoot extends PaginateOrScroll {
     slas: Sla[]
@@ -46,7 +50,7 @@ export interface Sla {
     description: string
     container_id: number
     timeperiod_id: number
-    start_date?: string
+    start_date?: string | null
     evaluation_interval: string
     consider_downtimes: number | boolean
     hard_state_only: number
@@ -58,32 +62,23 @@ export interface Sla {
     last_send_date?: string
     created: string
     modified: string
-    timeperiod: Timeperiod
+    timeperiod: ViewDetailsTimeperiod
     container: string
     allowEdit: boolean
     status_percent?: number
     fulfill: boolean
-    users: Users
+    users: {
+        _ids: number[]
+    }
     host_mapping_rule: null | HostMappingRulesPost
-    main_container?: MainContainer[]
+    main_container?: GenericIdAndName[]
     hostsOverview?: HostsOverview
 }
 
-export interface Timeperiod {
-    id: number
-    name: string
-    uuid?: string
-    container_id?: number
-    description?: string
-    calendar_id?: number
-    created?: string
-    modified?: string
-    timeperiod_timeranges?: TimeperiodTimerange[]
+export interface SlaEditGet {
+    sla: SlaPost
 }
 
-/***************************
- *    Add / Edit action    *
- ***************************/
 
 export interface SlaPost {
     id?: number
@@ -91,49 +86,23 @@ export interface SlaPost {
     timeperiod_id: null | number
     name: string
     description: string
-    minimal_availability: null | string | number
-    warning_threshold: null | string | number
-    start_date?: null | string
+    minimal_availability: null | number
+    warning_threshold: null | number
+    start_date: null | string
     evaluation_interval: string
-    consider_downtimes: number | boolean
+    consider_downtimes: number
     hard_state_only: number
     report_send_interval: string
     report_format: number
     report_evaluation: number
-    last_send_date?: string
-    created?: string
-    modified?: string
-    users: Users
-    allowEdit?: boolean
+    users: {
+        _ids: []
+    }
 }
 
-export interface Users {
-    _ids: number[]
-}
-
-export interface LoadContainersRoot {
-    containers: SelectKeyValue[]
-    _csrfToken: string
-}
-
-export interface LoadUsersRoot {
-    users: SelectKeyValue[]
-    _csrfToken: string
-}
-
-export interface LoadUsersParams {
-    containerId: number,
-    'selected[]': number[]
-}
-
-export interface LoadTimeperiodsRoot {
-    timeperiods: SelectKeyValue[]
-    _csrfToken: string
-}
-
-export interface LoadTimeperiodsParams {
-    containerId: number,
-}
+/***************************
+ *    Add / Edit action    *
+ ***************************/
 
 
 export interface SlaPostResponse extends GenericIdResponse {
@@ -146,12 +115,12 @@ export interface SlaPostResponse extends GenericIdResponse {
 
 export interface SlasHostsRoot extends PaginateOrScroll {
     sla: Sla
-    hosts: Host[]
+    hosts: SlaHost[]
     success: boolean
     _csrfToken: string
 }
 
-export interface Host {
+export interface SlaHost {
     id: number
     name: string
     address: string
@@ -159,54 +128,12 @@ export interface Host {
     container_id: number
     container: string
     primary_container: string
-    services: Service[]
-    hosttemplate: Hosttemplate
+    services: ServiceEntity[]
+    hosttemplate: HosttemplateEntity
     hosts_to_containers_sharing: HostsToContainersSharing[]
     allowEdit: boolean
-    description?: string
 }
 
-export interface Service {
-    id: number
-    host_id: number
-    servicename: string
-    disabled: number
-    sla_relevant?: number
-    is_sla_relevant: number
-    servicetemplate: Servicetemplate
-}
-
-export interface Servicetemplate {
-    id: number
-    template_name: string
-    container_id: number
-    sla_relevant: number
-    allowEdit: boolean
-}
-
-export interface Hosttemplate {
-    id: number
-    name: string
-    sla_id: any
-    container_id: number
-    allowEdit: boolean
-}
-
-export interface HostsToContainersSharing {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id?: number
-    lft: number
-    rght: number
-    _joinData: JoinData
-}
-
-export interface JoinData {
-    id: number
-    host_id: number
-    container_id: number
-}
 
 export interface SlasHostsParams {
     angular: true,
@@ -274,14 +201,6 @@ export interface Report {
     hosts: ReportHostParent[][]
 }
 
-export interface TimeperiodTimerange {
-    id: number
-    timeperiod_id: number
-    day: number
-    start: string
-    end: string
-    weekday: string
-}
 
 export interface EvaluationTime {
     start: number
@@ -423,6 +342,18 @@ export interface SlasViewDetailsParams {
     'filter[determined_availability][]': number[],
 }
 
+export interface SlaAvailabilityStatusLogIndexParams {
+    // Same again? Maybe create an intermediate class? OOP FTW :-P
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[from]': string,
+    'filter[to]': string,
+}
+
+
 export function getDefaultSlasViewDetailsParams(): SlasViewDetailsParams {
     return {
         angular: true,
@@ -443,39 +374,21 @@ export interface SlasViewDetailsRoot extends PaginateOrScroll {
     _csrfToken: string
 }
 
-export interface MainContainer {
-    id: number
-    name: string
-}
-
 export interface HostsOverview {
     totalHosts: number
-    failed: Failed
-    warning: Warning
-    passed: Passed
-    not_calculated: NotCalculated
+    failed: ObjectsSummary
+    warning: ObjectsSummary
+    passed: ObjectsSummary
+    not_calculated: ObjectsSummary
     top10: Top10[]
 }
 
-export interface Failed {
+export interface ObjectsSummary {
     count: number
+    percentage: string
     ids: number[]
 }
 
-export interface Warning {
-    count: number
-    ids: any[]
-}
-
-export interface Passed {
-    count: number
-    ids: number[]
-}
-
-export interface NotCalculated {
-    count: number
-    ids: number[]
-}
 
 export interface Top10 {
     id: number
@@ -493,8 +406,8 @@ export interface SlaDetail {
     determined_availability_time: number
     determined_availability: number
     sla_availability_status_services: SlaAvailabilityStatusService[]
-    host: Host
-    _matchingData: MatchingData
+    host: SlaHost
+    _matchingData: SlaHostMatchingData
     evaluation_total_time_human_readable: string
     determined_availability_time_human_readable: string
     determined_outage_time_human_readable: string
@@ -502,6 +415,14 @@ export interface SlaDetail {
     state_number: number
     host_state: string
     host_state_number: number
+}
+
+export interface SlaHostMatchingData {
+    Hosts: {
+        id: string
+        name: string
+        description: string
+    }
 }
 
 export interface SlaAvailabilityStatusService {
@@ -515,25 +436,14 @@ export interface SlaAvailabilityStatusService {
     determined_availability_percent: number
     minimal_availability_percent?: number
     determined_number_outages?: number
-    Services: Services
-    Servicetemplates: Servicetemplates
+    Services: GenericIdAndName
+    Servicetemplates: GenericIdAndName
     evaluation_total_time_human_readable: string
     determined_availability_time_human_readable: string
     determined_outage_time_human_readable: string
     state: string
 }
 
-export interface Services {
-    id: number
-}
-
-export interface Servicetemplates {
-    id: number
-}
-
-export interface MatchingData {
-    Hosts: Hosts
-}
 
 export interface Hosts {
     id: number
@@ -545,5 +455,3 @@ export interface Availability {
     status_percent: number
     fulfill: boolean
 }
-
-

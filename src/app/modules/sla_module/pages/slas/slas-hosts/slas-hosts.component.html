@@ -266,7 +266,7 @@
                                     </span>
                                 </span>
                                 <span [hidden]="service.sla_relevant !== null">
-                                    <span>
+                                    <span *ngIf="service.servicetemplate">
                                         <fa-icon [icon]="['fas', 'pencil-square']"
                                                  class="text-primary-700 width-15"></fa-icon>
                                         @if (this.PermissionsService.hasPermissionObservable(['servicetemplates', 'edit'])|async) {

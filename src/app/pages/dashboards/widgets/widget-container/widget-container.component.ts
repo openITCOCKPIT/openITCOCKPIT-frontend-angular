@@ -63,7 +63,8 @@ import { SlaWidgetComponent } from '../../../../modules/sla_module/widgets/sla-w
 import {
     SlaCalendarWidgetComponent
 } from '../../../../modules/sla_module/widgets/sla-calendar-widget/sla-calendar-widget.component';
-
+import { TrafficlightWidgetComponent } from '../trafficlight-widget/trafficlight-widget.component';
+import { TachometerWidgetComponent } from '../tachometer-widget/tachometer-widget.component';
 
 
 @Component({
@@ -105,7 +106,9 @@ import {
         SlaSummaryWidgetComponent,
         SlaSummaryWidgetComponent,
         SlaWidgetComponent,
-        SlaCalendarWidgetComponent
+        SlaCalendarWidgetComponent,
+        TrafficlightWidgetComponent,
+        TachometerWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

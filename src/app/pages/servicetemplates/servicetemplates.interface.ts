@@ -310,6 +310,7 @@ export interface ServicetemplateEntity {
     is_volatile: number
     created: string
     modified: string
+    allowEdit?: boolean
 }
 
 export interface HostWithServices extends HostEntity {

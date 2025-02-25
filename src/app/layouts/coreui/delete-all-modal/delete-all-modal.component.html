@@ -33,6 +33,19 @@
                                 <div *ngFor="let error of getErrorsForItem(item)" class="text-danger">
                                     <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
                                     {{ error.message }}
+                                    <div *ngIf="error.usedBy">
+                                        @if(error.usedBy['AUTOREPORT_MODULE'] && error.usedBy['AUTOREPORT_MODULE'].state === 'AutoreportsServiceUsedBy') {
+                                            <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'serviceUsedBy', item.id]">
+                                                {{ error.usedBy['AUTOREPORT_MODULE'].message }}
+                                            </a>
+                                        }
+                                        @if(error.usedBy['AUTOREPORT_MODULE'] && error.usedBy['AUTOREPORT_MODULE'].state === 'AutoreportsHostUsedBy') {
+                                            <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'hostUsedBy', item.id]">
+                                                {{ error.usedBy['AUTOREPORT_MODULE'].message }}
+                                            </a>
+                                        }
+
+                                    </div>
                                     <!-- todo implement usedby link -->
                                 </div>
                             </div>

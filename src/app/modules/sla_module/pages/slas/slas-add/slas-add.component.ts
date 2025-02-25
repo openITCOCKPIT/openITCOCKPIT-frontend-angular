@@ -1,26 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
-import { SlasService } from '../Slas.service';
+import { SlasService } from '../slas.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import {
-    LoadContainersRoot,
-    LoadTimeperiodsParams,
-    LoadTimeperiodsRoot,
-    LoadUsersParams,
-    LoadUsersRoot,
-    SlaPost,
-    SlaPostResponse
-} from '../Slas.interface';
+import { SlaPost, SlaPostResponse } from '../slas.interface';
 import { HistoryService } from '../../../../../history.service';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { SlasReportFormatEnum } from '../slas.enum';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import {
     CardBodyComponent,
@@ -55,6 +46,9 @@ import {
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
+import { ContainersService } from '../../../../../pages/containers/containers.service';
+import { UsersService } from '../../../../../pages/users/users.service';
+import { TimeperiodsService } from '../../../../../pages/timeperiods/timeperiods.service';
 
 @Component({
     selector: 'oitc-slas-add',
@@ -105,6 +99,9 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 export class SlasAddComponent implements OnInit, OnDestroy {
 
     private readonly SlasService: SlasService = inject(SlasService);
+    private readonly ContainersService: ContainersService = inject(ContainersService);
+    private readonly UsersService: UsersService = inject(UsersService);
+    private readonly TimeperiodsService: TimeperiodsService = inject(TimeperiodsService);
     private readonly TranslocoService = inject(TranslocoService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly notyService = inject(NotyService);
@@ -115,7 +112,7 @@ export class SlasAddComponent implements OnInit, OnDestroy {
 
     public readonly route = inject(ActivatedRoute);
     public errors: GenericValidationError | null = null;
-    public post: SlaPost = {} as SlaPost;
+    public post: SlaPost = this.getDefaultPost();
     protected createAnother: boolean = false;
     protected containers: SelectKeyValue[] = [];
     protected users: SelectKeyValue[] = [];
@@ -154,10 +151,6 @@ export class SlasAddComponent implements OnInit, OnDestroy {
     };
     private cdr = inject(ChangeDetectorRef);
 
-    constructor() {
-        this.post = this.getDefaultPost();
-    }
-
     private getDefaultPost(): SlaPost {
         return {
             container_id: null,
@@ -181,6 +174,8 @@ export class SlasAddComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.loadContainers();
+        this.loadUsers();
+        this.loadTimeperiods();
     }
 
     public ngOnDestroy() {
@@ -219,43 +214,35 @@ export class SlasAddComponent implements OnInit, OnDestroy {
             }))
     }
 
-    private loadContainers(): void {
-        this.subscriptions.add(this.SlasService.loadContainers()
-            .subscribe((result: LoadContainersRoot) => {
-                this.containers = result.containers;
-                this.cdr.markForCheck();
-            }))
+    private loadContainers() {
+        if (!this.post.container_id) {
+            return;
+        }
+        this.subscriptions.add(this.ContainersService.loadAllContainers().subscribe((result) => {
+            this.containers = result;
+            this.cdr.markForCheck();
+        }));
     }
 
-    private loadUsers(): void {
-        if (this.post.container_id !== null) {
-
-            const params: LoadUsersParams = {
-                containerId: this.post.container_id,
-                'selected[]': this.post.users._ids
-            };
-
-            this.subscriptions.add(this.SlasService.loadUsers(params)
-                .subscribe((result: LoadUsersRoot) => {
-                    this.users = result.users;
-                    this.cdr.markForCheck();
-                }))
+    private loadUsers() {
+        if (!this.post.container_id) {
+            return;
         }
+        this.subscriptions.add(this.UsersService.loadUsersByContainerId(this.post.container_id, this.post.users._ids).subscribe((result) => {
+            this.users = result;
+            this.cdr.markForCheck();
+        }));
     }
 
-    private loadTimeperiods(): void {
-        if (this.post.container_id !== null) {
 
-            const params: LoadTimeperiodsParams = {
-                containerId: this.post.container_id
-            };
-
-            this.subscriptions.add(this.SlasService.loadTimeperiods(params)
-                .subscribe((result: LoadTimeperiodsRoot) => {
-                    this.timeperiods = result.timeperiods;
-                    this.cdr.markForCheck();
-                }))
+    private loadTimeperiods() {
+        if (!this.post.container_id) {
+            return;
         }
+        this.subscriptions.add(this.TimeperiodsService.loadTimeperiodsByContainerId(this.post.container_id).subscribe((result) => {
+            this.timeperiods = result;
+            this.cdr.markForCheck();
+        }));
     }
 
     public onContainerChange(): void {

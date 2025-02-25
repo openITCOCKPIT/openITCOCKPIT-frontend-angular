@@ -13,8 +13,17 @@ export interface DeleteAllResponse {
     success: boolean
     id?: string | number        // Only on error
     message?: string            // Only on error
-    usedBy?: DeleteAllUsedBy[]  // Only on error
+    usedBy?: {
+        [key: string]: DeleteAllUsedBy
+    }  // Only on error
+    moduleError?: usedByModuleError,
     _csrfToken: string
+}
+
+export interface usedByModuleError {
+    module: string,
+    message: string,
+    angularUrl: ''
 }
 
 export interface DeleteAllUsedBy {

@@ -1,4 +1,4 @@
-import { Services, Sla } from '../../pages/slas/Slas.interface';
+import { Sla } from '../../pages/slas/slas.interface';
 
 export interface SlaServiceInformationElementRoot {
     response: Response
@@ -7,11 +7,11 @@ export interface SlaServiceInformationElementRoot {
 }
 
 export interface Response {
-    service: Service
+    service: SlaService
     evaluationDateDetails: EvaluationDateDetails
 }
 
-export interface Service {
+export interface SlaService {
     id: number
     host_id: number
     service_id: number
@@ -46,7 +46,7 @@ export interface Log {
     minimal_availability_percent: number
     evaluation_start: string
     sla_service_outages: any[]
-    Services: Services
+    Services: SlaService[]
     state: string
     determined_number_outages: number
 }
@@ -60,6 +60,3 @@ export interface EvaluationDateDetails {
     start_user_format: string
     end_user_format: string
 }
-
-
-

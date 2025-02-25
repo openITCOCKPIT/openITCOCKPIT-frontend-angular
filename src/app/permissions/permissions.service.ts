@@ -95,7 +95,8 @@ export class PermissionsService {
             filter(permissions => {
                 return Object.keys(permissions).length > 0
             }),
-            map(permissions => this.checkPermission(checkChunks, permissions))
+            map(permissions => this.checkPermission(checkChunks, permissions)),
+            take(1) // Ensure the observable completes after emitting the first value
         );
     }
 
@@ -103,7 +104,8 @@ export class PermissionsService {
     public hasModuleObservable(module: string): Observable<boolean> {
         return this.modules$$.asObservable().pipe(
             filter(modules => modules.length > 0),
-            map(modules => modules.includes(module))
+            map(modules => modules.includes(module)),
+            take(1) // Ensure the observable completes after emitting the first value
         );
     }
 

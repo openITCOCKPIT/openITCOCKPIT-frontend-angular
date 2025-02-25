@@ -1,5 +1,9 @@
-import { HostsToContainersSharing, Sla } from '../slas/Slas.interface';
+import { Sla } from '../slas/slas.interface';
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { HostsToContainersSharing } from '../../../../pages/hosts/hosts.interface';
+import { HosttemplateEntity } from '../../../../pages/hosttemplates/hosttemplates.interface';
+import { ServicetemplateEntity } from '../../../../pages/servicetemplates/servicetemplates.interface';
+
 
 export interface HostMappingRulesPost {
     host_keywords: null | string | string[]
@@ -85,11 +89,11 @@ export function getDefaultHostMappingRulesLoadHostsParams(id: number): HostMappi
 }
 
 export interface LoadHostsRoot extends PaginateOrScroll {
-    hosts: Host[]
+    hosts: SlaHostEntity[]
     _csrfToken: string;
 }
 
-export interface Host {
+export interface SlaHostEntity {
     id: number
     name: string
     address: string
@@ -98,30 +102,19 @@ export interface Host {
     hosttags: string
     container: string
     primary_container: string
-    services: Service[]
-    hosttemplate: Hosttemplate
+    services: SlaServiceEntity[]
+    hosttemplate: HosttemplateEntity
     hosts_to_containers_sharing: HostsToContainersSharing[]
     sla: Sla
 }
 
-export interface Service {
+export interface SlaServiceEntity {
     id: number
     host_id: number
     servicename: string
     description: any
     servicetags: string
     sla_relevant: any
-    is_sla_relevant: number
-    servicetemplate: Servicetemplate
+    is_sla_relevant: number | string
+    servicetemplate: ServicetemplateEntity
 }
-
-export interface Servicetemplate {
-    id: number
-    sla_relevant: number
-}
-
-export interface Hosttemplate {
-    id: number
-    sla_id: any
-}
-

@@ -12,7 +12,7 @@ import {
 import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
 import { SlaCalendarWidgetResponse, SlaConfig } from '../sla-widget.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
-import { SlasService } from '../../pages/slas/Slas.service';
+import { SlasService } from '../../pages/slas/slas.service';
 import { SlaCalendarWidgetService } from './sla-calendar-widget.service';
 import {
     AlertComponent,

@@ -118,17 +118,6 @@ export class ImportersIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public ngOnInit(): void {
         this.load();
-        /*
-
-
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
-            this.load();
-        }));
-
-         */
     }
 
     public load() {
