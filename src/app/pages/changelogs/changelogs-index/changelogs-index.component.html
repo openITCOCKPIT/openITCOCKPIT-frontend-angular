@@ -44,6 +44,16 @@
                         </button>
                     </c-nav-item>
                 }
+                @if (PermissionsService.hasModuleObservable('ScmModule')|async) {
+                    <c-nav-item *oitcPermission="['ScmModule','scmchangelogs', 'index']">
+                        <button
+                            class="nav-link"
+                            [routerLink]="['/', 'scm_module', 'scm_changelogs', 'index']">
+                            <fa-icon [icon]="['fas', 'people-roof']"></fa-icon>
+                            {{ t('Scm Module Changes') }}
+                        </button>
+                    </c-nav-item>
+                }
             </c-nav>
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">

@@ -282,6 +282,16 @@
                                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                 {{ t('Edit') }}
                             </oitc-actions-button-element>
+                            <oitc-actions-button-element [permission]="'ScmModule.resourcegroups.usedBy'"
+                                                         [url]="'/scm_module/resourcegroups/usedBy/' + resourcegroup.id">
+                                <fa-icon [icon]="['fas', 'reply-all']" [flip]="'horizontal'"></fa-icon>
+                                {{ t('Used by') }}
+                            </oitc-actions-button-element>
+                            <oitc-actions-button-element [permission]="'ScmModule.resourcegroups.notifications'"
+                                                         [url]="'/scm_module/resourcegroups/notifications/' + resourcegroup.id">
+                                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                {{ t('Notifications') }}
+                            </oitc-actions-button-element>
                             <oitc-actions-button-element [permission]="'ScmModule.scmchangelogs.index'"
                                                          [url]="'/scm_module/scm_changelogs/entity/Resourcegroup/' + resourcegroup.id">
                                 <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>

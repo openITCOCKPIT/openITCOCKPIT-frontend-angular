@@ -9,5 +9,11 @@ export const scmModuleRoutes: Routes = [{
 }, {
     path: 'scm_module/resourcegroups/edit/:id',
     loadComponent: () => import('./pages/resourcegroups/resourcegroups-edit/resourcegroups-edit.component').then(m => m.ResourcegroupsEditComponent)
+}, {
+    path: 'scm_module/scm_changelogs/entity/:type/:id',
+    loadComponent: () => import('./pages/scmchangelogs/scm-changelogs-entity/scm-changelogs-entity.component').then(m => m.ScmChangelogsEntityComponent)
+}, {
+    path: 'scm_module/scm_changelogs/index',
+    loadComponent: () => import('./pages/scmchangelogs/scm-changelogs-index/scm-changelogs-index.component').then(m => m.ScmChangelogsIndexComponent)
 }
 ];
