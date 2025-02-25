@@ -37,7 +37,7 @@
                 @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
                     <c-nav-item *oitcPermission="['ImportModule','importchangelogs', 'index']">
                         <button
-                            class="nav-link active"
+                            class="nav-link"
                             [routerLink]="['/', 'import_module', 'import_changelogs', 'index']">
                             <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
                             {{ t('Import Module Changes') }}
@@ -47,7 +47,7 @@
                 @if (PermissionsService.hasModuleObservable('ScmModule')|async) {
                     <c-nav-item *oitcPermission="['ScmModule','scmchangelogs', 'index']">
                         <button
-                            class="nav-link"
+                            class="nav-link active"
                             [routerLink]="['/', 'scm_module', 'scm_changelogs', 'index']">
                             <fa-icon [icon]="['fas', 'people-roof']"></fa-icon>
                             {{ t('Scm Module Changes') }}
@@ -140,98 +140,26 @@
                                 </h5>
                                 <c-form-check>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="tmpFilter.Models.Hostdefault" cFormCheckInput
+                                           [(ngModel)]="tmpFilter.Models.Resourcegroup" cFormCheckInput
                                            class="checkbox-lg checkbox-primary"
-                                           id="hostdefault"
-                                           name="hostdefault"
+                                           id="resourcegroup"
+                                           name="resourcegroup"
                                            oitcDebounce
                                            type="checkbox"/>
-                                    <label cFormCheckLabel for="hostdefault" class="ms-1 mt-1">
-                                        {{ t('Host defaults') }}
+                                    <label cFormCheckLabel for="resourcegroup" class="ms-1 mt-1">
+                                        {{ t('Resource groups') }}
                                     </label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="tmpFilter.Models.Importer" cFormCheckInput
+                                           [(ngModel)]="tmpFilter.Models.Resource" cFormCheckInput
                                            class="checkbox-lg checkbox-primary"
-                                           id="importer"
-                                           name="importer"
+                                           id="resource"
+                                           name="resource"
                                            oitcDebounce
                                            type="checkbox"/>
-                                    <label cFormCheckLabel for="importer" class="ms-1 mt-1">
-                                        {{ t('Importers') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="tmpFilter.Models.ImportedHost" cFormCheckInput
-                                           class="checkbox-lg checkbox-primary"
-                                           id="importedhost"
-                                           name="importedhost"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel for="importedhost" class="ms-1 mt-1">
-                                        {{ t('Imported hosts') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="tmpFilter.Models.ImportedHostgroup" cFormCheckInput
-                                           class="checkbox-lg checkbox-primary"
-                                           id="importedhostgroup"
-                                           name="importedhostgroup"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel for="importedhostgroup" class="ms-1 mt-1">
-                                        {{ t('Imported Hostgroups') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="tmpFilter.Models.ExternalSystem" cFormCheckInput
-                                           class="checkbox-lg checkbox-primary"
-                                           id="externalsystem"
-                                           name="externalsystem"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel for="externalsystem" class="ms-1 mt-1">
-                                        {{ t('External systems') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="tmpFilter.Models.ExternalMonitoring" cFormCheckInput
-                                           class="checkbox-lg checkbox-primary"
-                                           id="externalmonitoring"
-                                           name="externalmonitoring"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel for="externalmonitoring" class="ms-1 mt-1">
-                                        {{ t('External monitorings') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="tmpFilter.Models.StartImportData" cFormCheckInput
-                                           class="checkbox-lg checkbox-primary"
-                                           id="startimportdata"
-                                           name="startimportdata"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel for="startimportdata" class="ms-1 mt-1">
-                                        {{ t('Start import data') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="tmpFilter.Models.SynchronizeWithMonitoring" cFormCheckInput
-                                           class="checkbox-lg checkbox-primary"
-                                           id="synchronizewithmonitoring"
-                                           name="synchronizewithmonitoring"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel for="synchronizewithmonitoring" class="ms-1 mt-1">
-                                        {{ t('Synchronize with monitoring') }}
+                                    <label cFormCheckLabel for="resource" class="ms-1 mt-1">
+                                        {{ t('Resource') }}
                                     </label>
                                 </c-form-check>
                             </fieldset>
@@ -275,30 +203,6 @@
                                            type="checkbox"/>
                                     <label cFormCheckLabel for="delete" class="ms-1 mt-1">
                                         {{ t('Delete') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="tmpFilter.Action.import" cFormCheckInput
-                                           class="checkbox-lg checkbox-primary"
-                                           id="import"
-                                           name="import"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel for="import" class="ms-1 mt-1">
-                                        {{ t('Start import') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="tmpFilter.Action.synchronization" cFormCheckInput
-                                           class="checkbox-lg checkbox-primary"
-                                           id="synchronization"
-                                           name="synchronization"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel for="synchronization" class="ms-1 mt-1">
-                                        {{ t('Synchronize with monitoring') }}
                                     </label>
                                 </c-form-check>
                             </fieldset>

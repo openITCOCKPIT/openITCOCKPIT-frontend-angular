@@ -62,7 +62,9 @@ export class ResourcegroupsService {
     public getEdit(id: number): Observable<ResourcegroupsGet> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
-            resourcegroup: ResourcegroupsPost
+            resourcegroup: {
+                Resourcegroup: ResourcegroupsPost
+            }
         }>(`${proxyPath}/scm_module/resourcegroups/edit/${id}.json`, {
             params: {
                 angular: true
@@ -79,7 +81,7 @@ export class ResourcegroupsService {
      **********************/
     public edit(resourcegroup: ResourcegroupsPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/import_module/importers/edit/${resourcegroup.id}.json?angular=true`, {
+        return this.http.post<any>(`${proxyPath}/scm_module/resourcegroups/edit/${resourcegroup.id}.json?angular=true`, {
             Resourcegroup: resourcegroup
         })
             .pipe(
@@ -87,7 +89,7 @@ export class ResourcegroupsService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data.importer as GenericIdResponse
+                        data: data as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {

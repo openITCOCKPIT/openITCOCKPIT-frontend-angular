@@ -67,7 +67,9 @@ export function getResourcegroupsIndexParams(): ResourcegroupsIndexParams {
 }
 
 export interface ResourcegroupsGet {
-    resourcegroup: ResourcegroupsPost
+    resourcegroup: {
+        Resourcegroup: ResourcegroupsPost
+    }
 }
 
 
