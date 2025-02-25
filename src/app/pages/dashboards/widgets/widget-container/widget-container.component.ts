@@ -68,6 +68,7 @@ import { TachometerWidgetComponent } from '../tachometer-widget/tachometer-widge
 import {
     EventcorrelationWidgetComponent
 } from '../../../../modules/eventcorrelation_module/widgets/eventcorrelation-widget/eventcorrelation-widget.component';
+import { AutomapWidgetComponent } from '../automap-widget/automap-widget.component';
 
 
 @Component({
@@ -112,7 +113,8 @@ import {
         SlaCalendarWidgetComponent,
         TrafficlightWidgetComponent,
         TachometerWidgetComponent,
-        EventcorrelationWidgetComponent
+        EventcorrelationWidgetComponent,
+        AutomapWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

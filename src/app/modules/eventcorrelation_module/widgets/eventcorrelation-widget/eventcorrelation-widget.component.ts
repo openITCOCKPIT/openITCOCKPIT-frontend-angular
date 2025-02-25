@@ -92,6 +92,7 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
             this.loadEventCorrelations('');
         }
 
+
         super.onAnimationStart(event);
     }
 
@@ -104,12 +105,14 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
 
             // We have to remove the EVC from the DOM and re-add
             // otherwise the lines are not drawn correctly
+            this.show = true;
+            this.cdr.markForCheck();
+        } else {
+            // "true" means show config.
+            // The animation has stopped, and we are in the config view - so we can now remove the EVC from the DOM
+            // We hide the EVC case if we flip back to the content, the EVC is messed up and needs to be re-rendered
             this.show = false;
             this.cdr.markForCheck();
-            setTimeout(() => {
-                this.show = true;
-                this.cdr.markForCheck();
-            }, 10);
         }
     }
 
