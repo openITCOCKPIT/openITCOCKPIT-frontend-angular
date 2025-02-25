@@ -42,7 +42,7 @@ import { EventClickArg } from '@fullcalendar/core';
 import { TimezoneService } from '../../../../services/timezone.service';
 import { TimezoneObject } from '../../../../pages/services/timezone.interface';
 import { ChangecalendarWidgetModalService } from '../changecalendar-widget-modal.service';
-import { KtdResizeEnd } from '@katoid/angular-grid-layout';
+import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 
 @Component({
     selector: 'oitc-changecalendar-widget',
@@ -82,13 +82,7 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
     };
     public events: CalendarEvent[] = [];
     public ChangeCalendars: SelectKeyValue[] = [];
-    protected widgetConfig: ChangeCalendarWidgetPost = {
-        changecalendar_ids: [] as number[],
-        displayType: 'dayGridMonth',
-        Widget: {
-            id: "0"
-        }
-    } as ChangeCalendarWidgetPost;
+    protected widgetConfig?: ChangeCalendarWidgetPost;
     public DisplayTypes: SelectKeyValueString[] = [
         {value: 'Month', key: 'dayGridMonth'},
         {value: 'Week', key: 'dayGridWeek'},
@@ -141,6 +135,8 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
         this.cdr.markForCheck();
     }
 
+    public override layoutUpdate(event: KtdGridLayout) {
+    }
 
     public toggleChangecalendarModal(clickInfo: EventClickArg): void {
         // set this.event to the event from this.events where the originId matches clickInfo.event._def.extendedProps.originId
@@ -160,16 +156,18 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
                     this.EditableChangecalendar = response;
 
                     // Put data to POSTable object.
-                    this.widgetConfig.changecalendar_ids = Object.keys(this.EditableChangecalendar.changeCalendars).map((key) => parseInt(key, 10));
-                    this.widgetConfig.displayType = this.EditableChangecalendar.displayType;
-                    this.widgetConfig.Widget.id = widgetId;
+                    this.widgetConfig = {
+                        changecalendar_ids: Object.keys(response.changeCalendars).map((key) => parseInt(key, 10)),
+                        displayType: response.displayType,
+                        Widget: {
+                            id: widgetId
+                        },
+                    } as ChangeCalendarWidgetPost;
 
-                    console.warn(this.EditableChangecalendar);
-                    console.warn(this.widgetConfig);
                     this.events = [];
 
-                    Object.keys(this.EditableChangecalendar.changeCalendars).forEach((changeCalendarId: string) => {
-                        this.EditableChangecalendar?.changeCalendars[changeCalendarId].changecalendar_events.forEach((event) => {
+                    Object.keys(response.changeCalendars).forEach((changeCalendarId: string) => {
+                        response?.changeCalendars[changeCalendarId].changecalendar_events.forEach((event) => {
                             this.events.push({
                                 originId: event.id,
                                 title: event.title,
@@ -177,7 +175,6 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
                                 description: event.description,
                                 end: event.end,
                                 default_holiday: false,
-                                color: this.EditableChangecalendar?.changeCalendars[changeCalendarId].colour
                             });
                         });
                     });
@@ -207,13 +204,15 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
                     value: changecalendar.name
                 });
             });
-            console.warn(this.ChangeCalendars);
             this.cdr.markForCheck();
         }));
     }
 
     public saveWidgetConfig(): void {
         if (!this.widget) {
+            return;
+        }
+        if (!this.widgetConfig) {
             return;
         }
         this.subscriptions.add(this.ChangeCalendarWidgetService.saveWidgetConfig(this.widget.id, this.widgetConfig).subscribe((response) => {

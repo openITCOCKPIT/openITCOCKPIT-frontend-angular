@@ -63,7 +63,6 @@ export class ChangecalendarsCalendarComponent {
 
     @Input()
     public set initialView(initialView: string) {
-        console.warn("initialView", initialView);
 
         // Force reload of calendar here
         this.calendarOptions.update(options => ({...options, initialView: initialView}));
@@ -113,7 +112,6 @@ export class ChangecalendarsCalendarComponent {
 
     // Handle event edit
     public handleEventClick(clickInfo: EventClickArg) {
-        console.warn(this.calendarOptions());
         if (this.eventClick) {
             this.eventClick.emit(clickInfo);
             return;
@@ -134,7 +132,6 @@ export class ChangecalendarsCalendarComponent {
     }
 
     public handleDatesSet(dateInfo: { startStr: string, endStr: string, start: Date, end: Date, view: any }) {
-        //console.log('handleDatesSet', dateInfo);
         this.calendarOptions.update(options => ({...options, events: this.events}));
         this.eventsChange.emit(this.events);
     }

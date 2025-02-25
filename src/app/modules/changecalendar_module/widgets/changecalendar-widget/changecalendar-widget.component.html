@@ -15,11 +15,11 @@
              class="box-container">
             <div class="box-x">
                 <ng-container *ngIf="animationStateShowContent">
-                    <div *ngIf="!EditableChangecalendar" class="text-info">
+                    <div *ngIf="!widgetConfig" class="text-info">
                         {{ t('No element selected') }}
                     </div>
                     @if (PermissionsService.hasPermissionObservable(['changecalendarmodule', 'changecalendars', 'edit'])|async) {
-                        <div *ngIf="EditableChangecalendar">
+                        <div *ngIf="widgetConfig">
                             <c-row class="h-75">
                                 <c-col [xs]="12" [md]="12" [lg]="12">
                                     <oitc-changecalendars-calendar
@@ -56,6 +56,7 @@
                             </label>
 
                             <oitc-multi-select
+                                    *ngIf="widgetConfig"
                                     [id]="'config_changecalendar_id_'+widget.id"
                                     [name]="'config_changecalendar_id_'+widget.id"
                                     optionValue="key"
@@ -72,6 +73,7 @@
                             </label>
 
                             <oitc-select
+                                    *ngIf="widgetConfig"
                                     [id]="'config_changecalendar_type_'+widget.id"
                                     [name]="'config_changecalendar_type_'+widget.id"
                                     optionValue="key"
