@@ -187,6 +187,7 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public getClearForm(): ImportersPost {
@@ -234,13 +235,6 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
                     this.HistoryService.navigateWithFallback(['/import_module/importers/index']);
                     this.notyService.scrollContentDivToTop();
                     return;
-
-                    // Create another
-                    //this.post = this.getClearForm();
-                    //this.errors = null;
-                    //this.ngOnInit();
-                    //this.notyService.scrollContentDivToTop();
-                    //return;
                 }
 
                 // Error

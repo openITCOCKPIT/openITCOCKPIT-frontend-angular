@@ -7,7 +7,7 @@ export interface ResourcegroupsIndex extends PaginateOrScroll {
     _csrfToken: string
 }
 
-export interface Resourcegroup{
+export interface Resourcegroup {
     id: number
     container_id: number
     description: string
@@ -63,5 +63,28 @@ export function getResourcegroupsIndexParams(): ResourcegroupsIndexParams {
         'filter[Resourcegroup.id][]': [],
         'filter[Containers.name]': '',
         'filter[Resourcegroups.description]': ''
+    }
+}
+
+export interface ResourcegroupsGet {
+    resourcegroup: ResourcegroupsPost
+}
+
+
+export interface ResourcegroupsPost {
+    id?: number
+    description: string
+    container: {
+        parent_id: number | null
+        name: string
+    }
+    users: {
+        _ids: number[]
+    },
+    managers: {
+        _ids: number[]
+    },
+    region_managers: {
+        _ids: number[]
     }
 }
