@@ -129,6 +129,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-trafficlight-widget>
         }
+        @case (WidgetTypes.TachometerWidget) {
+            <oitc-tachometer-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-tachometer-widget>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {

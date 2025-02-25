@@ -527,6 +527,16 @@
                                         </td>
                                     </tr>
 
+                                    <tr *ngIf="result.servicestatus.perfdata">
+                                        <td>{{ t('Performance data') }}</td>
+                                        <td>
+                                            <div class="code-font"
+                                                 [ngClass]="result.servicestatus.textClass">
+                                                {{ result.servicestatus.perfdata }}
+                                            </div>
+                                        </td>
+                                    </tr>
+
                                     <tr *ngIf="Number(result.servicestatus.currentState) > 0">
                                         <td>
                                             {{ t('Last time') }}
