@@ -134,6 +134,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-tachometer-widget>
         }
+        @case (WidgetTypes.AutomapWidget) {
+            <oitc-automap-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-automap-widget>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {
