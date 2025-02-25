@@ -1,0 +1,342 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Service Capacity Management Module') }}
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'user-group']"></fa-icon>
+                {{ t('Resource groups') }}
+            </li>
+            <li aria-current="page" class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Resource groups') }}
+                <small class="fw-300">
+                    {{ t('Overview') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['ScmModule', 'resourcegroups', 'summary']"
+                            [routerLink]="['/', 'scm_module', 'resourcegroups', 'summary']"
+                            cButton
+                            [disabled]="resourcegroups && resourcegroups.all_resourcegroups.length==0"
+                            class="ripple"
+                            color="info"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'solar-panel']"></fa-icon>
+                        {{ t('SCM Board') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['ScmModule', 'resourcegroups', 'add']"
+                            [routerLink]="['/', 'scm_module', 'resourcegroups', 'add']"
+                            cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Containers.name]']"
+                                       [placeholder]="'Filter by resource group name' | transloco"
+                                       aria-label="resourcegroupsName"
+                                       cFormControl
+                                       name="resourcegroupsName"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Resourcegroups.description]']"
+                                       [placeholder]="'Filter by resource group description' | transloco"
+                                       aria-label="resourcegroupsDescription"
+                                       cFormControl
+                                       name="resourcegroupsDescription"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+            <oitc-table-loader *ngIf="!resourcegroups"></oitc-table-loader>
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th class="width-50 text-center" scope="col">
+                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                    </th>
+                    <th scope="col" mat-sort-header="Containers.name">
+                        {{ t('Resource group name') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Resourcegroups.description">
+                        {{ t('Description') }}
+                    </th>
+                    <th class="text-center">
+                        <fa-icon [icon]="['fas', 'chalkboard-user']"
+                                 [title]="'Number of resources' | transloco"></fa-icon>
+                    </th>
+                    <th scope="col">
+                        {{ t('Resource summary') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Users') }}
+                    </th>
+                    <th class="text-center width-50" scope="col">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    </th>
+                </tr>
+                </thead>
+                <tbody *ngIf="resourcegroups">
+                <tr *ngFor="let resourcegroup of resourcegroups.all_resourcegroups">
+                    <td class="text-center">
+                        <oitc-item-select
+                            *oitcPermission="['scmmodule','resourcegroups', 'delete']"
+                            [disabled]="!resourcegroup.allow_edit"
+                            [item]="resourcegroup"></oitc-item-select>
+                    </td>
+                    <td>
+                        <span *oitcPermission="['scmmodule','resourcegroups', 'edit']">
+                            @if (resourcegroup.allow_edit) {
+                                <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'edit',resourcegroup.id]">
+                                    {{ resourcegroup.container.name }}
+                                </a>
+                            } @else {
+                                {{ resourcegroup.container.name }}
+                            }
+                        </span>
+                        <span *oitcPermission="['scmmodule','resourcegroups', 'edit']; negate: true">
+                            {{ resourcegroup.container.name }}
+                        </span>
+                    </td>
+                    <td>{{ resourcegroup.description }}</td>
+
+                    <td class="text-center">
+                        @if (resourcegroup.resource_count > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
+                            <a [routerLink]="['/', 'scm_module', 'resources', 'index']"
+                               [queryParams]="{'resourcegroupId': resourcegroup.id}">
+                                <span class="pointer ms-2">
+                                    {{ resourcegroup.resource_count }}
+                                </span>
+                            </a>
+                        } @else {
+                            <span>
+                                {{ resourcegroup.resource_count }}
+                            </span>
+                        }
+                    </td>
+                    <td class="col-2">
+                        @if (PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async) {
+                            <c-button-group role="group" class="btn-group btn-group-justified w-100">
+                                <a class="btn btn-primary state-button-small"
+                                   [ngClass]="{'opacity-25': resourcegroup.statesummary[0]===0}"
+                                   [routerLink]="['/','scmmodule', 'resources', 'index']"
+                                   [queryParams]="{status:0, resourcegroupId: resourcegroup.id}">
+                                    {{ resourcegroup.statesummary[0] }}
+                                </a>
+                                <a class="btn btn-success state-button-small"
+                                   [ngClass]="{'opacity-25': resourcegroup.statesummary[1]===0}"
+                                   [routerLink]="['/','scmmodule', 'resources', 'index']"
+                                   [queryParams]="{status:1, resourcegroupId: resourcegroup.id}">
+                                    {{ resourcegroup.statesummary[1] }}
+                                </a>
+                                <a class="btn btn-warning state-button-small"
+                                   [ngClass]="{'opacity-25': resourcegroup.statesummary[2]===0}"
+                                   [routerLink]="['/','scmmodule', 'resources', 'index']"
+                                   [queryParams]="{status:2, resourcegroupId: resourcegroup.id}">
+                                    {{ resourcegroup.statesummary[2] }}
+                                </a>
+                                <a class="btn btn-danger state-button-small"
+                                   [ngClass]="{'opacity-25': resourcegroup.statesummary[3]===0}"
+                                   [routerLink]="['/','scmmodule', 'resources', 'index']"
+                                   [queryParams]="{status:3, resourcegroupId: resourcegroup.id}">
+                                    {{ resourcegroup.statesummary[3] }}
+                                </a>
+                            </c-button-group>
+                        } @else {
+                            <c-button-group role="group" class="btn-group btn-group-justified w-100">
+                                <button cButton color="primary" class="state-button-small"
+                                        [ngClass]="{'opacity-25': resourcegroup.statesummary[0]===0}">
+                                    {{ resourcegroup.statesummary[0] }}
+                                </button>
+                                <button cButton color="success" class="state-button-small"
+                                        [ngClass]="{'opacity-25': resourcegroup.statesummary[1]===0}">
+                                    {{ resourcegroup.statesummary[1] }}
+                                </button>
+                                <button cButton color="warning" class="state-button-small"
+                                        [ngClass]="{'opacity-25': resourcegroup.statesummary[2]===0}">
+                                    {{ resourcegroup.statesummary[2] }}
+                                </button>
+                                <button cButton color="danger" class="state-button-small"
+                                        [ngClass]="{'opacity-25': resourcegroup.statesummary[3]===0}">
+                                    {{ resourcegroup.statesummary[3] }}
+                                </button>
+                            </c-button-group>
+                        }
+
+                    </td>
+                    <td>
+                        @if (resourcegroup.region_managers.length > 0) {
+                            <span class="text-primary bold">{{ t('Region Managers') }}</span>
+                            <ul class="mb-0 ms-1 ps-2">
+                                <li *ngFor="let region_manager of resourcegroup.region_managers">
+                                    {{ region_manager.username }}
+                                </li>
+                            </ul>
+                        }
+                        @if (resourcegroup.managers.length > 0) {
+                            <span class="text-primary bold">{{ t('Managers') }}</span>
+                            <ul class="mb-0 ms-1 ps-2">
+                                <li *ngFor="let manager of resourcegroup.managers">
+                                    {{ manager.username }}
+                                </li>
+                            </ul>
+                        }
+                        @if (resourcegroup.users.length > 0) {
+                            <span class="text-primary bold">{{ t('Users') }}</span>
+                            <ul class="mb-0 ms-1 ps-2">
+                                <li *ngFor="let user of resourcegroup.users">
+                                    {{ user.username }}
+                                </li>
+                            </ul>
+                        }
+                        <div class="text-center" [title]="'Users' | transloco"
+                             *ngIf="resourcegroup.users.length === 0 && resourcegroup.managers.length === 0">
+                            <oitc-badge-outline color="danger" class="w-100">
+                                {{ t('Empty') }}
+                            </oitc-badge-outline>
+                        </div>
+                    </td>
+                    <td class="width-50">
+                        <oitc-actions-button [permission]="'ScmModule.resourcegroups.edit'"
+                                             [icon]="['fas', 'cog']"
+                                             [url]="'/scm_module/resourcegroups/edit/' + resourcegroup.id">
+                            <oitc-actions-button-element [permission]="'ScmModule.resourcegroups.edit'"
+                                                         *ngIf="resourcegroup.allow_edit"
+                                                         [url]="'/scm_module/resourcegroups/edit/' + resourcegroup.id">
+                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                {{ t('Edit') }}
+                            </oitc-actions-button-element>
+                            <oitc-actions-button-element [permission]="'ScmModule.scmchangelogs.index'"
+                                                         [url]="'/scm_module/scm_changelogs/entity/Resourcegroup/' + resourcegroup.id">
+                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                {{ t('Changelog') }}
+                            </oitc-actions-button-element>
+                            <li cDropdownDivider></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(resourcegroup)"
+                                                         *ngIf="resourcegroup.allow_edit"
+                                                         [permission]="'ScmModule.resourcegroups.delete'">
+                                <span class="text-danger">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete') }}
+                                </span>
+                            </oitc-actions-button-element>
+                        </oitc-actions-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <oitc-no-records
+                *ngIf="resourcegroups && resourcegroups.all_resourcegroups.length === 0"></oitc-no-records>
+            <ng-container *ngIf="resourcegroups">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="resourcegroups.all_resourcegroups.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </ng-container>
+
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            [paginateOrScroll]="resourcegroups"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+    </c-card>
+</ng-container>
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

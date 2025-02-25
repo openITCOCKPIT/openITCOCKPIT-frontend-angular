@@ -45,6 +45,7 @@ import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/lab
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { ContainersService } from '../../../../../pages/containers/containers.service';
 
 @Component({
   selector: 'oitc-autoreport-edit-step-one',
@@ -101,6 +102,7 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
     private readonly UsersService: UsersService = inject(UsersService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
+    private readonly ContainersService: ContainersService = inject(ContainersService);
 
     public init:boolean = false;
     public id: number = 0;
@@ -212,7 +214,7 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
     }
 
     private loadContainers() {
-        this.subscriptions.add(this.AutoreportsService.loadContainers().subscribe((result) => {
+        this.subscriptions.add(this.ContainersService.loadAllContainers().subscribe((result) => {
             this.containers = result;
             this.cdr.markForCheck();
         }));
