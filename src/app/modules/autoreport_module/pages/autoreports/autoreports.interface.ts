@@ -277,9 +277,13 @@ export interface Timerange {
 export interface ReportError {
     error: boolean
     message: string
-    objects: any[]
+    objects: ReportErrorObject[]
 }
 
+export interface ReportErrorObject {
+    name: string,
+    services?: string[]
+}
 export interface AutoreportServiceUsedByResponse {
     service: {
         id: number,

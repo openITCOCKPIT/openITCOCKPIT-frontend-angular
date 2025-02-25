@@ -52,7 +52,6 @@ import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/de
         TableLoaderComponent,
         MatSort,
         TableDirective,
-        MatSortHeader,
         NgForOf,
         ActionsButtonComponent,
         ActionsButtonElementComponent,

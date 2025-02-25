@@ -20,8 +20,6 @@ import {
     HostServiceParams,
     AutoReportHostWithServicesObject,
     PostAutoreport,
-    PostHost,
-    PostService
 } from '../autoreports.interface';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -33,6 +31,7 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { NgForOf, NgIf } from '@angular/common';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import {HostsService} from '../../../../../pages/hosts/hosts.service';
 import _ from 'lodash';
 
 @Component({
@@ -78,6 +77,7 @@ export class AutoreportEditStepTwoComponent implements OnInit, OnDestroy {
     private router = inject(Router);
     private subscriptions: Subscription = new Subscription();
     private readonly AutoreportsService: AutoreportsService = inject(AutoreportsService);
+    private readonly HostsService: HostsService = inject(HostsService);
     private readonly notyService = inject(NotyService);
     private cdr = inject(ChangeDetectorRef);
 
@@ -151,7 +151,7 @@ export class AutoreportEditStepTwoComponent implements OnInit, OnDestroy {
     }
 
     public loadHosts = (searchString: string) => {
-        this.subscriptions.add(this.AutoreportsService.loadHosts(this.autoreport.container_id, searchString, this.selectedHostIds)
+        this.subscriptions.add(this.HostsService.loadHostsByContainerId(this.autoreport.container_id, searchString, this.selectedHostIds)
             .subscribe((result) => {
                 this.hosts = result;
                 this.cdr.markForCheck();

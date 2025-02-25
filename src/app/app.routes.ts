@@ -32,6 +32,7 @@ import { grafanaModuleRoutes } from './modules/grafana_module/grafana_module.rou
 import { autoreportModuleRoutes } from './modules/autoreport_module/autoreport_module.routes';
 import { prometheusModuleRoutes } from './modules/prometheus_module/prometheus_module.routes';
 import { changecalendarsModuleRoutes } from './modules/changecalendar_module/changecalendar_module.routes';
+import { scmModuleRoutes } from './modules/scm_module/scm_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -85,7 +86,8 @@ const moduleRoutes: Routes = [
     ...grafanaModuleRoutes,
     ...openstreetmapModuleRoutes,
     ...autoreportModuleRoutes,
-    ...changecalendarsModuleRoutes
+    ...changecalendarsModuleRoutes,
+    ...scmModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
