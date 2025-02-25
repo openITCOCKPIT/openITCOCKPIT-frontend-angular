@@ -151,6 +151,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-grafana-userdefined-widget>
         }
+        @case (WidgetTypes.EvcWidget) {
+            <oitc-eventcorrelation-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-eventcorrelation-widget>
+        }
         @case (WidgetTypes.SlaSummaryWidget) {
             <oitc-sla-summary-widget
                 [widgetInput]="widget"

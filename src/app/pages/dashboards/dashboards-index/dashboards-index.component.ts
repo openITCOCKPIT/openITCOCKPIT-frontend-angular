@@ -319,6 +319,8 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
             // Get a new reference of the layout array to trigger the change detection
             this.layout = [...this.layout];
 
+            this.widgets = [...this.widgets];
+
             this.isLoading = false;
             this.cdr.markForCheck();
         }));
