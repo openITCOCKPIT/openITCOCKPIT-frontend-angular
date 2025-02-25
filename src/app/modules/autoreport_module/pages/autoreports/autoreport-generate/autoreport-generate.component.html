@@ -73,6 +73,18 @@
                 <c-alert color="danger" role="alert" [hidden]="!report_error">
                     @if (report_error) {
                         {{ report_error.message }}
+                        <ul *ngIf="report_error.objects.length > 0">
+                            <li *ngFor=" let errorObject of report_error.objects">
+                                {{errorObject.name}}
+
+                                <ul *ngIf="errorObject.services">
+                                    <li *ngFor=" let servicename of errorObject.services">
+                                        {{servicename}}
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+
                     }
                 </c-alert>
 

@@ -24,31 +24,35 @@ import {
 } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
-import { DeleteAllItem, DeleteAllResponse } from './delete-all.interface';
+import { DeleteAllItem, DeleteAllResponse, usedByModuleError } from './delete-all.interface';
 import { NgForOf, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { HttpErrorResponse } from '@angular/common/http';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-delete-all-modal',
     imports: [
-    ModalComponent,
-    ModalHeaderComponent,
-    ModalBodyComponent,
-    ModalTitleDirective,
-    ButtonCloseDirective,
-    ModalFooterComponent,
-    TranslocoDirective,
-    RowComponent,
-    ColComponent,
-    NgForOf,
-    FaIconComponent,
-    ProgressComponent,
-    NgIf,
-    XsButtonDirective
-],
+        ModalComponent,
+        ModalHeaderComponent,
+        ModalBodyComponent,
+        ModalTitleDirective,
+        ButtonCloseDirective,
+        ModalFooterComponent,
+        TranslocoDirective,
+        RowComponent,
+        ColComponent,
+        NgForOf,
+        FaIconComponent,
+        ProgressComponent,
+        NgIf,
+        XsButtonDirective,
+        PermissionDirective,
+        RouterLink
+    ],
     templateUrl: './delete-all-modal.component.html',
     styleUrl: './delete-all-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
