@@ -69,6 +69,9 @@ import {
     EventcorrelationWidgetComponent
 } from '../../../../modules/eventcorrelation_module/widgets/eventcorrelation-widget/eventcorrelation-widget.component';
 import { AutomapWidgetComponent } from '../automap-widget/automap-widget.component';
+import {
+    AutoreportWidgetComponent
+} from '../../../../modules/autoreport_module/widgets/autoreport-widget/autoreport-widget.component';
 
 
 @Component({
@@ -114,7 +117,8 @@ import { AutomapWidgetComponent } from '../automap-widget/automap-widget.compone
         TrafficlightWidgetComponent,
         TachometerWidgetComponent,
         EventcorrelationWidgetComponent,
-        AutomapWidgetComponent
+        AutomapWidgetComponent,
+        AutoreportWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

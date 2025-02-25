@@ -161,6 +161,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-eventcorrelation-widget>
         }
+        @case (WidgetTypes.AutoreportWidget) {
+            <oitc-autoreport-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-autoreport-widget>
+        }
         @case (WidgetTypes.SlaSummaryWidget) {
             <oitc-sla-summary-widget
                 [widgetInput]="widget"
