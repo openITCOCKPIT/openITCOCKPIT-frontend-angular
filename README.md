@@ -77,6 +77,12 @@ sudo -u www-data -g www-data /bin/bash
 ng serve
 ```
 
+In case you get random memory errors use this command to start the frontend:
+
+```
+NODE_OPTIONS="--max-old-space-size=6000" ng serve
+```
+
 cd ..
 
 ## Netzwerkzugriff

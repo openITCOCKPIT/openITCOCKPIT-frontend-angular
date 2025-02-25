@@ -129,6 +129,16 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-trafficlight-widget>
         }
+        @case (WidgetTypes.TachometerWidget) {
+            <oitc-tachometer-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-tachometer-widget>
+        }
+        @case (WidgetTypes.AutomapWidget) {
+            <oitc-automap-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-automap-widget>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {
@@ -145,6 +155,16 @@
             <oitc-grafana-userdefined-widget
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-grafana-userdefined-widget>
+        }
+        @case (WidgetTypes.EvcWidget) {
+            <oitc-eventcorrelation-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-eventcorrelation-widget>
+        }
+        @case (WidgetTypes.AutoreportWidget) {
+            <oitc-autoreport-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-autoreport-widget>
         }
         @case (WidgetTypes.SlaSummaryWidget) {
             <oitc-sla-summary-widget
