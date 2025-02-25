@@ -11,10 +11,11 @@ import {
     ChangeDetectionStrategy,
     Component,
     effect,
+    ElementRef,
     inject,
     OnDestroy,
-    OnInit,
-    signal
+    signal,
+    ViewChild
 } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -41,6 +42,7 @@ import { EventClickArg } from '@fullcalendar/core';
 import { TimezoneService } from '../../../../services/timezone.service';
 import { TimezoneObject } from '../../../../pages/services/timezone.interface';
 import { ChangecalendarWidgetModalService } from '../changecalendar-widget-modal.service';
+import { KtdResizeEnd } from '@katoid/angular-grid-layout';
 
 @Component({
     selector: 'oitc-changecalendar-widget',
@@ -65,6 +67,7 @@ import { ChangecalendarWidgetModalService } from '../changecalendar-widget-modal
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChangecalendarWidgetComponent extends BaseWidgetComponent implements OnDestroy, AfterViewInit {
+    @ViewChild('changecalendarContainer') changecalendarContainer?: ElementRef;
     protected flipped = signal<boolean>(false);
     private readonly ChangecalendarsService: ChangecalendarsService = inject(ChangecalendarsService);
     private readonly ChangeCalendarWidgetService: ChangecalendarWidgetService = inject(ChangecalendarWidgetService);
@@ -130,6 +133,12 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
             dS = Year + "-" + Month + "-" + Day + "T" + Hour + ":" + Minute + ":" + Second;
 
         return dS;
+    }
+
+    public override resizeWidget(event?: KtdResizeEnd) {
+        this.load();
+
+        this.cdr.markForCheck();
     }
 
 

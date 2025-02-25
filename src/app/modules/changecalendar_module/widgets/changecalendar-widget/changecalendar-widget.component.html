@@ -24,6 +24,7 @@
                                 <c-col [xs]="12" [md]="12" [lg]="12">
                                     <oitc-changecalendars-calendar
                                             [(events)]="events"
+                                            [initialView]="widgetConfig.displayType"
                                             [editable]="false"
                                             (eventClick)="toggleChangecalendarModal($event)"/>
                                 </c-col>

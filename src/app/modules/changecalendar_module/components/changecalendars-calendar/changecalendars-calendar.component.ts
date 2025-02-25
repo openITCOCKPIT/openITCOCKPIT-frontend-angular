@@ -38,6 +38,7 @@ export class ChangecalendarsCalendarComponent {
     private readonly cdr = inject(ChangeDetectorRef);
     private _events: CalendarEvent[] = [];
     private _editable: boolean = true;
+    private _initialView: string = 'dayGridMonth';
 
     @ViewChild('fullCalendar') fullCalendar!: FullCalendarComponent;
 
@@ -60,6 +61,19 @@ export class ChangecalendarsCalendarComponent {
         return this._editable;
     }
 
+    @Input()
+    public set initialView(initialView: string) {
+        console.warn("initialView", initialView);
+
+        // Force reload of calendar here
+        this.calendarOptions.update(options => ({...options, initialView: initialView}));
+        this._initialView = initialView;
+    }
+
+    public get initialView(): string {
+        return this._initialView;
+    }
+
     @Output() eventsChange = new EventEmitter<CalendarEvent[]>();
     @Output() eventClick = new EventEmitter<EventClickArg>();
     @Output() onCreateClick = new EventEmitter<any>();
@@ -76,7 +90,7 @@ export class ChangecalendarsCalendarComponent {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
         },
-        initialView: 'dayGridMonth',
+        initialView: this._initialView,
         //initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
         events: this.events,
         weekends: true,
@@ -99,6 +113,7 @@ export class ChangecalendarsCalendarComponent {
 
     // Handle event edit
     public handleEventClick(clickInfo: EventClickArg) {
+        console.warn(this.calendarOptions());
         if (this.eventClick) {
             this.eventClick.emit(clickInfo);
             return;
