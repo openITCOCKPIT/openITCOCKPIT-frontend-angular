@@ -38,7 +38,6 @@ import { AutoreportBitwiseIconComponent } from '../../../components/autoreport-b
         NgForOf,
         AsyncPipe,
         AutoreportBitwiseIconComponent,
-        XsButtonDirective
     ],
   templateUrl: './autoreport-edit-step-three.component.html',
   styleUrl: './../../../assets/autoreport.css',//'./autoreport-edit-step-three.component.css',

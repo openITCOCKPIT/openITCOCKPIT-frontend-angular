@@ -64,19 +64,6 @@ export class AutoreportsService {
         return this.http.post(`${proxyPath}/autoreport_module/autoreports/delete/${item.id}.json?angular=true`, {});
     }
 
-    public loadContainers(): Observable<SelectKeyValue[]> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<{ containers: SelectKeyValue[] }>(`${proxyPath}/containers/loadContainers.json`, {
-            params: {
-                angular: true
-            }
-        }).pipe(
-            map(data => {
-                return data.containers;
-            })
-        )
-    }
-
     public loadCalendars(params:CalendarParams): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{ calendars: SelectKeyValue[] }>(`${proxyPath}/calendars/loadCalendarsByContainerId.json`, {
@@ -227,25 +214,6 @@ export class AutoreportsService {
         )
     }
 
-    public loadHosts (containerId: number, search: string, selected: number[]): Observable<SelectKeyValue[]> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<{
-            hosts: SelectKeyValue[]
-        }>(`${proxyPath}/hosts/loadHostsByContainerId.json`, {
-            params: {
-                'angular': true,
-                'containerId': containerId,
-                'filter[Hosts.name]': search,
-                'selected[]': selected,
-                'resolveContainerIds': true
-
-            }
-        }).pipe(
-            map(data => {
-                return data.hosts
-            })
-        )
-    }
 
     public loadServicesWithHostByHostIds(params: HostServiceParams): Observable<any>{
         const proxyPath = this.proxyPath;
