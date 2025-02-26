@@ -10,7 +10,6 @@ import {
     AfterViewInit,
     ChangeDetectionStrategy,
     Component,
-    effect,
     ElementRef,
     inject,
     OnDestroy,
@@ -43,6 +42,8 @@ import { TimezoneService } from '../../../../services/timezone.service';
 import { TimezoneObject } from '../../../../pages/services/timezone.interface';
 import { ChangecalendarWidgetModalService } from '../changecalendar-widget-modal.service';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
+import { parseInt } from 'lodash';
+import { AnimationEvent } from '@angular/animations';
 
 @Component({
     selector: 'oitc-changecalendar-widget',
@@ -184,17 +185,6 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
         }
     }
 
-
-    constructor() {
-        super();
-        effect(() => {
-            if (this.flipped()) {
-                this.loadChangecalendars();
-            }
-            this.cdr.markForCheck();
-        });
-    }
-
     protected loadChangecalendars = () => {
         this.subscriptions.add(this.ChangecalendarsService.getIndex(getDefaultChangeCalendarsIndexParams()).subscribe((result: ChangeCalendarsIndex) => {
             this.ChangeCalendars = [];
@@ -224,4 +214,37 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
         }));
     }
 
+
+    public show: boolean = true;
+
+    public override onAnimationStart(event: AnimationEvent) {
+        if (event.toState && this.ChangeCalendars.length === 0) {
+            // "true" means show config.
+            // Load initial Grafana Dashboards
+            this.loadChangecalendars();
+        }
+
+
+        super.onAnimationStart(event);
+    }
+
+
+    public override onAnimationDone(event: AnimationEvent) {
+        super.onAnimationDone(event);
+
+        if (!event.toState) {
+            // "false" means show content.
+
+            // We have to remove the EVC from the DOM and re-add
+            // otherwise the lines are not drawn correctly
+            this.show = true;
+            this.cdr.markForCheck();
+        } else {
+            // "true" means show config.
+            // The animation has stopped, and we are in the config view - so we can now remove the EVC from the DOM
+            // We hide the EVC case if we flip back to the content, the EVC is messed up and needs to be re-rendered
+            this.show = false;
+            this.cdr.markForCheck();
+        }
+    }
 }

@@ -23,6 +23,7 @@
                             <c-row class="h-75">
                                 <c-col [xs]="12" [md]="12" [lg]="12">
                                     <oitc-changecalendars-calendar
+                                            *ngIf="show"
                                             [(events)]="events"
                                             [initialView]="widgetConfig.displayType"
                                             [editable]="false"
