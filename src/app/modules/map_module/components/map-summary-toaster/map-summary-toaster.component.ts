@@ -18,7 +18,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ToasterLoaderComponent } from '../../../../layouts/primeng/loading/toaster-loader/toaster-loader.component';
-import { MapSummaryRoot, Summary } from '../../pages/mapeditors/Mapeditors.interface';
+import { MapSummaryRoot, Summary } from '../../pages/mapeditors/mapeditors.interface';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';

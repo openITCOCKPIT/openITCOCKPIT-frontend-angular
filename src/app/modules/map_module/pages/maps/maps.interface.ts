@@ -15,14 +15,15 @@ export interface Map {
     id: number
     name: string
     title: string
-    background: any
-    refresh_interval: number
-    json_data: any
-    created: string
-    modified: string
-    containers: Container[]
-    allowEdit: boolean
-    allowCopy: boolean
+    object_id?: number
+    background?: string | null
+    refresh_interval?: number
+    json_data?: string
+    created?: string
+    modified?: string
+    containers?: Container[]
+    allowEdit?: boolean
+    allowCopy?: boolean
 }
 
 export interface Container {
