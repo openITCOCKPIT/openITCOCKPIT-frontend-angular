@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ServicePieEchartComponent } from './service-pie-echart.component';
-
-describe('ServicePieEchartComponent', () => {
-    let component: ServicePieEchartComponent;
-    let fixture: ComponentFixture<ServicePieEchartComponent>;
+import { HostsBarChartComponent } from './hosts-bar-chart.component';
+describe('HostsBarChartComponent', () => {
+    let component: HostsBarChartComponent;
+    let fixture: ComponentFixture<HostsBarChartComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ServicePieEchartComponent]
+            imports: [HostsBarChartComponent]
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(ServicePieEchartComponent);
+        fixture = TestBed.createComponent(HostsBarChartComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
