@@ -1,0 +1,64 @@
+<ng-container *transloco="let t">
+    <c-row class="mb-3">
+        <c-col md="4">
+            <oitc-service-pie-echart
+                    height="100"
+                    [title]="''"
+                    [showLegend]="false"
+                    [chartData]="[
+                                {name: 'OK',value: service().pieChartData.widgetOverview[0].percent},
+                                {name: 'WARNING',value: service().pieChartData.widgetOverview[1].percent},
+                                {name: 'CRITICAL',value: service().pieChartData.widgetOverview[2].percent},
+                                {name: 'UNKNOWN',value: service().pieChartData.widgetOverview[3].percent}]"/>
+        </c-col>
+        <c-col md="8">
+            <c-row class="downtime-report-state-overview"
+                   [ngStyle]="{background: this.dynamicColour() ? service().pieChartData.background : ''}"
+                   title="{{(service().Service.name === null)?service().Servicetemplate.name:service().Service.name}}">
+                <c-col md="12" [ngStyle]="{color: this.dynamicColour() ? 'white' : ''}">
+                    <h5 class="ellipsis">
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span style="text-overflow: ellipsis;" *oitcPermission="['services', 'browser']; negate: true">
+                            {{ ( service().Service.name === null ) ? service().Servicetemplate.name : service().Service.name }}
+                        </span>
+                        <span style="text-overflow: ellipsis;" *oitcPermission="['services', 'browser']"
+                              [routerLink]="['/', 'services', 'browser', service().Service.id]">
+                            {{ ( service().Service.name === null ) ? service().Servicetemplate.name : service().Service.name }}
+                        </span>
+                    </h5>
+                </c-col>
+            </c-row>
+
+            <c-row class="downtime-report-state-overview">
+                <c-col class="ellipsis" md="12">
+                    <i class="fa-solid fa-pen-to-square"> </i>
+                    {{ service().Servicetemplate.template_name }}
+                </c-col>
+            </c-row>
+            <c-row class="text-white bg-ok downtime-report-state-overview shadow-ok">
+                <c-col md="12">
+                    {{ service().pieChartData.widgetOverview[0].percent }} %
+                    ({{ service().pieChartData.widgetOverview[0].human }})
+                </c-col>
+            </c-row>
+            <c-row class="text-white bg-warning downtime-report-state-overview btn-warning shadow-warning">
+                <c-col md="12">
+                    {{ service().pieChartData.widgetOverview[1].percent }} %
+                    ({{ service().pieChartData.widgetOverview[1].human }})
+                </c-col>
+            </c-row>
+            <c-row class="text-white bg-critical downtime-report-state-overview btn-danger shadow-danger">
+                <c-col md="12">
+                    {{ service().pieChartData.widgetOverview[2].percent }} %
+                    ({{ service().pieChartData.widgetOverview[2].human }})
+                </c-col>
+            </c-row>
+            <c-row class="text-white bg-unknown downtime-report-state-overview btn-dark shadow-unknown">
+                <c-col md="12">
+                    {{ service().pieChartData.widgetOverview[3].percent }} %
+                    ({{ service().pieChartData.widgetOverview[3].human }})
+                </c-col>
+            </c-row>
+        </c-col>
+    </c-row>
+</ng-container>

@@ -67,7 +67,9 @@ export function getResourcegroupsIndexParams(): ResourcegroupsIndexParams {
 }
 
 export interface ResourcegroupsGet {
-    resourcegroup: ResourcegroupsPost
+    resourcegroup: {
+        Resourcegroup: ResourcegroupsPost
+    }
 }
 
 
@@ -87,4 +89,18 @@ export interface ResourcegroupsPost {
     region_managers: {
         _ids: number[]
     }
+}
+
+export interface ResourcegroupWithRelations{
+    id: number
+    container_id: number
+    description: string
+    last_state: number
+    last_update: string
+    last_send_date: string
+    last_send_state: number
+    created: string
+    modified: string
+    resources: Resource[]
+    container: ContainerEntity
 }

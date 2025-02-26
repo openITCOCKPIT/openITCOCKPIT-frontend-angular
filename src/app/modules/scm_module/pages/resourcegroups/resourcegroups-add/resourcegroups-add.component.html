@@ -13,7 +13,7 @@
             </li>
             <li class="breadcrumb-item">
                 <a *oitcPermission="['scmmodule','resourcegroups', 'index']"
-                   [routerLink]="['/', 'scmmodule', 'resourcegroups', 'index']">
+                   [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']">
                     <fa-icon [icon]="['fas', 'user-group']"></fa-icon>
                     {{ t('Resource groups') }}
                 </a>
@@ -24,7 +24,7 @@
             </li>
         </ol>
     </nav>
-    <form cForm (ngSubmit)="submit()" autocomplete="off">
+    <form cForm (ngSubmit)="submit(ResourcegroupsSubmitType.ResourcegroupsIndex)" autocomplete="off">
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>{{ t('Create new resource group') }}</h5>
@@ -137,15 +137,36 @@
                 </div>
             </c-card-body>
             <c-card-footer class="text-end">
+
                 <label class="me-2">
                     <input cFormCheckInput type="checkbox" name="createAnother"
                            [(ngModel)]="createAnother">
                     {{ t('Create another') }}
                 </label>
-                <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Create resource group') }}
-                </button>
-                <button [fallbackUrl]="['resourcegroups', 'index']" cButton class="ms-1 ripple" color="default"
+
+                <c-dropdown direction="center" variant="btn-group" class="ms-1">
+                    <button cButton color="primary" type="submit" class="ripple">
+                        {{ t('Create resource group') }}
+                    </button>
+                    <button [split]="true" cButton cDropdownToggle color="primary" [disabled]="createAnother">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul cDropdownMenu>
+                        @if (this.PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'add'])|async) {
+                            <li>
+                                <button cDropdownItem type="button"
+                                        (click)="submit(ResourcegroupsSubmitType.ResourceAdd)">
+                                    <fa-icon [icon]="['fas', 'chalkboard-user']"></fa-icon>
+                                    {{ t('Save and create resource') }}
+                                </button>
+                            </li>
+                        }
+
+                    </ul>
+                </c-dropdown>
+
+                <button [fallbackUrl]="['scmmodule','resourcegroups', 'index']" cButton class="ms-1 ripple"
+                        color="default"
                         oitcBackButton
                         type="button">
                     {{ t('Cancel') }}

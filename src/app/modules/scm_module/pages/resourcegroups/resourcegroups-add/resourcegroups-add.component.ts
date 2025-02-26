@@ -2,9 +2,15 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     CardBodyComponent,
-    CardComponent, CardFooterComponent,
+    CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, FormCheckInputDirective,
+    CardTitleDirective,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormCheckInputDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -15,13 +21,13 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
@@ -35,6 +41,7 @@ import { GenericIdResponse, GenericValidationError } from '../../../../../generi
 import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enum';
 import { UsersService } from '../../../../../pages/users/users.service';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { ResourcegroupsSubmitType } from '../resourcegroups.enum';
 
 @Component({
     selector: 'oitc-resourcegroups-add',
@@ -63,7 +70,12 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
         RouterLink,
         MultiSelectComponent,
         CardFooterComponent,
-        FormCheckInputDirective
+        FormCheckInputDirective,
+        AsyncPipe,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective
     ],
     templateUrl: './resourcegroups-add.component.html',
     styleUrl: './resourcegroups-add.component.css',
@@ -85,6 +97,10 @@ export class ResourcegroupsAddComponent implements OnInit, OnDestroy {
     public managers: SelectKeyValue[] = [];
     public region_managers: SelectKeyValue[] = [];
     protected readonly ROOT_CONTAINER = ROOT_CONTAINER;
+    protected readonly ResourcegroupsSubmitType = ResourcegroupsSubmitType;
+    private router: Router = inject(Router);
+
+
     private cdr = inject(ChangeDetectorRef);
     public errors: GenericValidationError | null = null;
 
@@ -102,7 +118,7 @@ export class ResourcegroupsAddComponent implements OnInit, OnDestroy {
     }
 
     private loadUsers() {
-        if(this.post.container.parent_id === null){
+        if (this.post.container.parent_id === null) {
             return;
         }
         this.subscriptions.add(this.UsersService.loadUsersByContainerId(this.post.container.parent_id, []).subscribe((result) => {
@@ -142,7 +158,7 @@ export class ResourcegroupsAddComponent implements OnInit, OnDestroy {
         }
     }
 
-    public submit() {
+    public submit(submitType: ResourcegroupsSubmitType) {
         this.subscriptions.add(this.ResourcegroupsService.createResourcegroup(this.post)
             .subscribe((result) => {
                 this.cdr.markForCheck();
@@ -152,21 +168,25 @@ export class ResourcegroupsAddComponent implements OnInit, OnDestroy {
                     const title = this.TranslocoService.translate('Resource group');
                     const msg = this.TranslocoService.translate('created successfully');
                     const url = ['scm_module', 'resourcegroups', 'edit', response.id];
-
                     this.notyService.genericSuccess(msg, title, url);
 
-                    if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/scm_module/resourcegroups/index']);
-                        this.notyService.scrollContentDivToTop();
+                    if (!this.createAnother && submitType) {
+                        switch (submitType) {
+                            case ResourcegroupsSubmitType.ResourceAdd:
+                                this.router.navigate(['/scm_module/resources/add/'], {queryParams: {resourcegroupId: response.id}});
+                                break;
+                            default:
+                                this.HistoryService.navigateWithFallback(['/scm_module/resourcegroups/index']);
+                                this.notyService.scrollContentDivToTop();
+                                break;
+                        }
                         return;
                     }
 
-                    // Create another
                     this.post = this.getClearForm();
-                    this.errors = null;
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
-
+                    this.errors = null;
                     return;
                 }
 
@@ -176,7 +196,7 @@ export class ResourcegroupsAddComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
-            })
-        );
+            }));
+
     }
 }

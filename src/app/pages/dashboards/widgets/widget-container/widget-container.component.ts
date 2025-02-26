@@ -72,6 +72,9 @@ import { AutomapWidgetComponent } from '../automap-widget/automap-widget.compone
 import {
     AutoreportWidgetComponent
 } from '../../../../modules/autoreport_module/widgets/autoreport-widget/autoreport-widget.component';
+import {
+    ChangecalendarWidgetComponent
+} from '../../../../modules/changecalendar_module/widgets/changecalendar-widget/changecalendar-widget.component';
 
 
 @Component({
@@ -118,7 +121,8 @@ import {
         TachometerWidgetComponent,
         EventcorrelationWidgetComponent,
         AutomapWidgetComponent,
-        AutoreportWidgetComponent
+        AutoreportWidgetComponent,
+        ChangecalendarWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

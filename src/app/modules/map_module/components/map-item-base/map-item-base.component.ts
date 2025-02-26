@@ -18,9 +18,10 @@ import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
-import { Mapitem, Mapline } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapitem, Mapline } from '../../pages/mapeditors/mapeditors.interface';
 import { ContextActionType, MapItemType } from './map-item-base.enum';
 import { NgIf } from '@angular/common';
+import { MapItemBaseService } from './map-item-base.service';
 
 @Component({
     selector: 'oitc-map-item-base',
@@ -40,6 +41,10 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     public isViewMode: InputSignal<boolean> = input<boolean>(false); // View mode for disabling drag and drop and context menu
 
     @Output() resizedEvent = new EventEmitter<ResizedEvent>();
+    @Output() dropItemEvent = new EventEmitter<MapitemBaseActionObject>();
+    @Output() contextActionEvent = new EventEmitter<ContextAction>();
+
+    protected readonly MapItemBaseService = inject(MapItemBaseService);
 
     protected id!: number;
     protected mapId!: number;
@@ -58,9 +63,6 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     // will be overridden by child components
     // this is for the drop event to know which type of item is dropped
     protected type = MapItemType.ITEM;
-
-    @Output() dropItemEvent = new EventEmitter<MapitemBaseActionObject>();
-    @Output() contextActionEvent = new EventEmitter<ContextAction>();
 
     protected readonly TranslocoService = inject(TranslocoService);
 

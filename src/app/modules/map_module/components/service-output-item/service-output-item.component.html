@@ -1,4 +1,3 @@
-<!-- has to be done with If instead of [draggable]=!viewMode because with cdkDragHandle it causes a drag delay bug -->
 @if (!isViewMode()) {
     <div cdkDrag #container oitcResizable [aspectRatio]="false" class="map-element-container"
          (cdkDragEnded)="onDragEnd($event)"

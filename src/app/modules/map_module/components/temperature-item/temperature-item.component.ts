@@ -2,7 +2,6 @@ import {
     ChangeDetectionStrategy,
     Component,
     effect,
-    inject,
     input,
     InputSignal,
     OnDestroy,
@@ -13,22 +12,21 @@ import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Mapgadget } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
-import { TemperatureItemService } from './temperature-item.service';
-import {
-    Host,
-    Perfdata,
-    Service,
-    Setup,
-    TemperatureItemRoot,
-    TemperatureItemRootParams
-} from './temperature-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { NgIf } from '@angular/common';
 import { LinearGauge } from 'canvas-gauges';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
+import {
+    HostForMapItem,
+    MapItemRoot,
+    MapItemRootParams,
+    Perfdata,
+    ServiceForMapItem,
+    Setup
+} from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-temperature-item',
@@ -45,7 +43,6 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
     public refreshInterval = input<number>(0);
 
     private subscriptions: Subscription = new Subscription();
-    private readonly TemperatureItemService = inject(TemperatureItemService);
     private statusUpdateInterval: Subscription = new Subscription();
 
     protected override type = MapItemType.GADGET;
@@ -76,8 +73,8 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
     protected width: number = 120;
     protected height: number = 400;
     private intervalStartet: boolean = false; // needed to prevent multiple interval subscriptions
-    protected Host!: Host;
-    protected Service!: Service;
+    protected Host!: HostForMapItem;
+    protected Service!: ServiceForMapItem;
     private responsePerfdata!: Perfdata;
     private color: string = '';
     private setup!: Setup;
@@ -113,7 +110,7 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
 
     private load() {
 
-        const params: TemperatureItemRootParams = {
+        const params: MapItemRootParams = {
             'angular': true,
             'disableGlobalLoader': true,
             'objectId': this.item()!.object_id as number,
@@ -121,9 +118,9 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
             'type': this.item()!.type as string
         };
 
-        this.subscriptions.add(this.TemperatureItemService.getTemperatureItem(params)
-            .subscribe((result: TemperatureItemRoot) => {
-                this.color = result.data.color;
+        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
+            .subscribe((result: MapItemRoot) => {
+                this.color = result.data.color!;
                 this.Host = result.data.Host;
                 this.Service = result.data.Service;
                 this.responsePerfdata = result.data.Perfdata;
@@ -308,11 +305,11 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
 
         if (this.responsePerfdata !== null) {
             if (this.item()!.metric !== null && this.responsePerfdata.hasOwnProperty(this.item()!.metric)) {
-                this.setup = this.responsePerfdata[this.item()!.metric].datasource.setup;
+                this.setup = this.responsePerfdata[this.item()!.metric].datasource!.setup;
             } else {
                 //Use first metric.
                 for (let metricName in this.responsePerfdata) {
-                    this.setup = this.responsePerfdata[metricName].datasource.setup;
+                    this.setup = this.responsePerfdata[metricName].datasource!.setup;
                     break;
                 }
             }

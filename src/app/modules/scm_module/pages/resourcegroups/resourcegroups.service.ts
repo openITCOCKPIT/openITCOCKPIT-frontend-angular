@@ -6,7 +6,8 @@ import {
     ResourcegroupsGet,
     ResourcegroupsIndex,
     ResourcegroupsIndexParams,
-    ResourcegroupsPost
+    ResourcegroupsPost,
+    ResourcegroupWithRelations
 } from './resourcegroups.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
@@ -62,7 +63,9 @@ export class ResourcegroupsService {
     public getEdit(id: number): Observable<ResourcegroupsGet> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
-            resourcegroup: ResourcegroupsPost
+            resourcegroup: {
+                Resourcegroup: ResourcegroupsPost
+            }
         }>(`${proxyPath}/scm_module/resourcegroups/edit/${id}.json`, {
             params: {
                 angular: true
@@ -79,7 +82,7 @@ export class ResourcegroupsService {
      **********************/
     public edit(resourcegroup: ResourcegroupsPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/import_module/importers/edit/${resourcegroup.id}.json?angular=true`, {
+        return this.http.post<any>(`${proxyPath}/scm_module/resourcegroups/edit/${resourcegroup.id}.json?angular=true`, {
             Resourcegroup: resourcegroup
         })
             .pipe(
@@ -87,7 +90,7 @@ export class ResourcegroupsService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data.importer as GenericIdResponse
+                        data: data as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
@@ -96,6 +99,26 @@ export class ResourcegroupsService {
                         success: false,
                         data: err
                     });
+                })
+            );
+    }
+
+    /**********************
+     *   Used by action   *
+     **********************/
+    public usedBy(id: number): Observable<ResourcegroupWithRelations> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            resourcegroupWithRelations: ResourcegroupWithRelations
+        }>(`${proxyPath}/scm_module/resourcegroups/usedBy/${id}.json`, {
+            params: {
+                angular: true
+            }
+
+        })
+            .pipe(
+                map(data => {
+                    return data.resourcegroupWithRelations;
                 })
             );
     }

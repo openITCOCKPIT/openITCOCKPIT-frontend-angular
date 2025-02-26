@@ -3,21 +3,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChangecalendarsEventEditorComponent } from './changecalendars-event-editor.component';
 
 describe('ChangecalendarsEventEditorComponent', () => {
-  let component: ChangecalendarsEventEditorComponent;
-  let fixture: ComponentFixture<ChangecalendarsEventEditorComponent>;
+    let component: ChangecalendarsEventEditorComponent;
+    let fixture: ComponentFixture<ChangecalendarsEventEditorComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ChangecalendarsEventEditorComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [ChangecalendarsEventEditorComponent]
+        })
+            .compileComponents();
 
-    fixture = TestBed.createComponent(ChangecalendarsEventEditorComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(ChangecalendarsEventEditorComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });
