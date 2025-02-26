@@ -1,1 +1,231 @@
-<p>autoreport-widget works!</p>
+<ng-container *transloco="let t">
+    <div class="d-flex h-100 flex-column" #boxContainer>
+        <div>
+            <div>
+                <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
+                        *ngIf="!isReadonly()">
+                    @if (flipped()) {
+                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                    } @else {
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                    }
+                </button>
+            </div>
+        </div>
+
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container">
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowContent">
+                    <!-- Widget Content -->
+                    <div class="ps-2 text-info" *ngIf="!autoreport_id">
+                        {{ t('No element selected') }}
+                    </div>
+
+                    @if (autoreport_id && config && widget) {
+                        @if (this.PermissionsService.hasPermissionObservable(['AutoreportModule', 'autoreports', 'generate'])|async) {
+
+                            @if (autoreport?.last_send_date) {
+                                <div class="info-box" [style.background-color]="backgroundColor"
+                                     [style.height.px]="widgetHeight">
+                                    <div class="info-box-icon">
+                                        <fa-icon [icon]="['fas', 'percent']" size="lg"
+                                                 *ngIf="config.in_percent"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'clock']" size="lg"
+                                                 *ngIf="!config.in_percent"></fa-icon>
+                                    </div>
+                                    <div class="info-box-content text-white">
+                                        <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'generate', autoreport?.id]"
+                                           [title]="autoreport?.name"
+                                           class="info-box-text">
+                                            <span class="text-white">{{ autoreport?.name }}</span>
+                                        </a>
+                                        <div class="info-update-date" *ngIf="config.show_update_date">
+                                            {{ t('Last update: ') }}{{ autoreport?.last_send_date }}
+                                        </div>
+                                        <div *ngIf="config.show_bar_chart">
+                                            <oitc-sparkline-bar-apexchart
+                                                [dataInput]="sparklineData"
+                                                [max]="maxValueInMinutes"></oitc-sparkline-bar-apexchart>
+                                        </div>
+                                        <span *ngIf="!config.show_bar_chart"
+                                              class="info-box-sparkline"></span>
+                                        <div class="info-box-number" [style.font-size.px]="fontSize">
+                                            <p *ngIf="config.in_percent">
+                                                {{ autoreport?.last_percent_value }}%
+                                            </p>
+                                            <p *ngIf="!config.in_percent">
+                                                {{ autoreport?.last_absolut_value_human }}
+                                            </p>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar"
+                                                 [style.width.%]="last_percent_value"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            } @else {
+
+                            }
+
+                        } @else {
+                            <c-row>
+                                <c-col [xs]="12" class="p-2 text-danger text-center">
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                    {{ t('You are not permitted to access this object') }}
+                                </c-col>
+                            </c-row>
+                        }
+                    }
+
+                    <!-- End Widget Content -->
+                </ng-container>
+            </div>
+
+            <div class="box-x">
+                <ng-container *ngIf="animationStateShowConfig">
+                    <!-- Config area -->
+                    @if (widget && config) {
+
+                        <c-row>
+                            <c-col [xs]="12">
+                                <div class="mb-3">
+                                    <label cLabel [for]="'autoreport_id_'+widget.id">
+                                        {{ t('Autoreport') }}
+                                        <oitc-required-icon></oitc-required-icon>
+                                    </label>
+
+                                    <oitc-select
+                                        [id]="'autoreport_id_'+widget.id"
+                                        [name]="'autoreport_id_'+widget.id"
+                                        [attr.id]="'autoreport_id_'+widget.id"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="config.id"
+                                        [options]="autoreports"
+                                        [appendTo]="''">
+                                    </oitc-select>
+                                </div>
+                            </c-col>
+                        </c-row>
+
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" [sm]="4">
+                                <fieldset>
+                                    <legend class="fs-5">
+                                        {{ t('Availibility') }}
+                                    </legend>
+                                    <c-form-check>
+                                        <input cFormCheckInput
+                                               class="radio-lg radio-primary border-primary"
+                                               type="radio"
+                                               [id]="'widget-radio0-'+widget.id"
+                                               [name]="'widget-radio0-'+widget.id"
+                                               [value]="false"
+                                               [(ngModel)]="config.in_percent"
+                                        />
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'widget-radio0-'+widget.id">
+                                            {{ t(' in %') }}
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input cFormCheckInput
+                                               class="radio-lg radio-primary border-primary"
+                                               type="radio"
+                                               [id]="'widget-radio1-'+widget.id"
+                                               [name]="'widget-radio1-'+widget.id"
+                                               [value]="true"
+                                               [(ngModel)]="config.in_percent"
+                                        />
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'widget-radio1-'+widget.id">
+                                            {{ t(' in h') }}
+                                        </label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+
+                            <c-col [xs]="12" [sm]="4">
+                                <fieldset>
+                                    <legend class="fs-5">
+                                        {{ t('Show log data') }}
+                                    </legend>
+                                    <c-form-check>
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            [id]="'show_update_date-'+widget.id"
+                                            [name]="'show_update_date-'+widget.id"
+                                            type="checkbox"
+                                            [(ngModel)]="config.show_update_date"/>
+
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'show_update_date-'+widget.id">
+                                            {{ t('Log date') }}
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            [id]="'show_bar_chart-'+widget.id"
+                                            [name]="'show_bar_chart-'+widget.id"
+                                            type="checkbox"
+                                            [(ngModel)]="config.show_bar_chart"/>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'show_bar_chart-'+widget.id">
+                                            {{ t('Bar chart') }}
+                                        </label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+
+                            <c-col [xs]="12" [sm]="4">
+                                <fieldset>
+                                    <legend class="fs-5">
+                                        {{ t('Dynamic color') }}
+                                        <oitc-autoreport-availibility-colors></oitc-autoreport-availibility-colors>
+                                    </legend>
+                                    <c-form-check>
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            [id]="'set_color_dynamically-'+widget.id"
+                                            [name]="'set_color_dynamically-'+widget.id"
+                                            type="checkbox"
+                                            [(ngModel)]="config.set_color_dynamically"/>
+
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'set_color_dynamically-'+widget.id">
+                                            {{ t('Yes') }}
+                                        </label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+
+
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" class="text-end">
+                                <button cButton type="button" class="ripple" (click)="saveConfig()">
+                                    {{ t('Save') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+
+                    }
+                    <!-- End Config area -->
+                </ng-container>
+            </div>
+        </div>
+    </div>
+
+</ng-container>
+
+
+
+
+
+
