@@ -2,7 +2,6 @@ import {
     ChangeDetectionStrategy,
     Component,
     effect,
-    inject,
     input,
     InputSignal,
     OnDestroy,
@@ -13,14 +12,18 @@ import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Mapgadget } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
-import { ServiceOutputItemService } from './service-output-item.service';
-import { Host, Service, ServiceOutputItemRoot, ServiceOutputItemRootParams } from './service-output-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { NgClass, NgIf, NgStyle } from '@angular/common';
 import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
+import {
+    HostForMapItem,
+    MapItemRoot,
+    MapItemRootParams,
+    ServiceForMapItem
+} from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-service-output-item',
@@ -37,7 +40,6 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
     public refreshInterval = input<number>(0);
 
     private subscriptions: Subscription = new Subscription();
-    private readonly ServiceOutputItemService = inject(ServiceOutputItemService);
     private statusUpdateInterval: Subscription = new Subscription();
 
     protected override type = MapItemType.GADGET;
@@ -49,8 +51,8 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
     private current_state: number = 0;
     private is_flapping: boolean = false;
     private intervalStartet: boolean = false; // needed to prevent multiple interval subscriptions
-    private Host!: Host;
-    protected Service!: Service;
+    private Host!: HostForMapItem;
+    protected Service!: ServiceForMapItem;
     protected allowView: boolean = false;
     protected output: string = "";
     private longOutputHtml: string | null = null;
@@ -86,7 +88,7 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
 
     private load() {
 
-        const params: ServiceOutputItemRootParams = {
+        const params: MapItemRootParams = {
             'angular': true,
             'disableGlobalLoader': true,
             'objectId': this.item()!.object_id as number,
@@ -95,18 +97,18 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
             'includeServiceOutput': true
         };
 
-        this.subscriptions.add(this.ServiceOutputItemService.getServiceOutputItem(params)
-            .subscribe((result: ServiceOutputItemRoot) => {
+        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
+            .subscribe((result: MapItemRoot) => {
                 this.current_state = result.data.Servicestatus.currentState;
                 this.is_flapping = result.data.Servicestatus.isFlapping;
 
                 this.Host = result.data.Host;
                 this.Service = result.data.Service;
-                this.allowView = result.allowView;
-                this.color = result.data.color;
+                this.allowView = result.allowView!;
+                this.color = result.data.color!;
 
                 this.output = result.data.Servicestatus.output;
-                this.longOutputHtml = result.data.Servicestatus.longOutputHtml;
+                this.longOutputHtml = result.data.Servicestatus.longOutputHtml!;
 
                 this.renderOutput();
 

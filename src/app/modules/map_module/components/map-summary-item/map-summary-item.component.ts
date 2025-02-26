@@ -12,14 +12,14 @@ import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Mapsummaryitem } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapsummaryitem } from '../../pages/mapeditors/mapeditors.interface';
 import { ContextActionType, LabelPosition, MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { MapSummaryItemService } from './map-summary-item.service';
-import { Data, MapSummaryItemRoot, MapSummaryItemRootParams } from './map-summary-item.interface';
 import { NgIf } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
+import { DataForMapItem, MapItemRoot, MapItemRootParams } from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-map-summary-item',
@@ -69,7 +69,7 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
 
     private load() {
 
-        const params: MapSummaryItemRootParams = {
+        const params: MapItemRootParams = {
             'angular': true,
             'disableGlobalLoader': true,
             'objectId': this.item()!.object_id as number,
@@ -78,10 +78,10 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
         };
 
         this.subscriptions.add(this.MapSummaryItemService.getMapSummaryItem(params)
-            .subscribe((result: MapSummaryItemRoot) => {
-                this.bitMaskHostState = result.data.BitMaskHostState;
-                this.bitMaskServiceState = result.data.BitMaskServiceState;
-                this.allowView = result.allowView;
+            .subscribe((result: MapItemRoot) => {
+                this.bitMaskHostState = result.data.BitMaskHostState!;
+                this.bitMaskServiceState = result.data.BitMaskServiceState!;
+                this.allowView = result.allowView!;
 
                 this.init = false;
                 if (this.allowView) {
@@ -95,7 +95,7 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
             }));
     };
 
-    protected getLabel(data: Data) {
+    protected getLabel(data: DataForMapItem) {
         this.label = '';
         switch (this.item()!.type) {
             case 'host':
@@ -107,15 +107,15 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
                 break;
 
             case 'hostgroup':
-                this.label = data.Hostgroup.name;
+                this.label = data.Hostgroup!.name;
                 break;
 
             case 'servicegroup':
-                this.label = data.Servicegroup.name;
+                this.label = data.Servicegroup!.name;
                 break;
 
             case 'map':
-                this.label = data.Map.name;
+                this.label = data.Map!.name;
                 break;
         }
         this.cdr.markForCheck();

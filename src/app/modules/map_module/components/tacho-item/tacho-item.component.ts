@@ -14,15 +14,21 @@ import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Mapgadget } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
-import { TachoItemService } from './tacho-item.service';
-import { Host, Perfdata, Service, Setup, TachoItemRoot, TachoItemRootParams } from './tacho-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { DOCUMENT, NgIf } from '@angular/common';
 import { RadialGauge } from 'canvas-gauges';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
+import {
+    HostForMapItem,
+    MapItemRoot,
+    MapItemRootParams,
+    Perfdata,
+    ServiceForMapItem,
+    Setup
+} from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-tacho-item',
@@ -41,7 +47,6 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     private readonly document = inject(DOCUMENT);
 
     private subscriptions: Subscription = new Subscription();
-    private readonly TachoItemService = inject(TachoItemService);
     private statusUpdateInterval: Subscription = new Subscription();
 
     protected override type = MapItemType.GADGET;
@@ -72,8 +77,8 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     protected width: number = 200;
     protected height: number = this.width;
     private intervalStartet: boolean = false; // needed to prevent multiple interval subscriptions
-    protected Host!: Host;
-    protected Service!: Service;
+    protected Host!: HostForMapItem;
+    protected Service!: ServiceForMapItem;
     private responsePerfdata!: Perfdata;
     private color: string = '';
     private setup!: Setup;
@@ -111,7 +116,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
     private load() {
 
-        const params: TachoItemRootParams = {
+        const params: MapItemRootParams = {
             'angular': true,
             'disableGlobalLoader': true,
             'objectId': this.item()!.object_id as number,
@@ -119,9 +124,9 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
             'type': this.item()!.type as string
         };
 
-        this.subscriptions.add(this.TachoItemService.getTachoItem(params)
-            .subscribe((result: TachoItemRoot) => {
-                this.color = result.data.color;
+        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
+            .subscribe((result: MapItemRoot) => {
+                this.color = result.data.color!;
                 this.Host = result.data.Host;
                 this.Service = result.data.Service;
                 this.responsePerfdata = result.data.Perfdata;
@@ -288,11 +293,11 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
         if (this.responsePerfdata !== null) {
             if (this.item()!.metric !== null && this.responsePerfdata.hasOwnProperty(this.item()!.metric)) {
-                this.setup = this.responsePerfdata[this.item()!.metric].datasource.setup;
+                this.setup = this.responsePerfdata[this.item()!.metric].datasource!.setup;
             } else {
                 //Use first metric.
                 for (let metricName in this.responsePerfdata) {
-                    this.setup = this.responsePerfdata[metricName].datasource.setup;
+                    this.setup = this.responsePerfdata[metricName].datasource!.setup;
                     break;
                 }
             }

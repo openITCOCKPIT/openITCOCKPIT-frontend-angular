@@ -12,9 +12,9 @@ import { interval, Subscription } from 'rxjs';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
-import { MapeditorsService } from '../Mapeditors.service';
+import { MapeditorsService } from '../mapeditors.service';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { MapeditorsViewMap } from '../Mapeditors.interface';
+import { MapeditorsViewMap } from '../mapeditors.interface';
 import {
     CardBodyComponent,
     CardComponent,
@@ -130,7 +130,7 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
         this.subscriptions.add(this.MapeditorsService.loadMapDetails(this.mapId)
             .subscribe((result) => {
                 this.map = result.map;
-                this.refreshInterval = this.map.Map.refresh_interval;
+                this.refreshInterval = this.map.Map.refresh_interval!;
                 if (this.refreshInterval !== 0 && this.refreshInterval < 5000) {
                     this.refreshInterval = 5000;
                 }

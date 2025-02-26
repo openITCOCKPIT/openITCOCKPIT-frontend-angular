@@ -13,20 +13,11 @@ import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Mapgadget } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { forkJoin, interval, Subscription } from 'rxjs';
 import { GraphItemService } from './graph-item.service';
-import {
-    GraphItemParams,
-    GraphItemRoot,
-    Host,
-    PerfdataParams,
-    Service,
-    Setup,
-    Timezone,
-    UserTimezoneRoot
-} from './graph-item.interface';
+import { GraphItemParams, GraphItemRoot, PerfdataParams } from './graph-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { NgIf } from '@angular/common';
 import { EChartsOption, VisualMapComponentOption } from 'echarts';
@@ -51,6 +42,8 @@ import { LineChart } from 'echarts/charts';
 import { PerformanceData } from '../../../../components/popover-graph/popover-graph.interface';
 import { AlertComponent } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { TimezoneConfiguration, TimezoneService } from '../../../../services/timezone.service';
+import { HostForMapItem, ServiceForMapItem, Setup } from '../map-item-base/map-item-base.interface';
 
 echarts.use([LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent, MarkLineComponent]);
 
@@ -73,6 +66,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
     private subscriptions: Subscription = new Subscription();
     private readonly GraphItemService = inject(GraphItemService);
+    private readonly TimezoneService = inject(TimezoneService);
     private PopoverGraphService = inject(PopoverGraphService);
     private readonly LayoutService = inject(LayoutService);
     private HtmlspecialcharsPipe = inject(HtmlspecialcharsPipe);
@@ -108,10 +102,10 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     private responsePerfdata!: PerformanceData[];
     private perfdata!: PerformanceData;
     private intervalStartet: boolean = false; // needed to prevent multiple interval subscriptions
-    private host!: Host;
-    private service!: Service;
+    private host!: HostForMapItem;
+    private service!: ServiceForMapItem;
     protected allowView: boolean = false;
-    private timezone!: Timezone;
+    private timezone!: TimezoneConfiguration;
     private serverTimeDateObject!: Date;
     private isLoadingGraph: boolean = false;
     private setup: Setup = this.defaultSetup;
@@ -173,7 +167,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
         let request = [
             this.GraphItemService.getGraphItem(params),
-            this.GraphItemService.getUserTimezone({
+            this.TimezoneService.getUserTimezone({
                 'angular': true,
                 'disableGlobalLoader': true
             })
@@ -182,7 +176,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         this.subscriptions.add(forkJoin(request).subscribe(
             (results) => {
                 const graphItem = results[0] as GraphItemRoot;
-                const userTimezone = results[1] as UserTimezoneRoot;
+                const userTimezone = results[1] as { timezone: TimezoneConfiguration };
                 this.host = graphItem.host;
                 this.service = graphItem.service;
                 this.allowView = graphItem.allowView;

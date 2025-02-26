@@ -26,39 +26,39 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../../../history.service';
-import { MapsService } from '../Maps.service';
-import { MapCopyPost } from '../Maps.interface';
+import { MapsService } from '../maps.service';
+import { MapCopyPost } from '../maps.interface';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 
 @Component({
     selector: 'oitc-maps-copy',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    NavComponent,
-    NgForOf,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    FormsModule,
-    FormLoaderComponent,
-    NgIf,
-    BackButtonDirective,
-    NavItemComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        NavComponent,
+        NgForOf,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        FormsModule,
+        FormLoaderComponent,
+        NgIf,
+        BackButtonDirective,
+        NavItemComponent
+    ],
     templateUrl: './maps-copy.component.html',
     styleUrl: './maps-copy.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

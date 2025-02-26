@@ -14,6 +14,11 @@ export interface TimezoneConfiguration {
     server_timezone: string
 }
 
+export interface UserTimezoneParams {
+    angular: boolean,
+    disableGlobalLoader: boolean
+}
+
 
 @Injectable({
     providedIn: 'root'
@@ -37,6 +42,17 @@ export class TimezoneService {
                 return data.timezone
             })
         );
+    }
+
+    public getUserTimezone(params: UserTimezoneParams): Observable<{ timezone: TimezoneConfiguration }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ timezone: TimezoneConfiguration }>(`${proxyPath}/angular/user_timezone.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 
 }

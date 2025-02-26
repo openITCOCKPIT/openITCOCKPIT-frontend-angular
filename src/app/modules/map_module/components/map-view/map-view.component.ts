@@ -12,8 +12,8 @@ import {
 import { interval, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GenericValidationError } from '../../../../generic-responses';
-import { MapeditorsService } from '../../pages/mapeditors/Mapeditors.service';
-import { Acl, MapRoot } from '../../pages/mapeditors/Mapeditors.interface';
+import { MapeditorsService } from '../../pages/mapeditors/mapeditors.service';
+import { Acl, MapRoot } from '../../pages/mapeditors/mapeditors.interface';
 import { parseInt } from 'lodash';
 import { MapSummaryItemComponent } from '../map-summary-item/map-summary-item.component';
 import { ServiceOutputItemComponent } from '../service-output-item/service-output-item.component';
@@ -99,7 +99,7 @@ export class MapViewComponent implements OnInit, OnDestroy {
         if (this.mapId() !== undefined) {
             this.subscriptions.add(this.MapeditorsService.loadMapView(this.mapId() as number)
                 .subscribe((result) => {
-                    this.refreshInterval = parseInt(result.map.Map.refresh_interval.toString(), 10);
+                    this.refreshInterval = parseInt(result.map.Map.refresh_interval!.toString(), 10);
                     this.map = result.map;
                     this.acl = result.ACL;
 

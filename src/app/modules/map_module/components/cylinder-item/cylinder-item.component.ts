@@ -3,7 +3,6 @@ import {
     Component,
     effect,
     ElementRef,
-    inject,
     input,
     InputSignal,
     OnDestroy,
@@ -15,20 +14,19 @@ import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Mapgadget } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
-import { CylinderItemService } from './cylinder-item.service';
-import {
-    CylinderItemRoot,
-    CylinderItemRootParams,
-    Host,
-    Perfdata,
-    PerformanceData,
-    Service
-} from './cylinder-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { NgIf, NgStyle } from '@angular/common';
+import {
+    HostForMapItem,
+    MapItemRoot,
+    MapItemRootParams,
+    Perfdata,
+    PerformanceData,
+    ServiceForMapItem
+} from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-cylinder-item',
@@ -46,7 +44,6 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
     public refreshInterval = input<number>(0);
 
     private subscriptions: Subscription = new Subscription();
-    private readonly CylinderItemService = inject(CylinderItemService);
     private statusUpdateInterval: Subscription = new Subscription();
 
     protected override type = MapItemType.GADGET;
@@ -55,8 +52,8 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
     protected width: number = 80;
     protected height: number = 125;
     private intervalStartet: boolean = false; // needed to prevent multiple interval subscriptions
-    protected Host!: Host;
-    protected Service!: Service;
+    protected Host!: HostForMapItem;
+    protected Service!: ServiceForMapItem;
     private current_state: number = 0;
     private responsePerfdata!: Perfdata;
     private perfdataName: string = '';
@@ -92,7 +89,7 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
 
     private load() {
 
-        const params: CylinderItemRootParams = {
+        const params: MapItemRootParams = {
             'angular': true,
             'disableGlobalLoader': true,
             'objectId': this.item()!.object_id as number,
@@ -100,8 +97,8 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
             'type': this.item()!.type as string
         };
 
-        this.subscriptions.add(this.CylinderItemService.getCylinderItem(params)
-            .subscribe((result: CylinderItemRoot) => {
+        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
+            .subscribe((result: MapItemRoot) => {
                 this.current_state = result.data.Servicestatus.currentState;
 
                 this.Host = result.data.Host;
