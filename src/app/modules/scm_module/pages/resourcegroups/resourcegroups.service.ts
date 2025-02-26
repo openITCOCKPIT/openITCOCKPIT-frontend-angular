@@ -6,6 +6,8 @@ import {
     ResourcegroupsGet,
     ResourcegroupsIndex,
     ResourcegroupsIndexParams,
+    ResourcegroupsNotifications,
+    ResourcegroupsNotificationsParams,
     ResourcegroupsPost,
     ResourcegroupWithRelations
 } from './resourcegroups.interface';
@@ -27,6 +29,17 @@ export class ResourcegroupsService {
         const proxyPath = this.proxyPath;
         return this.http.get<ResourcegroupsIndex>(`${proxyPath}/scm_module/resourcegroups/index.json`, {
             params: params as {} // cast ResourcegroupsIndexParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getNotifications(id: number, params: ResourcegroupsNotificationsParams): Observable<ResourcegroupsNotifications> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ResourcegroupsNotifications>(`${proxyPath}/scm_module/resourcegroups/notifications/${id}.json`, {
+            params: params as {} // cast ResourcegroupsNotificationsParams into object
         }).pipe(
             map(data => {
                 return data;
