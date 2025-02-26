@@ -23,7 +23,8 @@
                     </div>
 
                     <div *ngIf="config && config.map_id">
-                        <h1>Zeige hier die map {{ config.map_id }}</h1>
+                        <oitc-map-view
+                            [mapId]="config.map_id"></oitc-map-view>
                     </div>
 
                     <!-- End Widget Content -->

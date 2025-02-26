@@ -8,7 +8,8 @@ import {
     RowComponent,
     ToastBodyComponent,
     ToastComponent,
-    ToasterComponent
+    ToasterComponent,
+    ToastHeaderComponent
 } from '@coreui/angular';
 import { Subscription } from 'rxjs';
 import { MapSummaryToasterService } from './map-summary-toaster.service';
@@ -40,7 +41,8 @@ import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
         RowComponent,
         ColComponent,
         RouterLink,
-        TrustAsHtmlPipe
+        TrustAsHtmlPipe,
+        ToastHeaderComponent
     ],
     templateUrl: './map-summary-toaster.component.html',
     styleUrl: './map-summary-toaster.component.css',
