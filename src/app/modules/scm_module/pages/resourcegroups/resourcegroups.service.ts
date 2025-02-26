@@ -6,7 +6,8 @@ import {
     ResourcegroupsGet,
     ResourcegroupsIndex,
     ResourcegroupsIndexParams,
-    ResourcegroupsPost
+    ResourcegroupsPost,
+    ResourcegroupWithRelations
 } from './resourcegroups.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
@@ -98,6 +99,26 @@ export class ResourcegroupsService {
                         success: false,
                         data: err
                     });
+                })
+            );
+    }
+
+    /**********************
+     *   Used by action   *
+     **********************/
+    public usedBy(id: number): Observable<ResourcegroupWithRelations> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            resourcegroupWithRelations: ResourcegroupWithRelations
+        }>(`${proxyPath}/scm_module/resourcegroups/usedBy/${id}.json`, {
+            params: {
+                angular: true
+            }
+
+        })
+            .pipe(
+                map(data => {
+                    return data.resourcegroupWithRelations;
                 })
             );
     }

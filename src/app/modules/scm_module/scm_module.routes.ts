@@ -10,6 +10,9 @@ export const scmModuleRoutes: Routes = [{
     path: 'scm_module/resourcegroups/edit/:id',
     loadComponent: () => import('./pages/resourcegroups/resourcegroups-edit/resourcegroups-edit.component').then(m => m.ResourcegroupsEditComponent)
 }, {
+    path: 'scm_module/resourcegroups/usedBy/:id',
+    loadComponent: () => import('./pages/resourcegroups/resourcegroups-used-by/resourcegroups-used-by.component').then(m => m.ResourcegroupsUsedByComponent)
+}, {
     path: 'scm_module/scm_changelogs/entity/:type/:id',
     loadComponent: () => import('./pages/scmchangelogs/scm-changelogs-entity/scm-changelogs-entity.component').then(m => m.ScmChangelogsEntityComponent)
 }, {
