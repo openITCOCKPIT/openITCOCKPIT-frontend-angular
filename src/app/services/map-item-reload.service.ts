@@ -25,9 +25,9 @@
 
 import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MapeditorsService } from '../modules/map_module/pages/mapeditors/Mapeditors.service';
-import { Mapitem } from '../modules/map_module/pages/mapeditors/Mapeditors.interface';
-import { MapItemRoot } from '../modules/map_module/components/map-item/map-item.interface';
+import { MapeditorsService } from '../modules/map_module/pages/mapeditors/mapeditors.service';
+import { Mapitem } from '../modules/map_module/pages/mapeditors/mapeditors.interface';
+import { MapItemRoot } from '../modules/map_module/components/map-item-base/map-item-base.interface';
 
 interface Item {
     item: Mapitem;

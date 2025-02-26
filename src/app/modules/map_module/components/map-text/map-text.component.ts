@@ -4,7 +4,7 @@ import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { NgClass, NgIf, NgStyle } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Maptext } from '../../pages/mapeditors/Mapeditors.interface';
+import { Maptext } from '../../pages/mapeditors/mapeditors.interface';
 import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
 import { BbCodeParserService } from '../../../../services/bb-code-parser.service';
 import { MapItemType } from '../map-item-base/map-item-base.enum';

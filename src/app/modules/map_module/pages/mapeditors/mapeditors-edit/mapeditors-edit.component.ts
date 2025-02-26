@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
-import { MapeditorsService } from '../Mapeditors.service';
+import { MapeditorsService } from '../mapeditors.service';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HistoryService } from '../../../../../history.service';
@@ -66,7 +66,7 @@ import {
     MaxUploadLimit,
     ServicesByStringParams,
     VisibleLayers
-} from '../Mapeditors.interface';
+} from '../mapeditors.interface';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import {
     ContextAction,
@@ -719,7 +719,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     }
 
     public openChangeMapBackgroundModal() {
-        if (this.map.Map.background !== null && this.map.Map.background.length > 0) {
+        if (this.map && this.map.Map && this.map.Map.background && this.map.Map.background.length > 0) {
             if (this.backgrounds.length === 0) {
                 this.brokenImageDetected = true;
             } else {

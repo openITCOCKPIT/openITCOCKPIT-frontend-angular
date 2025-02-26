@@ -23,7 +23,7 @@ import {
     SaveBackgroundPost,
     ServicesByStringParams,
     ServicesByStringRoot
-} from './Mapeditors.interface';
+} from './mapeditors.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({

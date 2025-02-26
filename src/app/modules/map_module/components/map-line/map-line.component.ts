@@ -1,23 +1,13 @@
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import {
-    ChangeDetectionStrategy,
-    Component,
-    effect,
-    inject,
-    input,
-    InputSignal,
-    OnDestroy,
-    OnInit
-} from '@angular/core';
-import { Data, MapLineRoot, MapLineRootParams } from './map-line.interface';
+import { ChangeDetectionStrategy, Component, effect, input, InputSignal, OnDestroy, OnInit } from '@angular/core';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { NgClass, NgIf } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { interval, Subscription } from 'rxjs';
-import { MapLineService } from './map-line.service';
-import { Mapline } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapline } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
+import { DataForMapItem, MapItemRoot, MapItemRootParams } from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-map-line',
@@ -33,7 +23,6 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
     public refreshInterval = input<number>(0);
 
     private subscriptions: Subscription = new Subscription();
-    private readonly MapLineService = inject(MapLineService);
     private statusUpdateInterval: Subscription = new Subscription();
 
     protected allowView: boolean = false;
@@ -120,7 +109,7 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
     };
 
     private load() {
-        const params: MapLineRootParams = {
+        const params: MapItemRootParams = {
             'angular': true,
             'disableGlobalLoader': true,
             'objectId': this.item()!.object_id as number,
@@ -128,10 +117,10 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
             'type': this.item()!.type as string
         };
 
-        this.subscriptions.add(this.MapLineService.getMapLine(params)
-            .subscribe((result: MapLineRoot) => {
-                this.background = result.data.background;
-                this.allowView = result.allowView;
+        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
+            .subscribe((result: MapItemRoot) => {
+                this.background = result.data.background!;
+                this.allowView = result.allowView!;
                 this.init = false;
                 if (this.allowView) {
                     this.getLabel(result.data);
@@ -141,7 +130,7 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
             }));
     };
 
-    protected getLabel(data: Data) {
+    protected getLabel(data: DataForMapItem) {
         this.label = '';
         switch (this.item()!.type) {
             case 'host':
@@ -153,15 +142,15 @@ export class MapLineComponent extends MapItemBaseComponent<Mapline> implements O
                 break;
 
             case 'hostgroup':
-                this.label = data.Hostgroup.name;
+                this.label = data.Hostgroup!.name;
                 break;
 
             case 'servicegroup':
-                this.label = data.Servicegroup.name;
+                this.label = data.Servicegroup!.name;
                 break;
 
             case 'map':
-                this.label = data.Map.name;
+                this.label = data.Map!.name;
                 break;
         }
         this.cdr.markForCheck();

@@ -11,7 +11,7 @@ import {
     MapsEditRoot,
     MapsIndexParams,
     MapsIndexRoot
-} from './Maps.interface';
+} from './maps.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
