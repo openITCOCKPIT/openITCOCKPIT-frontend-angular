@@ -1,9 +1,21 @@
 <ng-container *transloco="let t">
     <div class="mb-3">
         <full-calendar #fullCalendar [options]="calendarOptions()">
+
+            <ng-template #eventContent let-arg>
+                <div class="fc-event-title-container">
+                    <div class="fc-event-title fc-sticky">
+                        {{ formatTime(arg.event.start.getTime()) }}
+                        -
+                        {{ formatTime(arg.event.end.getTime()) }}
+                        {{ arg.event.title }}
+                    </div>
+                </div>
+            </ng-template>
+
             <!-- dayCellContent  Content Injection -->
             <!-- https://fullcalendar.io/docs/day-cell-render-hooks -->
-            <ng-template #dayCellContent let-arg>
+            <ng-template #dayCellContent let-arg *ngIf="editable">
                 <div class="d-inline-flex w-100">
                     <div class="fc-daygrid-day-number">
                         {{ arg.dayNumberText }}
