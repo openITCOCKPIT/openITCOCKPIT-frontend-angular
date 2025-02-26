@@ -32,7 +32,7 @@ import { ProfileService } from '../profile.service';
 
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { UsersService } from '../../users/users.service';
-import { UserDateformat, UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
+import { UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { TimezoneConfiguration, TimezoneService } from '../../../services/timezone.service';
@@ -44,6 +44,7 @@ import { AuthService } from '../../../auth/auth.service';
 
 import { ProfileApikeysComponent } from '../profile-apikeys/profile-apikeys.component';
 import { ProfileChangePasswordComponent } from '../profile-change-password/profile-change-password.component';
+import { SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-profile-edit',
@@ -89,7 +90,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     public isLdapUser: boolean = false;
     public maxUploadLimit: ProfileMaxUploadLimit | null = null;
     public localeOptions: UserLocaleOption[] = [];
-    public dateformates: UserDateformat[] = [];
+    public dateformates: SelectKeyValueString[] = [];
     public timezones: UserTimezonesSelect[] = [];
     public serverTimezone: TimezoneConfiguration | null = null;
 

@@ -404,7 +404,7 @@
                                     [(ngModel)]="currentItem.type"
                                     [options]="mapItemObjectTypes"
                                     (onChange)="onCurrentItemTypeObjectIdChange()"
-                                    [appendTo]="addEditMapItemModal"
+                                    [appendTo]="''"
                                     oitcFormError [errors]="errors" errorField="type">
                                 </oitc-select>
                                 <oitc-form-feedback [errors]="errors" errorField="type"></oitc-form-feedback>
@@ -427,7 +427,7 @@
                                     [options]="itemObjects"
                                     (onChange)="onCurrentItemTypeObjectIdChange()"
                                     [searchCallback]="loadMoreItemObjects"
-                                    [appendTo]="addEditMapItemModal"
+                                    [appendTo]="''"
                                     oitcFormError [errors]="errors" errorField="object_id">
                                 </oitc-select>
                                 <oitc-form-feedback [errors]="errors" errorField="object_id"></oitc-form-feedback>
@@ -519,7 +519,7 @@
                                     optionLabel="value"
                                     [(ngModel)]="currentItem.z_index"
                                     [options]="layers"
-                                    [appendTo]="addEditMapItemModal"
+                                    [appendTo]="''"
                                     oitcFormError [errors]="errors" errorField="z_index">
                                 </oitc-select>
                                 <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
@@ -677,7 +677,7 @@
                                 [(ngModel)]="currentItem.type"
                                 [options]="mapLineObjectTypes"
                                 (onChange)="onCurrentItemTypeObjectIdChange()"
-                                [appendTo]="addEditMapLineModal"
+                                [appendTo]="''"
                                 oitcFormError [errors]="errors" errorField="type">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="type"></oitc-form-feedback>
@@ -700,7 +700,7 @@
                                 [options]="itemObjects"
                                 (onChange)="onCurrentItemTypeObjectIdChange()"
                                 [searchCallback]="loadMoreItemObjects"
-                                [appendTo]="addEditMapLineModal"
+                                [appendTo]="''"
                                 oitcFormError [errors]="errors" errorField="object_id">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="object_id"></oitc-form-feedback>
@@ -817,7 +817,7 @@
                                 optionLabel="value"
                                 [(ngModel)]="currentItem.z_index"
                                 [options]="layers"
-                                [appendTo]="addEditMapLineModal"
+                                [appendTo]="''"
                                 oitcFormError [errors]="errors" errorField="z_index">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
@@ -893,7 +893,7 @@
                                 [options]="itemObjects"
                                 (onChange)="onCurrentItemTypeObjectIdChange()"
                                 [searchCallback]="loadMoreItemObjects"
-                                [appendTo]="addEditMapGadgetModal"
+                                [appendTo]="''"
                                 oitcFormError [errors]="errors" errorField="object_id">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="object_id"></oitc-form-feedback>
@@ -941,7 +941,7 @@
                                 optionLabel="value"
                                 [(ngModel)]="currentItem.metric"
                                 [options]="metrics"
-                                [appendTo]="addEditMapGadgetModal"
+                                [appendTo]="''"
                                 oitcFormError [errors]="errors" errorField="metric">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="metric"></oitc-form-feedback>
@@ -964,7 +964,7 @@
                                 optionLabel="value"
                                 [(ngModel)]="currentItem.output_type"
                                 [options]="mapGadgetsOutputTypes"
-                                [appendTo]="addEditMapGadgetModal"
+                                [appendTo]="''"
                                 oitcFormError [errors]="errors" errorField="output_type">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="output_type"></oitc-form-feedback>
@@ -1112,7 +1112,7 @@
                                 optionLabel="value"
                                 [(ngModel)]="currentItem.z_index"
                                 [options]="layers"
-                                [appendTo]="addEditMapGadgetModal"
+                                [appendTo]="''"
                                 oitcFormError [errors]="errors" errorField="z_index">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
@@ -1186,7 +1186,7 @@
                                 [(ngModel)]="currentItem.type"
                                 [options]="mapItemObjectTypes"
                                 (onChange)="onCurrentItemTypeObjectIdChange()"
-                                [appendTo]="addEditSummaryItemModal"
+                                [appendTo]="''"
                                 oitcFormError [errors]="errors" errorField="type">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="type"></oitc-form-feedback>
@@ -1209,7 +1209,7 @@
                                 [options]="itemObjects"
                                 (onChange)="onCurrentItemTypeObjectIdChange()"
                                 [searchCallback]="loadMoreItemObjects"
-                                [appendTo]="addEditSummaryItemModal"
+                                [appendTo]="''"
                                 oitcFormError [errors]="errors" errorField="object_id">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="object_id"></oitc-form-feedback>
@@ -1305,7 +1305,7 @@
                                 optionLabel="value"
                                 [(ngModel)]="currentItem.z_index"
                                 [options]="layers"
-                                [appendTo]="addEditSummaryItemModal"
+                                [appendTo]="''"
                                 oitcFormError [errors]="errors" errorField="z_index">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
@@ -1596,7 +1596,7 @@
                                 optionLabel="value"
                                 [(ngModel)]="currentItem.z_index"
                                 [options]="layers"
-                                [appendTo]="AddEditStatelessIconModal"
+                                [appendTo]="''"
                                 oitcFormError [errors]="errors" errorField="z_index">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
@@ -1732,7 +1732,7 @@
                                 optionLabel="value"
                                 [(ngModel)]="currentItem.z_index"
                                 [options]="layers"
-                                [appendTo]="AddEditStatelessTextModal"
+                                [appendTo]="''"
                                 oitcFormError [errors]="errors" errorField="z_index">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>

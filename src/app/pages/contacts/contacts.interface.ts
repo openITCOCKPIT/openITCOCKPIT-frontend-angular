@@ -173,12 +173,7 @@ export interface ContactCopyPost {
 }
 
 export interface LoadTimeperiodsRoot {
-    timeperiods: Timeperiod[]
-}
-
-export interface Timeperiod {
-    key: number
-    value: string
+    timeperiods: SelectKeyValue[]
 }
 
 export interface LoadTimeperiodsPost {

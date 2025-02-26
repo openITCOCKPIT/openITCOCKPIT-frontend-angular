@@ -72,6 +72,7 @@ import { AutomapWidgetComponent } from '../automap-widget/automap-widget.compone
 import {
     AutoreportWidgetComponent
 } from '../../../../modules/autoreport_module/widgets/autoreport-widget/autoreport-widget.component';
+import { MapWidgetComponent } from '../../../../modules/map_module/widgets/map-widget/map-widget.component';
 import {
     ChangecalendarWidgetComponent
 } from '../../../../modules/changecalendar_module/widgets/changecalendar-widget/changecalendar-widget.component';
@@ -122,6 +123,7 @@ import {
         EventcorrelationWidgetComponent,
         AutomapWidgetComponent,
         AutoreportWidgetComponent,
+        MapWidgetComponent,
         ChangecalendarWidgetComponent
     ],
     templateUrl: './widget-container.component.html',

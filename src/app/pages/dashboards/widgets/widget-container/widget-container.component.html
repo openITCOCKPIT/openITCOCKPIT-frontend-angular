@@ -177,13 +177,18 @@
         }
         @case (WidgetTypes.SlaCalendarWidget) {
             <oitc-sla-calendar-widget
-                    [widgetInput]="widget"
-                    [isReadonly]="isReadonly()"></oitc-sla-calendar-widget>
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-sla-calendar-widget>
         }
         @case (WidgetTypes.ChangecalendarWidget) {
             <oitc-changecalendar-widget
-                    [widgetInput]="widget"
-                    [isReadonly]="isReadonly()"></oitc-changecalendar-widget>
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-changecalendar-widget>
+        }
+        @case (WidgetTypes.MapWidget) {
+            <oitc-map-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-map-widget>
         }
 
         <!-- Fallback Widget -->
