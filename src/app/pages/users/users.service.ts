@@ -14,7 +14,6 @@ import {
     LoadUsergroupsRoot,
     LoginGetRoot,
     UpdateUser,
-    UserDateformat,
     UserDateformatsRoot,
     UserLocaleOption,
     UsersAddRoot,
@@ -25,7 +24,7 @@ import {
 } from './users.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
-import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { SelectKeyValue, SelectKeyValueString } from '../../layouts/primeng/select.interface';
 import { ContainersLoadContainersByStringParams } from '../containers/containers.interface';
 
 
@@ -253,7 +252,7 @@ export class UsersService {
     public getDateformats(): Observable<UserDateformatsRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
-            dateformats: UserDateformat[],
+            dateformats: SelectKeyValueString[],
             defaultDateFormat: string,
             timezones: UserTimezoneGroup,
             serverTime: string,

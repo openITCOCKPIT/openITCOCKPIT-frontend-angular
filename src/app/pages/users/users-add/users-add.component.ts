@@ -43,7 +43,6 @@ import {
     LoadContainerRolesRequest,
     LoadContainerRolesRoot,
     LoadUsergroupsRoot,
-    UserDateformat,
     UserDateformatsRoot,
     UserLocaleOption,
     UsersAddRoot,
@@ -53,7 +52,7 @@ import { UsersService } from '../users.service';
 import { Subscription } from 'rxjs';
 import { ContainersService } from '../../containers/containers.service';
 import { ContainersLoadContainersByStringParams } from '../../containers/containers.interface';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
@@ -125,7 +124,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
     protected containerRoles: LoadContainerRolesRoot = {} as LoadContainerRolesRoot;
     protected selectedContainerIds: number[] = [];
     protected containers: SelectKeyValue[] = [];
-    protected dateformats: UserDateformat[] = [];
+    protected dateformats: SelectKeyValueString[] = [];
     protected timezones: UserTimezonesSelect[] = [];
     protected localeOptions: UserLocaleOption[] = [];
     protected usergroups: SelectKeyValue[] = [];

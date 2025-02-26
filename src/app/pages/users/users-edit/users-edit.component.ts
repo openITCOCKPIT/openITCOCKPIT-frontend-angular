@@ -50,13 +50,12 @@ import {
     LoadLdapUserDetailsRoot,
     LoadUsergroupsRoot,
     UpdateUser,
-    UserDateformat,
     UserDateformatsRoot,
     UserLocaleOption,
     UserTimezonesSelect,
     UserType
 } from '../users.interface';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { LdapConfig } from '../../contacts/contacts.interface';
 import { ContainersLoadContainersByStringParams } from '../../containers/containers.interface';
@@ -136,7 +135,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     protected containerRoles: LoadContainerRolesRoot = {} as LoadContainerRolesRoot;
     protected selectedContainerIds: number[] = [];
     protected containers: SelectKeyValue[] = [];
-    protected dateformats: UserDateformat[] = [];
+    protected dateformats: SelectKeyValueString[] = [];
     protected timezones: UserTimezonesSelect[] = [];
     protected localeOptions: UserLocaleOption[] = [];
     protected usergroups: SelectKeyValue[] = [];

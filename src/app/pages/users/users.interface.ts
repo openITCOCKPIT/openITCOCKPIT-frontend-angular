@@ -1,4 +1,4 @@
-import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { SelectKeyValue, SelectKeyValueString } from '../../layouts/primeng/select.interface';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 
 export interface UserLocaleOption {
@@ -7,7 +7,7 @@ export interface UserLocaleOption {
 }
 
 export interface UserDateformatsRoot {
-    dateformats: UserDateformat[]
+    dateformats: SelectKeyValueString[]
     defaultDateFormat: string,
     timezones: UserTimezonesSelect[],
     serverTime: string,
@@ -16,11 +16,6 @@ export interface UserDateformatsRoot {
 
 export interface LoadUsersByContainerIdRoot {
     users: SelectKeyValue[]
-}
-
-export interface UserDateformat {
-    key: string
-    value: string
 }
 
 export interface UserTimezoneGroup {
