@@ -12,5 +12,10 @@ export interface PieChartMetric {
 
 export interface SparklineBarMetric {
     name: string
-    value: number
+    value: number,
+    label?: {
+        value: string | number
+        icon: string
+        text: string
+    }
 }

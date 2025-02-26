@@ -10,6 +10,16 @@
                         <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                     }
                 </button>
+
+                @if (this.PermissionsService.hasPermissionObservable(['AutoreportModule', 'autoreports', 'generate'])|async) {
+                    <button class="btn btn-primary ripple mb-2 btn-xs px-2 float-end" type="button"
+                            *ngIf="autoreport_id"
+                            (click)="calculateAvailabilityForReport(autoreport_id);">
+                        <fa-icon [icon]="['fas', 'calculator']"></fa-icon>
+                        {{ t('Calculate availability') }}
+                    </button>
+                }
+
             </div>
         </div>
 
@@ -34,7 +44,7 @@
                                         <fa-icon [icon]="['fas', 'clock']" size="lg"
                                                  *ngIf="!config.in_percent"></fa-icon>
                                     </div>
-                                    <div class="info-box-content text-white">
+                                    <div class="info-box-content text-white position-relative">
                                         <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'generate', autoreport?.id]"
                                            [title]="autoreport?.name"
                                            class="info-box-text">
@@ -44,9 +54,10 @@
                                             {{ t('Last update: ') }}{{ autoreport?.last_send_date }}
                                         </div>
                                         <div *ngIf="config.show_bar_chart">
-                                            <oitc-sparkline-bar-apexchart
+                                            <oitc-sparkline-bar-echarts
                                                 [dataInput]="sparklineData"
-                                                [max]="maxValueInMinutes"></oitc-sparkline-bar-apexchart>
+                                                [max]="maxValueInMinutes"
+                                                [triggerResize]="triggerResizeCounter"></oitc-sparkline-bar-echarts>
                                         </div>
                                         <span *ngIf="!config.show_bar_chart"
                                               class="info-box-sparkline"></span>
@@ -67,6 +78,25 @@
                                 </div>
                             } @else {
 
+                                <div class="info-box" [style.background-color]="'#5856d6'"
+                                     [style.height.px]="widgetHeight">
+                                    <div class="info-box-icon">
+                                        <fa-icon [icon]="['fas', 'info']" size="lg"></fa-icon>
+                                    </div>
+                                    <div class="info-box-content text-white position-relative">
+                                        <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'generate', autoreport?.id]"
+                                           [title]="autoreport?.name"
+                                           class="info-box-text">
+                                            <span class="text-white">{{ autoreport?.name }}</span>
+                                        </a>
+
+                                        <div class="info-box-number" [style.font-size.px]="fontSize">
+                                            <p>
+                                                {{ t('No data available ') }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             }
 
                         } @else {
@@ -122,7 +152,7 @@
                                                type="radio"
                                                [id]="'widget-radio0-'+widget.id"
                                                [name]="'widget-radio0-'+widget.id"
-                                               [value]="false"
+                                               [value]="true"
                                                [(ngModel)]="config.in_percent"
                                         />
                                         <label cFormCheckLabel class="ms-1 mt-1"
@@ -136,7 +166,7 @@
                                                type="radio"
                                                [id]="'widget-radio1-'+widget.id"
                                                [name]="'widget-radio1-'+widget.id"
-                                               [value]="true"
+                                               [value]="false"
                                                [(ngModel)]="config.in_percent"
                                         />
                                         <label cFormCheckLabel class="ms-1 mt-1"

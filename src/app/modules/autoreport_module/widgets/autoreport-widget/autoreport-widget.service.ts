@@ -97,4 +97,22 @@ export class AutoreportWidgetService {
         )
     }
 
+    public calculateAvailability(reportId: number): Observable<{
+        calculatedTimeRanges: { start: number, end: number }[]
+    }> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.get<{
+            calculatedTimeRanges: { start: number, end: number }[]
+        }>(`${proxyPath}/autoreport_module/autoreports/calculateAvailability/${reportId}.json`, {
+            params: {
+                angular: true,
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
 }

@@ -32,10 +32,10 @@ import {
     AutoreportAvailibilityColorsComponent
 } from './autoreport-availibility-colors/autoreport-availibility-colors.component';
 import { RouterLink } from '@angular/router';
-import {
-    SparklineBarApexchartComponent
-} from '../../../../components/charts/sparkline-bar-apexchart/sparkline-bar-apexchart.component';
 import { SparklineBarMetric } from '../../../../components/charts/charts.interface';
+import {
+    SparklineBarEchartsComponent
+} from '../../../../components/charts/sparkline-bar-echarts/sparkline-bar-echarts.component';
 
 @Component({
     selector: 'oitc-autoreport-widget',
@@ -56,7 +56,7 @@ import { SparklineBarMetric } from '../../../../components/charts/charts.interfa
         AutoreportAvailibilityColorsComponent,
         AsyncPipe,
         RouterLink,
-        SparklineBarApexchartComponent
+        SparklineBarEchartsComponent
     ],
     templateUrl: './autoreport-widget.component.html',
     styleUrl: './autoreport-widget.component.css',
@@ -80,6 +80,7 @@ export class AutoreportWidgetComponent extends BaseWidgetComponent implements Af
 
     public config?: AutoreportWidgetConfig;
     public autoreports: SelectKeyValue[] = [];
+    public triggerResizeCounter: number = 0;
 
     private readonly AutoreportWidgetService = inject(AutoreportWidgetService);
 
@@ -101,14 +102,27 @@ export class AutoreportWidgetComponent extends BaseWidgetComponent implements Af
                     if (response.autoreport.autoreport_availability_log) {
                         response.autoreport.autoreport_availability_log.forEach((log) => {
                             if (response.config.Autoreport.in_percent) {
+                                // Chart is in percent, our max is 100%
+                                this.maxValueInMinutes = 100;
+
                                 this.sparklineData.push({
                                     name: log.determined_availability_percent + '%',
-                                    value: log.determined_availability_percent
+                                    value: log.determined_availability_percent,
+                                    label: {
+                                        value: log.determined_availability_percent + '%',
+                                        icon: 'fa-solid fa-calendar-day',
+                                        text: log.last_update_human
+                                    }
                                 });
                             } else {
                                 this.sparklineData.push({
-                                    name: log.determined_availability_time.toString(),
-                                    value: log.determined_availability_time
+                                    name: `${log.determined_availability_time_human} - ${log.last_update_human}`,
+                                    value: log.determined_availability_time,
+                                    label: {
+                                        value: log.determined_availability_time_human,
+                                        icon: 'fa-solid fa-calendar-day',
+                                        text: log.last_update_human
+                                    }
                                 });
 
                                 // For the max in the sparkline chart
@@ -119,11 +133,27 @@ export class AutoreportWidgetComponent extends BaseWidgetComponent implements Af
                             }
 
                         });
+
+                        if (response.config.Autoreport.set_color_dynamically) {
+                            this.backgroundColor = this.getBackgroundColor(this.last_percent_value, Number(response.autoreport.min_availability));
+                        }
+
                     }
 
                 }
 
                 this.config = response.config.Autoreport;
+
+                this.cdr.markForCheck();
+            });
+        }
+    }
+
+    public calculateAvailabilityForReport(reportId: number) {
+        if (this.config && this.widget) {
+            this.AutoreportWidgetService.calculateAvailability(reportId).subscribe((response) => {
+                // Update the content
+                this.load();
                 this.cdr.markForCheck();
             });
         }
@@ -171,8 +201,9 @@ export class AutoreportWidgetComponent extends BaseWidgetComponent implements Af
 
     public override resizeWidget(event?: KtdResizeEnd) {
         this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight;
-        this.widgetHeight = this.widgetHeight - 30 - 8; // 30px = editbutton 5px random padding
+        this.widgetHeight = this.widgetHeight - 30 - 10; // 30px = editbutton 10px random padding
 
+        this.triggerResizeCounter++;
         this.calcFontSize();
         this.cdr.markForCheck();
     }
