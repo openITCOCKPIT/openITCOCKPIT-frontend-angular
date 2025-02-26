@@ -8,6 +8,7 @@ import {
     AutomapEntity,
     AutomapsIndexParams,
     AutomapsIndexRoot,
+    AutomapsLoadAutomapsByStringParams,
     AutomapsMatchingHostAndServiceCounts,
     AutomapsViewParams,
     AutomapsViewRoot
@@ -188,6 +189,18 @@ export class AutomapsService {
         }).pipe(
             map(data => {
                 return data;
+            })
+        );
+    }
+
+    public loadAutomapsByString(params: AutomapsLoadAutomapsByStringParams): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.get<{ automaps: SelectKeyValue[] }>(`${proxyPath}/automaps/loadAutomapsByString.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data.automaps;
             })
         );
     }

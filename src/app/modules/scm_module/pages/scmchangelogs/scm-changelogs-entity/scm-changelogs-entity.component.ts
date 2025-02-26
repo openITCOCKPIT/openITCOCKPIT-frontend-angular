@@ -34,12 +34,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { ChangelogIndexRoot } from '../../../../../pages/changelogs/changelogs.interface';
 import { Subscription } from 'rxjs';
-import { ImportChangelogsService } from '../importchangelogs.service';
-import { ImportObjectTypesEnum } from '../import-object-types.enum';
-import { getDefaultImportChangelogsEntityParams, ImportChangelogsEntityParams } from '../importchangelogs.interface';
+import { ScmchangelogsService } from '../scmchangelogs.service';
+import { ScmObjectTypesEnum } from '../scm-object-types.enum';
+import { getDefaultScmChangelogsEntityParams, ScmChangelogsEntityParams } from '../scmchangelogs.interface';
 
 @Component({
-    selector: 'oitc-import-changelogs-entity',
+    selector: 'oitc-scm-changelogs-entity',
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -72,18 +72,18 @@ import { getDefaultImportChangelogsEntityParams, ImportChangelogsEntityParams } 
         XsButtonDirective,
         RouterLink
     ],
-    templateUrl: './import-changelogs-entity.component.html',
-    styleUrl: './import-changelogs-entity.component.css',
+    templateUrl: './scm-changelogs-entity.component.html',
+    styleUrl: './scm-changelogs-entity.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImportChangelogsEntityComponent implements OnInit, OnDestroy {
+export class ScmChangelogsEntityComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
 
     public hideFilter: boolean = true;
-    public params: ImportChangelogsEntityParams = getDefaultImportChangelogsEntityParams();
+    public params: ScmChangelogsEntityParams = getDefaultScmChangelogsEntityParams();
     private subscriptions: Subscription = new Subscription();
-    private ImportChangelogsService = inject(ImportChangelogsService)
+    private ScmChangelogsService = inject(ScmchangelogsService)
     public changes?: ChangelogIndexRoot;
     public entityType = String(this.route.snapshot.paramMap.get('type')).toUpperCase();
 
@@ -117,7 +117,7 @@ export class ImportChangelogsEntityComponent implements OnInit, OnDestroy {
 
         if (id && this.entityType) {
             this.params['filter[Changelogs.object_id]'] = id;
-            this.params['filter[Changelogs.objecttype_id]'] = [ImportObjectTypesEnum[this.entityType as keyof typeof ImportObjectTypesEnum]];
+            this.params['filter[Changelogs.objecttype_id]'] = [ScmObjectTypesEnum[this.entityType as keyof typeof ScmObjectTypesEnum]];
 
             this.params['filter[Changelogs.action][]'] = [];
 
@@ -130,7 +130,7 @@ export class ImportChangelogsEntityComponent implements OnInit, OnDestroy {
             this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
             this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
 
-            this.subscriptions.add(this.ImportChangelogsService.getEntity(this.params)
+            this.subscriptions.add(this.ScmChangelogsService.getEntity(this.params)
                 .subscribe((result: ChangelogIndexRoot) => {
                     this.changes = result;
                     this.cdr.markForCheck();
@@ -144,7 +144,7 @@ export class ImportChangelogsEntityComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter() {
-        this.params = getDefaultImportChangelogsEntityParams();
+        this.params = getDefaultScmChangelogsEntityParams();
         this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.tmpFilter = {
