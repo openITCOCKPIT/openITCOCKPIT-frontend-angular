@@ -1,24 +1,23 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
-  AlertComponent,
-  AlertHeadingDirective,
-  BadgeComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent,
-  TooltipDirective
+    AlertComponent,
+    AlertHeadingDirective,
+    BadgeComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent,
+    TooltipDirective
 } from "@coreui/angular";
 import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
@@ -44,9 +43,8 @@ import {
     LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
-    Timeperiod
 } from '../contacts.interface';
-import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
+import { LoadUsersByContainerIdRoot } from '../../users/users.interface';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
@@ -99,7 +97,7 @@ import { HistoryService } from '../../../history.service';
 export class ContactsLdapComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
-    protected users: UserByContainer[] = [];
+    protected users: SelectKeyValue[] = [];
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -108,7 +106,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     public post: ContactPost = {} as ContactPost;
     protected containers: SelectKeyValue[] = [];
     protected createAnother: boolean = false;
-    protected timeperiods: Timeperiod[] = [];
+    protected timeperiods: SelectKeyValue[] = [];
     protected notificationCommands: SelectKeyValue[] = [];
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;

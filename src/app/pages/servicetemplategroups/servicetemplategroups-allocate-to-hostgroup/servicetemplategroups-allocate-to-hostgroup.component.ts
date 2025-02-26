@@ -1,19 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  AlertComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckInputDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent,
-  ProgressBarComponent,
-  RowComponent
+    AlertComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckInputDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent,
+    ProgressBarComponent,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
@@ -32,7 +32,6 @@ import {
     AllocateToHostGroupGetService,
     AllocateToHostgroupPost,
     LoadHostgroupsByString,
-    LoadHostGroupsByStringHostgroup,
     LoadServicetemplategroupsByString,
     ServiceTemplateGroupsIndexParams
 } from '../servicetemplategroups.interface';
@@ -42,7 +41,6 @@ import { ServicetemplategroupsService } from '../servicetemplategroups.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { NotyService } from "../../../layouts/coreui/noty.service";
-
 import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HistoryService } from '../../../history.service';
@@ -97,7 +95,7 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
     protected selectedItems: DeleteAllItem[] = [];
     protected hideFilter: boolean = true;
     protected servicetemplategroups: SelectKeyValue[] = [];
-    protected hostgroups: LoadHostGroupsByStringHostgroup[] = [];
+    protected hostgroups: SelectKeyValue[] = [];
     protected hostsWithServicetemplatesForDeploy: AllocateToHostGroupGetHostsWithServicetemplatesForDeploy[] = [];
     protected isProcessing: boolean = false;
     protected errors: GenericValidationError = {} as GenericValidationError;

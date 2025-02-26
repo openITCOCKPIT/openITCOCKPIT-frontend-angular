@@ -15,12 +15,7 @@ export interface UserDateformatsRoot {
 }
 
 export interface LoadUsersByContainerIdRoot {
-    users: UserByContainer[]
-}
-
-export interface UserByContainer {
-    key: number
-    value: string
+    users: SelectKeyValue[]
 }
 
 export interface UserDateformat {

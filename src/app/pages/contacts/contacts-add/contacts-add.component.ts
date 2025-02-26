@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
     BadgeComponent,
@@ -40,9 +39,8 @@ import {
     LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
-    Timeperiod
 } from '../contacts.interface';
-import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
+import { LoadUsersByContainerIdRoot } from '../../users/users.interface';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
@@ -96,7 +94,7 @@ import { HistoryService } from '../../../history.service';
 export class ContactsAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
-    protected users: UserByContainer[] = [];
+    protected users: SelectKeyValue[] = [];
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     protected hasMacroErrors: boolean = false;
@@ -104,7 +102,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     public post: ContactPost = {} as ContactPost;
     protected containers: SelectKeyValue[] = [];
     protected createAnother: boolean = false;
-    protected timeperiods: Timeperiod[] = [];
+    protected timeperiods: SelectKeyValue[] = [];
     protected notificationCommands: SelectKeyValue[] = [];
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
