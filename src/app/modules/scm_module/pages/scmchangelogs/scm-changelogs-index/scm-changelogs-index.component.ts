@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     CardBodyComponent,
     CardComponent,
@@ -22,26 +21,32 @@ import { ChangelogsEntryComponent } from '../../../../../pages/changelogs/change
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, formatDate, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-
+import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
-import { ChangelogIndexRoot } from '../../../../../pages/changelogs/changelogs.interface';
+import { PermissionsService } from '../../../../../permissions/permissions.service';
+import {
+    ChangelogIndexRoot,
+    ChangelogsIndexParams,
+    getDefaultChangelogsIndexParams
+} from '../../../../../pages/changelogs/changelogs.interface';
 import { Subscription } from 'rxjs';
-import { ImportChangelogsService } from '../importchangelogs.service';
-import { ImportObjectTypesEnum } from '../import-object-types.enum';
-import { getDefaultImportChangelogsEntityParams, ImportChangelogsEntityParams } from '../importchangelogs.interface';
+import { ScmchangelogsService } from '../scmchangelogs.service';
+import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
+import { IndexPage } from '../../../../../pages.interface';
+import { Sort } from '@angular/material/sort';
+import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
+
 
 @Component({
-    selector: 'oitc-import-changelogs-entity',
+    selector: 'oitc-scm-changelogs-index',
     imports: [
-        BackButtonDirective,
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
@@ -65,33 +70,42 @@ import { getDefaultImportChangelogsEntityParams, ImportChangelogsEntityParams } 
         NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
+        PermissionDirective,
         ReactiveFormsModule,
         RowComponent,
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        AsyncPipe,
+        BlockLoaderComponent
     ],
-    templateUrl: './import-changelogs-entity.component.html',
-    styleUrl: './import-changelogs-entity.component.css',
+    templateUrl: './scm-changelogs-index.component.html',
+    styleUrl: './scm-changelogs-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImportChangelogsEntityComponent implements OnInit, OnDestroy {
+export class ScmChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-
+    public readonly PermissionsService = inject(PermissionsService);
     public hideFilter: boolean = true;
-    public params: ImportChangelogsEntityParams = getDefaultImportChangelogsEntityParams();
+    public params: ChangelogsIndexParams = getDefaultChangelogsIndexParams();
     private subscriptions: Subscription = new Subscription();
-    private ImportChangelogsService = inject(ImportChangelogsService)
+    private ScmChangelogsService = inject(ScmchangelogsService);
+
     public changes?: ChangelogIndexRoot;
-    public entityType = String(this.route.snapshot.paramMap.get('type')).toUpperCase();
 
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
-
     public tmpFilter = {
+        ScmChangelogs: {
+            name: ''
+        },
+        Models: {
+            Resourcegroup: true,
+            Resource: true
+        },
         Action: {
             add: true,
             edit: true,
@@ -100,54 +114,55 @@ export class ImportChangelogsEntityComponent implements OnInit, OnDestroy {
     };
     private cdr = inject(ChangeDetectorRef);
 
-    public ngOnInit() {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            this.loadChanges();
-        }));
-    }
 
-    public ngOnDestroy(): void {
-        this.subscriptions.unsubscribe();
-    }
-
-    loadChanges() {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
-
-        if (id && this.entityType) {
-            this.params['filter[Changelogs.object_id]'] = id;
-            this.params['filter[Changelogs.objecttype_id]'] = [ImportObjectTypesEnum[this.entityType as keyof typeof ImportObjectTypesEnum]];
-
-            this.params['filter[Changelogs.action][]'] = [];
-
-            for (let action in this.tmpFilter.Action) {
-                if (this.tmpFilter.Action[action as keyof typeof this.tmpFilter.Action]) {
-                    this.params['filter[Changelogs.action][]'].push(action);
-                }
+    public loadChanges() {
+        this.params['filter[Changelogs.action][]'] = [];
+        for (let action in this.tmpFilter.Action) {
+            if (this.tmpFilter.Action[action as keyof typeof this.tmpFilter.Action]) {
+                this.params['filter[Changelogs.action][]'].push(action);
             }
-
-            this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
-            this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
-
-            this.subscriptions.add(this.ImportChangelogsService.getEntity(this.params)
-                .subscribe((result: ChangelogIndexRoot) => {
-                    this.changes = result;
-                    this.cdr.markForCheck();
-                })
-            );
         }
+
+        this.params['filter[Changelogs.model][]'] = [];
+        for (let model in this.tmpFilter.Models) {
+            if (this.tmpFilter.Models[model as keyof typeof this.tmpFilter.Models]) {
+                this.params['filter[Changelogs.model][]'].push(model);
+            }
+        }
+
+        this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
+        this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
+
+        this.subscriptions.add(this.ScmChangelogsService.getIndex(this.params)
+            .subscribe((result: ChangelogIndexRoot) => {
+                this.changes = result;
+                this.cdr.markForCheck();
+            })
+        );
     }
 
     public toggleFilter() {
         this.hideFilter = !this.hideFilter;
     }
 
+    // Callback when a filter has changed
+    public onFilterChange(event: Event) {
+        this.params.page = 1;
+        this.loadChanges();
+    }
+
     public resetFilter() {
-        this.params = getDefaultImportChangelogsEntityParams();
+        this.params = getDefaultChangelogsIndexParams();
         this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.tmpFilter = {
+            ScmChangelogs: {
+                name: ''
+            },
+            Models: {
+                Resourcegroup: true,
+                Resource: true
+            },
             Action: {
                 add: true,
                 edit: true,
@@ -157,15 +172,28 @@ export class ImportChangelogsEntityComponent implements OnInit, OnDestroy {
         this.loadChanges();
     }
 
+    public ngOnInit() {
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            //console.log(params);
+            this.loadChanges();
+        }));
+    }
+
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
         this.loadChanges();
     }
 
-    // Callback when a filter has changed
-    public onFilterChange(event: Event) {
-        this.params.page = 1;
-        this.loadChanges();
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
+    public onMassActionComplete(success: boolean): void {
+    }
+
+    public onSortChange(sort: Sort): void {
     }
 }
