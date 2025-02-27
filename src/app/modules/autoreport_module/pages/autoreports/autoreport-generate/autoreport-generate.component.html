@@ -708,10 +708,12 @@
                                     <c-col lg="12" xs="12" md="9" class="offset-md-3"
                                          *ngFor="let graphBlobs of report.GraphImageBlobs[host.value.Host.uuid] | keyvalue">
                                         <div *ngIf="graphBlobs.key === service.value.Service.uuid">
-                                        <img *ngFor="let graph of graphBlobs.value"
-                                             class="img-fluid"
-                                             [src]="'data:image/png;base64,' + graph"
-                                             alt="Missing chart image">
+                                            <div *ngFor="let graph of graphBlobs.value">
+                                            <img
+                                                 class="img-fluid"
+                                                 [src]="'data:image/png;base64,' + graph"
+                                                 alt="Missing chart image">
+                                            </div>
                                         </div>
                                     </c-col>
                                 </c-col>
