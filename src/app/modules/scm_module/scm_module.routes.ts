@@ -21,5 +21,14 @@ export const scmModuleRoutes: Routes = [{
 }, {
     path: 'scm_module/scm_changelogs/index',
     loadComponent: () => import('./pages/scmchangelogs/scm-changelogs-index/scm-changelogs-index.component').then(m => m.ScmChangelogsIndexComponent)
+}, {
+    path: 'scm_module/resources/index',
+    loadComponent: () => import('./pages/resources/resources-index/resources-index.component').then(m => m.ResourcesIndexComponent)
+}, {
+    path: 'scm_module/resources/add',
+    loadComponent: () => import('./pages/resources/resources-add/resources-add.component').then(m => m.ResourcesAddComponent)
+}, {
+    path: 'scm_module/resources/edit/:id',
+    loadComponent: () => import('./pages/resources/resources-edit/resources-edit.component').then(m => m.ResourcesEditComponent)
 }
 ];

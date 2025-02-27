@@ -2,6 +2,7 @@ import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator
 import { UserIdAndUsername } from '../../../../pages/users/users.interface';
 import { ContainerEntity } from '../../../../pages/containers/containers.interface';
 import { ScmNotificationLogTypesEnum } from './resourcegroups-notifications/scm-notification-log-types.enum';
+import { Resource } from '../resources/resources.interface';
 
 export interface ResourcegroupsIndex extends PaginateOrScroll {
     all_resourcegroups: Resourcegroup[]
@@ -26,20 +27,6 @@ export interface Resourcegroup {
     region_managers: UserIdAndUsername[]
     resource_count: number
     statesummary: number[]
-}
-
-export interface Resource {
-    id: number
-    resourcegroup_id: number
-    user_id: number
-    name: string
-    description: string
-    status: number
-    comment: any
-    last_update: string
-    status_log_id: number
-    created: string
-    modified: string
 }
 
 export interface ResourcegroupsIndexParams {
