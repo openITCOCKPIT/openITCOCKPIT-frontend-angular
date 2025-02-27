@@ -13,7 +13,7 @@
         </c-modal-header>
         <c-modal-body>
             <ng-container>
-                <div class="alert border-warning alert-bg-warning-with-opacity text-secondary">
+                <div class="alert border-warning bg-warning-opacity-10 text-secondary">
                     <div class="d-flex align-items-center">
                         <div class="alert-icon me-2">
                             <span class="icon-stack icon-stack-md">
@@ -27,7 +27,7 @@
                                     {{ t('Warning') }}
                                 </span>
 
-                                    <br>
+                                <br>
                                 {{ t('No items are selected for status!') }}
                             </ng-container>
                         </div>
@@ -56,7 +56,7 @@
                     <code>{{ 1024 - comment.length }}</code>
                 </div>
             </ng-container>
-            
+
             <c-row [hidden]="!isProcessing" class="pt-4 pb-2">
                 <c-col sm="12">
                     <h4>{{ t('Set status...') }}</h4>
