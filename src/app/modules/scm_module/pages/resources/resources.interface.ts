@@ -1,5 +1,5 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
-import { Resourcegroup } from '../resourcegroups/resourcegroups.interface';
+import { Resourcegroup, ResourcegroupsPost } from '../resourcegroups/resourcegroups.interface';
 
 export interface ResourcesIndex extends PaginateOrScroll {
     all_resources: ResourceEntity[]
@@ -121,7 +121,15 @@ export function getResourceStatusForApi(reasonType: ResourceStatus): number[] {
 }
 
 export interface ResourcesPost {
+    id?: number
     name: string
     description: string
     resourcegroup_id: number
+}
+
+
+export interface ResourcesGet {
+    resource: {
+        Resource: ResourcesPost
+    }
 }
