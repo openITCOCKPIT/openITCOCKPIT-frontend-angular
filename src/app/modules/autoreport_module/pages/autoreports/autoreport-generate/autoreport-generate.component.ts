@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -19,6 +26,7 @@ import {
     NgClass,
     NgForOf,
     NgIf,
+    KeyValuePipe
 } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AutoreportsService } from '../autoreports.service';
@@ -27,6 +35,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import {
     AutoreportIndex,
     ReportError,
+    GenerateResponse
 } from '../autoreports.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -71,9 +80,10 @@ import { saveAs } from 'file-saver';
         DecimalPipe,
         AlertComponent,
         AsyncPipe,
+        KeyValuePipe,
     ],
   templateUrl: './autoreport-generate.component.html',
-  styleUrl: './../../../assets/autoreport.css',//'./autoreport-generate.component.css',
+  styleUrl: './autoreport-generate.component.css', //'./../../../assets/autoreport.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutoreportGenerateComponent implements OnInit, OnDestroy {
@@ -87,7 +97,7 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private cdr = inject(ChangeDetectorRef);
 
-
+    protected readonly keepOrder = keepOrder;
 
     public id: number = 0;
     public tabName: string = 'reportConfig';
@@ -97,7 +107,7 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
     public report_error: ReportError | null = null;
 
     public autoreports!: AutoreportIndex[];
-    public report:any = null;
+    public report!:GenerateResponse;
     public reportHostIds: number[] = [];
     public logoUrl:string = '';
     private now = DateTime.now();
@@ -138,7 +148,7 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
 
     public submitReport() {
         this.report_error = null;
-        this.report = null;
+       // this.report = null;
         this.cdr.markForCheck();
         this.post.Autoreport.from_date = formatDate(this.from, 'dd.MM.y', 'en-US');
         this.post.Autoreport.to_date = formatDate(this.to, 'dd.MM.y', 'en-US');
@@ -201,9 +211,6 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
                 }
 
             }));
-
-
-
         } else {
             this.reportWasGenerated = false;
             this.isGenerating = true;
@@ -268,6 +275,7 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
         if(typeof this.report !== "undefined"){
             if(this.report.hasOwnProperty('GraphImageBlobs')){
                 if(this.report.GraphImageBlobs.hasOwnProperty(hostUuid)){
+                    // @ts-ignore
                     if(this.report.GraphImageBlobs[hostUuid].hasOwnProperty(serviceUuid)){
                         return true;
                     }
@@ -278,3 +286,7 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
     }
 
 }
+
+const keepOrder = (a: any, b: any) => a;
+
+

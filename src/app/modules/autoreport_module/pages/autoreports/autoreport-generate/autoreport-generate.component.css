@@ -1,0 +1,27 @@
+ .html-report-host-row {
+    background-color: rgba(80, 80, 80, 0.2)!important;
+}
+
+.report-border-sucess {
+    border-left: 3px solid #00C851;
+}
+
+.report-border-warning {
+    border-left: 3px solid #FFBB33;
+}
+
+.report-border-danger {
+    border-left: 3px solid #CC0000;
+}
+
+.report-border-default {
+    border-left: 3px solid #DEE2E6;
+}
+
+ .host_option {
+     background: #92A2A842;
+ }
+
+ .service_option {
+     background: #DEE3E542;
+ }

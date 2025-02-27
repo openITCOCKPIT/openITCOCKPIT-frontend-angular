@@ -34,17 +34,17 @@
             </c-card-header>
             <c-card-body>
                 <c-row class="m-0 text-center mb-3" style="min-height: 22px;">
-                    <div
-                        class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                    <c-col xs="12" md="4" lg="2"
+                        class="wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                         <span>
                             <c-badge color="secondary">1</c-badge>
                         </span>
                         <span class="ms-1">
                             {{ t('Report configuration') }}
                         </span>
-                    </div>
-                    <div
-                        class="col-xs-12 col-md-4 col-lg-3 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-border-right">
+                    </c-col>
+                    <c-col xs="12" md="4" lg="3"
+                        class="wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-border-right">
                         <span>
                             <c-badge color="secondary">2</c-badge>
                         </span>
@@ -52,10 +52,9 @@
                             {{ t('Host and services configuration') }}
 
                         </span>
-
-                    </div>
-                    <div
-                        class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-border-right">
+                    </c-col>
+                    <c-col xs="12" md="4" lg="2"
+                        class="wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-border-right">
                         <span>
                             <c-badge color="secondary">3</c-badge>
                         </span>
@@ -63,10 +62,10 @@
                             {{ t('Report details') }}
                         </span>
 
-                    </div>
-                    <div class="col-lg-4 wizard-bg-inactive d-inline-flex">
-                    </div>
-                    <div class="col-xs-12 col-md-4 col-lg-1 ps-0 pe-0 wizard-bg-inactive">
+                    </c-col>
+                    <c-col lg="4" class="wizard-bg-inactive d-inline-flex">
+                    </c-col>
+                    <c-col xs="12" md="4" lg="1" class="ps-0 pe-0 wizard-bg-inactive">
                         <div class="btn-group btn-group-xs w-100 h-100">
                             <button type="submit" class="btn btn-success h-100"
                                     style="border-radius: 0;"
@@ -75,7 +74,7 @@
                                 <i class="fa fa-arrow-right"></i>
                             </button>
                         </div>
-                    </div>
+                    </c-col>
                 </c-row>
                 <c-row>
                     <p class="fs-5">{{ t('Main report configuration') }}
