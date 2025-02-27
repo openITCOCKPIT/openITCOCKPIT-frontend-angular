@@ -73,7 +73,8 @@ export interface TimeperiodRange {
     start: string,
     end: string,
     timeperiod_id?: number,
-    id?: number | null
+    id?: number | null,
+    weekday?: string
 }
 
 export interface InternalRange {
