@@ -7,11 +7,11 @@ import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/de
 import {
     getResourcesIndexParams,
     getResourceStatusForApi,
-    Resource,
     ResourceEntity,
     ResourcesIndex,
     ResourcesIndexParams,
-    ResourceStatus
+    ResourceStatus,
+    ScmSettings
 } from '../resources.interface';
 import {
     BadgeComponent,
@@ -127,10 +127,11 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
     public params: ResourcesIndexParams = getResourcesIndexParams();
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
-    public selectedResourceItems: Resource[] = [];
+    public selectedResourceItems: ResourceEntity[] = [];
     public resources?: ResourcesIndex;
     public myResourceGroupIds: number[] = [];
     public resourcegroups: SelectKeyValue[] = [];
+    public settings!: ScmSettings;
 
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
@@ -147,8 +148,6 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
         warning: 0,
         critical: 0
     };
-    protected selectedItemsForSetStatus: Resource[] = [];
-
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -167,6 +166,7 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
             .subscribe((result) => {
                 this.resources = result;
                 this.myResourceGroupIds = result.myResourceGroupIds;
+                this.settings = result.settings;
                 this.cdr.markForCheck();
             })
         );
@@ -265,7 +265,21 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public toggleSetStatusModal(resource?: ResourceEntity) {
+        let items: ResourceEntity[] = [];
         // Pass selection to the modal
+        if (resource) {
+            // User just want to delete a single calendar
+            items = [resource];
+        } else {
+            // User clicked on delete selected button
+            items = this.SelectionServiceService.getSelectedItems().map((item): ResourceEntity => {
+                return item;
+            });
+        }
+
+        // Pass selection to the modal
+        this.selectedResourceItems = items;
+
         // open modal
         this.modalService.toggle({
             show: true,
@@ -274,12 +288,4 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.cdr.markForCheck();
     }
 
-    private getSelectedItems(resource?: Resource): Resource[] {
-        if (resource) {
-            return [resource];
-        }
-        return this.SelectionServiceService.getSelectedItems().map((item): Resource => {
-            return item;
-        });
-    }
 }

@@ -13,7 +13,7 @@
         </c-modal-header>
         <c-modal-body>
             <ng-container>
-                <div class="alert border-warning bg-warning-opacity-10 text-secondary">
+                <div class="alert border-warning bg-warning-opacity-10 text-secondary" *ngIf="items.length === 0">
                     <div class="d-flex align-items-center">
                         <div class="alert-icon me-2">
                             <span class="icon-stack icon-stack-md">
@@ -34,27 +34,105 @@
                     </div>
                 </div>
 
-                dfdkföskfldö
+                <div class="alert border-warning bg-danger bg-opacity-25 text-secondary"
+                     *ngIf="items.length>0 && containNotAssignedObjects">
+                    <div class="d-flex align-items-center">
+                        <div class="alert-icon me-2">
+                            <span class="icon-stack icon-stack-md">
+                                <i class="base base-2 icon-stack-3x opacity-100 color-danger-700"></i>
+                                <i class="base base-10 icon-stack-2x opacity-100 color-white"></i>
+                                <i class="far fa-bell-slash icon-stack-1x opacity-100 color-danger-900"></i>
+                            </span>
+                        </div>
+                        <div class="flex-1">
+                            <ng-container>
+                                <span class="h5 text-warning">
+                                    {{ t('Attention') }}
+                                </span>
+
+                                <br>
+                                {{ t('The list contains resources that are not assigned to you!') }}
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <c-row class="pt-2">
+                    <c-col>
+                        {{ t('Do you want set status for the selected objects?') }}
+                    </c-col>
+                </c-row>
                 <c-row class="pt-2">
                     <c-col sm="12">
                         <ul class="mb-3">
-                            <li *ngFor="let item of items">
-                                items here
+                            @for (item of items; track $index) {
+                                <li>
+                                    <span
+                                        [ngClass]="{'text-decoration-line-through': !item.my_resource && settings.require_user_assigment || !item.is_expired && !settings.allow_overwriting}">
+                                        {{ item.name }}
+                                    </span>
+                                    <ul>
+                                        <li *ngIf="!item.my_resource">
+                                            <span class="text-danger pl-2">
+                                                <i class="far fa-bell-slash"></i>
+                                                {{ t('Not assigned to you') }}
+                                            </span>
+                                        </li>
+                                        <li *ngIf="!item.is_expired && !settings.allow_overwriting">
+                                            <span class="text-danger pl-2">
+                                                <i class="fas fa-person-chalkboard"></i>
+                                                {{ t('Status has already been set') }}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                        <ul class="m-0 list-unstyled mb-3" *ngIf="settings">
+                            <li *ngIf="!settings.allow_overwriting">
+                                ⚠️ {{ t('Resources, where a status has already been submitted will be ignored') }}
+                            </li>
+                            <li *ngIf="settings.require_user_assigment">
+                                ⚠️ {{ t('Ressources where you are not assigend to will be ignored') }}
                             </li>
                         </ul>
+
                     </c-col>
                 </c-row>
-                <textarea cFormControl
-                          [(ngModel)]="comment"
-                          [ngClass]="{'is-invalid': comment.length > 1024}"
-                ></textarea>
-                <oitc-form-feedback [errors]="errors" errorField="comment"></oitc-form-feedback>
+                <c-row>
+                    <c-col>
+                        <div class="mb-3">
+                            <label cLabel for="Status">
+                                {{ t('Status') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <select cSelect
+                                    name="Status"
+                                    id="Status"
+                                    [(ngModel)]="status">
+                                <option value="1">{{ t('Up') }}</option>
+                                <option value="2">{{ t('Warning') }}</option>
+                                <option value="3">{{ t('Critical') }}</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel [for]="'statusComment'">
+                                {{ t('Comment') }}
+                                <oitc-required-icon *ngIf="status && status > 1"></oitc-required-icon>
+                            </label>
+                            <textarea cFormControl
+                                      [(ngModel)]="comment"
+                                      id="statusComment"
+                                      [ngClass]="{'is-invalid': comment.length > 1024}"></textarea>
+                            <oitc-form-feedback [errors]="errors" errorField="comment"></oitc-form-feedback>
 
-                <div class="help-block mb-3"
-                     [ngClass]="{'text-danger': comment.length > 1024}">
-                    {{ t('The maximum length for this field is 1024. Characters available:') }}
-                    <code>{{ 1024 - comment.length }}</code>
-                </div>
+                            <div class="help-block mb-3"
+                                 [ngClass]="{'text-danger': comment.length > 1024}">
+                                {{ t('The maximum length for this field is 1024. Characters available:') }}
+                                <code>{{ 1024 - comment.length }}</code>
+                            </div>
+                        </div>
+                    </c-col>
+                </c-row>
             </ng-container>
 
             <c-row [hidden]="!isProcessing" class="pt-4 pb-2">

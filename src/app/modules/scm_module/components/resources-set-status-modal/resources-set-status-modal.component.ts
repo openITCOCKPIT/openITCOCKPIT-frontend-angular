@@ -9,10 +9,9 @@ import {
     Output
 } from '@angular/core';
 import {
-    AlertComponent,
     ButtonCloseDirective,
     ColComponent,
-    FormControlDirective,
+    FormControlDirective, FormLabelDirective, FormSelectDirective,
     ModalBodyComponent,
     ModalComponent,
     ModalFooterComponent,
@@ -22,19 +21,18 @@ import {
     ProgressComponent,
     RowComponent
 } from '@coreui/angular';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgForOf, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormFeedbackComponent } from '../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { GenericValidationError } from '../../../../generic-responses';
 import { Subscription } from 'rxjs';
-import { Resource } from '../../pages/resources/resources.interface';
+import { ResourceEntity, ScmSettings } from '../../pages/resources/resources.interface';
 import { ResourcesService } from '../../pages/resources/resources.service';
-import { ROOT_CONTAINER } from '../../../../pages/changelogs/object-types.enum';
-import { OitcAlertComponent } from '../../../../components/alert/alert.component';
+import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 
 @Component({
     selector: 'oitc-resources-set-status-modal',
@@ -49,14 +47,17 @@ import { OitcAlertComponent } from '../../../../components/alert/alert.component
         FormControlDirective,
         ModalBodyComponent,
         ModalFooterComponent,
-        NgForOf,
         ReactiveFormsModule,
         RowComponent,
         XsButtonDirective,
         FormsModule,
         ProgressComponent,
         FormFeedbackComponent,
-        NgClass
+        NgClass,
+        NgIf,
+        FormLabelDirective,
+        RequiredIconComponent,
+        FormSelectDirective
     ],
     templateUrl: './resources-set-status-modal.component.html',
     styleUrl: './resources-set-status-modal.component.css',
@@ -75,9 +76,11 @@ export class ResourcesSetStatusModalComponent implements OnInit {
     protected hasErrors: boolean = false;
     protected errors: GenericValidationError | null = null;
     private ResourcesService = inject(ResourcesService);
+    public containNotAssignedObjects: boolean = false;
 
 
-    @Input({required: true}) public items: Resource[] = [];
+    @Input({required: true}) public items: ResourceEntity[] = [];
+    @Input({required: true}) public settings!: ScmSettings ;
     @Output() completed = new EventEmitter<boolean>();
 
     constructor() {
@@ -86,6 +89,14 @@ export class ResourcesSetStatusModalComponent implements OnInit {
     public ngOnInit(): void {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
             if (state.id === 'resourcesSetStatusModal' && state.show === true) {
+                let ownObjectsCount = 0;
+                console.log(this.items);
+                this.items.forEach((item) => {
+                    if (item.my_resource) {
+                        ownObjectsCount++;
+                    }
+                });
+                this.containNotAssignedObjects = ownObjectsCount !== 0;
                 this.cdr.markForCheck();
             }
         }));
@@ -93,7 +104,7 @@ export class ResourcesSetStatusModalComponent implements OnInit {
 
 
     protected setStatus(): boolean | void {
-        // Iterate all elements of this.items and call this.CustomAlertsService.annotate
+        // Iterate all elements of this.items and call this.ResourcesService.annotate
         // with the appropriate arguments for each element.
         this.errors = null;
 
@@ -169,6 +180,4 @@ export class ResourcesSetStatusModalComponent implements OnInit {
         this.errors = null;
         this.items = [];
     }
-
-    protected readonly ROOT_CONTAINER = ROOT_CONTAINER;
 }
