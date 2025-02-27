@@ -133,3 +133,41 @@ export interface ResourcesGet {
         Resource: ResourcesPost
     }
 }
+
+export interface StatuslogParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | ''
+}
+
+
+export function getStatuslogParams(): StatuslogParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'ResourceStatusLog.id',
+        page: 1,
+        direction: 'desc'
+    }
+}
+
+export interface StatuslogResponse extends PaginateOrScroll {
+    resource: Resource
+    statuslog: Statuslog[]
+    success: boolean
+    _csrfToken: any
+}
+
+export interface Statuslog {
+    state_time: string
+    timeAgoInWords: string
+    user: {
+        id: number
+        firstname: string
+        lastname: string
+    }
+    comment?: string
+    status: number
+}

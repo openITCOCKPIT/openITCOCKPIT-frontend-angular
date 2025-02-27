@@ -2,11 +2,16 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { ResourcesGet, ResourcesIndex, ResourcesIndexParams, ResourcesPost } from './resources.interface';
+import {
+    ResourcesGet,
+    ResourcesIndex,
+    ResourcesIndexParams,
+    ResourcesPost,
+    StatuslogParams, StatuslogResponse
+} from './resources.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
-import { ResourcegroupsGet, ResourcegroupsPost } from '../resourcegroups/resourcegroups.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -117,5 +122,16 @@ export class ResourcesService {
                     });
                 })
             );
+    }
+
+    public getStatuslog(id: number, params: StatuslogParams): Observable<StatuslogResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<StatuslogResponse>(`${proxyPath}/scm_module/resources/statuslog/${id}.json`, {
+            params: params as {} // cast StatuslogParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 }
