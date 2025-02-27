@@ -1,5 +1,6 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { Container } from '../containers/containers.interface';
 
 export interface EventlogsIndex extends PaginateOrScroll {
     all_events: Eventlog[],
@@ -51,7 +52,7 @@ export interface Eventlog {
     user_email: string
     data: Data
     created: string
-    containers: Container[]
+    containers: EventlogContainer[]
     time: string
     recordExists: boolean
 }
@@ -60,17 +61,11 @@ export interface Data {
     user_email: string
 }
 
-export interface Container {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: any
-    lft: number
-    rght: number
-    _joinData: JoinData
+export interface EventlogContainer extends Container {
+    _joinData: EventlogContainerJoinData
 }
 
-export interface JoinData {
+export interface EventlogContainerJoinData {
     id: number
     eventlog_id: number
     container_id: number

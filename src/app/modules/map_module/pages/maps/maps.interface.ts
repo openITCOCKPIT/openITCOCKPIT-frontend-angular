@@ -1,6 +1,7 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { GenericValidationError } from '../../../../generic-responses';
+import { Container } from '../../../../pages/containers/containers.interface';
 
 export interface MapsIndexRoot extends PaginateOrScroll {
     all_maps: Map[]
@@ -21,22 +22,23 @@ export interface Map {
     json_data?: string
     created?: string
     modified?: string
-    containers?: Container[]
+    containers?: MapContainer[]
     allowEdit?: boolean
     allowCopy?: boolean
+    _joinData?: MapRotationJoinData
 }
 
-export interface Container {
+export interface MapRotationJoinData {
     id: number
-    containertype_id: number
-    name: string
-    parent_id: any
-    lft: number
-    rght: number
-    _joinData: JoinData
+    map_id: number
+    rotation_id: number
 }
 
-export interface JoinData {
+export interface MapContainer extends Container {
+    _joinData: MapContainerJoinData
+}
+
+export interface MapContainerJoinData {
     id: number
     container_id: number
     map_id: number
@@ -111,7 +113,7 @@ export interface MapCopyGet {
     name: string
     title: string
     refresh_interval: number
-    containers: Container[]
+    containers: MapContainer[]
 }
 
 export interface MapCopyPost {

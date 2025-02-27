@@ -1,6 +1,7 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { formatDate } from '@angular/common';
 import { Outage, SlaAvailabilityStatusLogIndexParams } from '../slas/slas.interface';
+import { Container } from '../../../../pages/containers/containers.interface';
 
 export function getDefaultSlaAvailabilityStatusHostsLogIndexParams(fromParam: number | null, toParam: number | null): SlaAvailabilityStatusLogIndexParams {
     let now = new Date();
@@ -42,17 +43,11 @@ export interface Host {
     hosts_to_containers_sharing: HostsToContainersSharing[]
 }
 
-export interface HostsToContainersSharing {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: number
-    lft: number
-    rght: number
-    _joinData: JoinData
+export interface HostsToContainersSharing extends Container {
+    _joinData: HostsToContainersSharingJoinData
 }
 
-export interface JoinData {
+export interface HostsToContainersSharingJoinData {
     id: number
     host_id: number
     container_id: number
