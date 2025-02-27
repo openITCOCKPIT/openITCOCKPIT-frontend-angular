@@ -391,7 +391,7 @@
                                         {{ t('Edit') }}
                                     </oitc-actions-button-element>
                                     <oitc-actions-button-element [permission]="'ScmModule.resources.setStatus'"
-                                                                 [url]="'/scm_module/resources/setStatus/' + resource.id">
+                                                                 (click)="toggleSetStatusModal(resource)">
                                         <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
                                         {{ t('Set status') }}
                                     </oitc-actions-button-element>
@@ -433,6 +433,12 @@
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleSetStatusModal()"
+                                        class="btn btn-outline-info col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
+                                    {{ t('Set status for selected') }}
+                                </button>
                                 <button (click)="toggleDeleteAllModal()"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
@@ -459,3 +465,5 @@
     </c-card>
 </ng-container>
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+<oitc-resources-set-status-modal (completed)="onMassActionComplete($event)"
+                                 [items]="selectedResourceItems"></oitc-resources-set-status-modal>

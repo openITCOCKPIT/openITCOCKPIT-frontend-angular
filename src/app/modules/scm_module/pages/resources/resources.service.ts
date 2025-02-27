@@ -3,11 +3,13 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
+    Resource,
     ResourcesGet,
     ResourcesIndex,
     ResourcesIndexParams,
     ResourcesPost,
-    StatuslogParams, StatuslogResponse
+    StatuslogParams,
+    StatuslogResponse
 } from './resources.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -133,5 +135,13 @@ export class ResourcesService {
                 return data;
             })
         )
+    }
+
+    public setStatus(resourceId: number, status: number, comment:string): Observable<void> {
+        return this.http.post<void>(`${this.proxyPath}/scm_module/resources/setStatus/${resourceId}.json`, {
+            params: {
+                angular: true
+            }
+        });
     }
 }

@@ -171,3 +171,8 @@ export interface Statuslog {
     comment?: string
     status: number
 }
+
+export interface SetStatusItem {
+    id: number | string,           // ID of the item to set status
+    resource: ResourceEntity
+}
