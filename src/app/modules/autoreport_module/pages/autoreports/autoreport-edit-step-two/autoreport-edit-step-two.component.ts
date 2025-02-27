@@ -117,31 +117,23 @@ export class AutoreportEditStepTwoComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.AutoreportsService.getEditStepTwo(this.id).subscribe((result) => {
             this.autoreport = result.autoreport;
             this.selectedHostIds = (result.selectedHostIds) ? result.selectedHostIds : [];
-           // this.hostsWithServices = (this.autoreport.hostsWithServices) ? this.autoreport.hostsWithServices : [];
              if(result.autoreport.POST?.hosts){
                  const hosts = Object.values(result.autoreport.POST?.hosts);
                  let hostArray = [];
                  for(let host of hosts){
-                     // @ts-ignore
                      hostArray[host.host_id] = host;
                  }
-                    // @ts-ignore
                  this.post.Autoreport.hosts = hostArray;
              }
             if(result.autoreport.POST?.services){
                 const services = Object.values(result.autoreport.POST?.services);
                 let serviceArray = [];
                 for(let service of services){
-                    // @ts-ignore
                     serviceArray[service.service_id] = service;
                 }
-                // @ts-ignore
                 this.post.Autoreport.services = serviceArray;
             }
             this.onHostChange('');
-            //this.post.Autoreport.hosts = this.autoreport.POST.hosts;
-            //this.post.Autoreport.services = this.autoreport.POST.services;
-
             this.init = true;
             this.cdr.markForCheck();
             this.loadHosts('');
@@ -190,7 +182,6 @@ export class AutoreportEditStepTwoComponent implements OnInit, OnDestroy {
         } else{
             let deletedHostIds = [];
             for(let hostId in this.post.Autoreport.hosts){
-                //  hostId = parseInt(hostId, 10);
                 if(this.selectedHostIds.indexOf(Number(hostId)) === -1){
                     delete this.post.Autoreport.hosts[hostId];
                     deletedHostIds.push(hostId);
@@ -269,9 +260,6 @@ export class AutoreportEditStepTwoComponent implements OnInit, OnDestroy {
             if(field === 'alias') {
                 this.post.Autoreport.services[serviceId].graph = value;
             } else {
-
-                // this.post.Autoreport.services[serviceId][field] = value;
-
                 (this.post.Autoreport.services[serviceId] as Record<string, any>)[field] = value;
             }
         }

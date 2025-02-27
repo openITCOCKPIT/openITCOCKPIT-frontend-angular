@@ -13,12 +13,17 @@ import {
     AutoreportObject,
     HostServiceParams,
     AutoreportPostObject,
-    AtutoreportEditPost,
+    AutoreportEditPost,
     AutoreportDownloadParams,
     AutoreportServiceUsedByResponse,
-    AutoreportHostUsedByResponse
+    AutoreportHostUsedByResponse,
+    GenerateResponse
 } from './autoreports.interface';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import {
+    GenericResponse,
+    GenericResponseWrapper,
+    GenericValidationError
+} from '../../../../generic-responses';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 
@@ -167,9 +172,9 @@ export class AutoreportsService {
         );
     }
 
-    public getEditStepTwo(id: number): Observable<AtutoreportEditPost> {
+    public getEditStepTwo(id: number): Observable<AutoreportEditPost> {
         const proxyPath = this.proxyPath;
-        return this.http.get<AtutoreportEditPost>(`${proxyPath}/autoreport_module/autoreports/editStepTwo/${id}.json`, {
+        return this.http.get<AutoreportEditPost>(`${proxyPath}/autoreport_module/autoreports/editStepTwo/${id}.json`, {
             params: {
                 angular: true
             }
@@ -234,7 +239,7 @@ export class AutoreportsService {
                 // Return true on 200 Ok
                 return {
                     success: true,
-                    data: data as GenericIdResponse
+                    data: data as GenericResponse
                 };
             }),
             catchError((error: any) => {
