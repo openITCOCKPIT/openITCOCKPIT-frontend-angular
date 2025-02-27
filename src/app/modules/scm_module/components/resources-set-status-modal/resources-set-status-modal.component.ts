@@ -45,7 +45,6 @@ import { OitcAlertComponent } from '../../../../components/alert/alert.component
         FaIconComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
-        AlertComponent,
         ColComponent,
         FormControlDirective,
         ModalBodyComponent,
