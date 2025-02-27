@@ -64,6 +64,18 @@ import {
     SlaCalendarWidgetComponent
 } from '../../../../modules/sla_module/widgets/sla-calendar-widget/sla-calendar-widget.component';
 import { TrafficlightWidgetComponent } from '../trafficlight-widget/trafficlight-widget.component';
+import { TachometerWidgetComponent } from '../tachometer-widget/tachometer-widget.component';
+import {
+    EventcorrelationWidgetComponent
+} from '../../../../modules/eventcorrelation_module/widgets/eventcorrelation-widget/eventcorrelation-widget.component';
+import { AutomapWidgetComponent } from '../automap-widget/automap-widget.component';
+import {
+    AutoreportWidgetComponent
+} from '../../../../modules/autoreport_module/widgets/autoreport-widget/autoreport-widget.component';
+import { MapWidgetComponent } from '../../../../modules/map_module/widgets/map-widget/map-widget.component';
+import {
+    ChangecalendarWidgetComponent
+} from '../../../../modules/changecalendar_module/widgets/changecalendar-widget/changecalendar-widget.component';
 
 
 @Component({
@@ -106,7 +118,13 @@ import { TrafficlightWidgetComponent } from '../trafficlight-widget/trafficlight
         SlaSummaryWidgetComponent,
         SlaWidgetComponent,
         SlaCalendarWidgetComponent,
-        TrafficlightWidgetComponent
+        TrafficlightWidgetComponent,
+        TachometerWidgetComponent,
+        EventcorrelationWidgetComponent,
+        AutomapWidgetComponent,
+        AutoreportWidgetComponent,
+        MapWidgetComponent,
+        ChangecalendarWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

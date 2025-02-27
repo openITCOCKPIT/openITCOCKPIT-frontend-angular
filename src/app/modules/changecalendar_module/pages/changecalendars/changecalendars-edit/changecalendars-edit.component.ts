@@ -211,14 +211,14 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     private hideModal(): void {
         this.ModalService.toggle({
             show: false,
-            id: 'changeCalendarEditorModal'
+            id: 'changeCalendarViewerModal'
         });
     }
 
     private showModal(): void {
         this.ModalService.toggle({
             show: true,
-            id: 'changeCalendarEditorModal'
+            id: 'changeCalendarViewerModal'
         });
     }
 

@@ -9,9 +9,9 @@ import {
     ViewChild
 } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
-import { Helplines } from './map-canvas.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { TranslocoService } from '@jsverse/transloco';
+import { Helplines } from '../../pages/mapeditors/mapeditors.interface';
 
 @Component({
     selector: 'oitc-map-canvas',
@@ -31,7 +31,7 @@ export class MapCanvasComponent {
     private readonly TranslocoService = inject(TranslocoService);
 
     public helplines = input<Helplines>({enabled: true, size: 15});
-    public background = input<string | null>('');
+    public background = input<string | null | undefined>('');
     public isViewMode: InputSignal<boolean> = input<boolean>(true);
     public currentDeletedItem: InputSignal<{ id: number, type: MapItemType } | undefined> = input<{
         id: number,

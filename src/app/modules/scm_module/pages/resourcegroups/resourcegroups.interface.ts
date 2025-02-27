@@ -1,13 +1,14 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { UserIdAndUsername } from '../../../../pages/users/users.interface';
 import { ContainerEntity } from '../../../../pages/containers/containers.interface';
+import { ScmNotificationLogTypesEnum } from './resourcegroups-notifications/scm-notification-log-types.enum';
 
 export interface ResourcegroupsIndex extends PaginateOrScroll {
     all_resourcegroups: Resourcegroup[]
     _csrfToken: string
 }
 
-export interface Resourcegroup{
+export interface Resourcegroup {
     id: number
     container_id: number
     description: string
@@ -64,4 +65,126 @@ export function getResourcegroupsIndexParams(): ResourcegroupsIndexParams {
         'filter[Containers.name]': '',
         'filter[Resourcegroups.description]': ''
     }
+}
+
+export interface ResourcegroupsGet {
+    resourcegroup: {
+        Resourcegroup: ResourcegroupsPost
+    }
+}
+
+
+export interface ResourcegroupsPost {
+    id?: number
+    description: string
+    container: {
+        parent_id: number | null
+        name: string
+    }
+    users: {
+        _ids: number[]
+    },
+    managers: {
+        _ids: number[]
+    },
+    region_managers: {
+        _ids: number[]
+    }
+}
+
+export interface ResourcegroupWithRelations {
+    id: number
+    container_id: number
+    description: string
+    last_state: number
+    last_update: string
+    last_send_date: string
+    last_send_state: number
+    created: string
+    modified: string
+    resources: Resource[]
+    container: ContainerEntity
+}
+
+export interface ResourcegroupsNotificationsParams {
+    angular: boolean
+    scroll: boolean
+    sort: string
+    page: number
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[ScmNotificationsLog.created]': string
+    'filter[ScmNotificationsLog.reason_type][]': number[]
+    'filter[username]': string
+    'filter[from]': Date | string
+    'filter[to]': Date | string
+}
+
+export function getResourcegroupsNotificationsParams(): ResourcegroupsNotificationsParams {
+    let now = new Date();
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'ScmNotificationsLog.created',
+        page: 1,
+        direction: 'desc',
+        'filter[ScmNotificationsLog.created]': '',
+        'filter[ScmNotificationsLog.reason_type][]': [],
+        'filter[username]': '',
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 30 * 4 * 1000)),
+        'filter[to]': new Date(now.getTime() + (3600 * 24 * 5 * 1000)),
+    };
+}
+
+export interface ResourcegroupsNotifications extends PaginateOrScroll {
+    resourcegroup: Resourcegroup
+    notifications: ResourcegroupNotification[]
+    _csrfToken: any
+}
+
+export interface ResourcegroupNotification {
+    id: number
+    resourcegroup_id: number
+    user_id: number
+    reason_type: number
+    send_time: string
+    json_data: ResourcegroupNotificationJson[]
+    has_been_sent: number
+    error_message: any
+    created: string
+    username: string
+    unconfirmed_resources: Resource[]
+    confirmed_resources: Resource[]
+}
+
+export interface ResourcegroupNotificationJson {
+    id: number
+    name: string
+    resourcegroup_id: number
+    status: number
+}
+
+
+export interface ResourcegroupNotificationReasonTypes {
+    reminder: number
+    escalation: number
+    status_report: number
+    cumulative_status_report: number
+}
+
+
+export function getNotificationReasonTypesForApi(reasonType: ResourcegroupNotificationReasonTypes): number[] {
+    let result = [];
+    if (reasonType.reminder) {
+        result.push(ScmNotificationLogTypesEnum.REMINDER);
+    }
+    if (reasonType.escalation) {
+        result.push(ScmNotificationLogTypesEnum.ESCALATION);
+    }
+    if (reasonType.status_report) {
+        result.push(ScmNotificationLogTypesEnum.STATUS_OVERVIEW);
+    }
+    if (reasonType.cumulative_status_report) {
+        result.push(ScmNotificationLogTypesEnum.CUMULATIVE_STATUS_SUMMARY);
+    }
+    return result;
 }

@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -30,9 +30,8 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { SelectKeyValue } from "../../../../../layouts/primeng/select.interface";
 import { HistoryService } from '../../../../../history.service';
-import { MapsService } from '../Maps.service';
-import { LoadContainersRoot, LoadSatellitesRoot, MapPost } from '../Maps.interface';
-
+import { MapsService } from '../maps.service';
+import { LoadContainersRoot, LoadSatellitesRoot, MapPost } from '../maps.interface';
 
 
 import { PermissionsService } from '../../../../../permissions/permissions.service';
@@ -40,32 +39,32 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 @Component({
     selector: 'oitc-maps-edit',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    NgSelectModule,
-    PermissionDirective,
-    RequiredIconComponent,
-    RouterLink,
-    TranslocoDirective,
-    XsButtonDirective,
-    MultiSelectComponent,
-    FormLoaderComponent,
-    AsyncPipe
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        RouterLink,
+        TranslocoDirective,
+        XsButtonDirective,
+        MultiSelectComponent,
+        FormLoaderComponent,
+        AsyncPipe
+    ],
     templateUrl: './maps-edit.component.html',
     styleUrl: './maps-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

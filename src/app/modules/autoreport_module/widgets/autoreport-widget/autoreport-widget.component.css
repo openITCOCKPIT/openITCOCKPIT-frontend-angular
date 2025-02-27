@@ -1,0 +1,93 @@
+.info-box {
+    min-height: 90px;
+    background: #fff;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    margin-bottom: 5px;
+}
+
+.info-box .progress {
+    background: rgba(0, 0, 0, 0.2);
+    margin: 0px -10px;
+    height: 2px;
+}
+
+.info-box .progress, .info-box .progress .progress-bar {
+    border-radius: 0;
+}
+
+.info-box .progress .progress-bar {
+    background: #fff;
+}
+
+.info-box-icon {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 2px;
+    float: left;
+    height: 100%;
+    width: 90px;
+    text-align: center;
+    font-size: 4em;
+    line-height: 90px;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-box-icon > fa-icon {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.info-box-content {
+    padding: 10px 10px;
+    margin-left: 90px;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.info-box-text {
+    display: flex;
+    width: 100%;
+    font-size: 20px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: bold;
+}
+
+.info-box-text > span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.info-box-sparkline {
+    flex: 0 1 10vh;
+    flex-basis: 30%;
+    font-weight: bold;
+}
+
+.info-box-number p {
+    display: block;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+}
+
+.info-box-number > p {
+    padding: 0;
+    bottom: 0%;
+}
+
+.info-update-date {
+    font-size: 12px;
+    font-style: italic;
+    height: 15px;
+}

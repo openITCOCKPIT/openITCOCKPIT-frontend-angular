@@ -3,7 +3,7 @@ import { map, Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { MapSummaryRoot } from '../../pages/mapeditors/Mapeditors.interface';
+import { MapSummaryRoot } from '../../pages/mapeditors/mapeditors.interface';
 
 @Injectable({
     providedIn: 'root'

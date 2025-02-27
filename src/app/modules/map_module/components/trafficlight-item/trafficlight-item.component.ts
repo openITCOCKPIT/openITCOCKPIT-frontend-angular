@@ -15,13 +15,17 @@ import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Mapgadget } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
-import { TrafficlightItemService } from './trafficlight-item.service';
-import { Host, Service, TrafficlightItemRoot, TrafficlightItemRootParams } from './trafficlight-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { DOCUMENT, NgIf } from '@angular/common';
+import {
+    HostForMapItem,
+    MapItemRoot,
+    MapItemRootParams,
+    ServiceForMapItem
+} from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-trafficlight-item',
@@ -43,7 +47,6 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
     private readonly document = inject(DOCUMENT);
 
     private subscriptions: Subscription = new Subscription();
-    private readonly TrafficlightItemService = inject(TrafficlightItemService);
     private statusUpdateInterval: Subscription = new Subscription();
 
     protected override type = MapItemType.GADGET;
@@ -54,8 +57,8 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
     private intervalStartet: boolean = false; // needed to prevent multiple interval subscriptions
     private current_state: number = 0;
     private is_flapping: boolean = false;
-    protected Host!: Host;
-    protected Service!: Service;
+    protected Host!: HostForMapItem;
+    protected Service!: ServiceForMapItem;
     protected showGreen: boolean = false;
     protected showYellow: boolean = false;
     protected showRed: boolean = false;
@@ -103,7 +106,7 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
 
     private load() {
 
-        const params: TrafficlightItemRootParams = {
+        const params: MapItemRootParams = {
             'angular': true,
             'disableGlobalLoader': true,
             'objectId': this.item()!.object_id as number,
@@ -111,8 +114,8 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
             'type': this.item()!.type as string
         };
 
-        this.subscriptions.add(this.TrafficlightItemService.getTrafficlightItem(params)
-            .subscribe((result: TrafficlightItemRoot) => {
+        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
+            .subscribe((result: MapItemRoot) => {
                 this.current_state = result.data.Servicestatus.currentState;
                 this.is_flapping = result.data.Servicestatus.isFlapping;
 

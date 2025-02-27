@@ -8,25 +8,24 @@ import {
     OnDestroy,
     OnInit
 } from '@angular/core';
-import { Data, MapItemRoot, MapItemRootParams } from './map-item.interface';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { NgClass, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { interval, Subscription } from 'rxjs';
-import { MapItemService } from './map-item.service';
-import { Mapitem } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapitem } from '../../pages/mapeditors/mapeditors.interface';
 import { ContextActionType, LabelPosition, MapItemType } from '../map-item-base/map-item-base.enum';
 import { MapItemReloadService } from '../../../../services/map-item-reload.service';
 import { BlinkService } from '../../../../services/blink.service';
 import { UUID } from '../../../../classes/UUID';
+import { DataForMapItem, MapItemRoot, MapItemRootParams } from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-map-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, NgIf, NgClass],
+    imports: [CdkDrag, ContextMenuModule, NgIf],
     templateUrl: './map-item.component.html',
     styleUrl: './map-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -37,7 +36,6 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
     public refreshInterval = input<number>();
 
     private subscriptions: Subscription = new Subscription();
-    private readonly MapItemService = inject(MapItemService);
     private readonly MapItemReloadService = inject(MapItemReloadService);
     private readonly BlinkService = inject(BlinkService);
     private blinkSubscription: Subscription = new Subscription();
@@ -56,6 +54,7 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
 
     constructor(parent: MapCanvasComponent) {
         super(parent);
+        this.blinkServiceCallback = this.blinkServiceCallback.bind(this);
         effect(() => {
             if (!this.isItemDeleted(this.type)) {
                 this.onItemObjectIdChange();
@@ -74,10 +73,10 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         if (!this.isItemDeleted(this.type)) {
             this.load();
         }
-        /*if (this.refreshInterval()! > 0 && this.uuidForServices) {
+        if (this.refreshInterval()! > 0 && this.uuidForServices) {
             this.MapItemReloadService.setRefreshInterval(this.refreshInterval() as number);
             this.MapItemReloadService.registerNewItem(this.uuidForServices, this.item() as Mapitem, this.updateCallback);
-        }*/
+        }
     }
 
     public updateCallback(result: MapItemRoot) {
@@ -86,8 +85,8 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
             return;
         }
 
-        this.icon = result.data.icon;
-        this.icon_property = result.data.icon_property;
+        this.icon = result.data.icon!;
+        this.icon_property = result.data.icon_property!;
         this.allowView = result.allowView;
         this.init = false;
 
@@ -118,13 +117,13 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
             'type': this.item()!.type as string
         };
 
-        this.subscriptions.add(this.MapItemService.getMapItem(params)
+        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
             .subscribe((result: MapItemRoot) => {
                 this.updateCallback(result);
             }));
     };
 
-    private getLabel(data: Data) {
+    private getLabel(data: DataForMapItem) {
         this.label = '';
         switch (this.item()!.type) {
             case 'host':
@@ -136,15 +135,15 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                 break;
 
             case 'hostgroup':
-                this.label = data.Hostgroup.name;
+                this.label = data.Hostgroup!.name;
                 break;
 
             case 'servicegroup':
-                this.label = data.Servicegroup.name;
+                this.label = data.Servicegroup!.name;
                 break;
 
             case 'map':
-                this.label = data.Map.name;
+                this.label = data.Map!.name;
                 break;
         }
         this.cdr.markForCheck();
@@ -180,7 +179,7 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
     private stop() {
         if (this.uuidForServices) {
             this.BlinkService.unregisterObject(this.uuidForServices);
-            //this.MapItemReloadService.unregisterItem(this.uuidForServices);
+            this.MapItemReloadService.unregisterItem(this.uuidForServices);
         }
     };
 

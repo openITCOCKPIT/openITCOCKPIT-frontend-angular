@@ -153,5 +153,10 @@
     </c-container>
 </ng-container>
 
-
-<oitc-service-browser-modal (completed)="reloadAutomap($event)"></oitc-service-browser-modal>
+<!--
+Avoids to end up with two (or more) modals in the Dashboard
+The dashboards-index.component.html includes the service browser modal
+-->
+@if (includeServicesBrowserModal()) {
+    <oitc-service-browser-modal (completed)="reloadAutomap($event)"></oitc-service-browser-modal>
+}

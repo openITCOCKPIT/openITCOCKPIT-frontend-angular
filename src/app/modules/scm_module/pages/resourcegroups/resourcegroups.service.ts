@@ -1,9 +1,18 @@
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { ResourcegroupsIndex, ResourcegroupsIndexParams } from './resourcegroups.interface';
+import {
+    ResourcegroupsGet,
+    ResourcegroupsIndex,
+    ResourcegroupsIndexParams,
+    ResourcegroupsNotifications,
+    ResourcegroupsNotificationsParams,
+    ResourcegroupsPost,
+    ResourcegroupWithRelations
+} from './resourcegroups.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -25,6 +34,106 @@ export class ResourcegroupsService {
                 return data;
             })
         )
+    }
+
+    public getNotifications(id: number, params: ResourcegroupsNotificationsParams): Observable<ResourcegroupsNotifications> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ResourcegroupsNotifications>(`${proxyPath}/scm_module/resourcegroups/notifications/${id}.json`, {
+            params: params as {} // cast ResourcegroupsNotificationsParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    /**********************
+     *    Add action    *
+     **********************/
+    public createResourcegroup(resourcegroup: ResourcegroupsPost) {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/scm_module/resourcegroups/add.json?angular=true`, {
+            Resourcegroup: resourcegroup
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<ResourcegroupsGet> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            resourcegroup: {
+                Resourcegroup: ResourcegroupsPost
+            }
+        }>(`${proxyPath}/scm_module/resourcegroups/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    /**********************
+     *    Edit action    *
+     **********************/
+    public edit(resourcegroup: ResourcegroupsPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/scm_module/resourcegroups/edit/${resourcegroup.id}.json?angular=true`, {
+            Resourcegroup: resourcegroup
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    /**********************
+     *   Used by action   *
+     **********************/
+    public usedBy(id: number): Observable<ResourcegroupWithRelations> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            resourcegroupWithRelations: ResourcegroupWithRelations
+        }>(`${proxyPath}/scm_module/resourcegroups/usedBy/${id}.json`, {
+            params: {
+                angular: true
+            }
+
+        })
+            .pipe(
+                map(data => {
+                    return data.resourcegroupWithRelations;
+                })
+            );
     }
 
 

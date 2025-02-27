@@ -4,6 +4,7 @@ import {
     Component,
     EventEmitter,
     inject,
+    input,
     Input,
     Output
 } from '@angular/core';
@@ -55,6 +56,9 @@ import {
 export class AutomapViewerComponent {
 
     @Input() public automapResult!: AutomapsViewRoot;
+
+    // Avoids to have two (or more) modals on the dashboard.
+    public includeServicesBrowserModal = input<boolean>(true);
     @Output() paginatorChange = new EventEmitter<PaginatorChangeEvent>();
     @Output() reload = new EventEmitter<boolean>();
 

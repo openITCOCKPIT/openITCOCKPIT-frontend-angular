@@ -2,7 +2,6 @@ import {
     ChangeDetectionStrategy,
     Component,
     effect,
-    inject,
     input,
     InputSignal,
     OnDestroy,
@@ -13,18 +12,12 @@ import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Mapgadget } from '../../pages/mapeditors/Mapeditors.interface';
+import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
-import { PerfdataTextItemService } from './perfdata-text-item.service';
-import {
-    Perfdata,
-    PerfdataTextItemRoot,
-    PerfdataTextItemRootParams,
-    PerformanceData
-} from './perfdata-text-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { NgIf } from '@angular/common';
+import { MapItemRoot, MapItemRootParams, Perfdata, PerformanceData } from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-perfdata-text-item',
@@ -41,7 +34,6 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
     public refreshInterval = input<number>(0);
 
     private subscriptions: Subscription = new Subscription();
-    private readonly PerfdataTextItemService = inject(PerfdataTextItemService);
     private statusUpdateInterval: Subscription = new Subscription();
 
     protected override type = MapItemType.GADGET;
@@ -75,7 +67,7 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
 
     private load() {
 
-        const params: PerfdataTextItemRootParams = {
+        const params: MapItemRootParams = {
             'angular': true,
             'disableGlobalLoader': true,
             'objectId': this.item()!.object_id as number,
@@ -83,8 +75,8 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
             'type': this.item()!.type as string
         };
 
-        this.subscriptions.add(this.PerfdataTextItemService.getPerfdataTextItem(params)
-            .subscribe((result: PerfdataTextItemRoot) => {
+        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
+            .subscribe((result: MapItemRoot) => {
                 this.responsePerfdata = result.data.Perfdata;
 
                 switch (result.data.color) {

@@ -150,13 +150,8 @@ export interface LoadServicetemplategroupsByString {
 
 /** LOAD HOST GROUPS BY STRING */
 export interface LoadHostgroupsByString {
-    hostgroups: LoadHostGroupsByStringHostgroup[]
+    hostgroups: SelectKeyValue[]
     _csrfToken: string
-}
-
-export interface LoadHostGroupsByStringHostgroup {
-    key: number
-    value: string
 }
 
 /** ALLOCATE TO HOSTGROUP POST **/

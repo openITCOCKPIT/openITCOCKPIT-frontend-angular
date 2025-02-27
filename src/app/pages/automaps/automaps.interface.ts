@@ -98,6 +98,7 @@ export interface AutomapsViewParams {
     angular: true,
     scroll: boolean,
     page: number,
+    limit?: number
 }
 
 export function getDefaultAutomapsViewParams(): AutomapsViewParams {
@@ -118,4 +119,14 @@ export interface AutomapsViewRoot extends PaginateOrScroll {
         }[]
     }[]
     _csrfToken: string
+}
+
+
+/**********************
+ *     Global action    *
+ **********************/
+export interface AutomapsLoadAutomapsByStringParams {
+    'angular': true,
+    'filter[Automaps.name]': string,
+    'selected[]': number[],
 }

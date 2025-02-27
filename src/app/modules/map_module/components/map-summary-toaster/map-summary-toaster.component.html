@@ -7,6 +7,13 @@
                  [delay]="5000"
                  class="align-items-center w-100">
             <div class="d-flex">
+
+                <c-toast-header>
+                    <c-progress thin>
+                        <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                    </c-progress>
+                </c-toast-header>
+
                 <c-toast-body class="w-100">
 
                     <oitc-toaster-loader *ngIf="!summaryState"></oitc-toaster-loader>

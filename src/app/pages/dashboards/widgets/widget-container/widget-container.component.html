@@ -129,6 +129,16 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-trafficlight-widget>
         }
+        @case (WidgetTypes.TachometerWidget) {
+            <oitc-tachometer-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-tachometer-widget>
+        }
+        @case (WidgetTypes.AutomapWidget) {
+            <oitc-automap-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-automap-widget>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {
@@ -146,6 +156,16 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-grafana-userdefined-widget>
         }
+        @case (WidgetTypes.EvcWidget) {
+            <oitc-eventcorrelation-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-eventcorrelation-widget>
+        }
+        @case (WidgetTypes.AutoreportWidget) {
+            <oitc-autoreport-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-autoreport-widget>
+        }
         @case (WidgetTypes.SlaSummaryWidget) {
             <oitc-sla-summary-widget
                 [widgetInput]="widget"
@@ -159,6 +179,16 @@
             <oitc-sla-calendar-widget
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-sla-calendar-widget>
+        }
+        @case (WidgetTypes.ChangecalendarWidget) {
+            <oitc-changecalendar-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-changecalendar-widget>
+        }
+        @case (WidgetTypes.MapWidget) {
+            <oitc-map-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-map-widget>
         }
 
         <!-- Fallback Widget -->

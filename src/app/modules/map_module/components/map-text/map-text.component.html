@@ -1,9 +1,16 @@
-<div cdkDrag #container class="map-element-container"
-     [draggable]="!isViewMode()"
-     [ngClass]="{'cursor-pointer': !isViewMode()}"
-     (cdkDragEnded)="onDragEnd($event)"
-     (cdkDragMoved)="onDragMove($event)"
-     cdkDragBoundary=".map-canvas">
-    <span class="textElement" [ngStyle]="{'font-size.px': item()?.font_size}" [innerHTML]="bbhtml | trustAsHtml"></span>
-</div>
-<p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>
+@if (!isViewMode()) {
+    <div cdkDrag #container class="map-element-container"
+         (cdkDragEnded)="onDragEnd($event)"
+         (cdkDragMoved)="onDragMove($event)"
+         cdkDragBoundary=".map-canvas">
+        <span class="textElement" [ngStyle]="{'font-size.px': item()?.font_size}"
+              [innerHTML]="bbhtml | trustAsHtml"></span>
+    </div>
+    <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
+                   appendTo="body"></p-contextMenu>
+} @else {
+    <div #container class="map-element-container cursor-pointer">
+        <span class="textElement" [ngStyle]="{'font-size.px': item()?.font_size}"
+              [innerHTML]="bbhtml | trustAsHtml"></span>
+    </div>
+}

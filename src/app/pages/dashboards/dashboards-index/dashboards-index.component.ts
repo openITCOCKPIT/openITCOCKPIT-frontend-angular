@@ -79,6 +79,9 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN } from '../../../tokens/delete-acknowledgement-injection.token';
 import { AcknowledgementsService } from '../../acknowledgements/acknowledgements.service';
 import { DowntimesService } from '../../downtimes/downtimes.service';
+import {
+    ChangecalendarsEventViewerComponent
+} from '../../../modules/changecalendar_module/components/changecalendars-event-viewer/changecalendars-event-viewer.component';
 
 
 @Component({
@@ -116,7 +119,8 @@ import { DowntimesService } from '../../downtimes/downtimes.service';
         DashboardCreateNewTabModalComponent,
         DashboardAddWidgetModalComponent,
         HostsBrowserModalComponent,
-        ServiceBrowserModalComponent
+        ServiceBrowserModalComponent,
+        ChangecalendarsEventViewerComponent
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
@@ -318,6 +322,8 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
             // Get a new reference of the layout array to trigger the change detection
             this.layout = [...this.layout];
+
+            this.widgets = [...this.widgets];
 
             this.isLoading = false;
             this.cdr.markForCheck();

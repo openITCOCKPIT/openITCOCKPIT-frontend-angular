@@ -17,7 +17,6 @@ import {
     NavItemComponent,
     TooltipDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -35,13 +34,12 @@ import {
     LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
-    Timeperiod
 } from '../contacts.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
+import { LoadUsersByContainerIdRoot } from '../../users/users.interface';
 import { Subscription } from 'rxjs';
 import { ContactsService } from '../contacts.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
@@ -97,7 +95,7 @@ import { HistoryService } from '../../../history.service';
 export class ContactsEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
-    protected users: UserByContainer[] = [];
+    protected users: SelectKeyValue[] = [];
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError = {} as GenericValidationError;
@@ -110,7 +108,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
     protected notificationCommands: SelectKeyValue[] = [];
-    protected timeperiods: Timeperiod[] = [];
+    protected timeperiods: SelectKeyValue[] = [];
     protected hasMacroErrors: boolean = false;
 
     protected requiredContainers: number[] = [];
