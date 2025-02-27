@@ -11,10 +11,10 @@
                 {{ t('Service Capacity Management Module') }}
             </li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['scmmodule','resourcegroups', 'index']"
-                   [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']">
-                    <fa-icon [icon]="['fas', 'user-group']"></fa-icon>
-                    {{ t('Resource groups') }}
+                <a *oitcPermission="['scmmodule','resources', 'index']"
+                   [routerLink]="['/', 'scm_module', 'resources', 'index']">
+                    <fa-icon [icon]="['fas', 'chalkboard-user']"></fa-icon>
+                    {{ t('Resources') }}
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">

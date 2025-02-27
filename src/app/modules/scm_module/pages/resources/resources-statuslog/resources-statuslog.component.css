@@ -215,7 +215,7 @@
 
     .cbp_tmtimeline > li .cbp_tmlabel:after {
         right: auto;
-        left: 20px;^
+        left: 20px;
         border-right-color: transparent;
         border-bottom-color: #f5f5f6;
         top: -20px;
