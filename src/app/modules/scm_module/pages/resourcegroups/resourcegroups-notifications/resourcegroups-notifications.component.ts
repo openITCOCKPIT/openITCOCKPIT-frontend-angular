@@ -9,7 +9,7 @@ import {
     getResourcegroupsNotificationsParams,
     Resourcegroup,
     ResourcegroupNotification,
-    ResourcegroupNotificationReasonTypes,
+    ResourcegroupNotificationReasonTypes, ResourcegroupsNotifications,
     ResourcegroupsNotificationsParams
 } from '../resourcegroups.interface';
 import { ResourcegroupsService } from '../resourcegroups.service';
@@ -44,6 +44,9 @@ import { ScmNotificationLogTypesEnum } from './scm-notification-log-types.enum';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
+import {
+    PaginateOrScrollComponent
+} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 
 @Component({
     selector: 'oitc-resourcegroups-notifications',
@@ -82,7 +85,8 @@ import { FormsModule } from '@angular/forms';
         RowComponent,
         FormCheckComponent,
         FormCheckInputDirective,
-        FormCheckLabelDirective
+        FormCheckLabelDirective,
+        PaginateOrScrollComponent
     ],
     templateUrl: './resourcegroups-notifications.component.html',
     styleUrl: './resourcegroups-notifications.component.css',
@@ -94,7 +98,7 @@ export class ResourcegroupsNotificationsComponent implements OnInit, OnDestroy, 
     public readonly router = inject(Router);
     public hideFilter: boolean = true;
     public params: ResourcegroupsNotificationsParams = getResourcegroupsNotificationsParams();
-    public notifications!: ResourcegroupNotification[];
+    public notifications!: ResourcegroupsNotifications;
     public resourcegroup!: Resourcegroup;
     private readonly ResourcegroupsService = inject(ResourcegroupsService);
     private cdr = inject(ChangeDetectorRef);
@@ -126,7 +130,7 @@ export class ResourcegroupsNotificationsComponent implements OnInit, OnDestroy, 
 
         this.subscriptions.add(this.ResourcegroupsService.getNotifications(this.resourcegroupId, this.params)
             .subscribe((result) => {
-                this.notifications = result.notifications;
+                this.notifications = result;
                 this.resourcegroup = result.resourcegroup;
                 this.cdr.markForCheck();
             })
