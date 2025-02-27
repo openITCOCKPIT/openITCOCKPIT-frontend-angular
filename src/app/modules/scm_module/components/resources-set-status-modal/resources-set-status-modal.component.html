@@ -1,0 +1,80 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="resourcesSetStatusModal"
+        size="lg">
+        <c-modal-header class="bg-info">
+            <h5 cModalTitle class="text-white">
+                <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
+                {{ t('Set status') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <ng-container>
+                <div class="alert border-warning alert-bg-warning-with-opacity text-secondary">
+                    <div class="d-flex align-items-center">
+                        <div class="alert-icon me-2">
+                            <span class="icon-stack icon-stack-md">
+                                <i class="icon-stack-3x base-shield text-warning"></i>
+                                <fa-icon [icon]="['fas', 'exclamation']" class="icon-stack-1x text-white"></fa-icon>
+                            </span>
+                        </div>
+                        <div class="flex-1">
+                            <ng-container>
+                                <span class="h5 text-warning">
+                                    {{ t('Warning') }}
+                                </span>
+
+                                    <br>
+                                {{ t('No items are selected for status!') }}
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+
+                dfdkföskfldö
+                <c-row class="pt-2">
+                    <c-col sm="12">
+                        <ul class="mb-3">
+                            <li *ngFor="let item of items">
+                                items here
+                            </li>
+                        </ul>
+                    </c-col>
+                </c-row>
+                <textarea cFormControl
+                          [(ngModel)]="comment"
+                          [ngClass]="{'is-invalid': comment.length > 1024}"
+                ></textarea>
+                <oitc-form-feedback [errors]="errors" errorField="comment"></oitc-form-feedback>
+
+                <div class="help-block mb-3"
+                     [ngClass]="{'text-danger': comment.length > 1024}">
+                    {{ t('The maximum length for this field is 1024. Characters available:') }}
+                    <code>{{ 1024 - comment.length }}</code>
+                </div>
+            </ng-container>
+            
+            <c-row [hidden]="!isProcessing" class="pt-4 pb-2">
+                <c-col sm="12">
+                    <h4>{{ t('Set status...') }}</h4>
+                </c-col>
+                <c-col sm="12">
+                    <c-progress [animated]="true" [value]="percentage" [max]="100" color="danger" variant="striped"/>
+                </c-col>
+            </c-row>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="setStatus()" [disabled]="isProcessing || comment.length > 1024 || comment.length === 0"
+                    cButton class="ripple" color="primary">
+                <fa-icon [hidden]="!isProcessing" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Set status') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
