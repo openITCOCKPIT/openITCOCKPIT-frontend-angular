@@ -41,4 +41,8 @@ export const mapModuleRoutes: Routes = [
         path: 'map_module/rotations/index',
         loadComponent: () => import('./pages/rotations/rotations-index/rotations-index.component').then(m => m.RotationsIndexComponent)
     },
+    {
+        path: 'map_module/rotations/add',
+        loadComponent: () => import('./pages/rotations/rotations-add/rotations-add.component').then(m => m.RotationsAddComponent)
+    },
 ];

@@ -31,10 +31,11 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
 import { SelectKeyValue } from "../../../../../layouts/primeng/select.interface";
 import { HistoryService } from '../../../../../history.service';
 import { MapsService } from '../maps.service';
-import { LoadContainersRoot, LoadSatellitesRoot, MapPost } from '../maps.interface';
+import { LoadSatellitesRoot, MapPost } from '../maps.interface';
 
 
 import { PermissionsService } from '../../../../../permissions/permissions.service';
+import { LoadContainersRoot } from '../../../../../pages/containers/containers.interface';
 
 @Component({
     selector: 'oitc-maps-edit',

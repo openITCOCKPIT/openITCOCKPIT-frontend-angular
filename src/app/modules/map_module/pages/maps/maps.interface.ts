@@ -93,11 +93,6 @@ export interface MapEdit {
     modified?: string
 }
 
-export interface LoadContainersRoot {
-    containers: SelectKeyValue[]
-    _csrfToken: string
-}
-
 export interface LoadSatellitesRoot {
     satellites: SelectKeyValue[]
     _csrfToken: string

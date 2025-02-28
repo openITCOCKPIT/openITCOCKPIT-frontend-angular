@@ -1,9 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
-import { RotationsIndexParams, RotationsIndexRoot } from './rotations.interface';
+import { catchError, map, Observable, of } from 'rxjs';
+import { LoadMapsRoot, RotationPost, RotationsIndexParams, RotationsIndexRoot } from './rotations.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { LoadContainersRoot } from '../../../../pages/containers/containers.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -26,6 +28,45 @@ export class RotationsService {
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/map_module/rotations/delete/${item.id}.json?angular=true`, {});
+    }
+
+    public loadContainers(): Observable<LoadContainersRoot> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<LoadContainersRoot>(`${proxyPath}/map_module/rotations/loadContainers.json?angular=true`).pipe(
+            map((data: LoadContainersRoot) => {
+                return data;
+            })
+        )
+    }
+
+    public loadMaps(): Observable<LoadMapsRoot> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<LoadMapsRoot>(`${proxyPath}/map_module/rotations/loadMaps.json?angular=true`).pipe(
+            map((data: LoadMapsRoot) => {
+                return data;
+            })
+        )
+    }
+
+    public add(post: RotationPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/rotations/add.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
 }

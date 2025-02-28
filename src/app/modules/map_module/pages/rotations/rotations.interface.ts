@@ -1,5 +1,4 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
-import { Map } from '../maps/maps.interface';
 import { Container } from '../../../../pages/containers/containers.interface';
 
 export interface RotationsIndexRoot extends PaginateOrScroll {
@@ -18,7 +17,7 @@ export interface Rotation {
     created: string
     modified: string
     containers: RotationContainer[]
-    maps: Map[]
+    maps: LoadMapChild[]
     allowEdit: boolean
     ids: string
     first_id: number
@@ -61,5 +60,25 @@ export function getDefaultRotationsIndexParams(): RotationsIndexParams {
  *    Add / Edit action    *
  ***************************/
 
+export interface RotationPost {
+    Rotation: RotationEdit
+}
+
+export interface RotationEdit {
+    name: string
+    interval: number
+    container_id: number[]
+    Map: number[]
+}
+
+export interface LoadMapsRoot {
+    maps: LoadMapChild[]
+    _csrfToken: any
+}
+
+export interface LoadMapChild {
+    key: number
+    value: string
+}
 
 
