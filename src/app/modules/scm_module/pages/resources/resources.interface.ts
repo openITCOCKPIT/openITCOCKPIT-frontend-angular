@@ -1,5 +1,5 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
-import { Resourcegroup, ResourcegroupsPost } from '../resourcegroups/resourcegroups.interface';
+import { Resourcegroup } from '../resourcegroups/resourcegroups.interface';
 
 export interface ResourcesIndex extends PaginateOrScroll {
     all_resources: ResourceEntity[]
@@ -54,17 +54,11 @@ export interface Settings {
 
 
 export interface ScmSettings {
+    deadline: string
+    reminder_time: number
+    allow_overwriting: number
+    require_user_assigment: number
     id: number
-    resourcegroup_id: number
-    user_id: number
-    name: string
-    description: string
-    status: number
-    comment: any
-    last_update: string
-    status_log_id: number
-    created: string
-    modified: string
 }
 
 export interface ResourcesIndexParams {
@@ -170,4 +164,9 @@ export interface Statuslog {
     }
     comment?: string
     status: number
+}
+
+export interface SetStatusItem {
+    id: number | string,           // ID of the item to set status
+    resource: ResourceEntity
 }

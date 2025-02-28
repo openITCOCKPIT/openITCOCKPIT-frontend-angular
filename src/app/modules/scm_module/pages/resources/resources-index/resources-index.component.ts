@@ -10,7 +10,8 @@ import {
     ResourceEntity,
     ResourcesIndex,
     ResourcesIndexParams,
-    ResourceStatus
+    ResourceStatus,
+    ScmSettings
 } from '../resources.interface';
 import {
     BadgeComponent,
@@ -54,13 +55,17 @@ import {
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import {
+    ResourcesSetStatusModalComponent
+} from '../../../components/resources-set-status-modal/resources-set-status-modal.component';
 
 @Component({
     selector: 'oitc-resources-index',
@@ -106,7 +111,8 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
         FormCheckComponent,
         MultiSelectComponent,
         FormCheckInputDirective,
-        FormCheckLabelDirective
+        FormCheckLabelDirective,
+        ResourcesSetStatusModalComponent
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ResourcesService} // Inject the ResourcesService into the DeleteAllModalComponent
@@ -121,15 +127,20 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
     public params: ResourcesIndexParams = getResourcesIndexParams();
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
+    public selectedResourceItems: ResourceEntity[] = [];
     public resources?: ResourcesIndex;
     public myResourceGroupIds: number[] = [];
     public resourcegroups: SelectKeyValue[] = [];
+    public settings!: ScmSettings;
 
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly ResourcesService = inject(ResourcesService);
     public readonly PermissionsService = inject(PermissionsService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
+
     private cdr = inject(ChangeDetectorRef);
     public ResourceStatusFilter: ResourceStatus = {
         unconfirmed: 0,
@@ -155,6 +166,7 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
             .subscribe((result) => {
                 this.resources = result;
                 this.myResourceGroupIds = result.myResourceGroupIds;
+                this.settings = result.settings;
                 this.cdr.markForCheck();
             })
         );
@@ -206,7 +218,22 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.load();
     }
 
+    // Generic callback whenever a mass action (like delete all) has been finished
+    public onMassActionComplete(success: boolean) {
+        if (success) {
+            this.load();
+        }
+    }
+
+    public myResourcegroupsOnly() {
+        this.params = getResourcesIndexParams();
+        this.params['filter[Resources.resourcegroup_id][]'] = this.myResourceGroupIds;
+        this.load();
+
+    }
+
     // Open the Delete All Modal
+
     public toggleDeleteAllModal(resource?: ResourceEntity) {
         let items: DeleteAllItem[] = [];
 
@@ -237,17 +264,27 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
         });
     }
 
-    // Generic callback whenever a mass action (like delete all) has been finished
-    public onMassActionComplete(success: boolean) {
-        if (success) {
-            this.load();
+    public toggleSetStatusModal(resource?: ResourceEntity) {
+        let items: ResourceEntity[] = [];
+        // Pass selection to the modal
+        if (resource) {
+            // User just want to delete a single calendar
+            items = [resource];
+        } else {
+            // User clicked on delete selected button
+            items = this.SelectionServiceService.getSelectedItems().map((item): ResourceEntity => {
+                return item;
+            });
         }
+
+        // Pass selection to the modal
+        this.selectedResourceItems = items;
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'resourcesSetStatusModal',
+        });
+        this.cdr.markForCheck();
     }
 
-    public myResourcegroupsOnly() {
-        this.params = getResourcesIndexParams();
-        this.params['filter[Resources.resourcegroup_id][]'] = this.myResourceGroupIds;
-        this.load();
-
-    }
 }

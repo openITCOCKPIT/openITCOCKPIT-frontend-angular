@@ -7,7 +7,8 @@ import {
     ResourcesIndex,
     ResourcesIndexParams,
     ResourcesPost,
-    StatuslogParams, StatuslogResponse
+    StatuslogParams,
+    StatuslogResponse
 } from './resources.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -133,5 +134,12 @@ export class ResourcesService {
                 return data;
             })
         )
+    }
+
+    public setStatus(resourceId: number, status: number, comment: string): Observable<void> {
+        return this.http.post<void>(`${this.proxyPath}/scm_module/resources/setStatus/${resourceId}.json?angular=true`, {
+            status: status,
+            comment: comment
+        });
     }
 }
