@@ -33,5 +33,8 @@ export const scmModuleRoutes: Routes = [{
 }, {
     path: 'scm_module/resources/statuslog/:id',
     loadComponent: () => import('./pages/resources/resources-statuslog/resources-statuslog.component').then(m => m.ResourcesStatuslogComponent)
+}, {
+    path: 'scm_module/scm_settings/index',
+    loadComponent: () => import('./pages/scmsettings/scm-settings-index/scm-settings-index.component').then(m => m.ScmSettingsIndexComponent)
 }
 ];
