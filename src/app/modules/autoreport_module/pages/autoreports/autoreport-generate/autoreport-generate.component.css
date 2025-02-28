@@ -25,3 +25,10 @@
  .service_option {
      background: #DEE3E542;
  }
+
+ .report-font-weight-500 {
+     font-weight: 500;
+ }
+
+ .border-top {
+     border-top: 1px solid #dee2e6 !important; }

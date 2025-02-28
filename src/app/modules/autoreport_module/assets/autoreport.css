@@ -23,6 +23,11 @@
 .service_icon {
     color: #DEE3E5;
 }
+/*
+.html-report-host-row {
+    background-color: rgba(80, 80, 80, 0.2)!important;
+}
+*/
 
 .host_option {
     background: #92A2A842;
@@ -30,6 +35,14 @@
 
 .service_option {
     background: #DEE3E542;
+}
+
+body.dark-theme .host_option {
+    background: #92A2A842!important;
+}
+
+body.dark-theme .service_option {
+    background: #DEE3E542!important;
 }
 
 .report-table-bordered {
@@ -77,3 +90,7 @@ i[class*='all_select_'] {
 .img-fluid {
     max-width: 100%;
     height: auto; }
+
+.html-report-host-row {
+    background-color: rgba(80, 80, 80, 0.2)!important;
+}

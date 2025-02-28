@@ -288,11 +288,11 @@
                 </c-col>
             </c-row>
             <ng-container *ngFor="let host of autoreport.hostsWithServices">
-                <c-row>
+                <c-row class="show-grid">
                     <c-col class="col-3"></c-col>
-                    <c-col class="col-9 host_row">
-                        <c-row class="show-grid report-details-bordered">
-                            <c-col class="col-3 host_option ">
+                    <c-col class="col-9">
+                        <c-row class="show-grid host_row report-details-bordered">
+                            <c-col class="col-3 host_option">
                                 {{ host.name }}
                             </c-col>
                             <c-col class="col-1 text-center" *ngIf="host._joinData">
@@ -305,7 +305,7 @@
                                                               [compareValue]="2"/>
                                 <!-- minute = 2 -->
                             </c-col>
-                            <c-col class="col-2 host_option text-center" *ngIf="host._joinData">
+                            <c-col class="col-2 text-center host_option" *ngIf="host._joinData">
                                 <oitc-autoreport-bitwise-icon [optionValue]="host._joinData.configuration_option"
                                                               [compareValue]="4"/>
                                 <!-- alias = 4 -->
@@ -322,17 +322,21 @@
                     </c-col>
                 </c-row>
 
-                <c-row class="show-grid report-details-bordered" *ngIf="host.services.length === 0">
-                    <c-col class=="col-3"></c-col>
-                    <c-col class="col-9 service_option text-left text-info padding-top-10 padding-left-20 padding-bottom-10">
-                        <strong><em>{{t('No Services selected. Report will considered only host state changes.')}}</em></strong>
+                <c-row class="show-grid" *ngIf="host.services.length === 0">
+                    <c-col class="col-3"></c-col>
+                    <c-col class="col-9">
+                        <c-row class="show-grid service_row report-details-bordered">
+                            <c-col class="text-info service_option">
+                                <strong><em>{{t('No Services selected. Report will considered only host state changes.')}}</em></strong>
+                            </c-col>
+                        </c-row>
                     </c-col>
                 </c-row>
 
-                    <c-row *ngFor="let service of host.services">
+                    <c-row class="show-grid" *ngFor="let service of host.services">
                         <c-col class="col-3"></c-col>
-                        <c-col class="col-9 service-row">
-                            <c-row class="show-grid report-details-bordered">
+                        <c-col class="col-9">
+                            <c-row class="show-grid service_row report-details-bordered">
                                 <c-col class="col-3 service_option">
                                     {{ service.servicename }}
                                 </c-col>
