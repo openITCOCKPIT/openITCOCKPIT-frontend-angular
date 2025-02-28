@@ -2,16 +2,18 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    effect,
     EventEmitter,
     inject,
+    input,
     Input,
-    OnInit,
     Output
 } from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
-    FormControlDirective, FormLabelDirective, FormSelectDirective,
+    FormControlDirective,
+    FormLabelDirective,
     ModalBodyComponent,
     ModalComponent,
     ModalFooterComponent,
@@ -23,16 +25,18 @@ import {
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormFeedbackComponent } from '../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { GenericValidationError } from '../../../../generic-responses';
-import { Subscription } from 'rxjs';
 import { ResourceEntity, ScmSettings } from '../../pages/resources/resources.interface';
 import { ResourcesService } from '../../pages/resources/resources.service';
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
+import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
+import { NotyService } from '../../../../layouts/coreui/noty.service';
+import { FormErrorDirective } from '../../../../layouts/coreui/form-error.directive';
 
 @Component({
     selector: 'oitc-resources-set-status-modal',
@@ -57,15 +61,15 @@ import { RequiredIconComponent } from '../../../../components/required-icon/requ
         NgIf,
         FormLabelDirective,
         RequiredIconComponent,
-        FormSelectDirective
+        SelectComponent,
+        FormErrorDirective
     ],
     templateUrl: './resources-set-status-modal.component.html',
     styleUrl: './resources-set-status-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ResourcesSetStatusModalComponent implements OnInit {
+export class ResourcesSetStatusModalComponent {
     private readonly modalService = inject(ModalService);
-    private readonly subscriptions: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
@@ -78,28 +82,44 @@ export class ResourcesSetStatusModalComponent implements OnInit {
     private ResourcesService = inject(ResourcesService);
     public containNotAssignedObjects: boolean = false;
 
-
-    @Input({required: true}) public items: ResourceEntity[] = [];
-    @Input({required: true}) public settings!: ScmSettings ;
+    itemsInput = input<ResourceEntity[]>([]);
+    public items: ResourceEntity[] = [];
+    @Input({required: true}) public settings!: ScmSettings;
     @Output() completed = new EventEmitter<boolean>();
+    private readonly notyService = inject(NotyService);
+    protected responseCount: number = 0;
+    protected issueCount: number = 0;
+
+    protected readonly statusTypes = [
+        {
+            key: 1,
+            value: this.TranslocoService.translate('Ok')
+        },
+        {
+            key: 2,
+            value: this.TranslocoService.translate('Warning')
+        },
+        {
+            key: 3,
+            value: this.TranslocoService.translate('Critical')
+        }
+    ];
 
     constructor() {
-    }
+        effect(() => {
+            this.items = this.itemsInput();
+            this.status = null;
+            this.comment = '';
+            let ownObjectsCount = 0;
+            this.items.forEach((item) => {
+                if (item.my_resource) {
+                    ownObjectsCount++;
+                }
+            });
+            this.containNotAssignedObjects = ownObjectsCount !== this.items.length;
+            this.cdr.markForCheck();
 
-    public ngOnInit(): void {
-        this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
-            if (state.id === 'resourcesSetStatusModal' && state.show === true) {
-                let ownObjectsCount = 0;
-                console.log(this.items);
-                this.items.forEach((item) => {
-                    if (item.my_resource) {
-                        ownObjectsCount++;
-                    }
-                });
-                this.containNotAssignedObjects = ownObjectsCount !== 0;
-                this.cdr.markForCheck();
-            }
-        }));
+        });
     }
 
 
@@ -107,6 +127,8 @@ export class ResourcesSetStatusModalComponent implements OnInit {
         // Iterate all elements of this.items and call this.ResourcesService.annotate
         // with the appropriate arguments for each element.
         this.errors = null;
+        this.responseCount = 0;
+        this.issueCount = 0;
 
         if (this.status === null) {
             this.errors = {
@@ -126,37 +148,35 @@ export class ResourcesSetStatusModalComponent implements OnInit {
         this.isProcessing = true;
         for (let i in this.items) {
             const item = this.items[i];
-            let responseCount = 0;
-            let count = this.items.length;
-            let issueCount = 0;
-
 
             this.ResourcesService.setStatus(item.id, this.status, this.comment).subscribe({
                 next: (value: any) => {
-                    responseCount++
-                    this.percentage = Math.round((responseCount / count) * 100);
+                    this.responseCount++;
+                    this.percentage = Math.round((this.responseCount / this.items.length) * 100);
 
-                    if (responseCount === count && issueCount === 0) {
+                    if (this.responseCount === this.items.length && this.issueCount === 0) {
                         this.hideModal();
                         this.completed.emit(true);
                     }
+                    this.notyService.genericSuccess();
                     this.cdr.markForCheck();
                 },
                 error: (error: HttpErrorResponse) => {
                     this.cdr.markForCheck();
+                    this.responseCount++;
                     this.errors = error.error.error as GenericValidationError
-                    issueCount++
+                    this.issueCount++
                     this.hasErrors = true;
-
-                    responseCount++;
-
-                    if (responseCount === count && issueCount > 0) {
+                    this.notyService.genericError();
+                    if (this.responseCount === this.items.length && this.issueCount > 0) {
                         // The timeout is not necessary. It is just to show the progress bar at 100% for a short time.
                         setTimeout(() => {
-                            this.isProcessing = false;
                             this.percentage = 0;
                         }, 250);
                         this.completed.emit(false);
+                    }
+                    if (this.responseCount && this.items.length) {
+                        this.isProcessing = false;
                     }
                     this.cdr.markForCheck();
                 }

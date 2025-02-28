@@ -279,7 +279,6 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         // Pass selection to the modal
         this.selectedResourceItems = items;
-
         // open modal
         this.modalService.toggle({
             show: true,

@@ -17,8 +17,9 @@
                     <div class="d-flex align-items-center">
                         <div class="alert-icon me-2">
                             <span class="icon-stack icon-stack-md">
-                                <i class="icon-stack-3x base-shield text-warning"></i>
-                                <fa-icon [icon]="['fas', 'exclamation']" class="icon-stack-1x text-white"></fa-icon>
+                                <i class="base base-2 icon-stack-3x opacity-100 text-warning"></i>
+                                <i class="base base-10 icon-stack-2x opacity-100 text-white"></i>
+                                <i class="far fa-exclamation icon-stack-1x opacity-100 text-arning-900"></i>
                             </span>
                         </div>
                         <div class="flex-1">
@@ -34,20 +35,20 @@
                     </div>
                 </div>
 
-                <div class="alert border-warning bg-danger bg-opacity-25 text-secondary"
-                     *ngIf="items.length>0 && containNotAssignedObjects">
+                <div *ngIf="items.length > 0 && containNotAssignedObjects"
+                     class="alert bg-danger bg-opacity-10 text-red-700 border-danger text-secondary">
                     <div class="d-flex align-items-center">
                         <div class="alert-icon me-2">
                             <span class="icon-stack icon-stack-md">
-                                <i class="base base-2 icon-stack-3x opacity-100 color-danger-700"></i>
-                                <i class="base base-10 icon-stack-2x opacity-100 color-white"></i>
-                                <i class="far fa-bell-slash icon-stack-1x opacity-100 color-danger-900"></i>
+                                <i class="base base-2 icon-stack-3x opacity-100 text-danger"></i>
+                                <i class="base base-10 icon-stack-2x opacity-100 text-white"></i>
+                                <i class="far fa-bell-slash icon-stack-1x opacity-100 text-red-900"></i>
                             </span>
                         </div>
                         <div class="flex-1">
                             <ng-container>
-                                <span class="h5 text-warning">
-                                    {{ t('Attention') }}
+                                <span class="h5 text-danger">
+                                    {{ t('Attention!') }}
                                 </span>
 
                                 <br>
@@ -105,14 +106,18 @@
                                 {{ t('Status') }}
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
-                            <select cSelect
-                                    name="Status"
-                                    id="Status"
-                                    [(ngModel)]="status">
-                                <option value="1">{{ t('Up') }}</option>
-                                <option value="2">{{ t('Warning') }}</option>
-                                <option value="3">{{ t('Critical') }}</option>
-                            </select>
+                            <oitc-select
+                                name="Status"
+                                id="Status"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="statusTypes"
+                                [(ngModel)]="status"
+                                [showClear]="false"
+                                oitcFormError [errors]="errors" errorField="status">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="status"></oitc-form-feedback>
                         </div>
                         <div class="mb-3">
                             <label cLabel [for]="'statusComment'">
@@ -145,8 +150,8 @@
             </c-row>
         </c-modal-body>
         <c-modal-footer>
-            <button (click)="setStatus()" [disabled]="isProcessing || comment.length > 1024 || comment.length === 0"
-                    cButton class="ripple" color="primary">
+            <button (click)="setStatus()" [disabled]="isProcessing ||  items.length === 0"
+                    cButton class="ripple" color="primary" [ngClass]="{'btn-warning':containNotAssignedObjects}">
                 <fa-icon [hidden]="!isProcessing" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
                 {{ t('Set status') }}
             </button>

@@ -3,7 +3,6 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
-    Resource,
     ResourcesGet,
     ResourcesIndex,
     ResourcesIndexParams,
@@ -137,11 +136,10 @@ export class ResourcesService {
         )
     }
 
-    public setStatus(resourceId: number, status: number, comment:string): Observable<void> {
-        return this.http.post<void>(`${this.proxyPath}/scm_module/resources/setStatus/${resourceId}.json`, {
-            params: {
-                angular: true
-            }
+    public setStatus(resourceId: number, status: number, comment: string): Observable<void> {
+        return this.http.post<void>(`${this.proxyPath}/scm_module/resources/setStatus/${resourceId}.json?angular=true`, {
+            status: status,
+            comment: comment
         });
     }
 }
