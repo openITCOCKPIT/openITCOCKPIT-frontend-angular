@@ -8,7 +8,7 @@ import {
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
-    CardHeaderComponent,
+    CardHeaderComponent, CardTitleDirective,
     ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
@@ -57,7 +57,8 @@ import { ScmSettingsIndex, ScmSettingsPost } from '../scmsettings.interface';
         CardFooterComponent,
         XsButtonDirective,
         RowComponent,
-        ColComponent
+        ColComponent,
+        CardTitleDirective
     ],
     templateUrl: './scm-settings-index.component.html',
     styleUrl: './scm-settings-index.component.css',
