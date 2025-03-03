@@ -2,7 +2,13 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
-import { LoadMapsRoot, RotationPost, RotationsIndexParams, RotationsIndexRoot } from './rotations.interface';
+import {
+    LoadMapsRoot,
+    RotationPost,
+    RotationsEditRoot,
+    RotationsIndexParams,
+    RotationsIndexRoot
+} from './rotations.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { LoadContainersRoot } from '../../../../pages/containers/containers.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
@@ -51,6 +57,36 @@ export class RotationsService {
     public add(post: RotationPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/map_module/rotations/add.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<RotationsEditRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/map_module/rotations/edit/${id}.json?angular=true`, {}).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public updateRotation(post: RotationPost, id: number): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/rotations/edit/${id}.json?angular=true`, post)
             .pipe(
                 map(data => {
                     // Return true on 200 Ok

@@ -1,5 +1,7 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { Container } from '../../../../pages/containers/containers.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { Map } from '../maps/maps.interface';
 
 export interface RotationsIndexRoot extends PaginateOrScroll {
     all_rotations: Rotation[]
@@ -17,10 +19,10 @@ export interface Rotation {
     created: string
     modified: string
     containers: RotationContainer[]
-    maps: LoadMapChild[]
-    allowEdit: boolean
-    ids: string
-    first_id: number
+    maps: Map[]
+    allowEdit?: boolean
+    ids?: string
+    first_id?: number
 }
 
 export interface RotationContainer extends Container {
@@ -72,13 +74,14 @@ export interface RotationEdit {
 }
 
 export interface LoadMapsRoot {
-    maps: LoadMapChild[]
+    maps: SelectKeyValue[]
     _csrfToken: any
 }
 
-export interface LoadMapChild {
-    key: number
-    value: string
+export interface RotationsEditRoot {
+    rotation: Rotation
+    _csrfToken: string
 }
+
 
 

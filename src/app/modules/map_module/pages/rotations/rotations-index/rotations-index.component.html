@@ -144,11 +144,11 @@
                             [item]="rotation"></oitc-item-select>
 
                     </td>
-                    <td><a *ngIf="rotation.ids.length"
+                    <td><a *ngIf="rotation.ids?.length"
                            [routerLink]="['/', 'map_module', 'mapeditors', 'view', rotation.first_id, false, rotation.ids, rotation.interval]">
                         {{ rotation.name }}
                     </a>
-                        <a *ngIf="!rotation.ids.length && rotation.allowEdit"
+                        <a *ngIf="!rotation.ids?.length && rotation.allowEdit"
                            [routerLink]="['/', 'map_module', 'rotations', 'edit', rotation.id]">
                             {{ rotation.name }}
                         </a>
@@ -168,13 +168,13 @@
                             </oitc-actions-button-element>
                             <li cDropdownDivider *oitcPermission="['MapModule', 'mapeditors', 'view']"></li>
                             <oitc-actions-button-element [permission]="'mapmodule.mapeditors.view'"
-                                                         *ngIf="rotation.ids.length"
+                                                         *ngIf="rotation.ids?.length"
                                                          [url]="'/map_module/mapeditors/view/' + rotation.first_id + '/' + false + '/' + rotation.ids + '/' + rotation.interval">
                                 <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                                 {{ t('View') }}
                             </oitc-actions-button-element>
                             <oitc-actions-button-element [permission]="'mapmodule.mapeditors.view'"
-                                                         *ngIf="rotation.ids.length"
+                                                         *ngIf="rotation.ids?.length"
                                                          [url]="'/map_module/mapeditors/view/' + rotation.first_id + '/' + true + '/' + rotation.ids + '/' + rotation.interval">
                                 <fa-icon [icon]="['fas', 'expand']"></fa-icon>
                                 {{ t('View in fullscreen') }}
