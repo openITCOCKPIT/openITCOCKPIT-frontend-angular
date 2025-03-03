@@ -1,0 +1,121 @@
+<ng-container *transloco="let t">
+    <div class="d-flex h-100 flex-column" #scmWidgetContainer *ngIf="widget">
+        <oitc-block-loader *ngIf="!resources"></oitc-block-loader>
+        <div *ngIf="resources">
+            <c-row>
+                <c-col class="flex-1">
+                    <h5 *ngIf="resources.resources.total === 0" class="fw-normal">
+                        <fa-icon [icon]="['fas', 'circle-info']" class="text-info"></fa-icon>
+                        {{ t('No own resources defined!') }}
+                    </h5>
+                    <h5 *ngIf="resources.resources.total > 0 && resources.resources.status_overview[0] === 0"
+                        class="fw-normal">
+                        {{ t('All resources are confirmed') }}
+                        <fa-icon [icon]="['fas', 'check-check']" class="text-success"></fa-icon>
+                    </h5>
+                    @if (resources.resources.total > 0 && resources.resources.status_overview[0] > 0) {
+                        <h5 class="m-0 fw-normal">
+                            {{ t('Unconfirmed resources exists') }}
+                            <span class="pl-3 float-end">
+                                ⏰ {{ t('Deadline') }}
+                                <time>{{ deadline }}</time>
+                            </span>
+                            <div *ngIf="deadlineExceeded" class="text-danger font-xs py-2">
+                                ‼️ {{ t('Deadline has been exceeded!!') }}
+                            </div>
+                            <div *ngIf="!deadlineExceeded" class="text-warning font-xs py-2">
+                                ⚠️ {{ t('Please confirm the missing resource status before the deadline expires!') }}
+                            </div>
+                        </h5>
+                    }
+                </c-col>
+            </c-row>
+            <c-row>
+                <c-col [xs]="12" [md]="3" [lg]="3">
+                    <div class="p-2 bg-primary rounded overflow-hidden position-relative text-white mb-g">
+                        <div>
+                            <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                @if (resources.resources.status_overview[0] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
+                                       [queryParams]="{id: resources.resources.resource_ids[0]}">
+                                        {{ resources.resources.status_overview[0] }}
+                                    </a>
+                                } @else {
+                                    {{ resources.resources.status_overview[0] }}
+                                }
+                            </h6>
+                            <small class="m-0 l-h-n small">
+                                {{ t('Unconfirmed') }}
+                            </small>
+                        </div>
+                        <fa-icon [icon]="['fas', 'question']"
+                                 class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                    </div>
+                </c-col>
+                <c-col [xs]="12" [md]="3" [lg]="3">
+                    <div class="p-2 bg-success rounded overflow-hidden position-relative text-white mb-g">
+                        <div>
+                            <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                @if (resources.resources.status_overview[1] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
+                                       [queryParams]="{id: resources.resources.resource_ids[1]}">
+                                        {{ resources.resources.status_overview[1] }}
+                                    </a>
+                                } @else {
+                                    {{ resources.resources.status_overview[1] }}
+                                }
+                            </h6>
+                            <small class="m-0 l-h-n small">
+                                {{ t('Ok') }}
+                            </small>
+                        </div>
+                        <fa-icon [icon]="['fas', 'check']"
+                                 class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                    </div>
+                </c-col>
+                <c-col [xs]="12" [md]="3" [lg]="3">
+                    <div class="p-2 bg-warning rounded overflow-hidden position-relative text-white mb-g">
+                        <div>
+                            <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                @if (resources.resources.status_overview[2] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
+                                       [queryParams]="{id: resources.resources.resource_ids[2]}">
+                                        {{ resources.resources.status_overview[2] }}
+                                    </a>
+                                } @else {
+                                    {{ resources.resources.status_overview[2] }}
+                                }
+                            </h6>
+                            <small class="m-0 l-h-n small">
+                                {{ t('Warning') }}
+                            </small>
+                        </div>
+                        <fa-icon [icon]="['far', 'bell']"
+                                 class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                    </div>
+                </c-col>
+                <c-col [xs]="12" [md]="3" [lg]="3">
+                    <div class="p-2 bg-critical rounded overflow-hidden position-relative text-white mb-g">
+                        <div>
+                            <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                @if (resources.resources.status_overview[3] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
+                                    <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
+                                       [queryParams]="{id: resources.resources.resource_ids[3]}">
+                                        {{ resources.resources.status_overview[3] }}
+                                    </a>
+                                } @else {
+                                    {{ resources.resources.status_overview[3] }}
+                                }
+                            </h6>
+                            <small class="m-0 l-h-n small">
+                                {{ t('Critical') }}
+                            </small>
+                        </div>
+                        <fa-icon [icon]="['fas', 'exclamation']"
+                                 class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                    </div>
+                </c-col>
+            </c-row>
+        </div>
+    </div>
+</ng-container>

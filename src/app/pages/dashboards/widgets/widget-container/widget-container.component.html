@@ -190,6 +190,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-map-widget>
         }
+        @case (WidgetTypes.MyResourcesSummaryWidget) {
+            <oitc-my-resources-summary-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-my-resources-summary-widget>
+        }
 
         <!-- Fallback Widget -->
         @default {

@@ -67,7 +67,7 @@ export interface ResourcesIndexParams {
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
-    'filter[Resources.id][]': [],
+    'filter[Resources.id][]': number[],
     'filter[Resources.name]': string
     'filter[Resources.description]': string
     'filter[Resources.resourcegroup_id][]': number[]
