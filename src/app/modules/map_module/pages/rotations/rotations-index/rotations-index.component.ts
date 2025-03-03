@@ -45,12 +45,17 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { IndexPage } from '../../../../../pages.interface';
-import { MapsService } from '../maps.service';
-import { getDefaultMapsIndexParams, Map, MapsIndexParams, MapsIndexRoot } from '../maps.interface';
+import { RotationsService } from '../rotations.service';
+import {
+    getDefaultRotationsIndexParams,
+    Rotation,
+    RotationsIndexParams,
+    RotationsIndexRoot
+} from '../rotations.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 
 @Component({
-    selector: 'oitc-maps-index',
+    selector: 'oitc-rotations-index',
     imports: [
         TranslocoDirective,
         DeleteAllModalComponent,
@@ -88,27 +93,28 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
         TableDirective,
         TranslocoPipe,
         XsButtonDirective,
-        TableLoaderComponent
+        TableLoaderComponent,
+        PermissionDirective
     ],
-    templateUrl: './maps-index.component.html',
-    styleUrl: './maps-index.component.css',
+    templateUrl: './rotations-index.component.html',
+    styleUrl: './rotations-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: MapsService}
+        {provide: DELETE_SERVICE_TOKEN, useClass: RotationsService}
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
+export class RotationsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private subscriptions: Subscription = new Subscription();
-    private MapsService: MapsService = inject(MapsService);
+    private RotationsService: RotationsService = inject(RotationsService);
 
-    public params: MapsIndexParams = getDefaultMapsIndexParams();
+    public params: RotationsIndexParams = getDefaultRotationsIndexParams();
 
     public readonly route = inject(ActivatedRoute);
     public selectedItems: DeleteAllItem[] = [];
-    public maps?: MapsIndexRoot;
+    public rotations?: RotationsIndexRoot;
     public readonly router = inject(Router);
     public hideFilter: boolean = true;
     private cdr = inject(ChangeDetectorRef);
@@ -125,7 +131,7 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
             // You can do something with these parameters here.
             //console.log(params);
 
-            this.loadMaps();
+            this.loadRotations();
         }));
     }
 
@@ -134,22 +140,22 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public resetFilter() {
-        this.params = getDefaultMapsIndexParams();
-        this.loadMaps();
+        this.params = getDefaultRotationsIndexParams();
+        this.loadRotations();
     }
 
     // Callback for Paginator or Scroll Index Component
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
-        this.loadMaps();
+        this.loadRotations();
     }
 
 
     // Callback when a filter has changed
     public onFilterChange(event: Event) {
         this.params.page = 1;
-        this.loadMaps();
+        this.loadRotations();
     }
 
     // Callback when sort has changed
@@ -157,16 +163,16 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
         if (sort.direction) {
             this.params.sort = sort.active;
             this.params.direction = sort.direction;
-            this.loadMaps();
+            this.loadRotations();
         }
     }
 
-    public loadMaps() {
+    public loadRotations() {
         this.SelectionServiceService.deselectAll();
 
-        this.subscriptions.add(this.MapsService.getIndex(this.params)
-            .subscribe((result: MapsIndexRoot) => {
-                this.maps = result;
+        this.subscriptions.add(this.RotationsService.getIndex(this.params)
+            .subscribe((result: RotationsIndexRoot) => {
+                this.rotations = result;
                 this.cdr.markForCheck();
             }));
     }
@@ -174,14 +180,14 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
     // Generic callback whenever a mass action (like delete all) has been finished
     public onMassActionComplete(success: boolean) {
         if (success) {
-            this.loadMaps();
+            this.loadRotations();
         }
     }
 
 
     // Open the Delete All Modal
 
-    public toggleDeleteAllModal(map?: Map) {
+    public toggleDeleteAllModal(map?: Rotation) {
         let items: DeleteAllItem[] = [];
 
         if (map) {
@@ -211,12 +217,5 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
             show: true,
             id: 'deleteAllModal',
         });
-    }
-
-    public navigateCopy() {
-        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.id).join(',');
-        if (ids) {
-            this.router.navigate(['/', 'map_module', 'maps', 'copy', ids]);
-        }
     }
 }

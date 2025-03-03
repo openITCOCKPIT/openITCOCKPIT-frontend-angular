@@ -1,6 +1,7 @@
 import { ContainerTypesEnum } from '../changelogs/object-types.enum';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { Edge, Node } from 'vis-network';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 export interface Container {
     containertype_id: number
@@ -157,5 +158,14 @@ export interface ContainerShowDetailsTreeRootResult {
         edges: Edge[]
         cluster: any[]
     }
+    _csrfToken: string
+}
+
+/**************************
+ * Load Containers        *
+ **************************/
+
+export interface LoadContainersRoot {
+    containers: SelectKeyValue[]
     _csrfToken: string
 }

@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
-    LoadContainersRoot,
     LoadSatellitesRoot,
     MapCopyGet,
     MapCopyPost,
@@ -14,6 +13,7 @@ import {
 } from './maps.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { LoadContainersRoot } from '../../../../pages/containers/containers.interface';
 
 @Injectable({
     providedIn: 'root'

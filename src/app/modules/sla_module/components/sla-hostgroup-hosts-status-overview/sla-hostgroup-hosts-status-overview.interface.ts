@@ -1,5 +1,3 @@
-import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
-
 export interface SlaHostgroupHostsStatusOverviewParams {
     angular: true,
     'filter[Hosts.name]': string,
@@ -51,11 +49,6 @@ export interface HeatmapData {
     legendLabelFailed: string
     legendLabelPassed: string
     legendCsvHeader: string
-}
-
-export interface LoadContainersRoot {
-    containers: SelectKeyValue[]
-    _csrfToken: string
 }
 
 
