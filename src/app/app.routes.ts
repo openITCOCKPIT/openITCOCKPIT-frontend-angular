@@ -33,6 +33,7 @@ import { autoreportModuleRoutes } from './modules/autoreport_module/autoreport_m
 import { prometheusModuleRoutes } from './modules/prometheus_module/prometheus_module.routes';
 import { changecalendarsModuleRoutes } from './modules/changecalendar_module/changecalendar_module.routes';
 import { scmModuleRoutes } from './modules/scm_module/scm_module.routes';
+import { slackModuleRoutes } from './modules/slack_module/slack_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -87,7 +88,8 @@ const moduleRoutes: Routes = [
     ...openstreetmapModuleRoutes,
     ...autoreportModuleRoutes,
     ...changecalendarsModuleRoutes,
-    ...scmModuleRoutes
+    ...scmModuleRoutes,
+    ...slackModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
