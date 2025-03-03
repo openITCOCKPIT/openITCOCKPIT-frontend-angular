@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RotationsEditComponent } from './rotations-edit.component';
 
-describe('MapsEditComponent', () => {
+describe('RotationsEditComponent', () => {
     let component: RotationsEditComponent;
     let fixture: ComponentFixture<RotationsEditComponent>;
 
