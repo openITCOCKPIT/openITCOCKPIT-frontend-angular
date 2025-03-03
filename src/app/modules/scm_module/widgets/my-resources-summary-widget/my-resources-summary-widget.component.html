@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-    <div class="d-flex h-100 flex-column" #scmWidgetContainer *ngIf="widget">
+    <div class="d-flex h-100 flex-column" *ngIf="widget">
         <oitc-block-loader *ngIf="!resources"></oitc-block-loader>
         <div *ngIf="resources">
             <c-row>

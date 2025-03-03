@@ -1,0 +1,17 @@
+@import "../../../../../../assets/coreui/variables";
+
+.border-unconfirmed {
+    border-left: 5px solid $primary;
+}
+
+.border-ok {
+    border-left: 5px solid $success;
+}
+
+.border-warning {
+    border-left: 5px solid $warning;
+}
+
+.border-danger {
+    border-left: 5px solid $danger;
+}
