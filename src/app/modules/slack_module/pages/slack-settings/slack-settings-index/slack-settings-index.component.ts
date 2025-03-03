@@ -11,7 +11,7 @@ import {
     FormDirective, FormLabelDirective
 } from '@coreui/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SlackPost} from '../slack-settings.interface';
+import { SlackSettings} from '../slack-settings.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -21,7 +21,7 @@ import { Subscription } from 'rxjs';
 import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-//import { NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { SlackSettingsService} from '../slack-settings.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
@@ -52,7 +52,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         CardFooterComponent,
         XsButtonDirective,
         FormLoaderComponent,
-      //  NgIf
+        NgIf
     ],
   templateUrl: './slack-settings-index.component.html',
   styleUrl: './slack-settings-index.component.css',
@@ -68,18 +68,11 @@ export class SlackSettingsIndexComponent implements OnInit, OnDestroy {
     public init: boolean = false;
     public errors: GenericValidationError | null = null;
     protected currentCommandAsPostRequest: string = '';
-    public post:SlackPost = {
-        SlackSettings: {
-            api_url: '',
-            oauth_access_token: '',
-            two_way: false,
-            use_proxy: false,
-        }
-    };
+    public post!:SlackSettings;
 
     public ngOnInit(): void {
         this.subscriptions.add(this.SlackSettingsService.getSlackSettings().subscribe(data => {
-            this.post.SlackSettings = data;
+            this.post = data;
             this.init = true;
             this.cdr.markForCheck();
         }));
@@ -105,7 +98,7 @@ export class SlackSettingsIndexComponent implements OnInit, OnDestroy {
                     this.cdr.markForCheck();
                     if (result.success) {
                         this.errors = null;
-                        this.post.SlackSettings = result.data;
+                        this.post = result.data;
                         this.notyService.genericSuccess();
                         return;
                     }

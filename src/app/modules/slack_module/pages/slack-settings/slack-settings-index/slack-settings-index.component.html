@@ -26,10 +26,10 @@
         </ol>
     </nav>
 
-    <!--<oitc-form-loader *ngIf="!post"></oitc-form-loader>-->
+    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
 
     <form cForm (ngSubmit)="submitSlackSettings()">
-        <c-card>
+        <c-card *ngIf="post">
             <c-card-header>
                 <h5 cCardTitle>
                     {{ t('Edit Slack Settings') }}
@@ -47,7 +47,7 @@
                            name="api_url"
                            placeholder="https://hooks.slack.com/services/..."
                            oitcFormError [errors]="errors" errorField="api_url"
-                           [(ngModel)]="post.SlackSettings.api_url">
+                           [(ngModel)]="post.api_url">
                     <oitc-form-feedback [errors]="errors" errorField="api_url"></oitc-form-feedback>
                     <div class="help-block">
                         {{ t('Incoming Webhook URL you got from Slack after you enable incoming webhooks.') }}
@@ -64,7 +64,7 @@
                            name="SlackSettings.oauth_access_token"
                            placeholder="xoxp-3200670952..."
                            oitcFormError [errors]="errors" errorField="oauth_access_token"
-                           [(ngModel)]="post.SlackSettings.oauth_access_token">
+                           [(ngModel)]="post.oauth_access_token">
                     <oitc-form-feedback [errors]="errors" errorField="oauth_access_token"></oitc-form-feedback>
                     <div class="help-block">
                         {{ t('OAuth Access Token for your Slack Workspace (required for two-way integration)') }}
@@ -78,7 +78,7 @@
                                id="two_way"
                                type="checkbox"
                                trueFalseValue
-                               [(ngModel)]="post.SlackSettings.two_way">
+                               [(ngModel)]="post.two_way">
                         <label cFormCheckLabel for="two_way">
                             {{ t('Enable Two-Way Integration') }}
                         </label>
@@ -119,7 +119,7 @@
                                id="proxy"
                                type="checkbox"
                                trueFalseValue
-                               [(ngModel)]="post.SlackSettings.use_proxy">
+                               [(ngModel)]="post.use_proxy">
                         <label cFormCheckLabel for="proxy">
                             {{ t('Use Proxy Server') }}
                         </label>

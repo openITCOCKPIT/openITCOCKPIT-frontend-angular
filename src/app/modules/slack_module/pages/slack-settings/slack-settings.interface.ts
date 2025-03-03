@@ -1,9 +1,5 @@
 import { GenericValidationError } from '../../../../generic-responses';
 
-export interface SlackPost {
-    SlackSettings: SlackSettings
-}
-
 export interface GetSlackSettings {
     settings: SlackSettings,
     _csrfToken: any
