@@ -231,8 +231,6 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
                 continue;
             }
 
-            //this.post.Autoreport.hosts[hostId][field] = value;
-
             (this.post.Autoreport.hosts[hostId] as Record<string, any>)[field] = value;
         }
 

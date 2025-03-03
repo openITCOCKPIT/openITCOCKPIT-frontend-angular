@@ -289,7 +289,7 @@ export interface MapsByStringParams {
     'angular': boolean,
     'filter[Maps.name]': string,
     'selected[]': number[],
-    'excluded[]': number[]
+    'excluded[]'?: number[]
 }
 
 export interface MapsByStringRoot {

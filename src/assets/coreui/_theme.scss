@@ -155,3 +155,8 @@ nav ol.breadcrumb li.breadcrumb-item a {
 .title-border-bottom-danger {
     border-image-source: linear-gradient(45deg, $danger, transparent);
 }
+
+.bg-warning-opacity-10 {
+    /** usually you can do 'bg-danger bg-opacity-10' but for reasons I dont know this does not work for bg-warning  **/
+    background-color: rgba($warning, 0.1);
+}

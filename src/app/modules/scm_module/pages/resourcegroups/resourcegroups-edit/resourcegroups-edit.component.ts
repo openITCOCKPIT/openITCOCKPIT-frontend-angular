@@ -132,7 +132,7 @@ export class ResourcegroupsEditComponent implements OnInit, OnDestroy {
     }
 
     private loadUsers() {
-        if(this.post.container.parent_id === null){
+        if (this.post.container.parent_id === null) {
             return;
         }
         this.subscriptions.add(this.UsersService.loadUsersByContainerId(this.post.container.parent_id, []).subscribe((result) => {
