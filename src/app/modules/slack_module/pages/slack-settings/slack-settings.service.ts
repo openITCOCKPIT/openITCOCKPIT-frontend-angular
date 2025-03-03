@@ -1,43 +1,44 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { PagerdutySettings, PagerdutySettingsGet, PagerdutySettingsPostResponse } from './PagerdutySettings.interface';
 import { catchError, map, Observable, of } from 'rxjs';
 import { TranslocoService } from "@jsverse/transloco";
 import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { GetSlackSettings,SlackSettings, SlackPost, SlackSettingsPostResponse } from './slack-settings.interface';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
-export class PagerdutySettingsService {
+export class SlackSettingsService {
+
     private readonly http: HttpClient = inject(HttpClient);
     private readonly proxyPath: string = inject(PROXY_PATH);
     private readonly TranslocoService = inject(TranslocoService);
 
-    getPagerdutySettings(): Observable<PagerdutySettings> {
+    getSlackSettings(): Observable<SlackSettings> {
         const proxyPath: string = this.proxyPath;
-        return this.http.get<PagerdutySettingsGet>(`${proxyPath}/pagerduty_module/settings/edit.json`, {
+        return this.http.get<GetSlackSettings>(`${proxyPath}/slack_module/slack_settings/index.json`, {
             params: {
                 angular: true
             }
         }).pipe(
-            map((data: PagerdutySettingsGet) => {
-                return data.settings.PagerdutySettings;
+            map((data: GetSlackSettings) => {
+                return data.settings;
             })
         );
     }
 
-    setPagerdutySettings(settings: PagerdutySettings): Observable<GenericResponseWrapper> {
+    setSlackSettings(settings: SlackPost): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
 
-        return this.http.post<PagerdutySettingsPostResponse>(`${proxyPath}/pagerduty_module/settings/edit.json?angular=true`, {
-            PagerdutySettings: settings
-        }).pipe(
-            map((data: PagerdutySettingsPostResponse): any => {
+        return this.http.post<SlackSettingsPostResponse>(`${proxyPath}/slack_module/slack_settings/index.json?angular=true`,
+            settings
+        ).pipe(
+            map((data: SlackSettingsPostResponse): any => {
                 // Return true on 200 Ok
                 return {
                     success: true,
-                    data: data.settings as PagerdutySettings
+                    data: data.settings as SlackSettings
                 };
             }),
             catchError((error: any) => {
