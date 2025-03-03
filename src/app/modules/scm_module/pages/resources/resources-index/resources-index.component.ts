@@ -55,14 +55,13 @@ import {
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import {
     ResourcesSetStatusModalComponent
 } from '../../../components/resources-set-status-modal/resources-set-status-modal.component';
@@ -138,8 +137,6 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly ResourcesService = inject(ResourcesService);
     public readonly PermissionsService = inject(PermissionsService);
-    private readonly TranslocoService = inject(TranslocoService);
-    private readonly notyService = inject(NotyService);
 
     private cdr = inject(ChangeDetectorRef);
     public ResourceStatusFilter: ResourceStatus = {
@@ -154,6 +151,10 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
             //console.log(params);
+            let resourceId = params['id'] || params['id'];
+            if (resourceId) {
+                this.params['filter[Resources.id][]'] = [].concat(resourceId); // make sure we always get an array
+            }
             this.load();
         }));
     }
@@ -286,5 +287,4 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
         });
         this.cdr.markForCheck();
     }
-
 }

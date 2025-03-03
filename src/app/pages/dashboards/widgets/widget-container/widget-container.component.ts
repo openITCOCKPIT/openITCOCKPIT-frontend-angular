@@ -76,6 +76,9 @@ import { MapWidgetComponent } from '../../../../modules/map_module/widgets/map-w
 import {
     ChangecalendarWidgetComponent
 } from '../../../../modules/changecalendar_module/widgets/changecalendar-widget/changecalendar-widget.component';
+import {
+    MyResourcesSummaryWidgetComponent
+} from '../../../../modules/scm_module/widgets/my-resources-summary-widget/my-resources-summary-widget.component';
 
 
 @Component({
@@ -124,7 +127,8 @@ import {
         AutomapWidgetComponent,
         AutoreportWidgetComponent,
         MapWidgetComponent,
-        ChangecalendarWidgetComponent
+        ChangecalendarWidgetComponent,
+        MyResourcesSummaryWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',
