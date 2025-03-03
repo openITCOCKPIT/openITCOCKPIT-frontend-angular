@@ -11,10 +11,10 @@
                 {{ t('Map Module') }}
             </li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['MapModule', 'maps', 'index']"
-                   [routerLink]="['/', 'map_module', 'maps', 'index']">
-                    <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
-                    {{ t('Maps') }}
+                <a *oitcPermission="['MapModule', 'rotations', 'index']"
+                   [routerLink]="['/', 'map_module', 'rotations', 'index']">
+                    <fa-icon [icon]="['fas', 'retweet']"></fa-icon>
+                    {{ t('Rotations') }}
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
@@ -26,21 +26,21 @@
 
     <c-card class="mb-3">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Maps') }}
+            <h5 cCardTitle>{{ t('Rotations') }}
                 <small class="fw-300">
                     {{ t('overview') }}
                 </small>
             </h5>
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
-                    <button (click)="loadMaps()" cButton class="ripple" color="default" size="xs">
+                    <button (click)="loadRotations()" cButton class="ripple" color="default" size="xs">
                         <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                         {{ t('Refresh') }}
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <button *oitcPermission="['MapModule', 'maps', 'add']"
-                            [routerLink]="['/', 'map_module', 'maps', 'add']" cButton
+                    <button *oitcPermission="['MapModule', 'rotations', 'add']"
+                            [routerLink]="['/', 'map_module', 'rotations', 'add']" cButton
                             class="ripple"
                             color="success"
                             size="xs">
@@ -77,11 +77,11 @@
                                     <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Maps.name]']"
-                                       [placeholder]="'Filter by Map name' | transloco"
-                                       aria-label="Map Name"
+                                       [(ngModel)]="params['filter[Rotations.name]']"
+                                       [placeholder]="'Filter by Rotation name' | transloco"
+                                       aria-label="Rotation Name"
                                        cFormControl
-                                       name="maps.name"
+                                       name="rotations.name"
                                        oitcDebounce
                                        type="text"
                                 />
@@ -93,11 +93,11 @@
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Maps.title]']"
-                                       [placeholder]="'Filter by Map title' | transloco"
-                                       aria-label="Map Title"
+                                       [(ngModel)]="params['filter[Rotations.interval]']"
+                                       [placeholder]="'Filter by Rotation Interval' | transloco"
+                                       aria-label="Rotation Interval"
                                        cFormControl
-                                       name="maps.title"
+                                       name="rotations.interval"
                                        oitcDebounce
                                        type="text"
                                 />
@@ -115,8 +115,8 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!maps"></oitc-table-loader>
-            <table *ngIf="maps" bordered cTable class="mt-2 mb-0" hover striped matSort
+            <oitc-table-loader *ngIf="!rotations"></oitc-table-loader>
+            <table *ngIf="rotations" bordered cTable class="mt-2 mb-0" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
@@ -124,11 +124,11 @@
                     <th class="text-center col-1" scope="col" style="width: 5px;">
                         <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                     </th>
-                    <th scope="col" mat-sort-header="Maps.name">
-                        {{ t('Map name') }}
+                    <th scope="col" mat-sort-header="Rotations.name">
+                        {{ t('Rotation name') }}
                     </th>
-                    <th scope="col" mat-sort-header="Maps.title">
-                        {{ t('Map title') }}
+                    <th scope="col" mat-sort-header="Rotations.interval">
+                        {{ t('Rotation interval') }}
                     </th>
                     <th class="text-center col-1 width-50" scope="col">
                         <fa-icon [icon]="['fas', 'gear']"></fa-icon>
@@ -136,56 +136,52 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let map of maps.all_maps">
+                <tr *ngFor="let rotation of rotations.all_rotations">
                     <td class="text-center">
                         <oitc-item-select
-                            *oitcPermission="['mapmodule','maps', 'delete']"
-                            [disabled]="!map.allowEdit"
-                            [item]="map"></oitc-item-select>
+                            *oitcPermission="['mapmodule','rotations', 'delete']"
+                            [disabled]="!rotation.allowEdit"
+                            [item]="rotation"></oitc-item-select>
 
                     </td>
-                    <td><a [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.id, false]">{{ map.name }}</a>
+                    <td><a *ngIf="rotation.ids?.length"
+                           [routerLink]="['/', 'map_module', 'mapeditors', 'view', rotation.first_id, false, rotation.ids, rotation.interval]">
+                        {{ rotation.name }}
+                    </a>
+                        <a *ngIf="!rotation.ids?.length && rotation.allowEdit"
+                           [routerLink]="['/', 'map_module', 'rotations', 'edit', rotation.id]">
+                            {{ rotation.name }}
+                        </a>
                     </td>
-                    <td>{{ map.title }}</td>
+                    <td>{{ rotation.interval }}</td>
 
                     <td class="width-50">
-                        <oitc-actions-button [allowEdit]="map.allowEdit"
-                                             [permission]="'mapmodule.maps.edit'"
-                                             [url]="'/map_module/mapeditors/edit/' + map.id">
+                        <oitc-actions-button [allowEdit]="rotation.allowEdit"
+                                             [permission]="'mapmodule.rotations.edit'"
+                                             [url]="'/map_module/rotations/edit/' + rotation.id">
 
-                            <oitc-actions-button-element [permission]="'mapmodule.maps.edit'"
-                                                         [allow]="map.allowEdit"
-                                                         [url]="'/map_module/mapeditors/edit/' + map.id">
+                            <oitc-actions-button-element [permission]="'mapmodule.rotations.edit'"
+                                                         [allow]="rotation.allowEdit"
+                                                         [url]="'/map_module/rotations/edit/' + rotation.id">
                                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                {{ t('Edit in Map editor') }}
+                                {{ t('Edit') }}
                             </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'mapmodule.maps.edit'"
-                                                         [allow]="map.allowEdit"
-                                                         [url]="'/map_module/maps/edit/' + map.id">
-                                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                                {{ t('Edit settings') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *oitcPermission="['MapModule', 'maps', 'copy']"></li>
-                            <oitc-actions-button-element [permission]="'mapmodule.maps.copy'"
-                                                         [allow]="map.allowCopy"
-                                                         [url]="'/map_module/maps/copy/' + map.id">
-                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                {{ t('Copy') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['MapModule', 'mapeditors', 'view']"></li>
                             <oitc-actions-button-element [permission]="'mapmodule.mapeditors.view'"
-                                                         [url]="'/map_module/mapeditors/view/' + map.id + '/' + false">
+                                                         *ngIf="rotation.ids?.length"
+                                                         [url]="'/map_module/mapeditors/view/' + rotation.first_id + '/' + false + '/' + rotation.ids + '/' + rotation.interval">
                                 <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                                 {{ t('View') }}
                             </oitc-actions-button-element>
                             <oitc-actions-button-element [permission]="'mapmodule.mapeditors.view'"
-                                                         [url]="'/map_module/mapeditors/view/' + map.id + '/' + true">
+                                                         *ngIf="rotation.ids?.length"
+                                                         [url]="'/map_module/mapeditors/view/' + rotation.first_id + '/' + true + '/' + rotation.ids + '/' + rotation.interval">
                                 <fa-icon [icon]="['fas', 'expand']"></fa-icon>
                                 {{ t('View in fullscreen') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider *oitcPermission="['MapModule', 'maps', 'delete']"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(map)"
-                                                         [permission]="'mapmodule.maps.delete'">
+                            <li cDropdownDivider *oitcPermission="['MapModule', 'rotations', 'delete']"></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(rotation)"
+                                                         [permission]="'mapmodule.rotations.delete'">
                                 <span class="text-danger">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete') }}
@@ -197,22 +193,17 @@
                 </tbody>
             </table>
 
-            <oitc-no-records *ngIf="maps && maps.all_maps.length === 0"></oitc-no-records>
-            <ng-container *ngIf="maps && maps.all_maps">
+            <oitc-no-records *ngIf="rotations && rotations.all_rotations.length === 0"></oitc-no-records>
+            <ng-container *ngIf="rotations && rotations.all_rotations">
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                [itemsCount]="maps.all_maps.length"></oitc-select-all>
+                                [itemsCount]="rotations.all_rotations.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
-                                <button class="btn btn-outline-primary col-3 border-0" type="button"
-                                        (click)="navigateCopy()">
-                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                    {{ t('Copy') }}
-                                </button>
                                 <button (click)="toggleDeleteAllModal()"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
@@ -231,8 +222,8 @@
                     <c-col>
                         <oitc-paginate-or-scroll
                             (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="maps"
-                            [paginateOrScroll]="maps"></oitc-paginate-or-scroll>
+                            *ngIf="rotations"
+                            [paginateOrScroll]="rotations"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>

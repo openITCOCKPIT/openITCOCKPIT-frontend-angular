@@ -27,10 +27,10 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import {
-    LoadContainersRoot,
     SlaHostgroupHostsStatusOverviewParams,
     SlaHostgroupHostsStatusOverviewRoot
 } from './sla-hostgroup-hosts-status-overview.interface';
+import { LoadContainersRoot } from '../../../../pages/containers/containers.interface';
 
 @Injectable({
     providedIn: 'root',

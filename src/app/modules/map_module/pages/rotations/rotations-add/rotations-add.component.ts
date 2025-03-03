@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -16,7 +16,6 @@ import {
     CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    FormCheckInputDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -32,12 +31,12 @@ import { FormsModule } from '@angular/forms';
 
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { LoadSatellitesRoot, MapPost } from '../maps.interface';
-import { MapsService } from '../maps.service';
+import { LoadMapsRoot, RotationPost } from '../rotations.interface';
+import { RotationsService } from '../rotations.service';
 import { LoadContainersRoot } from '../../../../../pages/containers/containers.interface';
 
 @Component({
-    selector: 'oitc-maps-add',
+    selector: 'oitc-rotations-add',
     imports: [
         TranslocoDirective,
         XsButtonDirective,
@@ -58,19 +57,17 @@ import { LoadContainersRoot } from '../../../../../pages/containers/containers.i
         FormDirective,
         FormLabelDirective,
         FormControlDirective,
-        FormCheckInputDirective,
         MultiSelectComponent,
         CardFooterComponent,
-        PermissionDirective,
-        AsyncPipe
+        PermissionDirective
     ],
-    templateUrl: './maps-add.component.html',
-    styleUrl: './maps-add.component.css',
+    templateUrl: './rotations-add.component.html',
+    styleUrl: './rotations-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapsAddComponent implements OnInit, OnDestroy {
+export class RotationsAddComponent implements OnInit, OnDestroy {
 
-    private readonly MapsService: MapsService = inject(MapsService);
+    private readonly RotationsService: RotationsService = inject(RotationsService);
     private readonly TranslocoService = inject(TranslocoService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly notyService = inject(NotyService);
@@ -81,10 +78,9 @@ export class MapsAddComponent implements OnInit, OnDestroy {
 
     public readonly route = inject(ActivatedRoute);
     public errors: GenericValidationError | null = null;
-    public post: MapPost = {} as MapPost;
-    protected createAnother: boolean = false;
+    public post: RotationPost = {} as RotationPost;
     protected containers: SelectKeyValue[] = [];
-    protected satellites: SelectKeyValue[] = [];
+    protected maps: SelectKeyValue[] = [];
 
     private cdr = inject(ChangeDetectorRef);
 
@@ -92,24 +88,20 @@ export class MapsAddComponent implements OnInit, OnDestroy {
         this.post = this.getDefaultPost();
     }
 
-    private getDefaultPost(): MapPost {
+    private getDefaultPost(): RotationPost {
         return {
-            Map: {
+            Rotation: {
                 name: '',
-                title: '',
-                refresh_interval: 90,
-                containers: {
-                    _ids: []
-                },
-                satellites: {
-                    _ids: []
-                }
+                interval: 90,
+                container_id: [],
+                Map: []
             }
         };
     }
 
     public ngOnInit() {
-        this.load();
+        this.loadMaps();
+        this.loadContainers();
     }
 
     public ngOnDestroy() {
@@ -117,24 +109,17 @@ export class MapsAddComponent implements OnInit, OnDestroy {
     }
 
     public submit(): void {
-        this.subscriptions.add(this.MapsService.add(this.post)
+        this.subscriptions.add(this.RotationsService.add(this.post)
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('Map');
+                    const title = this.TranslocoService.translate('Data');
                     const msg = this.TranslocoService.translate('created successfully');
-                    const url = ['map_module', 'maps', 'edit', response.id];
+                    const url = ['map_module', 'rotations', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-
-                    if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/map_module/maps/index']);
-                        return;
-                    }
-                    this.post = this.getDefaultPost();
-                    this.ngOnInit();
-                    this.notyService.scrollContentDivToTop();
+                    this.HistoryService.navigateWithFallback(['/map_module/rotations/index']);
                     return;
                 }
 
@@ -148,28 +133,20 @@ export class MapsAddComponent implements OnInit, OnDestroy {
             }))
     }
 
-    private load(): void {
-        this.subscriptions.add(this.MapsService.loadContainers()
+    private loadContainers(): void {
+        this.subscriptions.add(this.RotationsService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
                 this.cdr.markForCheck();
             }))
     }
 
-    private loadSatellites(): void {
-        this.subscriptions.add(this.MapsService.loadSatellites(this.post.Map.containers._ids)
-            .subscribe((result: LoadSatellitesRoot) => {
-                this.satellites = result.satellites;
+    private loadMaps(): void {
+        this.subscriptions.add(this.RotationsService.loadMaps()
+            .subscribe((result: LoadMapsRoot) => {
+                this.maps = result.maps;
                 this.cdr.markForCheck();
             }))
-    }
-
-    public onContainerChange(): void {
-        if (this.post.Map.containers._ids.length === 0) {
-            //Create another
-            return;
-        }
-        this.loadSatellites();
     }
 
 }

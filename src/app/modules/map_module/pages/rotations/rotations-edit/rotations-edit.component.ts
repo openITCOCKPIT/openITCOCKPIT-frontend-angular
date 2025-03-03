@@ -16,7 +16,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -30,15 +30,15 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { SelectKeyValue } from "../../../../../layouts/primeng/select.interface";
 import { HistoryService } from '../../../../../history.service';
-import { MapsService } from '../maps.service';
-import { LoadSatellitesRoot, MapPost } from '../maps.interface';
 
 
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { LoadContainersRoot } from '../../../../../pages/containers/containers.interface';
+import { RotationsService } from '../rotations.service';
+import { LoadMapsRoot, Rotation, RotationPost } from '../rotations.interface';
 
 @Component({
-    selector: 'oitc-maps-edit',
+    selector: 'oitc-rotations-edit',
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -63,62 +63,87 @@ import { LoadContainersRoot } from '../../../../../pages/containers/containers.i
         TranslocoDirective,
         XsButtonDirective,
         MultiSelectComponent,
-        FormLoaderComponent,
-        AsyncPipe
+        FormLoaderComponent
     ],
-    templateUrl: './maps-edit.component.html',
-    styleUrl: './maps-edit.component.css',
+    templateUrl: './rotations-edit.component.html',
+    styleUrl: './rotations-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapsEditComponent implements OnInit, OnDestroy {
+export class RotationsEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
-    private MapsService: MapsService = inject(MapsService);
+    private RotationsService: RotationsService = inject(RotationsService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError = {} as GenericValidationError;
 
-    public post!: MapPost;
+    public post: RotationPost = {
+        Rotation: {
+            name: '',
+            interval: 90,
+            container_id: [],
+            Map: []
+        }
+    };
 
     protected containers: SelectKeyValue[] = [];
-    protected satellites: SelectKeyValue[] = [];
+    protected maps: SelectKeyValue[] = [];
+
     private route = inject(ActivatedRoute);
 
-    protected mapId: number = 0;
+    protected rotationId: number = 0;
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private cdr = inject(ChangeDetectorRef);
+    private rotation!: Rotation;
 
     public ngOnInit() {
+        this.rotationId = Number(this.route.snapshot.paramMap.get('id'));
         this.loadContainers();
-        this.mapId = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.MapsService.getEdit(this.mapId)
-            .subscribe((result) => {
-                this.cdr.markForCheck();
-                this.post = result.map;
-                this.post.Map.refresh_interval = (parseInt(this.post.Map.refresh_interval.toString(), 10) / 1000);
-                this.onContainerChange();
-            }));
+        this.loadMaps();
+        this.load();
     }
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
 
-    public updateMap(): void {
+    private load() {
+        this.subscriptions.add(this.RotationsService.getEdit(this.rotationId)
+            .subscribe((result) => {
+                this.cdr.markForCheck();
+                this.rotation = result.rotation;
+                let selectedContainer = [];
+                let selectedMaps = [];
 
-        this.subscriptions.add(this.MapsService.updateMap(this.post)
+                for (let key in this.rotation.containers) {
+                    selectedContainer.push(parseInt(String(this.rotation.containers[key].id), 10));
+                }
+
+                for (let key in this.rotation.maps) {
+                    selectedMaps.push(parseInt(String(this.rotation.maps[key].id), 10));
+                }
+
+                this.post.Rotation.container_id = selectedContainer;
+                this.post.Rotation.Map = selectedMaps;
+                this.post.Rotation.name = this.rotation.name;
+                this.post.Rotation.interval = parseInt(String(this.rotation.interval), 10);
+            }));
+    }
+
+    public updateRotation(): void {
+
+        this.subscriptions.add(this.RotationsService.updateRotation(this.post, this.rotationId)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
-                    const title: string = this.TranslocoService.translate('Map');
+                    const title: string = this.TranslocoService.translate('Data');
                     const msg: string = this.TranslocoService.translate('updated successfully');
-                    const url: (string | number)[] = ['map_module', 'maps', 'edit', response.id];
+                    const url: (string | number)[] = ['map_module', 'rotations', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-                    this.HistoryService.navigateWithFallback(['/map_module/maps/index']);
-
+                    this.HistoryService.navigateWithFallback(['/map_module/rotations/index']);
                     return;
                 }
 
@@ -133,29 +158,18 @@ export class MapsEditComponent implements OnInit, OnDestroy {
     }
 
     private loadContainers(): void {
-        this.subscriptions.add(this.MapsService.loadContainers()
+        this.subscriptions.add(this.RotationsService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
                 this.cdr.markForCheck();
             }))
     }
 
-    private loadSatellites(): void {
-        this.subscriptions.add(this.MapsService.loadSatellites(this.post.Map.containers._ids)
-            .subscribe((result: LoadSatellitesRoot) => {
-                this.satellites = result.satellites;
+    private loadMaps(): void {
+        this.subscriptions.add(this.RotationsService.loadMaps()
+            .subscribe((result: LoadMapsRoot) => {
+                this.maps = result.maps;
                 this.cdr.markForCheck();
             }))
-    }
-
-    public onContainerChange(): void {
-        if (typeof this.post === "undefined") {
-            return;
-        }
-        if (this.post.Map.containers._ids.length === 0) {
-            //Create another
-            return;
-        }
-        this.loadSatellites();
     }
 }

@@ -13,7 +13,7 @@ import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
-    FormControlDirective,
+    FormControlDirective, FormDirective,
     FormLabelDirective,
     RowComponent
 } from '@coreui/angular';
@@ -58,7 +58,8 @@ import { ScmSettingsIndex, ScmSettingsPost } from '../scmsettings.interface';
         XsButtonDirective,
         RowComponent,
         ColComponent,
-        CardTitleDirective
+        CardTitleDirective,
+        FormDirective
     ],
     templateUrl: './scm-settings-index.component.html',
     styleUrl: './scm-settings-index.component.css',
