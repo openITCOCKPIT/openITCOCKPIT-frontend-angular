@@ -155,6 +155,24 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
             if (resourceId) {
                 this.params['filter[Resources.id][]'] = [].concat(resourceId); // make sure we always get an array
             }
+            let status = params['status'] || undefined;
+            if (status !== undefined) {
+                status = parseInt(status, 10);
+                switch (status) {
+                    case 0:
+                        this.ResourceStatusFilter.unconfirmed = 1;
+                        break;
+                    case 1:
+                        this.ResourceStatusFilter.ok = 1;
+                        break;
+                    case 2:
+                        this.ResourceStatusFilter.warning = 1;
+                        break;
+                    case 3:
+                        this.ResourceStatusFilter.critical = 1;
+                        break;
+                }
+            }
             this.load();
         }));
     }

@@ -1,17 +1,8 @@
-import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    Component,
-    ElementRef,
-    inject,
-    OnDestroy,
-    ViewChild
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, inject, OnDestroy } from '@angular/core';
 import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { ColComponent, RowComponent } from '@coreui/angular';
 import { ScmWidgetService } from '../scm-widget.service';
-import { KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { ResourcesWidgetResponse } from '../scm-widget.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -41,7 +32,6 @@ export class MyResourcesSummaryWidgetComponent extends BaseWidgetComponent imple
     public deadline!: string;
     public deadlineExceeded!: boolean;
     private readonly ScmWidgetService = inject(ScmWidgetService);
-    @ViewChild('scmWidgetContainer') scmWidgetContainer?: ElementRef;
 
     public override load() {
         if (this.widget) {
@@ -53,12 +43,6 @@ export class MyResourcesSummaryWidgetComponent extends BaseWidgetComponent imple
                     this.cdr.markForCheck();
                 }));
         }
-    }
-
-    public override resizeWidget(event?: KtdResizeEnd) {
-        this.widgetHeight = this.scmWidgetContainer?.nativeElement.offsetHeight;
-        this.fontSize = this.widgetHeight / 3.5;
-        this.cdr.markForCheck();
     }
 
     public ngAfterViewInit(): void {

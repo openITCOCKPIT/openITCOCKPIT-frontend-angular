@@ -15,12 +15,7 @@ import { generateGuid } from '@foblex/utils';
 import { EvcTreeDirection } from './evc-tree.enum';
 import { EvcService, EvcTree } from '../../eventcorrelations.interface';
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
-import {
-  ButtonGroupComponent,
-  ColComponent,
-  RowComponent,
-  TooltipDirective
-} from '@coreui/angular';
+import { ButtonGroupComponent, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum';
 import { DowntimeIconComponent } from '../../../../../../pages/downtimes/downtime-icon/downtime-icon.component';
@@ -93,23 +88,23 @@ const OPERATOR_WIDTH = 100;
 @Component({
     selector: 'oitc-evc-tree',
     imports: [
-    FFlowModule,
-    NgClass,
-    RowComponent,
-    ColComponent,
-    NgIf,
-    TooltipDirective,
-    FaIconComponent,
-    DowntimeIconComponent,
-    PermissionDirective,
-    AsyncPipe,
-    AcknowledgementIconComponent,
-    TranslocoPipe,
-    RouterLink,
-    XsButtonDirective,
-    ButtonGroupComponent,
-    EvcServicestatusToasterComponent
-],
+        FFlowModule,
+        NgClass,
+        RowComponent,
+        ColComponent,
+        NgIf,
+        TooltipDirective,
+        FaIconComponent,
+        DowntimeIconComponent,
+        PermissionDirective,
+        AsyncPipe,
+        AcknowledgementIconComponent,
+        TranslocoPipe,
+        RouterLink,
+        XsButtonDirective,
+        ButtonGroupComponent,
+        EvcServicestatusToasterComponent
+    ],
     templateUrl: './evc-tree.component.html',
     styleUrl: './evc-tree.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -385,7 +380,7 @@ export class EvcTreeComponent {
         // https://flow.foblex.com/docs/f-canvas-component
         if (this.fCanvasComponent) {
             this.fCanvasComponent.resetScaleAndCenter(false);
-            this.fCanvasComponent.position = PointExtensions.initialize(0, 0);
+            this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
 
             //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 50), false);
         }
