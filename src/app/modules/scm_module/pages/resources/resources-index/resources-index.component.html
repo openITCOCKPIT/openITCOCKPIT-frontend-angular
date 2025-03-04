@@ -10,11 +10,14 @@
                 <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
                 {{ t('Service Capacity Management Module') }}
             </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'chalkboard-user']"></fa-icon>
-                {{ t('Resources') }}
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['scmmodule','resources', 'index']"
+                   [routerLink]="['/', 'scm_module', 'resources', 'index']">
+                    <fa-icon [icon]="['fas', 'chalkboard-user']"></fa-icon>
+                    {{ t('Resources') }}
+                </a>
             </li>
-            <li aria-current="page" class="breadcrumb-item">
+            <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'list']"></fa-icon>
                 {{ t('Overview') }}
             </li>
@@ -466,4 +469,5 @@
 </ng-container>
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
 <oitc-resources-set-status-modal (completed)="onMassActionComplete($event)"
-                                 [itemsInput]="selectedResourceItems" [settings]="settings"></oitc-resources-set-status-modal>
+                                 [itemsInput]="selectedResourceItems"
+                                 [settings]="settings"></oitc-resources-set-status-modal>

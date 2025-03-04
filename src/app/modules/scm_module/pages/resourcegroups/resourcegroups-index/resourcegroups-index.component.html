@@ -195,25 +195,25 @@
                             <c-button-group role="group" class="btn-group btn-group-justified w-100">
                                 <a class="btn btn-primary state-button-small"
                                    [ngClass]="{'opacity-25': resourcegroup.statesummary[0]===0}"
-                                   [routerLink]="['/','scmmodule', 'resources', 'index']"
+                                   [routerLink]="['/','scm_module', 'resources', 'index']"
                                    [queryParams]="{status:0, resourcegroupId: resourcegroup.id}">
                                     {{ resourcegroup.statesummary[0] }}
                                 </a>
                                 <a class="btn btn-success state-button-small"
                                    [ngClass]="{'opacity-25': resourcegroup.statesummary[1]===0}"
-                                   [routerLink]="['/','scmmodule', 'resources', 'index']"
+                                   [routerLink]="['/','scm_module', 'resources', 'index']"
                                    [queryParams]="{status:1, resourcegroupId: resourcegroup.id}">
                                     {{ resourcegroup.statesummary[1] }}
                                 </a>
                                 <a class="btn btn-warning state-button-small"
                                    [ngClass]="{'opacity-25': resourcegroup.statesummary[2]===0}"
-                                   [routerLink]="['/','scmmodule', 'resources', 'index']"
+                                   [routerLink]="['/','scm_module', 'resources', 'index']"
                                    [queryParams]="{status:2, resourcegroupId: resourcegroup.id}">
                                     {{ resourcegroup.statesummary[2] }}
                                 </a>
                                 <a class="btn btn-danger state-button-small"
                                    [ngClass]="{'opacity-25': resourcegroup.statesummary[3]===0}"
-                                   [routerLink]="['/','scmmodule', 'resources', 'index']"
+                                   [routerLink]="['/','scm_module', 'resources', 'index']"
                                    [queryParams]="{status:3, resourcegroupId: resourcegroup.id}">
                                     {{ resourcegroup.statesummary[3] }}
                                 </a>
