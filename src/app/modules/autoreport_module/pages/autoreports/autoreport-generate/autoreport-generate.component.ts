@@ -81,6 +81,7 @@ import { saveAs } from 'file-saver';
         AlertComponent,
         AsyncPipe,
         KeyValuePipe,
+        FormDirective,
     ],
   templateUrl: './autoreport-generate.component.html',
   styleUrl: './autoreport-generate.component.css', //'./../../../assets/autoreport.css',
