@@ -146,7 +146,7 @@
                     </c-col>
                 </c-row>
 
-                <c-row class="text-end">
+                <c-row class="text-end card-footer">
                     <c-col>
                         <button cButton class="ripple" color="primary" type="submit">
                             <fa-icon [icon]="['fas', 'spinner']" [hidden]="!isGenerating" animation="spin"></fa-icon>
@@ -375,8 +375,8 @@
                                     <tr *ngFor="let service of host.value.Services | keyvalue: keepOrder ">
                                         <td></td>
                                         <td>
-                                            <span class="padding-left-10">
-                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                            <span>
+                                                <fa-icon [icon]="['fas', 'cog']" class="ms-3"></fa-icon>
                                                 @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
                                                     <a [routerLink]="['/', 'services', 'browser', service.value.Service.id]">
                                                         {{ service.value.Service.name }}
@@ -444,7 +444,7 @@
                     </c-col>
                 </c-row>
                 <ng-container *ngFor="let host of report.autoreport_data.hosts | keyvalue: keepOrder">
-                    <c-row class="html-report-host-row border-top pt-2 pb-2">
+                    <c-row class="html-report-host-row border-top pt-3 pb-3">
                         <c-col class="col-3 text-start d-sm-flex align-items-center">
                             <fa-icon [icon]="['fas', 'desktop']" class="pe-1"></fa-icon>
                             @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
@@ -513,7 +513,7 @@
                     <c-row class="html-report-host-row">
                         <c-col class="col-12"
                                *ngIf="host.value.Host.frontend && host.value.Host.frontend.show_outages">
-                            <c-row class="pt-2 pb-2">
+                            <c-row class="mt-3">
                                 <c-col lg="12" xs="12" md="9" class="offset-md-3">
                                     <c-row>
                                         <c-col xs="12" md="4" class="report-font-weight-500">
@@ -549,11 +549,11 @@
                         <c-col lg="12"
                                *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_OUTAGES_IN_DOWNTIME.value) &&
                                  host.value.Host.frontend.outages_summarized_in_downtime.length > 0">
-                            <c-row class="pt-3 pb-3">
+                            <c-row class="pt-3">
                                 <c-col xs="12" lg="12" md="9" class="offset-md-3">
                                     <c-row>
                                         <c-col xs="12" md="8" class="report-font-weight-500">
-                                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                            <fa-icon [icon]="['far', 'clock']"></fa-icon>
                                             <span
                                                 *ngIf="host.value.Host.outage_duration !== null">
 
@@ -616,7 +616,7 @@
                     <!-- show services -->
                     <ng-container *ngIf="host.value.Services">
                         <c-row *ngFor="let service of host.value.Services | keyvalue: keepOrder">
-                            <c-col class="col-12 border-top pt-2 pb-2"
+                            <c-col class="col-12 border-top pt-3 pb-3"
                                    *ngIf="service.value.Service.state_overview">
                                 <c-row>
                                     <c-col class="col-md-3 d-sm-flex">
@@ -761,14 +761,14 @@
                                    *ngIf="service.value.Service.frontend && service.value.Service.frontend.outages_summarized_in_downtime && service.value.Service.frontend.outages_summarized_in_downtime.length > 0 &&
                                      hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_OUTAGES_IN_DOWNTIME.value) &&
                                         service.value.Service.frontend.outages_summarized_in_downtime">
-                                <c-row>
-                                    <c-col lg="12" xs="12" md="9" class="offset-md-3">
+                                <c-row class="mb-3">
+                                    <c-col lg="12" xs="12" md="9" [offset]="3">
                                         <c-row>
                                             <c-col xs="12" md="8" class="report-font-weight-500">
                                                 <fa-icon [icon]="['far', 'clock']"></fa-icon>
                                                 <span
                                                     *ngIf="service.value.Service.outage_duration !== null">
-                                                    t{{ ( 'Service outage in downtime exceeding the permitted limit' ) }}
+                                                    {{ t('Service outage in downtime exceeding the permitted limit') }}
                                                     {{ service.value.Service.outage_duration }}
                                                     {{ t('min') }}</span>
                                                 <span
@@ -795,7 +795,7 @@
                                     service.value.Service.frontend &&
                                     service.value.Service.frontend.downtimes &&
                                     service.value.Service.frontend.downtimes.length > 0">
-                                <c-row class="pb-2">
+                                <c-row>
                                     <c-col lg="12" xs="12" md="9" [offset]="3">
                                         <c-row>
                                             <c-col lg="12" xs="12" md="9" class="report-font-weight-500">
