@@ -324,10 +324,16 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     }
 
     private initSelectOptions(): void {
-        let selectItemObjectTypes: { value: string, key: string }[] = [];
+        // has to be done with two variables, because wit strcturedClone the entries, which are checked for permission, are removed in mapLinesObjectTypes
+        let selectItemObjectTypes: SelectKeyValueString[] = [];
+        let selectLineObjectTypes: SelectKeyValueString[] = [];
         this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['hosts', 'index']).subscribe(hasPermission => {
             if (hasPermission) {
                 selectItemObjectTypes.push({
+                    key: 'host',
+                    value: this.TranslocoService.translate('Host')
+                });
+                selectLineObjectTypes.push({
                     key: 'host',
                     value: this.TranslocoService.translate('Host')
                 });
@@ -339,11 +345,19 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     key: 'service',
                     value: this.TranslocoService.translate('Service')
                 });
+                selectLineObjectTypes.push({
+                    key: 'service',
+                    value: this.TranslocoService.translate('Service')
+                });
             }
         }));
         this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['hostgroups', 'index']).subscribe(hasPermission => {
             if (hasPermission) {
                 selectItemObjectTypes.push({
+                    key: 'hostgroup',
+                    value: this.TranslocoService.translate('Hostgroup')
+                });
+                selectLineObjectTypes.push({
                     key: 'hostgroup',
                     value: this.TranslocoService.translate('Hostgroup')
                 });
@@ -355,18 +369,26 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     key: 'servicegroup',
                     value: this.TranslocoService.translate('Servicegroup')
                 });
+                selectLineObjectTypes.push({
+                    key: 'servicegroup',
+                    value: this.TranslocoService.translate('Servicegroup')
+                });
             }
         }));
         selectItemObjectTypes.push({
             key: 'map',
             value: this.TranslocoService.translate('Map')
         });
-        this.mapItemObjectTypes = selectItemObjectTypes;
-        this.mapLineObjectTypes = structuredClone(selectItemObjectTypes);
-        this.mapLineObjectTypes.push({
+        selectLineObjectTypes.push({
+            key: 'map',
+            value: this.TranslocoService.translate('Map')
+        });
+        selectLineObjectTypes.push({
             key: 'stateless',
             value: this.TranslocoService.translate('Stateless line')
         });
+        this.mapItemObjectTypes = selectItemObjectTypes;
+        this.mapLineObjectTypes = selectLineObjectTypes;
         this.cdr.markForCheck();
 
     }
@@ -2299,7 +2321,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 acceptedFiles: '.zip', //mimetypes
                 paramName: "file",
                 clickable: true,
-                addRemoveLinks: true,
                 headers: {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },

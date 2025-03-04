@@ -97,8 +97,16 @@
                                 class="btn btn-labeled btn-primary btn-xs btn-w-m ripple"
                                 (click)="changeTab(ServiceBrowserTabs.SLA)">
                                 <span class="btn-label-bootstrap-5">
-                                    <fa-icon [icon]="['fas', 'question']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'question']" size="lg"></fa-icon>
                                 </span> {{ t('Not available') }}
+                            </button>
+                        } @else if (SlaOverview.state === 'not_sla_relevant') {
+                            <button disabled="true"
+                                    class="btn btn-labeled btn-secondary btn-xs btn-w-m ripple"
+                                    (click)="changeTab(ServiceBrowserTabs.SLA)">
+                                <span class="btn-label-bootstrap-5">
+                                    <fa-icon [icon]="['fas', 'xmark']" size="lg"></fa-icon>
+                                </span> {{ t('Not SLA relevant') }}
                             </button>
                         } @else {
                             <button
@@ -106,11 +114,11 @@
                                 [ngClass]="'btn-'+SlaOverview.state"
                                 (click)="changeTab(ServiceBrowserTabs.SLA)">
                                 <span class="btn-label-bootstrap-5">
-                                    <fa-icon [icon]="['fas', 'check']"
+                                    <fa-icon [icon]="['fas', 'check']" size="lg"
                                              *ngIf="SlaOverview.state == 'success'"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                    <fa-icon [icon]="['fas', 'triangle-exclamation']" size="lg"
                                              *ngIf="SlaOverview.state == 'warning'"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'bolt']"
+                                    <fa-icon [icon]="['fas', 'bolt']" size="lg"
                                              *ngIf="SlaOverview.state == 'danger'"></fa-icon>
                                 </span> {{ SlaOverview.determined_availability_percent }} %
                             </button>
