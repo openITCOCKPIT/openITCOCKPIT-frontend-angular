@@ -6,7 +6,11 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
     SatelliteEntityCake2,
     SatellitesLoadSatellitesByStringParams,
+    SatellitesStatusParams,
+    SatelliteStatusIndex,
     SatelliteSystemdowntimesParams,
+    SatelliteTasksIndex,
+    SatelliteTasksParams,
     SystemdowntimeSatelliteIndexRoot
 } from './satellites.interface';
 import { SystemdowntimesPost } from '../../../../pages/systemdowntimes/systemdowntimes.interface';
@@ -22,6 +26,29 @@ export class SatellitesService {
     constructor() {
     }
 
+    public getTasksIndex(params: SatelliteTasksParams): Observable<SatelliteTasksIndex> {
+        return this.http.get<SatelliteTasksIndex>(`${this.proxyPath}/distribute_module/satellites/tasks.json`, {
+            params: {
+                ...params
+            }
+        }).pipe(
+            map((data: SatelliteTasksIndex): SatelliteTasksIndex => {
+                return data;
+            })
+        );
+    }
+
+    public getStatusIndex(params: SatellitesStatusParams): Observable<SatelliteStatusIndex> {
+        return this.http.get<SatelliteStatusIndex>(`${this.proxyPath}/distribute_module/satellites/status.json`, {
+            params: {
+                ...params
+            }
+        }).pipe(
+            map((data: SatelliteStatusIndex): SatelliteStatusIndex => {
+                return data;
+            })
+        );
+    }
 
     public loadSatellitesByString(params: SatellitesLoadSatellitesByStringParams): Observable<SelectKeyValue[]> {
         const proxyPath: string = this.proxyPath;
