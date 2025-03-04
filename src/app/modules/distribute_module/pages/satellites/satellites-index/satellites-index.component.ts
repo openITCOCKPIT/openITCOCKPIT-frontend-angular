@@ -1,24 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { IndexPage } from '../../../../../pages.interface';
-import { Subscription } from 'rxjs';
-import { getDefaultSatelliteTasksParams, SatelliteTasksIndex, SatelliteTasksParams } from '../satellites.interface';
-import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { SatellitesService } from '../satellites.service';
 import {
-    BadgeComponent,
     CardBodyComponent,
     CardComponent,
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownDividerDirective,
     FormControlDirective,
     FormDirective,
     HeaderComponent,
     InputGroupComponent,
     InputGroupTextDirective,
+    ModalService,
     NavComponent,
     NavItemComponent,
     RowComponent,
@@ -27,6 +20,7 @@ import {
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
@@ -35,11 +29,31 @@ import {
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
+import { IndexPage } from '../../../../../pages.interface';
+import { Subscription } from 'rxjs';
+import { SatellitesService } from '../satellites.service';
+import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
+import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
+import {
+    AllIndexSatellite,
+    getDefaultSatelliteIndexParams,
+    SatelliteIndex,
+    SatelliteIndexParams
+} from '../satellites.interface';
+import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
+import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../../../components/actions-button-element/actions-button-element.component';
+import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
+import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
-    selector: 'oitc-satellites-tasks',
+    selector: 'oitc-satellites-index',
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -71,37 +85,43 @@ import { RouterLink } from '@angular/router';
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        BadgeComponent
+        ItemSelectComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        DropdownDividerDirective,
+        BadgeOutlineComponent
     ],
-    templateUrl: './satellites-tasks.component.html',
-    styleUrl: './satellites-tasks.component.css',
+    templateUrl: './satellites-index.component.html',
+    styleUrl: './satellites-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SatellitesTasksComponent implements OnInit, OnDestroy, IndexPage {
+export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly SatellitesService: SatellitesService = inject(SatellitesService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly modalService: ModalService = inject(ModalService);
+    private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
 
-    protected params: SatelliteTasksParams = getDefaultSatelliteTasksParams();
+    protected selectedItems: DeleteAllItem[] = [];
+    protected params: SatelliteIndexParams = getDefaultSatelliteIndexParams();
     protected hideFilter: boolean = true;
-    protected readonly statusOptions: SelectKeyValue[] = [
-        {key: 0, value: this.TranslocoService.translate('Unknown')},
-        {key: 1, value: this.TranslocoService.translate('Queued')},
-        {key: 2, value: this.TranslocoService.translate('Running')},
-        {key: 4, value: this.TranslocoService.translate('Success')},
-        {key: 8, value: this.TranslocoService.translate('Failed')},
-        {key: 16, value: this.TranslocoService.translate('Aborted')},
-    ];
-    protected result: SatelliteTasksIndex = {
-        all_satellite_tasks: []
-    } as SatelliteTasksIndex;
+    protected readonly syncMethods: SelectKeyValueString[] = [
+        {value: 'SSH', key: 'ssh'},
+        {value: this.TranslocoService.translate('HTTPS pull mode'), key: 'https_pull'},
+        {value: this.TranslocoService.translate('HTTPS push mode'), key: 'https_push'},
+    ]
+
+    protected result: SatelliteIndex = {
+        all_satellites: []
+    } as SatelliteIndex;
 
     public reload() {
-        this.subscriptions.add(this.SatellitesService.getTasksIndex(this.params)
-            .subscribe((result: SatelliteTasksIndex) => {
+        this.subscriptions.add(this.SatellitesService.getSatellitesIndex(this.params)
+            .subscribe((result: SatelliteIndex) => {
                 this.result = result;
                 this.cdr.markForCheck();
+
             }));
     }
 
@@ -133,7 +153,7 @@ export class SatellitesTasksComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public resetFilter() {
-        this.params = getDefaultSatelliteTasksParams();
+        this.params = getDefaultSatelliteIndexParams();
         this.reload();
     }
 
@@ -148,5 +168,34 @@ export class SatellitesTasksComponent implements OnInit, OnDestroy, IndexPage {
 
     public onMassActionComplete(success: boolean) {
     }
-}
 
+    // Open the Delete All Modal
+    public toggleDeleteAllModal(satellite?: AllIndexSatellite) {
+        let items: DeleteAllItem[] = [];
+        if (satellite) {
+            items = [
+                {
+                    id: satellite.id as number,
+                    displayName: satellite.name
+                }
+            ];
+        } else {
+            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+                return {
+                    id: item.id,
+                    displayName: item.full_name
+                };
+            });
+        }
+
+        // Pass selection to the modal
+        this.selectedItems = items;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'deleteAllModal',
+        });
+    }
+
+}

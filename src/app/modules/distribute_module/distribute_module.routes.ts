@@ -10,6 +10,10 @@ export const distributeModuleRoutes: Routes = [
         loadComponent: () => import('./pages/satellites/satellites-downtime/satellites-downtime.component').then(m => m.SatellitesDowntimeComponent)
     },
     {
+        path: 'distribute_module/satellites/index',
+        loadComponent: () => import('./pages/satellites/satellites-index/satellites-index.component').then(m => m.SatellitesIndexComponent)
+    },
+    {
         path: 'distribute_module/satellites/status',
         loadComponent: () => import('./pages/satellites/satellites-status/satellites-status.component').then(m => m.SatellitesStatusComponent)
     },
