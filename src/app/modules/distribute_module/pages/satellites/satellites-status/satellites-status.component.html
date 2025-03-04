@@ -207,7 +207,16 @@
                         {{ satellite.sync_method_name }}
                     </td>
                     <td>
-                        {{ satellite.status }}
+                        <c-badge
+                                [title]="satellite.satellite_status.status_human"
+                                class="mr-5"
+                                [ngClass]="{
+                                    'bg-success': satellite.satellite_status.status === 1,
+                                    'bg-secondary': satellite.satellite_status.status === 0,
+                                    'bg-danger': satellite.satellite_status.status === 2
+                                }"
+                        >{{ satellite.satellite_status.status_human }}</c-badge>
+
                     </td>
                     <td>
                         {{ satellite.satellite_status.last_export }}
@@ -215,7 +224,7 @@
                     <td>
                         {{ satellite.satellite_status.last_seen }}
                     </td>
-                    <td>
+                    <td class="text-danger">
                         {{ satellite.satellite_status.last_error }}
                     </td>
                 </tr>

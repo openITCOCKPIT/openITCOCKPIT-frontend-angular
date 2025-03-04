@@ -3,12 +3,14 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
+
 import {
+    BadgeComponent,
     CardBodyComponent,
     CardComponent,
     CardTitleDirective,
     ColComponent,
-    ContainerComponent, DropdownDividerDirective,
+    ContainerComponent,
     FormControlDirective,
     FormDirective,
     HeaderComponent,
@@ -16,7 +18,8 @@ import {
     InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent, TableDirective
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
@@ -33,14 +36,8 @@ import { Subscription } from 'rxjs';
 import { SatellitesService } from '../satellites.service';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../../../components/actions-button-element/actions-button-element.component';
-import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
-import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -74,17 +71,14 @@ import {
         TranslocoPipe,
         NgIf,
         TableLoaderComponent,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        BadgeOutlineComponent,
-        DropdownDividerDirective,
-        ItemSelectComponent,
         MatSort,
         MatSortHeader,
         NgForOf,
         TableDirective,
         NoRecordsComponent,
-        PaginateOrScrollComponent
+        PaginateOrScrollComponent,
+        BadgeComponent,
+        NgClass
     ],
     templateUrl: './satellites-status.component.html',
     styleUrl: './satellites-status.component.css',
@@ -99,9 +93,9 @@ export class SatellitesStatusComponent implements OnInit, OnDestroy, IndexPage {
     protected params: SatellitesStatusParams = getDefaultSatellitesStatusParams();
     protected hideFilter: boolean = true;
     protected readonly syncMethods: SelectKeyValueString[] = [
-        {key: 'SSH', value: 'ssh'},
-        {key: this.TranslocoService.translate('HTTPS pull mode'), value: 'https_pull'},
-        {key: this.TranslocoService.translate('HTTPS push mode'), value: 'https_push'},
+        {value: 'SSH', key: 'ssh'},
+        {value: this.TranslocoService.translate('HTTPS pull mode'), key: 'https_pull'},
+        {value: this.TranslocoService.translate('HTTPS push mode'), key: 'https_push'},
     ]
     protected readonly syncStatus: SelectKeyValue[] = [
         {key: 0, value: this.TranslocoService.translate('Unknown')},
