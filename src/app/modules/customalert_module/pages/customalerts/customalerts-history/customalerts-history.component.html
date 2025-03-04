@@ -29,7 +29,7 @@
             </h5>
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
-                    <button (click)="reload()" cButton class="ripple" color="default"
+                    <button (click)="load()" cButton class="ripple" color="default"
                             size="xs">
                         <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                         {{ t('Refresh') }}
@@ -38,23 +38,23 @@
             </c-nav>
         </c-card-header>
         <c-card-body>
-
+            <oitc-block-loader *ngIf="!history"></oitc-block-loader>
             <c-container
-                    [fluid]="true" *ngIf="history && history.history">
+                [fluid]="true" *ngIf="history && history.history">
                 <ul class="cbp_tmtimeline">
                     <li *ngFor="let historyItem of history.history">
                         <time class="cbp_tmtime" [dateTime]="historyItem.state_time">
                             <span>{{ historyItem.state_time }}</span>
                             <span>{{ historyItem.timeAgoInWords }}</span>
                         </time>
-                        <div class="cbp_tmicon txt-color-white"
+                        <div class="cbp_tmicon text-white"
                              [ngClass]="{'new-flame-bg': historyItem.state===0, 'bg-secondary': historyItem.state===1, 'bg-success': historyItem.state===2, 'bg-primary': historyItem.state===3}">
                             <i class="fa-solid fa-fire-flame-curved" [hidden]="historyItem.state!==0"></i>
                             <i class="fa-solid fa-person-digging" [hidden]="historyItem.state!==1"></i>
                             <i class="fa-solid fa-clipboard-check" [hidden]="historyItem.state!==2"></i>
                             <i class="fa-solid fa-folder-closed" [hidden]="historyItem.state!==3"></i>
                         </div>
-                        <div class="cbp_tmlabel p-3" *ngIf="historyItem.customalert_comment.id">
+                        <div class="cbp_tmlabel" *ngIf="historyItem.customalert_comment.id">
                             <h5 class="font-md">
                                 <span class="font-xs" *ngIf="historyItem.user">
 
@@ -72,15 +72,14 @@
                                 </span>
                             </h5>
                             <blockquote
-                                    [ngClass]="{ 'changelog-blockquote-secondary': historyItem.state==1, 'changelog-blockquote-success': historyItem.state==2}"
-
-                                    class="blockquote">
-                                <div class="margin-left-10 italic font-sm">
+                                [ngClass]="{ 'changelog-blockquote-secondary': historyItem.state==1, 'changelog-blockquote-success': historyItem.state==2}"
+                                class="blockquote">
+                                <div class="italic font-sm ps-2">
                                     {{ historyItem.customalert_comment.comment }}
                                 </div>
                             </blockquote>
                         </div>
-                        <div class="cbp_tmlabel" *ngIf="historyItem.user === false && historyItem.state === 0">
+                        <div class="cbp_tmlabel" *ngIf="!historyItem.user && historyItem.state === 0">
                             <h5 class="font-md">
                                 {{ t('Service:') }}
 
@@ -111,12 +110,11 @@
                             </h5>
 
                             <blockquote class="blockquote changelog-blockquote-danger">
-                                <code>
+                                <code class="ps-2">
                                     {{ history.customalert.message }}
                                 </code>
                             </blockquote>
                         </div>
-
                     </li>
                 </ul>
             </c-container>

@@ -5,6 +5,7 @@ import { CommandTypesEnum } from './command-types.enum';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericValidationError } from '../../generic-responses';
 import { DefaultMacros } from '../../components/code-mirror-container/code-mirror-container.interface';
+import { GenericIdAndName } from '../../generic.interfaces';
 
 export interface CommandsIndexParams {
     angular: true,
@@ -107,15 +108,11 @@ export interface CommandCopyGet {
 }
 
 export interface CommandCopyPost {
-    Source: SourceCommand
+    Source: GenericIdAndName
     Command: CommandCopy
     Error: GenericValidationError | null
 }
 
-export interface SourceCommand {
-    id: number
-    name: string
-}
 
 export interface CommandCopy {
     id?: number,
