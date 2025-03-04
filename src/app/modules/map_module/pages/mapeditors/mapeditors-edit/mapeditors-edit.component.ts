@@ -94,7 +94,7 @@ import {
     ServicegroupsLoadServicegroupsByStringParams
 } from '../../../../../pages/servicegroups/servicegroups.interface';
 import { ServicegroupsService } from '../../../../../pages/servicegroups/servicegroups.service';
-import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -249,10 +249,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     public maxUploadLimit?: MaxUploadLimit;
     public iconsets: Iconset[] = [];
     public icons: string[] = [];
-    public metrics: { key: string, value: string }[] = [];
+    public metrics: SelectKeyValueString[] = [];
     public itemObjects: SelectKeyValue[] = [];
-    public mapItemObjectTypes: { key: string, value: string }[] = [];
-    public mapLineObjectTypes: { key: string, value: string }[] = [];
+    public mapItemObjectTypes: SelectKeyValueString[] = [];
+    public mapLineObjectTypes: SelectKeyValueString[] = [];
     public mapGadgetsOutputTypes = [
         {key: 'service_output', value: this.TranslocoService.translate('Service output')},
         {key: 'service_long_output', value: this.TranslocoService.translate('Service long output')}
@@ -856,7 +856,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.visibleLayers['layer_' + newZIndex] = true;
 
         if (this.currentItem.hasOwnProperty('z_index')) {
-            this.currentItem.z_index = newZIndex;
+            this.currentItem.z_index = newZIndex.toString();
         }
     };
 
@@ -1977,7 +1977,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
      * Load more objects if the user type to search in a select box.
      * @param searchString
      */
-    public loadMoreItemObjects(searchString: string) {
+    public loadMoreItemObjects = (searchString: string) => {
         if (typeof this.currentItem.type !== "undefined") {
 
             //Avoid duplicate search requests because of $scope.currentItem.object_id will be set to

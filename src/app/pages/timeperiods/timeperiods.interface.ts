@@ -69,7 +69,7 @@ export interface Timeperiod {
 }
 
 export interface TimeperiodRange {
-    day: '1'|'2'|'3'|'4'|'5'|'6'|'7'
+    day: '1' | '2' | '3' | '4' | '5' | '6' | '7'
     start: string,
     end: string,
     timeperiod_id?: number,
@@ -79,20 +79,10 @@ export interface TimeperiodRange {
 
 export interface InternalRange {
     id: number | null,
-    day: '1'|'2'|'3'|'4'|'5'|'6'|'7'
+    day: '1' | '2' | '3' | '4' | '5' | '6' | '7'
     start: string,
     end: string,
     index: number
-}
-
-export interface Container {
-    key: number,
-    value: string
-}
-
-export interface Calendar {
-    key: number,
-    value: string
 }
 
 export interface TimeperiodAddResponse extends GenericIdResponse {

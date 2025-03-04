@@ -4,11 +4,10 @@ import { GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Calendar, Container, InternalRange, Timeperiod, TimeperiodAddResponse } from '../timeperiods.interface';
+import { InternalRange, Timeperiod, TimeperiodAddResponse } from '../timeperiods.interface';
 import { TimeperiodsService } from '../timeperiods.service';
 import _ from 'lodash';
 import { WeekdaysService } from '../../../weekdays.service';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
     CardBodyComponent,
@@ -37,6 +36,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { HistoryService } from '../../../history.service';
+import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-timeperiods-add',
@@ -88,13 +88,13 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
         description: '',
     }
 
-    public containers: Container[] = [];
+    public containers: SelectKeyValue[] = [];
 
     public timeperiod: { ranges: InternalRange[] } = {
         ranges: []
     };
 
-    public calendars: Calendar[] = [];
+    public calendars: SelectKeyValue[] = [];
 
     public errors: GenericValidationError | null = null;
 
@@ -106,7 +106,7 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
-    public readonly weekdays: { key: string, value: string }[] = this.WeekdaysService.getWeekdays();
+    public readonly weekdays: SelectKeyValueString[] = this.WeekdaysService.getWeekdays();
     public startPlaceholder = this.TranslocoService.translate('Start') + ' ' + this.TranslocoService.translate('(00:00)');
     public endPlaceholder = this.TranslocoService.translate('End') + ' ' + this.TranslocoService.translate('(24:00)');
     private cdr = inject(ChangeDetectorRef);

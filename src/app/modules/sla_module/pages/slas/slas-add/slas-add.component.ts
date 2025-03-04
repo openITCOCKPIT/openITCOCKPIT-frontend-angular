@@ -215,9 +215,6 @@ export class SlasAddComponent implements OnInit, OnDestroy {
     }
 
     private loadContainers() {
-        if (!this.post.container_id) {
-            return;
-        }
         this.subscriptions.add(this.ContainersService.loadAllContainers().subscribe((result) => {
             this.containers = result;
             this.cdr.markForCheck();

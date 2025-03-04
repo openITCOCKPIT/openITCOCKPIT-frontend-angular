@@ -4,7 +4,6 @@ import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
-    Container,
     Timeperiod,
     TimeperiodCopyGet,
     TimeperiodCopyPost,
@@ -41,10 +40,10 @@ export class TimeperiodsService {
         )
     }
 
-    public getAdd(): Observable<Container[]> {
+    public getAdd(): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
-            containers: Container[]
+            containers: SelectKeyValue[]
         }>(`${proxyPath}/containers/loadContainersForAngular.json?angular=true`).pipe(
             map(data => {
                 return data['containers'];
@@ -58,10 +57,10 @@ export class TimeperiodsService {
             map(data => {
 
                 // The server response the "day" as integer, but the Frontend expects a string
-                let result:TimeperiodsEditRoot = data;
+                let result: TimeperiodsEditRoot = data;
                 result.timeperiod.timeperiod_timeranges.forEach((timerange) => {
                     const day = timerange.day;
-                    timerange.day = day.toString() as '1'|'2'|'3'|'4'|'5'|'6'|'7';
+                    timerange.day = day.toString() as '1' | '2' | '3' | '4' | '5' | '6' | '7';
                 });
 
                 return result;
@@ -69,10 +68,10 @@ export class TimeperiodsService {
         )
     }
 
-    public getContainers(): Observable<Container[]> {
+    public getContainers(): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
-            containers: Container[]
+            containers: SelectKeyValue[]
         }>(`${proxyPath}/containers/loadContainersForAngular.json?angular=true`).pipe(
             map(data => {
                 return data['containers'];

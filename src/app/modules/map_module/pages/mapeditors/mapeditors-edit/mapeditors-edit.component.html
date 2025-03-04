@@ -506,33 +506,37 @@
                         </c-col>
                     </c-row>
                     <c-row>
-                        <c-col lg="10">
+                        <c-col lg="12">
                             <div class="mb-3">
                                 <label cLabel for="mapItemLayers">
                                     {{ t('Select layer') }}
                                 </label>
 
-                                <oitc-select
-                                    name="mapItemLayers"
-                                    id="mapItemLayers"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="currentItem.z_index"
-                                    [options]="layers"
-                                    [appendTo]="''"
-                                    oitcFormError [errors]="errors" errorField="z_index">
-                                </oitc-select>
+                                <div class="d-flex justify-content-between align-items-center gap-3">
+                                    <div style="flex-basis: 85%">
+                                        <oitc-select
+                                            name="mapItemLayers"
+                                            id="mapItemLayers"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [(ngModel)]="currentItem.z_index"
+                                            [options]="layers"
+                                            [appendTo]="''"
+                                            oitcFormError [errors]="errors" errorField="z_index">
+                                        </oitc-select>
+                                    </div>
+                                    <div style="flex-basis: 15%">
+                                        <button (click)="addNewLayer()" cButton class="ripple" style="width: 100%"
+                                                color="default">
+                                            {{ t('Add new layer') }}
+                                        </button>
+                                    </div>
+                                </div>
                                 <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
                                 <span class="help-block">
                                     {{ t('Layers could be used to stack items on a map. Empty layers will be deleted automatically.') }}
                                 </span>
                             </div>
-                        </c-col>
-                        <c-col lg="2">
-                            <button (click)="addNewLayer()" cButton class="ripple mt-4" style="width: 100%"
-                                    color="default">
-                                {{ t('Add new layer') }}
-                            </button>
                         </c-col>
                     </c-row>
                     <c-row>
@@ -636,7 +640,8 @@
 
             </c-modal-body>
             <c-modal-footer>
-                <button cButton color="danger" class="ripple me-auto" (click)="deleteItem()">
+                <button cButton color="danger" class="ripple me-auto" (click)="deleteItem()"
+                        *ngIf="currentItem.hasOwnProperty('id')">
                     {{ t('Delete') }}
                 </button>
                 <button cButton color="success" type="submit" class="ripple">
@@ -804,33 +809,37 @@
                     </c-col>
                 </c-row>
                 <c-row>
-                    <c-col lg="10">
+                    <c-col lg="12">
                         <div class="mb-3">
                             <label cLabel for="mapLineLayers">
                                 {{ t('Select layer') }}
                             </label>
 
-                            <oitc-select
-                                name="mapLineLayers"
-                                id="mapLineLayers"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="currentItem.z_index"
-                                [options]="layers"
-                                [appendTo]="''"
-                                oitcFormError [errors]="errors" errorField="z_index">
-                            </oitc-select>
+                            <div class="d-flex justify-content-between align-items-center gap-3">
+                                <div style="flex-basis: 85%">
+                                    <oitc-select
+                                        name="mapLineLayers"
+                                        id="mapLineLayers"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="currentItem.z_index"
+                                        [options]="layers"
+                                        [appendTo]="''"
+                                        oitcFormError [errors]="errors" errorField="z_index">
+                                    </oitc-select>
+                                </div>
+                                <div style="flex-basis: 15%">
+                                    <button (click)="addNewLayer()" cButton class="ripple" style="width: 100%"
+                                            color="default">
+                                        {{ t('Add new layer') }}
+                                    </button>
+                                </div>
+                            </div>
                             <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
                             <span class="help-block">
                                 {{ t('Layers could be used to stack items on a map. Empty layers will be deleted automatically.') }}
                             </span>
                         </div>
-                    </c-col>
-                    <c-col lg="2">
-                        <button (click)="addNewLayer()" cButton class="ripple mt-4" style="width: 100%"
-                                color="default">
-                            {{ t('Add new layer') }}
-                        </button>
                     </c-col>
                 </c-row>
                 <c-row>
@@ -851,7 +860,8 @@
 
             </c-modal-body>
             <c-modal-footer>
-                <button cButton color="danger" class="ripple me-auto" (click)="deleteLine()">
+                <button cButton color="danger" class="ripple me-auto" (click)="deleteLine()"
+                        *ngIf="currentItem.hasOwnProperty('id')">
                     {{ t('Delete') }}
                 </button>
                 <button cButton color="success" type="submit" class="ripple">
@@ -1099,33 +1109,37 @@
                     </c-col>
                 </c-row>
                 <c-row>
-                    <c-col lg="10">
+                    <c-col lg="12">
                         <div class="mb-3">
                             <label cLabel for="mapGadgetLayers">
                                 {{ t('Select layer') }}
                             </label>
 
-                            <oitc-select
-                                name="mapGadgetLayers"
-                                id="mapGadgetLayers"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="currentItem.z_index"
-                                [options]="layers"
-                                [appendTo]="''"
-                                oitcFormError [errors]="errors" errorField="z_index">
-                            </oitc-select>
+                            <div class="d-flex justify-content-between align-items-center gap-3">
+                                <div style="flex-basis: 85%">
+                                    <oitc-select
+                                        name="mapGadgetLayers"
+                                        id="mapGadgetLayers"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="currentItem.z_index"
+                                        [options]="layers"
+                                        [appendTo]="''"
+                                        oitcFormError [errors]="errors" errorField="z_index">
+                                    </oitc-select>
+                                </div>
+                                <div style="flex-basis: 15%">
+                                    <button (click)="addNewLayer()" cButton class="ripple" style="width: 100%"
+                                            color="default">
+                                        {{ t('Add new layer') }}
+                                    </button>
+                                </div>
+                            </div>
                             <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
                             <span class="help-block">
                                 {{ t('Layers could be used to stack items on a map. Empty layers will be deleted automatically.') }}
                             </span>
                         </div>
-                    </c-col>
-                    <c-col lg="2">
-                        <button (click)="addNewLayer()" cButton class="ripple mt-4" style="width: 100%"
-                                color="default">
-                            {{ t('Add new layer') }}
-                        </button>
                     </c-col>
                 </c-row>
                 <c-row>
@@ -1146,7 +1160,8 @@
 
             </c-modal-body>
             <c-modal-footer>
-                <button cButton color="danger" class="ripple me-auto" (click)="deleteGadget()">
+                <button cButton color="danger" class="ripple me-auto" (click)="deleteGadget()"
+                        *ngIf="currentItem.hasOwnProperty('id')">
                     {{ t('Delete') }}
                 </button>
                 <button cButton color="success" type="submit" class="ripple">
@@ -1292,33 +1307,37 @@
                     </c-col>
                 </c-row>
                 <c-row>
-                    <c-col lg="10">
+                    <c-col lg="12">
                         <div class="mb-3">
                             <label cLabel for="mapSummaryItemLayers">
                                 {{ t('Select layer') }}
                             </label>
 
-                            <oitc-select
-                                name="mapSummaryItemLayers"
-                                id="mapSummaryItemLayers"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="currentItem.z_index"
-                                [options]="layers"
-                                [appendTo]="''"
-                                oitcFormError [errors]="errors" errorField="z_index">
-                            </oitc-select>
+                            <div class="d-flex justify-content-between align-items-center gap-3">
+                                <div style="flex-basis: 85%">
+                                    <oitc-select
+                                        name="mapSummaryItemLayers"
+                                        id="mapSummaryItemLayers"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="currentItem.z_index"
+                                        [options]="layers"
+                                        [appendTo]="''"
+                                        oitcFormError [errors]="errors" errorField="z_index">
+                                    </oitc-select>
+                                </div>
+                                <div style="flex-basis: 15%">
+                                    <button (click)="addNewLayer()" cButton class="ripple" style="width: 100%"
+                                            color="default">
+                                        {{ t('Add new layer') }}
+                                    </button>
+                                </div>
+                            </div>
                             <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
                             <span class="help-block">
                                 {{ t('Layers could be used to stack items on a map. Empty layers will be deleted automatically.') }}
                             </span>
                         </div>
-                    </c-col>
-                    <c-col lg="2">
-                        <button (click)="addNewLayer()" cButton class="ripple mt-4" style="width: 100%"
-                                color="default">
-                            {{ t('Add new layer') }}
-                        </button>
                     </c-col>
                 </c-row>
                 <c-row>
@@ -1373,7 +1392,8 @@
                 </c-row>
             </c-modal-body>
             <c-modal-footer>
-                <button cButton color="danger" class="ripple me-auto" (click)="deleteSummaryItem()">
+                <button cButton color="danger" class="ripple me-auto" (click)="deleteSummaryItem()"
+                        *ngIf="currentItem.hasOwnProperty('id')">
                     {{ t('Delete') }}
                 </button>
                 <button cButton color="success" type="submit" class="ripple">
@@ -1583,33 +1603,37 @@
                     </c-col>
                 </c-row>
                 <c-row>
-                    <c-col lg="10">
+                    <c-col lg="12">
                         <div class="mb-3">
                             <label cLabel for="statelessIconLayers">
                                 {{ t('Select layer') }}
                             </label>
 
-                            <oitc-select
-                                name="statelessIconLayers"
-                                id="statelessIconLayers"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="currentItem.z_index"
-                                [options]="layers"
-                                [appendTo]="''"
-                                oitcFormError [errors]="errors" errorField="z_index">
-                            </oitc-select>
+                            <div class="d-flex justify-content-between align-items-center gap-3">
+                                <div style="flex-basis: 85%">
+                                    <oitc-select
+                                        name="statelessIconLayers"
+                                        id="statelessIconLayers"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="currentItem.z_index"
+                                        [options]="layers"
+                                        [appendTo]="''"
+                                        oitcFormError [errors]="errors" errorField="z_index">
+                                    </oitc-select>
+                                </div>
+                                <div style="flex-basis: 15%">
+                                    <button (click)="addNewLayer()" cButton class="ripple" style="width: 100%"
+                                            color="default">
+                                        {{ t('Add new layer') }}
+                                    </button>
+                                </div>
+                            </div>
                             <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
                             <span class="help-block">
                                 {{ t('Layers could be used to stack items on a map. Empty layers will be deleted automatically.') }}
                             </span>
                         </div>
-                    </c-col>
-                    <c-col lg="2">
-                        <button (click)="addNewLayer()" cButton class="ripple mt-4" style="width: 100%"
-                                color="default">
-                            {{ t('Add new layer') }}
-                        </button>
                     </c-col>
                 </c-row>
                 <c-row>
@@ -1637,7 +1661,8 @@
                 </c-row>
             </c-modal-body>
             <c-modal-footer>
-                <button cButton color="danger" class="ripple me-auto" (click)="deleteIcon()">
+                <button cButton color="danger" class="ripple me-auto" (click)="deleteIcon()"
+                        *ngIf="currentItem.hasOwnProperty('id')">
                     {{ t('Delete') }}
                 </button>
                 <button cButton color="success" type="submit" class="ripple">
@@ -1719,39 +1744,44 @@
                     </c-col>
                 </c-row>
                 <c-row>
-                    <c-col lg="10">
+                    <c-col lg="12">
                         <div class="mb-3">
                             <label cLabel for="statelessTextLayers">
                                 {{ t('Select layer') }}
                             </label>
 
-                            <oitc-select
-                                name="statelessTextLayers"
-                                id="statelessTextLayers"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="currentItem.z_index"
-                                [options]="layers"
-                                [appendTo]="''"
-                                oitcFormError [errors]="errors" errorField="z_index">
-                            </oitc-select>
+                            <div class="d-flex justify-content-between align-items-center gap-3">
+                                <div style="flex-basis: 85%">
+                                    <oitc-select
+                                        name="statelessTextLayers"
+                                        id="statelessTextLayers"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="currentItem.z_index"
+                                        [options]="layers"
+                                        [appendTo]="''"
+                                        oitcFormError [errors]="errors" errorField="z_index">
+                                    </oitc-select>
+                                </div>
+                                <div style="flex-basis: 15%">
+                                    <button (click)="addNewLayer()" cButton class="ripple" style="width: 100%"
+                                            color="default">
+                                        {{ t('Add new layer') }}
+                                    </button>
+                                </div>
+                            </div>
                             <oitc-form-feedback [errors]="errors" errorField="z_index"></oitc-form-feedback>
                             <span class="help-block">
                                 {{ t('Layers could be used to stack items on a map. Empty layers will be deleted automatically.') }}
                             </span>
                         </div>
                     </c-col>
-                    <c-col lg="2">
-                        <button (click)="addNewLayer()" cButton class="ripple mt-4" style="width: 100%"
-                                color="default">
-                            {{ t('Add new layer') }}
-                        </button>
-                    </c-col>
                 </c-row>
 
             </c-modal-body>
             <c-modal-footer>
-                <button cButton color="danger" class="ripple me-auto" (click)="deleteText()">
+                <button cButton color="danger" class="ripple me-auto" (click)="deleteText()"
+                        *ngIf="currentItem.hasOwnProperty('id')">
                     {{ t('Delete') }}
                 </button>
                 <button cButton color="success" type="submit" class="ripple">
