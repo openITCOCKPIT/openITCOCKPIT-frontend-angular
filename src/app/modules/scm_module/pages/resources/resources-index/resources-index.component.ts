@@ -150,10 +150,32 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
-            //console.log(params);
             let resourceId = params['id'] || params['id'];
             if (resourceId) {
                 this.params['filter[Resources.id][]'] = [].concat(resourceId); // make sure we always get an array
+            }
+            let resourcegroupId = params['resourcegroupId'] || params['resourcegroupId'];
+            if (resourcegroupId) {
+                resourcegroupId = parseInt(resourcegroupId, 10);
+                this.params['filter[Resources.resourcegroup_id][]'] = [].concat(resourcegroupId); // make sure we always get an array
+            }
+            let status = params['status'] || undefined;
+            if (status !== undefined) {
+                status = parseInt(status, 10);
+                switch (status) {
+                    case 0:
+                        this.ResourceStatusFilter.unconfirmed = 1;
+                        break;
+                    case 1:
+                        this.ResourceStatusFilter.ok = 1;
+                        break;
+                    case 2:
+                        this.ResourceStatusFilter.warning = 1;
+                        break;
+                    case 3:
+                        this.ResourceStatusFilter.critical = 1;
+                        break;
+                }
             }
             this.load();
         }));

@@ -117,18 +117,18 @@ const GROUP_HEIGHT = 50;
 @Component({
     selector: 'oitc-evc-tree-edit',
     imports: [
-    FFlowModule,
-    NgClass,
-    RowComponent,
-    ColComponent,
-    NgIf,
-    TooltipDirective,
-    FaIconComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    ButtonGroupComponent
-],
+        FFlowModule,
+        NgClass,
+        RowComponent,
+        ColComponent,
+        NgIf,
+        TooltipDirective,
+        FaIconComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        ButtonGroupComponent
+    ],
     templateUrl: './evc-tree-edit.component.html',
     styleUrl: './evc-tree-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -506,7 +506,7 @@ export class EvcTreeEditComponent implements OnDestroy {
         // https://flow.foblex.com/docs/f-canvas-component
         if (this.fCanvasComponent) {
             this.fCanvasComponent.resetScaleAndCenter(false);
-            this.fCanvasComponent.position = PointExtensions.initialize(0, 0);
+            this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
 
             //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 50), false);
         }
