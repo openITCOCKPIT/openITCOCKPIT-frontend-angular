@@ -19,7 +19,7 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'satellite-dish']"></fa-icon>
+                <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
                 {{ t('Tasks Overview') }}
             </li>
         </ol>
@@ -30,26 +30,29 @@
             <h5 cCardTitle>
                 {{ t('Satellites') }}
                 <small class="fw-300">
-                    {{ t('Status overview') }}
+                    {{ t('Tasks overview') }}
                 </small>
             </h5>
 
+            <c-nav variant="underline" class="card-toolbar card-header-pills mR-3" style="margin-right:15px;">
+                <c-nav-item>
+                    <button class="nav-link" [routerLink]="['/', 'distribute_module', 'satellites', 'status']">
+                        <fa-icon [icon]="['fas', 'satellite-dish']"></fa-icon>
+                        {{ t('Satellites Status') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item>
+                    <button class="active nav-link" [routerLink]="['/', 'distribute_module', 'satellites', 'tasks']">
+                        <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
+                        {{ t('Satellite Tasks') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
                     <button (click)="reload()" cButton class="ripple" color="default" size="xs">
                         <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                         {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button *oitcPermission="['distributeModule', 'satellites', 'add']"
-                            [routerLink]="['/', 'distribute_module', 'satellites', 'add']"
-                            cButton
-                            class="ripple"
-                            color="success"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                        {{ t('New') }}
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
@@ -152,51 +155,62 @@
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
                 <tr>
-                    <th scope="col" mat-sort-header="Satellits.name">
+                    <th scope="col" mat-sort-header="SatelliteTasks.id">
+                        {{ t('Task ID') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Satellites.name">
                         {{ t('Instance name') }}
                     </th>
-                    <th scope="col" mat-sort-header="Satellits.address">
-                        {{ t('IP address') }}
+                    <th scope="col" mat-sort-header="SatelliteTasks.task">
+                        {{ t('Task') }}
                     </th>
-                    <th scope="col" mat-sort-header="Satellits.sync_method">
-                        {{ t('Sync method') }}
+                    <th scope="col" mat-sort-header="SatelliteTasks.status">
+                        {{ t('Status') }}
                     </th>
-                    <th scope="col" mat-sort-header="status">
-                        {{ t('Sync status') }}
+                    <th scope="col" mat-sort-header="SatelliteTasks.result">
+                        {{ t('Task Result') }}
                     </th>
-                    <th scope="col" mat-sort-header="SatelliteStatus.last_export">
-                        {{ t('Last sync') }}
+                    <th scope="col" mat-sort-header="SatelliteTasks.error">
+                        {{ t('Error') }}
                     </th>
-                    <th scope="col" mat-sort-header="SatelliteStatus.last_seen">
-                        {{ t('Last seen') }}
+                    <th scope="col" mat-sort-header="SatelliteTasks.modified">
+                        {{ t('Modified') }}
                     </th>
-                    <th scope="col" mat-sort-header="SatelliteStatus.last_error">
-                        {{ t('Last error') }}
+                    <th scope="col" mat-sort-header="SatelliteTasks.created">
+                        {{ t('Created') }}
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let task of result.all_satellite_tasks">
                     <td>
-                        {{ task.name }}
+                        {{ task.id }}
                     </td>
                     <td>
-                        {{ task.address }}
+                        {{ task.satellite.name }}
                     </td>
                     <td>
-                        {{ task.sync_method_name }}
+                        <code>{{ task.task }}</code>
                     </td>
                     <td>
-                        {{ task.status }}
+                        <c-badge
+                                [title]="task.status_human"
+                                [color]="task.status_human.class.replaceAll('badge-', '')"
+                                class="mr-5"
+                        >{{ task.status_human.title }}
+                        </c-badge>
                     </td>
                     <td>
-                        {{ task.satellite_status.last_export }}
+                        {{ task.result }}
+                    </td>
+                    <td class="text-danger">
+                        {{ task.error }}
                     </td>
                     <td>
-                        {{ task.satellite_status.last_seen }}
+                        {{ task.created }}
                     </td>
                     <td>
-                        {{ task.satellite_status.last_error }}
+                        {{ task.modified }}
                     </td>
                 </tr>
                 </tbody>
@@ -204,7 +218,7 @@
 
 
             <oitc-no-records
-                    *ngIf="result && result.all_satellites.length === 0"></oitc-no-records>
+                    *ngIf="result && result.all_satellite_tasks.length === 0"></oitc-no-records>
 
             <c-container
                     [fluid]="true">

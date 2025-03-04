@@ -8,6 +8,7 @@ import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/pa
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { SatellitesService } from '../satellites.service';
 import {
+    BadgeComponent,
     CardBodyComponent,
     CardComponent,
     CardTitleDirective,
@@ -69,7 +70,8 @@ import { RouterLink } from '@angular/router';
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        BadgeComponent
     ],
     templateUrl: './satellites-tasks.component.html',
     styleUrl: './satellites-tasks.component.css',
@@ -91,20 +93,17 @@ export class SatellitesTasksComponent implements OnInit, OnDestroy, IndexPage {
         {key: 8, value: this.TranslocoService.translate('Failed')},
         {key: 16, value: this.TranslocoService.translate('Aborted')},
     ];
+    protected result: SatelliteTasksIndex = {
+        all_satellite_tasks: []
+    } as SatelliteTasksIndex;
 
     public reload() {
         this.subscriptions.add(this.SatellitesService.getTasksIndex(this.params)
             .subscribe((result: SatelliteTasksIndex) => {
                 this.result = result;
                 this.cdr.markForCheck();
-
             }));
     }
-
-
-    protected result: SatelliteTasksIndex = {
-        all_satellites: []
-    } as SatelliteTasksIndex;
 
     public ngOnInit() {
         this.reload();

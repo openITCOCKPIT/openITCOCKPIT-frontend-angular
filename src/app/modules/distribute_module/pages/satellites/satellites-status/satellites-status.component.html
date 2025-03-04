@@ -19,7 +19,7 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'satellite-dish']"></fa-icon>
+                <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
                 {{ t('Status Overview') }}
             </li>
         </ol>
@@ -34,6 +34,20 @@
                 </small>
             </h5>
 
+            <c-nav variant="underline" class="card-toolbar card-header-pills mR-3" style="margin-right:15px;">
+                <c-nav-item>
+                    <button class="active nav-link" [routerLink]="['/', 'distribute_module', 'satellites', 'status']">
+                        <fa-icon [icon]="['fas', 'satellite-dish']"></fa-icon>
+                        {{ t('Satellites Status') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item>
+                    <button class="nav-link" [routerLink]="['/', 'distribute_module', 'satellites', 'tasks']">
+                        <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
+                        {{ t('Satellite Tasks') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
                     <button (click)="reload()" cButton class="ripple" color="default" size="xs">

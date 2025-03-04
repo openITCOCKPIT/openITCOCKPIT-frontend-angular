@@ -42,6 +42,7 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { DowntimereportsEnum } from '../../../../../pages/downtimereports/downtimereports.enum';
 
 @Component({
     selector: 'oitc-satellites-status',
@@ -102,6 +103,9 @@ export class SatellitesStatusComponent implements OnInit, OnDestroy, IndexPage {
         {key: 1, value: this.TranslocoService.translate('Success')},
         {key: 2, value: this.TranslocoService.translate('Error')},
     ];
+    protected result: SatelliteStatusIndex = {
+        all_satellites: []
+    } as SatelliteStatusIndex;
 
     public reload() {
         this.subscriptions.add(this.SatellitesService.getStatusIndex(this.params)
@@ -111,11 +115,6 @@ export class SatellitesStatusComponent implements OnInit, OnDestroy, IndexPage {
 
             }));
     }
-
-
-    protected result: SatelliteStatusIndex = {
-        all_satellites: []
-    } as SatelliteStatusIndex;
 
     public ngOnInit() {
         this.reload();
@@ -160,4 +159,6 @@ export class SatellitesStatusComponent implements OnInit, OnDestroy, IndexPage {
 
     public onMassActionComplete(success: boolean) {
     }
+
+    protected readonly DowntimereportsEnum = DowntimereportsEnum;
 }

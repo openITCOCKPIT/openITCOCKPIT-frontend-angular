@@ -86,7 +86,6 @@ export interface SatelliteStatus {
 // TASKS: INDEX
 export interface SatelliteTasksIndex extends PaginateOrScroll {
     all_satellite_tasks: AllSatelliteTask[]
-    _csrfToken: any
 }
 
 export interface AllSatelliteTask {
