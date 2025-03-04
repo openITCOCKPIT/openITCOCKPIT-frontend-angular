@@ -1,0 +1,374 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Service Capacity Management Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['scmmodule','resourcegroups', 'index']"
+                   [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']">
+                    <fa-icon [icon]="['fas', 'user-group']"></fa-icon>
+                    {{ t('Resource groups') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'solar-panel']"></fa-icon>
+                {{ t('Summary') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Resource groups') }}
+                <small class="fw-300">
+                    {{ t('summary') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="['scm_module', 'resourcegroups', 'index']" cButton class="ripple"
+                            color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <oitc-block-loader *ngIf="!globalStatusSummary"></oitc-block-loader>
+            <c-row>
+                <c-col [xs]="12" [md]="12" [lg]="4">
+                    <div #scmSummaryContainer id="sunburstchart">
+                        &nbsp;
+                    </div>
+                </c-col>
+                <c-col [xs]="12" [md]="12" [lg]="8" *ngIf="globalStatusSummary">
+                    <c-row>
+                        <c-col class="fieldset-legend-border-bottom mb-3">
+                            <h4>
+                                {{ t('Global status summary') }}
+                            </h4>
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col [xs]="12" [md]="3" [lg]="3" class="mb-3">
+                            <div class="p-2 bg-primary rounded overflow-hidden position-relative text-white mb-g">
+                                <div>
+                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                        @if (globalStatusSummary[0] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
+                                            <a [routerLink]="['/', 'scm_module', 'resources', 'index']"
+                                               class="text-white"
+                                               [queryParams]="{status: 0}">
+                                                {{ globalStatusSummary[0] }}
+                                            </a>
+                                        } @else {
+                                            {{ globalStatusSummary[0] }}
+                                        }
+                                    </h6>
+                                    <small class="m-0 l-h-n small">
+                                        {{ t('Unconfirmed') }}
+                                    </small>
+                                </div>
+                                <fa-icon [icon]="['fas', 'question']"
+                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                            </div>
+                        </c-col>
+                        <c-col [xs]="12" [md]="3" [lg]="3">
+                            <div class="p-2 bg-success rounded overflow-hidden position-relative text-white mb-g">
+                                <div>
+                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                        @if (globalStatusSummary[1] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
+                                            <a [routerLink]="['/', 'scm_module', 'resources', 'index']"
+                                               class="text-white"
+                                               [queryParams]="{status: 1}">
+                                                {{ globalStatusSummary[1] }}
+                                            </a>
+                                        } @else {
+                                            {{ globalStatusSummary[1] }}
+                                        }
+                                    </h6>
+                                    <small class="m-0 l-h-n small">
+                                        {{ t('Ok') }}
+                                    </small>
+                                </div>
+                                <fa-icon [icon]="['fas', 'check']"
+                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                            </div>
+                        </c-col>
+                        <c-col [xs]="12" [md]="3" [lg]="3">
+                            <div class="p-2 bg-warning rounded overflow-hidden position-relative text-white mb-g">
+                                <div>
+                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                        @if (globalStatusSummary[2] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
+                                            <a [routerLink]="['/', 'scm_module', 'resources', 'index']"
+                                               class="text-white"
+                                               [queryParams]="{status: 2}">
+                                                {{ globalStatusSummary[2] }}
+                                            </a>
+                                        } @else {
+                                            {{ globalStatusSummary[2] }}
+                                        }
+                                    </h6>
+                                    <small class="m-0 l-h-n small">
+                                        {{ t('Warning') }}
+                                    </small>
+                                </div>
+                                <fa-icon [icon]="['far', 'bell']"
+                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                            </div>
+                        </c-col>
+                        <c-col [xs]="12" [md]="3" [lg]="3">
+                            <div class="p-2 bg-critical rounded overflow-hidden position-relative text-white mb-g">
+                                <div>
+                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                        @if (globalStatusSummary[3] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
+                                            <a [routerLink]="['/', 'scm_module', 'resources', 'index']"
+                                               class="text-white"
+                                               [queryParams]="{status: 3}">
+                                                {{ globalStatusSummary[3] }}
+                                            </a>
+                                        } @else {
+                                            {{ globalStatusSummary[3] }}
+                                        }
+                                    </h6>
+                                    <small class="m-0 l-h-n small">
+                                        {{ t('Critical') }}
+                                    </small>
+                                </div>
+                                <fa-icon [icon]="['fas', 'exclamation']"
+                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                            </div>
+                        </c-col>
+                    </c-row>
+
+                    <c-row *ngIf="selectedResoucegroup">
+                        <c-col [xs]="12" [md]="12" [lg]="12" class="fieldset-legend-border-bottom mb-3">
+                            <h4>
+                                {{ selectedResoucegroup.container.name }}
+                                <span class="fw-300">
+                                    <i>{{ selectedResoucegroup.description }}</i>
+                                </span>
+                            </h4>
+                        </c-col>
+                        <c-col [xs]="12" [md]="12" [lg]="8" class="border-end border-end-primary">
+                            <h5>
+                                {{ t('Resources') }}
+                            </h5>
+
+                            @if (PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async) {
+                                <c-button-group role="group" class="btn-group btn-group-justified w-100">
+                                    <a class="btn btn-primary state-button-small"
+                                       [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[0]===0}"
+                                       [routerLink]="['/','scmmodule', 'resources', 'index']"
+                                       [queryParams]="{status:0, resourcegroupId: selectedResoucegroup.id}">
+                                        {{ selectedResoucegroup.statesummary[0] }}
+                                    </a>
+                                    <a class="btn btn-success state-button-small"
+                                       [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[1]===0}"
+                                       [routerLink]="['/','scmmodule', 'resources', 'index']"
+                                       [queryParams]="{status:1, resourcegroupId: selectedResoucegroup.id}">
+                                        {{ selectedResoucegroup.statesummary[1] }}
+                                    </a>
+                                    <a class="btn btn-warning state-button-small"
+                                       [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[2]===0}"
+                                       [routerLink]="['/','scmmodule', 'resources', 'index']"
+                                       [queryParams]="{status:2, resourcegroupId: selectedResoucegroup.id}">
+                                        {{ selectedResoucegroup.statesummary[2] }}
+                                    </a>
+                                    <a class="btn btn-danger state-button-small"
+                                       [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[3]===0}"
+                                       [routerLink]="['/','scmmodule', 'resources', 'index']"
+                                       [queryParams]="{status:3, resourcegroupId: selectedResoucegroup.id}">
+                                        {{ selectedResoucegroup.statesummary[3] }}
+                                    </a>
+                                </c-button-group>
+                            } @else {
+                                <c-button-group role="group" class="btn-group btn-group-justified w-100">
+                                    <button cButton color="primary" class="state-button-small"
+                                            [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[0]===0}">
+                                        {{ selectedResoucegroup.statesummary[0] }}
+                                    </button>
+                                    <button cButton color="success" class="state-button-small"
+                                            [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[1]===0}">
+                                        {{ selectedResoucegroup.statesummary[1] }}
+                                    </button>
+                                    <button cButton color="warning" class="state-button-small"
+                                            [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[2]===0}">
+                                        {{ selectedResoucegroup.statesummary[2] }}
+                                    </button>
+                                    <button cButton color="danger" class="state-button-small"
+                                            [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[3]===0}">
+                                        {{ selectedResoucegroup.statesummary[3] }}
+                                    </button>
+                                </c-button-group>
+                            }
+                            <ul class="list-unstyled my-2 ps-4">
+                                @for (resource of selectedResoucegroup.resources; track $index) {
+                                    <li class="ps-1 my-1"
+                                        [ngClass]="{'border-unconfirmed':  resource.current_status==0, 'border-ok': resource.current_status==1, 'border-warning': resource.current_status==2, 'border-danger': resource.current_status==3, 'shadow-lg p-3 mb-5': resource.id == selectedResouceId}">
+                                        <oitc-label-link [objectId]="resource.id"
+                                                         [route]="'/scm_module/resources/edit'"
+                                                         [permissions]="'scmmodule.resources.edit'">
+                                            {{ resource.name }}
+                                        </oitc-label-link>
+                                        <i>{{ resource.description }}</i>
+                                        <br/>
+                                        <div class="w-100 help-text"
+                                             *ngIf="resource.current_status == resource.status">
+                                            [{{ resource.last_update }}]
+                                            {{ t('was set by') }}
+                                            <span class="px-1 bold">
+                                                <oitc-label-link [objectId]="resource.id"
+                                                                 [route]="'/scm_module/resources/edit'"
+                                                                 [permissions]="'scmmodule.resources.edit'">
+                                                    {{ resource.name }}
+                                                </oitc-label-link>
+                                            </span>
+                                            <span *ngIf="resource.comment">
+                                                {{ t('with comment') }}
+                                                <span class="px-1 bold">"{{ resource.comment }}"</span>
+                                            </span>
+                                            <oitc-label-link [objectId]="resource.id" [title]="'Status log' |transloco"
+                                                             [route]="'/scm_module/resources/statuslog'"
+                                                             [permissions]="'scmmodule.resources.statuslog'">
+                                                <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
+                                            </oitc-label-link>
+                                        </div>
+                                        <div class="w-100 help-text"
+                                             *ngIf="resource.current_status != resource.status">
+                                            {{ t('Last time') }}
+                                            @switch (resource.status) {
+                                                @case (1) {
+                                                    <fa-stack class="me-1" [size]="'sm'">
+                                                        <fa-icon [icon]="['fas', 'square']"
+                                                                 stackItemSize="2x"
+                                                                 class="text-success"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'check']" [inverse]="true"
+                                                                 stackItemSize="1x"
+                                                        ></fa-icon>
+                                                    </fa-stack>
+                                                }
+                                                @case (2) {
+                                                    <fa-stack class="me-1" [size]="'sm'">
+                                                        <fa-icon [icon]="['fas', 'square']"
+                                                                 stackItemSize="2x"
+                                                                 class="text-warning"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'bell']" [inverse]="true"
+                                                                 stackItemSize="1x"
+                                                        ></fa-icon>
+                                                    </fa-stack>
+                                                }
+                                                @case (3) {
+                                                    <fa-stack class="me-1" [size]="'sm'">
+                                                        <fa-icon [icon]="['fas', 'square']"
+                                                                 stackItemSize="2x"
+                                                                 class="text-danger"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'exclamation']" [inverse]="true"
+                                                                 stackItemSize="1x"
+                                                        ></fa-icon>
+                                                    </fa-stack>
+                                                }
+                                                @default {
+                                                    <fa-stack class="me-1" [size]="'sm'">
+                                                        <fa-icon [icon]="['fas', 'square']"
+                                                                 stackItemSize="2x"
+                                                                 class="text-primary"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'question']" [inverse]="true"
+                                                                 stackItemSize="1x"
+                                                        ></fa-icon>
+                                                    </fa-stack>
+                                                }
+                                            }
+                                            [{{ resource.last_update }}]
+                                            {{ t('was set by') }}
+                                            <span class="px-1 bold">
+                                                <oitc-label-link [objectId]="resource.user?.id"
+                                                                 [route]="'/users/edit'"
+                                                                 [permissions]="'users.edit'">
+                                                    {{ resource.username }}
+                                                </oitc-label-link>
+                                            </span>
+                                            <span *ngIf="resource.comment">
+                                                {{ t('with comment') }}
+                                                <span class="px-1 bold">"{{ resource.comment }}"</span>
+                                            </span>
+                                            <oitc-label-link [objectId]="resource.id"
+                                                             [route]="'/scmmodule/resources/statuslog'"
+                                                             [permissions]="'scmmodule.resources.statuslog'">
+                                                <fa-icon [icon]="['fas', 'clock-rotate-left']"
+                                                         [title]="'Status log' |transloco"></fa-icon>
+                                            </oitc-label-link>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </c-col>
+                        <c-col [xs]="12" [md]="12" [lg]="4">
+                            <h5>
+                                {{ t('Region Managers') }}
+                            </h5>
+                            <ul class="m-0 list-unstyled mb-2 pl-4">
+                                @for (region_manager of selectedResoucegroup.region_managers; track $index) {
+                                    <li>
+                                        <oitc-label-link [objectId]="region_manager.id"
+                                                         [route]="'/users/edit'"
+                                                         [permissions]="'users.edit'">
+                                            {{ region_manager.username }}
+                                        </oitc-label-link>
+                                    </li>
+                                }
+                            </ul>
+                            <h5>
+                                {{ t('Managers') }}
+                            </h5>
+                            <ul class="m-0 list-unstyled mb-2 pl-4">
+                                @for (manager of selectedResoucegroup.managers; track $index) {
+                                    <li>
+                                        <oitc-label-link [objectId]="manager.id"
+                                                         [route]="'/users/edit'"
+                                                         [permissions]="'users.edit'">
+                                            {{ manager.username }}
+                                        </oitc-label-link>
+                                    </li>
+                                }
+                            </ul>
+                            <h5>
+                                {{ t('Users') }}
+                            </h5>
+                            <ul class="m-0 list-unstyled mb-2 pl-4">
+                                @for (user of selectedResoucegroup.users; track $index) {
+                                    <li>
+                                        <oitc-label-link [objectId]="user.id"
+                                                         [route]="'/users/edit'"
+                                                         [permissions]="'users.edit'">
+                                            {{ user.username }}
+                                        </oitc-label-link>
+                                    </li>
+                                }
+                            </ul>
+                        </c-col>
+                    </c-row>
+                </c-col>
+            </c-row>
+            <c-row *ngIf="resourcegroups && resourcegroups.length === 0">
+                <c-col class="text-center text-danger fst-italic">
+                    {{ t('No entries match the selection') }}
+                </c-col>
+            </c-row>
+        </c-card-body>
+    </c-card>
+</ng-container>

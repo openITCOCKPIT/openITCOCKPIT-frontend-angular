@@ -16,6 +16,9 @@ export const scmModuleRoutes: Routes = [{
     path: 'scm_module/resourcegroups/notifications/:id',
     loadComponent: () => import('./pages/resourcegroups/resourcegroups-notifications/resourcegroups-notifications.component').then(m => m.ResourcegroupsNotificationsComponent)
 }, {
+    path: 'scm_module/resourcegroups/summary',
+    loadComponent: () => import('./pages/resourcegroups/resourcegroups-summary/resourcegroups-summary.component').then(m => m.ResourcegroupsSummaryComponent)
+}, {
     path: 'scm_module/scm_changelogs/entity/:type/:id',
     loadComponent: () => import('./pages/scmchangelogs/scm-changelogs-entity/scm-changelogs-entity.component').then(m => m.ScmChangelogsEntityComponent)
 }, {
