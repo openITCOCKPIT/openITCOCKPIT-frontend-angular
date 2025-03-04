@@ -711,7 +711,7 @@
 
                         <c-col lg="12"
                                *ngIf="hasGraph(host.value.Host.uuid, service.value.Service.uuid) && service.value.Service.state_overview">
-                            <c-col lg="12" xs="12" md="9" class="offset-md-3"
+                            <c-col xs="12" md="9" class="offset-md-3"
                                    *ngFor="let graphBlobs of report.GraphImageBlobs[host.value.Host.uuid] | keyvalue">
                                 <div *ngIf="graphBlobs.key === service.value.Service.uuid">
                                     <div *ngFor="let graph of graphBlobs.value">
@@ -778,7 +778,7 @@
                                         </c-col>
                                     </c-row>
                                 </c-col>
-                                <div class="col-12 col-xs-12 col-md-9 offset-md-3">
+                                <div class="col-xs-12 col-md-9 offset-md-3">
                                     <div class="row"
                                          *ngFor="let outage of service.value.Service.frontend.outages_summarized_in_downtime">
                                         <div class="col-xs-12 col-md-4">
@@ -799,7 +799,7 @@
                             <c-row>
                                 <c-col xs="12" md="9" [offset]="3">
                                     <c-row>
-                                        <c-col lg="12" xs="12" md="9" class="report-font-weight-500">
+                                        <c-col xs="12" md="9" class="report-font-weight-500">
                                             <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                                             {{ t('Service downtimes') }}
                                         </c-col>
