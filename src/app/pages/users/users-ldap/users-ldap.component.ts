@@ -137,7 +137,6 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     protected ldapConfig: LdapConfig = {} as LdapConfig;
     protected serverTime: string = '';
     protected serverTimeZone: string = '';
-    protected usedContainerIdsBySource: { [key: string]: number[] } = {};
     protected ldapUserDetails: LdapUserDetails = {
         usergroupLdap: {
             id: 0

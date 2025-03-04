@@ -1,5 +1,6 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericIdResponse, GenericValidationError } from '../../generic-responses';
+import { GenericIdAndName } from '../../generic.interfaces';
 
 export interface TimeperiodsIndexParams {
     angular: true,
@@ -102,14 +103,9 @@ export interface TimeperiodCopyGet {
 }
 
 export interface TimeperiodCopyPost {
-    Source: SourceTimeperiod
+    Source: GenericIdAndName
     Timeperiod: TimeperiodCopy
     Error: GenericValidationError | null
-}
-
-export interface SourceTimeperiod {
-    id: number
-    name: string
 }
 
 export interface TimeperiodCopy {
@@ -142,81 +138,19 @@ export interface TimeperiodUsedByTimeperiod {
 
 
 export interface TimeperiodUsedByObjects {
-    Contacts: TimeperiodUsedByContact[]
-    Hostdependencies: TimeperiodUsedByHostdependency[]
-    Hostescalations: TimeperiodUsedByHostescalation[]
-    Hosts: TimeperiodUsedByHost[]
-    Hosttemplates: TimeperiodUsedByHosttemplate[]
-    Instantreports: TimeperiodUsedByInstantreport[]
-    Servicedependencies: TimeperiodUsedByServicedependency[]
-    Serviceescalations: TimeperiodUsedByServiceescalation[]
+    Contacts: GenericIdAndName[]
+    Hostdependencies: GenericIdResponse[]
+    Hostescalations: GenericIdResponse[]
+    Hosts: GenericIdAndName[]
+    Hosttemplates: GenericIdAndName[]
+    Instantreports: GenericIdAndName[]
+    Servicedependencies: GenericIdResponse[]
+    Serviceescalations: GenericIdResponse[]
     Services: TimeperiodUsedByService[]
-    Servicetemplates: TimeperiodUsedByServicetemplate[]
-    Autoreports: TimeperiodUsedByAutoreport[]
+    Servicetemplates: GenericIdAndName[]
+    Autoreports: GenericIdAndName[]
 }
 
-export interface TimeperiodUsedByContact {
-    id: number
-    name: string
-    containers: TimeperiodUsedByContainer[]
-}
-
-export interface TimeperiodUsedByContainer {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: number
-    lft: number
-    rght: number
-    _joinData: TimeperiodUsedByJoinData
-}
-
-export interface TimeperiodUsedByJoinData {
-    id: number
-    contact_id: number
-    container_id: number
-}
-
-export interface TimeperiodUsedByHosttemplate {
-    id: number
-    name: string
-}
-
-export interface TimeperiodUsedByServicetemplate {
-    id: number
-    name: string
-}
-
-export interface TimeperiodUsedByHost {
-    id: number
-    name: string
-}
-
-export interface TimeperiodUsedByHostdependency {
-    id: number
-}
-
-export interface TimeperiodUsedByHostescalation {
-    id: number
-}
-
-export interface TimeperiodUsedByServicedependency {
-    id: number
-}
-
-export interface TimeperiodUsedByServiceescalation {
-    id: number
-}
-
-export interface TimeperiodUsedByInstantreport {
-    id: number
-    name: string
-}
-
-export interface TimeperiodUsedByAutoreport {
-    id: number
-    name: string
-}
 
 export interface TimeperiodUsedByService {
     id: number
@@ -225,19 +159,10 @@ export interface TimeperiodUsedByService {
 }
 
 export interface TimeperiodUsedByMatchingData {
-    Hosts: TimeperiodUsedByHosts
-    Servicetemplates: TimeperiodUsedByServicetemplates
+    Hosts: GenericIdAndName
+    Servicetemplates: GenericIdAndName
 }
 
-export interface TimeperiodUsedByHosts {
-    id: number
-    name: string
-}
-
-export interface TimeperiodUsedByServicetemplates {
-    id: number
-    name: string
-}
 
 /************************
  *  view Details action *
@@ -278,49 +203,6 @@ export interface Event {
     className?: string
     allDay?: boolean
     overLap?: boolean
-}
-
-export interface UserRoot {
-    user: User
-    isLdapUser: boolean
-    maxUploadLimit: MaxUploadLimit
-    newDesktopApi: boolean
-    oitcVersion: string
-    _csrfToken: string
-}
-
-export interface User {
-    id: number
-    usergroup_id: number
-    email: string
-    firstname: string
-    lastname: string
-    position: any
-    company: any
-    phone: any
-    timezone: string
-    i18n: string
-    dateformat: string
-    samaccountname: any
-    ldap_dn: any
-    showstatsinmenu: number
-    is_active: number
-    dashboard_tab_rotation: number
-    paginatorlength: number
-    recursive_browser: number
-    image: any
-    is_oauth: boolean
-    usercontainerroles_ldap: UsercontainerrolesLdap
-}
-
-export interface UsercontainerrolesLdap {
-    _ids: any[]
-}
-
-export interface MaxUploadLimit {
-    value: number
-    unit: string
-    string: string
 }
 
 export interface TimeperiodEnity {

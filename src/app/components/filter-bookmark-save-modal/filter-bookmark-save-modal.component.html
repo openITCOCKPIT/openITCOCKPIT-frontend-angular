@@ -30,7 +30,7 @@
         id="filterBookmarkSaveModal"
         size="lg"
     >
-        <c-modal-header class="txt-color-white" [ngClass]="actionType == 'create' ? 'bg-success' : 'bg-info'">
+        <c-modal-header class="text-white" [ngClass]="actionType == 'create' ? 'bg-success' : 'bg-info'">
             <h5 *ngIf="actionType === 'create'" cModalTitle class="text-white">
                 {{ t('Create bookmark') }}
             </h5>
