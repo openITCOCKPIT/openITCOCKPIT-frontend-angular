@@ -42,7 +42,6 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { DowntimereportsEnum } from '../../../../../pages/downtimereports/downtimereports.enum';
 
 @Component({
     selector: 'oitc-satellites-status',
@@ -159,6 +158,4 @@ export class SatellitesStatusComponent implements OnInit, OnDestroy, IndexPage {
 
     public onMassActionComplete(success: boolean) {
     }
-
-    protected readonly DowntimereportsEnum = DowntimereportsEnum;
 }

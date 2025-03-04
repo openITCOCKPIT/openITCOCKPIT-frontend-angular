@@ -137,7 +137,7 @@ export function getDefaultSatelliteTasksParams(): SatelliteTasksParams {
     }
 }
 
-// INDEX
+// STATUS INDEX
 export interface SatelliteStatusIndex extends PaginateOrScroll {
     all_satellites: AllSatellite[]
 }
@@ -187,7 +187,59 @@ export function getDefaultSatellitesStatusParams(): SatellitesStatusParams {
     } as SatellitesStatusParams;
 }
 
-// ADD
+// SATELLITE INDEX
+export interface SatelliteIndexParams {
+    angular: true,
+    direction: 'asc' | 'desc' | '',
+    page: number,
+    scroll: boolean,
+    sort: string,
+
+    'filter[Satellites.address]': string,
+    'filter[Satellites.name]': string,
+    'filter[Satellites.sync_method][]': string[],
+    'filter[Satellites.description]': string,
+}
+
+export function getDefaultSatelliteIndexParams(): SatelliteIndexParams {
+    return {
+        angular: true,
+        direction: 'asc',
+        page: 1,
+        scroll: true,
+        sort: 'Satellites.name',
+
+        'filter[Satellites.address]': '',
+        'filter[Satellites.name]': '',
+        'filter[Satellites.sync_method][]': [],
+        'filter[Satellites.description]': '',
+    }
+}
+
+export interface SatelliteIndex extends PaginateOrScroll {
+    all_satellites: AllIndexSatellite[]
+}
+
+export interface AllIndexSatellite extends AllSatellite {
+    sync_instance: number
+    created: string
+    modified: string
+    login: string
+    port: number
+    private_key_path: string
+    url: string
+    remote_port: number
+    api_key: string
+    interval: number
+    timeout: number
+    use_proxy: number
+    proxy_url: string
+    verify_certificate: number
+    use_timesync: number
+    nsta_sync_instance: number
+}
+
+// SATELLITE ADD
 export interface Root {
     frontendUrl: string
     protocol: string
