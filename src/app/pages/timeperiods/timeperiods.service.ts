@@ -11,8 +11,6 @@ import {
     TimeperiodsEditRoot,
     TimeperiodsIndexParams,
     TimeperiodUsedBy,
-    User,
-    UserRoot,
     ViewDetailsTimeperiod,
     ViewDetailsTimeperiodRoot
 } from './timeperiods.interface';
@@ -182,16 +180,6 @@ export class TimeperiodsService {
         );
     }
 
-    public getUser(): Observable<User> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<UserRoot>(`${proxyPath}/profile/edit.json?angular=true`).pipe(
-            map(
-                data => {
-                    return data.user;
-                }
-            )
-        );
-    }
 
     // Generic function for the Delete All Modal
     public delete(item: DeleteAllItem): Observable<Object> {
