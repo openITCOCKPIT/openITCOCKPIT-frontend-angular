@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
+import { SelectKeyValueString } from './layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +21,7 @@ export class WeekdaysService {
     constructor() {
     }
 
-    public getWeekdays(): { key: string, value: string }[] {
+    public getWeekdays(): SelectKeyValueString[] {
         return this.weekdays;
     }
 
