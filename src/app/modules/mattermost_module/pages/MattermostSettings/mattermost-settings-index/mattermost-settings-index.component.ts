@@ -11,7 +11,6 @@ import {
     FormDirective, FormLabelDirective
 } from '@coreui/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SlackSettings} from '../slack-settings.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -22,19 +21,23 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { NgIf } from '@angular/common';
-import { SlackSettingsService} from '../slack-settings.service';
+import { MattermostSettings} from '../../../mattermost.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { MattermostService} from '../../../mattermost.service';
+
 
 @Component({
-  selector: 'oitc-slack-settings-index',
+  selector: 'oitc-mattermost-settings-index',
     imports: [
+        TranslocoDirective,
         FaIconComponent,
         PermissionDirective,
-        TranslocoDirective,
         RouterLink,
         FormDirective,
         FormsModule,
-        ReactiveFormsModule,
+        FormLoaderComponent,
+        NgIf,
+        CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
         CardBodyComponent,
@@ -43,40 +46,32 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         FormFeedbackComponent,
         FormLabelDirective,
         RequiredIconComponent,
-        CardComponent,
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
         ApikeyDocModalComponent,
         CardFooterComponent,
-        XsButtonDirective,
-        FormLoaderComponent,
-        NgIf
+        XsButtonDirective
     ],
-  templateUrl: './slack-settings-index.component.html',
-  styleUrl: './slack-settings-index.component.css',
+  templateUrl: './mattermost-settings-index.component.html',
+  styleUrl: './mattermost-settings-index.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SlackSettingsIndexComponent implements OnInit, OnDestroy {
+export class MattermostSettingsIndexComponent implements OnInit, OnDestroy {
 
-    private readonly subscriptions: Subscription = new Subscription();
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private readonly SlackSettingsService: SlackSettingsService = inject(SlackSettingsService);
     private readonly notyService: NotyService = inject(NotyService);
+    private readonly MattermostService: MattermostService = inject(MattermostService);
     private cdr = inject(ChangeDetectorRef);
+    private readonly subscriptions: Subscription = new Subscription();
+    public post!:MattermostSettings;
     public errors: GenericValidationError | null = null;
-    protected currentCommandAsPostRequest: string = '';
-    public post!:SlackSettings;
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.SlackSettingsService.getSlackSettings().subscribe(data => {
+        this.subscriptions.add(this.MattermostService.getMattermostSettings().subscribe(data => {
             this.post = data;
             this.cdr.markForCheck();
         }));
-
-        const API_KEY_TRANSLATION = this.TranslocoService.translate('YOUR_API_KEY_HERE');
-        this.currentCommandAsPostRequest = `https://${window.location.hostname}/slack_module/acknowledge/submit.json?apikey=${API_KEY_TRANSLATION}`;
         this.cdr.markForCheck();
     }
 
@@ -84,15 +79,13 @@ export class SlackSettingsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-
-
-    public submitSlackSettings() {
+    public submitMattermostSettings() {
         if (!this.post) {
             return;
         }
 
         this.subscriptions.add(
-            this.SlackSettingsService.setSlackSettings(this.post).subscribe((result: GenericResponseWrapper): void => {
+            this.MattermostService.setSMattermostSettings(this.post).subscribe((result: GenericResponseWrapper): void => {
                     this.cdr.markForCheck();
                     if (result.success) {
                         this.errors = null;
@@ -100,13 +93,11 @@ export class SlackSettingsIndexComponent implements OnInit, OnDestroy {
                         this.notyService.genericSuccess();
                         return;
                     }
-
                     this.errors = result.data as GenericValidationError;
                     this.notyService.genericError();
                 }
             )
         );
     }
-
 
 }
