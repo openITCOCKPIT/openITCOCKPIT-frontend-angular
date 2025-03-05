@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckInputDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
@@ -41,36 +41,40 @@ import { SelectComponent } from "../../../layouts/primeng/select/select/select.c
 import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
 import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
 import { HistoryService } from '../../../history.service';
+import {
+    MultiSelectOptgroupComponent
+} from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 
 @Component({
     selector: 'oitc-servicegroups-add',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    NgSelectModule,
-    PermissionDirective,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    SelectComponent,
-    MultiSelectComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormCheckInputDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        SelectComponent,
+        MultiSelectComponent,
+        MultiSelectOptgroupComponent
+    ],
     templateUrl: './servicegroups-add.component.html',
     styleUrl: './servicegroups-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -87,14 +91,15 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
 
     protected errors: GenericValidationError | null = null;
     protected createAnother: boolean = false;
-    protected post: Servicegroup = {} as Servicegroup;
-    protected services: ServicesListService[] = [];
+    protected post: Servicegroup = this.getDefaultPost();
     protected preselectedServiceIds: number[] = [];
+
+    protected services: ServicesListService[] = [];
     protected containers: SelectKeyValue[] = [];
     protected servicetemplates: SelectKeyValue[] = [];
 
+
     constructor() {
-        this.post = this.getDefaultPost();
         const serviceIds = this.route.snapshot.paramMap.get('serviceids');
         if (serviceIds) {
             this.preselectedServiceIds = serviceIds.split(',').map(Number);
@@ -197,14 +202,13 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
             this.services = [];
             return;
         }
+        if (this.preselectedServiceIds.length > 0) {
+            this.post.services._ids = this.preselectedServiceIds;
+        }
         this.subscriptions.add(this.ServicegroupsService.loadServices(this.post.container.parent_id, search, this.post.services._ids)
             .subscribe((result: LoadServicesResponse) => {
                 this.cdr.markForCheck();
-
                 this.services = result.services;
-
-                // Preselect services if they were passed in the URL.
-                this.post.services._ids = this.preselectedServiceIds;
             }))
     }
 

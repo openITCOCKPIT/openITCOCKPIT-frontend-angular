@@ -67,7 +67,7 @@ export class ServicegroupsService {
             },
             selected: selected
         }
-        return this.http.post<LoadServicesResponse>(`${proxyPath}/services/loadServicesByContainerIdCake4.json?angular=true`, postObject).pipe(
+        return this.http.post<LoadServicesResponse>(`${proxyPath}/servicegroups/loadServicesByStringForOptionGroup.json?angular=true`, postObject).pipe(
             map((data: LoadServicesResponse) => {
                 return data;
             })
