@@ -4,13 +4,12 @@ import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontaweso
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
-
+import { ColorModeService, ContainerComponent, ModalService, ShadowOnScrollDirective } from '@coreui/angular';
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
 import { HistoryService } from './history.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { NgSelectConfig } from '@ng-select/ng-select';
-import { ColorModeService, ContainerComponent, ShadowOnScrollDirective } from '@coreui/angular';
 
 import { CoreuiHeaderComponent } from './layouts/coreui/coreui-header/coreui-header.component';
 import { CoreuiNavbarComponent } from './layouts/coreui/coreui-navbar/coreui-navbar.component';
@@ -25,6 +24,7 @@ import {
 } from './components/message-of-the-day-modal/message-of-the-day-modal.component';
 import { CurrentMessageOfTheDay } from './pages/messagesotd/messagesotd.interface';
 import { MessagesOfTheDayService } from './pages/messagesotd/messagesotd.service';
+import { AuthService } from './auth/auth.service';
 
 @Component({
     selector: 'oitc-root',
@@ -50,7 +50,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     // Inject HistoryService to keep track of the previous URLs
     private historyService: HistoryService = inject(HistoryService);
 
-    // store the current message of the day
+    // I am the current messageOfTheDay.
     protected messageOfTheDay: CurrentMessageOfTheDay = {} as CurrentMessageOfTheDay;
 
     public readonly LayoutService = inject(LayoutService);
@@ -64,7 +64,9 @@ export class AppComponent implements OnDestroy, AfterViewInit {
                 private TranslocoService: TranslocoService,
                 private colorService: ColorModeService,
                 private cdr: ChangeDetectorRef,
-                private MessageOfTheDayService: MessagesOfTheDayService
+                private MessageOfTheDayService: MessagesOfTheDayService,
+                private readonly AuthService: AuthService,
+                private readonly ModalService: ModalService,
     ) {
         // Add an icon to the library for convenient access in other components
         library.addIconPacks(fas);
@@ -104,13 +106,35 @@ export class AppComponent implements OnDestroy, AfterViewInit {
             }
         }));
 
-        // Solely fetch the current message of the day.
-        this.subscription.add(this.MessageOfTheDayService.getCurrentMessageOfTheDay().subscribe((message: CurrentMessageOfTheDay) => {
-            if (message.messageOtdAvailable) {
-                this.messageOfTheDay = message;
-            }
-        }));
+        // Fetch the message of the day
+        this.watchMessageOfTheDay();
+    }
 
+    private watchMessageOfTheDay(): void {
+        this.subscription.add(this.AuthService.authenticated$.subscribe((isLoggedIn) => {
+            if (!isLoggedIn) {
+                return;
+            }
+            // Solely fetch the current message of the day.
+            this.subscription.add(this.MessageOfTheDayService.getCurrentMessageOfTheDay().subscribe((message: CurrentMessageOfTheDay) => {
+                if (!message.messageOtdAvailable) {
+                    this.cdr.markForCheck();
+                    return;
+                }
+                this.messageOfTheDay = message;
+                if (!message.showMessageAfterLogin) {
+                    this.cdr.markForCheck();
+                    return;
+                }
+                window.setTimeout(() => {
+                    this.ModalService.toggle({
+                        show: true,
+                        id: 'messageOfTheDayModal'
+                    });
+                }, 500)
+                this.cdr.markForCheck();
+            }));
+        }));
     }
 
     public ngOnDestroy(): void {
