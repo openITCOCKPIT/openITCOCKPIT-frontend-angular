@@ -122,7 +122,7 @@ export class PrometheusAlertRulesIndexComponent implements OnInit, OnDestroy, In
     protected selectedItems: DeleteAllItem[] = [];
     protected hosts: SelectKeyValue[] = [];
     protected params: PrometheusAlertRulesIndexParams = getDefaultPrometheusAlertRulesIndexParams();
-    protected result: PrometheusAlertRulesIndexRoot | undefined = undefined;
+    protected result?: PrometheusAlertRulesIndexRoot;
     protected hideFilter: boolean = true;
     protected timezone!: TimezoneObject;
 
@@ -199,9 +199,8 @@ export class PrometheusAlertRulesIndexComponent implements OnInit, OnDestroy, In
         const hostId = Number(this.route.snapshot.paramMap.get('hostId'));
         if (hostId) {
             this.params['filter[PrometheusAlertRules.host_id]'] = hostId;
-            this.reload();
-            this.cdr.markForCheck();
         }
+        this.reload();
     }
 
     public ngOnDestroy() {
