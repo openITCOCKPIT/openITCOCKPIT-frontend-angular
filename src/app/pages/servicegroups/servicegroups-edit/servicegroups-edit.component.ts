@@ -1,18 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -43,37 +42,41 @@ import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/mult
 import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
+import {
+    MultiSelectOptgroupComponent
+} from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 
 @Component({
     selector: 'oitc-servicegroups-edit',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    NgSelectModule,
-    PermissionDirective,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    ObjectUuidComponent,
-    SelectComponent,
-    MultiSelectComponent,
-    FormLoaderComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        ObjectUuidComponent,
+        SelectComponent,
+        MultiSelectComponent,
+        FormLoaderComponent,
+        MultiSelectOptgroupComponent
+    ],
     templateUrl: './servicegroups-edit.component.html',
     styleUrl: './servicegroups-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -92,27 +95,7 @@ export class ServicegroupsEditComponent implements OnInit, OnDestroy {
 
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
-    public post: Servicegroup = {
-        container: {
-            containertype_id: 0,
-            id: 0,
-            lft: 0,
-            name: '',
-            parent_id: 0,
-            rght: 0,
-        },
-        container_id: 0,
-        description: '',
-        servicegroup_url: '',
-        services: {
-            _ids: []
-        },
-        servicetemplates: {
-            _ids: []
-        },
-        id: 0,
-        uuid: ''
-    }
+    public post!: Servicegroup;
     protected containers: SelectKeyValue[] = [];
     protected servicetemplates: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute);
@@ -145,7 +128,7 @@ export class ServicegroupsEditComponent implements OnInit, OnDestroy {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
                     const title: string = this.TranslocoService.translate('Servicegroup');
-                    const msg: string = this.TranslocoService.translate('added successfully');
+                    const msg: string = this.TranslocoService.translate('updated successfully');
                     const url: (string | number)[] = ['servicegroups', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
