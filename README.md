@@ -150,6 +150,28 @@ const moduleRoutes: Routes = [
 
 Original Angular Readme (unten)
 
+# Translations (i18n)
+
+openITCOCKPIT is a multi-language frontend.
+If you found errors in the translations, we are more than happy to receive pull requests.
+
+There are different levels how you can help us to improve our translations.
+All Translations are located at `src/assets/i18n/` in "JSON" files (e.g. `src/assets/i18n/de_DE.json` for German translations).
+The `key` is the original English text and the `value` is the translated text. Please do **never change the key**.
+
+openITCOCKPIT use [Transloco](https://jsverse.gitbook.io/transloco) for translations. Please refer to the official documentation for more information.
+
+## 1. Fix typos
+
+Found a typo, some grammar issues or a bad wording?
+The easiest way to help us is to fix it directly in the JSON file. Open the corosponding JSON file (e.g. `src/assets/i18n/es_ES.json`) and search for the text you want to change.
+
+After you have fixed the issue, please send us a pull request.
+
+## 2. Improve existing translations
+
+## 3. Add new translations
+
 # How to Upgrade Angular
 
 This document describes how to upgrade the underlying Angular version.
