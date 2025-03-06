@@ -34,17 +34,32 @@
                                     <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
                                     {{ error.message }}
                                     <div *ngIf="error.usedBy">
-                                        @if(error.usedBy['AUTOREPORT_MODULE'] && error.usedBy['AUTOREPORT_MODULE'].state === 'AutoreportsServiceUsedBy') {
-                                            <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'serviceUsedBy', item.id]">
-                                                {{ error.usedBy['AUTOREPORT_MODULE'].message }}
-                                            </a>
-                                        }
-                                        @if(error.usedBy['AUTOREPORT_MODULE'] && error.usedBy['AUTOREPORT_MODULE'].state === 'AutoreportsHostUsedBy') {
-                                            <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'hostUsedBy', item.id]">
-                                                {{ error.usedBy['AUTOREPORT_MODULE'].message }}
-                                            </a>
-                                        }
-
+                                        <ng-container *ngFor="let usedBy of error.usedBy | keyvalue">
+                                            <div
+                                                *ngIf="usedBy.value.module && usedBy.value.state && usedBy.value.message">
+                                                @if (usedBy.value.module === 'AutoreportModule' && usedBy.value.state === 'AutoreportsServiceUsedBy') {
+                                                    <div>
+                                                        <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'serviceUsedBy', item.id]">
+                                                            {{ usedBy.value.message }}
+                                                        </a>
+                                                    </div>
+                                                }
+                                                @if (usedBy.value.module === 'AutoreportModule' && usedBy.value.state === 'AutoreportsHostUsedBy') {
+                                                    <div>
+                                                        <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'hostUsedBy', item.id]">
+                                                            {{ usedBy.value.message }}
+                                                        </a>
+                                                    </div>
+                                                }
+                                                @if (usedBy.value.module === 'EventcorrelationModule' && usedBy.value.state === 'EventcorrelationsHostUsedBy') {
+                                                    <div>
+                                                        <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'usedBy', item.id]">
+                                                            {{ usedBy.value.message }}
+                                                        </a>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </ng-container>
                                     </div>
                                     <!-- todo implement usedby link -->
                                 </div>
