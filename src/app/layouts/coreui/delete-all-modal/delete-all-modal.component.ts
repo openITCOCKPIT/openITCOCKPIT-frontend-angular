@@ -25,7 +25,7 @@ import {
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { DeleteAllItem, DeleteAllResponse, usedByModuleError } from './delete-all.interface';
-import { NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -50,7 +50,8 @@ import { RouterLink } from '@angular/router';
         ProgressComponent,
         NgIf,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        KeyValuePipe
     ],
     templateUrl: './delete-all-modal.component.html',
     styleUrl: './delete-all-modal.component.css',

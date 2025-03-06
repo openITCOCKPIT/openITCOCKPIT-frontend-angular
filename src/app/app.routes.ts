@@ -102,6 +102,15 @@ const coreRoutes: Routes = [{
     path: 'dashboards/index',
     loadComponent: () => import('./pages/dashboards/dashboards-index/dashboards-index.component').then(m => m.DashboardsIndexComponent)
 }, {
+    path: 'DashboardAllocations/index',
+    loadComponent: () => import('./pages/dashboardallocations/dashboard-allocations-index/dashboard-allocations-index.component').then(m => m.DashboardAllocationsIndexComponent)
+}, {
+    path: 'DashboardAllocations/add',
+    loadComponent: () => import('./pages/dashboardallocations/dashboard-allocations-add/dashboard-allocations-add.component').then(m => m.DashboardAllocationsAddComponent)
+}, {
+    path: 'DashboardAllocations/edit/:id',
+    loadComponent: () => import('./pages/dashboardallocations/dashboard-allocations-edit/dashboard-allocations-edit.component').then(m => m.DashboardAllocationsEditComponent)
+}, {
     path: 'macros/index',
     loadComponent: () => import('./pages/macros/macro-index/macro-index.component').then(m => m.MacroIndexComponent)
 }, {
