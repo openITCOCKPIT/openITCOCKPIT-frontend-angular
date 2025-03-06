@@ -166,6 +166,15 @@ The `key` is the original English text and the `value` is the translated text. P
 }
 ```
 
+The `{0}` as placeholders that will be replaced by the frontend at runtime.
+It is important to use `{0}` in the key, and `{{0}}` in teh value.
+
+```json
+{
+    "My name is {0}": "Mein Name ist {{0}}"
+}
+```
+
 openITCOCKPIT use [Transloco](https://jsverse.gitbook.io/transloco) for translations. Please refer to the official documentation for more information.
 
 ## 1. Fix typos
@@ -197,6 +206,39 @@ You can now start to translate all english texts to German:
 ```
 
 ## 3. Add new translations
+
+If you plan to add a new language, you need to add the new language to the `transloco.config.js` file.
+For example add `it_IT` for Italian translations:
+
+```javascript
+langs: ['...', 'uk_UA', 'it_IT']
+```
+
+Now, create a empty JSON file in the `src/assets/i18n/` folder with the name `it_IT.json`.
+
+```sh
+echo "{}" > src/assets/i18n/it_IT.json
+```
+
+and run the `npm run i18n:find` command to add all missing keys.
+
+You can now translate all keys to Italian.
+
+```json
+{
+    "Username": "Nome utente",
+    "Password": "Parola d'ordine",
+    "Login": "Accesso"
+}
+```
+
+In the last step, you have to add the new language to the `src/app/app.config.ts` file.
+
+```ts
+ availableLangs: ['...', 'uk_UA', 'it_IT']
+```
+
+and add the new language into the dropdown menu `src/app/layouts/coreui/change-language/change-language.component.html`
 
 # How to Upgrade Angular
 
