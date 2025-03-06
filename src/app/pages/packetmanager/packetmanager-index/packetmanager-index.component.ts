@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -7,25 +6,25 @@ import { RouterLink } from '@angular/router';
 
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import {
-  AlertComponent,
-  BadgeComponent,
-  ButtonGroupComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  FormCheckInputDirective,
-  InputGroupTextDirective,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalToggleDirective,
-  RowComponent
+    AlertComponent,
+    BadgeComponent,
+    ButtonGroupComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    FormCheckInputDirective,
+    InputGroupTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalToggleDirective,
+    RowComponent
 } from '@coreui/angular';
 
 
@@ -38,42 +37,44 @@ import { PacketmanagerService } from '../packetmanager.service';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import { RepositoryCheckerComponent } from '../../../components/repository-checker/repository-checker.component';
 import { ConsoleCopyComponent } from '../../../components/console-copy/console-copy.component';
+import { EolAlertsComponent } from '../../administrators/administrators-debug/eol-alerts/eol-alerts.component';
 
 @Component({
     selector: 'oitc-packetmanager-index',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormCheckInputDirective,
-    FormsModule,
-    XsButtonDirective,
-    ModalComponent,
-    ModalHeaderComponent,
-    ModalFooterComponent,
-    ModalToggleDirective,
-    ModalBodyComponent,
-    AlertComponent,
-    NgIf,
-    NgForOf,
-    TranslocoPipe,
-    ColComponent,
-    BadgeComponent,
-    RowComponent,
-    NgClass,
-    ContainerComponent,
-    InputGroupTextDirective,
-    TrustAsHtmlPipe,
-    ButtonGroupComponent,
-    RepositoryCheckerComponent,
-    ConsoleCopyComponent
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FormCheckInputDirective,
+        FormsModule,
+        XsButtonDirective,
+        ModalComponent,
+        ModalHeaderComponent,
+        ModalFooterComponent,
+        ModalToggleDirective,
+        ModalBodyComponent,
+        AlertComponent,
+        NgIf,
+        NgForOf,
+        TranslocoPipe,
+        ColComponent,
+        BadgeComponent,
+        RowComponent,
+        NgClass,
+        ContainerComponent,
+        InputGroupTextDirective,
+        TrustAsHtmlPipe,
+        ButtonGroupComponent,
+        RepositoryCheckerComponent,
+        ConsoleCopyComponent,
+        EolAlertsComponent
+    ],
     templateUrl: './packetmanager-index.component.html',
     styleUrl: './packetmanager-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -100,7 +101,7 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
                 isDebianBased: false,
                 isRhelBased: false,
                 isContainer: false,
-                codename: '',
+                LsbRelease: '',
                 systemname: '',
                 newVersion: false,
                 version: '',
@@ -120,6 +121,7 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.PacketmanagerService.getIndex()
             .subscribe((result: PacketmanagerIndexRoot): void => {
                 this.data = result;
+                console.log(this.data);
                 this.cdr.markForCheck();
 
                 this.initializeModulesToCheckboxesInstall();

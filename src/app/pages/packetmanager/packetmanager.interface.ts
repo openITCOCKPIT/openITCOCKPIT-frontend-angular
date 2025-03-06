@@ -8,7 +8,7 @@ export interface PacketmanagerIndexRoot {
             isDebianBased: boolean
             isRhelBased: boolean
             isContainer: boolean
-            codename: string
+            LsbRelease: string
             systemname: string
             newVersion: boolean
             version: string
