@@ -6,8 +6,7 @@
         <div class="top-left">
             <div class="sidebar-header border-bottom">
                 <div class="sidebar-brand d-flex flex-align-items-center cursor-pointer" [routerLink]="['/']">
-                    <!-- todo fix logo -->
-                    <img src="/img/logos/logo_header.png"/>
+                    <img [src]="headerLogoForHtml"/>
                     <span class="page-logo-text">
                         {{ SystemnameService.systemName$ | async }}
                     </span>

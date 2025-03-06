@@ -27,14 +27,14 @@ import { SystemnameService } from '../../../services/systemname.service';
 @Component({
     selector: 'oitc-coreui-navbar',
     imports: [
-    RouterLink,
-    FaIconComponent,
-    NavbarGroupComponent,
-    NgClass,
-    NgIf,
-    NavbarSearchComponent,
-    AsyncPipe
-],
+        RouterLink,
+        FaIconComponent,
+        NavbarGroupComponent,
+        NgClass,
+        NgIf,
+        NavbarSearchComponent,
+        AsyncPipe
+    ],
     templateUrl: './coreui-navbar.component.html',
     styleUrl: './coreui-navbar.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -69,6 +69,7 @@ export class CoreuiNavbarComponent implements OnInit {
     public readonly SystemnameService = inject(SystemnameService);
 
     public menu: MenuHeadline[] = [];
+    public headerLogoForHtml: string = '';
 
     public isMobile(): boolean {
         return window.innerWidth < this.mobileBreakpoint;
@@ -85,6 +86,7 @@ export class CoreuiNavbarComponent implements OnInit {
             .subscribe((result: NavigationInterface) => {
                 // Menu records are loaded
                 this.menu = result.menu;
+                this.headerLogoForHtml = result.headerLogoForHtml + "?" + new Date().getTime();
                 this.cdr.markForCheck();
             })
         );
