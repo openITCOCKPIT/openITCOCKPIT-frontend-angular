@@ -1,0 +1,71 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['Administrators', 'debug']" [routerLink]="['/', 'administrators', 'debug']">
+                    <fa-icon [icon]="['fas', 'bug']"></fa-icon>
+                    {{ SystemnameService.systemName$ | async }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Debugging information') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Debugging information') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+        </c-card-header>
+        <c-card-body>
+
+            <c-row *ngIf="response && response.interfaceInformation.oitc_is_debugging_mode">
+                <c-col [xs]="12">
+
+                    <ng-template #contentTemplate let-data>
+                        <span class="h5" [ngClass]="['text-'+data.color]" *ngIf="data">
+                            {{ SystemnameService.systemName$ | async }} is running in debug mode!
+                        </span>
+                        <br>
+                        This can be a potential security issue as you error messages will contain detailed information
+                        and stack traces. To disable debug mode, execute the command <code>openitcockpit-update</code>.
+                    </ng-template>
+                    <ng-template #buttonTemplate let-data>
+                        <div class="ms-2" *ngIf="data">
+                            <button class="btn btn-sm ripple" [ngClass]="'btn-outline-primary'"
+                                    *ngIf="!hasXdebugCookie"
+                                    (click)="setXdebugCookie()">
+                                <fa-icon [icon]="['fas', 'bug']"></fa-icon>
+                                {{ t('Set XDEBUG_TRIGGER cookie') }}
+                            </button>
+                            <button class="btn btn-sm ripple" [ngClass]="'btn-outline-danger'"
+                                    *ngIf="hasXdebugCookie"
+                                    (click)="removeXdebugCookie()">
+                                <fa-icon [icon]="['fas', 'bug-slash']"></fa-icon>
+                                {{ t('Remove XDEBUG_TRIGGER cookie') }}
+                            </button>
+                        </div>
+                    </ng-template>
+                    <oitc-alert baseIcon="shield" color="danger"
+                                [icon]="['fas', 'bug']"
+                                [contentTemplate]="contentTemplate" [buttonTemplate]="buttonTemplate"></oitc-alert>
+
+                </c-col>
+            </c-row>
+
+            <oitc-eol-alerts *ngIf="response && !response.serverInformation.isContainer"
+                             [codename]="response.serverInformation.LsbRelease"></oitc-eol-alerts>
+
+        </c-card-body>
+    </c-card>
+</ng-container>

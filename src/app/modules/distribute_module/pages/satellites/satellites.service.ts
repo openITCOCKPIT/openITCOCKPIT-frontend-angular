@@ -5,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
     SatelliteEntityCake2,
+    SatelliteIndex,
+    SatelliteIndexParams,
     SatellitesLoadSatellitesByStringParams,
     SatellitesStatusParams,
     SatelliteStatusIndex,
@@ -23,8 +25,18 @@ export class SatellitesService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    constructor() {
+    public getSatellitesIndex(params: SatelliteIndexParams): Observable<SatelliteIndex> {
+        return this.http.get<SatelliteIndex>(`${this.proxyPath}/distribute_module/satellites/index.json`, {
+            params: {
+                ...params
+            }
+        }).pipe(
+            map((data: SatelliteIndex): SatelliteIndex => {
+                return data;
+            })
+        );
     }
+
 
     public getTasksIndex(params: SatelliteTasksParams): Observable<SatelliteTasksIndex> {
         return this.http.get<SatelliteTasksIndex>(`${this.proxyPath}/distribute_module/satellites/tasks.json`, {

@@ -107,16 +107,17 @@
                     <label cLabel for="post.services._ids">
                         {{ t('Services') }}
                     </label>
-                    <oitc-multi-select
+                    <oitc-multi-select-optgroup
                         name="post.services._ids"
                         id="post.services._ids"
-                        [(ngModel)]="post.services._ids"
-                        optionValue="key"
-                        optionLabel="value.servicename"
-                        [searchCallback]="loadServices"
+                        optionValue="value"
+                        optionLabel="label"
                         [options]="services"
+                        [(ngModel)]="post.services._ids"
+                        [searchCallback]="loadServices"
+                        class="flex-1"
                         oitcFormError [errors]="errors" errorField="services">
-                    </oitc-multi-select>
+                    </oitc-multi-select-optgroup>
                     <oitc-form-feedback [errors]="errors" errorField="services"></oitc-form-feedback>
                 </div>
 
@@ -159,4 +160,3 @@
         </c-card>
     </form>
 </ng-container>
-

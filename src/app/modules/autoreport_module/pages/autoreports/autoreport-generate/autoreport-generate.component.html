@@ -517,7 +517,14 @@
                             <c-col xs="12" md="9" class="offset-md-3">
                                 <c-row>
                                     <c-col xs="12" md="4" class="report-font-weight-500">
-                                        {{ host.value.Host.frontend.outages_headline }}
+
+                                        {{
+                                            t('Outages of at least {0} min', {
+                                                '0': host.value.Host.outage_duration
+                                            })
+                                        }}
+
+
                                     </c-col>
                                     <c-col xs="12" md="4" class="report-font-weight-500">
                                         <span
@@ -731,7 +738,11 @@
                                        *ngIf="service.value.Service.frontend.show_outages">
                                     <c-row>
                                         <c-col xs="12" md="4" class="report-font-weight-500">
-                                            {{ service.value.Service.frontend.outages_headline }}
+                                            {{
+                                                t('Outages of at least {0} min', {
+                                                    '0': service.value.Service.outage_duration
+                                                })
+                                            }}
                                         </c-col>
                                         <c-col xs="12" md="4" class="report-font-weight-500"
                                                *ngIf="service.value.Service.outage_duration !== null">

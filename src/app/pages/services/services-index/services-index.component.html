@@ -817,7 +817,7 @@
                                         'ok' : service.Service.priority==2, 'warning' : service.Service.priority==3,
                                         'critical-soft' : service.Service.priority==4, 'critical' : service.Service.priority==5}"></fa-icon>
                                 </td>
-                                <td *ngIf="fields[7]">
+                                <td *ngIf="fields[7]" class="word-break">
                                     <span *oitcPermission="['services', 'browser']">
                                         <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
                                     </span>

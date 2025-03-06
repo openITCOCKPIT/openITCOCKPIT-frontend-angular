@@ -149,3 +149,4 @@ export class SatellitesTasksComponent implements OnInit, OnDestroy, IndexPage {
     public onMassActionComplete(success: boolean) {
     }
 }
+

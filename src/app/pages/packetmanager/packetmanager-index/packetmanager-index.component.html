@@ -38,31 +38,9 @@
     </ng-container>
 
 
-    <!-- alerts -->
-    <c-alert *ngIf="!data.result.data.isContainer && data.result.data.codename === 'bionic'">
-        <h4>
-            <fa-icon [icon]="['fas', 'warning']"></fa-icon>
-            {{ t('Ubuntu Bionic 18.04 is end of life soon!') }}
-        </h4>
-        {{ t('Official end of life of Ubuntu Bionic scheduled for April 2023.') }}
-        {{ t('Therefore openITCOCKPIT 4.5.5 will be one of the last releases for Ubuntu Bionic. Please update to Ubuntu Focal to receive further updates.') }}
-        <br/>
-        {{ t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {}) }}
-
-    </c-alert>
-
-
-    <c-alert *ngIf="!data.result.data.isContainer && data.result.data.codename === 'buster'">
-        <h4>
-            <fa-icon [icon]="['fas', 'warning']"></fa-icon>
-            {{ t('Debian Buster 10 end of life!') }}
-        </h4>
-        {{ t('Debian Buster is not supported by the Debian security team anymore!') }}
-        {{ t('Therefore openITCOCKPIT 4.5.5 will be one of the last releases for Debian Buster. Please update to Debian Bullseye to receive further updates.') }}
-        <br/>
-        {{ t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {}) }}
-
-    </c-alert>
+    <!-- End of life alerts -->
+    <oitc-eol-alerts *ngIf="data && !data.result.data.isContainer"
+                     [codename]="data.result.data.LsbRelease"></oitc-eol-alerts>
 
     <!--- da list -->
     <c-card class="mb-3">
