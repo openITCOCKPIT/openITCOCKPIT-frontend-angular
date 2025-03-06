@@ -159,6 +159,13 @@ There are different levels how you can help us to improve our translations.
 All Translations are located at `src/assets/i18n/` in "JSON" files (e.g. `src/assets/i18n/de_DE.json` for German translations).
 The `key` is the original English text and the `value` is the translated text. Please do **never change the key**.
 
+```json
+{
+    "This is the KEY, please never change this": "This is the value and can be translated",
+    "Monitoring is fun": "Monitoring macht Spaß"
+}
+```
+
 openITCOCKPIT use [Transloco](https://jsverse.gitbook.io/transloco) for translations. Please refer to the official documentation for more information.
 
 ## 1. Fix typos
@@ -168,7 +175,26 @@ The easiest way to help us is to fix it directly in the JSON file. Open the coro
 
 After you have fixed the issue, please send us a pull request.
 
-## 2. Improve existing translations
+## 2. Improve or update existing translations
+
+Sometimes, some keys are missing in the translation files. To add missing translations to existing files,
+you can run the command `npm run i18n:find`. This will add all missing keys with the English text as value.
+
+For example `src/assets/i18n/de_DE.json`:
+
+```json
+{
+    "Marked for re-enable": "Marked for re-enable"
+}
+```
+
+You can now start to translate all english texts to German:
+
+```json
+{
+    "Marked for re-enable": "Zum Wiederaktivieren markiert"
+}
+```
 
 ## 3. Add new translations
 
