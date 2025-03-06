@@ -24,6 +24,7 @@ export interface MenuLink {
 
 export interface NavigationInterface {
     menu: MenuHeadline[]
+    headerLogoForHtml: string
 }
 
 export interface MenuLinkWithSearchPath extends MenuLink {
