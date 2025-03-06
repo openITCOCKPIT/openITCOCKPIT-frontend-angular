@@ -27,7 +27,8 @@ export interface AdministratorsDebugRootResponse {
         [key: string]: AdministratorsDebugGearmanStatus
     }
     emailInformation: AdministratorsDebugEmailInformation
-    userInformation: AdministratorsDebugUserInformation
+    userInformation: AdministratorsDebugUserInformation,
+    logoHtmlPath: string
     _csrfToken: string
 }
 
