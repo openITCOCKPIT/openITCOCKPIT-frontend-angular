@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
-    BadgeComponent,
     ColorModeService,
     ContainerComponent,
     DropdownComponent,
@@ -20,8 +19,7 @@ import {
     DropdownMenuDirective,
     DropdownToggleDirective,
     HeaderComponent,
-    HeaderNavComponent,
-    NavItemComponent
+    HeaderNavComponent
 } from '@coreui/angular';
 import { delay, filter, map, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -46,8 +44,6 @@ import { HeaderAvatarComponent } from './header-avatar/header-avatar.component';
     imports: [
         ContainerComponent,
         HeaderNavComponent,
-        NavItemComponent,
-        BadgeComponent,
         RouterLink,
         NgTemplateOutlet,
         DropdownComponent,
