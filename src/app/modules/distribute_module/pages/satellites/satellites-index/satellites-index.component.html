@@ -196,7 +196,7 @@
                 <tr *ngFor="let satellite of result.all_satellites">
                     <td class="text-center">
                         <oitc-item-select
-                                *oitcPermission="['distribute_module', 'satellite', 'delete']"
+                                *oitcPermission="['distributeModule', 'satellites', 'delete']"
                                 [disabled]="!satellite.allow_edit"
                                 [item]="satellite"></oitc-item-select>
                     </td>
@@ -251,6 +251,28 @@
 
             <oitc-no-records
                     *ngIf="result && result.all_satellites.length === 0"></oitc-no-records>
+
+            <ng-container *ngIf="result && result.all_satellites">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                    [itemsCount]="result.all_satellites.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </ng-container>
 
             <c-container
                     [fluid]="true">

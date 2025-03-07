@@ -51,6 +51,7 @@ import {
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
+import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 
 @Component({
     selector: 'oitc-satellites-index',
@@ -89,7 +90,8 @@ import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outli
         ActionsButtonComponent,
         ActionsButtonElementComponent,
         DropdownDividerDirective,
-        BadgeOutlineComponent
+        BadgeOutlineComponent,
+        SelectAllComponent
     ],
     templateUrl: './satellites-index.component.html',
     styleUrl: './satellites-index.component.css',
