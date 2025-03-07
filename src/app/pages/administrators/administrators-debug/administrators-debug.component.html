@@ -378,7 +378,7 @@
                     <c-card>
                         <c-card-header>
                             <h5 cCardTitle>
-                                <fa-icon [icon]="['fas', 'hdd']"></fa-icon>
+                                <fa-icon [icon]="['fas', 'server']"></fa-icon>
                                 {{ t('Server information') }}
                             </h5>
                         </c-card-header>
@@ -478,13 +478,311 @@
 
             <c-row>
                 <c-col [xs]="12" class="mb-3">
-                    HIER MEMORY
+                    <c-card>
+                        <c-card-header>
+                            <h5 cCardTitle>
+                                <fa-icon [icon]="['fas', 'pie-chart']"></fa-icon>
+                                {{ t('Memory and disk usage') }}
+                            </h5>
+                            <c-nav class="card-toolbar card-header-pills">
+                                <c-nav-item class="px-1">
+                                    <button (click)="load()" cButton class="ripple" color="default" size="xs"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                                        {{ t('Refresh') }}
+                                    </button>
+                                </c-nav-item>
+                            </c-nav>
+                        </c-card-header>
+                        <c-card-body>
+                            @if (!response) {
+                                <oitc-block-loader [height]="'10rem'"></oitc-block-loader>
+                            }
+                            @if (response) {
+
+                                <!-- Memory Usage -->
+                                <c-card class="mb-4">
+                                    <c-card-body>
+                                        <h5 cCardTitle>
+                                            <fa-icon [icon]="['fas', 'memory']"></fa-icon>
+                                            {{ t('Memory usage') }}
+                                        </h5>
+
+                                        <c-row>
+                                            <c-col [xs]="12" [lg]="3">
+                                                <div
+                                                    class="border-start border-start-4 border-start-secondary px-3 mb-3">
+                                                    <div class="small text-body-secondary text-truncate">
+                                                        {{ t('Total:') }}
+                                                    </div>
+                                                    <div class="fs-5 fw-semibold">
+                                                        {{ response.memory.memory.total | number: '1.0-1' }} MB
+                                                    </div>
+                                                </div>
+                                            </c-col>
+                                            <c-col [xs]="12" [lg]="3">
+                                                <div class="border-start border-start-4 border-start-success px-3 mb-3">
+                                                    <div class="small text-body-secondary text-truncate">
+                                                        {{ t('Used:') }}
+                                                    </div>
+                                                    <div class="fs-5 fw-semibold">
+                                                        {{ response.memory.memory.used | number: '1.0-1' }} MB
+                                                    </div>
+                                                </div>
+                                            </c-col>
+                                            <c-col [xs]="12" [lg]="3">
+                                                <div class="border-start border-start-4 border-start-warning px-3 mb-3">
+                                                    <div class="small text-body-secondary text-truncate">
+                                                        {{ t('Cached:') }}
+                                                    </div>
+                                                    <div class="fs-5 fw-semibold">
+                                                        {{ response.memory.memory.cached | number: '1.0-1' }} MB
+                                                    </div>
+                                                </div>
+                                            </c-col>
+                                            <c-col [xs]="12" [lg]="3">
+                                                <div class="border-start border-start-4 border-start-info px-3 mb-3">
+                                                    <div class="small text-body-secondary text-truncate">
+                                                        {{ t('Buffers:') }}
+                                                    </div>
+                                                    <div class="fs-5 fw-semibold">
+                                                        {{ response.memory.memory.buffers | number: '1.0-1' }} MB
+                                                    </div>
+                                                </div>
+                                            </c-col>
+                                        </c-row>
+                                        <c-row>
+                                            <c-col [xs]="12">
+                                                <c-progress-stacked>
+                                                    <!-- Used -->
+                                                    <c-progress
+                                                        color="success"
+                                                        [value]="(response.memory.memory.used / response.memory.memory.total) * 100">
+                                                        @if (response.memory.memory.used > 50) {
+                                                            {{ response.memory.memory.used  | number: '1.0-1' }}MB
+                                                        }
+                                                    </c-progress>
+
+                                                    <!-- Cached -->
+                                                    <c-progress
+                                                        color="warning"
+                                                        [value]="(response.memory.memory.cached / response.memory.memory.total) * 100">
+                                                        @if (response.memory.memory.cached > 10) {
+                                                            <span class="text-dark">
+                                                                {{ response.memory.memory.cached  | number: '1.0-1' }}MB
+                                                            </span>
+                                                        }
+                                                    </c-progress>
+
+                                                    <!-- Buffers -->
+                                                    <c-progress
+                                                        color="info"
+                                                        [animated]="true"
+                                                        [value]="(response.memory.memory.buffers / response.memory.memory.total) * 100">
+                                                        @if (response.memory.memory.buffers > 10) {
+                                                            {{ response.memory.memory.buffers  | number: '1.0-1' }}MB
+                                                        }
+                                                    </c-progress>
+
+                                                </c-progress-stacked>
+                                            </c-col>
+                                        </c-row>
+
+                                    </c-card-body>
+                                </c-card>
+
+                                <!-- Swap Usage -->
+                                <c-card class="mb-4">
+                                    <c-card-body>
+                                        <h5 cCardTitle>
+                                            <fa-icon [icon]="['fas', 'compact-disc']"></fa-icon>
+                                            {{ t('Swap usage') }}
+                                        </h5>
+
+                                        <c-row>
+                                            <c-col [xs]="12" [lg]="3">
+                                                <div
+                                                    class="border-start border-start-4 border-start-secondary px-3 mb-3">
+                                                    <div class="small text-body-secondary text-truncate">
+                                                        {{ t('Total:') }}
+                                                    </div>
+                                                    <div class="fs-5 fw-semibold">
+                                                        {{ response.memory.swap.total | number: '1.0-1' }} MB
+                                                    </div>
+                                                </div>
+                                            </c-col>
+                                            <c-col [xs]="12" [lg]="3">
+                                                <div class="border-start border-start-4 border-start-danger px-3 mb-3">
+                                                    <div class="small text-body-secondary text-truncate">
+                                                        {{ t('Used:') }}
+                                                    </div>
+                                                    <div class="fs-5 fw-semibold">
+                                                        {{ response.memory.swap.used | number: '1.0-1' }} MB
+                                                    </div>
+                                                </div>
+                                            </c-col>
+                                        </c-row>
+                                        <c-row>
+                                            <c-col [xs]="12">
+                                                <!-- Used -->
+                                                <c-progress
+                                                    color="danger"
+                                                    [value]="(response.memory.swap.used / response.memory.swap.total) * 100">
+                                                    @if (response.memory.swap.used > 50) {
+                                                        {{ response.memory.swap.used  | number: '1.0-1' }}MB
+                                                    }
+                                                </c-progress>
+                                            </c-col>
+                                        </c-row>
+
+                                    </c-card-body>
+                                </c-card>
+
+                                <!-- Disk Usage -->
+                                @for (disk of response.diskUsage; track $index) {
+                                    <c-card class="mb-4">
+                                        <c-card-body>
+                                            <h5 cCardTitle>
+                                                <fa-icon [icon]="['fas', 'hdd']"></fa-icon>
+                                                {{ t('Disk usage') }}
+                                            </h5>
+                                            <h6 cCardSubtitle class="mb-2 text-medium-emphasis">
+                                                {{ disk.disk }} ({{ t('Mount point') }}: {{ disk.mountpoint }})
+                                            </h6>
+
+                                            <c-row>
+                                                <c-col [xs]="12" [lg]="3">
+                                                    <div
+                                                        class="border-start border-start-4 border-start-secondary px-3 mb-3">
+                                                        <div class="small text-body-secondary text-truncate">
+                                                            {{ t('Size') }}:
+                                                        </div>
+                                                        <div class="fs-5 fw-semibold">
+                                                            {{ disk.size }}
+                                                        </div>
+                                                    </div>
+                                                </c-col>
+                                                <c-col [xs]="12" [lg]="3">
+                                                    <div
+                                                        class="border-start border-start-4 border-start-primary px-3 mb-3">
+                                                        <div class="small text-body-secondary text-truncate">
+                                                            {{ t('Used:') }}
+                                                        </div>
+                                                        <div class="fs-5 fw-semibold">
+                                                            {{ disk.used }}
+                                                        </div>
+                                                    </div>
+                                                </c-col>
+                                                <c-col [xs]="12" [lg]="3">
+                                                    <div
+                                                        class="border-start border-start-4 border-start-success px-3 mb-3">
+                                                        <div class="small text-body-secondary text-truncate">
+                                                            {{ t('Available') }}:
+                                                        </div>
+                                                        <div class="fs-5 fw-semibold">
+                                                            {{ disk.avail }}
+                                                        </div>
+                                                    </div>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col [xs]="12">
+                                                    <!-- Used -->
+                                                    <c-progress
+                                                        color="primary"
+                                                        [value]="disk.use_percentage">
+                                                        @if (disk.use_percentage > 5) {
+                                                            {{ disk.use_percentage  | number: '1.0-1' }}%
+                                                        }
+                                                    </c-progress>
+                                                </c-col>
+                                            </c-row>
+
+                                        </c-card-body>
+                                    </c-card>
+                                }
+
+                            }
+                        </c-card-body>
+                    </c-card>
+
                 </c-col>
             </c-row>
 
             <c-row>
                 <c-col [xs]="12" class="mb-3">
-                    HIER QUEUE
+                    <c-card>
+                        <c-card-header>
+                            <h5 cCardTitle>
+                                <fa-icon [icon]="['fas', 'list-ol']"></fa-icon>
+                                {{ t('Queuing engine') }}
+                            </h5>
+                            <c-nav class="card-toolbar card-header-pills">
+                                <c-nav-item class="px-1">
+                                    <button (click)="load()" cButton class="ripple" color="default" size="xs"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                                        {{ t('Refresh') }}
+                                    </button>
+                                </c-nav-item>
+                            </c-nav>
+                        </c-card-header>
+                        <c-card-body>
+                            @if (!response) {
+                                <oitc-block-loader [height]="'10rem'"></oitc-block-loader>
+                            }
+                            @if (response) {
+                                <table
+                                    bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                    <thead>
+                                    <tr>
+                                        <th>{{ t('Queue name') }}</th>
+                                        <th>{{ t('Jobs waiting') }}</th>
+                                        <th>{{ t('Active jobs') }}</th>
+                                        <th>{{ t('Worker available') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (queue of gearmanStatus; track $index) {
+                                            <tr
+                                                [ngClass]="{
+                                            'table-warning': queue.worker === 0,
+                                            'table-danger': queue.jobs > 500,
+                                            'table-primary': queue.jobs > 5 && queue.jobs < 50,
+                                            'table-info': queue.jobs > 50 && queue.jobs < 500,
+                                            }">
+                                                <td>{{ queue.name }}</td>
+                                                <td>
+                                                    <div class="d-flex flex-row">
+                                                        {{ queue.jobs }}
+                                                        <oitc-sparkline-stats
+                                                            class="ps-1"
+                                                            [lastUpdate]="lastUpdate"
+                                                            [value]="queue.jobs"
+                                                            [maxValues]="25"></oitc-sparkline-stats>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-row">
+                                                        {{ queue.running }}
+                                                        <oitc-sparkline-stats
+                                                            class="ps-1"
+                                                            [lastUpdate]="lastUpdate"
+                                                            [value]="queue.running"
+                                                            [maxValues]="15"></oitc-sparkline-stats>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    {{ queue.worker }}
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                        </c-card-body>
+                    </c-card>
+
                 </c-col>
             </c-row>
 
@@ -524,10 +822,10 @@
                                     </dl>
 
                                     <div class="mt-2">
-                                        <button (click)="sendTestMail()" cButton class="ripple" color="default"
+                                        <button (click)="sendTestMail()" cButton class="ripple" color="primary"
                                                 size="xs"
                                                 type="button">
-                                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
                                             {{ t('Send test Email to') }}
                                             <span class="text-decoration-underline">
                                                 {{ response.emailInformation.test_mail_address }}
@@ -577,7 +875,17 @@
 
             <c-row>
                 <c-col [xs]="12" class="mb-3">
-                    phpinfo
+                    <c-card class="h-100 flex-1">
+                        <c-card-header>
+                            <h5 cCardTitle>
+                                <fa-icon [icon]="['fab', 'php']"></fa-icon>
+                                {{ t('PHP info') }}
+                            </h5>
+                        </c-card-header>
+                        <c-card-body>
+                            <oitc-phpinfo></oitc-phpinfo>
+                        </c-card-body>
+                    </c-card>
                 </c-col>
             </c-row>
 

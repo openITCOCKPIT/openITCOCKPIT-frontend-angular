@@ -8,10 +8,13 @@ import {
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
+    CardSubtitleDirective,
     CardTitleDirective,
     ColComponent,
     NavComponent,
     NavItemComponent,
+    ProgressComponent,
+    ProgressStackedComponent,
     RowComponent,
     TableDirective,
     TooltipDirective
@@ -19,8 +22,11 @@ import {
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SystemnameService } from '../../../services/systemname.service';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
-import { AdministratorsDebugRootResponse } from '../administrators.interface';
+import { AsyncPipe, DecimalPipe, NgClass, NgIf } from '@angular/common';
+import {
+    AdministratorsDebugGearmanStatusForAngular,
+    AdministratorsDebugRootResponse
+} from '../administrators.interface';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
 import { AdministratorsService } from '../administrators.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -39,6 +45,9 @@ import 'echarts/theme/dark.js';
 import { LayoutService } from '../../../layouts/coreui/layout.service';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TimezoneObject } from '../../services/timezone.interface';
+import { SparklineStatsComponent } from '../../../components/sparkline-stats/sparkline-stats.component';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { PhpinfoComponent } from './phpinfo/phpinfo.component';
 
 
 echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent]);
@@ -72,7 +81,13 @@ echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent
         NavComponent,
         NavItemComponent,
         XsButtonDirective,
-        NgxEchartsDirective
+        NgxEchartsDirective,
+        DecimalPipe,
+        ProgressStackedComponent,
+        ProgressComponent,
+        CardSubtitleDirective,
+        SparklineStatsComponent,
+        PhpinfoComponent
     ],
     templateUrl: './administrators-debug.component.html',
     styleUrl: './administrators-debug.component.css',
@@ -85,6 +100,9 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
 
     public response?: AdministratorsDebugRootResponse;
     public hasXdebugCookie: boolean = false;
+
+    public lastUpdate: Date = new Date();
+    public gearmanStatus: AdministratorsDebugGearmanStatusForAngular[] = [];
 
     private timezone?: TimezoneObject;
     public chartOption: EChartsOption = {};
@@ -99,7 +117,9 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private cdr = inject(ChangeDetectorRef);
     private readonly TimezoneService: TimezoneService = inject(TimezoneService);
+    private readonly notyService = inject(NotyService);
 
+    private interval: any = null;
 
     public constructor() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
@@ -115,17 +135,47 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.load();
         this.getUserTimezone();
+        this.startReloadInterval();
         this.hasXdebugCookie = this.CookieService.check('XDEBUG_TRIGGER');
     }
 
     public ngOnDestroy(): void {
+        if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
+
         this.subscriptions.unsubscribe();
+    }
+
+    private startReloadInterval() {
+        if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
+
+        this.interval = setInterval(() => {
+            this.load();
+        }, 10000);
     }
 
     public load() {
         this.subscriptions.add(
             this.AdministratorsService.getDebug().subscribe(response => {
                 this.response = response;
+                this.lastUpdate = new Date();
+
+                this.gearmanStatus = [];
+                for (let queueName in this.response.gearmanStatus) {
+                    const status: AdministratorsDebugGearmanStatusForAngular = {
+                        name: queueName,
+                        jobs: Number(this.response.gearmanStatus[queueName].jobs),
+                        running: Number(this.response.gearmanStatus[queueName].running),
+                        worker: Number(this.response.gearmanStatus[queueName].worker)
+                    }
+                    this.gearmanStatus.push(status);
+                }
+
 
                 this.renderChart();
 
@@ -278,8 +328,15 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
     }
 
     public sendTestMail() {
-        // todo
-        console.log('TODO IMPLEMENT ME');
+        this.subscriptions.add(this.AdministratorsService.sendTestMail().subscribe(data => {
+            const msg = String(data.data);
+
+            if (data.success) {
+                this.notyService.genericSuccess(msg);
+            } else {
+                this.notyService.genericError(msg);
+            }
+        }));
     }
 
 }
