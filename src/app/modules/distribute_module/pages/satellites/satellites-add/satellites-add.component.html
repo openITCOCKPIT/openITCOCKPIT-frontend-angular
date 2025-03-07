@@ -370,6 +370,7 @@
                             {{ t('Generate new API key') }}
                         </button>
                     </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
                 </div>
 
                 <!-- interval -->
@@ -384,10 +385,10 @@
                            type="text"
                            name="post.Satellite.interval"
                            [(ngModel)]="post.Satellite.interval"
-                           oitcFormError [errors]="errors" errorField="address">
-                    <oitc-form-feedback [errors]="errors" errorField="address"></oitc-form-feedback>
+                           oitcFormError [errors]="errors" errorField="interval">
+                    <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
                     <div class="help-block">
-                        {{ t('This address will be used for all communications between the master instance and the satellite system.') }}
+                        {{ t('Time interval in seconds the master system will pickup check results') }}
                     </div>
                 </div>
 
@@ -403,10 +404,10 @@
                            type="text"
                            name="post.Satellite.timeout"
                            [(ngModel)]="post.Satellite.timeout"
-                           oitcFormError [errors]="errors" errorField="address">
-                    <oitc-form-feedback [errors]="errors" errorField="address"></oitc-form-feedback>
+                           oitcFormError [errors]="errors" errorField="timeout">
+                    <oitc-form-feedback [errors]="errors" errorField="timeout"></oitc-form-feedback>
                     <div class="help-block">
-                        {{ t('This address will be used for all communications between the master instance and the satellite system.') }}
+                        {{ t('Time limit in seconds which defines when the satellite should be marked as OFFLINE .') }}
                     </div>
                 </div>
 

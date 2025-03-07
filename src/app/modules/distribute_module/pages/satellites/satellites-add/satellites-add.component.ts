@@ -45,6 +45,7 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { UserTimezonesSelect } from '../../../../../pages/users/users.interface';
 import { ProfileService } from '../../../../../pages/profile/profile.service';
 import { NgIf } from '@angular/common';
+import { UsersService } from '../../../../../pages/users/users.service';
 
 @Component({
     selector: 'oitc-satellites-add',
@@ -93,6 +94,7 @@ import { NgIf } from '@angular/common';
 export class SatellitesAddComponent implements OnDestroy, OnInit {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly SatellitesService: SatellitesService = inject(SatellitesService);
+    private readonly UsersService: UsersService = inject(UsersService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly notyService: NotyService = inject(NotyService);
@@ -118,6 +120,7 @@ export class SatellitesAddComponent implements OnDestroy, OnInit {
     public ngOnInit() {
         this.loadContainers();
         this.getUserTimezone();
+        this.getTimeZones();
     }
 
     public loadContainers = (): void => {
@@ -130,7 +133,14 @@ export class SatellitesAddComponent implements OnDestroy, OnInit {
 
     private getUserTimezone() {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
-            this.timezone = data;
+            this.post.Satellite.timezone = data.user_timezone;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    private getTimeZones(): void {
+        this.subscriptions.add(this.UsersService.getDateformats().subscribe(data => {
+            this.timezones = data.timezones;
             this.cdr.markForCheck();
         }));
     }
