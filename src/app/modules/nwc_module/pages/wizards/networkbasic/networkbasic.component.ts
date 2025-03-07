@@ -115,7 +115,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
             this.cdr.markForCheck();
             console.warn(data);
             // Error
-            if (data.success) {
+            if (!data.error) {
                 for (let key in data.interfaces) {
                     let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.interfaceServicetemplate.servicetemplatecommandargumentvalues));
                     servicetemplatecommandargumentvalues[0].value = data.interfaces[key].value.name;
@@ -132,6 +132,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
 
                 this.childComponentLocal.cdr.markForCheck();
                 this.childComponent.cdr.markForCheck();
+                this.cdr.markForCheck();
                 return;
             }
             this.notyService.genericError();

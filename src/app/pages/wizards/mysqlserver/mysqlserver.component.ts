@@ -77,13 +77,12 @@ export class MysqlserverComponent extends WizardsAbstractComponent {
             this.systemName = a;
         })
         super.ngOnInit();
-
     }
 
     protected override wizardLoad(result: MysqlWizardGet): void {
         this.post.username = result.username;
         this.post.password = result.password;
-        this.post.database = result.database;
+        this.post.database = result.database || 'information_schema';
         this.serverAddr = result.serverAddr;
         super.wizardLoad(result);
     }
