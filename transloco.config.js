@@ -4,7 +4,7 @@ module.exports = {
     keysManager: {
         fileFormat: 'json', // or 'pot'
         addMissingKeys: true,
-        defaultValue: '',
+        defaultValue: '{{key}}',
         interpolation: ['{{', '}}']
     }
 };

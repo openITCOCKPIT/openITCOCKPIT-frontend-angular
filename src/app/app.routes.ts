@@ -34,6 +34,7 @@ import { prometheusModuleRoutes } from './modules/prometheus_module/prometheus_m
 import { changecalendarsModuleRoutes } from './modules/changecalendar_module/changecalendar_module.routes';
 import { scmModuleRoutes } from './modules/scm_module/scm_module.routes';
 import { slackModuleRoutes } from './modules/slack_module/slack_module.routes';
+import { designModuleRoutes } from './modules/design_module/design_module.routes';
 import { mattermostModuleRoutes } from './modules/mattermost_module/mattermost_module.routes';
 
 @Component({
@@ -91,6 +92,7 @@ const moduleRoutes: Routes = [
     ...changecalendarsModuleRoutes,
     ...scmModuleRoutes,
     ...slackModuleRoutes,
+    ...designModuleRoutes,
     ...mattermostModuleRoutes
 ];
 /***    Core routes   ***/
