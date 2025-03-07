@@ -7,6 +7,7 @@ import {
     SatelliteEntityCake2,
     SatelliteIndex,
     SatelliteIndexParams,
+    SatellitesAddRoot,
     SatellitesLoadSatellitesByStringParams,
     SatellitesStatusParams,
     SatelliteStatusIndex,
@@ -62,6 +63,26 @@ export class SatellitesService {
         );
     }
 
+    public addSatellite(satellite: SatellitesAddRoot): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/distribute_module/satellites/add.json?angular=true`, satellite)
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data.satellite as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
     public loadSatellitesByString(params: SatellitesLoadSatellitesByStringParams): Observable<SelectKeyValue[]> {
         const proxyPath: string = this.proxyPath;
 
@@ -76,6 +97,21 @@ export class SatellitesService {
         );
     }
 
+
+    public loadAllContainers(): Observable<SelectKeyValue[]> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<{
+            containers: SelectKeyValue[]
+        }>(`${proxyPath}/distribute_module/satellites/loadContainers.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.containers;
+            })
+        )
+    }
 
     public createSatellitedowntime(satellitecontainerdowntime: SystemdowntimesPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
