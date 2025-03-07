@@ -453,6 +453,21 @@
                             </h5>
                             <c-nav class="card-toolbar card-header-pills">
                                 <c-nav-item class="px-1">
+                                    <c-form-check>
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="keepHistory"
+                                            id="keepHistory"
+                                            type="checkbox"
+                                            [(ngModel)]="keepHistory"/>
+
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="keepHistory">{{ t('Keep history') }}</label>
+                                    </c-form-check>
+
+                                </c-nav-item>
+                                <c-nav-item class="px-1">
                                     <button (click)="load()" cButton class="ripple" color="default" size="xs"
                                             type="button">
                                         <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
