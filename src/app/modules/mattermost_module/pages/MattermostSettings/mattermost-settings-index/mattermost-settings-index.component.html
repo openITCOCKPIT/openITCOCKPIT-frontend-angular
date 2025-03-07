@@ -1,0 +1,125 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Mattermost Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'mattermost_module', 'mattermost_settings', 'index']"
+                   *oitcPermission="['MattermostModule', 'mattermostsettings', 'index']">
+                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                    {{ t('Configuration') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
+    </nav>
+
+    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <form cForm (ngSubmit)="submitMattermostSettings()">
+        <c-card *ngIf="post">
+
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Mattermost') }}
+                    <small class="fw-300">
+                        {{ t('Configuration') }}
+                    </small>
+                </h5>
+            </c-card-header>
+            <c-card-body>
+
+                <div class="mb-3">
+                    <label cLabel for="webhook_url">
+                        {{ t('Webhook URL') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl required
+                           id="webhook_url"
+                           name="webhook_url"
+                           placeholder="https://mattermost.example.org/hooks/1nmqus1wsfr988e81sr8whqrte"
+                           oitcFormError [errors]="errors" errorField="webhook_url"
+                           [(ngModel)]="post.webhook_url">
+                    <oitc-form-feedback [errors]="errors" errorField="webhook_url"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Mattermost Webhook URL.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <c-form-check>
+                        <input cFormCheckInput
+                               name="two_way"
+                               id="two_way"
+                               type="checkbox"
+                               trueFalseValue
+                               [(ngModel)]="post.two_way">
+                        <label cFormCheckLabel for="two_way">
+                            {{ t('Enable Two-Way Integration') }}
+                        </label>
+                    </c-form-check>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="api_key">
+                        {{ t('openITCOCKPIT Api Key') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           id="api_key"
+                           name="api_key"
+                           placeholder="6d132de3bfb3fa8ea5793fa3b2400a690ed72c5b0b9cfad8a0fd4f20caf4444c56057d4554eea978e5da72a7668d37ad3a50812905d958f5f47a58f6e2c5a2cff1c1ac11cdeb483504f4b80de2814c4d"
+                           [(ngModel)]="post.apikey"
+                           oitcFormError [errors]="errors" errorField="apikey">
+                    <oitc-form-feedback [errors]="errors" errorField="apikey"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Api Key') }}
+                        <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
+                        {{ t('used by Mattermost for authentication against openITCOCKPIT.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <c-form-check>
+                        <input cFormCheckInput
+                               name="proxy"
+                               id="proxy"
+                               type="checkbox"
+                               trueFalseValue
+                               [(ngModel)]="post.use_proxy">
+                        <label cFormCheckLabel for="proxy">
+                            {{ t('Use Proxy Server') }}
+                        </label>
+                        <div class="help-block">
+                            <span *oitcPermission="['proxy', 'index'];negate:true">
+                                {{ t('Determine if the configured proxy should be used.') }}
+                            </span>
+                            <a *oitcPermission="['proxy', 'index']" [routerLink]="['/', 'proxy', 'index']">
+                                {{ t('Determine if the configured proxy should be used.') }}
+                            </a>
+                        </div>
+                    </c-form-check>
+                </div>
+
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Save') }}
+                </button>
+            </c-card-footer>
+
+        </c-card>
+    </form>
+
+</ng-container>

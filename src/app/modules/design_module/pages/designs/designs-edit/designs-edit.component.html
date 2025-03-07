@@ -1,0 +1,227 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Design Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['designmodule', 'designs', 'edit']"
+                   [routerLink]="['/', 'design_module', 'designs', 'edit']">
+                    <fa-icon [icon]="['fas', 'palette']"></fa-icon>
+                    {{ t('Design') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Designs') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+        </c-card-header>
+        <c-card-body>
+
+            <!-- Logos -->
+            <c-row>
+                <c-col md="12">
+                    <h4> {{ t('Logos') }}</h4>
+                    <button cButton color="primary" class="ripple mb-3"
+                            (click)="triggerUploadLogoModal()">
+                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                        {{ t('Upload logo') }}
+                    </button>
+                </c-col>
+            </c-row>
+            <c-row>
+                <c-col md="3">
+                    <c-card class="mb-2">
+                        <img [src]="logoPdfForHtml" class="card-img-top" alt="">
+                        <c-card-body>
+                            <div class="form-group">
+                                <button cButton color="danger" class="ripple" (click)="resetLogo(0)">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Reset logo') }}
+                                </button>
+                                <div class="pt-2">
+                                    <div
+                                        class="helptext">{{ t('The logo is used by the interface and PDF files.') }}
+                                    </div>
+                                    <div class="helptext">{{ t('Resolution: 2600x800') }}</div>
+                                </div>
+                            </div>
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+                <c-col md="3">
+                    <c-card class="mb-2">
+                        <img [src]="smallLogoPdfForHtml" class="card-img-top img-fluid img-center"
+                             style="max-width: 250px;">
+                        <c-card-body>
+                            <div class="form-group">
+                                <button cButton color="danger" class="ripple" (click)="resetLogo(1)">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Reset logo') }}
+                                </button>
+                                <div class="pt-2">
+                                    <div
+                                        class="helptext">{{ t('The small logo is used by notifications.') }}
+                                    </div>
+                                    <div class="helptext">{{ t('Resolution: 250x77') }}</div>
+                                </div>
+                            </div>
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+                <c-col md="3">
+                    <c-card class="mb-2">
+                        <img [src]="logoForHtml" class="card-img-top img-fluid img-center">
+                        <c-card-body>
+                            <div class="form-group">
+                                <button cButton color="danger" class="ripple" (click)="resetLogo(2)">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Reset logo') }}
+                                </button>
+                                <div class="pt-2">
+                                    <div
+                                        class="helptext">{{ t('The logo is used by the interface and login screen.') }}
+                                    </div>
+                                    <div class="helptext">{{ t('Resolution: 1920x1080') }}</div>
+                                </div>
+                            </div>
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+                <c-col md="3">
+                    <c-card class="mb-2">
+                        <img [src]="headerLogoForHtml" class="card-img-top img-fluid img-center"
+                             style="max-width: 32px;">
+                        <c-card-body>
+                            <div class="form-group">
+                                <button cButton color="danger" class="ripple" (click)="resetLogo(3)">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Reset logo') }}
+                                </button>
+                                <div class="pt-2">
+                                    <div class="helptext">{{ t('This Logo is used in the page header') }}</div>
+                                    <div class="helptext">{{ t('Resolution: 32x32px') }}</div>
+                                </div>
+                            </div>
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+            </c-row>
+
+            <hr>
+
+            <!-- custom login background  -->
+            <c-row>
+                <c-col md="12">
+                    <h4>{{ t('Login background image') }}</h4>
+                    <button cButton color="primary" class="ripple mb-3"
+                            (click)="triggerUploadLogoModal(4)">
+                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                        {{ t('Upload login background') }}
+                    </button>
+                </c-col>
+            </c-row>
+            <c-row>
+                <c-col md="12">
+                    <c-card>
+                        <img [src]="customLoginBackgroundHtml" class="card-img-top img-fluid img-center" alt="">
+                        <c-card-body class="card-body">
+                            <div class="form-group">
+                                <button cButton color="danger" class="ripple" (click)="resetLogo(4)">
+                                    <fa-icon [icon]="['fas', 'trash']">&nbsp;</fa-icon>
+                                    {{ t('Reset background') }}
+                                </button>
+                                <div class="pt-2">
+                                    <div
+                                        class="helptext">{{ t('The image is used as background image for the login screen.') }}
+                                    </div>
+                                    <div class="helptext">{{ t('Resolution: 2560x1440') }}</div>
+                                </div>
+                            </div>
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+            </c-row>
+
+        </c-card-body>
+    </c-card>
+
+    <!-- Upload logo modal -->
+    <c-modal #UploadLogoModal fullscreen="md" size="lg" id="UploadLogoModal">
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                {{ t('Upload your logo or background') }}
+            </h5>
+            <button [cModalToggle]="UploadLogoModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col lg="12">
+                    <div class="mb-2">
+                        <label cLabel for="logoType">
+                            {{ t('Logo / Background for') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-select
+                            name="logoType"
+                            id="logoType"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="logoType"
+                            [options]="logTypeOptions"
+                            (onChange)="onLogoTypeChange()">
+                        </oitc-select>
+                    </div>
+                </c-col>
+            </c-row>
+            <c-row [hidden]="!showUpload">
+                <c-col lg="12">
+                    <div class="form-group">
+                        <c-col lg="12" class="text-info pt-2">
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('Max allowed file size: ') }}
+                            {{ maxUploadLimit?.string }}.
+                            {{ t('Supported iamge types: .jpg, .png and .gif.') }}
+                        </c-col>
+                        <c-col lg="12" class="pt-2">
+                            <div id="logoDropzone"
+                                 class="logo-dropzone dropzone dropzoneStyle">
+                                <div class="dz-message">
+                                    <fa-icon [icon]="['fas', 'cloud-upload-alt']" size="5x"
+                                             class="mb-3 text-muted"></fa-icon>
+                                    <br>
+                                    <span class="text-uppercase"> {{ t('Drop files here or click to upload.') }} </span>
+                                </div>
+                            </div>
+                        </c-col>
+                    </div>
+                </c-col>
+            </c-row>
+        </c-modal-body>
+        <c-modal-footer>
+            <button [cModalToggle]="UploadLogoModal.id" cButton color="default" class="ripple">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+
+</ng-container>
+
+<oitc-reload-interface-modal></oitc-reload-interface-modal>

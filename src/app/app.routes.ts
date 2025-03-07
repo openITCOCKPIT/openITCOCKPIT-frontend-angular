@@ -34,6 +34,8 @@ import { prometheusModuleRoutes } from './modules/prometheus_module/prometheus_m
 import { changecalendarsModuleRoutes } from './modules/changecalendar_module/changecalendar_module.routes';
 import { scmModuleRoutes } from './modules/scm_module/scm_module.routes';
 import { slackModuleRoutes } from './modules/slack_module/slack_module.routes';
+import { designModuleRoutes } from './modules/design_module/design_module.routes';
+import { mattermostModuleRoutes } from './modules/mattermost_module/mattermost_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -89,7 +91,9 @@ const moduleRoutes: Routes = [
     ...autoreportModuleRoutes,
     ...changecalendarsModuleRoutes,
     ...scmModuleRoutes,
-    ...slackModuleRoutes
+    ...slackModuleRoutes,
+    ...designModuleRoutes,
+    ...mattermostModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
@@ -99,6 +103,15 @@ const coreRoutes: Routes = [{
 }, {
     path: 'dashboards/index',
     loadComponent: () => import('./pages/dashboards/dashboards-index/dashboards-index.component').then(m => m.DashboardsIndexComponent)
+}, {
+    path: 'DashboardAllocations/index',
+    loadComponent: () => import('./pages/dashboardallocations/dashboard-allocations-index/dashboard-allocations-index.component').then(m => m.DashboardAllocationsIndexComponent)
+}, {
+    path: 'DashboardAllocations/add',
+    loadComponent: () => import('./pages/dashboardallocations/dashboard-allocations-add/dashboard-allocations-add.component').then(m => m.DashboardAllocationsAddComponent)
+}, {
+    path: 'DashboardAllocations/edit/:id',
+    loadComponent: () => import('./pages/dashboardallocations/dashboard-allocations-edit/dashboard-allocations-edit.component').then(m => m.DashboardAllocationsEditComponent)
 }, {
     path: 'macros/index',
     loadComponent: () => import('./pages/macros/macro-index/macro-index.component').then(m => m.MacroIndexComponent)
@@ -690,6 +703,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'backups/restore',
     loadComponent: () => import('./pages/backups/backups-restore/backups-restore.component').then(m => m.BackupsRestoreComponent)
+}, {
+    path: 'administrators/debug',
+    loadComponent: () => import('./pages/administrators/administrators-debug/administrators-debug.component').then(m => m.AdministratorsDebugComponent)
 }, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)

@@ -1,0 +1,586 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['Administrators', 'debug']" [routerLink]="['/', 'administrators', 'debug']">
+                    <fa-icon [icon]="['fas', 'bug']"></fa-icon>
+                    {{ SystemnameService.systemName$ | async }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Debugging information') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Debugging information') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+        </c-card-header>
+        <c-card-body>
+
+            <c-row *ngIf="response && response.interfaceInformation.oitc_is_debugging_mode">
+                <c-col [xs]="12">
+
+                    <ng-template #contentTemplate let-data>
+                        <span class="h5" [ngClass]="['text-'+data.color]" *ngIf="data">
+                            {{ SystemnameService.systemName$ | async }} is running in debug mode!
+                        </span>
+                        <br>
+                        This can be a potential security issue as you error messages will contain detailed information
+                        and stack traces. To disable debug mode, execute the command <code>openitcockpit-update</code>.
+                    </ng-template>
+                    <ng-template #buttonTemplate let-data>
+                        <div class="ms-2" *ngIf="data">
+                            <button class="btn btn-sm ripple" [ngClass]="'btn-outline-primary'"
+                                    *ngIf="!hasXdebugCookie"
+                                    (click)="setXdebugCookie()">
+                                <fa-icon [icon]="['fas', 'bug']"></fa-icon>
+                                {{ t('Set XDEBUG_TRIGGER cookie') }}
+                            </button>
+                            <button class="btn btn-sm ripple" [ngClass]="'btn-outline-danger'"
+                                    *ngIf="hasXdebugCookie"
+                                    (click)="removeXdebugCookie()">
+                                <fa-icon [icon]="['fas', 'bug-slash']"></fa-icon>
+                                {{ t('Remove XDEBUG_TRIGGER cookie') }}
+                            </button>
+                        </div>
+                    </ng-template>
+                    <oitc-alert baseIcon="shield" color="danger"
+                                [icon]="['fas', 'bug']"
+                                [contentTemplate]="contentTemplate" [buttonTemplate]="buttonTemplate"></oitc-alert>
+
+                </c-col>
+            </c-row>
+
+            <oitc-eol-alerts *ngIf="response && !response.serverInformation.isContainer"
+                             [codename]="response.serverInformation.LsbRelease"></oitc-eol-alerts>
+
+            <c-row>
+                <c-col [xs]="12" [sm]="12" [lg]="6" class="mb-3">
+                    <c-card class="h-100 flex-1">
+                        <c-card-header>
+                            <h5 cCardTitle>
+                                <fa-icon [icon]="['fas', 'globe-europe']"></fa-icon>
+                                {{ t('Interface information') }}
+                            </h5>
+                        </c-card-header>
+                        <c-card-body>
+                            @if (!response) {
+                                <oitc-block-loader [height]="'10rem'"></oitc-block-loader>
+                            }
+                            @if (response) {
+                                <div class="w-100 text-center">
+                                    <img class="img-fluid" alt="Logo"
+                                         [src]="response.logoHtmlPath"
+                                         style="max-height: 209px;">
+                                </div>
+
+                                <div>
+
+                                    <dl class="row">
+                                        <dt class="col-xs-12 col-lg-3">{{ t('System name') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.interfaceInformation.systemname }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Version') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.interfaceInformation.version }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Edition') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.interfaceInformation.edition }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Monitoring Engine') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.interfaceInformation.monitoring_engine }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Path for config') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.interfaceInformation.path_for_config }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Path for backups') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.interfaceInformation.path_for_backups }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Command interface') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.interfaceInformation.command_interface }}</dd>
+                                    </dl>
+
+                                </div>
+
+                            }
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+
+                <c-col [xs]="12" [sm]="12" [lg]="6" class="mb-3">
+                    <c-card class="h-100 flex-1">
+                        <c-card-header>
+                            <h5 cCardTitle>
+                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                {{ t('Process information') }}
+                            </h5>
+                        </c-card-header>
+                        <c-card-body>
+                            @if (!response) {
+                                <oitc-block-loader [height]="'10rem'"></oitc-block-loader>
+                            }
+                            @if (response) {
+
+                                <c-alert color="danger" class="mb-3"
+                                         *ngIf="!response.processInformation.gearmanReachable">
+                                    <h4 cAlertHeading>
+                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                        {{ t('Error') }}
+                                    </h4>
+                                    <p>
+                                        {{ t('Gearman-Job-Server is not running, openITCOCKPIT could not check the state of background daemons') }}
+                                        <br>
+                                        {{ t('Please start Gearman-Job-Server first') }}
+                                    </p>
+                                </c-alert>
+
+                                <c-alert color="danger" class="mb-3"
+                                         *ngIf="!response.processInformation.isGearmanWorkerRunning">
+                                    <h4 cAlertHeading>
+                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                        {{ t('Error') }}
+                                    </h4>
+                                    <p>
+                                        {{ t('gearman_worker is not running, openITCOCKPIT could not check the state of background daemons') }}
+                                        <br>
+                                        {{ t('Please start gearman_worker first') }}
+                                    </p>
+                                </c-alert>
+
+                                <table
+                                    *ngIf="response.processInformation.gearmanReachable && response.processInformation.isGearmanWorkerRunning"
+                                    bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                    <thead>
+                                    <tr>
+                                        <th>{{ t('Process') }}</th>
+                                        <th>{{ t('State') }}</th>
+                                        <th class="text-center">
+                                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ t('Monitoring engine') }}</td>
+                                        <td>
+                                            <oitc-badge-outline color="success"
+                                                                *ngIf="response.processInformation.backgroundProcesses.isNagiosRunning">
+                                                {{ t('Running') }}
+                                            </oitc-badge-outline>
+
+                                            <oitc-badge-outline color="danger"
+                                                                *ngIf="!response.processInformation.backgroundProcesses.isNagiosRunning">
+                                                {{ t('Stopped') }}
+                                            </oitc-badge-outline>
+                                        </td>
+                                        <td class="text-center">
+                                            <fa-icon [icon]="['fas', 'info-circle']"
+                                                     class="text-info"
+                                                     [cTooltip]="response.interfaceInformation.monitoring_engine"
+                                                     cTooltipPlacement="left"
+                                            ></fa-icon>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('Database connector') }}</td>
+                                        <td>
+                                            <oitc-badge-outline color="success"
+                                                                *ngIf="response.processInformation.backgroundProcesses.isStatusengineRunning">
+                                                {{ t('Running') }}
+                                            </oitc-badge-outline>
+
+                                            <oitc-badge-outline color="danger"
+                                                                *ngIf="!response.processInformation.backgroundProcesses.isStatusengineRunning">
+                                                {{ t('Stopped') }}
+                                            </oitc-badge-outline>
+                                        </td>
+                                        <td class="text-center">
+                                            <fa-icon [icon]="['fas', 'info-circle']"
+                                                     class="text-info"
+                                                     [cTooltip]="'Statusengine' | transloco"
+                                                     cTooltipPlacement="left"
+                                            ></fa-icon>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('Perfdata processor') }}</td>
+                                        <td>
+                                            <oitc-badge-outline color="success"
+                                                                *ngIf="response.processInformation.backgroundProcesses.isStatusengineRunning">
+                                                {{ t('Running') }}
+                                            </oitc-badge-outline>
+
+                                            <oitc-badge-outline color="danger"
+                                                                *ngIf="!response.processInformation.backgroundProcesses.isStatusengineRunning">
+                                                {{ t('Stopped') }}
+                                            </oitc-badge-outline>
+                                        </td>
+                                        <td class="text-center">
+                                            <fa-icon [icon]="['fas', 'info-circle']"
+                                                     class="text-info"
+                                                     [cTooltip]="'Statusengine' | transloco"
+                                                     cTooltipPlacement="left"
+                                            ></fa-icon>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('Queuing engine') }}</td>
+                                        <td>
+                                            <span class="badge border border-success text-success">
+                                                {{ t('Running') }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <fa-icon [icon]="['fas', 'info-circle']"
+                                                     class="text-info"
+                                                     [cTooltip]="'openITCOCKPIT uses the Gearman Job Server to run different background tasks' | transloco"
+                                                     cTooltipPlacement="left"
+                                            ></fa-icon>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('Gearman Worker') }}</td>
+                                        <td>
+                                            <oitc-badge-outline color="success"
+                                                                *ngIf="response.processInformation.backgroundProcesses.isGearmanWorkerRunning">
+                                                {{ t('Running') }}
+                                            </oitc-badge-outline>
+
+                                            <oitc-badge-outline color="danger"
+                                                                *ngIf="!response.processInformation.backgroundProcesses.isGearmanWorkerRunning">
+                                                {{ t('Stopped') }}
+                                            </oitc-badge-outline>
+                                        </td>
+                                        <td class="text-center">
+                                            <fa-icon [icon]="['fas', 'info-circle']"
+                                                     class="text-info"
+                                                     [cTooltip]="'Execute background jobs like refresh of monitoring configuration.' | transloco"
+                                                     cTooltipPlacement="left"
+                                            ></fa-icon>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('OITC Cmd') }}</td>
+                                        <td>
+                                            <oitc-badge-outline color="success"
+                                                                *ngIf="response.processInformation.backgroundProcesses.isOitcCmdRunning">
+                                                {{ t('Running') }}
+                                            </oitc-badge-outline>
+
+                                            <oitc-badge-outline color="danger"
+                                                                *ngIf="!response.processInformation.backgroundProcesses.isOitcCmdRunning">
+                                                {{ t('Stopped') }}
+                                            </oitc-badge-outline>
+                                        </td>
+                                        <td class="text-center">
+                                            <fa-icon [icon]="['fas', 'info-circle']"
+                                                     class="text-info"
+                                                     [cTooltip]="'External command interface used by Check_MK to pass check results.' | transloco"
+                                                     cTooltipPlacement="left"
+                                            ></fa-icon>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('NSTA') }}</td>
+                                        <td>
+                                            <oitc-badge-outline color="success"
+                                                                *ngIf="response.processInformation.backgroundProcesses.isNstaRunning">
+                                                {{ t('Running') }}
+                                            </oitc-badge-outline>
+
+                                            <oitc-badge-outline color="danger"
+                                                                *ngIf="!response.processInformation.backgroundProcesses.isNstaRunning">
+                                                {{ t('Stopped') }}
+                                            </oitc-badge-outline>
+                                        </td>
+                                        <td class="text-center">
+                                            <fa-icon [icon]="['fas', 'info-circle']"
+                                                     class="text-info"
+                                                     [cTooltip]="'NSTA is only installed and running if you are using Distributed Monitoring.' | transloco"
+                                                     cTooltipPlacement="left"
+                                            ></fa-icon>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('Push notification service') }}</td>
+                                        <td>
+                                            <oitc-badge-outline color="success"
+                                                                *ngIf="response.processInformation.backgroundProcesses.isPushNotificationRunning">
+                                                {{ t('Running') }}
+                                            </oitc-badge-outline>
+
+                                            <oitc-badge-outline color="danger"
+                                                                *ngIf="!response.processInformation.backgroundProcesses.isPushNotificationRunning">
+                                                {{ t('Stopped') }}
+                                            </oitc-badge-outline>
+                                        </td>
+                                        <td class="text-center">
+                                            <fa-icon [icon]="['fas', 'info-circle']"
+                                                     class="text-info"
+                                                     [cTooltip]="'Service required to send push notifications to your browser window.' | transloco"
+                                                     cTooltipPlacement="left"
+                                            ></fa-icon>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('Nodejs Backend') }}</td>
+                                        <td>
+                                            <oitc-badge-outline color="success"
+                                                                *ngIf="response.processInformation.backgroundProcesses.isNodeJsServerRunning">
+                                                {{ t('Running') }}
+                                            </oitc-badge-outline>
+
+                                            <oitc-badge-outline color="danger"
+                                                                *ngIf="!response.processInformation.backgroundProcesses.isNodeJsServerRunning">
+                                                {{ t('Stopped') }}
+                                            </oitc-badge-outline>
+                                        </td>
+                                        <td class="text-center">
+                                            <fa-icon [icon]="['fas', 'info-circle']"
+                                                     class="text-info"
+                                                     [cTooltip]="'Service required to run server side JavaScript to render PDF files and charts for email notifications.' | transloco"
+                                                     cTooltipPlacement="left"
+                                            ></fa-icon>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+
+                            }
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+
+            </c-row>
+
+            <c-row>
+                <c-col [xs]="12" class="mb-3">
+                    <c-card>
+                        <c-card-header>
+                            <h5 cCardTitle>
+                                <fa-icon [icon]="['fas', 'hdd']"></fa-icon>
+                                {{ t('Server information') }}
+                            </h5>
+                        </c-card-header>
+                        <c-card-body>
+                            @if (!response) {
+                                <oitc-block-loader [height]="'10rem'"></oitc-block-loader>
+                            }
+                            @if (response) {
+                                <div>
+
+                                    <dl class="row">
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Address') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.serverInformation.address }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Webserver') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.serverInformation.webserver }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('HTTPS / TLS') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.serverInformation.tls }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('OS') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.serverInformation.os_version }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Kernel') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.serverInformation.kernel }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Containerized') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.serverInformation.containerized }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('PHP version') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.serverInformation.php_version }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('PHP Memory limit') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.serverInformation.php_memory_limit }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('PHP Max. execution time') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.serverInformation.php_max_execution_time }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('PHP loaded extensions') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.serverInformation.php_extensions.join(', ') }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('CPU model') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.serverInformation.cpu_processor }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('CPU Architecture') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.serverInformation.architecture }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Number of CPU cores') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.serverInformation.cpu_cores }}</dd>
+                                    </dl>
+
+                                </div>
+
+                            }
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+            </c-row>
+
+            <c-row>
+                <c-col [xs]="12" class="mb-3">
+                    <c-card>
+                        <c-card-header>
+                            <h5 cCardTitle>
+                                <fa-icon [icon]="['fas', 'line-chart']"></fa-icon>
+                                {{ t('CPU load') }}
+                                <small class="fw-300" *ngIf="response">
+                                    {{ t('Current load:') }}
+                                    {{ response.currentCpuLoad['1'] }}, {{ response.currentCpuLoad['5'] }},
+                                    {{ response.currentCpuLoad['15'] }}
+                                </small>
+                            </h5>
+                            <c-nav class="card-toolbar card-header-pills">
+                                <c-nav-item class="px-1">
+                                    <button (click)="load()" cButton class="ripple" color="default" size="xs"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                                        {{ t('Refresh') }}
+                                    </button>
+                                </c-nav-item>
+                            </c-nav>
+                        </c-card-header>
+                        <c-card-body>
+                            @if (!response) {
+                                <oitc-block-loader [height]="'10rem'"></oitc-block-loader>
+                            }
+                            @if (response) {
+                                <div echarts [options]="chartOption"
+                                     [theme]="theme"
+                                     (chartInit)="onChartInit($event)"
+                                     class="w-100"></div>
+                            }
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+            </c-row>
+
+            <c-row>
+                <c-col [xs]="12" class="mb-3">
+                    HIER MEMORY
+                </c-col>
+            </c-row>
+
+            <c-row>
+                <c-col [xs]="12" class="mb-3">
+                    HIER QUEUE
+                </c-col>
+            </c-row>
+
+            <c-row>
+                <c-col [xs]="12" [sm]="12" [lg]="6" class="mb-3">
+                    <c-card class="h-100 flex-1">
+                        <c-card-header>
+                            <h5 cCardTitle>
+                                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                {{ t('Email configuration') }}
+                            </h5>
+                        </c-card-header>
+                        <c-card-body>
+                            @if (!response) {
+                                <oitc-block-loader [height]="'10rem'"></oitc-block-loader>
+                            }
+                            @if (response) {
+                                <div>
+
+                                    <dl class="row">
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Mail server address') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.emailInformation.host }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Mail server port') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.emailInformation.port }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Transport method') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.emailInformation.transport }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Username') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.emailInformation.username }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Password') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9 italic">
+                                            {{ t('Password hidden due to security please see the file /opt/openitc/frontend/config/email.php for detailed configuration information.') }}
+                                        </dd>
+                                    </dl>
+
+                                    <div class="mt-2">
+                                        <button (click)="sendTestMail()" cButton class="ripple" color="default"
+                                                size="xs"
+                                                type="button">
+                                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                                            {{ t('Send test Email to') }}
+                                            <span class="text-decoration-underline">
+                                                {{ response.emailInformation.test_mail_address }}
+                                            </span>
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                            }
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+
+                <c-col [xs]="12" [sm]="12" [lg]="6" class="mb-3">
+                    <c-card class="h-100 flex-1">
+                        <c-card-header>
+                            <h5 cCardTitle>
+                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                {{ t('Client information') }}
+                            </h5>
+                        </c-card-header>
+                        <c-card-body>
+                            @if (!response) {
+                                <oitc-block-loader [height]="'5rem'"></oitc-block-loader>
+                            }
+                            @if (response) {
+                                <div>
+
+                                    <dl class="row">
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Client OS') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.userInformation.user_os }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Client browser') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.userInformation.user_agent }}</dd>
+
+                                        <dt class="col-xs-12 col-lg-3">{{ t('Client IP address') }}:</dt>
+                                        <dd class="col-xs-12 col-lg-9">{{ response.userInformation.user_remote_address }}</dd>
+                                    </dl>
+                                </div>
+
+                            }
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+            </c-row>
+
+            <c-row>
+                <c-col [xs]="12" class="mb-3">
+                    phpinfo
+                </c-col>
+            </c-row>
+
+        </c-card-body>
+    </c-card>
+</ng-container>

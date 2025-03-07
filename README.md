@@ -150,6 +150,96 @@ const moduleRoutes: Routes = [
 
 Original Angular Readme (unten)
 
+# Translations (i18n)
+
+openITCOCKPIT is a multi-language frontend.
+If you found errors in the translations, we are more than happy to receive pull requests.
+
+There are different levels how you can help us to improve our translations.
+All Translations are located at `src/assets/i18n/` in "JSON" files (e.g. `src/assets/i18n/de_DE.json` for German translations).
+The `key` is the original English text and the `value` is the translated text. Please do **never change the key**.
+
+```json
+{
+    "This is the KEY, please never change this": "This is the value and can be translated",
+    "Monitoring is fun": "Monitoring macht Spaß"
+}
+```
+
+The `{0}` as placeholders that will be replaced by the frontend at runtime.
+It is important to use `{0}` in the key, and `{{0}}` in teh value.
+
+```json
+{
+    "My name is {0}": "Mein Name ist {{0}}"
+}
+```
+
+openITCOCKPIT use [Transloco](https://jsverse.gitbook.io/transloco) for translations. Please refer to the official documentation for more information.
+
+## 1. Fix typos
+
+Found a typo, some grammar issues or a bad wording?
+The easiest way to help us is to fix it directly in the JSON file. Open the corosponding JSON file (e.g. `src/assets/i18n/es_ES.json`) and search for the text you want to change.
+
+After you have fixed the issue, please send us a pull request.
+
+## 2. Improve or update existing translations
+
+Sometimes, some keys are missing in the translation files. To add missing translations to existing files,
+you can run the command `npm run i18n:find`. This will add all missing keys with the English text as value.
+
+For example `src/assets/i18n/de_DE.json`:
+
+```json
+{
+    "Marked for re-enable": "Marked for re-enable"
+}
+```
+
+You can now start to translate all english texts to German:
+
+```json
+{
+    "Marked for re-enable": "Zum Wiederaktivieren markiert"
+}
+```
+
+## 3. Add new translations
+
+If you plan to add a new language, you need to add the new language to the `transloco.config.js` file.
+For example add `it_IT` for Italian translations:
+
+```javascript
+langs: ['...', 'uk_UA', 'it_IT']
+```
+
+Now, create a empty JSON file in the `src/assets/i18n/` folder with the name `it_IT.json`.
+
+```sh
+echo "{}" > src/assets/i18n/it_IT.json
+```
+
+and run the `npm run i18n:find` command to add all missing keys.
+
+You can now translate all keys to Italian.
+
+```json
+{
+    "Username": "Nome utente",
+    "Password": "Parola d'ordine",
+    "Login": "Accesso"
+}
+```
+
+In the last step, you have to add the new language to the `src/app/app.config.ts` file.
+
+```ts
+ availableLangs: ['...', 'uk_UA', 'it_IT']
+```
+
+and add the new language into the dropdown menu `src/app/layouts/coreui/change-language/change-language.component.html`
+
 # How to Upgrade Angular
 
 This document describes how to upgrade the underlying Angular version.

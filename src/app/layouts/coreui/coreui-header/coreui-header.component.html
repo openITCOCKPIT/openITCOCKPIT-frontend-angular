@@ -12,22 +12,6 @@
 
             <oitc-top-search class="flex-1 pe-3"></oitc-top-search>
             <oitc-message-of-the-day-button [messageOfTheDay]="messageOfTheDay"/>
-            <!-- todo remove me or use me -->
-
-            <c-header-nav class="d-none d-md-flex ms-2">
-                <c-nav-item>
-                    <a cNavLink routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-                </c-nav-item>
-                <c-nav-item>
-                    <a cNavLink routerLink="/users" routerLinkActive="active">Users</a>
-                </c-nav-item>
-                <c-nav-item>
-                    <a cNavLink routerLink="/settings" routerLinkActive="active">Settings</a>
-                </c-nav-item>
-            </c-header-nav>
-
-            <c-header-nav class="d-none d-md-flex ms-auto ">
-            </c-header-nav>
 
             <c-header-nav class="ms-auto ms-md-0">
                 <div class="nav-item py-1">
@@ -61,43 +45,8 @@
             </button>
             <ul cDropdownMenu class="pt-0 w-auto">
                 <li>
-                    <h6 cDropdownHeader class="bg-body-secondary text-body-secondary fw-semibold py-2 rounded-top">
-                        Account
-                    </h6>
-                </li>
-                <li>
-                    <a cDropdownItem routerLink="">
-                        <svg cIcon class="me-2" name="cilBell"></svg>
-                        Updates
-                        <c-badge class="ms-2 float-end" color="info"> 42</c-badge>
-                    </a>
-                </li>
-                <li>
-                    <a cDropdownItem routerLink="/apps/email/inbox">
-                        <svg cIcon class="me-2" name="cilEnvelopeOpen"></svg>
-                        Messages
-                        <c-badge class="ms-2 float-end" color="success">
-                            42
-                        </c-badge>
-                    </a>
-                </li>
-                <li>
-                    <a cDropdownItem routerLink="">
-                        <svg cIcon class="me-2" name="cilTask"></svg>
-                        Tasks
-                        <c-badge class="ms-2 float-end" color="danger"> 42</c-badge>
-                    </a>
-                </li>
-                <li>
-                    <a cDropdownItem routerLink="">
-                        <svg cIcon class="me-2" name="cilCommentSquare"></svg>
-                        Comments
-                        <c-badge class="ms-auto" color="warning"> 42</c-badge>
-                    </a>
-                </li>
-                <li>
                     <h6 cDropdownHeader class="bg-body-secondary text-body-secondary fw-semibold py-2">
-                        Settings
+                        {{ t('Settings') }}
                     </h6>
                 </li>
                 <li></li>
@@ -114,44 +63,14 @@
                         {{ t('Refresh monitoring configuration') }}
                     </a>
                 </li>
-
-                <li>
-                    <a cDropdownItem routerLink="">
-                        <svg cIcon class="me-2" name="cilSettings"></svg>
-                        Settings
-                    </a>
-                </li>
-                <li>
-                    <a cDropdownItem routerLink="">
-                        <svg cIcon class="me-2" name="cilCreditCard"></svg>
-                        Payments
-                        <c-badge class="ms-2 float-end" color="secondary">
-                            42
-                        </c-badge>
-                    </a>
-                </li>
-                <li>
-                    <a cDropdownItem routerLink="">
-                        <svg cIcon class="me-2" name="cilFile"></svg>
-                        Projects
-                        <c-badge class="ms-2 float-end" color="primary">
-                            42
-                        </c-badge>
-                    </a>
-                </li>
+                
                 <li>
                     <hr cDropdownDivider/>
                 </li>
                 <li>
-                    <a cDropdownItem routerLink="">
-                        <svg cIcon class="me-2" name="cilLockLocked"></svg>
-                        Lock Account
-                    </a>
-                </li>
-                <li>
                     <a cDropdownItem href="/users/logout">
                         <svg cIcon class="me-2" name="cilAccountLogout"></svg>
-                        Logout
+                        {{ t('Logout') }}
                     </a>
                 </li>
             </ul>
