@@ -269,3 +269,22 @@ export interface IndexSatellite {
     use_timesync: number
     verify_certificate: number
 }
+
+export interface EditSatelliteRoot {
+    satellite: EditableSatellite
+    frontendUrl?: string
+    protocol?: string
+    proxyProtocol?: string
+    proxyUrl?: string
+}
+export interface EditSatellitePostRoot {
+    Satellite: EditableSatellite
+    frontendUrl?: string
+    protocol?: string
+    proxyProtocol?: string
+    proxyUrl?: string
+}
+
+export interface EditableSatellite extends IndexSatellite {
+    id: number
+}

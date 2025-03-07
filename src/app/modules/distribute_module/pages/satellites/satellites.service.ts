@@ -4,6 +4,8 @@ import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
+    EditSatellitePostRoot,
+    EditSatelliteRoot,
     SatelliteEntityCake2,
     SatelliteIndex,
     SatelliteIndexParams,
@@ -61,6 +63,36 @@ export class SatellitesService {
                 return data;
             })
         );
+    }
+
+    public updateSatellite(satelliteId: number, satellite: EditSatellitePostRoot): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/distribute_module/satellites/edit/${satelliteId}.json?angular=true`, satellite)
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data.satellite as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<EditSatelliteRoot> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<EditSatelliteRoot>(`${proxyPath}/distribute_module/satellites/edit/${id}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            );
     }
 
     public addSatellite(satellite: SatellitesAddRoot): Observable<GenericResponseWrapper> {
