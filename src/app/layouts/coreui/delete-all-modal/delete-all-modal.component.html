@@ -53,7 +53,14 @@
                                                 }
                                                 @if (usedBy.value.module === 'EventcorrelationModule' && usedBy.value.state === 'EventcorrelationsHostUsedBy') {
                                                     <div>
-                                                        <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'usedBy', item.id]">
+                                                        <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'hostUsedBy', item.id]">
+                                                            {{ usedBy.value.message }}
+                                                        </a>
+                                                    </div>
+                                                }
+                                                @if (usedBy.value.module === 'EventcorrelationModule' && usedBy.value.state === 'EventcorrelationsServiceUsedBy') {
+                                                    <div>
+                                                        <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'serviceUsedBy', item.id]">
                                                             {{ usedBy.value.message }}
                                                         </a>
                                                     </div>
