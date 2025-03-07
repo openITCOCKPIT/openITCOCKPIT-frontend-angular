@@ -8,10 +8,16 @@ import {
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
+    CardSubtitleDirective,
     CardTitleDirective,
     ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     NavComponent,
     NavItemComponent,
+    ProgressComponent,
+    ProgressStackedComponent,
     RowComponent,
     TableDirective,
     TooltipDirective
@@ -19,8 +25,11 @@ import {
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SystemnameService } from '../../../services/systemname.service';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
-import { AdministratorsDebugRootResponse } from '../administrators.interface';
+import { AsyncPipe, DecimalPipe, NgClass, NgIf } from '@angular/common';
+import {
+    AdministratorsDebugGearmanStatusForAngular,
+    AdministratorsDebugRootResponse
+} from '../administrators.interface';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
 import { AdministratorsService } from '../administrators.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -39,6 +48,10 @@ import 'echarts/theme/dark.js';
 import { LayoutService } from '../../../layouts/coreui/layout.service';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TimezoneObject } from '../../services/timezone.interface';
+import { SparklineStatsComponent } from '../../../components/sparkline-stats/sparkline-stats.component';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { PhpinfoComponent } from './phpinfo/phpinfo.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent]);
@@ -72,7 +85,18 @@ echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent
         NavComponent,
         NavItemComponent,
         XsButtonDirective,
-        NgxEchartsDirective
+        NgxEchartsDirective,
+        DecimalPipe,
+        ProgressStackedComponent,
+        ProgressComponent,
+        CardSubtitleDirective,
+        SparklineStatsComponent,
+        PhpinfoComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        ReactiveFormsModule,
+        FormsModule
     ],
     templateUrl: './administrators-debug.component.html',
     styleUrl: './administrators-debug.component.css',
@@ -86,10 +110,18 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
     public response?: AdministratorsDebugRootResponse;
     public hasXdebugCookie: boolean = false;
 
+    public lastUpdate: Date = new Date();
+    public gearmanStatus: AdministratorsDebugGearmanStatusForAngular[] = [];
+
     private timezone?: TimezoneObject;
+    public keepHistory: boolean = false;
+    private isFirstLoad: boolean = true;
     public chartOption: EChartsOption = {};
     public echartsInstance: any;
     public theme: null | 'dark' = null;
+    private load1: [string, number][] = [];
+    private load5: [string, number][] = [];
+    private load15: [string, number][] = [];
 
     private subscriptions: Subscription = new Subscription();
     public readonly SystemnameService = inject(SystemnameService);
@@ -99,7 +131,9 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private cdr = inject(ChangeDetectorRef);
     private readonly TimezoneService: TimezoneService = inject(TimezoneService);
+    private readonly notyService = inject(NotyService);
 
+    private interval: any = null;
 
     public constructor() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
@@ -113,21 +147,91 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.isFirstLoad = true;
         this.load();
         this.getUserTimezone();
+        this.startReloadInterval();
         this.hasXdebugCookie = this.CookieService.check('XDEBUG_TRIGGER');
     }
 
     public ngOnDestroy(): void {
+        if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
+
         this.subscriptions.unsubscribe();
+    }
+
+    private startReloadInterval() {
+        if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
+
+        this.interval = setInterval(() => {
+            this.load();
+        }, 10000);
     }
 
     public load() {
         this.subscriptions.add(
             this.AdministratorsService.getDebug().subscribe(response => {
                 this.response = response;
+                this.lastUpdate = new Date();
 
-                this.renderChart();
+                this.gearmanStatus = [];
+                for (let queueName in this.response.gearmanStatus) {
+                    const status: AdministratorsDebugGearmanStatusForAngular = {
+                        name: queueName,
+                        jobs: Number(this.response.gearmanStatus[queueName].jobs),
+                        running: Number(this.response.gearmanStatus[queueName].running),
+                        worker: Number(this.response.gearmanStatus[queueName].worker)
+                    }
+                    this.gearmanStatus.push(status);
+                }
+
+                if (this.isFirstLoad) {
+                    //Only save CPU history on first load and update it later with current values
+
+                    this.isFirstLoad = false;
+
+                    this.load1 = [];
+                    this.load5 = [];
+                    this.load15 = [];
+                    for (const isoTimestamp in this.response.cpuLoadHistoryInformation['1']) {
+                        this.load1.push([isoTimestamp, this.response.cpuLoadHistoryInformation['1'][isoTimestamp]]);
+                    }
+                    for (const isoTimestamp in this.response.cpuLoadHistoryInformation['5']) {
+                        this.load5.push([isoTimestamp, this.response.cpuLoadHistoryInformation['5'][isoTimestamp]]);
+                    }
+                    for (const isoTimestamp in this.response.cpuLoadHistoryInformation['15']) {
+                        this.load15.push([isoTimestamp, this.response.cpuLoadHistoryInformation['15'][isoTimestamp]]);
+                    }
+
+                    this.renderChart();
+                } else {
+                    // Append new data to chart
+
+                    if (!this.keepHistory) {
+                        // Drop the first (oldest) record from the history
+                        this.load1.shift();
+                        this.load5.shift();
+                        this.load15.shift();
+                    }
+
+                    const isoTimestamp = DateTime.now().toISO();
+                    this.load1.push([isoTimestamp, this.response.currentCpuLoad['1']]);
+                    this.load5.push([isoTimestamp, this.response.currentCpuLoad['5']]);
+                    this.load15.push([isoTimestamp, this.response.currentCpuLoad['15']]);
+                    this.echartsInstance.setOption({
+                        series: [
+                            {data: [...this.load1]},
+                            {data: [...this.load5]},
+                            {data: [...this.load15]},
+                        ]
+                    });
+                }
 
                 this.cdr.markForCheck();
             })
@@ -165,19 +269,6 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
     private renderChart() {
         if (!this.response) {
             return;
-        }
-
-        const load1: [string, number][] = [];
-        const load5: [string, number][] = [];
-        const load15: [string, number][] = [];
-        for (let isoTimestamp in this.response.cpuLoadHistoryInformation['1']) {
-            load1.push([isoTimestamp, this.response.cpuLoadHistoryInformation['1'][isoTimestamp]]);
-        }
-        for (let isoTimestamp in this.response.cpuLoadHistoryInformation['5']) {
-            load5.push([isoTimestamp, this.response.cpuLoadHistoryInformation['5'][isoTimestamp]]);
-        }
-        for (let isoTimestamp in this.response.cpuLoadHistoryInformation['15']) {
-            load15.push([isoTimestamp, this.response.cpuLoadHistoryInformation['15'][isoTimestamp]]);
         }
 
         this.chartOption = {
@@ -247,7 +338,7 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
                     },
 
                     smooth: false,
-                    data: load1
+                    data: this.load1
                 },
                 {
                     name: this.TranslocoService.translate('Load 5'),
@@ -258,7 +349,7 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
                     },
 
                     smooth: false,
-                    data: load5
+                    data: this.load5
                 },
                 {
                     name: this.TranslocoService.translate('Load 15'),
@@ -269,7 +360,7 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
                     },
 
                     smooth: false,
-                    data: load15
+                    data: this.load15
                 },
             ],
         };
@@ -278,8 +369,15 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
     }
 
     public sendTestMail() {
-        // todo
-        console.log('TODO IMPLEMENT ME');
+        this.subscriptions.add(this.AdministratorsService.sendTestMail().subscribe(data => {
+            const msg = String(data.data);
+
+            if (data.success) {
+                this.notyService.genericSuccess(msg);
+            } else {
+                this.notyService.genericError(msg);
+            }
+        }));
     }
 
 }
