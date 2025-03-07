@@ -228,7 +228,7 @@
                     <!-- Proxy URL -->
                     <div class="mb-3">
                         <label cLabel for="post.Satellite.proxy_url">
-                            {{ t('Proxy URTL') }}
+                            {{ t('Proxy URL') }}
                             <oitc-required-icon *ngIf="post.Satellite.use_proxy"/>
                         </label>
                         <c-input-group>
@@ -266,6 +266,69 @@
                                 /
                             </span>
                         </c-input-group>
+                    </div>
+
+                    <!-- API Key -->
+                    <div class="mb-3">
+                        <label cLabel for="post.Satellite.api_key">
+                            {{ t('API Key') }}
+                            <oitc-required-icon/>
+                        </label>
+
+                        <c-input-group>
+                            <input cFormControl
+                                   required
+                                   disabled
+                                   id="post.Satellite.api_key"
+                                   type="text"
+                                   name="post.Satellite.api_key"
+                                   [ngModelOptions]="{standalone: true}"
+                                   [(ngModel)]="post.Satellite.api_key">
+                            <button cButton color="success" (click)="refreshApiKey()">
+                                <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                                {{ t('Generate new API key') }}
+                            </button>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
+                    </div>
+
+
+                    <!-- interval -->
+                    <div class="mb-3">
+                        <label cLabel for="post.Satellite.interval">
+                            {{ t('Interval') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <input cFormControl
+                               required
+                               id="post.Satellite.interval"
+                               type="text"
+                               name="post.Satellite.interval"
+                               [(ngModel)]="post.Satellite.interval"
+                               oitcFormError [errors]="errors" errorField="interval">
+                        <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Time interval in seconds the master system will pickup check results') }}
+                        </div>
+                    </div>
+
+                    <!-- Timeout -->
+                    <div class="mb-3">
+                        <label cLabel for="post.Satellite.timeout">
+                            {{ t('Timeout') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <input cFormControl
+                               required
+                               id="post.Satellite.timeout"
+                               type="text"
+                               name="post.Satellite.timeout"
+                               [(ngModel)]="post.Satellite.timeout"
+                               oitcFormError [errors]="errors" errorField="timeout">
+                        <oitc-form-feedback [errors]="errors" errorField="timeout"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Time limit in seconds which defines when the satellite should be marked as OFFLINE .') }}
+                        </div>
                     </div>
                 </ng-container>
 
@@ -311,7 +374,7 @@
                     <!-- Private Key Path -->
                     <div class="mb-3">
                         <label cLabel for="post.Satellite.private_key_path">
-                            {{ t('Login') }}
+                            {{ t('PrivateKeyPath') }}
                             <oitc-required-icon/>
                         </label>
                         <input cFormControl
@@ -333,6 +396,7 @@
                     <div class="mb-3">
                         <label cLabel for="post.Satellite.remote_port">
                             {{ t('RemotePort') }}
+                            <oitc-required-icon/>
                         </label>
                         <input cFormControl
                                required
@@ -348,68 +412,6 @@
                         </div>
                     </div>
                 </ng-container>
-
-                <!-- API Key -->
-                <div class="mb-3">
-                    <label cLabel for="post.Satellite.api_key">
-                        {{ t('Api key') }}
-                        <oitc-required-icon/>
-                    </label>
-
-                    <c-input-group>
-                        <input cFormControl
-                               required
-                               disabled
-                               id="post.Satellite.api_key"
-                               type="text"
-                               name="post.Satellite.api_key"
-                               [ngModelOptions]="{standalone: true}"
-                               [(ngModel)]="post.Satellite.api_key">
-                        <button cButton color="success" (click)="refreshApiKey()">
-                            <fa-icon [icon]="['fas', 'key']"></fa-icon>
-                            {{ t('Generate new API key') }}
-                        </button>
-                    </c-input-group>
-                    <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
-                </div>
-
-                <!-- interval -->
-                <div class="mb-3">
-                    <label cLabel for="post.Satellite.interval">
-                        {{ t('Interval') }}
-                        <oitc-required-icon/>
-                    </label>
-                    <input cFormControl
-                           required
-                           id="post.Satellite.interval"
-                           type="text"
-                           name="post.Satellite.interval"
-                           [(ngModel)]="post.Satellite.interval"
-                           oitcFormError [errors]="errors" errorField="interval">
-                    <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('Time interval in seconds the master system will pickup check results') }}
-                    </div>
-                </div>
-
-                <!-- Timeout -->
-                <div class="mb-3">
-                    <label cLabel for="post.Satellite.timeout">
-                        {{ t('Timeout') }}
-                        <oitc-required-icon/>
-                    </label>
-                    <input cFormControl
-                           required
-                           id="post.Satellite.timeout"
-                           type="text"
-                           name="post.Satellite.timeout"
-                           [(ngModel)]="post.Satellite.timeout"
-                           oitcFormError [errors]="errors" errorField="timeout">
-                    <oitc-form-feedback [errors]="errors" errorField="timeout"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('Time limit in seconds which defines when the satellite should be marked as OFFLINE .') }}
-                    </div>
-                </div>
 
                 <!-- Time zone -->
                 <div class="mb-3">

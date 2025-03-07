@@ -175,11 +175,31 @@ export class SatellitesEditComponent implements OnDestroy, OnInit {
                     Satellite: result.satellite
                 }
 
+                this.post.protocol = 'https';
+                if (this.post.Satellite.url.startsWith('http://')) {
+                    this.post.protocol = 'http';
+                }
+                this.post.proxyProtocol = 'https';
+                if (this.post.Satellite.proxy_url.startsWith('http://')) {
+                    this.post.proxyProtocol = 'http';
+                }
+
+
+                if (this.post.Satellite.url) {
+                    this.post.frontendUrl = this.post.Satellite.url.replaceAll(`${this.post.protocol}://${this.post.Satellite.address}/`, '');
+                }
+
+                if (this.post.Satellite.proxy_url) {
+                    this.post.proxyUrl = this.post.Satellite.proxy_url.replaceAll(`${this.post.proxyProtocol}://`, '');
+                }
+
                 this.cdr.markForCheck();
             }));
     }
 
     protected updateSatellite(): void {
+
+        this.post.Satellite.url = `${this.post.protocol}://${this.post.Satellite.address}/${this.post.frontendUrl}`;
         this.subscriptions.add(this.SatellitesService.updateSatellite(this.post.Satellite.id, this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
