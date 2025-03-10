@@ -288,3 +288,23 @@ export interface EditSatellitePostRoot {
 export interface EditableSatellite extends IndexSatellite {
     id: number
 }
+
+// USED BY
+export interface SatelliteUsedBy {
+    satellite: SatelliteUsedBySatellite
+    all_hosts: SatelliteUsedByHost[]
+    total: number
+    _csrfToken: string
+}
+
+export interface SatelliteUsedBySatellite {
+    id: number
+    name: string
+}
+
+export interface SatelliteUsedByHost {
+    id: number
+    name: string
+    address: string
+    uuid: string
+}

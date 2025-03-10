@@ -268,30 +268,6 @@
                         </c-input-group>
                     </div>
 
-                    <!-- API Key -->
-                    <div class="mb-3">
-                        <label cLabel for="post.Satellite.api_key">
-                            {{ t('API Key') }}
-                            <oitc-required-icon/>
-                        </label>
-
-                        <c-input-group>
-                            <input cFormControl
-                                   required
-                                   disabled
-                                   id="post.Satellite.api_key"
-                                   type="text"
-                                   name="post.Satellite.api_key"
-                                   [ngModelOptions]="{standalone: true}"
-                                   [(ngModel)]="post.Satellite.api_key">
-                            <button cButton color="success" (click)="refreshApiKey()">
-                                <fa-icon [icon]="['fas', 'key']"></fa-icon>
-                                {{ t('Generate new API key') }}
-                            </button>
-                        </c-input-group>
-                        <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
-                    </div>
-
 
                     <!-- interval -->
                     <div class="mb-3">
@@ -329,6 +305,32 @@
                         <div class="help-block">
                             {{ t('Time limit in seconds which defines when the satellite should be marked as OFFLINE .') }}
                         </div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="post.Satellite.sync_method !== 'ssh'">
+                    <!-- API Key -->
+                    <div class="mb-3">
+                        <label cLabel for="post.Satellite.api_key">
+                            {{ t('API Key') }}
+                            <oitc-required-icon/>
+                        </label>
+
+                        <c-input-group>
+                            <input cFormControl
+                                   required
+                                   disabled
+                                   id="post.Satellite.api_key"
+                                   type="text"
+                                   name="post.Satellite.api_key"
+                                   [ngModelOptions]="{standalone: true}"
+                                   [(ngModel)]="post.Satellite.api_key">
+                            <button cButton color="success" (click)="refreshApiKey()">
+                                <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                                {{ t('Generate new API key') }}
+                            </button>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
                     </div>
                 </ng-container>
 

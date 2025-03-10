@@ -268,6 +268,29 @@
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete selected') }}
                                 </button>
+
+                                <c-dropdown>
+                                    <button cButton cDropdownToggle color="default">
+                                        {{ t('More actions') }}
+                                    </button>
+                                    <ul cDropdownMenu>
+                                        <li><a cDropdownItem href="javascript:void(0);"
+                                               (click)="disableNotifications()">
+                                            <fa-icon [icon]="['far', 'envelope']"></fa-icon>
+                                            {{ t('Disable notifications') }}
+                                        </a></li>
+                                        <li><a cDropdownItem href="javascript:void(0);"
+                                               (click)="enableNotifications()">
+                                            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                            {{ t('Enable notifications') }}
+                                        </a></li>
+                                        <li><a cDropdownItem href="javascript:void(0);"
+                                               (click)="enableNotifications()">
+                                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                            {{ t('Set planned maintenance times') }}
+                                        </a></li>
+                                    </ul>
+                                </c-dropdown>
                             </div>
                         </c-col>
                     </c-row>
@@ -287,4 +310,6 @@
             </c-container>
         </c-card-body>
     </c-card>
+
+    <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
 </ng-container>

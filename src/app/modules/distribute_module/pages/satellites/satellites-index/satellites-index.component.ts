@@ -5,7 +5,11 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownComponent,
     DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormControlDirective,
     FormDirective,
     HeaderComponent,
@@ -17,6 +21,7 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
+import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
@@ -52,6 +57,14 @@ import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/de
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
+import {
+    ExternalCommandsService,
+    HostDisableNotificationsItem,
+    ServiceNotifcationItem
+} from '../../../../../services/external-commands.service';
+import { ExternalCommandsEnum } from '../../../../../enums/external-commands.enum';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 
 @Component({
     selector: 'oitc-satellites-index',
@@ -91,9 +104,17 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
         ActionsButtonElementComponent,
         DropdownDividerDirective,
         BadgeOutlineComponent,
-        SelectAllComponent
+        SelectAllComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        DeleteAllModalComponent
     ],
     templateUrl: './satellites-index.component.html',
+    providers: [
+        {provide: DELETE_SERVICE_TOKEN, useClass: SatellitesService}
+    ],
     styleUrl: './satellites-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -103,6 +124,8 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly modalService: ModalService = inject(ModalService);
+    private readonly NotyService: NotyService = inject(NotyService);
+    private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
 
     protected selectedItems: DeleteAllItem[] = [];
@@ -169,6 +192,7 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public onMassActionComplete(success: boolean) {
+        this.reload();
     }
 
     // Open the Delete All Modal
@@ -185,7 +209,7 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: item.full_name
+                    displayName: item.name
                 };
             });
         }
@@ -198,6 +222,69 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
             show: true,
             id: 'deleteAllModal',
         });
+    }
+
+
+    public disableNotifications() {
+        // let commands = [];
+        const commands = this.SelectionServiceService.getSelectedItems().map((item): HostDisableNotificationsItem => {
+            return {
+                command: ExternalCommandsEnum.submitDisableHostNotifications,
+                type: '',
+                hostUuid: item.Host.uuid
+            };
+
+        });
+        if (commands.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.NotyService.genericError(message);
+            return
+        }
+        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
+            if (result.message) {
+                const title = this.TranslocoService.translate('Disable Notifications');
+
+                this.NotyService.genericSuccess(result.message, title, []);
+                // this.notyService.scrollContentDivToTop();
+                // this.SelectionServiceService.deselectAll()
+            } else {
+                this.NotyService.genericError();
+            }
+            setTimeout(() => {
+                this.reload()
+            }, 5000);
+        }));
+    }
+
+    public enableNotifications() {
+        const commands = this.SelectionServiceService.getSelectedItems().map((item): ServiceNotifcationItem => {
+            return {
+                command: ExternalCommandsEnum.submitEnableServiceNotifications,
+                hostUuid: item.Host.uuid,
+                serviceUuid: item.Service.uuid
+            };
+
+        });
+        if (commands.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.NotyService.genericError(message);
+            return;
+        }
+        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
+            if (result.message) {
+                const title = this.TranslocoService.translate('enable Notifications');
+
+                this.NotyService.genericSuccess(result.message, title, []);
+                //this.notyService.scrollContentDivToTop();
+                // this.SelectionServiceService.deselectAll()
+            } else {
+                this.NotyService.genericError();
+            }
+
+            setTimeout(() => {
+                this.reload()
+            }, 5000);
+        }));
     }
 
 }

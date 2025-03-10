@@ -16,10 +16,12 @@ import {
     SatelliteSystemdowntimesParams,
     SatelliteTasksIndex,
     SatelliteTasksParams,
+    SatelliteUsedBy,
     SystemdowntimeSatelliteIndexRoot
 } from './satellites.interface';
 import { SystemdowntimesPost } from '../../../../pages/systemdowntimes/systemdowntimes.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -195,5 +197,22 @@ export class SatellitesService {
                 return data.satellite;
             })
         )
+    }
+
+    // Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/distribute_module/satellites/delete/${item.id}.json?angular=true`, {});
+    }
+
+    public usedBy(id: number): Observable<SatelliteUsedBy> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<SatelliteUsedBy>(`${proxyPath}/distribute_module/satellites/usedBy/${id}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
     }
 }
