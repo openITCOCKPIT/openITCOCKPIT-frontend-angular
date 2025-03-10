@@ -66,6 +66,7 @@ export class BlinkService implements OnDestroy {
     public ngOnDestroy(): void {
         if (this.interval) {
             clearInterval(this.interval);
+            this.interval = null;
         }
     }
 
