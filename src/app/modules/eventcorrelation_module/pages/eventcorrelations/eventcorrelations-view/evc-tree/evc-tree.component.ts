@@ -377,12 +377,14 @@ export class EvcTreeComponent {
         // Disabled for now, as it adds a scale factor to the canvas and "zooms in" on init.
         //return;
 
-        // https://flow.foblex.com/docs/f-canvas-component
+         https://flow.foblex.com/docs/f-canvas-component
         if (this.fCanvasComponent) {
-            this.fCanvasComponent.resetScaleAndCenter(false);
+            this.fCanvasComponent.resetScaleAndCenter(true);
             this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
+            this.cdr.markForCheck();
 
-            //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 50), false);
+
+            //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
         }
     }
 

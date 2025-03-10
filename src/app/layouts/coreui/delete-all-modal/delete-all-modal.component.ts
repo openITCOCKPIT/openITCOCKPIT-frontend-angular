@@ -177,4 +177,34 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
     public getErrorsForItem(item: DeleteAllItem): DeleteAllResponse[] {
         return this.errors.filter((error) => error.id == item.id);
     }
+
+
+    public createURL(uisref: string, id: number): (string|number)[] {
+        switch(uisref) {
+            case 'EventcorrelationsHostUsedBy':
+                return ['/', 'eventcorrelation_module', 'eventcorrelations', 'hostUsedBy', id];
+            case 'EventcorrelationsServiceUsedBy':
+                return ['/', 'eventcorrelation_module', 'eventcorrelations', 'serviceUsedBy', id];
+            case 'AutoreportsHostUsedBy':
+                return ['/', 'autoreport_module', 'autoreports', 'hostUsedBy', id];
+            case 'AutoreportsServiceUsedBy':
+                return ['/', 'autoreport_module', 'autoreports', 'serviceUsedBy', id];
+            case 'ContactsUsedBy':
+                return ['/', 'contacts', 'usedBy', id];
+            case 'ContactgroupsUsedBy':
+                return ['/', 'contactgroups', 'usedBy', id];
+            case 'CommandsUsedBy':
+                return ['/', 'commands', 'usedBy', id];
+            case 'HosttemplatesUsedBy':
+                return ['/', 'hosttemplates', 'usedBy', id];
+            case 'ServicetemplatesUsedBy':
+                return ['/', 'servicetemplates', 'usedBy', id];
+            case 'TimeperiodsUsedBy':
+                return ['/', 'timperiods', 'usedBy', id];
+
+            default: return ['/', 'error', 404];
+            }
+    }
+
+    protected readonly Number = Number;
 }
