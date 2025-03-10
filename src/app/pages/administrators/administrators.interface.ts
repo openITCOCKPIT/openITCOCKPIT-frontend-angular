@@ -27,7 +27,8 @@ export interface AdministratorsDebugRootResponse {
         [key: string]: AdministratorsDebugGearmanStatus
     }
     emailInformation: AdministratorsDebugEmailInformation
-    userInformation: AdministratorsDebugUserInformation
+    userInformation: AdministratorsDebugUserInformation,
+    logoHtmlPath: string
     _csrfToken: string
 }
 
@@ -122,6 +123,13 @@ export interface AdministratorsDebugGearmanStatus {
     jobs: string
     running: string
     worker: string
+}
+
+export interface AdministratorsDebugGearmanStatusForAngular {
+    name: string     // Name of Gearman Queue
+    jobs: number     // How many jobs are in the queue
+    running: number  // How many jobs are currently running
+    worker: number   // How many workers are available
 }
 
 export interface AdministratorsDebugEmailInformation {

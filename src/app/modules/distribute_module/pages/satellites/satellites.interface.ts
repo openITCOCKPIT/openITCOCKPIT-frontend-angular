@@ -240,7 +240,7 @@ export interface AllIndexSatellite extends AllSatellite {
 }
 
 // SATELLITE ADD
-export interface Root {
+export interface SatellitesAddRoot {
     frontendUrl: string
     protocol: string
     proxyProtocol: string
