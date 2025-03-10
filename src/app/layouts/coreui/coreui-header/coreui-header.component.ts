@@ -32,6 +32,7 @@ import { TopSearchComponent } from '../top-search/top-search.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { HeaderTimeComponent} from './header-time/header-time.component';
 
 import {
     MessageOfTheDayButtonComponent
@@ -59,7 +60,8 @@ import { HeaderAvatarComponent } from './header-avatar/header-avatar.component';
         FaIconComponent,
         PermissionDirective,
         MessageOfTheDayButtonComponent,
-        HeaderAvatarComponent
+        HeaderAvatarComponent,
+        HeaderTimeComponent
     ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css',
