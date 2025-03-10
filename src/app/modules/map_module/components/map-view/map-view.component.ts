@@ -89,6 +89,7 @@ export class MapViewComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
         this.stopInterval();
     }
 
