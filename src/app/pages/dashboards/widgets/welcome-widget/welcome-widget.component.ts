@@ -5,10 +5,11 @@ import { forkJoin, Observable } from 'rxjs';
 import { WelcomeWidgetResponse } from '../widgets.interface';
 import { StatuscountResponse } from '../../../browsers/browsers.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { AsyncPipe, DecimalPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { SystemnameService } from '../../../../services/systemname.service';
 import { Avatar } from 'primeng/avatar';
 import initials from 'initials';
+import { LocalNumberPipe } from '../../../../pipes/local-number.pipe';
 
 @Component({
     selector: 'oitc-welcome-widget',
@@ -16,7 +17,7 @@ import initials from 'initials';
         TranslocoDirective,
         AsyncPipe,
         Avatar,
-        DecimalPipe
+        LocalNumberPipe
     ],
     templateUrl: './welcome-widget.component.html',
     styleUrl: './welcome-widget.component.css',

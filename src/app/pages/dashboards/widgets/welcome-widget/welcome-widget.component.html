@@ -23,10 +23,10 @@
         </div>
 
         <div class="flex-grow-1 ms-2">
-            <strong>{{ statuscount?.hoststatusSum |number }}</strong> {{ t('hosts are monitored') }}
+            <strong>{{ statuscount?.hoststatusSum | localNumber }}</strong> {{ t('hosts are monitored') }}
 
             <br>
-            <strong>{{ statuscount?.servicestatusSum  |number }}</strong> {{ t('services are monitored') }}
+            <strong>{{ statuscount?.servicestatusSum  |localNumber }}</strong> {{ t('services are monitored') }}
             <br>
             <br>
             {{ t('Your selected Timezone is ') }} {{ welcome?.user_timezone }}

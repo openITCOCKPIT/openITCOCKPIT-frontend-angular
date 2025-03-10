@@ -531,7 +531,8 @@
                                                         {{ t('Total:') }}
                                                     </div>
                                                     <div class="fs-5 fw-semibold">
-                                                        {{ response.memory.memory.total | number: '1.0-1' }} MB
+                                                        {{ response.memory.memory.total | localNumber }}
+                                                        MB
                                                     </div>
                                                 </div>
                                             </c-col>
@@ -541,7 +542,7 @@
                                                         {{ t('Used:') }}
                                                     </div>
                                                     <div class="fs-5 fw-semibold">
-                                                        {{ response.memory.memory.used | number: '1.0-1' }} MB
+                                                        {{ response.memory.memory.used | localNumber }} MB
                                                     </div>
                                                 </div>
                                             </c-col>
@@ -551,7 +552,7 @@
                                                         {{ t('Cached:') }}
                                                     </div>
                                                     <div class="fs-5 fw-semibold">
-                                                        {{ response.memory.memory.cached | number: '1.0-1' }} MB
+                                                        {{ response.memory.memory.cached | localNumber }} MB
                                                     </div>
                                                 </div>
                                             </c-col>
@@ -561,7 +562,7 @@
                                                         {{ t('Buffers:') }}
                                                     </div>
                                                     <div class="fs-5 fw-semibold">
-                                                        {{ response.memory.memory.buffers | number: '1.0-1' }} MB
+                                                        {{ response.memory.memory.buffers | localNumber }} MB
                                                     </div>
                                                 </div>
                                             </c-col>
@@ -574,7 +575,7 @@
                                                         color="success"
                                                         [value]="(response.memory.memory.used / response.memory.memory.total) * 100">
                                                         @if (response.memory.memory.used > 50) {
-                                                            {{ response.memory.memory.used  | number: '1.0-1' }}MB
+                                                            {{ response.memory.memory.used  | localNumber }}MB
                                                         }
                                                     </c-progress>
 
@@ -584,7 +585,7 @@
                                                         [value]="(response.memory.memory.cached / response.memory.memory.total) * 100">
                                                         @if (response.memory.memory.cached > 10) {
                                                             <span class="text-dark">
-                                                                {{ response.memory.memory.cached  | number: '1.0-1' }}MB
+                                                                {{ response.memory.memory.cached  | localNumber }}MB
                                                             </span>
                                                         }
                                                     </c-progress>
@@ -595,7 +596,7 @@
                                                         [animated]="true"
                                                         [value]="(response.memory.memory.buffers / response.memory.memory.total) * 100">
                                                         @if (response.memory.memory.buffers > 10) {
-                                                            {{ response.memory.memory.buffers  | number: '1.0-1' }}MB
+                                                            {{ response.memory.memory.buffers  | localNumber }}MB
                                                         }
                                                     </c-progress>
 
@@ -622,7 +623,7 @@
                                                         {{ t('Total:') }}
                                                     </div>
                                                     <div class="fs-5 fw-semibold">
-                                                        {{ response.memory.swap.total | number: '1.0-1' }} MB
+                                                        {{ response.memory.swap.total | localNumber }} MB
                                                     </div>
                                                 </div>
                                             </c-col>
@@ -632,7 +633,7 @@
                                                         {{ t('Used:') }}
                                                     </div>
                                                     <div class="fs-5 fw-semibold">
-                                                        {{ response.memory.swap.used | number: '1.0-1' }} MB
+                                                        {{ response.memory.swap.used | localNumber }} MB
                                                     </div>
                                                 </div>
                                             </c-col>
@@ -644,7 +645,7 @@
                                                     color="danger"
                                                     [value]="(response.memory.swap.used / response.memory.swap.total) * 100">
                                                     @if (response.memory.swap.used > 50) {
-                                                        {{ response.memory.swap.used  | number: '1.0-1' }}MB
+                                                        {{ response.memory.swap.used  |localNumber }}MB
                                                     }
                                                 </c-progress>
                                             </c-col>
@@ -707,7 +708,7 @@
                                                         color="primary"
                                                         [value]="disk.use_percentage">
                                                         @if (disk.use_percentage > 5) {
-                                                            {{ disk.use_percentage  | number: '1.0-1' }}%
+                                                            {{ disk.use_percentage  | localNumber }}%
                                                         }
                                                     </c-progress>
                                                 </c-col>
