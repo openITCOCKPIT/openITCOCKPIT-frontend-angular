@@ -30,7 +30,7 @@ export class HeaderTimeComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
 
     protected timezoneConfig!: TimezoneConfiguration;
-    protected showClientTime:boolean = true;
+    protected showClientTime:boolean = false;
     protected pageLoadedTime = new Date().getTime();
     protected currentServerTime:string = '';
     protected currentClientTime: string= '';
