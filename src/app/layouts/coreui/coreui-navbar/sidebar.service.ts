@@ -23,4 +23,13 @@ export class SidebarService {
         });
     }
 
+    public isSidebarVisible(): boolean {
+        let isVisible = false;
+        if (document.getElementById('sidebar1') !== null && document.getElementById('sidebar1') !== undefined && document.getElementById('sidebar1')?.classList !== undefined) {
+            isVisible = document.getElementById('sidebar1')!.classList.contains('show');
+        }
+
+        return isVisible;
+    }
+
 }

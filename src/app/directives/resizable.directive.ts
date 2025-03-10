@@ -23,31 +23,42 @@
  *     confirmation.
  */
 
-import { AfterViewInit, Directive, ElementRef, EventEmitter, Input, Output, Renderer2 } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, EventEmitter, Input, OnDestroy, Output, Renderer2 } from '@angular/core';
 
 @Directive({
     selector: '[oitcResizable]',
     standalone: true
 })
-export class ResizableDirective implements AfterViewInit {
+export class ResizableDirective implements AfterViewInit, OnDestroy {
 
     @Output() resizeStop = new EventEmitter<{ width: number, height: number }>();
     @Input() aspectRatio: boolean = false;
 
     private lastWidth: number = 0
     private lastHeight: number = 0;
+    private mouseUpListener: () => void;
+    private mouseDownListener: () => void;
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.renderer.addClass(this.el.nativeElement, 'resizable');
-        this.renderer.listen(this.el.nativeElement, 'mouseup', this.onMouseUp.bind(this));
+        this.mouseUpListener = this.renderer.listen(this.el.nativeElement, 'mouseup', this.onMouseUp.bind(this));
+        this.mouseDownListener = this.renderer.listen(this.el.nativeElement, 'mousedown', this.onMouseDown.bind(this));
     }
 
     public ngAfterViewInit(): void {
         // timeout needed to prevent that height is 0
         setTimeout(() => {
-            const rect = this.el.nativeElement.getBoundingClientRect();
-            this.setLastWidthHeight(rect.width, rect.height);
+            this.setLastWidthHeightByHimself();
         }, 400);
+    }
+
+    public ngOnDestroy(): void {
+        this.mouseDownListener();
+        this.mouseUpListener();
+    }
+
+    private onMouseDown() {
+        this.setLastWidthHeightByHimself();
     }
 
     private onMouseUp() {
@@ -75,6 +86,11 @@ export class ResizableDirective implements AfterViewInit {
 
         this.lastWidth = newWidth;
         this.lastHeight = newHeight;
+    }
+
+    private setLastWidthHeightByHimself() {
+        const rect = this.el.nativeElement.getBoundingClientRect();
+        this.setLastWidthHeight(rect.width, rect.height);
     }
 
     // its important to put this function in the init of the item to make sure that the lastWidth and lastHeight are set
