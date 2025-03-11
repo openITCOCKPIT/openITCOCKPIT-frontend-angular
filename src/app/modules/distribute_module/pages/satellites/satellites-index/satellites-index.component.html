@@ -199,12 +199,12 @@
                                 *oitcPermission="['distributeModule', 'satellites', 'delete']"
                                 [disabled]="!satellite.allow_edit"
                                 [item]="satellite"></oitc-item-select>
-                    </td>
-                    <td>
-                        {{ satellite.name }}
                         <oitc-badge-outline color="info">
                             ID {{ satellite.id }}
                         </oitc-badge-outline>
+                    </td>
+                    <td>
+                        {{ satellite.name }}
                     </td>
                     <td>
                         {{ satellite.address }}
@@ -285,7 +285,7 @@
                                             {{ t('Enable notifications') }}
                                         </a></li>
                                         <li><a cDropdownItem href="javascript:void(0);"
-                                               (click)="enableNotifications()">
+                                               (click)="toggleDowntimeModal()">
                                             <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                                             {{ t('Set planned maintenance times') }}
                                         </a></li>
@@ -312,4 +312,15 @@
     </c-card>
 
     <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+
+    <oitc-hosts-maintenance-modal [items]="selectedItems"
+                                  (completed)="onMassActionComplete($event)"></oitc-hosts-maintenance-modal>
+
+    <oitc-hosts-enable-notifications-modal [items]="selectedItems"
+                                           (completed)="onMassActionComplete($event)"></oitc-hosts-enable-notifications-modal>
+
+    <oitc-hosts-disable-notifications-modal [items]="selectedItems"
+                                            (completed)="onMassActionComplete($event)"></oitc-hosts-disable-notifications-modal>
+
 </ng-container>
+

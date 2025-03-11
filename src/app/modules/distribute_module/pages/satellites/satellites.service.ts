@@ -6,6 +6,7 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
     EditSatellitePostRoot,
     EditSatelliteRoot,
+    LoadHostsBySatelliteIds,
     SatelliteEntityCake2,
     SatelliteIndex,
     SatelliteIndexParams,
@@ -195,6 +196,21 @@ export class SatellitesService {
         }).pipe(
             map(data => {
                 return data.satellite;
+            })
+        )
+    }
+
+    public loadHostsBySatelliteId(satelliteIds: number[]): Observable<LoadHostsBySatelliteIds> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.get<LoadHostsBySatelliteIds>(`${proxyPath}/distribute_module/satellites/loadHostsBySatelliteIds.json`, {
+            params: {
+                angular: true,
+                'satelliteIds[]': satelliteIds
+            }
+        }).pipe(
+            map((data: LoadHostsBySatelliteIds) => {
+                return data;
             })
         )
     }

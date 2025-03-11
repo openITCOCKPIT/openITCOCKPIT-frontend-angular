@@ -308,3 +308,13 @@ export interface SatelliteUsedByHost {
     address: string
     uuid: string
 }
+
+// LoadHostsBySatelliteIds
+export interface LoadHostsBySatelliteIds {
+    hosts: LoadHostsBySatelliteIdsHost[]
+}
+
+export interface LoadHostsBySatelliteIdsHost {
+    id: number,
+    uuid: string
+}

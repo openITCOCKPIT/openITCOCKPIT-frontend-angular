@@ -45,6 +45,8 @@ import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/pa
 import {
     AllIndexSatellite,
     getDefaultSatelliteIndexParams,
+    LoadHostsBySatelliteIds,
+    LoadHostsBySatelliteIdsHost,
     SatelliteIndex,
     SatelliteIndexParams
 } from '../satellites.interface';
@@ -60,11 +62,21 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
 import {
     ExternalCommandsService,
     HostDisableNotificationsItem,
-    ServiceNotifcationItem
+    HostDowntimeItem,
+    HostEnableNotificationsItem
 } from '../../../../../services/external-commands.service';
 import { ExternalCommandsEnum } from '../../../../../enums/external-commands.enum';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import {
+    HostsDisableNotificationsModalComponent
+} from '../../../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component';
+import {
+    HostsEnableNotificationsModalComponent
+} from '../../../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component';
+import {
+    HostsMaintenanceModalComponent
+} from '../../../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
 
 @Component({
     selector: 'oitc-satellites-index',
@@ -109,7 +121,10 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
         DropdownItemDirective,
         DropdownMenuDirective,
         DropdownToggleDirective,
-        DeleteAllModalComponent
+        DeleteAllModalComponent,
+        HostsDisableNotificationsModalComponent,
+        HostsEnableNotificationsModalComponent,
+        HostsMaintenanceModalComponent
     ],
     templateUrl: './satellites-index.component.html',
     providers: [
@@ -128,7 +143,7 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
 
-    protected selectedItems: DeleteAllItem[] = [];
+    protected selectedItems: any[] = [];
     protected params: SatelliteIndexParams = getDefaultSatelliteIndexParams();
     protected hideFilter: boolean = true;
     protected readonly syncMethods: SelectKeyValueString[] = [
@@ -225,66 +240,114 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
 
-    public disableNotifications() {
-        // let commands = [];
-        const commands = this.SelectionServiceService.getSelectedItems().map((item): HostDisableNotificationsItem => {
-            return {
-                command: ExternalCommandsEnum.submitDisableHostNotifications,
-                type: '',
-                hostUuid: item.Host.uuid
-            };
+    public userFullname: string = '';
 
+    public toggleDowntimeModal() {
+        const satelliteIds: number[] = this.SelectionServiceService.getSelectedItems().map((item): number => {
+            console.warn(item);
+            return item.id;
         });
-        if (commands.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
-            this.NotyService.genericError(message);
-            return
-        }
-        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
-            if (result.message) {
-                const title = this.TranslocoService.translate('Disable Notifications');
+        console.warn(satelliteIds);
 
-                this.NotyService.genericSuccess(result.message, title, []);
-                // this.notyService.scrollContentDivToTop();
-                // this.SelectionServiceService.deselectAll()
-            } else {
-                this.NotyService.genericError();
-            }
-            setTimeout(() => {
-                this.reload()
-            }, 5000);
-        }));
+        this.subscriptions.add(this.SatellitesService.loadHostsBySatelliteId(satelliteIds)
+            .subscribe((result: LoadHostsBySatelliteIds) => {
+
+                if (result.hosts.length === 0) {
+                    const message = this.TranslocoService.translate('No items found!');
+                    this.NotyService.genericError(message);
+                    return;
+                }
+
+                const commands = result.hosts.map((item: LoadHostsBySatelliteIdsHost): HostDowntimeItem => {
+                    return {
+                        command: ExternalCommandsEnum.submitHostDowntime,
+                        hostUuid: item.uuid,
+                        start: 0,
+                        end: 0,
+                        author: this.userFullname,
+                        comment: '',
+                        downtimetype: ''
+                    };
+
+                });
+                this.selectedItems = commands;
+                this.modalService.toggle({
+                    show: true,
+                    id: 'hostDisableNotificationsModal',
+                });
+
+                this.cdr.markForCheck();
+
+            }));
+    }
+
+    public disableNotifications() {
+        const satelliteIds: number[] = this.SelectionServiceService.getSelectedItems().map((item): number => {
+            console.warn(item);
+            return item.id;
+        });
+        console.warn(satelliteIds);
+
+        this.subscriptions.add(this.SatellitesService.loadHostsBySatelliteId(satelliteIds)
+            .subscribe((result: LoadHostsBySatelliteIds) => {
+
+                if (result.hosts.length === 0) {
+                    const message = this.TranslocoService.translate('No items found!');
+                    this.NotyService.genericError(message);
+                    return;
+                }
+
+                const commands = result.hosts.map((item: LoadHostsBySatelliteIdsHost): HostDisableNotificationsItem => {
+                    return {
+                        command: ExternalCommandsEnum.submitDisableHostNotifications,
+                        hostUuid: item.uuid,
+                        type: 'hostOnly'
+                    };
+
+                });
+                this.selectedItems = commands;
+                this.modalService.toggle({
+                    show: true,
+                    id: 'hostDisableNotificationsModal',
+                });
+
+                this.cdr.markForCheck();
+
+            }));
     }
 
     public enableNotifications() {
-        const commands = this.SelectionServiceService.getSelectedItems().map((item): ServiceNotifcationItem => {
-            return {
-                command: ExternalCommandsEnum.submitEnableServiceNotifications,
-                hostUuid: item.Host.uuid,
-                serviceUuid: item.Service.uuid
-            };
-
+        const satelliteIds: number[] = this.SelectionServiceService.getSelectedItems().map((item): number => {
+            console.warn(item);
+            return item.id;
         });
-        if (commands.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
-            this.NotyService.genericError(message);
-            return;
-        }
-        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
-            if (result.message) {
-                const title = this.TranslocoService.translate('enable Notifications');
+        console.warn(satelliteIds);
 
-                this.NotyService.genericSuccess(result.message, title, []);
-                //this.notyService.scrollContentDivToTop();
-                // this.SelectionServiceService.deselectAll()
-            } else {
-                this.NotyService.genericError();
-            }
+        this.subscriptions.add(this.SatellitesService.loadHostsBySatelliteId(satelliteIds)
+            .subscribe((result: LoadHostsBySatelliteIds) => {
 
-            setTimeout(() => {
-                this.reload()
-            }, 5000);
-        }));
+                if (result.hosts.length === 0) {
+                    const message = this.TranslocoService.translate('No items found!');
+                    this.NotyService.genericError(message);
+                    return;
+                }
+
+                const commands = result.hosts.map((item: LoadHostsBySatelliteIdsHost): HostEnableNotificationsItem => {
+                    return {
+                        command: ExternalCommandsEnum.submitEnableHostNotifications,
+                        hostUuid: item.uuid,
+                        type: 'hostOnly'
+                    };
+
+                });
+                this.selectedItems = commands;
+                this.modalService.toggle({
+                    show: true,
+                    id: 'hostEnableNotificationsModal',
+                });
+
+                this.cdr.markForCheck();
+
+            }));
     }
-
 }
