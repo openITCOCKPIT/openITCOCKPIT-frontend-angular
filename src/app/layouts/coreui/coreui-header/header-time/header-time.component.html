@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-    <c-button-group role="group">
+    <c-button-group class="btn-group-xs" role="group">
         <button cButton color="secondary" *ngIf="showClientTime" cTooltip="{{t('local time of client')}}">{{ currentClientTime }}</button>
         <button cButton color="default" variant="outline" cTooltip="{{t('display time information')}}"><fa-icon [icon]="['fas', 'clock']"></fa-icon></button>
         <button cButton color="primary" cTooltip="{{t('local time of server')}}">{{ currentServerTime }}</button>
