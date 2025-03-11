@@ -1,56 +1,48 @@
 <ng-container *transloco="let t">
     <c-button-group role="group" *ngIf="showstatsinmenu" class="pe-2">
-        <button cButton color="default" variant="outline" cTooltip="{{t('host notifiations')}}">
-            <a [routerLink]="['/', 'hosts', 'index']"
+            <button cButton type="button"  color="default" variant="outline"  [routerLink]="['/', 'hosts', 'index']" cTooltip="{{t('All hosts')}}"
                [queryParams]="{ hoststate: [0,1,2], sort: 'Hoststatus.last_state_change', direction: 'desc'}"
-               *oitcPermission="['hosts', 'index']" class="nav-link">
+               *oitcPermission="['hosts', 'index']">
                 <fa-icon [icon]="['fas', 'hdd']"></fa-icon>
-            </a>
-        </button>
-        <button cButton color="danger" cTooltip="{{t('critical messages')}}">
-            <a [routerLink]="['/', 'hosts', 'index']"
+            </button>
+        <button cButton type="button" color="danger" cTooltip="{{t('Down')}}"
+             [routerLink]="['/', 'hosts', 'index']"
                [queryParams]="{ hoststate: [1], sort: 'Hoststatus.last_state_change', direction: 'desc'}"
-               *oitcPermission="['hosts', 'index']" class="nav-link">
+               *oitcPermission="['hosts', 'index']">
                 {{ hoststatusCount[1] }}
-            </a>
         </button>
-        <button cButton color="secondary" cTooltip="{{t('warning messages')}}">
-            <a [routerLink]="['/', 'hosts', 'index']"
+        <button cButton type="button" color="secondary" cTooltip="{{t('Unreachable')}}"
+             [routerLink]="['/', 'hosts', 'index']"
                [queryParams]="{ hoststate: [2], sort: 'Hoststatus.last_state_change', direction: 'desc'}"
-               *oitcPermission="['hosts', 'index']" class="nav-link">
+               *oitcPermission="['hosts', 'index']">
                 {{ hoststatusCount[2] }}
-            </a>
         </button>
     </c-button-group>
 
     <c-button-group role="group" *ngIf="showstatsinmenu">
-        <button cButton color="default" variant="outline" cTooltip="{{t('service notifiations')}}">
-            <a [routerLink]="['/', 'services', 'index']"
+        <button cButton type="button" color="default" variant="outline" cTooltip="{{t('All services')}}"
+             [routerLink]="['/', 'services', 'index']"
                [queryParams]="{ servicestate: [0,1,2,3], sort: 'Servicestatus.last_state_change', direction: 'desc'}"
-               *oitcPermission="['services', 'index']" class="nav-link">
+               *oitcPermission="['services', 'index']">
                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-            </a>
         </button>
-        <button cButton color="danger" cTooltip="{{t('messages with filter set to criticals only')}}">
-            <a [routerLink]="['/', 'services', 'index']"
+        <button cButton type="button" color="danger" cTooltip="{{t('Critical')}}"
+             [routerLink]="['/', 'services', 'index']"
                [queryParams]="{ servicestate: [2], sort: 'Servicestatus.last_state_change', direction: 'desc'}"
-               *oitcPermission="['services', 'index']" class="nav-link">
+               *oitcPermission="['services', 'index']">
                 {{ servicestatusCount[2] }}
-            </a>
         </button>
-        <button cButton color="warning" cTooltip="{{t('messages with filter set to warnings only')}}">
-            <a [routerLink]="['/', 'services', 'index']"
+        <button cButton type="button" color="warning" cTooltip="{{t('Warning')}}"
+             [routerLink]="['/', 'services', 'index']"
                [queryParams]="{ servicestate: [1], sort: 'Servicestatus.last_state_change', direction: 'desc'}"
-               *oitcPermission="['services', 'index']" class="nav-link">
+               *oitcPermission="['services', 'index']">
                 {{ servicestatusCount[1] }}
-            </a>
         </button>
-        <button cButton color="secondary" cTooltip="{{t('messages with filter set to unknowns only')}}">
-            <a [routerLink]="['/', 'services', 'index']"
+        <button cButton type="button" color="secondary" cTooltip="{{t('Unknown')}}"
+             [routerLink]="['/', 'services', 'index']"
                [queryParams]="{ servicestate: [3], sort: 'Servicestatus.last_state_change', direction: 'desc'}"
-               *oitcPermission="['services', 'index']" class="nav-link">
+               *oitcPermission="['services', 'index']">
                 {{ servicestatusCount[3] }}
-            </a>
         </button>
     </c-button-group>
 
