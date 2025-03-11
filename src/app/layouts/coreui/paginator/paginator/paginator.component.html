@@ -2,11 +2,11 @@
     <c-row>
         <c-col *ngIf="paging" md="6">
             {{ t('Page') }}
-            {{ paging.page | number }}
+            {{ paging.page | localNumber }}
             {{ t('of') }}
-            {{ paging.pageCount | number }},
+            {{ paging.pageCount | localNumber }},
             {{ t('Total') }}
-            {{ paging.count | number }}
+            {{ paging.count | localNumber }}
             {{ t('entries') }}
 
         </c-col>

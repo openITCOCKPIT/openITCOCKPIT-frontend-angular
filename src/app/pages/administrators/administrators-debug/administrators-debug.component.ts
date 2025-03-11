@@ -25,7 +25,7 @@ import {
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SystemnameService } from '../../../services/systemname.service';
-import { AsyncPipe, DecimalPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import {
     AdministratorsDebugGearmanStatusForAngular,
     AdministratorsDebugRootResponse
@@ -52,6 +52,7 @@ import { SparklineStatsComponent } from '../../../components/sparkline-stats/spa
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { PhpinfoComponent } from './phpinfo/phpinfo.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LocalNumberPipe } from '../../../pipes/local-number.pipe';
 
 
 echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent]);
@@ -86,7 +87,6 @@ echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent
         NavItemComponent,
         XsButtonDirective,
         NgxEchartsDirective,
-        DecimalPipe,
         ProgressStackedComponent,
         ProgressComponent,
         CardSubtitleDirective,
@@ -96,7 +96,8 @@ echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent
         FormCheckInputDirective,
         FormCheckLabelDirective,
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
+        LocalNumberPipe
     ],
     templateUrl: './administrators-debug.component.html',
     styleUrl: './administrators-debug.component.css',

@@ -80,3 +80,7 @@
     width: 100%; // be 100%
 }
 
+/* Forces the position of the "select box overlay" to be always on top 0, otherwise the top value can be negativ and out of view of the user */
+.p-overlay.p-component {
+    top: 0 !important;
+}

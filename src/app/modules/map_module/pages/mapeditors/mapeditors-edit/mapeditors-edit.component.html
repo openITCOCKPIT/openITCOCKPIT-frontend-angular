@@ -150,7 +150,8 @@
 
                 <c-nav-item class="px-1" *ngIf="map">
                     <button *oitcPermission="['mapmodule', 'mapeditors', 'view']"
-                            [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id]" cButton class="ripple"
+                            [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id, false]" cButton
+                            class="ripple"
                             color="default" size="xs" class="me-1">
                         <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                         {{ t('View') }}

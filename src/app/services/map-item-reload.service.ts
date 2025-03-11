@@ -52,6 +52,10 @@ export class MapItemReloadService implements OnDestroy {
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+        if (this.interval !== null) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
     }
 
     private loadData() {

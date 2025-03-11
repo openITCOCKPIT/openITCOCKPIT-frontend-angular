@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { ApplicationConfig, isDevMode } from '@angular/core';
+import { ApplicationConfig, isDevMode, LOCALE_ID } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -46,6 +46,7 @@ import OItcPrimeNGPreset from './layouts/primeng/primeng.preset';
 
 export const appConfig: ApplicationConfig = {
     providers: [
+        {provide: LOCALE_ID, useValue: 'en-US'},
         {provide: LEGACY_BASE_URL, useValue: '/#!'}, // Must be replaced by real staged URL
         {provide: PROXY_PATH, useValue: ''},
         {provide: Window, useValue: window},

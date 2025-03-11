@@ -86,7 +86,7 @@ export class DashboardAllocationsService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data.allocation as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
