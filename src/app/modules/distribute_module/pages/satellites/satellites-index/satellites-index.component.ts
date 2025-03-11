@@ -160,6 +160,7 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.SatellitesService.getSatellitesIndex(this.params)
             .subscribe((result: SatelliteIndex) => {
                 this.result = result;
+                this.SelectionServiceService.deselectAll();
                 this.cdr.markForCheck();
 
             }));
@@ -207,6 +208,8 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public onMassActionComplete(success: boolean) {
+        this.SelectionServiceService.deselectAll();
+        this.cdr.markForCheck();
         this.reload();
     }
 
@@ -273,7 +276,7 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
                 this.selectedItems = commands;
                 this.modalService.toggle({
                     show: true,
-                    id: 'hostDisableNotificationsModal',
+                    id: 'hostMaintenanceModal',
                 });
 
                 this.cdr.markForCheck();
