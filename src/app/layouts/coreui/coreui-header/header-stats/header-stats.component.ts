@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, timer, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ButtonDirective, ButtonGroupComponent, TooltipDirective } from '@coreui/angular';
 import {HeaderStatsService} from './header-stats.service';
-import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -18,7 +17,6 @@ import { RouterLink } from '@angular/router';
         ButtonGroupComponent,
         ButtonDirective,
         TooltipDirective,
-        PermissionDirective,
         RouterLink
     ],
   templateUrl: './header-stats.component.html',
@@ -34,7 +32,6 @@ export class HeaderStatsComponent implements OnInit, OnDestroy {
     protected showstatsinmenu: boolean = false;
     protected hoststatusCount: {[key:number]:number} = {};
     protected servicestatusCount: {[key:number]:number} = {};
-    protected data:any = {};
 
     public ngOnInit() {
         timer(0, 30000).pipe(takeUntil(this.destroy$)).subscribe({next: () => {
@@ -56,7 +53,6 @@ export class HeaderStatsComponent implements OnInit, OnDestroy {
             this.showstatsinmenu = data.showstatsinmenu;
             this.hoststatusCount = data.hoststatusCount;
             this.servicestatusCount = data.servicestatusCount;
-           // this.data = data;
             this.cdr.markForCheck();
         }));
     }
