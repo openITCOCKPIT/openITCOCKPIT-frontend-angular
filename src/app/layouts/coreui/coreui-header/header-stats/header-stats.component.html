@@ -1,0 +1,42 @@
+<ng-container *transloco="let t">
+    <c-button-group role="group" *ngIf="showstatsinmenu" class="pe-2">
+            <button cButton type="button"  color="default" variant="outline"  [routerLink]="['/', 'hosts', 'index']" cTooltip="{{t('All hosts')}}"
+               [queryParams]="{ hoststate: [0,1,2], sort: 'Hoststatus.last_state_change', direction: 'desc'}">
+                <fa-icon [icon]="['fas', 'hdd']"></fa-icon>
+            </button>
+        <button cButton type="button" color="danger" cTooltip="{{t('Down')}}"
+             [routerLink]="['/', 'hosts', 'index']"
+               [queryParams]="{ hoststate: [1], sort: 'Hoststatus.last_state_change', direction: 'desc'}">
+                {{ hoststatusCount[1] }}
+        </button>
+        <button cButton type="button" color="secondary" cTooltip="{{t('Unreachable')}}"
+             [routerLink]="['/', 'hosts', 'index']"
+               [queryParams]="{ hoststate: [2], sort: 'Hoststatus.last_state_change', direction: 'desc'}">
+                {{ hoststatusCount[2] }}
+        </button>
+    </c-button-group>
+
+    <c-button-group role="group" *ngIf="showstatsinmenu">
+        <button cButton type="button" color="default" variant="outline" cTooltip="{{t('All services')}}"
+             [routerLink]="['/', 'services', 'index']"
+               [queryParams]="{ servicestate: [0,1,2,3], sort: 'Servicestatus.last_state_change', direction: 'desc'}">
+                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+        </button>
+        <button cButton type="button" color="danger" cTooltip="{{t('Critical')}}"
+             [routerLink]="['/', 'services', 'index']"
+               [queryParams]="{ servicestate: [2], sort: 'Servicestatus.last_state_change', direction: 'desc'}">
+                {{ servicestatusCount[2] }}
+        </button>
+        <button cButton type="button" color="warning" cTooltip="{{t('Warning')}}"
+             [routerLink]="['/', 'services', 'index']"
+               [queryParams]="{ servicestate: [1], sort: 'Servicestatus.last_state_change', direction: 'desc'}">
+                {{ servicestatusCount[1] }}
+        </button>
+        <button cButton type="button" color="secondary" cTooltip="{{t('Unknown')}}"
+             [routerLink]="['/', 'services', 'index']"
+               [queryParams]="{ servicestate: [3], sort: 'Servicestatus.last_state_change', direction: 'desc'}">
+                {{ servicestatusCount[3] }}
+        </button>
+    </c-button-group>
+
+</ng-container>

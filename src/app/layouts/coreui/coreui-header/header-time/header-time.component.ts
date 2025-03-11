@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, timer, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { TimezoneService } from '../../../../services/timezone.service';
 import {TimezoneConfiguration } from '../../../../services/timezone.service';
 import { TranslocoDirective } from '@jsverse/transloco';

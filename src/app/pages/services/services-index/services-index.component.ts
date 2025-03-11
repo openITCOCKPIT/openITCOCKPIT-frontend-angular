@@ -366,6 +366,12 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
             let servicestate = params['servicestate'] || undefined;
             if (servicestate) {
+                //first reset all states
+                this.filter.Servicestatus.current_state.ok = false;
+                this.filter.Servicestatus.current_state.warning = false;
+                this.filter.Servicestatus.current_state.critical = false;
+                this.filter.Servicestatus.current_state.unknown = false;
+
                 servicestate = [].concat(servicestate); // make sure we always get an array
                 servicestate.forEach((state: any) => {
                     switch (parseInt(state, 10)) {
@@ -386,9 +392,10 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
                     }
                 });
             }
+            this.setFilterAndLoad(this.filter);
+            this.cdr.markForCheck();
         });
-        this.setFilterAndLoad(this.filter);
-        this.cdr.markForCheck();
+
     }
 
     public ngOnDestroy() {
