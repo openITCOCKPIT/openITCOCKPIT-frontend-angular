@@ -33,6 +33,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { HeaderTimeComponent} from './header-time/header-time.component';
+import { HeaderStatsComponent} from './header-stats/header-stats.component';
 
 import {
     MessageOfTheDayButtonComponent
@@ -61,7 +62,8 @@ import { HeaderAvatarComponent } from './header-avatar/header-avatar.component';
         PermissionDirective,
         MessageOfTheDayButtonComponent,
         HeaderAvatarComponent,
-        HeaderTimeComponent
+        HeaderTimeComponent,
+        HeaderStatsComponent
     ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css',
