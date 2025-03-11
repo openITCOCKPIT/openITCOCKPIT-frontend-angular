@@ -4,6 +4,9 @@ import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
+    EditSatellitePostRoot,
+    EditSatelliteRoot,
+    LoadHostsBySatelliteIds,
     SatelliteEntityCake2,
     SatelliteIndex,
     SatelliteIndexParams,
@@ -14,10 +17,12 @@ import {
     SatelliteSystemdowntimesParams,
     SatelliteTasksIndex,
     SatelliteTasksParams,
+    SatelliteUsedBy,
     SystemdowntimeSatelliteIndexRoot
 } from './satellites.interface';
 import { SystemdowntimesPost } from '../../../../pages/systemdowntimes/systemdowntimes.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -61,6 +66,36 @@ export class SatellitesService {
                 return data;
             })
         );
+    }
+
+    public updateSatellite(satelliteId: number, satellite: EditSatellitePostRoot): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/distribute_module/satellites/edit/${satelliteId}.json?angular=true`, satellite)
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data.satellite as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<EditSatelliteRoot> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<EditSatelliteRoot>(`${proxyPath}/distribute_module/satellites/edit/${id}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            );
     }
 
     public addSatellite(satellite: SatellitesAddRoot): Observable<GenericResponseWrapper> {
@@ -163,5 +198,37 @@ export class SatellitesService {
                 return data.satellite;
             })
         )
+    }
+
+    public loadHostsBySatelliteId(satelliteIds: number[]): Observable<LoadHostsBySatelliteIds> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.get<LoadHostsBySatelliteIds>(`${proxyPath}/distribute_module/satellites/loadHostsBySatelliteIds.json`, {
+            params: {
+                angular: true,
+                'satelliteIds[]': satelliteIds
+            }
+        }).pipe(
+            map((data: LoadHostsBySatelliteIds) => {
+                return data;
+            })
+        )
+    }
+
+    // Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/distribute_module/satellites/delete/${item.id}.json?angular=true`, {});
+    }
+
+    public usedBy(id: number): Observable<SatelliteUsedBy> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<SatelliteUsedBy>(`${proxyPath}/distribute_module/satellites/usedBy/${id}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
     }
 }

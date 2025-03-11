@@ -269,3 +269,52 @@ export interface IndexSatellite {
     use_timesync: number
     verify_certificate: number
 }
+
+export interface EditSatelliteRoot {
+    satellite: EditableSatellite
+    frontendUrl?: string
+    protocol?: string
+    proxyProtocol?: string
+    proxyUrl?: string
+}
+export interface EditSatellitePostRoot {
+    Satellite: EditableSatellite
+    frontendUrl?: string
+    protocol?: string
+    proxyProtocol?: string
+    proxyUrl?: string
+}
+
+export interface EditableSatellite extends IndexSatellite {
+    id: number
+}
+
+// USED BY
+export interface SatelliteUsedBy {
+    satellite: SatelliteUsedBySatellite
+    all_hosts: SatelliteUsedByHost[]
+    total: number
+    _csrfToken: string
+}
+
+export interface SatelliteUsedBySatellite {
+    id: number
+    name: string
+}
+
+export interface SatelliteUsedByHost {
+    id: number
+    name: string
+    address: string
+    uuid: string
+}
+
+// LoadHostsBySatelliteIds
+export interface LoadHostsBySatelliteIds {
+    hosts: LoadHostsBySatelliteIdsHost[]
+}
+
+export interface LoadHostsBySatelliteIdsHost {
+    id: number,
+    uuid: string
+}
