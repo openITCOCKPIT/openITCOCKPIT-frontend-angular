@@ -199,12 +199,12 @@
                                 *oitcPermission="['distributeModule', 'satellites', 'delete']"
                                 [disabled]="!satellite.allow_edit"
                                 [item]="satellite"></oitc-item-select>
-                        <oitc-badge-outline color="info">
-                            ID {{ satellite.id }}
-                        </oitc-badge-outline>
                     </td>
                     <td>
                         {{ satellite.name }}
+                        <oitc-badge-outline color="info">
+                            ID {{ satellite.id }}
+                        </oitc-badge-outline>
                     </td>
                     <td>
                         {{ satellite.address }}
