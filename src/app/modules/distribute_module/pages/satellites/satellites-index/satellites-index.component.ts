@@ -247,10 +247,8 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public toggleDowntimeModal() {
         const satelliteIds: number[] = this.SelectionServiceService.getSelectedItems().map((item): number => {
-            console.warn(item);
             return item.id;
         });
-        console.warn(satelliteIds);
 
         this.subscriptions.add(this.SatellitesService.loadHostsBySatelliteId(satelliteIds)
             .subscribe((result: LoadHostsBySatelliteIds) => {
@@ -286,10 +284,8 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public disableNotifications() {
         const satelliteIds: number[] = this.SelectionServiceService.getSelectedItems().map((item): number => {
-            console.warn(item);
             return item.id;
         });
-        console.warn(satelliteIds);
 
         this.subscriptions.add(this.SatellitesService.loadHostsBySatelliteId(satelliteIds)
             .subscribe((result: LoadHostsBySatelliteIds) => {
@@ -321,10 +317,8 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public enableNotifications() {
         const satelliteIds: number[] = this.SelectionServiceService.getSelectedItems().map((item): number => {
-            console.warn(item);
             return item.id;
         });
-        console.warn(satelliteIds);
 
         this.subscriptions.add(this.SatellitesService.loadHostsBySatelliteId(satelliteIds)
             .subscribe((result: LoadHostsBySatelliteIds) => {
