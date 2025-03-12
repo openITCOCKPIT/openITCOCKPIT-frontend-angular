@@ -20,7 +20,7 @@ import { FormsModule } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { Service, WizardPost } from '../../../pages/wizards/wizards.interface';
+import { Service } from '../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-wizards-dynamicfields',
