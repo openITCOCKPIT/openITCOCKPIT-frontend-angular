@@ -19,17 +19,21 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                {{ t('Add') }}
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Edit') }}
             </li>
         </ol>
     </nav>
 
-    <form cForm (ngSubmit)="addSatellite()">
-        <c-card class="mb-3">
+    <oitc-form-loader *ngIf="post.Satellite.id === 0"></oitc-form-loader>
+    <form cForm (ngSubmit)="updateSatellite()">
+        <c-card class="mb-3" *ngIf="post.Satellite.id !== 0">
             <c-card-header>
                 <h5 cCardTitle>
-                    {{ t('Create new Satellite') }}
+                    {{ t('Edit Satellite:') }}
+                    <small class="fw-300">
+                        {{ post.Satellite.name }}
+                    </small>
                 </h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
@@ -137,7 +141,7 @@
 
                     <!-- URL -->
                     <div class="mb-3">
-                        <label cLabel for="post.Satellite.description">
+                        <label cLabel for="post.frontendUrl">
                             {{ t('URL') }}
                             <oitc-required-icon/>
                         </label>
@@ -146,21 +150,21 @@
                                 <button *ngIf="post.protocol === 'http'"
                                         cButton cDropdownToggle color="primary">
                                     <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                                    {{ t('HTTP') }}
+                                    {{ t('http') }}
                                 </button>
                                 <button *ngIf="post.protocol === 'https'"
                                         cButton cDropdownToggle color="primary">
                                     <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                                    {{ t('HTTPS') }}
+                                    {{ t('https') }}
                                 </button>
                                 <ul cDropdownMenu>
                                     <li cDropdownItem (click)="setUrlProtocol('http')">
                                         <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                                        {{ t('HTTP') }}
+                                        {{ t('http') }}
                                     </li>
                                     <li cDropdownItem (click)="setUrlProtocol('https')">
                                         <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                                        {{ t('HTTPS') }}
+                                        {{ t('https') }}
                                     </li>
                                 </ul>
                             </c-dropdown>
@@ -177,10 +181,10 @@
                                 /
                             </span>
                             <input cFormControl
-                                   id="post.Satellite.url"
+                                   id="post.frontendUrl"
                                    type="text"
-                                   name="post.Satellite.url"
-                                   [(ngModel)]="post.Satellite.url"/>
+                                   name="post.frontendUrl"
+                                   [(ngModel)]="post.frontendUrl"/>
                         </c-input-group>
                     </div>
 
@@ -227,7 +231,7 @@
 
                     <!-- Proxy URL -->
                     <div class="mb-3">
-                        <label cLabel for="post.Satellite.proxy_url">
+                        <label cLabel for="this.post.proxyUrl">
                             {{ t('Proxy URL') }}
                             <oitc-required-icon *ngIf="post.Satellite.use_proxy"/>
                         </label>
@@ -236,21 +240,21 @@
                                 <button *ngIf="post.proxyProtocol === 'http'"
                                         cButton cDropdownToggle color="primary">
                                     <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                                    {{ t('HTTP') }}
+                                    {{ t('http') }}
                                 </button>
                                 <button *ngIf="post.proxyProtocol === 'https'"
                                         cButton cDropdownToggle color="primary">
                                     <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                                    {{ t('HTTPS') }}
+                                    {{ t('https') }}
                                 </button>
                                 <ul cDropdownMenu>
                                     <li cDropdownItem (click)="setProxyProtocol('http')">
                                         <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                                        {{ t('HTTP') }}
+                                        {{ t('http') }}
                                     </li>
                                     <li cDropdownItem (click)="setProxyProtocol('https')">
                                         <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                                        {{ t('HTTPS') }}
+                                        {{ t('https') }}
                                     </li>
                                 </ul>
                             </c-dropdown>
@@ -258,16 +262,39 @@
                                 ://
                             </span>
                             <input cFormControl
-                                   id="post.Satellite.proxy_url"
+                                   id="this.post.proxyUrl"
                                    type="text"
-                                   name="post.Satellite.proxy_url"
-                                   [(ngModel)]="post.Satellite.proxy_url"/>
+                                   name="this.post.proxyUrl"
+                                   [(ngModel)]="this.post.proxyUrl"/>
                             <span cInputGroupText>
                                 /
                             </span>
                         </c-input-group>
                     </div>
 
+                    <!-- API Key -->
+                    <div class="mb-3">
+                        <label cLabel for="post.Satellite.api_key">
+                            {{ t('API Key') }}
+                            <oitc-required-icon/>
+                        </label>
+
+                        <c-input-group>
+                            <input cFormControl
+                                   required
+                                   disabled
+                                   id="post.Satellite.api_key"
+                                   type="text"
+                                   name="post.Satellite.api_key"
+                                   [ngModelOptions]="{standalone: true}"
+                                   [(ngModel)]="post.Satellite.api_key">
+                            <button cButton color="success" (click)="refreshApiKey()">
+                                <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                                {{ t('Generate new API key') }}
+                            </button>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
+                    </div>
 
                     <!-- interval -->
                     <div class="mb-3">
@@ -305,32 +332,6 @@
                         <div class="help-block">
                             {{ t('Time limit in seconds which defines when the satellite should be marked as OFFLINE .') }}
                         </div>
-                    </div>
-                </ng-container>
-
-                <ng-container *ngIf="post.Satellite.sync_method !== 'ssh'">
-                    <!-- API Key -->
-                    <div class="mb-3">
-                        <label cLabel for="post.Satellite.api_key">
-                            {{ t('API Key') }}
-                            <oitc-required-icon/>
-                        </label>
-
-                        <c-input-group>
-                            <input cFormControl
-                                   required
-                                   disabled
-                                   id="post.Satellite.api_key"
-                                   type="text"
-                                   name="post.Satellite.api_key"
-                                   [ngModelOptions]="{standalone: true}"
-                                   [(ngModel)]="post.Satellite.api_key">
-                            <button cButton color="success" (click)="refreshApiKey()">
-                                <fa-icon [icon]="['fas', 'key']"></fa-icon>
-                                {{ t('Generate new API key') }}
-                            </button>
-                        </c-input-group>
-                        <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
                     </div>
                 </ng-container>
 
@@ -415,6 +416,8 @@
                     </div>
                 </ng-container>
 
+
+
                 <!-- Time zone -->
                 <div class="mb-3">
                     <label cLabel for="post.Satellite.timezone">
@@ -470,14 +473,8 @@
                 </div>
             </c-card-body>
             <c-card-footer class="text-end">
-                <label class="me-2">
-                    <input cFormCheckInput type="checkbox" name="createAnother"
-                           [(ngModel)]="createAnother">
-                    {{ t('Create another') }}
-                </label>
-
                 <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Create satellite') }}
+                    {{ t('Update satellite') }}
                 </button>
                 <button [fallbackUrl]="['distribute_module', 'satellites', 'index']" cButton class="ms-1 ripple"
                         color="default"

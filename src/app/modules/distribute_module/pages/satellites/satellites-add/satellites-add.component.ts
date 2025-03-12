@@ -188,8 +188,6 @@ export class SatellitesAddComponent implements OnDestroy, OnInit {
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
-
-                    console.warn(this.errors);
                 }
             })
         );
