@@ -14,6 +14,10 @@ export const distributeModuleRoutes: Routes = [
         loadComponent: () => import('./pages/satellites/satellites-downtime/satellites-downtime.component').then(m => m.SatellitesDowntimeComponent)
     },
     {
+        path: 'distribute_module/satellites/edit/:id',
+        loadComponent: () => import('./pages/satellites/satellites-edit/satellites-edit.component').then(m => m.SatellitesEditComponent)
+    },
+    {
         path: 'distribute_module/satellites/index',
         loadComponent: () => import('./pages/satellites/satellites-index/satellites-index.component').then(m => m.SatellitesIndexComponent)
     },
@@ -24,5 +28,9 @@ export const distributeModuleRoutes: Routes = [
     {
         path: 'distribute_module/satellites/tasks',
         loadComponent: () => import('./pages/satellites/satellites-tasks/satellites-tasks.component').then(m => m.SatellitesTasksComponent)
+    },
+    {
+        path: 'distribute_module/satellites/usedBy/:satelliteId',
+        loadComponent: () => import('./pages/satellites/satellites-used-by/satellites-used-by.component').then(m => m.SatellitesUsedByComponent)
     }
 ];

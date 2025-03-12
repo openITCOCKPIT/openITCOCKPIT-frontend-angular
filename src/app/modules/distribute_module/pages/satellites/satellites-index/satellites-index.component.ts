@@ -5,7 +5,11 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownComponent,
     DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormControlDirective,
     FormDirective,
     HeaderComponent,
@@ -17,6 +21,7 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
+import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
@@ -40,6 +45,8 @@ import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/pa
 import {
     AllIndexSatellite,
     getDefaultSatelliteIndexParams,
+    LoadHostsBySatelliteIds,
+    LoadHostsBySatelliteIdsHost,
     SatelliteIndex,
     SatelliteIndexParams
 } from '../satellites.interface';
@@ -51,6 +58,25 @@ import {
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
+import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
+import {
+    ExternalCommandsService,
+    HostDisableNotificationsItem,
+    HostDowntimeItem,
+    HostEnableNotificationsItem
+} from '../../../../../services/external-commands.service';
+import { ExternalCommandsEnum } from '../../../../../enums/external-commands.enum';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import {
+    HostsDisableNotificationsModalComponent
+} from '../../../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component';
+import {
+    HostsEnableNotificationsModalComponent
+} from '../../../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component';
+import {
+    HostsMaintenanceModalComponent
+} from '../../../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
 
 @Component({
     selector: 'oitc-satellites-index',
@@ -89,9 +115,21 @@ import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outli
         ActionsButtonComponent,
         ActionsButtonElementComponent,
         DropdownDividerDirective,
-        BadgeOutlineComponent
+        BadgeOutlineComponent,
+        SelectAllComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        DeleteAllModalComponent,
+        HostsDisableNotificationsModalComponent,
+        HostsEnableNotificationsModalComponent,
+        HostsMaintenanceModalComponent
     ],
     templateUrl: './satellites-index.component.html',
+    providers: [
+        {provide: DELETE_SERVICE_TOKEN, useClass: SatellitesService}
+    ],
     styleUrl: './satellites-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -101,9 +139,11 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly modalService: ModalService = inject(ModalService);
+    private readonly NotyService: NotyService = inject(NotyService);
+    private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
 
-    protected selectedItems: DeleteAllItem[] = [];
+    protected selectedItems: any[] = [];
     protected params: SatelliteIndexParams = getDefaultSatelliteIndexParams();
     protected hideFilter: boolean = true;
     protected readonly syncMethods: SelectKeyValueString[] = [
@@ -120,6 +160,7 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.SatellitesService.getSatellitesIndex(this.params)
             .subscribe((result: SatelliteIndex) => {
                 this.result = result;
+                this.SelectionServiceService.deselectAll();
                 this.cdr.markForCheck();
 
             }));
@@ -167,6 +208,9 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public onMassActionComplete(success: boolean) {
+        this.SelectionServiceService.deselectAll();
+        this.cdr.markForCheck();
+        this.reload();
     }
 
     // Open the Delete All Modal
@@ -183,7 +227,7 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: item.full_name
+                    displayName: item.name
                 };
             });
         }
@@ -198,4 +242,109 @@ export class SatellitesIndexComponent implements OnInit, OnDestroy, IndexPage {
         });
     }
 
+
+    public userFullname: string = '';
+
+    public toggleDowntimeModal() {
+        const satelliteIds: number[] = this.SelectionServiceService.getSelectedItems().map((item): number => {
+            return item.id;
+        });
+
+        this.subscriptions.add(this.SatellitesService.loadHostsBySatelliteId(satelliteIds)
+            .subscribe((result: LoadHostsBySatelliteIds) => {
+
+                if (result.hosts.length === 0) {
+                    const message = this.TranslocoService.translate('No items found!');
+                    this.NotyService.genericError(message);
+                    return;
+                }
+
+                const commands = result.hosts.map((item: LoadHostsBySatelliteIdsHost): HostDowntimeItem => {
+                    return {
+                        command: ExternalCommandsEnum.submitHostDowntime,
+                        hostUuid: item.uuid,
+                        start: 0,
+                        end: 0,
+                        author: this.userFullname,
+                        comment: '',
+                        downtimetype: ''
+                    };
+
+                });
+                this.selectedItems = commands;
+                this.modalService.toggle({
+                    show: true,
+                    id: 'hostMaintenanceModal',
+                });
+
+                this.cdr.markForCheck();
+
+            }));
+    }
+
+    public disableNotifications() {
+        const satelliteIds: number[] = this.SelectionServiceService.getSelectedItems().map((item): number => {
+            return item.id;
+        });
+
+        this.subscriptions.add(this.SatellitesService.loadHostsBySatelliteId(satelliteIds)
+            .subscribe((result: LoadHostsBySatelliteIds) => {
+
+                if (result.hosts.length === 0) {
+                    const message = this.TranslocoService.translate('No items found!');
+                    this.NotyService.genericError(message);
+                    return;
+                }
+
+                const commands = result.hosts.map((item: LoadHostsBySatelliteIdsHost): HostDisableNotificationsItem => {
+                    return {
+                        command: ExternalCommandsEnum.submitDisableHostNotifications,
+                        hostUuid: item.uuid,
+                        type: 'hostOnly'
+                    };
+
+                });
+                this.selectedItems = commands;
+                this.modalService.toggle({
+                    show: true,
+                    id: 'hostDisableNotificationsModal',
+                });
+
+                this.cdr.markForCheck();
+
+            }));
+    }
+
+    public enableNotifications() {
+        const satelliteIds: number[] = this.SelectionServiceService.getSelectedItems().map((item): number => {
+            return item.id;
+        });
+
+        this.subscriptions.add(this.SatellitesService.loadHostsBySatelliteId(satelliteIds)
+            .subscribe((result: LoadHostsBySatelliteIds) => {
+
+                if (result.hosts.length === 0) {
+                    const message = this.TranslocoService.translate('No items found!');
+                    this.NotyService.genericError(message);
+                    return;
+                }
+
+                const commands = result.hosts.map((item: LoadHostsBySatelliteIdsHost): HostEnableNotificationsItem => {
+                    return {
+                        command: ExternalCommandsEnum.submitEnableHostNotifications,
+                        hostUuid: item.uuid,
+                        type: 'hostOnly'
+                    };
+
+                });
+                this.selectedItems = commands;
+                this.modalService.toggle({
+                    show: true,
+                    id: 'hostEnableNotificationsModal',
+                });
+
+                this.cdr.markForCheck();
+
+            }));
+    }
 }

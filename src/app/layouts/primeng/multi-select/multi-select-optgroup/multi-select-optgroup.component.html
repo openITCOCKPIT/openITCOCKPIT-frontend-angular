@@ -29,7 +29,8 @@ https://stackoverflow.com/a/76688561
     group="true"
     optionGroupLabel="label"
     [appendTo]="appendTo"
-    [autofocusFilter]="true">
+    [autofocusFilter]="true"
+    (onPanelShow)="onShow($event)">
     <ng-template let-item pTemplate="item">
         <div [innerHTML]="item | highlightSearch : this.searchText:this.optionLabel"></div>
     </ng-template>

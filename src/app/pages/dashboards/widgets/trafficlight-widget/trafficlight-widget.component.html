@@ -46,19 +46,17 @@
                             <label cLabel [for]="'trafficlight_service_id_'+widget.id">
                                 {{ t('Service') }}
                             </label>
-                            <c-input-group>
-                                <oitc-select-optgroup
-                                    [attr.id]="'trafficlight_service_id_'+widget.id"
-                                    [name]="'trafficlight_service_id_'+widget.id"
-                                    optionValue="value"
-                                    optionLabel="label"
-                                    [options]="services"
-                                    [(ngModel)]="service_id"
-                                    [searchCallback]="loadServicesByString"
-                                    [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
-                                    class="flex-1">
-                                </oitc-select-optgroup>
-                            </c-input-group>
+                            <oitc-select-optgroup
+                                [attr.id]="'trafficlight_service_id_'+widget.id"
+                                [name]="'trafficlight_service_id_'+widget.id"
+                                optionValue="value"
+                                optionLabel="label"
+                                [options]="services"
+                                [(ngModel)]="service_id"
+                                [searchCallback]="loadServicesByString"
+                                [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
+                                class="flex-1">
+                            </oitc-select-optgroup>
                         </div>
 
                         <div class="mb-3">

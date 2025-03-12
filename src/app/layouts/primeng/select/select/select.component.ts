@@ -18,6 +18,7 @@ import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } fro
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { TranslocoService } from '@jsverse/transloco';
 import { debounceTime } from 'rxjs/operators';
+import { AnimationEvent } from '@angular/animations';
 
 import { Select } from 'primeng/select';
 
@@ -124,7 +125,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
      *
      * @group Props
      */
-    @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = '';
+    @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = 'body';
 
     /**
      * If the selected value (current value of ngModel) does not exist in the options, the value will be reset to 0
@@ -264,6 +265,21 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
                 element.value = this.labelPrefix + element.value;
             }
         })
+    }
+
+    /**
+     * This method is an ugly workaround to with a limitation of the PrimeNG select component.
+     * By default, PrimeNG calculates a value for "min-width" which absolutely
+     * is bad for long option labels. This behavior is not configurable.
+     * https://github.com/primefaces/primeng/issues/17363#issuecomment-2714217581
+     *
+     * This method copies the value of min-width into width to make the overlay use an absolute width
+     * so we can linebreak long option labels.
+     *
+     * @param event
+     */
+    public onShow(event: AnimationEvent) {
+        event.element.parentElement.style.width = event.element.parentElement.style.minWidth;
     }
 
     protected readonly String = String;

@@ -14,20 +14,21 @@ import {
 } from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { PrimeTemplate } from 'primeng/api';
-import { Select } from 'primeng/select';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primeng/multiselect';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslocoService } from '@jsverse/transloco';
 import { debounceTime } from 'rxjs/operators';
+import { Select } from 'primeng/select';
+import { AnimationEvent } from '@angular/animations';
 
 @Component({
     selector: 'oitc-select-optgroup',
     imports: [
         HighlightSearchPipe,
         PrimeTemplate,
-        Select,
-        FormsModule
+        FormsModule,
+        Select
     ],
     providers: [
         {
@@ -124,7 +125,7 @@ export class SelectOptgroupComponent implements ControlValueAccessor, OnInit, On
      *
      * @group Props
      */
-    @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = '';
+    @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = 'body';
 
     /**
      * If the selected value (current value of ngModel) does not exist in the options, the value will be reset to 0
@@ -264,6 +265,21 @@ export class SelectOptgroupComponent implements ControlValueAccessor, OnInit, On
                 element.value = this.labelPrefix + element.value;
             }
         })
+    }
+
+    /**
+     * This method is an ugly workaround to with a limitation of the PrimeNG select component.
+     * By default, PrimeNG calculates a value for "min-width" which absolutely
+     * is bad for long option labels. This behavior is not configurable.
+     * https://github.com/primefaces/primeng/issues/17363#issuecomment-2714217581
+     *
+     * This method copies the value of min-width into width to make the overlay use an absolute width
+     * so we can linebreak long option labels.
+     *
+     * @param event
+     */
+    public onShow(event: AnimationEvent) {
+        event.element.parentElement.style.width = event.element.parentElement.style.minWidth;
     }
 
     protected readonly String = String;
