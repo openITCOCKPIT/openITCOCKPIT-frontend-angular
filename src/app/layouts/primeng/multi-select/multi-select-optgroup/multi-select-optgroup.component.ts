@@ -10,10 +10,11 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    TemplateRef
+    TemplateRef,
+    ViewChild
 } from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
-import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
+import { MultiSelect, MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
 import { SharedModule } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -45,6 +46,9 @@ import { AnimationEvent } from '@angular/animations';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnInit, OnDestroy {
+    @ViewChild('multiSelectOptgroup') multiSelectOptgroup: MultiSelect | undefined;
+
+
     private init: boolean = false;
     @Input() id: string | undefined;
     @Input() name: string | undefined;
@@ -285,7 +289,7 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
     }
 
     /**
-     * This method is an ugly workaround to with a limitation of the PrimeNG select component.
+     * This method is an ugly workaround to a limitation of the PrimeNG select component.
      * By default, PrimeNG calculates a value for "min-width" which absolutely
      * is bad for long option labels. This behavior is not configurable.
      * https://github.com/primefaces/primeng/issues/17363#issuecomment-2714217581
@@ -297,5 +301,18 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
      */
     public onShow(event: AnimationEvent) {
         event.element.parentElement.style.width = event.element.parentElement.style.minWidth;
+
+        // 🩹
+        // Fix for long option labels
+        // PrimeNG calculates the left position with the min-width value. So if you have an option with a very long name
+        // the dropdown will be displayed outside the viewport.
+        // To fix this, PrimeNG sets left to 0. https://github.com/primefaces/primeng/blob/33b099064e75d2ba9aa5fd45889837ff9a9875e5/packages/primeng/src/dom/domhandler.ts#L194
+        // We try to fix this, when left = 0, we set it to the same position as the select box is.
+        if (this.multiSelectOptgroup) {
+            if (event.element.parentElement.style.left === '0px') {
+                const selectBoxPosition = this.multiSelectOptgroup.el.nativeElement.getBoundingClientRect();
+                event.element.parentElement.style.left = selectBoxPosition.x + 'px';
+            }
+        }
     }
 }
