@@ -2,9 +2,17 @@
 
 // things that are not possible to override using the PrimeNG theme
 
+// font-size is hardcoded in the PrimeNG components
+// https://github.com/primefaces/primeng/blob/df745663da783e8b499db2240e843ed5a69fe899/packages/primeng/src/inputtext/style/inputtextstyle.ts#L8
+// We want a smaller font-size for the input fields
+.p-inputtext {
+    font-size: 0.8rem !important;
+}
+
 // Fix that the p-multiselect elements are taking the full width
 .p-multiselect, .p-select {
     width: 100%;
+    border: 1px solid var(--cui-border-color) !important;
 }
 
 // Make select break lines when selected elements are too long
@@ -17,6 +25,8 @@
 .p-select-option, .p-multiselect-option {
     word-break: break-all !important;
     white-space: wrap !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
 }
 
 // Make the select width 100% in input-groups
