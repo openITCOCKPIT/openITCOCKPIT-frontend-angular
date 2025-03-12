@@ -138,7 +138,7 @@
                             [item]="hostgroup"></oitc-item-select>
 
                     </td>
-                    <td>
+                    <td class="word-break">
                         <span *oitcPermission="['hostgroups', 'extended']">
                             <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id]">
                                 {{ hostgroup.container.name }}

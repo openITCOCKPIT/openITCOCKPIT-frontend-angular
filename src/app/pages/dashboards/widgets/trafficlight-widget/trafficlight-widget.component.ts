@@ -18,8 +18,7 @@ import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
-    FormLabelDirective,
-    InputGroupComponent
+    FormLabelDirective
 } from '@coreui/angular';
 import { SelectOptgroupComponent } from '../../../../layouts/primeng/select/select-optgroup/select-optgroup.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -36,7 +35,6 @@ import { forkJoin } from 'rxjs';
     selector: 'oitc-trafficlight-widget',
     imports: [
         FormLabelDirective,
-        InputGroupComponent,
         SelectOptgroupComponent,
         FaIconComponent,
         NgIf,
