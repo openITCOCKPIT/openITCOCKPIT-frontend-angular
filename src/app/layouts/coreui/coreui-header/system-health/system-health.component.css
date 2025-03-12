@@ -1,0 +1,27 @@
+.dropdown-header {
+    display: block;
+    padding: 3px 20px;
+    font-size: 12px;
+    line-height: 1.428571429;
+    color: #999999;
+}
+
+.color-white {
+    color: #fff; }
+
+.list-unstyled {
+    padding-left: 0;
+    list-style: none;
+}
+
+.system-health-item {
+    white-space: normal;
+    word-break: break-word;
+}
+
+.notification-title, .notification-message{
+    color: #212529;
+}
+
+.fs-sm {
+    font-size: 0.78125rem !important; }
