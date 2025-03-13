@@ -1,16 +1,16 @@
 <ng-container *transloco="let t">
     <div class="btn-group btn-group-xs pe-2" aria-label="Display of host status" role="group" *ngIf="showstatsinmenu">
-        <button cButton type="button" color="default" variant="outline" class="ps-3 pe-3"
+        <button cButton type="button" color="default" variant="outline" class="px-3"
                 [routerLink]="['/', 'hosts', 'index']" cTooltip="{{t('All hosts')}}"
                 [queryParams]="{ hoststate: [0,1,2], sort: 'Hoststatus.last_state_change', direction: 'desc'}">
             <fa-icon [icon]="['fas', 'hdd']"></fa-icon>
         </button>
-        <button cButton type="button" color="danger" class="ps-3 pe-3" cTooltip="{{t('Down')}}"
+        <button cButton type="button" color="danger" class="px-3" cTooltip="{{t('Down')}}"
                 [routerLink]="['/', 'hosts', 'index']"
                 [queryParams]="{ hoststate: [1], sort: 'Hoststatus.last_state_change', direction: 'desc'}">
             {{ hoststatusCount[1] }}
         </button>
-        <button cButton type="button" color="secondary" class="ps-3 pe-3" cTooltip="{{t('Unreachable')}}"
+        <button cButton type="button" color="secondary" class="px-3" cTooltip="{{t('Unreachable')}}"
                 [routerLink]="['/', 'hosts', 'index']"
                 [queryParams]="{ hoststate: [2], sort: 'Hoststatus.last_state_change', direction: 'desc'}">
             {{ hoststatusCount[2] }}
@@ -19,23 +19,23 @@
 
     <div class="btn-group btn-group-xs pe-2" aria-label="Display of service status" role="group"
          *ngIf="showstatsinmenu">
-        <button cButton type="button" color="default" class="ps-3 pe-3" variant="outline"
+        <button cButton type="button" color="default" class="px-3" variant="outline"
                 cTooltip="{{t('All services')}}"
                 [routerLink]="['/', 'services', 'index']"
                 [queryParams]="{ servicestate: [0,1,2,3], sort: 'Servicestatus.last_state_change', direction: 'desc'}">
             <fa-icon [icon]="['fas', 'cog']"></fa-icon>
         </button>
-        <button cButton type="button" color="danger" class="ps-3 pe-3" cTooltip="{{t('Critical')}}"
+        <button cButton type="button" color="danger" class="px-3" cTooltip="{{t('Critical')}}"
                 [routerLink]="['/', 'services', 'index']"
                 [queryParams]="{ servicestate: [2], sort: 'Servicestatus.last_state_change', direction: 'desc'}">
             {{ servicestatusCount[2] }}
         </button>
-        <button cButton type="button" color="warning" class="ps-3 pe-3" cTooltip="{{t('Warning')}}"
+        <button cButton type="button" color="warning" class="px-3" cTooltip="{{t('Warning')}}"
                 [routerLink]="['/', 'services', 'index']"
                 [queryParams]="{ servicestate: [1], sort: 'Servicestatus.last_state_change', direction: 'desc'}">
             {{ servicestatusCount[1] }}
         </button>
-        <button cButton type="button" color="secondary" class="ps-3 pe-3" cTooltip="{{t('Unknown')}}"
+        <button cButton type="button" color="secondary" class="px-3" cTooltip="{{t('Unknown')}}"
                 [routerLink]="['/', 'services', 'index']"
                 [queryParams]="{ servicestate: [3], sort: 'Servicestatus.last_state_change', direction: 'desc'}">
             {{ servicestatusCount[3] }}

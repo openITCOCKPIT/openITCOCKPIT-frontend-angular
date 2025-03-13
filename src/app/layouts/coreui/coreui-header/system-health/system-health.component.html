@@ -1,13 +1,13 @@
 <ng-container *transloco="let t">
     <div class="btn-group btn-group-xs" aria-label="Display of system health notifications" role="group">
         <c-dropdown class="dropdown">
-            <button cButton type="button" size="xs" variant="outline" color="default" cDropdownToggle class="ps-3 pe-3"
+            <button cButton type="button" size="xs" variant="outline" color="default" cDropdownToggle class="px-3"
                     [caret]="false"
                     cTooltip="{{t('System health')}}"
                     data-placement="bottom" rel="tooltip" aria-expanded="false">
                 <fa-icon [icon]="['fas', 'heartbeat']" class="{{class}}"></fa-icon>
             </button>
-            <div cDropdownMenu [ngStyle]="{'min-width.px': 300}" class="mt-2 py-0">
+            <div cDropdownMenu [style.min-width.px]="300" class="mt-2 py-0">
                 <div
                     class="{{bgClass}} d-flex justify-content-center align-items-center pt-0">
                     <h4 class="m-0 text-center color-white">
@@ -31,7 +31,7 @@
                 </div>
                 <div class="dropdown-item"
                      *ngIf="systemHealth.state === 'warning' || systemHealth.state === 'critical'">
-                    <div class="d-flex align-items-center" [routerLink]="['/', 'Administrators', 'debug']">
+                    <div class="d-flex align-items-center" [routerLink]="['/', 'administrators', 'debug']">
                         <ul class="pt-2 list-unstyled system-health-item fs-sm w-100">
                             <li *ngIf="!systemHealth.isNagiosRunning">
                                 <span>
@@ -264,7 +264,7 @@
                     <div class="p-2 d-flex justify-content-between">
                         <a [routerLink]="['/', 'systemHealthUsers', 'index']" class="btn btn-primary btn-xs"
                            title="{{t('System health notification list')}}">
-                            <fa-icon [icon]="['fas', 'user']" class="pe-1"></fa-icon>
+                            <fa-icon [icon]="['fas', 'user']" class="px-3"></fa-icon>
                         </a>
                         <div class="italic text-info text-right">
                             {{ t('Last update') }}: {{ systemHealth.update }}
@@ -277,7 +277,7 @@
                 }
             </div>
         </c-dropdown>
-        <button cButton class="btn btn-xs {{btnClass}} ps-3 pe-3"
+        <button cButton class="btn btn-xs {{btnClass}} px-3"
         >{{ systemHealth.errorCount }}
         </button>
     </div>
