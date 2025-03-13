@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { Subscription, timer, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgForOf, NgIf, NgStyle } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf, NgStyle } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
     ButtonDirective,
@@ -13,11 +13,87 @@ import {
 } from '@coreui/angular';
 import { RouterLink } from '@angular/router';
 import { SystemHealthService } from './system-health.service';
+import { PermissionsService } from '../../../../permissions/permissions.service';
 
-export interface SystemHealthDefault {
-    state: string;
-    update: string;
-    errorCount: number;
+
+export interface SystemHealth {
+    isNagiosRunning?: boolean,
+    isNdoRunning?: boolean,
+    isStatusengineRunning?: boolean,
+    isNpcdRunning?: boolean,
+    isOitcCmdRunning?: boolean,
+    isSudoServerRunning?: boolean,
+    isNstaRunning?: boolean,
+    isGearmanWorkerRunning?: boolean,
+    isNdoInstalled?: boolean,
+    isStatusengineInstalled?: boolean,
+    isStatusenginePerfdataProcessor?: boolean,
+    isDistributeModuleInstalled?: boolean,
+    isPushNotificationRunning?: boolean,
+    isNodeJsServerRunning?: boolean,
+    previousState?: string,
+    update: string,
+    cache_readable?: boolean,
+    gearman_reachable?: boolean,
+    gearman_worker_running?: boolean,
+    state: string,
+    errorCount: number
+    load?: {
+        load1: number,
+        load5: number,
+        load15: number,
+        cores: number,
+        state: string
+    },
+    disk_usage?:
+        {
+            disk: string,
+            size: string,
+            used: string,
+            avail: string,
+            use_percentage: number,
+            mountpoint: string,
+            state: string
+        }[],
+    memory_usage?: {
+        memory: {
+            total: number,
+            used: number,
+            free: number,
+            buffers: number,
+            cached: number,
+            percentage: number,
+            state: string
+        },
+        swap: {
+            total: number,
+            used: number,
+            free: number,
+            percentage: number,
+            state: string
+        }
+    },
+    satellites?:
+        {
+            id: number,
+            name: string,
+            description: string | null,
+            address: string,
+            container_id: number,
+            timezone: string,
+            sync_method: string,
+            status: number,
+            satellite_status: {
+                status: number,
+                last_error: string,
+                last_export: string,
+                last_seen: string,
+                satellite_id: number
+            },
+            allow_edit: boolean
+        }[]
+
+
 }
 
 @Component({
@@ -35,7 +111,9 @@ export interface SystemHealthDefault {
         RouterLink,
         ProgressComponent,
         NgForOf,
-        TooltipDirective
+        TooltipDirective,
+        AsyncPipe,
+
     ],
   templateUrl: './system-health.component.html',
   styleUrl: './system-health.component.css',
@@ -46,18 +124,18 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();
     private cdr = inject(ChangeDetectorRef);
     private readonly SystemHealthService: SystemHealthService = inject(SystemHealthService);
+    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
 
-    protected systemHealth:SystemHealthDefault |any = {};
-    protected class:string = '';
-    protected bgClass:string = '';
-    protected btnClass:string = '';
-    protected systemHealthDefault: SystemHealthDefault = {
+    protected systemHealthDefault: SystemHealth = {
         state: 'unknown',
         update: 'n/a',
         errorCount: 0
     }
 
-
+    protected systemHealth:SystemHealth = this.systemHealthDefault;
+    protected class:string = '';
+    protected bgClass:string = '';
+    protected btnClass:string = '';
 
     public ngOnInit() {
         timer(0, 60000).pipe(takeUntil(this.destroy$)).subscribe({next: () => {
