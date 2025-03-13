@@ -212,6 +212,7 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                                     errorMessage: response.message,
                                     notValidRawData: notValidData
                                 }
+                                this.cdr.markForCheck();
                             }
                             this.cdr.markForCheck();
 
@@ -279,6 +280,12 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                 if (data.success) {
                     this.hideModal();
                     this.completed.emit(true);
+                } else {
+                    this.importData = {
+                        success: false,
+                        errorMessage: data.data.error,
+                        notValidRawData: []
+                    }
                 }
             });
         }

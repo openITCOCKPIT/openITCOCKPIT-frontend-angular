@@ -14,7 +14,6 @@ import { ButtonDirective, ButtonGroupComponent, TooltipDirective } from '@coreui
         TranslocoDirective,
         NgIf,
         FaIconComponent,
-        ButtonGroupComponent,
         ButtonDirective,
         TooltipDirective
     ],
@@ -93,4 +92,3 @@ export class HeaderTimeComponent implements OnInit, OnDestroy {
     }
 
 }
-

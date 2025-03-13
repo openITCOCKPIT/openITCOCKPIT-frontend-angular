@@ -309,7 +309,7 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
         // To fix this, PrimeNG sets left to 0. https://github.com/primefaces/primeng/blob/33b099064e75d2ba9aa5fd45889837ff9a9875e5/packages/primeng/src/dom/domhandler.ts#L194
         // We try to fix this, when left = 0, we set it to the same position as the select box is.
         if (this.multiSelectOptgroup) {
-            if (event.element.parentElement.style.left === '0px') {
+            if (event.element.parentElement.style.left === '0px' && this.multiSelectOptgroup.appendTo.length !== 0) {
                 const selectBoxPosition = this.multiSelectOptgroup.el.nativeElement.getBoundingClientRect();
                 event.element.parentElement.style.left = selectBoxPosition.x + 'px';
             }

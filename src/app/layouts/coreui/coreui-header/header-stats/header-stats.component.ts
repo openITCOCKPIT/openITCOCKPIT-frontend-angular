@@ -1,27 +1,26 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, timer, Subject } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ButtonDirective, ButtonGroupComponent, TooltipDirective } from '@coreui/angular';
-import {HeaderStatsService} from './header-stats.service';
+import { ButtonDirective, TooltipDirective } from '@coreui/angular';
+import { HeaderStatsService } from './header-stats.service';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'oitc-header-stats',
+    selector: 'oitc-header-stats',
     imports: [
         TranslocoDirective,
         NgIf,
         FaIconComponent,
-        ButtonGroupComponent,
         ButtonDirective,
         TooltipDirective,
         RouterLink
     ],
-  templateUrl: './header-stats.component.html',
-  styleUrl: './header-stats.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './header-stats.component.html',
+    styleUrl: './header-stats.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderStatsComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
@@ -30,13 +29,15 @@ export class HeaderStatsComponent implements OnInit, OnDestroy {
     private readonly HeaderStatsService: HeaderStatsService = inject(HeaderStatsService);
 
     protected showstatsinmenu: boolean = false;
-    protected hoststatusCount: {[key:number]:number} = {};
-    protected servicestatusCount: {[key:number]:number} = {};
+    protected hoststatusCount: { [key: number]: number } = {};
+    protected servicestatusCount: { [key: number]: number } = {};
 
     public ngOnInit() {
-        timer(0, 30000).pipe(takeUntil(this.destroy$)).subscribe({next: () => {
+        timer(0, 30000).pipe(takeUntil(this.destroy$)).subscribe({
+            next: () => {
                 this.loadStats();
-            }});
+            }
+        });
 
 
     }

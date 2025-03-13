@@ -1,0 +1,19 @@
+.color-white {
+    color: #fff; }
+
+.list-unstyled {
+    padding-left: 0;
+    list-style: none;
+}
+
+.system-health-item {
+    white-space: normal;
+    word-break: break-word;
+}
+
+.fs-sm {
+    font-size: 0.78125rem !important; }
+
+.text-right {
+    text-align: right;
+}
