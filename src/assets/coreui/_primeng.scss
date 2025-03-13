@@ -4,62 +4,81 @@
 
 // font-size is hardcoded in the PrimeNG components
 // https://github.com/primefaces/primeng/blob/df745663da783e8b499db2240e843ed5a69fe899/packages/primeng/src/inputtext/style/inputtextstyle.ts#L8
+// We want a smaller font-size for the input fields
 .p-inputtext {
     font-size: 0.8rem !important;
 }
 
-.mark-highlight {
-    background-color: color.adjust($primary, $alpha: -0.85);
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-// Hardcoded
-// https://github.com/primefaces/primeng/blob/df745663da783e8b499db2240e843ed5a69fe899/packages/primeng/src/select/style/selectstyle.ts#L6
+// Fix that the p-multiselect elements are taking the full width
 .p-multiselect, .p-select {
-    display: flex !important;
-    flex-grow: 1 !important;
+    width: 100%;
     border: 1px solid var(--cui-border-color) !important;
 }
 
-
-.p-multiselect-label {
-    white-space: normal !important;
-    display: block !important;
+// Make select break lines when selected elements are too long
+.p-select-label {
+    white-space: wrap !important;
+    word-break: break-all !important; // enforce break when no spaces are in the name
 }
 
-.p-chip-label {
-    white-space: wrap;
-    word-break: break-all;
+// Make long options in a p-select and p-multiselect break lines
+.p-select-option, .p-multiselect-option {
+    word-break: break-all !important;
+    white-space: wrap !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
 }
 
-.p-chip {
-    color: var(--cui-body-color) !important;
-}
-
-
-.p-multiselect-chip-item {
-    display: inline-flex;
-    margin: .2rem .1rem;
-}
-
-// Fix for select in in input-groups
+// Make the select width 100% in input-groups
 .ui-fluid .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
     flex: auto;
 }
 
+// Fix border for select in input-groups
 .input-group .p-multiselect, .input-group .p-select {
     /* input-group, start with something else followed by select */
     /* top-left | top-right | bottom-right | bottom-left */
     border-radius: 0 var(--cui-border-radius) var(--cui-border-radius) 0;
 }
 
+// Fix border for select in input-groups
 .input-group:nth-child(2) .p-multiselect, .input-group:nth-child(2) .p-select {
     /* input-group, start with select followed by something else */
     /* top-left | top-right | bottom-right | bottom-left */
     border-radius: var(--cui-border-radius) 0 0 var(--cui-border-radius);
 }
 
+// Ensure that the p-chip will be displayed in p-multiselect
+.p-multiselect-label {
+    white-space: normal !important;
+    display: block !important;
+}
+
+// Make the p-chip elements in p-multiselect be displayed as line (multiple p-chips in one row, not one below the other)
+.p-multiselect-chip-item {
+    display: inline-flex;
+    margin: .2rem .1rem;
+}
+
+// Fix color of p-chip elements (used in Primeng MultiSelect)
+.p-chip {
+    color: var(--cui-body-color) !important;
+}
+
+// Make long labels in p-chip elements break lines
+.p-chip-label {
+    white-space: wrap;
+    word-break: break-all;
+}
+
+// Highlight search results in the overlay panel
+.mark-highlight {
+    background-color: color.adjust($primary, $alpha: -0.85);
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+// Mark invalid fields in the form
 .is-invalid p-select, .is-invalid p-multiselect {
     border-color: var(--cui-form-invalid-border-color) !important;
     padding-right: calc(1.5em + 0.75rem);
@@ -69,18 +88,3 @@
     background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
 
-.p-select-option {
-    padding: 0.25rem 1.25rem !important;
-}
-
-/* This fix the with of select and multiselect elements with very long names */
-.p-overlay {
-    max-width: 100%;
-    min-width: 50px !important; // OverWrite hardcoded PrimeNG value
-    width: 100%; // be 100%
-}
-
-/* Forces the position of the "select box overlay" to be always on top 0, otherwise the top value can be negativ and out of view of the user */
-.p-overlay.p-component {
-    top: 0 !important;
-}

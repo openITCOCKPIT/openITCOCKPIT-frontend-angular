@@ -91,13 +91,13 @@ export class ImportersService {
         );
     }
 
-    public loadConfig(data_source: string, importerId?:number) {
+    public loadConfig(data_source: string, importerId?: number) {
         const proxyPath = this.proxyPath;
-        if(importerId){
+        if (importerId) {
             return this.http.post<ImporterConfig>(`${proxyPath}/import_module/importers/loadConfigFieldsByDataSource/${data_source}.json?angular=true`, {
                 importerId: importerId
             });
-        }else{
+        } else {
             return this.http.post<ImporterConfig>(`${proxyPath}/import_module/importers/loadConfigFieldsByDataSource/${data_source}.json?angular=true`, {});
         }
     }
@@ -325,7 +325,7 @@ export class ImportersService {
                 };
             }),
             catchError((error: any) => {
-                const err = error.error.error as GenericValidationError;
+                const err = error.error.response as GenericValidationError;
                 return of({
                     success: false,
                     data: err

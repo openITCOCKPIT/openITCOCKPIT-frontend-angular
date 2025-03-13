@@ -12,8 +12,7 @@ import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
-    FormLabelDirective,
-    InputGroupComponent
+    FormLabelDirective
 } from '@coreui/angular';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -43,7 +42,6 @@ import { SelectComponent } from '../../../../layouts/primeng/select/select/selec
         FormCheckInputDirective,
         FormCheckLabelDirective,
         FormLabelDirective,
-        InputGroupComponent,
         NgIf,
         FormsModule,
         SelectOptgroupComponent,
