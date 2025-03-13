@@ -14,6 +14,7 @@ import {
 import { RouterLink } from '@angular/router';
 import { SystemHealthService } from './system-health.service';
 import { PermissionsService } from '../../../../permissions/permissions.service';
+import { XsButtonDirective } from '../../xsbutton-directive/xsbutton.directive';
 
 
 export interface SystemHealth {
@@ -92,20 +93,16 @@ export interface SystemHealth {
             },
             allow_edit: boolean
         }[]
-
-
 }
 
 @Component({
   selector: 'oitc-system-health',
     imports: [
         TranslocoDirective,
-        ButtonGroupComponent,
         NgIf,
         FaIconComponent,
         DropdownComponent,
         NgStyle,
-        ButtonDirective,
         DropdownToggleDirective,
         DropdownMenuDirective,
         RouterLink,
@@ -113,6 +110,7 @@ export interface SystemHealth {
         NgForOf,
         TooltipDirective,
         AsyncPipe,
+        XsButtonDirective,
 
     ],
   templateUrl: './system-health.component.html',
