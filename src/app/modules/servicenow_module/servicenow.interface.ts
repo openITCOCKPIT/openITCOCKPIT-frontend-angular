@@ -60,8 +60,10 @@ export interface ServicenowIncident {
 }
 
 export interface ServicenowSettings {
-    id: number
+    id?: number
     domain: string
+    user_id?: any
+    user_password?: any
     assignment_group: null | string
     assigned_to: null | string
     business_service: null | string
@@ -70,6 +72,11 @@ export interface ServicenowSettings {
     recovery_state: number
     two_way: boolean
     use_proxy: boolean
-    created: string
-    modified: string
+    created?: string
+    modified?: string
+}
+
+export interface ServicenowSettingsIndexRoot {
+    servicenowSettings: ServicenowSettings
+    _csrfToken: string
 }

@@ -138,7 +138,7 @@
                             [disabled]="false"
                             [item]="servicegroup"></oitc-item-select>
                     </td>
-                    <td>
+                    <td class="word-break">
                         <span *oitcPermission="['servicegroups', 'extended']">
                             <a [routerLink]="['/', 'servicegroups', 'extended', servicegroup.id]">
                                 {{ servicegroup.container.name }}

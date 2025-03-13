@@ -34,6 +34,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { HeaderTimeComponent} from './header-time/header-time.component';
 import { HeaderStatsComponent} from './header-stats/header-stats.component';
+import { SystemHealthComponent} from './system-health/system-health.component';
 
 import {
     MessageOfTheDayButtonComponent
@@ -63,7 +64,8 @@ import { HeaderAvatarComponent } from './header-avatar/header-avatar.component';
         MessageOfTheDayButtonComponent,
         HeaderAvatarComponent,
         HeaderTimeComponent,
-        HeaderStatsComponent
+        HeaderStatsComponent,
+        SystemHealthComponent
     ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css',
