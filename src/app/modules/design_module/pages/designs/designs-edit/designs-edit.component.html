@@ -186,7 +186,8 @@
                             optionLabel="value"
                             [(ngModel)]="logoType"
                             [options]="logTypeOptions"
-                            (onChange)="onLogoTypeChange()">
+                            (onChange)="onLogoTypeChange()"
+                            [appendTo]="''">
                         </oitc-select>
                     </div>
                 </c-col>
