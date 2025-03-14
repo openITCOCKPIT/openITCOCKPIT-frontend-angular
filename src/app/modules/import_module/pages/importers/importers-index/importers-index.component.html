@@ -17,7 +17,7 @@
         </ol>
     </nav>
     <div class="alert alert-warning border-faded"
-         *ngIf="hostdefaults.length === 0">
+         *ngIf="!isLoading && hostdefaults.length === 0">
         <div class="d-flex align-items-center">
             <div class="alert-icon me-2">
                 <span class="icon-stack icon-stack-md">
