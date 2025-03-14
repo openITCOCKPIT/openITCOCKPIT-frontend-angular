@@ -11,8 +11,11 @@
             </button>
 
             <oitc-top-search class="flex-1 pe-3"></oitc-top-search>
+            <oitc-header-edition [headerinfo]="info" class="pe-2"></oitc-header-edition>
             <oitc-header-stats class="pe-2"></oitc-header-stats>
             <oitc-system-health class="pe-2"/>
+
+            <oitc-header-export class="px-3" [headerinfo]="info"></oitc-header-export>
 
             <oitc-message-of-the-day-button [messageOfTheDay]="messageOfTheDay" class="pe-2"/>
 
