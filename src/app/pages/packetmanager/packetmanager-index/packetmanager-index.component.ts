@@ -121,7 +121,6 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.PacketmanagerService.getIndex()
             .subscribe((result: PacketmanagerIndexRoot): void => {
                 this.data = result;
-                console.log(this.data);
                 this.cdr.markForCheck();
 
                 this.initializeModulesToCheckboxesInstall();

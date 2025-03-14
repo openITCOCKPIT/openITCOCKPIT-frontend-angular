@@ -37,6 +37,7 @@ import { HeaderStatsComponent} from './header-stats/header-stats.component';
 import { SystemHealthComponent} from './system-health/system-health.component';
 import { HeaderEditionComponent} from './header-edition/header-edition.component';
 import { HeaderExportComponent} from './header-export/header-export.component';
+import { VersionCheckComponent} from './version-check/version-check.component';
 
 import {
     MessageOfTheDayButtonComponent
@@ -71,7 +72,8 @@ import {HeaderInfo} from './header-info.service';
         HeaderStatsComponent,
         SystemHealthComponent,
         HeaderEditionComponent,
-        HeaderExportComponent
+        HeaderExportComponent,
+        VersionCheckComponent
     ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css',
@@ -97,6 +99,7 @@ export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy 
         exportRunningHeaderInfo: false,
         hasSubscription: false,
         isCommunityEdition: false,
+        newVersionAvailable: false
     };
 
     constructor() {
