@@ -1614,6 +1614,13 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                             itemIndex = Number(i);
                             if (this.currentItem.object_id) {   // after edit
                                 this.map.Mapgadgets[i] = this.currentItem;
+
+                                if (this.map.Mapgadgets[i].size_x === null) {
+                                    this.map.Mapgadgets[i].size_x = 0;
+                                }
+                                if (this.map.Mapgadgets[i].size_y === null) {
+                                    this.map.Mapgadgets[i].size_y = 0;
+                                }
                             } else {                            // only after (draggable) position change
                                 this.map.Mapgadgets[i].x = this.currentItem.x;
                                 this.map.Mapgadgets[i].y = this.currentItem.y;

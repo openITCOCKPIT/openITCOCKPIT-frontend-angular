@@ -2,10 +2,14 @@
 
 /* bring back good old .btn-xs */
 
+.btn-group-xs {
+    vertical-align: baseline !important;
+}
+
 .btn-group-xs > .btn, .btn-xs {
-    padding: 1px .844rem;
+    padding: 0.0753rem .844rem;
     font-size: .7rem;
-    line-height: 1.5;
+    line-height: 1.403065;
     border-radius: .25rem;
 }
 
