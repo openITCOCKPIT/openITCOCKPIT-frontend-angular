@@ -94,7 +94,7 @@ import { Hostdefault } from '../../hostdefaults/hostdefaults.interface';
         TableDirective
     ],
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: ImportersService } // Inject the ImportersService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ImportersService} // Inject the ImportersService into the DeleteAllModalComponent
     ],
     templateUrl: './importers-index.component.html',
     styleUrl: './importers-index.component.css',
@@ -108,6 +108,7 @@ export class ImportersIndexComponent implements OnInit, OnDestroy, IndexPage {
     public selectedItems: DeleteAllItem[] = [];
     public importers?: ImportersIndexRoot;
     public hostdefaults: Hostdefault[] = [];
+    public isLoading: boolean = true;
 
 
     private readonly modalService = inject(ModalService);
@@ -129,9 +130,11 @@ export class ImportersIndexComponent implements OnInit, OnDestroy, IndexPage {
         forkJoin(request).subscribe(
             (result) => {
                 this.importers = result.importers;
-                this.hostdefaults = result.hostdefaults;
+                this.hostdefaults = result.hostdefaults
+                this.isLoading = false;
                 this.cdr.markForCheck();
             });
+
     }
 
     public ngOnDestroy(): void {
