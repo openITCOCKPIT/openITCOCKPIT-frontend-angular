@@ -8,6 +8,7 @@ export interface HeaderInfo {
     exportRunningHeaderInfo: boolean,
     hasSubscription: boolean,
     isCommunityEdition: boolean,
+    newVersionAvailable: boolean
     //  _csrfToken: string
 }
 
