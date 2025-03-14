@@ -17,7 +17,6 @@ export interface ImportedhostsIndexRoot extends PaginateOrScroll {
     _csrfToken: string
 }
 
-
 export interface Importedhost {
     id: number
     host_id: number | null
@@ -326,4 +325,21 @@ export interface ImportedHostElements {
     satellites: SelectKeyValue[]
     agentchecks: SelectKeyValue[]
 
+}
+
+export interface ImportDataResponse {
+    rawData: any[]
+    errors: ImportDataErrors
+    success: boolean
+    message: string
+}
+
+export interface ImportDataErrors {
+    notValidRawData: NotValidRawData
+}
+
+export interface NotValidRawData {
+    error: string
+    description: string
+    invalidData: any[]
 }
