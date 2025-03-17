@@ -229,7 +229,8 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                                 let response = data.data as ImportDataResponse;
                                 this.importData = {
                                     success: true,
-                                    data: response.response.rawData
+                                    data: response.response.rawData,
+                                    errors: response.response.errors || null,
                                 }
                                 this.cdr.markForCheck();
                             }
