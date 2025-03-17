@@ -1,5 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {
+    AfterViewChecked,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy
+} from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
@@ -25,6 +33,8 @@ import {
 import { CurrentMessageOfTheDay } from './pages/messagesotd/messagesotd.interface';
 import { MessagesOfTheDayService } from './pages/messagesotd/messagesotd.service';
 import { AuthService } from './auth/auth.service';
+import { Title } from '@angular/platform-browser';
+import { SystemnameService } from './services/systemname.service';
 
 @Component({
     selector: 'oitc-root',
@@ -45,7 +55,7 @@ import { AuthService } from './auth/auth.service';
     styleUrl: './app.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnDestroy, AfterViewInit {
+export class AppComponent implements OnDestroy, AfterViewInit, AfterViewChecked {
 
     // Inject HistoryService to keep track of the previous URLs
     private historyService: HistoryService = inject(HistoryService);
@@ -53,12 +63,14 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     // I am the current messageOfTheDay.
     protected messageOfTheDay: CurrentMessageOfTheDay = {} as CurrentMessageOfTheDay;
 
+    private readonly TitleService: Title = inject(Title);
     public readonly LayoutService = inject(LayoutService);
     private readonly document = inject(DOCUMENT);
 
     private subscription: Subscription = new Subscription();
 
     constructor(library: FaIconLibrary,
+                private router: Router,
                 private IconSetService: IconSetService,
                 private selectConfig: NgSelectConfig,
                 private TranslocoService: TranslocoService,
@@ -66,8 +78,17 @@ export class AppComponent implements OnDestroy, AfterViewInit {
                 private cdr: ChangeDetectorRef,
                 private MessageOfTheDayService: MessagesOfTheDayService,
                 private readonly AuthService: AuthService,
+                private readonly SystemnameService: SystemnameService,
                 private readonly ModalService: ModalService,
     ) {
+        // Subscribe to route changes
+        this.subscription.add(this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.navigationEndEvent = event;
+                this.cdr.markForCheck();
+            }
+        }));
+
         // Add an icon to the library for convenient access in other components
         library.addIconPacks(fas);
         library.addIconPacks(far);
@@ -108,7 +129,48 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
         // Fetch the message of the day
         this.watchMessageOfTheDay();
+
+        // Fetch the systemname
+        this.watchSystemname();
     }
+
+    private navigationEndEvent: NavigationEnd | null = null;
+
+    public ngAfterViewChecked(): void {
+        if (this.navigationEndEvent) {
+            this.navigationEndEvent = null;
+            this.updateTitle();
+        }
+    }
+
+    private updateTitle(): void {
+        // Try loading the title from the first c-card-header h5 element.
+        let pageTitle: string = String(document.querySelector('#mainContentContainer>*>c-card>c-card-header>h5')?.textContent?.trim().replaceAll('  ', ' '));
+
+        // If no title was found, try loading the title from the breadcrumb.
+        if (pageTitle.length === 0) {
+            pageTitle = String(document.querySelector('nav>ol>li.breadcrumb-item:last-child')?.textContent?.trim());
+        }
+
+        // If still not found, check the route
+        // @todo
+
+        // Append the systemname
+        if (pageTitle.length > 0) {
+            pageTitle = pageTitle + ' | ';
+        }
+
+        this.TitleService.setTitle(pageTitle + this.systemName);
+    }
+
+    protected systemName: string = 'openITCOCKPIT';
+
+    private watchSystemname(): void {
+        this.subscription.add(this.SystemnameService.systemName$.subscribe((systemname) => {
+            this.systemName = systemname;
+        }));
+    }
+
 
     private watchMessageOfTheDay(): void {
         this.subscription.add(this.AuthService.authenticated$.subscribe((isLoggedIn) => {
