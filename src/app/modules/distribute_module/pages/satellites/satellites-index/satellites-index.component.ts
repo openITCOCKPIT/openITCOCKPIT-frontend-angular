@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
-    CardComponent,
+    CardComponent, CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
@@ -124,7 +124,8 @@ import {
         DeleteAllModalComponent,
         HostsDisableNotificationsModalComponent,
         HostsEnableNotificationsModalComponent,
-        HostsMaintenanceModalComponent
+        HostsMaintenanceModalComponent,
+        CardHeaderComponent
     ],
     templateUrl: './satellites-index.component.html',
     providers: [

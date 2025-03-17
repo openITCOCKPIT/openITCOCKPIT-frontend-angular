@@ -1,12 +1,4 @@
-import {
-    AfterViewChecked,
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    OnDestroy
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -55,7 +47,7 @@ import { SystemnameService } from './services/systemname.service';
     styleUrl: './app.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnDestroy, AfterViewInit, AfterViewChecked {
+export class AppComponent implements OnDestroy, AfterViewInit {
 
     // Inject HistoryService to keep track of the previous URLs
     private historyService: HistoryService = inject(HistoryService);
@@ -81,14 +73,6 @@ export class AppComponent implements OnDestroy, AfterViewInit, AfterViewChecked 
                 private readonly SystemnameService: SystemnameService,
                 private readonly ModalService: ModalService,
     ) {
-        // Subscribe to route changes
-        this.subscription.add(this.router.events.subscribe(event => {
-            if (event instanceof NavigationEnd) {
-                this.navigationEndEvent = event;
-                this.cdr.markForCheck();
-            }
-        }));
-
         // Add an icon to the library for convenient access in other components
         library.addIconPacks(fas);
         library.addIconPacks(far);
@@ -136,31 +120,34 @@ export class AppComponent implements OnDestroy, AfterViewInit, AfterViewChecked 
 
     private navigationEndEvent: NavigationEnd | null = null;
 
-    public ngAfterViewChecked(): void {
-        if (this.navigationEndEvent) {
-            this.navigationEndEvent = null;
-            this.updateTitle();
-        }
-    }
 
     private updateTitle(): void {
         // Try loading the title from the first c-card-header h5 element.
-        let pageTitle: string = String(document.querySelector('#mainContentContainer>*>c-card>c-card-header>h5')?.textContent?.trim().replaceAll('  ', ' '));
+        let pageTitle: string | undefined = document.querySelector('#mainContentContainer>*>c-card>c-card-header>h5')?.textContent?.trim().replaceAll('  ', ' ');
+        console.log('pageTitle 1 (h5)', pageTitle);
+        // If it is wrapped in a form...
+        if (!pageTitle) {
+            pageTitle = document.querySelector('#mainContentContainer>*>form>c-card>c-card-header>h5')?.textContent?.trim().replaceAll('  ', ' ');
+            console.log('pageTitle 2 (form>h5)', pageTitle);
+        }
 
         // If no title was found, try loading the title from the breadcrumb.
-        if (pageTitle.length === 0) {
-            pageTitle = String(document.querySelector('nav>ol>li.breadcrumb-item:last-child')?.textContent?.trim());
+        if (!pageTitle) {
+            pageTitle = document.querySelector('nav>ol>li.breadcrumb-item:last-child')?.textContent?.trim();
+            console.log('pageTitle 3 (breadcrumb)', pageTitle);
         }
 
         // If still not found, check the route
         // @todo
 
         // Append the systemname
-        if (pageTitle.length > 0) {
+        if (pageTitle) {
             pageTitle = pageTitle + ' | ';
         }
 
         this.TitleService.setTitle(pageTitle + this.systemName);
+        // Ensure the view is updated after the DOM change
+        this.cdr.detectChanges();
     }
 
     protected systemName: string = 'openITCOCKPIT';
@@ -204,6 +191,17 @@ export class AppComponent implements OnDestroy, AfterViewInit, AfterViewChecked 
     }
 
     public ngAfterViewInit(): void {
+        // Subscribe to route changes
+        this.subscription.add(this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.navigationEndEvent = event;
+                this.cdr.markForCheck();
+                setTimeout(() => {
+                    this.updateTitle();
+                }, 200);
+            }
+        }));
+
         const osSystemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const coreUiTheme: 'light' | 'dark' | 'auto' | null = this.colorService.getStoredTheme('coreui-free-angular-admin-template-theme-default');
         this.LayoutService.setTheme('light');
