@@ -255,6 +255,8 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
             // still required?  this.loadCsrf();
             this.disableLogin = false;
+            this.hasValidSslCertificate = false;
+            this.cdr.markForCheck();
 
             if (data.hasOwnProperty('errors')) {
                 let errors: { [key: string]: string[] } = data.errors as unknown as { [key: string]: string[] };
@@ -269,8 +271,6 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 }
             }
 
-            this.disableLogin = false;
-            this.hasValidSslCertificate = false;
         }));
 
     }
