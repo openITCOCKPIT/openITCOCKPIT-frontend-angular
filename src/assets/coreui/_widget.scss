@@ -105,7 +105,7 @@
     position: relative;
     width: 100%;
     transform-style: preserve-3d;
-    backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
 }
 
 .box-x {
@@ -115,6 +115,7 @@
     &:first-child {
         z-index: 1;
         flex: 1 1 auto;
+        backface-visibility: hidden;
     }
 
     &:last-child {
