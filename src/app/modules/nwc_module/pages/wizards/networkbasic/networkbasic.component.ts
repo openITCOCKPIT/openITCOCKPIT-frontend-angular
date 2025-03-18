@@ -4,6 +4,7 @@ import { SelectKeyValueString } from '../../../../../layouts/primeng/select.inte
 import { NetworkbasicWizardService } from './networkbasic-wizard.service';
 import {
     InterfaceServicetemplate,
+    N0,
     NetworkbasicWizardGet,
     NetworkbasicWizardPost
 } from './networkbasic-wizard.interface';
@@ -14,8 +15,13 @@ import {
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
+    FormCheckInputDirective,
     FormControlDirective,
-    FormLabelDirective
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    RowComponent
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -23,14 +29,16 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { GenericValidationError } from '../../../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { Service } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-networkbasic',
@@ -54,7 +62,14 @@ import { GenericValidationError } from '../../../../../generic-responses';
         OitcAlertComponent,
         ProgressBarModule,
         XsButtonDirective,
-        CardTitleDirective
+        CardTitleDirective,
+        ColComponent,
+        FormCheckInputDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NgForOf,
+        NgSelectComponent,
+        RowComponent
     ],
     templateUrl: './networkbasic.component.html',
     styleUrl: './networkbasic.component.css',
@@ -85,6 +100,8 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         {value: '2', key: 'SNMP V 2c'},
         {value: '3', key: 'SNMP V 3'},
     ]
+    protected searchedTags: string[] = [];
+
 
     protected securityLevels: SelectKeyValueString[] = [
         {key: 'authPriv', value: '1'},
@@ -110,28 +127,105 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         super.wizardLoad(result);
     }
 
+    public override submit(): void {
+        // let request = this.post; // Clone the original post object here!
+        let request: NetworkbasicWizardPost = JSON.parse(JSON.stringify(this.post));
+
+        // Remove all services from request where createService is false.
+        request.services = this.post.services.filter((service: Service) => {
+            return service.createService === true;
+        });
+        // Remove all interfaces from request where createService is false.
+        request.interfaces = this.post.interfaces.filter((service: N0) => {
+            return service.createService === true;
+        });
+
+
+        this.subscriptions.add(this.WizardService.submit(request)
+            .subscribe((result: GenericResponseWrapper) => {
+                if (result.success) {
+                    const title: string = this.TranslocoService.translate('Success');
+                    const msg: string = this.TranslocoService.translate('Data saved successfully');
+
+                    this.notyService.genericSuccess(msg, title);
+                    this.router.navigate(['/services/notMonitored']);
+                    this.cdr.markForCheck();
+                    return;
+                }
+                // Error
+                this.notyService.genericError();
+                const errorResponse: GenericValidationError = result.data as GenericValidationError;
+                if (result) {
+                    this.errors = errorResponse;
+                }
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    protected toggleCheck(theService: Service | undefined): void {
+        if (theService) {
+            this.post.interfaces.forEach((service: N0) => {
+                if (service.name !== theService.name) {
+                    return;
+                }
+                service.createService = !service.createService
+            });
+            this.cdr.markForCheck();
+            return;
+        }
+        this.post.interfaces.forEach((service: N0) => {
+            if (!this.hasName(service.name)) {
+                return;
+            }
+            service.createService = !service.createService
+        });
+        this.cdr.markForCheck();
+    }
+
+    protected detectColor = function (label: string): string {
+        if (label.match(/warning/gi)) {
+            return 'warning';
+        }
+
+        if (label.match(/critical/gi)) {
+            return 'critical';
+        }
+
+        return '';
+    };
+
+    protected hasName = (name: string): boolean => {
+        if (this.searchedTags.length === 0) {
+            return true;
+        }
+        return this.searchedTags.some((tag) => {
+            return name.toLowerCase().includes(tag.toLowerCase());
+        });
+    }
+
     protected runSnmpDiscovery(): void {
+        this.post.interfaces = [];
+        this.cdr.markForCheck();
         this.WizardService.executeSNMPDiscovery(this.post).subscribe((data: any) => {
             this.cdr.markForCheck();
-            console.warn(data);
             // Error
-            if (data.success) {
+            if (!data.error) {
                 for (let key in data.interfaces) {
                     let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.interfaceServicetemplate.servicetemplatecommandargumentvalues));
                     servicetemplatecommandargumentvalues[0].value = data.interfaces[key].value.name;
                     this.post.interfaces.push(
                         {
-                            'host_id': this.post.host_id,
-                            'servicetemplate_id': this.interfaceServicetemplate.id,
-                            'name': data.interfaces[key].value.name,
-                            'description': data.interfaces[key].value.number,
-                            'servicecommandargumentvalues': servicetemplatecommandargumentvalues,
-                            'createService': false
+                            createService: true,
+                            description: String(data.interfaces[key].value.number),
+                            host_id: this.post.host_id,
+                            name: String(data.interfaces[key].value.name),
+                            servicecommandargumentvalues: servicetemplatecommandargumentvalues,
+                            servicetemplate_id: this.interfaceServicetemplate.id
                         });
                 }
-
                 this.childComponentLocal.cdr.markForCheck();
-                this.childComponent.cdr.markForCheck();
+                this.cdr.markForCheck();
                 return;
             }
             this.notyService.genericError();

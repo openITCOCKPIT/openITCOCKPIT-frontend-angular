@@ -1,4 +1,4 @@
-<ng-container *transloco="let t">
+<<ng-container *transloco="let t">
 
     <nav aria-label="breadcrumb" class="mt-3">
         <ol class="breadcrumb">
@@ -139,6 +139,9 @@
                                 <ng-container *ngIf="!user.allow_edit">
                                     {{ user.full_name }}
                                 </ng-container>
+                                <oitc-badge-outline color="warning" *ngIf="user._joinData?.through_ldap">
+                                    <i class="fas fa-key"></i> {{ t('User container role through LDAP') }}
+                                </oitc-badge-outline>
                             </li>
                         </ul>
                     </td>
