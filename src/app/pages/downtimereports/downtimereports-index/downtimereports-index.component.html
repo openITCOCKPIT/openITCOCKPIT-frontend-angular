@@ -270,10 +270,11 @@
                 <c-card *ngIf="report.downtimeReport.hostsWithOutages" class="mb-3">
                     <c-card-header>
                         <h5 cCardTitle>
-                            <span class="fa-stack">
-                                <i class="fa fa-desktop fa-lg fa-stack-1x"></i>
-                                <i class="fa fa-exclamation-triangle fa-stack-1x fa-xs cornered cornered-lr text-danger padding-bottom-2"></i>
-                            </span>
+                            <fa-stack [size]="'lg'">
+                                <fa-icon [icon]="['fas', 'desktop']"              [size]="'lg'" stackItemSize="1x"></fa-icon>
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']" [size]="'1x'" stackItemSize="1x" class="text-danger"
+                                         transform="shrink-4"></fa-icon>
+                            </fa-stack>
                             {{ t('Involved in outages (Hosts):') }}
                         </h5>
                     </c-card-header>
@@ -296,10 +297,11 @@
                 <c-card *ngIf="report.downtimeReport.hostsWithoutOutages" class="mb-3">
                     <c-card-header>
                         <h5 cCardTitle>
-                            <span class="fa-stack">
-                                <i class="fa fa-desktop fa-lg fa-stack-1x"></i>
-                                <i class="fa fa-check-circle fa-stack-1x fa-xs cornered cornered-lr ok padding-bottom-2"></i>
-                            </span>
+                            <fa-stack [size]="'lg'">
+                                <fa-icon [icon]="['fas', 'desktop']"              [size]="'lg'" stackItemSize="1x"></fa-icon>
+                                <fa-icon [icon]="['fas', 'check-circle']" [size]="'1x'" stackItemSize="1x" class="ok"
+                                         transform="shrink-4"></fa-icon>
+                            </fa-stack>
                             {{ t('Hosts without outages:') }}
                         </h5>
                     </c-card-header>
