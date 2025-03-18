@@ -40,7 +40,7 @@
         <c-col xs="12" md="6" lg="4" class="p-5 login-side-right">
 
             <div class="col-12 text-end" *ngIf="!disableLogin">
-                <div>
+                <div *ngIf="!enforceDisableAnimation">
                     <input cFormCheckInput
                            id="animation" type="checkbox"
                            class="checkbox-lg checkbox-primary"

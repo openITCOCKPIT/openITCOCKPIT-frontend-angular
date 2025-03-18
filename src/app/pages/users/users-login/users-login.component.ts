@@ -1,19 +1,18 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  AlertComponent,
-  ColComponent,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormLabelDirective,
-  RowComponent
+    AlertComponent,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    RowComponent
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { NgForOf, NgIf } from '@angular/common';
-
 
 
 import { UsersService } from '../users.service';
@@ -34,21 +33,21 @@ import { LoginResponse } from '../../../auth/auth.interface';
 @Component({
     selector: 'oitc-users-login',
     imports: [
-    FaIconComponent,
-    AlertComponent,
-    FormsModule,
-    TranslocoDirective,
-    NgIf,
-    FormControlDirective,
-    FormLabelDirective,
-    FormCheckComponent,
-    RowComponent,
-    ColComponent,
-    NgxParticlesModule,
-    NgForOf,
-    FormCheckInputDirective,
-    FormCheckLabelDirective
-],
+        FaIconComponent,
+        AlertComponent,
+        FormsModule,
+        TranslocoDirective,
+        NgIf,
+        FormControlDirective,
+        FormLabelDirective,
+        FormCheckComponent,
+        RowComponent,
+        ColComponent,
+        NgxParticlesModule,
+        NgForOf,
+        FormCheckInputDirective,
+        FormCheckLabelDirective
+    ],
     templateUrl: './users-login.component.html',
     styleUrl: './users-login.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -71,6 +70,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     protected hasValidSslCertificate: boolean = false;
     protected loginAnimation: boolean = true;
     protected disableAnimation: boolean = false;
+    protected enforceDisableAnimation: boolean = false;
     protected disableLogin: boolean = false;
     protected readonly InstantreportObjectTypes = InstantreportObjectTypes;
     protected particlesOptions: any = {
@@ -167,6 +167,10 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             this.isCustomLoginBackground = data.isCustomLoginBackground;
             this.loginAnimation = !data.disableAnimation;
             this.disableAnimation = data.disableAnimation; // Server wants us to not have this feature at all
+            if (data.disableAnimation) {
+                // If DISABLE_LOGIN_ANIMATION is set to true, we remove the animation checkbox from the login screen
+                this.enforceDisableAnimation = true;
+            }
 
             switch (data.images.particles) {
                 case 'none':
