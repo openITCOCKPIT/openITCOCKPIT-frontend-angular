@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
@@ -25,6 +25,8 @@ import {
 import { CurrentMessageOfTheDay } from './pages/messagesotd/messagesotd.interface';
 import { MessagesOfTheDayService } from './pages/messagesotd/messagesotd.service';
 import { AuthService } from './auth/auth.service';
+import { Title } from '@angular/platform-browser';
+import { SystemnameService } from './services/systemname.service';
 
 @Component({
     selector: 'oitc-root',
@@ -53,12 +55,14 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     // I am the current messageOfTheDay.
     protected messageOfTheDay: CurrentMessageOfTheDay = {} as CurrentMessageOfTheDay;
 
+    private readonly TitleService: Title = inject(Title);
     public readonly LayoutService = inject(LayoutService);
     private readonly document = inject(DOCUMENT);
 
     private subscription: Subscription = new Subscription();
 
     constructor(library: FaIconLibrary,
+                private router: Router,
                 private IconSetService: IconSetService,
                 private selectConfig: NgSelectConfig,
                 private TranslocoService: TranslocoService,
@@ -66,6 +70,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
                 private cdr: ChangeDetectorRef,
                 private MessageOfTheDayService: MessagesOfTheDayService,
                 private readonly AuthService: AuthService,
+                private readonly SystemnameService: SystemnameService,
                 private readonly ModalService: ModalService,
     ) {
         // Add an icon to the library for convenient access in other components
@@ -108,7 +113,51 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
         // Fetch the message of the day
         this.watchMessageOfTheDay();
+
+        // Fetch the systemname
+        this.watchSystemname();
     }
+
+    private navigationEndEvent: NavigationEnd | null = null;
+
+
+    private updateTitle(): void {
+        // Try loading the title from the first c-card-header h5 element.
+        let pageTitle: string | undefined = document.querySelector('#mainContentContainer>*>c-card>c-card-header>h5')?.textContent?.trim().replaceAll('  ', ' ');
+        console.log('pageTitle 1 (h5)', pageTitle);
+        // If it is wrapped in a form...
+        if (!pageTitle) {
+            pageTitle = document.querySelector('#mainContentContainer>*>form>c-card>c-card-header>h5')?.textContent?.trim().replaceAll('  ', ' ');
+            console.log('pageTitle 2 (form>h5)', pageTitle);
+        }
+
+        // If no title was found, try loading the title from the breadcrumb.
+        if (!pageTitle) {
+            pageTitle = document.querySelector('nav>ol>li.breadcrumb-item:last-child')?.textContent?.trim();
+            console.log('pageTitle 3 (breadcrumb)', pageTitle);
+        }
+
+        // If still not found, check the route
+        // @todo
+
+        // Append the systemname
+        if (pageTitle) {
+            pageTitle = pageTitle + ' | ';
+        }
+
+        this.TitleService.setTitle(pageTitle + this.systemName);
+        // Ensure the view is updated after the DOM change
+        this.cdr.detectChanges();
+    }
+
+    protected systemName: string = 'openITCOCKPIT';
+
+    private watchSystemname(): void {
+        this.subscription.add(this.SystemnameService.systemName$.subscribe((systemname) => {
+            this.systemName = systemname;
+        }));
+    }
+
 
     private watchMessageOfTheDay(): void {
         this.subscription.add(this.AuthService.authenticated$.subscribe((isLoggedIn) => {
@@ -142,6 +191,17 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     }
 
     public ngAfterViewInit(): void {
+        // Subscribe to route changes
+        this.subscription.add(this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.navigationEndEvent = event;
+                this.cdr.markForCheck();
+                setTimeout(() => {
+                    this.updateTitle();
+                }, 200);
+            }
+        }));
+
         const osSystemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const coreUiTheme: 'light' | 'dark' | 'auto' | null = this.colorService.getStoredTheme('coreui-free-angular-admin-template-theme-default');
         this.LayoutService.setTheme('light');
