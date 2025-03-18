@@ -47,9 +47,6 @@ import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.co
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { FormsModule } from '@angular/forms';
 
-import {ExportRunningService} from '../../../services/export-running.service';
-
-
 @Component({
     selector: 'oitc-exports-index',
     imports: [
@@ -108,9 +105,6 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
-
-    private readonly ExportRunningService: ExportRunningService = inject(ExportRunningService);
-
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
@@ -147,8 +141,6 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
                         this.cdr.markForCheck();
                         this.tasks = data.tasks; // Tasks to show in the log
                         this.isExportRunning = !data.exportFinished;
-                        console.log('exportinterval',this.isExportRunning);
-                        this.ExportRunningService.setIsRunning(this.isExportRunning);
 
                         if (data.exportFinished) {
                             this.cancelBroadcastInterval();
@@ -193,8 +185,6 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
                         this.cdr.markForCheck();
                         this.tasks = data.tasks; // Tasks to show in the log
                         this.isExportRunning = !data.exportFinished;
-
-                        this.ExportRunningService.setIsRunning(this.isExportRunning);
 
                         if (data.exportFinished) {
                             this.cancelBroadcastInterval();
