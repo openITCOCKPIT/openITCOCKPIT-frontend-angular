@@ -1,6 +1,6 @@
 <ng-container *transloco="let t">
     @if (!headerinfo.exportRunningHeaderInfo) {
-        <div class="pe-2">
+        <div>
             <a class="btn btn-default btn-xs waves-effect waves-themed"
                [routerLink]="['/', 'exports', 'index']"
                cTooltip="{{t('Refresh monitoring configuration')}}">
@@ -8,7 +8,7 @@
             </a>
         </div>
     } @else {
-        <div class="pe-2">
+        <div>
             <a class="btn btn-default btn-xs waves-effect waves-themed"
                [routerLink]="['/', 'exports', 'index']"
                cTooltip="{{t('Refresh monitoring configuration')}}">
