@@ -128,6 +128,7 @@ import {
 } from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { IndexPage } from '../../../pages.interface';
+import { TitleService } from '../../../services/title.service';
 
 @Component({
     selector: 'oitc-browsers-index',
@@ -293,6 +294,7 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
     private readonly LocalStorageService = inject(LocalStorageService);
+    private readonly TitleService: TitleService = inject(TitleService);
 
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
@@ -313,6 +315,10 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
                 .subscribe((result) => {
                     this.containers = result;
                     this.cdr.markForCheck();
+
+                    // Update the title.
+                    let newTitle: string = this.containers.breadcrumbs[this.containers.breadcrumbs.length - 1].value;
+                    this.TitleService.setTitle(`${newTitle} | ` + this.TranslocoService.translate('Browser'));
                 })
             );
 
