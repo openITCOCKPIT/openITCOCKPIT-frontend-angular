@@ -22,8 +22,13 @@ export class TitleService extends Title {
                 this.manualSetTimeout = 0;
             }
 
+            let separator: string = '';
+            if (title && this.systemName) {
+                separator = ' | ';
+            }
+
             // And set the title immediately.
-            super.setTitle(`${title} | ${this.systemName}`);
+            super.setTitle(`${title} ${separator} ${this.systemName}`);
             return;
         }
         /*
@@ -38,7 +43,13 @@ export class TitleService extends Title {
             let title = this.findTitle();
 
             // And set it, then.
-            super.setTitle(`${title} | ${this.systemName}`);
+            let separator: string = '';
+            if (title && this.systemName) {
+                separator = ' | ';
+            }
+
+            // And set the title immediately.
+            super.setTitle(`${title} ${separator} ${this.systemName}`);
         }, this.titleFetchTimeout);
     }
 
