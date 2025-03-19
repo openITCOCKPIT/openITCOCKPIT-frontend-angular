@@ -38,6 +38,7 @@
 .btn-default:hover, .btn-default:active {
     border-color: #c6c6c6 !important;
     color: #333;
+    background-color: #ffffff !important; // otherwise form-check.scss will override it
 }
 
 .btn-outline-default {
@@ -64,6 +65,7 @@ body.dark-theme .btn-default {
 body.dark-theme .btn-default:hover, body.dark-theme .btn-default:active {
     border: 1px solid rgba(var(--cui-border-color), 1);
     color: #fff;
+    background-color: #282d37 !important; // otherwise form-check.scss will override it
 }
 
 body.dark-theme .btn-outline-default {
