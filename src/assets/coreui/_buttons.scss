@@ -57,13 +57,13 @@
 body.dark-theme .btn-default {
     background-color: #1d222b;
     color: #eeecec;
-    border: 1px solid rgba(var(--cui-border-color), 0.1);
+    border: 1px solid $gray-800;
     /*box-shadow: 0 2px 6px 0 rgba(29, 34, 43, 0.5);*/
     box-shadow: 0 2px 6px 0 rgba(11, 81, 197, 0.13);
 }
 
 body.dark-theme .btn-default:hover, body.dark-theme .btn-default:active {
-    border: 1px solid rgba(var(--cui-border-color), 1);
+    border: 1px solid $gray-700 !important;
     color: #fff;
     background-color: #282d37 !important; // otherwise form-check.scss will override it
 }
