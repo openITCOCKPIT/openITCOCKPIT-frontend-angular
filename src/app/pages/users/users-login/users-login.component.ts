@@ -30,6 +30,7 @@ import { LayoutOptions, LayoutService } from '../../../layouts/coreui/layout.ser
 import { ActivatedRoute, Router } from '@angular/router';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { LoginResponse } from '../../../auth/auth.interface';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'oitc-users-login',
@@ -63,6 +64,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     private readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly TitleService: Title = inject(Title);
     private _csrfToken: string = '';
 
     protected logoUrl: string = '';
@@ -72,7 +74,6 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     protected loginAnimation: boolean = true;
     protected disableAnimation: boolean = false;
     protected disableLogin: boolean = false;
-    protected readonly InstantreportObjectTypes = InstantreportObjectTypes;
     protected particlesOptions: any = {
         background: {
             color: {
@@ -156,7 +157,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         this.LayoutService.setLayout(LayoutOptions.Blank);
 
         this.subscriptions.add(this.UsersService.getLoginDetails().subscribe(data => {
-            this.cdr.markForCheck();
+            this.TitleService.setTitle('Login');
 
             this.images = data.images.images;
             this.isSsoEnabled = data.isSsoEnabled;
@@ -218,6 +219,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     }, 10);
                 }
             }
+            this.cdr.markForCheck();
         }));
     }
 

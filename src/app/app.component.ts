@@ -58,6 +58,9 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     private readonly TitleService: Title = inject(Title);
     public readonly LayoutService = inject(LayoutService);
     private readonly document = inject(DOCUMENT);
+    private navigationEndEvent: NavigationEnd | null = null;
+
+    protected systemName: string = '';
 
     private subscription: Subscription = new Subscription();
 
@@ -118,17 +121,18 @@ export class AppComponent implements OnDestroy, AfterViewInit {
         this.watchSystemname();
     }
 
-    private navigationEndEvent: NavigationEnd | null = null;
 
 
     private updateTitle(): void {
+        if (this.systemName.length === 0) {
+            console.log('systemName not set yet');
+            return;
+        }
         // Try loading the title from the first c-card-header h5 element.
         let pageTitle: string | undefined = document.querySelector('#mainContentContainer>*>c-card>c-card-header>h5')?.textContent?.trim().replaceAll('  ', ' ');
-        console.log('pageTitle 1 (h5)', pageTitle);
         // If it is wrapped in a form...
         if (!pageTitle) {
             pageTitle = document.querySelector('#mainContentContainer>*>form>c-card>c-card-header>h5')?.textContent?.trim().replaceAll('  ', ' ');
-            console.log('pageTitle 2 (form>h5)', pageTitle);
         }
 
         // If no title was found, try loading the title from the breadcrumb.
@@ -149,8 +153,6 @@ export class AppComponent implements OnDestroy, AfterViewInit {
         // Ensure the view is updated after the DOM change
         this.cdr.detectChanges();
     }
-
-    protected systemName: string = 'openITCOCKPIT';
 
     private watchSystemname(): void {
         this.subscription.add(this.SystemnameService.systemName$.subscribe((systemname) => {
