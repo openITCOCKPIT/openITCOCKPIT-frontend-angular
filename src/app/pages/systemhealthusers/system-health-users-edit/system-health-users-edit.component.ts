@@ -34,7 +34,6 @@ import { GenericIdResponse, GenericValidationError } from '../../../generic-resp
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { HistoryService } from '../../../history.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-system-health-users-edit',
@@ -61,8 +60,7 @@ import { NgIf } from '@angular/common';
     FormCheckInputDirective,
     FormCheckLabelDirective,
     CardFooterComponent,
-    FormLoaderComponent,
-    NgIf
+    FormLoaderComponent
 ],
     templateUrl: './system-health-users-edit.component.html',
     styleUrl: './system-health-users-edit.component.css',

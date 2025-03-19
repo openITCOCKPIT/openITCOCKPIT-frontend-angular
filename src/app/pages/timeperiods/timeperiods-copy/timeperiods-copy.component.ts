@@ -17,12 +17,11 @@ import {
     FormLabelDirective,
     NavComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -52,8 +51,7 @@ import { HistoryService } from '../../../history.service';
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        FormLoaderComponent,
-        NgIf
+        FormLoaderComponent
     ],
     templateUrl: './timeperiods-copy.component.html',
     styleUrl: './timeperiods-copy.component.css',

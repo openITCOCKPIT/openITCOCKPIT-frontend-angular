@@ -28,7 +28,7 @@
     </nav>
 
 
-    <oitc-form-loader *ngIf="typeof(post.PrometheusExporter) === 'undefined'"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="typeof(post.PrometheusExporter) === 'undefined'"></oitc-form-loader>
     <form cForm (ngSubmit)="update()" *ngIf="typeof(post.PrometheusExporter) !== 'undefined'">
 
         <c-card class="mb-3">

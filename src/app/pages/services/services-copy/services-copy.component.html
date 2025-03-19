@@ -71,7 +71,7 @@
                 </c-card-body>
             </c-card>
 
-            <oitc-form-loader *ngIf="services.length === 0 && host_id > 0"></oitc-form-loader>
+            <oitc-form-loader [isVisible]="services.length === 0 && host_id > 0"></oitc-form-loader>
 
             <c-card class="mb-3" *ngFor="let service of services; let i = index">
                 <c-card-header>

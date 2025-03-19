@@ -26,7 +26,7 @@
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
     <form cForm (ngSubmit)="submitMattermostSettings()">
         <c-card *ngIf="post">
 

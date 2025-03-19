@@ -14,7 +14,7 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -60,7 +60,6 @@ import { FormsModule } from '@angular/forms';
         XsButtonDirective,
         RouterLink,
         FormLoaderComponent,
-        NgIf,
         FormsModule
     ],
     templateUrl: './servicetemplates-copy.component.html',

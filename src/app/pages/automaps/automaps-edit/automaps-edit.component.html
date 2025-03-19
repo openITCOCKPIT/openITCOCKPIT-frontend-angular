@@ -19,7 +19,7 @@
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
     <form cForm (ngSubmit)="submit()">
         <c-card class="mb-3" *ngIf="post">
             <c-card-header>
@@ -400,8 +400,8 @@
                         </c-card>
                     </c-col>
 
-                    <c-col [xs]="12" [lg]="6" class="flex-1">
-                        <c-card class="h-100 flex-1">
+                    <c-col [xs]="12" [lg]="6" class="d-flex flex-1">
+                        <c-card>
                             <c-card-header>
                                 <fa-icon [icon]="['fas', 'image']"/>
                                 {{ t('Icon Preview') }}
