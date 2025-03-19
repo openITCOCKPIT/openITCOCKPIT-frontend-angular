@@ -29,7 +29,7 @@ import { LayoutOptions, LayoutService } from '../../../layouts/coreui/layout.ser
 import { ActivatedRoute, Router } from '@angular/router';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { LoginResponse } from '../../../auth/auth.interface';
-import { Title } from '@angular/platform-browser';
+import { TitleService } from '../../../services/title.service';
 
 @Component({
     selector: 'oitc-users-login',
@@ -63,7 +63,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     private readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
-    private readonly TitleService: Title = inject(Title);
+    private readonly TitleService: TitleService = inject(TitleService);
     private _csrfToken: string = '';
 
     protected logoUrl: string = '';
