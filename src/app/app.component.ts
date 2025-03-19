@@ -25,7 +25,7 @@ import {
 import { CurrentMessageOfTheDay } from './pages/messagesotd/messagesotd.interface';
 import { MessagesOfTheDayService } from './pages/messagesotd/messagesotd.service';
 import { AuthService } from './auth/auth.service';
-import { Title } from '@angular/platform-browser';
+import { TitleService } from './services/title.service';
 import { SystemnameService } from './services/systemname.service';
 
 @Component({
@@ -55,7 +55,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     // I am the current messageOfTheDay.
     protected messageOfTheDay: CurrentMessageOfTheDay = {} as CurrentMessageOfTheDay;
 
-    private readonly TitleService: Title = inject(Title);
+    private readonly TitleService: TitleService = inject(TitleService);
     public readonly LayoutService = inject(LayoutService);
     private readonly document = inject(DOCUMENT);
     private navigationEndEvent: NavigationEnd | null = null;
@@ -121,45 +121,12 @@ export class AppComponent implements OnDestroy, AfterViewInit {
         this.watchSystemname();
     }
 
-
-
-    private updateTitle(): void {
-        if (this.systemName.length === 0) {
-            console.log('systemName not set yet');
-            return;
-        }
-        // Try loading the title from the first c-card-header h5 element.
-        let pageTitle: string | undefined = document.querySelector('#mainContentContainer>*>c-card>c-card-header>h5')?.textContent?.trim().replaceAll('  ', ' ');
-        // If it is wrapped in a form...
-        if (!pageTitle) {
-            pageTitle = document.querySelector('#mainContentContainer>*>form>c-card>c-card-header>h5')?.textContent?.trim().replaceAll('  ', ' ');
-        }
-
-        // If no title was found, try loading the title from the breadcrumb.
-        if (!pageTitle) {
-            pageTitle = document.querySelector('nav>ol>li.breadcrumb-item:last-child')?.textContent?.trim();
-            console.log('pageTitle 3 (breadcrumb)', pageTitle);
-        }
-
-        // If still not found, check the route
-        // @todo
-
-        // Append the systemname
-        if (pageTitle) {
-            pageTitle = pageTitle + ' | ';
-        }
-
-        this.TitleService.setTitle(pageTitle + this.systemName);
-        // Ensure the view is updated after the DOM change
-        this.cdr.detectChanges();
-    }
-
     private watchSystemname(): void {
-        this.subscription.add(this.SystemnameService.systemName$.subscribe((systemname) => {
-            this.systemName = systemname;
+        this.subscription.add(this.SystemnameService.systemName$.subscribe((systemName: string) => {
+            this.systemName = `${systemName}`;
+            this.TitleService.setSystemName(systemName);
         }));
     }
-
 
     private watchMessageOfTheDay(): void {
         this.subscription.add(this.AuthService.authenticated$.subscribe((isLoggedIn) => {
@@ -198,9 +165,8 @@ export class AppComponent implements OnDestroy, AfterViewInit {
             if (event instanceof NavigationEnd) {
                 this.navigationEndEvent = event;
                 this.cdr.markForCheck();
-                setTimeout(() => {
-                    this.updateTitle();
-                }, 200);
+                // Leave title empty to let the TitleService figure out the title itself.
+                this.TitleService.setTitle();
             }
         }));
 
