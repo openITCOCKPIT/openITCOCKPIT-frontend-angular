@@ -25,7 +25,7 @@
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="post.Satellite.id === 0"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="post.Satellite.id === 0"></oitc-form-loader>
     <form cForm (ngSubmit)="updateSatellite()">
         <c-card class="mb-3" *ngIf="post.Satellite.id !== 0">
             <c-card-header>

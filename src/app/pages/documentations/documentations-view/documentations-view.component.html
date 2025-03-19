@@ -34,7 +34,7 @@
         </nav>
     }
 
-    <oitc-form-loader *ngIf="!documentation"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!documentation"></oitc-form-loader>
 
     <c-card class="mb-3" *ngIf="documentation">
         <c-card-header>

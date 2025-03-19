@@ -38,7 +38,7 @@
         </c-card-header>
         <c-card-body>
 
-            <oitc-form-loader *ngIf="! usergroups.data"></oitc-form-loader>
+            <oitc-form-loader [isVisible]="! usergroups.data" />
 
             <c-card class="mb-3" *ngFor="let usergroup of usergroups.data; let i = index">
                 <c-card-header>

@@ -24,7 +24,7 @@
             </li>
         </ol>
     </nav>
-    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
     <form cForm (ngSubmit)="submit(ResourcegroupsSubmitType.ResourcegroupsIndex)" autocomplete="off" *ngIf="post">
         <c-card class="mb-3">
             <c-card-header>

@@ -24,7 +24,7 @@
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="!satellite"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!satellite"></oitc-form-loader>
 
 
     <c-card class="mb-3" *ngIf="satellite">

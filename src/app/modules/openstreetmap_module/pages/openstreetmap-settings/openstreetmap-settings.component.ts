@@ -4,7 +4,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
 import { FormLoaderComponent } from '../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
 import {
     CardBodyComponent,
     CardComponent, CardFooterComponent,
@@ -43,7 +42,6 @@ import { FormErrorDirective } from '../../../../layouts/coreui/form-error.direct
         PermissionDirective,
         RouterLink,
         FormLoaderComponent,
-        NgIf,
         FormDirective,
         FormsModule,
         CardComponent,

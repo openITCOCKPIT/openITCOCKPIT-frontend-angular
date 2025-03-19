@@ -55,18 +55,14 @@ export class TitleService extends Title {
 
     private findTitle(): string {
         let title: string | undefined = '';
-        console.log('TitleService::setTitle::Anon begin', title);
         if (!title) { // First check the first container's title.
             title = document.querySelector('#mainContentContainer>*>c-card>c-card-header>h5')?.textContent?.trim().replaceAll('  ', ' ');
-            console.log('TitleService::setTitle::Anon from #mainContentContainer>*>c-card>c-card-header>h5', title);
         }
         if (!title) { // Maybe the first container is in a form?
             title = document.querySelector('#mainContentContainer>*>form>c-card>c-card-header>h5')?.textContent?.trim().replaceAll('  ', ' ');
-            console.log('TitleService::setTitle::Anon from #mainContentContainer>*>form>c-card>c-card-header>h5', title);
         }
         if (!title) { // *sigh* okay, let' use the breadcrumbs then.
             title = document.querySelector('nav>ol>li.breadcrumb-item:last-child')?.textContent?.trim();
-            console.log('TitleService::setTitle::Anon nav>ol>li.breadcrumb-item:last-child', title);
         }
         if (!title) { // This seems odd, but it just prevens the 'undefined' string from being set as title.
             title = '';
