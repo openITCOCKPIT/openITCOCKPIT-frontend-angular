@@ -21,7 +21,7 @@
     </nav>
 
 
-    <oitc-form-loader *ngIf="post.id === 0"/>
+    <oitc-form-loader [isVisible]="post.id === 0"/>
     <form *ngIf="post.id !== 0" cForm (ngSubmit)="updateMessageOfTheDay()">
         <c-card class="mb-3">
             <c-card-header>

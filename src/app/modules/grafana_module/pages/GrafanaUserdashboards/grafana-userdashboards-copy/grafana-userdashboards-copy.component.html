@@ -44,7 +44,7 @@
         </c-card-header>
         <c-card-body>
 
-            <oitc-form-loader *ngIf="dashboards.length === 0"></oitc-form-loader>
+            <oitc-form-loader [isVisible]="dashboards.length === 0"></oitc-form-loader>
 
             <c-card class="mb-3" *ngFor="let dashboard of dashboards; let i = index">
                 <c-card-header>
