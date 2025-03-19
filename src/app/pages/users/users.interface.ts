@@ -329,7 +329,8 @@ export interface LoginGetRoot {
     errorMessages: any[]
     customLoginBackgroundHtml: string
     isCustomLoginBackground: boolean,
-    disableAnimation: boolean
+    disableAnimation: boolean,
+    disableSocialButtons: boolean
 }
 
 export interface LoginImage {

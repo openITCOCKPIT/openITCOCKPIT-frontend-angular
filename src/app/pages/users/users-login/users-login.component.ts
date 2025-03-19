@@ -8,7 +8,8 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
-    RowComponent
+    RowComponent,
+    TooltipDirective
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -24,12 +25,12 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Container, Engine, MoveDirection, OutMode, } from "@tsparticles/engine";
 import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
 import { NgParticlesService, NgxParticlesModule } from "@tsparticles/angular";
-import { InstantreportObjectTypes } from '../../instantreports/instantreports.enums';
 import { LayoutOptions, LayoutService } from '../../../layouts/coreui/layout.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { LoginResponse } from '../../../auth/auth.interface';
 import { TitleService } from '../../../services/title.service';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-users-login',
@@ -47,7 +48,9 @@ import { TitleService } from '../../../services/title.service';
         NgxParticlesModule,
         NgForOf,
         FormCheckInputDirective,
-        FormCheckLabelDirective
+        FormCheckLabelDirective,
+        XsButtonDirective,
+        TooltipDirective
     ],
     templateUrl: './users-login.component.html',
     styleUrl: './users-login.component.css',
@@ -73,6 +76,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     protected loginAnimation: boolean = true;
     protected disableAnimation: boolean = false;
     protected enforceDisableAnimation: boolean = false;
+    protected disableSocialButtons: boolean = false;
     protected disableLogin: boolean = false;
     protected particlesOptions: any = {
         background: {
@@ -172,6 +176,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 // If DISABLE_LOGIN_ANIMATION is set to true, we remove the animation checkbox from the login screen
                 this.enforceDisableAnimation = true;
             }
+            this.disableSocialButtons = data.disableSocialButtons;
 
             switch (data.images.particles) {
                 case 'none':

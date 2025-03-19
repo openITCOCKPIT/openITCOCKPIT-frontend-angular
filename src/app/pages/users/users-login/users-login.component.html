@@ -63,7 +63,7 @@
             <div *ngIf="isSsoEnabled" class="form-group mb-5">
                 <a id="sso-redirect-href"
                    href="/users/login?redirect_sso=true"
-                   class="btn btn-primary btn-lg w-100">
+                   class="btn btn-primary btn-lg w-100 ripple">
                     <i class="fas fa-sign-in-alt"></i>
                     {{ t('Login through Single sign-on') }}
                 </a>
@@ -125,7 +125,7 @@
                     <c-col md="6" lg="4" class="text-end">
                         <button
                             type="submit"
-                            class="btn btn-primary text-end"
+                            class="btn btn-primary text-end ripple"
                             [disabled]="disableLogin">
                             <span>
                                 <i class="fa fa-spinner fa-spin" *ngIf="disableLogin"></i>
@@ -159,23 +159,30 @@
             <!-- End certificates login -->
 
 
-            <div class="text-end" style="padding-top: 100px;">
-                <a href="https://openitcockpit.io/" target="_blank" class="btn  btn-light btn-icon">
-                    <fa-icon [icon]="['fas', 'globe']"/>
-                </a>
-                <a href="https://github.com/it-novum/openITCOCKPIT" target="_blank" class="btn  btn-light btn-icon">
-                    <fa-icon [icon]="['fab', 'github']"/>
-                </a>
-                <a href="https://twitter.com/openITCOCKPIT" target="_blank" class="btn  btn-light btn-icon">
-                    <fa-icon [icon]="['fab', 'twitter']"/>
-                </a>
-                <a href="https://www.reddit.com/r/openitcockpit" target="_blank" class="btn  btn-light btn-icon">
-                    <fa-icon [icon]="['fab', 'reddit']"/>
-                </a>
-                <a href="https://discord.gg/G8KhxKuQ9G" target="_blank" class="btn  btn-light btn-icon">
-                    <fa-icon [icon]="['fab', 'discord']"/>
-                </a>
-            </div>
+            @if (!disableSocialButtons) {
+                <div class="text-end" style="padding-top: 100px;">
+                    <a href="https://openitcockpit.io/" target="_blank"
+                       cButton [color]="'default'" class="ripple"
+                       [cTooltip]="'openITCOCKPIT Website'" cTooltipPlacement="top">
+                        <fa-icon [icon]="['fas', 'globe']" [size]="'lg'"></fa-icon>
+                    </a>
+                    <a href="https://github.com/it-novum/openITCOCKPIT" target="_blank"
+                       cButton [color]="'default'" class="ripple"
+                       [cTooltip]="'GitHub - Source Code'" cTooltipPlacement="top">
+                        <fa-icon [icon]="['fab', 'github']" [size]="'lg'"></fa-icon>
+                    </a>
+                    <a href="https://www.reddit.com/r/openitcockpit" target="_blank"
+                       cButton [color]="'default'" class="ripple"
+                       [cTooltip]="'Reddit Community'" cTooltipPlacement="top">
+                        <fa-icon [icon]="['fab', 'reddit']" [size]="'lg'"></fa-icon>
+                    </a>
+                    <a href="https://discord.gg/G8KhxKuQ9G" target="_blank"
+                       cButton [color]="'default'" class="ripple"
+                       [cTooltip]="'Discord Community'" cTooltipPlacement="top">
+                        <fa-icon [icon]="['fab', 'discord']" [size]="'lg'"></fa-icon>
+                    </a>
+                </div>
+            }
 
         </c-col>
     </c-row>
