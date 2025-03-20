@@ -38,7 +38,7 @@
                                             <div
                                                 *ngIf="usedBy.value.module && usedBy.value.state && usedBy.value.message">
                                                 <div>
-                                                    <a [routerLink]="createURL(usedBy.value.state, Number(item.id))">
+                                                    <a [routerLink]="createURL(usedBy.value.state, Number(usedBy.value.id || item.id))">
                                                         {{ usedBy.value.message }}
                                                     </a>
                                                 </div>

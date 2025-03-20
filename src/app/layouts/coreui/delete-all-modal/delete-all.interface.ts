@@ -31,4 +31,5 @@ export interface DeleteAllUsedBy {
     state: string
     message: string
     module: string
+    id: string|number
 }
