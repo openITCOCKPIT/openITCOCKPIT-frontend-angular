@@ -236,6 +236,7 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
     public readonly PermissionsService = inject(PermissionsService);
     private router = inject(Router);
     private route = inject(ActivatedRoute);
+    private acknowledgeOpened: boolean = false;
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly ExternalCommandsService = inject(ExternalCommandsService);
     private readonly TranslocoService = inject(TranslocoService);
@@ -329,7 +330,8 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
             this.lastUpdated = new Date();
 
             if (this.router.url.includes('#acknowledge')) {
-                if (this.result) {
+                if (this.result && !this.acknowledgeOpened) {
+                    this.acknowledgeOpened = true;
                     this.acknowledgeStatus(this.result.mergedService, this.result.host);
                 }
             }

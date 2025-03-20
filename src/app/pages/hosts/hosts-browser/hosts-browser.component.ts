@@ -213,6 +213,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
 
     public SlaOverview: false | HostBrowserSlaOverview = false;
 
+    private acknowledgeOpened: boolean = false;
     private subscriptions: Subscription = new Subscription();
     private HostsService = inject(HostsService);
     private readonly notyService = inject(NotyService);
@@ -294,6 +295,13 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             this.loadSlaInformation();
 
             this.lastUpdated = new Date();
+
+            if (this.router.url.includes('#acknowledge')) {
+                if (this.result && !this.acknowledgeOpened) {
+                    this.acknowledgeOpened = true;
+                    this.acknowledgeStatus(this.result.mergedHost);
+                }
+            }
         }));
     }
 
