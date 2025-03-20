@@ -1,284 +1,287 @@
 <ng-container *transloco="let t">
-    <div class="btn-group btn-group-xs" aria-label="Display of system health notifications" role="group">
-        <c-dropdown class="dropdown">
-            <button cButton type="button" size="xs" color="default" cDropdownToggle class="px-3"
-                    [caret]="false"
-                    cTooltip="{{t('System health')}}"
-                    data-placement="bottom" rel="tooltip" aria-expanded="false">
-                <fa-icon [icon]="['fas', 'heartbeat']" class="{{class}}"></fa-icon>
-            </button>
-            <div cDropdownMenu [style.min-width.px]="300" class="mt-2 py-0">
-                <div
-                    class="{{bgClass}} d-flex justify-content-center align-items-center pt-0">
-                    <h4 class="m-0 text-center color-white">
-                        {{ t('System Health') }}
-                    </h4>
-                </div>
-                <div class="dropdown-item" *ngIf="systemHealth.state === 'ok'">
-                    <div class="d-flex align-items-center" [routerLink]="['/', 'Administrators', 'debug']">
-                        <span class="me-2">
-                            <fa-icon [icon]="['fas', 'check']" class="d-inline-block fa-2x ok w-100"></fa-icon>
-                        </span>
-                        <span class="d-flex flex-column flex-1 ms-1">
-                            <span>
-                                {{ t('Alright!') }}
-                            </span>
-                            <span class="fs-sm">
-                                {{ t('No issues detected. System operates normally.') }}
-                            </span>
-                        </span>
+    <div class="nav-item nav-link">
+        <div class="btn-group btn-group-xs" aria-label="Display of system health notifications" role="group">
+            <c-dropdown class="dropdown">
+                <button cButton type="button" size="xs" color="default" cDropdownToggle class="px-3"
+                        [caret]="false"
+                        cTooltip="{{t('System health')}}"
+                        data-placement="bottom" rel="tooltip" aria-expanded="false">
+                    <fa-icon [icon]="['fas', 'heartbeat']" class="{{class}}"></fa-icon>
+                </button>
+                <div cDropdownMenu [style.min-width.px]="300" class="mt-2 py-0">
+                    <div
+                        class="{{bgClass}} d-flex justify-content-center align-items-center pt-0">
+                        <h4 class="m-0 text-center color-white">
+                            {{ t('System Health') }}
+                        </h4>
                     </div>
-                </div>
-                <div class="dropdown-item"
-                     *ngIf="systemHealth.state === 'warning' || systemHealth.state === 'critical'">
-                    <div class="d-flex align-items-center" [routerLink]="['/', 'administrators', 'debug']">
-                        <ul class="pt-2 list-unstyled system-health-item fs-sm w-100">
+                    <div class="dropdown-item" *ngIf="systemHealth.state === 'ok'">
+                        <div class="d-flex align-items-center" [routerLink]="['/', 'Administrators', 'debug']">
+                            <span class="me-2">
+                                <fa-icon [icon]="['fas', 'check']" class="d-inline-block fa-2x ok w-100"></fa-icon>
+                            </span>
+                            <span class="d-flex flex-column flex-1 ms-1">
+                                <span>
+                                    {{ t('Alright!') }}
+                                </span>
+                                <span class="fs-sm">
+                                    {{ t('No issues detected. System operates normally.') }}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="dropdown-item"
+                         *ngIf="systemHealth.state === 'warning' || systemHealth.state === 'critical'">
+                        <div class="d-flex align-items-center" [routerLink]="['/', 'administrators', 'debug']">
+                            <ul class="pt-2 list-unstyled system-health-item fs-sm w-100">
+                                <li *ngIf="!systemHealth.isNagiosRunning">
+                                    <span>
+                                        <div class="pt-2">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
+                                                {{ t('Critical') }}
+                                            </h6>
+                                            <i>{{ t('Monitoring engine is not running!') }}</i>
+                                        </div>
+                                    </span>
+                                </li>
+
+                                <li *ngIf="!systemHealth.gearman_reachable">
+                                    <span>
+                                        <div class="pt-2">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
+                                                {{ t('Critical') }}
+                                            </h6>
+                                            <i>{{ t('Gearman job server not reachable!') }}</i>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li *ngIf="!systemHealth.gearman_worker_running">
+                                    <span>
+                                        <div class="pt-2">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
+                                                {{ t('Critical') }}
+                                            </h6>
+                                            <i>{{ t('Service gearman_worker is not running!') }}</i>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li *ngIf="systemHealth.isNdoInstalled && !systemHealth.isNdoRunning">
+                                    <span>
+                                        <div class="pt-2">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
+                                                {{ t('Critical') }}
+                                            </h6>
+                                            <i>{{ t('Database connector NDOUtils is not running!') }}</i>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li *ngIf="systemHealth.isStatusengineInstalled && !systemHealth.isStatusengineRunning">
+                                    <span>
+                                        <div class="pt-2">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
+                                                {{ t('Critical') }}
+                                            </h6>
+                                            <i>{{ t('Database connector Statusengine is not running!') }}</i>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li *ngIf="systemHealth.isStatusenginePerfdataProcessor && !systemHealth.isStatusengineRunning">
+                                    <span>
+                                        <div class="pt-2">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
+                                                {{ t('Warning') }}
+                                            </h6>
+                                            <i>{{ t('Performance data processer Statusengine is not running!') }}</i>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li *ngIf="!systemHealth.isStatusenginePerfdataProcessor && !systemHealth.isNpcdRunning">
+                                    <span>
+                                        <div class="pt-2">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
+                                                {{ t('Warning') }}
+                                            </h6>
+                                            <i>{{ t('Performance data processer NPCD is not running!') }}</i>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li *ngIf="!systemHealth.isSudoServerRunning">
+                                    <span>
+                                        <div class="pt-2">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
+                                                {{ t('Warning') }}
+                                            </h6>
+                                            <i>{{ t('Service sudo_server is not running!') }}</i>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li *ngIf="!systemHealth.isOitcCmdRunning">
+                                    <span>
+                                        <div class="pt-2">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
+                                                {{ t('Warning') }}
+                                            </h6>
+                                            <i>{{ t('Service oitc_cmd is not running!') }}</i>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li *ngIf="!systemHealth.isPushNotificationRunning">
+                                    <span>
+                                        <div class="pt-2">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
+                                                {{ t('Warning') }}
+                                            </h6>
+
+                                            <i>{{ t('Service push_notification is not running!') }}</i>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li *ngIf="!systemHealth.isNodeJsServerRunning">
+                                    <span>
+                                        <div class="pt-2">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
+                                                {{ t('Warning') }}
+                                            </h6>
+
+                                            <i>{{ t('Nodejs backend is not running') }}</i>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li *ngIf="systemHealth.load?.state !== 'ok'">
+                                    <span>
+                                        <div class="pt-2">
+                                            <p class="mb-2">
+                                                <i>{{ t('Current CPU load is too high!') }}</i>
+                                                <br/>
+                                                <i>{{ systemHealth.load?.load1 }}, {{ systemHealth.load?.load5 }}, {{
+                                                        systemHealth.load?.load15
+                                                    }}</i>
+                                            </p>
+                                        </div>
+                                    </span>
+                                </li>
+                                <ng-container *ngFor="let satellite of systemHealth.satellites">
+                                    <li *ngIf="satellite.satellite_status.status !== 1">
+                                        <span>
+                                            <div class="pt-2">
+                                                <p class="mb-2">
+                                                    <i>{{ t('Sync status') }} {{ t('failed') }}</i>
+                                                    <br/>
+                                                    <i>{{ satellite.name }}
+                                                        , {{ t('last seen') }} {{ satellite.satellite_status.last_seen }}</i>
+                                                </p>
+                                            </div>
+                                        </span>
+                                    </li>
+                                </ng-container>
+                                <li *ngIf="systemHealth.memory_usage && systemHealth.memory_usage.memory.state !== 'ok'">
+                                    <span>
+                                        <div class="pt-2">
+                                            <p class="mb-2">
+                                                <i>{{ t('High memory usage.') }}</i>
+                                                <span class="float-end semi-bold text-muted">
+                                                    {{ systemHealth.memory_usage.memory.percentage }}%
+                                                </span>
+                                            </p>
+                                            <c-progress [value]="systemHealth.memory_usage.memory.percentage"/>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li *ngIf="systemHealth.memory_usage && systemHealth.memory_usage.swap.state !== 'ok'">
+                                    <span>
+                                        <div class="pt-2">
+                                            <p class="mb-2">
+                                                <i>{{ t('High Swap usage') }}</i>
+                                                <span class="float-end semi-bold text-muted">
+                                                    {{ systemHealth.memory_usage.swap.percentage }}%
+                                                </span>
+                                            </p>
+                                            <c-progress [value]="systemHealth.memory_usage.swap.percentage"/>
+                                        </div>
+                                    </span>
+                                </li>
+                                <ng-container *ngFor="let disk of systemHealth.disk_usage">
+                                    <li *ngIf="disk.state !== 'ok'">
+                                        <span>
+                                            <div class="pt-2">
+                                                <p class="mb-2">
+                                                    <i>{{ ( 'Low disk space left for mountpoint:' ) }}</i>
+                                                    <br/>
+                                                    <i>"{{ disk.mountpoint }}"</i>
+                                                    <span class="float-end semi-bold text-muted">
+                                                        {{ disk.use_percentage }}%
+                                                    </span>
+                                                </p>
+                                                <c-progress [value]="disk.use_percentage"/>
+                                            </div>
+                                        </span>
+                                    </li>
+                                </ng-container>
+                                <li *ngIf="systemHealth.isDistributeModuleInstalled && !systemHealth.isNstaRunning">
+                                    <span>
+                                        <div class="pt-2">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
+                                                {{ t('Warning') }}
+                                            </h6>
+                                            <i>{{ t('Service NSTA is not running!') }}</i>
+                                        </div>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- end ngIf: systemHealth.state == 'warning' || systemHealth.state == 'critical' -->
+                    <!-- ngIf: systemHealth.state === 'unknown' -->
+                    <div class="dropdown-item no-padding" *ngIf="systemHealth.state === 'unknown'">
+                        <ul class="list-unstyled system-health-item notification-message fs-sm w-100">
                             <li *ngIf="!systemHealth.isNagiosRunning">
                                 <span>
                                     <div class="pt-2">
-                                        <h6>
-                                            <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
-                                            {{ t('Critical') }}
-                                        </h6>
-                                        <i>{{ t('Monitoring engine is not running!') }}</i>
-                                    </div>
-                                </span>
-                            </li>
-
-                            <li *ngIf="!systemHealth.gearman_reachable">
-                                <span>
-                                    <div class="pt-2">
-                                        <h6>
-                                            <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
-                                            {{ t('Critical') }}
-                                        </h6>
-                                        <i>{{ t('Gearman job server not reachable!') }}</i>
-                                    </div>
-                                </span>
-                            </li>
-                            <li *ngIf="!systemHealth.gearman_worker_running">
-                                <span>
-                                    <div class="pt-2">
-                                        <h6>
-                                            <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
-                                            {{ t('Critical') }}
-                                        </h6>
-                                        <i>{{ t('Service gearman_worker is not running!') }}</i>
-                                    </div>
-                                </span>
-                            </li>
-                            <li *ngIf="systemHealth.isNdoInstalled && !systemHealth.isNdoRunning">
-                                <span>
-                                    <div class="pt-2">
-                                        <h6>
-                                            <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
-                                            {{ t('Critical') }}
-                                        </h6>
-                                        <i>{{ t('Database connector NDOUtils is not running!') }}</i>
-                                    </div>
-                                </span>
-                            </li>
-                            <li *ngIf="systemHealth.isStatusengineInstalled && !systemHealth.isStatusengineRunning">
-                                <span>
-                                    <div class="pt-2">
-                                        <h6>
-                                            <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
-                                            {{ t('Critical') }}
-                                        </h6>
-                                        <i>{{ t('Database connector Statusengine is not running!') }}</i>
-                                    </div>
-                                </span>
-                            </li>
-                            <li *ngIf="systemHealth.isStatusenginePerfdataProcessor && !systemHealth.isStatusengineRunning">
-                                <span>
-                                    <div class="pt-2">
-                                        <h6>
-                                            <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
-                                            {{ t('Warning') }}
-                                        </h6>
-                                        <i>{{ t('Performance data processer Statusengine is not running!') }}</i>
-                                    </div>
-                                </span>
-                            </li>
-                            <li *ngIf="!systemHealth.isStatusenginePerfdataProcessor && !systemHealth.isNpcdRunning">
-                                <span>
-                                    <div class="pt-2">
-                                        <h6>
-                                            <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
-                                            {{ t('Warning') }}
-                                        </h6>
-                                        <i>{{ t('Performance data processer NPCD is not running!') }}</i>
-                                    </div>
-                                </span>
-                            </li>
-                            <li *ngIf="!systemHealth.isSudoServerRunning">
-                                <span>
-                                    <div class="pt-2">
-                                        <h6>
-                                            <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
-                                            {{ t('Warning') }}
-                                        </h6>
-                                        <i>{{ t('Service sudo_server is not running!') }}</i>
-                                    </div>
-                                </span>
-                            </li>
-                            <li *ngIf="!systemHealth.isOitcCmdRunning">
-                                <span>
-                                    <div class="pt-2">
-                                        <h6>
-                                            <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
-                                            {{ t('Warning') }}
-                                        </h6>
-                                        <i>{{ t('Service oitc_cmd is not running!') }}</i>
-                                    </div>
-                                </span>
-                            </li>
-                            <li *ngIf="!systemHealth.isPushNotificationRunning">
-                                <span>
-                                    <div class="pt-2">
-                                        <h6>
-                                            <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
-                                            {{ t('Warning') }}
-                                        </h6>
-
-                                        <i>{{ t('Service push_notification is not running!') }}</i>
-                                    </div>
-                                </span>
-                            </li>
-                            <li *ngIf="!systemHealth.isNodeJsServerRunning">
-                                <span>
-                                    <div class="pt-2">
-                                        <h6>
-                                            <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
-                                            {{ t('Warning') }}
-                                        </h6>
-
-                                        <i>{{ t('Nodejs backend is not running') }}</i>
-                                    </div>
-                                </span>
-                            </li>
-                            <li *ngIf="systemHealth.load?.state !== 'ok'">
-                                <span>
-                                    <div class="pt-2">
                                         <p class="mb-2">
-                                            <i>{{ t('Current CPU load is too high!') }}</i>
+                                            <fa-icon [icon]="['fas', 'question-circle']"
+                                                     class="text-primary pe-1"></fa-icon>
+                                            <strong>{{ t('Unknown') }}</strong>
                                             <br/>
-                                            <i>{{ systemHealth.load?.load1 }}, {{ systemHealth.load?.load5 }}, {{
-                                                    systemHealth.load?.load15
-                                                }}</i>
+                                            <i>{{ t('Could not detect system health status.') }}</i>
                                         </p>
-                                    </div>
-                                </span>
-                            </li>
-                            <ng-container *ngFor="let satellite of systemHealth.satellites">
-                                <li *ngIf="satellite.satellite_status.status !== 1">
-                                    <span>
-                                        <div class="pt-2">
-                                            <p class="mb-2">
-                                                <i>{{ t('Sync status') }} {{ t('failed') }}</i>
-                                                <br/>
-                                                <i>{{ satellite.name }}
-                                                    , {{ t('last seen') }} {{ satellite.satellite_status.last_seen }}</i>
-                                            </p>
-                                        </div>
-                                    </span>
-                                </li>
-                            </ng-container>
-                            <li *ngIf="systemHealth.memory_usage && systemHealth.memory_usage.memory.state !== 'ok'">
-                                <span>
-                                    <div class="pt-2">
-                                        <p class="mb-2">
-                                            <i>{{ t('High memory usage.') }}</i>
-                                            <span class="float-end semi-bold text-muted">
-                                                {{ systemHealth.memory_usage.memory.percentage }}%
-                                            </span>
-                                        </p>
-                                        <c-progress [value]="systemHealth.memory_usage.memory.percentage"/>
-                                    </div>
-                                </span>
-                            </li>
-                            <li *ngIf="systemHealth.memory_usage && systemHealth.memory_usage.swap.state !== 'ok'">
-                                <span>
-                                    <div class="pt-2">
-                                        <p class="mb-2">
-                                            <i>{{ t('High Swap usage') }}</i>
-                                            <span class="float-end semi-bold text-muted">
-                                                {{ systemHealth.memory_usage.swap.percentage }}%
-                                            </span>
-                                        </p>
-                                        <c-progress [value]="systemHealth.memory_usage.swap.percentage"/>
-                                    </div>
-                                </span>
-                            </li>
-                            <ng-container *ngFor="let disk of systemHealth.disk_usage">
-                                <li *ngIf="disk.state !== 'ok'">
-                                    <span>
-                                        <div class="pt-2">
-                                            <p class="mb-2">
-                                                <i>{{ ( 'Low disk space left for mountpoint:' ) }}</i>
-                                                <br/>
-                                                <i>"{{ disk.mountpoint }}"</i>
-                                                <span class="float-end semi-bold text-muted">
-                                                    {{ disk.use_percentage }}%
-                                                </span>
-                                            </p>
-                                            <c-progress [value]="disk.use_percentage"/>
-                                        </div>
-                                    </span>
-                                </li>
-                            </ng-container>
-                            <li *ngIf="systemHealth.isDistributeModuleInstalled && !systemHealth.isNstaRunning">
-                                <span>
-                                    <div class="pt-2">
-                                        <h6>
-                                            <fa-icon [icon]="['fas', 'warning']" class="down pe-1"></fa-icon>
-                                            {{ t('Warning') }}
-                                        </h6>
-                                        <i>{{ t('Service NSTA is not running!') }}</i>
                                     </div>
                                 </span>
                             </li>
                         </ul>
                     </div>
-                </div>
-                <!-- end ngIf: systemHealth.state == 'warning' || systemHealth.state == 'critical' -->
-                <!-- ngIf: systemHealth.state === 'unknown' -->
-                <div class="dropdown-item no-padding" *ngIf="systemHealth.state === 'unknown'">
-                    <ul class="list-unstyled system-health-item notification-message fs-sm w-100">
-                        <li *ngIf="!systemHealth.isNagiosRunning">
-                            <span>
-                                <div class="pt-2">
-                                    <p class="mb-2">
-                                        <fa-icon [icon]="['fas', 'question-circle']"
-                                                 class="text-primary pe-1"></fa-icon>
-                                        <strong>{{ t('Unknown') }}</strong>
-                                        <br/>
-                                        <i>{{ t('Could not detect system health status.') }}</i>
-                                    </p>
-                                </div>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-                @if (PermissionsService.hasPermissionObservable(['systemHealthUsers', 'index'])|async) {
-                    <div class="p-2 d-flex justify-content-between">
-                        <a [routerLink]="['/', 'systemHealthUsers', 'index']" class="btn btn-primary btn-xs"
-                           title="{{t('System health notification list')}}">
-                            <fa-icon [icon]="['fas', 'user']" class="px-3"></fa-icon>
-                        </a>
-                        <div class="italic text-info text-right">
+                    @if (PermissionsService.hasPermissionObservable(['systemHealthUsers', 'index'])|async) {
+                        <div class="p-2 d-flex justify-content-between">
+                            <a [routerLink]="['/', 'systemHealthUsers', 'index']" class="btn btn-primary btn-xs"
+                               title="{{t('System health notification list')}}">
+                                <fa-icon [icon]="['fas', 'user']" class="px-3"></fa-icon>
+                            </a>
+                            <div class="italic text-info text-right">
+                                {{ t('Last update') }}: {{ systemHealth.update }}
+                            </div>
+                        </div>
+                    } @else {
+                        <div class="p-2 italic text-info text-right">
                             {{ t('Last update') }}: {{ systemHealth.update }}
                         </div>
-                    </div>
-                } @else {
-                    <div class="p-2 italic text-info text-right">
-                        {{ t('Last update') }}: {{ systemHealth.update }}
-                    </div>
-                }
-            </div>
-        </c-dropdown>
-        <button cButton class="btn btn-xs {{btnClass}} px-3"
-        >{{ systemHealth.errorCount }}
-        </button>
+                    }
+                </div>
+            </c-dropdown>
+            <button cButton class="btn btn-xs {{btnClass}} px-3"
+            >{{ systemHealth.errorCount }}
+            </button>
+        </div>
     </div>
+
 </ng-container>
