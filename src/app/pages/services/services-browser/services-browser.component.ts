@@ -327,6 +327,12 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
             this.loadSlaInformation();
 
             this.lastUpdated = new Date();
+
+            if (this.router.url.includes('#acknowledge')) {
+                if (this.result) {
+                    this.acknowledgeStatus(this.result.mergedService, this.result.host);
+                }
+            }
         }));
     }
 
