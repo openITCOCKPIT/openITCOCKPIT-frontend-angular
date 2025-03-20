@@ -977,7 +977,7 @@
                                         'critical-soft' : host.Host.priority==4, 'critical' : host.Host.priority==5}"></fa-icon>
                     </td>
 
-                    <td *ngIf="fields[7]">
+                    <td *ngIf="fields[7]" class="word-break">
                         @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                             <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
                                 {{ host.Host.name }}
