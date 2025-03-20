@@ -49,8 +49,8 @@ export class HistoryService implements OnDestroy {
 
     public navigateWithFallback(fallbackUrl: any[]): void {
         const previousUrl = this.getPreviousUrl();
-        //console.log(previousUrl);
-        if (previousUrl) {
+        //if edit open in new Tab, Window previousUrL is '/' and you cannot reach the fallback
+        if (previousUrl && previousUrl != '/') {
             // if (previousUrl != '/') { // '/' is the Dashboard in this case
             this.location.back();
             return;
