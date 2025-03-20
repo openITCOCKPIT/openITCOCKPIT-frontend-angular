@@ -15,7 +15,8 @@
             <oitc-navbar-search [menu]="menu" *ngIf="!unfoldable">
             </oitc-navbar-search>
         </div>
-        <ul class="sidebar-nav">
+        <!-- [style.color-scheme]="'dark'" - Fix for Safari Menu Scroll -->
+        <ul class="sidebar-nav" [style.color-scheme]="'dark'">
             <div class="simplebar-wrapper">
                 <div class="simplebar-height-auto-observer-wrapper">
                     <div class="simplebar-height-auto-observer"></div>
