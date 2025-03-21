@@ -149,7 +149,7 @@ export class MessagesotdEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.MessagesOfTheDayService.getEdit(id)
             .subscribe((result: EditableMessageOfTheDay) => {
                 this.post = result;
-                this.post.expire = this.post.expiration_duration > 0;
+                this.post.expire = !! this.post.expiration_duration;
                 this.html = this.BbCodeParserService.parse(this.post.content);
             }));
     }
@@ -159,9 +159,6 @@ export class MessagesotdEditComponent implements OnInit, OnDestroy {
     }
 
     protected updateMessageOfTheDay(): void {
-        if (!this.post.expire) {
-            this.post.expiration_duration = 0;
-        }
         this.subscriptions.add(this.MessagesOfTheDayService.updateMessageOfTheDay(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 if (result.success) {
@@ -204,6 +201,10 @@ export class MessagesotdEditComponent implements OnInit, OnDestroy {
 
     protected setExpiration(expiration: boolean): void {
         this.post.expire = expiration;
+        if (!expiration) {
+            this.post.expiration_duration = null;
+        }
+        this.cdr.markForCheck();
     }
 
 

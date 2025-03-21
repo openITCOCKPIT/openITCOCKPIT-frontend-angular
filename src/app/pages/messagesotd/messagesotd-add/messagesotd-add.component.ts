@@ -1,28 +1,28 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MessageOfTheDay } from '../messagesotd.interface';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  DropdownComponent,
-  DropdownItemDirective,
-  DropdownMenuDirective,
-  DropdownToggleDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -106,6 +106,7 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
     private readonly BbCodeParserService = inject(BbCodeParserService);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected post: MessageOfTheDay = this.getDefaultPost();
     protected usergroups: SelectKeyValue[] = [];
@@ -182,6 +183,10 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
 
     protected setExpiration(expiration: boolean): void {
         this.post.expire = expiration;
+        if (!expiration) {
+            this.post.expiration_duration = null;
+        }
+        this.cdr.markForCheck();
     }
 
     public ngOnInit() {
