@@ -63,6 +63,7 @@
         "@types/file-saver": "^2.0.7",
         "@types/lodash": "^4.17.14",
         "@types/sprintf-js": "^1.1.4",
+        "@types/uuid": "^10.0.0",
         "animate.css": "^4.1.1",
         "canvas-gauges": "^2.1.7",
         "codemirror": "^6.0.1",
