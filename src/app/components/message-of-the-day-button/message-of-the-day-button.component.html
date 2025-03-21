@@ -1,6 +1,8 @@
-<a class="btn btn-xs ps-3 pe-3"
-   *ngIf="messageOfTheDay.messageOtdAvailable"
-   [ngClass]="'pulse-'+messageOfTheDay.messageOtd.style + ' btn-outline-' + messageOfTheDay.messageOtd.style"
-   (click)="showModal()">
-    <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
-</a>
+<div [ngClass]="{'ps-2': messageOfTheDay.messageOtdAvailable}">
+    <a class="btn btn-xs ps-3 pe-3"
+       *ngIf="messageOfTheDay.messageOtdAvailable"
+       [ngClass]="'pulse-'+messageOfTheDay.messageOtd.style + ' btn-outline-' + messageOfTheDay.messageOtd.style"
+       (click)="showModal()">
+        <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
+    </a>
+</div>

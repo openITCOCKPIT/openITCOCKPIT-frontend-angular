@@ -17,9 +17,6 @@ import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { ResourcegroupsService } from '../resourcegroups.service';
 import { ResourcegroupWithRelations } from '../resourcegroups.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
-import {
-    NotUsedByObjectComponent
-} from '../../../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -43,7 +40,6 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
         NgForOf,
         TableDirective,
         AsyncPipe,
-        NotUsedByObjectComponent,
         BackButtonDirective,
         FormLoaderComponent,
         PermissionDirective,
