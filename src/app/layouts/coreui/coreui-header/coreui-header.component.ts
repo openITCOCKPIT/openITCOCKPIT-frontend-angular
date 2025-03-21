@@ -32,15 +32,16 @@ import { TopSearchComponent } from '../top-search/top-search.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { HeaderTimeComponent} from './header-time/header-time.component';
-import { HeaderStatsComponent} from './header-stats/header-stats.component';
-import { SystemHealthComponent} from './system-health/system-health.component';
+import { HeaderTimeComponent } from './header-time/header-time.component';
+import { HeaderStatsComponent } from './header-stats/header-stats.component';
+import { SystemHealthComponent } from './system-health/system-health.component';
 
 import {
     MessageOfTheDayButtonComponent
 } from '../../../components/message-of-the-day-button/message-of-the-day-button.component';
 import { CurrentMessageOfTheDay } from '../../../pages/messagesotd/messagesotd.interface';
 import { HeaderAvatarComponent } from './header-avatar/header-avatar.component';
+import { PushNotificationsComponent } from '../../../components/push-notifications/push-notifications.component';
 
 @Component({
     selector: 'oitc-coreui-header',
@@ -65,7 +66,8 @@ import { HeaderAvatarComponent } from './header-avatar/header-avatar.component';
         HeaderAvatarComponent,
         HeaderTimeComponent,
         HeaderStatsComponent,
-        SystemHealthComponent
+        SystemHealthComponent,
+        PushNotificationsComponent
     ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css',

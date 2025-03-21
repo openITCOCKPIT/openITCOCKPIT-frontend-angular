@@ -23,13 +23,21 @@ export class PushNotificationsComponent implements OnInit, OnDestroy {
 
     private hasPermission: boolean = false;
 
-    private websocketConfig: { [p: string]: string };
+    private websocketConfig: { [p: string]: string } = {};
 
     private cdr = inject(ChangeDetectorRef);
 
+
+    constructor() {
+        this.subscriptions.add(this.PushNotificationsService.hasPermissionObservable$.subscribe((hasPermission: boolean) => {
+            this.hasPermission = hasPermission;
+            this.onHasPermissionChange();
+        }));
+    }
+
     public ngOnInit(): void {
         if (this.checkBrowserSupport()) {
-            this.checkPermissions();
+            this.PushNotificationsService.checkPermissions();
         }
     }
 
@@ -43,25 +51,6 @@ export class PushNotificationsComponent implements OnInit, OnDestroy {
             return false;
         }
         return true;
-    };
-
-    private checkPermissions() {
-        if (Notification.permission === "granted") {
-            this.hasPermission = true;
-            this.onHasPermissionChange();
-            return true;
-        }
-
-        if (Notification.permission !== 'denied') {
-            Notification.requestPermission((permission) => {
-                // If the user accepts, let's create a notification
-                if (permission === "granted") {
-                    this.hasPermission = true;
-                    this.onHasPermissionChange();
-                }
-            });
-        }
-
     };
 
     private connectToNotificationPushServer() {
@@ -87,7 +76,7 @@ export class PushNotificationsComponent implements OnInit, OnDestroy {
     };
 
     private onHasPermissionChange() {
-        if (this.hasPermission === true) {
+        if (this.hasPermission === true && !this.PushNotificationsService.isConnected()) {
             this.connectToNotificationPushServer();
         }
     };
@@ -96,7 +85,7 @@ export class PushNotificationsComponent implements OnInit, OnDestroy {
         if (typeof event.data !== "undefined") {
             let data = JSON.parse(event.data);
 
-            let options = {
+            let options: NotificationOptions = {
                 body: data.message
             };
 
@@ -106,14 +95,16 @@ export class PushNotificationsComponent implements OnInit, OnDestroy {
 
             let notification = new Notification(data.data.title, options);
 
-            let url = '/hosts/browser/' + data.data.hostUuid;
-            if (data.data.type === 'service') {
-                url = '/services/browser/' + data.data.serviceUuid;
-            }
+            if (data.data.hostUuid !== null || data.data.serviceUuid !== null) {
+                let url = '/hosts/browser/' + data.data.hostUuid;
+                if (data.data.type === 'service') {
+                    url = '/services/browser/' + data.data.serviceUuid;
+                }
 
-            notification.onclick = function (event) {
-                event.preventDefault(); // prevent the browser from focusing the Notification's tab
-                window.open(url, '_blank');
+                notification.onclick = function (event) {
+                    event.preventDefault(); // prevent the browser from focusing the Notification's tab
+                    window.open(url, '_blank');
+                }
             }
         }
     }

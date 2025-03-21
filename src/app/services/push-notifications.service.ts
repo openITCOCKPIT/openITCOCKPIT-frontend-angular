@@ -1,13 +1,13 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
-import * as console from 'console';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PushNotificationsService implements OnDestroy {
 
-    private _connection: WebSocket | null = null;
+    private _connection?: WebSocket;
     private _url: string = '';
     private _key: string = '';
     private _userId: number = 0;
@@ -16,6 +16,10 @@ export class PushNotificationsService implements OnDestroy {
     private _success: boolean = false;
     private keepAliveInterval: number | null = null;
     private _uniqid: string | null = null;
+    private _hasPermission: boolean = false;
+
+    private hasPermissionSubject$$: Subject<boolean> = new Subject<boolean>();
+    public hasPermissionObservable$: Observable<boolean> = this.hasPermissionSubject$$.asObservable();
 
     constructor() {
         this._onResponse = this._onResponse.bind(this);
@@ -64,7 +68,7 @@ export class PushNotificationsService implements OnDestroy {
         console.error(event);
     };
 
-    private _onResponse(event: MessageEvent) {
+    private _onResponse(event: Event) {
         //console.log(event);
     };
 
@@ -170,6 +174,46 @@ export class PushNotificationsService implements OnDestroy {
 
     public send(json: string) {
         this._send(json);
+    };
+
+    public hasPermission(): boolean {
+        return this._hasPermission;
+    }
+
+    public checkPermissions() {
+        if (Notification.permission === "granted") {
+            this._hasPermission = true;
+            this.hasPermissionSubject$$.next(this._hasPermission);
+            return;
+        }
+
+        if (Notification.permission !== 'denied') {
+            Notification.requestPermission((permission) => {
+                // If the user accepts, let's create a notification
+                if (permission === "granted") {
+                    this._hasPermission = true;
+                    this.hasPermissionSubject$$.next(this._hasPermission);
+                }
+            });
+        }
+
+    };
+
+    public isConnected(): boolean {
+        return this._success;
+    }
+
+    public sendTestMessage() {
+        this._send(JSON.stringify({
+            task: 'testMessage',
+            key: this._key,
+            uuid: this._uuid,
+            data: {
+                'title': 'Test',
+                'message': 'This is a test message',
+                'icon': '/img/push_notifications/wh/ServicePushIconUNKNOWN.png'
+            }
+        }));
     };
 
 }
