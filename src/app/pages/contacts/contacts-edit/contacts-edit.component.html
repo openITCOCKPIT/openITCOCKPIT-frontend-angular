@@ -266,29 +266,55 @@
                                         </label>
                                     </c-form-check>
                                 </div>
-                                <div class="custom-control custom-checkbox">
-                                    <c-form-check>
-                                        <input
-                                            cFormCheckInput
-                                            type="checkbox"
-                                            id="host_push_notifications_enabled"
-                                            [(ngModel)]="post.host_push_notifications_enabled"
-                                            (ngModelChange)="post.host_push_notifications_enabled = $event ? 1 : 0"
-                                            (click)="toggleHostBrowserCheckbox()"
-                                            name="host_push_notifications_enabled"
-                                        />
-                                        <label
-                                            cFormCheckLabel
-                                            for="host_push_notifications_enabled">
-                                            {{ t('Push notifications to browser') }}
-                                            <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
-                                                     [cTooltip]="tooltipContent">
-                                                <ng-template #tooltipContent>
-                                                    <img src="./assets/images/docs/browser_notification_bg.png"/>
-                                                </ng-template>
-                                            </fa-icon>
-                                        </label>
-                                    </c-form-check>
+                                <div class="d-flex flex-row justify-content-between">
+                                    <div class="custom-control custom-checkbox">
+                                        <c-form-check>
+                                            <input
+                                                cFormCheckInput
+                                                type="checkbox"
+                                                id="host_push_notifications_enabled"
+                                                [(ngModel)]="post.host_push_notifications_enabled"
+                                                (ngModelChange)="post.host_push_notifications_enabled = $event ? 1 : 0"
+                                                (click)="toggleHostBrowserCheckbox()"
+                                                name="host_push_notifications_enabled"
+                                            />
+                                            <label
+                                                cFormCheckLabel
+                                                for="host_push_notifications_enabled">
+                                                {{ t('Push notifications to browser') }}
+                                                <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
+                                                         [cTooltip]="tooltipContent">
+                                                    <ng-template #tooltipContent>
+                                                        <img src="./assets/images/docs/browser_notification_bg.png"/>
+                                                    </ng-template>
+                                                </fa-icon>
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+                                    <button cButton class="ripple" color="primary" type="button" size="xs"
+                                            *ngIf="post.host_push_notifications_enabled"
+                                            (click)="checkPushNotificationSettings()">
+                                        <fa-icon [icon]="['fas', 'bell']"></fa-icon>
+                                        {{ t('Test Push notifications') }}
+                                    </button>
+                                </div>
+                                <div
+                                    *ngIf="post.host_push_notifications_enabled && pushNotificationHasPermission !== undefined && !pushNotificationHasPermission">
+                                    <c-alert color="danger" class="mt-2">
+                                        {{ t('No permission for push notification. Enable it in your browser settings!') }}
+                                    </c-alert>
+                                </div>
+                                <div
+                                    *ngIf="post.host_push_notifications_enabled && pushNotificationHasPermission !== undefined && pushNotificationConnected !== undefined && pushNotificationHasPermission && !pushNotificationConnected">
+                                    <c-alert color="danger" class="mt-2">
+                                        {{ t('Connection to push notification service is not established') }}
+                                    </c-alert>
+                                </div>
+                                <div
+                                    *ngIf="post.host_push_notifications_enabled && pushNotificationHasPermission !== undefined && pushNotificationConnected !== undefined && pushNotificationHasPermission && pushNotificationConnected">
+                                    <c-alert color="success" class="mt-2">
+                                        {{ t('Connection to push notification service established successfully') }}
+                                    </c-alert>
                                 </div>
 
                                 <hr class="border-dashed">
@@ -473,30 +499,56 @@
                                         </label>
                                     </c-form-check>
                                 </div>
-                                <div class="custom-control custom-checkbox">
-                                    <c-form-check>
-                                        <input
-                                            type="checkbox"
-                                            id="service_push_notifications_enabled"
-                                            [(ngModel)]="post.service_push_notifications_enabled"
-                                            (ngModelChange)="post.service_push_notifications_enabled = $event ? 1 : 0"
-                                            (click)="toggleServiceBrowserCheckbox()"
-                                            cFormCheckInput
-                                            name="service_push_notifications_enabled"
-                                        />
-                                        <label
-                                            cFormCheckLabel
-                                            for="service_push_notifications_enabled">
-                                            {{ t('Push notifications to browser') }}
-                                            <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
-                                                     [cTooltip]="tooltipContent2">
-                                                <ng-template #tooltipContent2>
-                                                    <img
-                                                        src="./assets/images/docs/browser_service_notification_bg.png"/>
-                                                </ng-template>
-                                            </fa-icon>
-                                        </label>
-                                    </c-form-check>
+                                <div class="d-flex flex-row justify-content-between">
+                                    <div class="custom-control custom-checkbox">
+                                        <c-form-check>
+                                            <input
+                                                type="checkbox"
+                                                id="service_push_notifications_enabled"
+                                                [(ngModel)]="post.service_push_notifications_enabled"
+                                                (ngModelChange)="post.service_push_notifications_enabled = $event ? 1 : 0"
+                                                (click)="toggleServiceBrowserCheckbox()"
+                                                cFormCheckInput
+                                                name="service_push_notifications_enabled"
+                                            />
+                                            <label
+                                                cFormCheckLabel
+                                                for="service_push_notifications_enabled">
+                                                {{ t('Push notifications to browser') }}
+                                                <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
+                                                         [cTooltip]="tooltipContent2">
+                                                    <ng-template #tooltipContent2>
+                                                        <img
+                                                            src="./assets/images/docs/browser_service_notification_bg.png"/>
+                                                    </ng-template>
+                                                </fa-icon>
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+                                    <button cButton class="ripple" color="primary" type="button" size="xs"
+                                            *ngIf="post.service_push_notifications_enabled"
+                                            (click)="checkPushNotificationSettings()">
+                                        <fa-icon [icon]="['fas', 'bell']"></fa-icon>
+                                        {{ t('Test Push notifications') }}
+                                    </button>
+                                </div>
+                                <div
+                                    *ngIf="post.service_push_notifications_enabled && pushNotificationHasPermission !== undefined && !pushNotificationHasPermission">
+                                    <c-alert color="danger" class="mt-2">
+                                        {{ t('No permission for push notification. Enable it in your browser settings!') }}
+                                    </c-alert>
+                                </div>
+                                <div
+                                    *ngIf="post.service_push_notifications_enabled && pushNotificationHasPermission !== undefined && pushNotificationConnected !== undefined && pushNotificationHasPermission && !pushNotificationConnected">
+                                    <c-alert color="danger" class="mt-2">
+                                        {{ t('Connection to push notification service is not established') }}
+                                    </c-alert>
+                                </div>
+                                <div
+                                    *ngIf="post.service_push_notifications_enabled && pushNotificationHasPermission !== undefined && pushNotificationConnected !== undefined && pushNotificationHasPermission && pushNotificationConnected">
+                                    <c-alert color="success" class="mt-2">
+                                        {{ t('Connection to push notification service established successfully') }}
+                                    </c-alert>
                                 </div>
 
                                 <hr class="border-dashed">

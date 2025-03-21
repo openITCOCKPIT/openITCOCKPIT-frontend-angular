@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
+    AlertComponent,
     BadgeComponent,
     CardBodyComponent,
     CardComponent,
@@ -49,6 +50,7 @@ import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-lin
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
 import { HistoryService } from '../../../history.service';
+import { PushNotificationsService } from '../../../services/push-notifications.service';
 
 @Component({
     selector: 'oitc-contacts-edit',
@@ -86,7 +88,8 @@ import { HistoryService } from '../../../history.service';
         MultiSelectComponent,
         SelectComponent,
         LabelLinkComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        AlertComponent
     ],
     templateUrl: './contacts-edit.component.html',
     styleUrl: './contacts-edit.component.css',
@@ -95,6 +98,7 @@ import { HistoryService } from '../../../history.service';
 export class ContactsEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
+    private PushNotificationsService: PushNotificationsService = inject(PushNotificationsService);
     protected users: SelectKeyValue[] = [];
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -120,6 +124,9 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     protected containersSelection: number[] = [];
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private cdr = inject(ChangeDetectorRef);
+
+    public pushNotificationConnected: boolean | undefined;
+    public pushNotificationHasPermission: boolean | undefined;
 
     public ngOnInit() {
         this.loadCommands();
@@ -302,6 +309,11 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                 this.post.service_commands._ids = [...this.post.service_commands._ids.filter(item => item !== this.servicePushCommandId)];
             }
         }
+
+        if (!this.post.service_push_notifications_enabled) {
+            this.pushNotificationHasPermission = undefined;
+            this.pushNotificationConnected = undefined;
+        }
     }
 
     // Called by (click) - no manual change detection required
@@ -314,6 +326,11 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
             if (this.post.host_commands._ids.indexOf(this.hostPushCommandId) !== -1) {
                 this.post.host_commands._ids = [...this.post.host_commands._ids.filter(item => item !== this.hostPushCommandId)];
             }
+        }
+
+        if (!this.post.host_push_notifications_enabled) {
+            this.pushNotificationHasPermission = undefined;
+            this.pushNotificationConnected = undefined;
         }
     }
 
@@ -332,6 +349,17 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
             this.post.host_push_notifications_enabled = 1;
         } else {
             this.post.host_push_notifications_enabled = 0;
+        }
+    }
+
+    protected checkPushNotificationSettings(): void {
+        if (!this.pushNotificationHasPermission) {
+            this.PushNotificationsService.checkPermissions();
+        }
+        this.pushNotificationConnected = this.PushNotificationsService.isConnected();
+        this.pushNotificationHasPermission = this.PushNotificationsService.hasPermission();
+        if (this.pushNotificationConnected && this.pushNotificationHasPermission) {
+            this.PushNotificationsService.sendTestMessage();
         }
     }
 
