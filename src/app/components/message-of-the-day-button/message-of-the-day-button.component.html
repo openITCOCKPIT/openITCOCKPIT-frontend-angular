@@ -1,4 +1,4 @@
-<div [ngClass]="{'ps-2': messageOfTheDay.messageOtdAvailable}">
+<div [ngClass]="{'ps-2 pe-1': messageOfTheDay.messageOtdAvailable}">
     <a class="btn btn-xs ps-3 pe-3"
        *ngIf="messageOfTheDay.messageOtdAvailable"
        [ngClass]="'pulse-'+messageOfTheDay.messageOtd.style + ' btn-outline-' + messageOfTheDay.messageOtd.style"
