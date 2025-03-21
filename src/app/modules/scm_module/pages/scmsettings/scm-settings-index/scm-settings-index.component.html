@@ -20,7 +20,7 @@
             </li>
         </ol>
     </nav>
-    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
     <c-row>
         <c-col>
             <div class="alert bg-warning-500 border-warning text-dark">

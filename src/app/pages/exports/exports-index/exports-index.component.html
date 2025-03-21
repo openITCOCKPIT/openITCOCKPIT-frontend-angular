@@ -21,7 +21,7 @@
 
     <oitc-query-handler-checker></oitc-query-handler-checker>
 
-    <oitc-form-loader *ngIf="init"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="init"></oitc-form-loader>
 
     <c-card class="mb-3" *ngIf="!init">
         <c-card-header>

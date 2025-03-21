@@ -20,7 +20,7 @@
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="post.Usergroup.id === 0"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="post.Usergroup.id === 0" />
     <form *ngIf="post.Usergroup.id !== 0" cForm (ngSubmit)="editUserrole()">
         <c-card class="mb-3">
             <c-card-header>
@@ -218,7 +218,7 @@
                         <ng-container
                             *ngIf="controllerFilter === '' || controller.value.alias.toLowerCase().includes(controllerFilter)">
                             <ng-container
-                                *ngIf="showController(controller.value.children) && controller.value.alias.substring(-6) !== 'Module'">
+                                *ngIf="showController(controller.value.children) && ! controller.value.alias.endsWith('Module')">
                                 <h5>
                                     {{ controller.value.alias }}
                                 </h5>
@@ -249,7 +249,7 @@
 
                     <ng-container *ngFor="let plugin of acos.acos[0].children | keyvalue: keepOrder">
                         <ng-container
-                            *ngIf="showController(plugin.value.children) && plugin.value.alias.substring(-6) === 'Module'">
+                            *ngIf="showController(plugin.value.children) && plugin.value.alias.endsWith('Module')">
                             <h5 class="ok">
                                 <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
                                 {{ plugin.value.alias }}

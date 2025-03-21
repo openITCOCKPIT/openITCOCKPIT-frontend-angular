@@ -8,7 +8,7 @@ import {
     signal
 } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
 import {
@@ -95,7 +95,9 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         NgForOf,
         PopoverDirective,
         HostsBarChartComponent,
-        AlertComponent
+        AlertComponent,
+        FaStackComponent,
+        FaStackItemSizeDirective
     ],
     templateUrl: './downtimereports-index.component.html',
     styleUrl: './downtimereports-index.component.css',

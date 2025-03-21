@@ -39,6 +39,7 @@ import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/blo
 import Sunburst from 'sunburst-chart';
 import _ from 'lodash';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
+import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 
 
 @Component({
@@ -66,7 +67,8 @@ import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/lab
         LabelLinkComponent,
         TranslocoPipe,
         FaStackComponent,
-        FaStackItemSizeDirective
+        FaStackItemSizeDirective,
+        NoRecordsComponent
     ],
     templateUrl: './resourcegroups-summary.component.html',
     styleUrl: './resourcegroups-summary.component.scss',

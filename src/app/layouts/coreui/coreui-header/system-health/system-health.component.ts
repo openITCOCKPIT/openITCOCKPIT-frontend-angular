@@ -5,8 +5,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { AsyncPipe, NgForOf, NgIf, NgStyle } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    ButtonDirective,
-    ButtonGroupComponent,
     DropdownComponent, DropdownMenuDirective,
     DropdownToggleDirective, ProgressComponent,
     TooltipDirective
@@ -96,13 +94,12 @@ export interface SystemHealth {
 }
 
 @Component({
-  selector: 'oitc-system-health',
+    selector: 'oitc-system-health',
     imports: [
         TranslocoDirective,
         NgIf,
         FaIconComponent,
         DropdownComponent,
-        NgStyle,
         DropdownToggleDirective,
         DropdownMenuDirective,
         RouterLink,
@@ -113,9 +110,9 @@ export interface SystemHealth {
         XsButtonDirective,
 
     ],
-  templateUrl: './system-health.component.html',
-  styleUrl: './system-health.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './system-health.component.html',
+    styleUrl: './system-health.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SystemHealthComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
@@ -130,15 +127,17 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
         errorCount: 0
     }
 
-    protected systemHealth:SystemHealth = this.systemHealthDefault;
-    protected class:string = '';
-    protected bgClass:string = '';
-    protected btnClass:string = '';
+    protected systemHealth: SystemHealth = this.systemHealthDefault;
+    protected class: string = '';
+    protected bgClass: string = '';
+    protected btnClass: string = '';
 
     public ngOnInit() {
-        timer(0, 60000).pipe(takeUntil(this.destroy$)).subscribe({next: () => {
+        timer(0, 60000).pipe(takeUntil(this.destroy$)).subscribe({
+            next: () => {
                 this.getSystemHealth();
-            }});
+            }
+        });
     }
 
     public ngOnDestroy() {
@@ -147,8 +146,8 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    protected getHealthClass(){
-        switch(this.systemHealth.state){
+    protected getHealthClass() {
+        switch (this.systemHealth.state) {
             case 'ok':
                 return 'up';
 
@@ -163,8 +162,8 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
         }
     }
 
-    protected getHealthBgClass(){
-        switch(this.systemHealth.state){
+    protected getHealthBgClass() {
+        switch (this.systemHealth.state) {
             case 'ok':
                 return 'bg-up';
 
@@ -179,8 +178,8 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
         }
     }
 
-    protected getHealthBtnClass (){
-        switch(this.systemHealth.state){
+    protected getHealthBtnClass() {
+        switch (this.systemHealth.state) {
             case 'ok':
                 return 'btn-success';
 
@@ -197,9 +196,9 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
 
     protected getSystemHealth() {
         this.subscriptions.add(this.SystemHealthService.getSystemHealth().subscribe((data: any) => {
-            if(data.status.cache_readable){
+            if (data.status.cache_readable) {
                 this.systemHealth = data.status;
-            }else{
+            } else {
                 this.systemHealth = this.systemHealthDefault;
             }
             this.class = this.getHealthClass();

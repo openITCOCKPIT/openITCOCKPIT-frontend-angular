@@ -35,6 +35,9 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { HeaderTimeComponent } from './header-time/header-time.component';
 import { HeaderStatsComponent } from './header-stats/header-stats.component';
 import { SystemHealthComponent } from './system-health/system-health.component';
+import { HeaderEditionComponent } from './header-edition/header-edition.component';
+import { HeaderExportComponent } from './header-export/header-export.component';
+import { VersionCheckComponent } from './version-check/version-check.component';
 
 import {
     MessageOfTheDayButtonComponent
@@ -42,6 +45,7 @@ import {
 import { CurrentMessageOfTheDay } from '../../../pages/messagesotd/messagesotd.interface';
 import { HeaderAvatarComponent } from './header-avatar/header-avatar.component';
 import { PushNotificationsComponent } from '../../../components/push-notifications/push-notifications.component';
+import { HeaderInfo, HeaderInfoService } from './header-info.service';
 
 @Component({
     selector: 'oitc-coreui-header',
@@ -67,7 +71,10 @@ import { PushNotificationsComponent } from '../../../components/push-notificatio
         HeaderTimeComponent,
         HeaderStatsComponent,
         SystemHealthComponent,
-        PushNotificationsComponent
+        PushNotificationsComponent,
+        HeaderEditionComponent,
+        HeaderExportComponent,
+        VersionCheckComponent
     ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css',
@@ -83,10 +90,18 @@ export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy 
     readonly colorMode = this.#colorModeService.colorMode;
     readonly #destroyRef: DestroyRef = inject(DestroyRef);
     readonly sidebarService: SidebarService = inject(SidebarService);
+    private readonly HeaderInfoService: HeaderInfoService = inject(HeaderInfoService);
 
     private cdr = inject(ChangeDetectorRef);
 
     private readonly subscriptions: Subscription = new Subscription();
+
+    protected info: HeaderInfo = {
+        exportRunningHeaderInfo: false,
+        hasSubscription: false,
+        isCommunityEdition: false,
+        newVersionAvailable: false
+    };
 
     constructor() {
         super();
@@ -105,6 +120,8 @@ export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy 
                 takeUntilDestroyed(this.#destroyRef)
             )
             .subscribe();
+        this.getHeaderInfo();
+
     }
 
     public ngOnDestroy() {
@@ -113,6 +130,13 @@ export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy 
 
     public toggleShowOrHideSidebar() {
         this.sidebarService.toggleShowOrHideSidebar();
+    }
+
+    public getHeaderInfo() {
+        this.subscriptions.add(this.HeaderInfoService.getInfo().subscribe((data: HeaderInfo) => {
+            this.info = data;
+            this.cdr.markForCheck();
+        }));
     }
 
 }

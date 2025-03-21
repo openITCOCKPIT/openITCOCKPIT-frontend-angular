@@ -7,13 +7,12 @@ import { RouterLink } from '@angular/router';
 import {
     BadgeComponent,
     CardBodyComponent,
-    CardComponent,
+    CardComponent, CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
     FormControlDirective,
     FormDirective,
-    HeaderComponent,
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
@@ -51,7 +50,6 @@ import {
         PermissionDirective,
         RouterLink,
         CardComponent,
-        HeaderComponent,
         CardTitleDirective,
         CardBodyComponent,
         NavComponent,
@@ -78,7 +76,8 @@ import {
         NoRecordsComponent,
         PaginateOrScrollComponent,
         BadgeComponent,
-        NgClass
+        NgClass,
+        CardHeaderComponent
     ],
     templateUrl: './satellites-status.component.html',
     styleUrl: './satellites-status.component.css',

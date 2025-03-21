@@ -18,7 +18,7 @@
             </li>
         </ol>
     </nav>
-    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
     <form cForm (ngSubmit)="checkForMisingArguments()">
         <c-card class="mb-3" *ngIf="post">
             <c-card-header>

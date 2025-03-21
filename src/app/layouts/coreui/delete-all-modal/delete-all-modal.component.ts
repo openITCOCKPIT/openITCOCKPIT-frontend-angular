@@ -200,7 +200,7 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
             case 'ServicetemplatesUsedBy':
                 return ['/', 'servicetemplates', 'usedBy', id];
             case 'TimeperiodsUsedBy':
-                return ['/', 'timperiods', 'usedBy', id];
+                return ['/', 'timeperiods', 'usedBy', id];
 
             default: return ['/', 'error', 404];
             }

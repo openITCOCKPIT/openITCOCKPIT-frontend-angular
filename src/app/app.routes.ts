@@ -394,6 +394,9 @@ const coreRoutes: Routes = [{
     path: 'documentations/edit/:uuid/:type',
     loadComponent: () => import('./pages/documentations/documentations-edit/documentations-edit.component').then(m => m.DocumentationsEditComponent)
 }, {
+    path: 'documentations/wiki',
+    loadComponent: () => import('./pages/documentations/documentations-wiki/documentations-wiki.component').then(m => m.DocumentationsWikiComponent)
+}, {
     path: 'messagesOtd/add',
     loadComponent: () => import('./pages/messagesotd/messagesotd-add/messagesotd-add.component').then(m => m.MessagesotdAddComponent)
 }, {

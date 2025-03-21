@@ -24,7 +24,7 @@
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="!evcHost"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!evcHost"></oitc-form-loader>
     <c-card class="mb-3" *ngIf="evcHost">
         <c-card-header>
             <h5 cCardTitle>{{ t('Host') }}

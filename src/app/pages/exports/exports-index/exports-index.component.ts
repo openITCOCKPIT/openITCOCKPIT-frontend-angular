@@ -47,7 +47,6 @@ import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.co
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { FormsModule } from '@angular/forms';
 
-
 @Component({
     selector: 'oitc-exports-index',
     imports: [
@@ -106,7 +105,6 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
-
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {

@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
@@ -25,6 +25,8 @@ import {
 import { CurrentMessageOfTheDay } from './pages/messagesotd/messagesotd.interface';
 import { MessagesOfTheDayService } from './pages/messagesotd/messagesotd.service';
 import { AuthService } from './auth/auth.service';
+import { TitleService } from './services/title.service';
+import { SystemnameService } from './services/systemname.service';
 
 @Component({
     selector: 'oitc-root',
@@ -53,12 +55,17 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     // I am the current messageOfTheDay.
     protected messageOfTheDay: CurrentMessageOfTheDay = {} as CurrentMessageOfTheDay;
 
+    private readonly TitleService: TitleService = inject(TitleService);
     public readonly LayoutService = inject(LayoutService);
     private readonly document = inject(DOCUMENT);
+    private navigationEndEvent: NavigationEnd | null = null;
+
+    protected systemName: string = '';
 
     private subscription: Subscription = new Subscription();
 
     constructor(library: FaIconLibrary,
+                private router: Router,
                 private IconSetService: IconSetService,
                 private selectConfig: NgSelectConfig,
                 private TranslocoService: TranslocoService,
@@ -66,6 +73,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
                 private cdr: ChangeDetectorRef,
                 private MessageOfTheDayService: MessagesOfTheDayService,
                 private readonly AuthService: AuthService,
+                private readonly SystemnameService: SystemnameService,
                 private readonly ModalService: ModalService,
     ) {
         // Add an icon to the library for convenient access in other components
@@ -108,6 +116,16 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
         // Fetch the message of the day
         this.watchMessageOfTheDay();
+
+        // Fetch the systemname
+        this.watchSystemname();
+    }
+
+    private watchSystemname(): void {
+        this.subscription.add(this.SystemnameService.systemName$.subscribe((systemName: string) => {
+            this.systemName = `${systemName}`;
+            this.TitleService.setSystemName(systemName);
+        }));
     }
 
     private watchMessageOfTheDay(): void {
@@ -142,6 +160,16 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     }
 
     public ngAfterViewInit(): void {
+        // Subscribe to route changes
+        this.subscription.add(this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.navigationEndEvent = event;
+                this.cdr.markForCheck();
+                // Leave title empty to let the TitleService figure out the title itself.
+                this.TitleService.setTitle();
+            }
+        }));
+
         const osSystemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const coreUiTheme: 'light' | 'dark' | 'auto' | null = this.colorService.getStoredTheme('coreui-free-angular-admin-template-theme-default');
         this.LayoutService.setTheme('light');

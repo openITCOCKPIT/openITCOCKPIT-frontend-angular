@@ -1,19 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  AlertComponent,
-  ColComponent,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormLabelDirective,
-  RowComponent
+    AlertComponent,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    RowComponent,
+    TooltipDirective
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { NgForOf, NgIf } from '@angular/common';
-
 
 
 import { UsersService } from '../users.service';
@@ -25,30 +25,33 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Container, Engine, MoveDirection, OutMode, } from "@tsparticles/engine";
 import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
 import { NgParticlesService, NgxParticlesModule } from "@tsparticles/angular";
-import { InstantreportObjectTypes } from '../../instantreports/instantreports.enums';
 import { LayoutOptions, LayoutService } from '../../../layouts/coreui/layout.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { LoginResponse } from '../../../auth/auth.interface';
+import { TitleService } from '../../../services/title.service';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-users-login',
     imports: [
-    FaIconComponent,
-    AlertComponent,
-    FormsModule,
-    TranslocoDirective,
-    NgIf,
-    FormControlDirective,
-    FormLabelDirective,
-    FormCheckComponent,
-    RowComponent,
-    ColComponent,
-    NgxParticlesModule,
-    NgForOf,
-    FormCheckInputDirective,
-    FormCheckLabelDirective
-],
+        FaIconComponent,
+        AlertComponent,
+        FormsModule,
+        TranslocoDirective,
+        NgIf,
+        FormControlDirective,
+        FormLabelDirective,
+        FormCheckComponent,
+        RowComponent,
+        ColComponent,
+        NgxParticlesModule,
+        NgForOf,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        XsButtonDirective,
+        TooltipDirective
+    ],
     templateUrl: './users-login.component.html',
     styleUrl: './users-login.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -63,6 +66,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     private readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly TitleService: TitleService = inject(TitleService);
     private _csrfToken: string = '';
 
     protected logoUrl: string = '';
@@ -71,8 +75,9 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     protected hasValidSslCertificate: boolean = false;
     protected loginAnimation: boolean = true;
     protected disableAnimation: boolean = false;
+    protected enforceDisableAnimation: boolean = false;
+    protected disableSocialButtons: boolean = false;
     protected disableLogin: boolean = false;
-    protected readonly InstantreportObjectTypes = InstantreportObjectTypes;
     protected particlesOptions: any = {
         background: {
             color: {
@@ -156,7 +161,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         this.LayoutService.setLayout(LayoutOptions.Blank);
 
         this.subscriptions.add(this.UsersService.getLoginDetails().subscribe(data => {
-            this.cdr.markForCheck();
+            this.TitleService.setTitle('Login');
 
             this.images = data.images.images;
             this.isSsoEnabled = data.isSsoEnabled;
@@ -167,6 +172,11 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             this.isCustomLoginBackground = data.isCustomLoginBackground;
             this.loginAnimation = !data.disableAnimation;
             this.disableAnimation = data.disableAnimation; // Server wants us to not have this feature at all
+            if (data.disableAnimation) {
+                // If DISABLE_LOGIN_ANIMATION is set to true, we remove the animation checkbox from the login screen
+                this.enforceDisableAnimation = true;
+            }
+            this.disableSocialButtons = data.disableSocialButtons;
 
             switch (data.images.particles) {
                 case 'none':
@@ -218,6 +228,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     }, 10);
                 }
             }
+            this.cdr.markForCheck();
         }));
     }
 
@@ -251,6 +262,8 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
             // still required?  this.loadCsrf();
             this.disableLogin = false;
+            this.hasValidSslCertificate = false;
+            this.cdr.markForCheck();
 
             if (data.hasOwnProperty('errors')) {
                 let errors: { [key: string]: string[] } = data.errors as unknown as { [key: string]: string[] };
@@ -265,8 +278,6 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 }
             }
 
-            this.disableLogin = false;
-            this.hasValidSslCertificate = false;
         }));
 
     }

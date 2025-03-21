@@ -52,6 +52,7 @@ import {
     UserContainerRolesIndexRoot
 } from '../usercontainerroles.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
     selector: 'oitc-usercontainerroles-index',
@@ -92,7 +93,8 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        BadgeOutlineComponent
     ],
     templateUrl: './usercontainerroles-index.component.html',
     styleUrl: './usercontainerroles-index.component.css',

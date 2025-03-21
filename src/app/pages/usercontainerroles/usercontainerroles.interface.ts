@@ -39,7 +39,10 @@ export interface UserContainerRolesIndex {
         firstname: string
         lastname: string
         full_name: string
-        allow_edit: boolean
+        allow_edit: boolean,
+        _joinData?: {
+            through_ldap: any
+        }
     }[]
     allow_edit: boolean
 }

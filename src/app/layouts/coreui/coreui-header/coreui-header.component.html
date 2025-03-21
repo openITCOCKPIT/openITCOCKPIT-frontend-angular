@@ -11,12 +11,37 @@
             </button>
 
             <oitc-top-search class="flex-1 pe-3"></oitc-top-search>
-            <oitc-header-stats class="pe-2"></oitc-header-stats>
-            <oitc-system-health class="pe-2"/>
+            <oitc-header-edition [headerinfo]="info"></oitc-header-edition>
 
-            <oitc-message-of-the-day-button [messageOfTheDay]="messageOfTheDay" class="pe-2"/>
+            <c-header-nav class="ms-auto ms-md-0">
+                <div class="nav-item py-1">
+                    <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
+                </div>
+                <oitc-header-stats></oitc-header-stats>
+            </c-header-nav>
 
-            <oitc-header-time class="pe-2"/>
+            <c-header-nav class="ms-auto ms-md-0">
+                <div class="nav-item py-1">
+                    <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
+                </div>
+                <oitc-system-health/>
+                <div class="nav-item py-1">
+                    <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
+                </div>
+            </c-header-nav>
+
+            <oitc-header-export [headerinfo]="info" class="ps-1"></oitc-header-export>
+
+            <oitc-version-check [newVersion]="info.newVersionAvailable" class="pe-1"></oitc-version-check>
+
+            <oitc-message-of-the-day-button [messageOfTheDay]="messageOfTheDay"/>
+
+            <c-header-nav class="ms-auto ms-md-0">
+                <div class="nav-item py-1">
+                    <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
+                </div>
+                <oitc-header-time/>
+            </c-header-nav>
 
             <c-header-nav class="ms-auto ms-md-0">
                 <div class="nav-item py-1">

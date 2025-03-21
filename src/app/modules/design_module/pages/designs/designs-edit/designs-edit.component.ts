@@ -19,6 +19,7 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    FormLabelDirective,
     ModalBodyComponent,
     ModalComponent,
     ModalFooterComponent,
@@ -59,7 +60,8 @@ import {
         RequiredIconComponent,
         SelectComponent,
         ButtonCloseDirective,
-        ReloadInterfaceModalComponent
+        ReloadInterfaceModalComponent,
+        FormLabelDirective
     ],
     templateUrl: './designs-edit.component.html',
     styleUrl: './designs-edit.component.css',

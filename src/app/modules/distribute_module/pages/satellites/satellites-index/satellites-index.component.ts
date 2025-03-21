@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
-    CardComponent,
+    CardComponent, CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
@@ -12,7 +12,6 @@ import {
     DropdownToggleDirective,
     FormControlDirective,
     FormDirective,
-    HeaderComponent,
     InputGroupComponent,
     InputGroupTextDirective,
     ModalService,
@@ -91,7 +90,6 @@ import {
         FormControlDirective,
         FormDirective,
         FormsModule,
-        HeaderComponent,
         InputGroupComponent,
         InputGroupTextDirective,
         MatSort,
@@ -124,7 +122,8 @@ import {
         DeleteAllModalComponent,
         HostsDisableNotificationsModalComponent,
         HostsEnableNotificationsModalComponent,
-        HostsMaintenanceModalComponent
+        HostsMaintenanceModalComponent,
+        CardHeaderComponent
     ],
     templateUrl: './satellites-index.component.html',
     providers: [

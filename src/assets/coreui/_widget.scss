@@ -98,14 +98,18 @@
     color: #fff;
 }
 
-/*** widgets content rotation box**/
+/*** widgets content rotation box
+backface-visibility:hidden is needed for Firefox to access the backface view of dashboard widgets,
+for chrome-browsers  the backface-visibility must not be set to hidden to access the backface view of dashboard widgets
+-moz-backface-visibility is supported but deprecated and may be removed in future: https://developer.mozilla.org/en-US/docs/Web/CSS/Mozilla_Extensions
+***/
 
 .box-container {
     display: grid;
     position: relative;
     width: 100%;
     transform-style: preserve-3d;
-    backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
 }
 
 .box-x {
@@ -115,6 +119,7 @@
     &:first-child {
         z-index: 1;
         flex: 1 1 auto;
+        backface-visibility: hidden;
     }
 
     &:last-child {
