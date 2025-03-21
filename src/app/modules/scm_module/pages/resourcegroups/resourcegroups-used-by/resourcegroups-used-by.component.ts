@@ -24,6 +24,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 
 @Component({
     selector: 'oitc-resourcegroups-used-by',
@@ -46,7 +47,8 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         BackButtonDirective,
         FormLoaderComponent,
         PermissionDirective,
-        XsButtonDirective
+        XsButtonDirective,
+        NoRecordsComponent
     ],
     templateUrl: './resourcegroups-used-by.component.html',
     styleUrl: './resourcegroups-used-by.component.css',

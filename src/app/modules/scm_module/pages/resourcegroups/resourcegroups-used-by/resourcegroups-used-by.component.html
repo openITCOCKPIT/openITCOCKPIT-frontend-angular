@@ -84,9 +84,7 @@
                     </tbody>
                 </table>
 
-                <oitc-not-used-by-object *ngIf="resourcegroupWithRelations.resources.length == 0">
-                    {{ t('No entries match the selection') }}
-                </oitc-not-used-by-object>
+                <oitc-no-records *ngIf="resourcegroupWithRelations.resources.length == 0"></oitc-no-records>
 
             </c-container>
         </c-card-body>
