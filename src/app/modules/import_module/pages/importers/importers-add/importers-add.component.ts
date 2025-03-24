@@ -56,6 +56,7 @@ import { DynamicalFormFields } from '../../../../../components/dynamical-form-fi
 import {
     DynamicalFormFieldsComponent
 } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
+import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'oitc-importers-add',
@@ -101,7 +102,10 @@ import {
         DynamicalFormFieldsComponent,
         FormCheckLabelDirective,
         TranslocoPipe,
-        TableDirective
+        TableDirective,
+        CdkDropList,
+        CdkDrag,
+        CdkDragHandle
     ],
     templateUrl: './importers-add.component.html',
     styleUrl: './importers-add.component.css',
@@ -341,6 +345,12 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
 
             this.errors = structuredClone(this.errors); // get new reference to trigger change detection if signals
             this.cdr.markForCheck();
+        }
+    }
+
+    public importerDrop(event: CdkDragDrop<string[]>): void {
+        if (this.post && this.post.importers_to_hostdefaults) {
+            moveItemInArray(this.post.importers_to_hostdefaults, event.previousIndex, event.currentIndex);
         }
     }
 }

@@ -57,6 +57,7 @@ import {
     DynamicalFormFieldsComponent
 } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'oitc-importers-edit',
@@ -103,7 +104,10 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         FormCheckLabelDirective,
         TranslocoPipe,
         TableDirective,
-        FormLoaderComponent
+        FormLoaderComponent,
+        CdkDropList,
+        CdkDragHandle,
+        CdkDrag
     ],
     templateUrl: './importers-edit.component.html',
     styleUrl: './importers-edit.component.css',
@@ -224,7 +228,7 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
                     const url = ['import_module', 'importers', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-                    this.HistoryService.navigateWithFallback(['/import_module/Importers/index']);
+                    this.HistoryService.navigateWithFallback(['/import_module/importers/index']);
                     this.notyService.scrollContentDivToTop();
                     return;
                 }
@@ -337,6 +341,12 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
 
             this.errors = structuredClone(this.errors); // get new reference to trigger change detection if signals
             this.cdr.markForCheck();
+        }
+    }
+
+    public importerDrop(event: CdkDragDrop<string[]>): void {
+        if (this.post && this.post.importers_to_hostdefaults) {
+            moveItemInArray(this.post.importers_to_hostdefaults, event.previousIndex, event.currentIndex);
         }
     }
 }
