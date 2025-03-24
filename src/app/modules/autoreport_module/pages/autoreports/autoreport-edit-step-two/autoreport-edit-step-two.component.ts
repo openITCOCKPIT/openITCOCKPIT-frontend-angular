@@ -134,7 +134,7 @@ export class AutoreportEditStepTwoComponent implements OnInit, OnDestroy {
                 this.post.Autoreport.services = serviceArray;
             }
             this.onHostChange('');
-            this.init = true;
+
             this.cdr.markForCheck();
             this.loadHosts('');
 
@@ -146,6 +146,7 @@ export class AutoreportEditStepTwoComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.loadHostsByContainerId(this.autoreport.container_id, searchString, this.selectedHostIds)
             .subscribe((result) => {
                 this.hosts = result;
+                this.init = true;
                 this.cdr.markForCheck();
             })
         );

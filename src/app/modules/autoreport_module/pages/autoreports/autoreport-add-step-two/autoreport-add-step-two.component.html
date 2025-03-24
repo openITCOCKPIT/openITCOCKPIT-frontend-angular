@@ -30,7 +30,7 @@
             <c-card-header class="mb-3">
                 <h5 cCardTitle>{{ t('Create new autoreport:') }}
                     <small class="fw-300" *ngIf="autoreport">
-                        {{autoreport.name}}
+                        {{ autoreport.name }}
                     </small>
                 </h5>
             </c-card-header>
@@ -94,7 +94,7 @@
                     </c-col>
                 </c-row>
 
-                <c-row class="mb-3">
+                <div class="mb-3">
                     <label cLabel for="hosts">
                         {{ t('Hosts') }}
                         <oitc-required-icon></oitc-required-icon>
@@ -111,8 +111,8 @@
                         oitcFormError [errors]="errors" errorField="report_send_interval">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="report_send_interval"></oitc-form-feedback>
-                </c-row>
-                <c-row  class="mb-3">
+                </div>
+                <div class="mb-3">
                     <label cLabel for="min_availability">
                         {{ t('Service RegEx') }}
                     </label>
@@ -133,10 +133,10 @@
                                [disabled]="selectedHostIds.length === 0"
                         />
                     </c-input-group>
-                </c-row>
-                <c-row>
+                </div>
+                <div>
                     <table class="table-stripped" id="HostServicesSettings"
-                         *ngIf="selectedHostIds.length > 0" style="width: 100%;">
+                           *ngIf="selectedHostIds.length > 0" style="width: 100%;">
                         <tr class="report-table-bordered">
                             <th class="table-half-half-background col-md-4 padding-5">
                                 <div class="half">{{ t('Host') }}</div>
@@ -160,7 +160,7 @@
                                 <!--<i class="fa fa-square host_icon"></i>-->
                                 <fa-icon [icon]="['fas', 'square']" class="host_icon"></fa-icon>
                                 <span class="m-1">{{ t('host settings') }}</span>
-                               <!-- <i class="fa fa-square service_icon"></i>-->
+                                <!-- <i class="fa fa-square service_icon"></i>-->
                                 <fa-icon [icon]="['fas', 'square']" class="service_icon"></fa-icon>
                                 {{ t('service settings') }}
                             </td>
@@ -214,26 +214,26 @@
                             </td>
                             <td class="text-center">
                                 <c-form-check inline>
-                                <input type="radio" [(ngModel)]="defaultOptionsGraphSettings"
-                                       (debouncedValue)="onDefaultOptionsGraphSettingsChange($event)"
-                                       oitcDebounce
-                                       cFormCheckInput
-                                       value="MIN"
+                                    <input type="radio" [(ngModel)]="defaultOptionsGraphSettings"
+                                           (debouncedValue)="onDefaultOptionsGraphSettingsChange($event)"
+                                           oitcDebounce
+                                           cFormCheckInput
+                                           value="MIN"
 
-                                       name="defaultOptionsgraphSettings">&nbsp;
-                                <input type="radio" [(ngModel)]="defaultOptionsGraphSettings"
-                                       (debouncedValue)="onDefaultOptionsGraphSettingsChange($event)"
-                                       oitcDebounce
-                                       cFormCheckInput
-                                       value="AVERAGE"
+                                           name="defaultOptionsgraphSettings">&nbsp;
+                                    <input type="radio" [(ngModel)]="defaultOptionsGraphSettings"
+                                           (debouncedValue)="onDefaultOptionsGraphSettingsChange($event)"
+                                           oitcDebounce
+                                           cFormCheckInput
+                                           value="AVERAGE"
 
-                                       name="defaultOptionsgraphSettings">&nbsp;
-                                <input type="radio" [(ngModel)]="defaultOptionsGraphSettings"
-                                       (debouncedValue)="onDefaultOptionsGraphSettingsChange($event)"
-                                       oitcDebounce
-                                       cFormCheckInput
-                                       value="MAX"
-                                       name="defaultOptionsgraphSettings">
+                                           name="defaultOptionsgraphSettings">&nbsp;
+                                    <input type="radio" [(ngModel)]="defaultOptionsGraphSettings"
+                                           (debouncedValue)="onDefaultOptionsGraphSettingsChange($event)"
+                                           oitcDebounce
+                                           cFormCheckInput
+                                           value="MAX"
+                                           name="defaultOptionsgraphSettings">
                                 </c-form-check>
                             </td>
                             <td class="text-center">
@@ -263,164 +263,168 @@
                             </td>
                         </tr>
                         <ng-container *ngFor="let host of hostsWithServices">
-                        <tr class="host_row report-table-bordered"  *ngIf="post.Autoreport.hosts[host.id]">
-                            <td class="host_option ps-1">{{host.name}}</td>
-                            <td class="text-center">
-                                <c-form-check>
+                            <tr class="host_row report-table-bordered" *ngIf="post.Autoreport.hosts[host.id]">
+                                <td class="host_option ps-1">{{ host.name }}</td>
+                                <td class="text-center">
+                                    <c-form-check>
+                                        <input
+                                            id="host_percent_{{host.id}}"
+                                            name="host_percent_{{host.id}}"
+                                            [(ngModel)]="post.Autoreport.hosts[host.id].percent"
+                                            cFormCheckInput
+                                            class="checkbox-lg"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            type="checkbox"/>
+                                    </c-form-check>
+                                </td>
+                                <td class="text-center">
+                                    <c-form-check>
+                                        <input
+                                            id="host_minute_{{host.id}}"
+                                            name="host_minute_{{host.id}}"
+                                            [(ngModel)]="post.Autoreport.hosts[host.id].minute"
+                                            cFormCheckInput
+                                            class="checkbox-lg"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            type="checkbox"/>
+                                    </c-form-check>
+                                </td>
+                                <td class="host_option text-center">
+                                    <c-form-check>
+                                        <input
+                                            id="host_alias_{{host.id}}"
+                                            name="host_alias_{{host.id}}"
+                                            [(ngModel)]="post.Autoreport.hosts[host.id].alias"
+                                            cFormCheckInput
+                                            class="checkbox-lg"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            type="checkbox"/>
+                                    </c-form-check>
+                                </td>
+                                <td class="text-center">
+                                </td>
+                                <td class="text-center">
                                     <input
-                                        id="host_percent_{{host.id}}"
-                                        name="host_percent_{{host.id}}"
-                                        [(ngModel)]="post.Autoreport.hosts[host.id].percent"
-                                        cFormCheckInput
-                                        class="checkbox-lg"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        type="checkbox"/>
-                                </c-form-check>
-                            </td>
-                            <td class="text-center">
-                                <c-form-check>
-                                    <input
-                                        id="host_minute_{{host.id}}"
-                                        name="host_minute_{{host.id}}"
-                                        [(ngModel)]="post.Autoreport.hosts[host.id].minute"
-                                        cFormCheckInput
-                                        class="checkbox-lg"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        type="checkbox"/>
-                                </c-form-check>
-                            </td>
-                            <td class="host_option text-center">
-                                <c-form-check>
-                                    <input
-                                        id="host_alias_{{host.id}}"
-                                        name="host_alias_{{host.id}}"
-                                        [(ngModel)]="post.Autoreport.hosts[host.id].alias"
-                                        cFormCheckInput
-                                        class="checkbox-lg"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        type="checkbox"/>
-                                </c-form-check>
-                            </td>
-                            <td class="text-center">
-                            </td>
-                            <td class="text-center">
-                                <input
-                                    cFormControl
-                                    name="host_outage_{{host.id}}"
-                                    [(ngModel)]="post.Autoreport.hosts[host.id].outage"
-                                    min="0"
-                                    type="number">
-                            </td>
-                            <td class="text-center">
-                                <c-form-check>
-                                    <input
-                                        id="host_failures_{{host.id}}"
-                                        name="host_failures_{{host.id}}"
-                                        [(ngModel)]="post.Autoreport.hosts[host.id].allfailures"
-                                        cFormCheckInput
-                                        class="checkbox-lg"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        type="checkbox"/>
-                                </c-form-check>
-                            </td>
-                        </tr>
-                        <ng-container
-                            *ngFor="let service of host.services">
-                            <tr  class="service_row report-table-bordered" *ngIf="post.Autoreport.services[service.id]">
-                            <td class="service_option ps-1">{{service.servicename}}</td>
-                            <td class="text-center">
-                                <c-form-check>
-                                    <input
-                                        id="service_percent_{{service.id}}"
-                                        name="service_percent_{{service.id}}"
-                                        [(ngModel)]="post.Autoreport.services[service.id].percent"
-                                        cFormCheckInput
-                                        class="checkbox-lg"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        type="checkbox"/>
-                                </c-form-check>
-                            </td>
-                            <td class="text-center">
-                                <c-form-check>
-                                    <input
-                                        id="service_minute_{{service.id}}"
-                                        name="service_minute_{{service.id}}"
-                                        [(ngModel)]="post.Autoreport.services[service.id].minute"
-                                        cFormCheckInput
-                                        class="checkbox-lg"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        type="checkbox"/>
-                                </c-form-check>
-                            </td>
-                            <td class="service_option text-center">
-                                <c-form-check>
-                                    <input
-                                        id="service_graph_{{service.id}}"
-                                        name="service_graph_{{service.id}}"
-                                        [(ngModel)]="post.Autoreport.services[service.id].graph"
-                                        cFormCheckInput
-                                        class="checkbox-lg"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        type="checkbox"/>
-                                </c-form-check>
-                            </td>
-                            <td class="text-center">
-
-                                <c-form-check inline>
-                                    <input type="radio" [(ngModel)]="post.Autoreport.services[service.id].graphSettings"
-                                           cFormCheckInput
-                                           value="MIN"
-                                           name="graph_settings_service_{{service.id}}">&nbsp;
-                                    <input type="radio" [(ngModel)]="post.Autoreport.services[service.id].graphSettings"
-                                           cFormCheckInput
-                                           value="AVERAGE"
-                                           name="graph_settings_service_{{service.id}}">&nbsp;
-                                    <input type="radio" [(ngModel)]="post.Autoreport.services[service.id].graphSettings"
-                                           cFormCheckInput
-                                           value="MAX"
-                                           name="graph_settings_service_{{service.id}}">
-                                </c-form-check>
-                            </td>
-                            <td class="text-center">
-                                <input type="number"
-                                       name="servce_outage_{{service.id}}"
-                                       cFormControl
-                                       min="0"
-                                       [(ngModel)]="post.Autoreport.services[service.id].outage">
-                            </td>
-                            <td class="text-center">
-                                <c-form-check>
-                                    <input
-                                        id="service_failure_{{service.id}}"
-                                        name="service_failure_{{service.id}}"
-                                        [(ngModel)]="post.Autoreport.services[service.id].allfailures"
-                                        cFormCheckInput
-                                        class="checkbox-lg"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        type="checkbox"/>
-                                </c-form-check>
-                            </td>
+                                        cFormControl
+                                        name="host_outage_{{host.id}}"
+                                        [(ngModel)]="post.Autoreport.hosts[host.id].outage"
+                                        min="0"
+                                        type="number">
+                                </td>
+                                <td class="text-center">
+                                    <c-form-check>
+                                        <input
+                                            id="host_failures_{{host.id}}"
+                                            name="host_failures_{{host.id}}"
+                                            [(ngModel)]="post.Autoreport.hosts[host.id].allfailures"
+                                            cFormCheckInput
+                                            class="checkbox-lg"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            type="checkbox"/>
+                                    </c-form-check>
+                                </td>
                             </tr>
-                        </ng-container>
+                            <ng-container
+                                *ngFor="let service of host.services">
+                                <tr class="service_row report-table-bordered"
+                                    *ngIf="post.Autoreport.services[service.id]">
+                                    <td class="service_option ps-1">{{ service.servicename }}</td>
+                                    <td class="text-center">
+                                        <c-form-check>
+                                            <input
+                                                id="service_percent_{{service.id}}"
+                                                name="service_percent_{{service.id}}"
+                                                [(ngModel)]="post.Autoreport.services[service.id].percent"
+                                                cFormCheckInput
+                                                class="checkbox-lg"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                type="checkbox"/>
+                                        </c-form-check>
+                                    </td>
+                                    <td class="text-center">
+                                        <c-form-check>
+                                            <input
+                                                id="service_minute_{{service.id}}"
+                                                name="service_minute_{{service.id}}"
+                                                [(ngModel)]="post.Autoreport.services[service.id].minute"
+                                                cFormCheckInput
+                                                class="checkbox-lg"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                type="checkbox"/>
+                                        </c-form-check>
+                                    </td>
+                                    <td class="service_option text-center">
+                                        <c-form-check>
+                                            <input
+                                                id="service_graph_{{service.id}}"
+                                                name="service_graph_{{service.id}}"
+                                                [(ngModel)]="post.Autoreport.services[service.id].graph"
+                                                cFormCheckInput
+                                                class="checkbox-lg"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                type="checkbox"/>
+                                        </c-form-check>
+                                    </td>
+                                    <td class="text-center">
+
+                                        <c-form-check inline>
+                                            <input type="radio"
+                                                   [(ngModel)]="post.Autoreport.services[service.id].graphSettings"
+                                                   cFormCheckInput
+                                                   value="MIN"
+                                                   name="graph_settings_service_{{service.id}}">&nbsp;
+                                            <input type="radio"
+                                                   [(ngModel)]="post.Autoreport.services[service.id].graphSettings"
+                                                   cFormCheckInput
+                                                   value="AVERAGE"
+                                                   name="graph_settings_service_{{service.id}}">&nbsp;
+                                            <input type="radio"
+                                                   [(ngModel)]="post.Autoreport.services[service.id].graphSettings"
+                                                   cFormCheckInput
+                                                   value="MAX"
+                                                   name="graph_settings_service_{{service.id}}">
+                                        </c-form-check>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="number"
+                                               name="servce_outage_{{service.id}}"
+                                               cFormControl
+                                               min="0"
+                                               [(ngModel)]="post.Autoreport.services[service.id].outage">
+                                    </td>
+                                    <td class="text-center">
+                                        <c-form-check>
+                                            <input
+                                                id="service_failure_{{service.id}}"
+                                                name="service_failure_{{service.id}}"
+                                                [(ngModel)]="post.Autoreport.services[service.id].allfailures"
+                                                cFormCheckInput
+                                                class="checkbox-lg"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                type="checkbox"/>
+                                        </c-form-check>
+                                    </td>
+                                </tr>
+                            </ng-container>
                         </ng-container>
                     </table>
-                </c-row>
+                </div>
             </c-card-body>
         </c-card>
     </form>

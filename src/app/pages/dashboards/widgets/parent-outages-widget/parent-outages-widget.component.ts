@@ -18,6 +18,7 @@ import { NgIf } from '@angular/common';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import { ParentOutagesWidgetService } from './parent-outages-widget.service';
 import { ParentOutage } from './parent-outages-widget.interface';
+import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-records.component';
 
 @Component({
     selector: 'oitc-parent-outages-widget',
@@ -36,7 +37,8 @@ import { ParentOutage } from './parent-outages-widget.interface';
         RowComponent,
         ColComponent,
         ListGroupDirective,
-        ListGroupItemDirective
+        ListGroupItemDirective,
+        NoRecordsComponent
     ],
     templateUrl: './parent-outages-widget.component.html',
     styleUrl: './parent-outages-widget.component.css',

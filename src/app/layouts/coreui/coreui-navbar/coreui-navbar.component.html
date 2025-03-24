@@ -7,7 +7,7 @@
             <div class="sidebar-header border-bottom">
                 <div class="sidebar-brand d-flex flex-align-items-center cursor-pointer" [routerLink]="['/']">
                     <img [src]="headerLogoForHtml" width="32"/>
-                    <span class="page-logo-text">
+                    <span class="sidebar-brand-full page-logo-text">
                         {{ SystemnameService.systemName$ | async }}
                     </span>
                 </div>
@@ -15,7 +15,8 @@
             <oitc-navbar-search [menu]="menu" *ngIf="!unfoldable">
             </oitc-navbar-search>
         </div>
-        <ul class="sidebar-nav">
+        <!-- [style.color-scheme]="'dark'" - Fix for Safari Menu Scroll -->
+        <ul class="sidebar-nav" [style.color-scheme]="'dark'">
             <div class="simplebar-wrapper">
                 <div class="simplebar-height-auto-observer-wrapper">
                     <div class="simplebar-height-auto-observer"></div>

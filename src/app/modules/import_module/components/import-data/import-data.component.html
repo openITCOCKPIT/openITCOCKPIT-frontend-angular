@@ -249,22 +249,22 @@
                                     </tr>
                                 }
 
-                                @if (!importData.success && importData.errors.notValidRawData && importData.errors.notValidRawData.invalidData.length > 0) {
+                                @if (importData.errors.notValidRawData && importData.errors.notValidRawData.invalidData.length > 0) {
                                     <tr *ngFor="let importInvalidHostData of importData.errors.notValidRawData.invalidData"
                                         class="word-break">
-                                        <td>
+                                        <td class="text-decoration-line-through text-decoration-color-danger">
                                             {{ importInvalidHostData.identifier }}
                                         </td>
-                                        <td>
+                                        <td class="text-decoration-line-through text-decoration-color-danger">
                                             {{ importInvalidHostData.hostname }}
                                         </td>
-                                        <td>
+                                        <td class="text-decoration-line-through text-decoration-color-danger">
                                             {{ importInvalidHostData.address }}
                                         </td>
-                                        <td>
+                                        <td class="text-decoration-line-through text-decoration-color-danger">
                                             {{ importInvalidHostData.description }}
                                         </td>
-                                        <td>
+                                        <td class="text-decoration-line-through text-decoration-color-danger">
                                             {{ importInvalidHostData.software }}
                                         </td>
                                     </tr>

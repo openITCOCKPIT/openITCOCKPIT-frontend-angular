@@ -30,7 +30,7 @@
             <c-card-header class="mb-3">
                 <h5 cCardTitle>{{ t('Edit autoreport:') }}
                     <small class="fw-300">
-                        {{autoreport.name}}
+                        {{ autoreport.name }}
                     </small>
                 </h5>
             </c-card-header>
@@ -88,13 +88,13 @@
                     </div>
                 </c-row>
 
-                <c-row>
+                <div>
                     <c-col class="fs-5">
                         {{ t('Report configuration for hosts and services') }}
                     </c-col>
-                </c-row>
+                </div>
 
-                <c-row class="mb-3">
+                <div class="mb-3">
                     <label cLabel for="hosts">
                         {{ t('Hosts') }}
                         <oitc-required-icon></oitc-required-icon>
@@ -111,8 +111,8 @@
                         oitcFormError [errors]="errors" errorField="report_send_interval">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="report_send_interval"></oitc-form-feedback>
-                </c-row>
-                <c-row  class="mb-3">
+                </div>
+                <div class="mb-3">
                     <label cLabel for="min_availability">
                         {{ t('Service RegEx') }}
                     </label>
@@ -133,8 +133,8 @@
                                [disabled]="selectedHostIds.length === 0"
                         />
                     </c-input-group>
-                </c-row>
-                <c-row>
+                </div>
+                <div>
                     <table class="table-stripped" id="HostServicesSettings"
                            *ngIf="selectedHostIds.length > 0" style="width: 100%;">
                         <tr class="report-table-bordered">
@@ -261,8 +261,8 @@
                             </td>
                         </tr>
                         <ng-container *ngFor="let host of hostsWithServices">
-                            <tr class="host_row report-table-bordered"  *ngIf="post.Autoreport.hosts[host.id]">
-                                <td class="host_option ps-1">{{host.name}}</td>
+                            <tr class="host_row report-table-bordered" *ngIf="post.Autoreport.hosts[host.id]">
+                                <td class="host_option ps-1">{{ host.name }}</td>
                                 <td class="text-center">
                                     <c-form-check>
                                         <input
@@ -332,8 +332,9 @@
                             </tr>
                             <ng-container
                                 *ngFor="let service of host.services">
-                                <tr  class="service_row report-table-bordered" *ngIf="post.Autoreport.services[service.id]">
-                                    <td class="service_option ps-1">{{service.servicename}}</td>
+                                <tr class="service_row report-table-bordered"
+                                    *ngIf="post.Autoreport.services[service.id]">
+                                    <td class="service_option ps-1">{{ service.servicename }}</td>
                                     <td class="text-center">
                                         <c-form-check>
                                             <input
@@ -379,15 +380,18 @@
                                     <td class="text-center">
 
                                         <c-form-check inline>
-                                            <input type="radio" [(ngModel)]="post.Autoreport.services[service.id].graphSettings"
+                                            <input type="radio"
+                                                   [(ngModel)]="post.Autoreport.services[service.id].graphSettings"
                                                    cFormCheckInput
                                                    value="MIN"
                                                    name="graph_settings_service_{{service.id}}">&nbsp;
-                                            <input type="radio" [(ngModel)]="post.Autoreport.services[service.id].graphSettings"
+                                            <input type="radio"
+                                                   [(ngModel)]="post.Autoreport.services[service.id].graphSettings"
                                                    cFormCheckInput
                                                    value="AVERAGE"
                                                    name="graph_settings_service_{{service.id}}">&nbsp;
-                                            <input type="radio" [(ngModel)]="post.Autoreport.services[service.id].graphSettings"
+                                            <input type="radio"
+                                                   [(ngModel)]="post.Autoreport.services[service.id].graphSettings"
                                                    cFormCheckInput
                                                    value="MAX"
                                                    name="graph_settings_service_{{service.id}}">
@@ -418,7 +422,7 @@
                             </ng-container>
                         </ng-container>
                     </table>
-                </c-row>
+                </div>
             </c-card-body>
         </c-card>
     </form>

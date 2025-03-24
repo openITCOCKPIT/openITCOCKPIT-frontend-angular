@@ -32,20 +32,20 @@ import { TopSearchComponent } from '../top-search/top-search.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { HeaderTimeComponent} from './header-time/header-time.component';
-import { HeaderStatsComponent} from './header-stats/header-stats.component';
-import { SystemHealthComponent} from './system-health/system-health.component';
-import { HeaderEditionComponent} from './header-edition/header-edition.component';
-import { HeaderExportComponent} from './header-export/header-export.component';
-import { VersionCheckComponent} from './version-check/version-check.component';
+import { HeaderTimeComponent } from './header-time/header-time.component';
+import { HeaderStatsComponent } from './header-stats/header-stats.component';
+import { SystemHealthComponent } from './system-health/system-health.component';
+import { HeaderEditionComponent } from './header-edition/header-edition.component';
+import { HeaderExportComponent } from './header-export/header-export.component';
+import { VersionCheckComponent } from './version-check/version-check.component';
 
 import {
     MessageOfTheDayButtonComponent
 } from '../../../components/message-of-the-day-button/message-of-the-day-button.component';
 import { CurrentMessageOfTheDay } from '../../../pages/messagesotd/messagesotd.interface';
 import { HeaderAvatarComponent } from './header-avatar/header-avatar.component';
-import { HeaderInfoService } from './header-info.service';
-import {HeaderInfo} from './header-info.service';
+import { PushNotificationsComponent } from '../../../components/push-notifications/push-notifications.component';
+import { HeaderInfo, HeaderInfoService } from './header-info.service';
 
 @Component({
     selector: 'oitc-coreui-header',
@@ -71,6 +71,7 @@ import {HeaderInfo} from './header-info.service';
         HeaderTimeComponent,
         HeaderStatsComponent,
         SystemHealthComponent,
+        PushNotificationsComponent,
         HeaderEditionComponent,
         HeaderExportComponent,
         VersionCheckComponent
@@ -95,7 +96,7 @@ export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy 
 
     private readonly subscriptions: Subscription = new Subscription();
 
-    protected info:HeaderInfo = {
+    protected info: HeaderInfo = {
         exportRunningHeaderInfo: false,
         hasSubscription: false,
         isCommunityEdition: false,

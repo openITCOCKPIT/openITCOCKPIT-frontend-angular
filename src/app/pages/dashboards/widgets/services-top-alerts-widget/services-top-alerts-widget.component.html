@@ -152,7 +152,7 @@
                                     </td>
                                     <td>
                                         @if (PermissionsService.hasPermissionObservable(['notifications', 'index'])|async) {
-                                            <a [routerLink]="['/', 'notifications', 'sderviceNotification', serviceAlert.Service.id]">
+                                            <a [routerLink]="['/', 'notifications', 'serviceNotification', serviceAlert.Service.id]">
                                                 {{ serviceAlert.Service.servicename }}
                                             </a>
                                         } @else {
