@@ -624,6 +624,46 @@
                             </span>
                         </div>
 
+                        <div class="help-block mb-3 mb-2 p-2 regex-tester-bg"
+                             *ngIf="post.importers_to_hostdefaults.length > 0">
+                            <c-row>
+                                <c-col [xs]="12" [lg]="6">
+                                    <c-input-group>
+                                        <span cInputGroupText class="bg-info text-white">
+                                            <fa-icon [icon]="['fas', 'font']"></fa-icon>
+                                        </span>
+                                        <input type="text" cFormControl
+                                               name="regex_test_string"
+                                               id="regex_test_string"
+                                               [(ngModel)]="regex_test_string"
+                                               (ngModelChange)="matchImporterRegexAgainsTestString()"
+                                               [placeholder]="'Test your overwrite rules, by entering a string (e.g. a hostname) to see what RegEx will match.' | transloco"
+                                        />
+                                    </c-input-group>
+                                    <div class="help-block">
+                                        {{ t('Matching RegEx will be marked in green color') }}
+                                    </div>
+                                    <div class="help-block">
+                                        @if (regex_test_string !== '' && matchingImporters.filter(Boolean).length === 0) {
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['far', 'circle-xmark']"></fa-icon>
+                                                {{ t('No overwrite RegEx matches the given input string.') }}
+                                            </span>
+                                        }
+
+                                        @if (regex_test_string !== '' && matchingImporters.filter(Boolean).length > 0) {
+                                            <span class="text-success">
+                                                <fa-icon [icon]="['far', 'circle-check']"></fa-icon>
+                                                {{ matchingImporters.filter(Boolean).length }}
+                                                {{ t('matching host default overwrite found.') }}
+                                            </span>
+                                        }
+
+                                    </div>
+                                </c-col>
+                            </c-row>
+                        </div>
+
                         <div cdkDropList class="hostdefault-overwrites-list"
                              cdkDropListOrientation="vertical"
                              (cdkDropListDropped)="importerDrop($event)">
@@ -664,6 +704,7 @@
                                                 <input type="text" cFormControl
                                                        name="hd_regex_st{{$index}}"
                                                        id="hd_regex_st{{$index}}"
+                                                       [ngClass]="{'is-valid': matchingImporters[$index]}"
                                                        oitcDebounce
                                                        placeholder="{{ t('RegEx') }}"
                                                        [(ngModel)]="post.importers_to_hostdefaults[$index].regex"
