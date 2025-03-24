@@ -249,7 +249,7 @@
                                     </tr>
                                 }
 
-                                @if (importData.errors.notValidRawData && importData.errors.notValidRawData.invalidData.length > 0) {
+                                @if (importData.errors !== null && importData.errors.notValidRawData && importData.errors.notValidRawData.invalidData.length > 0) {
                                     <tr *ngFor="let importInvalidHostData of importData.errors.notValidRawData.invalidData"
                                         class="word-break">
                                         <td class="text-decoration-line-through text-decoration-color-danger">
