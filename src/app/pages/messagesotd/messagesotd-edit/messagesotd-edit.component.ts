@@ -205,8 +205,9 @@ export class MessagesotdEditComponent implements OnInit, OnDestroy {
         if (!expiration) {
             this.post.expiration_duration = null;
             this.placeholder = '';
+        } else {
+            this.placeholder = '1';
         }
-        this.placeholder = '1';
         this.cdr.markForCheck();
     }
 
