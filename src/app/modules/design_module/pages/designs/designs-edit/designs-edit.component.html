@@ -33,28 +33,27 @@
             </h5>
         </c-card-header>
         <c-card-body>
-
-            <!-- Logos -->
-            <c-row>
-                <c-col md="12">
-                    <h4> {{ t('Logos') }}</h4>
-                    <button cButton color="primary" class="ripple mb-3"
-                            (click)="triggerUploadLogoModal()">
-                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
-                        {{ t('Upload logo') }}
-                    </button>
-                </c-col>
-            </c-row>
             <c-row>
                 <c-col md="3">
                     <c-card class="mb-2">
-                        <img [src]="logoPdfForHtml" class="card-img-top" alt="">
+                        <c-card-header>
+                            <h6 cCardTitle>{{t('Interface and PDFs') }}</h6>
+                        </c-card-header>
                         <c-card-body>
+                            <img [src]="logoPdfForHtml" class="card-img-top" alt="">
+                            <hr />  
                             <div class="form-group">
-                                <button cButton color="danger" class="ripple" (click)="resetLogo(0)">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Reset logo') }}
-                                </button>
+                                <c-button-group>
+                                    <button cButton color="primary" class="ripple"
+                                            (click)="triggerUploadLogoModal(0)">
+                                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                                        {{ t('Upload') }}
+                                    </button>
+                                    <button cButton color="danger" class="ripple" (click)="resetLogo(0)">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Reset logo') }}
+                                    </button>
+                                </c-button-group>
                                 <div class="pt-2">
                                     <div
                                         class="helptext">{{ t('The logo is used by the interface and PDF files.') }}
@@ -67,14 +66,25 @@
                 </c-col>
                 <c-col md="3">
                     <c-card class="mb-2">
-                        <img [src]="smallLogoPdfForHtml" class="card-img-top img-fluid img-center"
-                             style="max-width: 250px;">
+                        <c-card-header>
+                            <h6 cCardTitle>{{t('Notifications') }}</h6>
+                        </c-card-header>
                         <c-card-body>
+                            <img [src]="smallLogoPdfForHtml" class="card-img-top img-fluid img-center"
+                                 style="max-width: 250px;">
+                            <hr />
                             <div class="form-group">
-                                <button cButton color="danger" class="ripple" (click)="resetLogo(1)">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Reset logo') }}
-                                </button>
+                                <c-button-group>
+                                    <button cButton color="primary" class="ripple"
+                                            (click)="triggerUploadLogoModal(1)">
+                                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                                        {{ t('Upload') }}
+                                    </button>
+                                    <button cButton color="danger" class="ripple" (click)="resetLogo(1)">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Reset logo') }}
+                                    </button>
+                                </c-button-group>
                                 <div class="pt-2">
                                     <div
                                         class="helptext">{{ t('The small logo is used by notifications.') }}
@@ -87,13 +97,24 @@
                 </c-col>
                 <c-col md="3">
                     <c-card class="mb-2">
-                        <img [src]="logoForHtml" class="card-img-top img-fluid img-center">
+                        <c-card-header>
+                            <h6 cCardTitle>{{t('Interface and Login') }}</h6>
+                        </c-card-header>
                         <c-card-body>
+                            <img [src]="logoForHtml" class="card-img-top img-fluid img-center">
+                            <hr />
                             <div class="form-group">
-                                <button cButton color="danger" class="ripple" (click)="resetLogo(2)">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Reset logo') }}
-                                </button>
+                                <c-button-group>
+                                    <button cButton color="primary" class="ripple"
+                                            (click)="triggerUploadLogoModal(2)">
+                                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                                        {{ t('Upload') }}
+                                    </button>
+                                    <button cButton color="danger" class="ripple" (click)="resetLogo(2)">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Reset logo') }}
+                                    </button>
+                                </c-button-group>
                                 <div class="pt-2">
                                     <div
                                         class="helptext">{{ t('The logo is used by the interface and login screen.') }}
@@ -106,14 +127,25 @@
                 </c-col>
                 <c-col md="3">
                     <c-card class="mb-2">
-                        <img [src]="headerLogoForHtml" class="card-img-top img-fluid img-center"
-                             style="max-width: 32px;">
+                        <c-card-header>
+                            <h6 cCardTitle>{{t('Header logo') }}</h6>
+                        </c-card-header>
                         <c-card-body>
+                            <img [src]="headerLogoForHtml" class="card-img-top img-fluid img-center"
+                                 style="max-width: 32px;">
+                            <hr />
                             <div class="form-group">
-                                <button cButton color="danger" class="ripple" (click)="resetLogo(3)">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Reset logo') }}
-                                </button>
+                                <c-button-group>
+                                    <button cButton color="primary" class="ripple"
+                                            (click)="triggerUploadLogoModal(3)">
+                                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                                        {{ t('Upload') }}
+                                    </button>
+                                    <button cButton color="danger" class="ripple" (click)="resetLogo(3)">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Reset logo') }}
+                                    </button>
+                                </c-button-group>
                                 <div class="pt-2">
                                     <div class="helptext">{{ t('This Logo is used in the page header') }}</div>
                                     <div class="helptext">{{ t('Resolution: 32x32px') }}</div>
