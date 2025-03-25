@@ -82,6 +82,9 @@
                 </tbody>
             </table>
 
+            <oitc-not-used-by-object *ngIf="total === 0">
+                {{ t('This satellite is not used by any object') }}
+            </oitc-not-used-by-object>
 
         </c-card-body>
     </c-card>
