@@ -119,6 +119,7 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
     ] as SelectKeyValueString[];
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected html: string = '';
+    protected placeholder: string = '';
     protected createAnother: boolean = false;
 
     constructor() {
@@ -185,7 +186,9 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
         this.post.expire = expiration;
         if (!expiration) {
             this.post.expiration_duration = null;
+            this.placeholder = '';
         }
+        this.placeholder = '1';
         this.cdr.markForCheck();
     }
 

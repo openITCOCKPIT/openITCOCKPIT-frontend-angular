@@ -119,8 +119,8 @@
                                id="post.expiration_duration"
                                type="number"
                                name="post.expiration_duration"
-                               placeholder="1"
                                oitcFormError [errors]="errors" errorField="expiration_duration"
+                               [placeholder]="placeholder"
                                [disabled]="! post.expire"
                                [(ngModel)]="post.expiration_duration"/>
                         <span cInputGroupText>
