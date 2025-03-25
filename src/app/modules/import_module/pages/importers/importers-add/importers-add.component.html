@@ -481,9 +481,9 @@
                                         {{ hostdefaults[post.hostdefault_id].container.name }}
                                         <div
                                             *ngIf="hostdefaults[post.hostdefault_id].hostdefaults_to_containers_sharing.length > 0">
-                                            <b>{{ t('Shared containers:') }}</b>
+                                            <b class="bg-transparent">{{ t('Shared containers:') }}</b>
                                             <ul>
-                                                <li class="py-0"
+                                                <li class="py-0 bg-transparent"
                                                     *ngFor="let sharedcontainer of hostdefaults[post.hostdefault_id].hostdefaults_to_containers_sharing">
                                                     {{ sharedcontainer.name }}
                                                 </li>
@@ -493,7 +493,7 @@
                                     <td class="col-6">
                                         <ul class="list-unstyled pb-2 mb-2 hostdefaults-item-list"
                                             *ngIf="hostdefaults[post.hostdefault_id].hostdefaults_to_servicetemplates.length > 0">
-                                            <li class="pb-1 pt-0">
+                                            <li class="pb-1 pt-0 bg-transparent">
                                                 <span class="badge bg-primary me-1">
                                                     <fa-icon [icon]="['fas', 'equals']"></fa-icon>
                                                     {{ t('Field to match') }}
@@ -507,7 +507,7 @@
                                                     {{ t('Service template') }}
                                                 </span>
                                             </li>
-                                            <li class="py-0"
+                                            <li class="py-0 bg-transparent"
                                                 *ngFor="let servicetemplate_match of hostdefaults[post.hostdefault_id].hostdefaults_to_servicetemplates">
                                                 <span class="badge border border-primary text-primary me-1">
                                                     <fa-icon [icon]="['fas', 'equals']"></fa-icon>
@@ -525,7 +525,7 @@
                                         </ul>
                                         <ul class="list-unstyled pb-2 mb-2 hostdefaults-item-list"
                                             *ngIf="hostdefaults[post.hostdefault_id].hostdefaults_to_servicetemplategroups.length > 0">
-                                            <li class="pb-1 pt-0">
+                                            <li class="pb-1 pt-0 bg-transparent">
                                                 <span class="badge bg-primary me-1">
                                                     <fa-icon [icon]="['fas', 'equals']"></fa-icon>
                                                     {{ t('Field to match') }}
@@ -539,7 +539,7 @@
                                                     {{ t('Service template group') }}
                                                 </span>
                                             </li>
-                                            <li class="py-0"
+                                            <li class="py-0 bg-transparent"
                                                 *ngFor="let servicetemplategroup_match of hostdefaults[post.hostdefault_id].hostdefaults_to_servicetemplategroups">
                                                 <span class="badge border border-primary text-primary me-1">
                                                     <fa-icon [icon]="['fas', 'equals']"></fa-icon>
@@ -558,7 +558,7 @@
 
                                         <ul class="list-unstyled pb-2 mb-2 hostdefaults-item-list"
                                             *ngIf="hostdefaults[post.hostdefault_id].hostdefaults_to_agentchecks.length > 0">
-                                            <li class="pb-1 pt-0">
+                                            <li class="pb-1 pt-0 bg-transparent">
                                                 <span class="badge bg-primary">
                                                     <fa-icon [icon]="['fas', 'equals']"></fa-icon>
                                                     {{ t('Agent check') }}
@@ -568,7 +568,7 @@
                                                     {{ t('RegEx that needs to match ') }}
                                                 </span>
                                             </li>
-                                            <li class="py-0"
+                                            <li class="py-0 bg-transparent"
                                                 *ngFor="let agentcheck_match of hostdefaults[post.hostdefault_id].hostdefaults_to_agentchecks">
                                                 <span class="badge border border-primary text-primary">
                                                     <fa-icon [icon]="['fas', 'equals']"></fa-icon>
@@ -583,7 +583,7 @@
 
                                         <ul class="list-unstyled pb-2 mb-2 hostdefaults-item-list"
                                             *ngIf="hostdefaults[post.hostdefault_id].hostdefaults_to_servicetemplates_external_monitoring.length > 0">
-                                            <li class="pb-1 pt-0">
+                                            <li class="pb-1 pt-0 bg-transparent">
                                                 <span class="badge bg-info">
                                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                                     {{ t('RegEx that needs to match') }}
@@ -593,7 +593,7 @@
                                                     {{ t('Service template ') }}
                                                 </span>
                                             </li>
-                                            <li class="py-0"
+                                            <li class="py-0 bg-transparent"
                                                 *ngFor="let external_monitoring_check of hostdefaults[post.hostdefault_id].hostdefaults_to_servicetemplates_external_monitoring">
                                                 <span class="badge border border-info text-info">
                                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -624,232 +624,282 @@
                             </span>
                         </div>
 
-                        @for (match of post.importers_to_hostdefaults; track $index) {
-                            <c-row class="mb-2">
-                                <c-col [xs]="12" [md]="12" [lg]="2">
-                                    <c-input-group>
-                                        <span cInputGroupText class="bg-primary text-white">
-                                            <fa-icon [icon]="['fas', 'equals']"></fa-icon>
-                                        </span>
-                                        <oitc-select
-                                            class="flex-1"
-                                            name="hd_field_st_match_{{$index}}"
-                                            id="hd_field_st_match_{{$index}}"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [options]="matchFields"
-                                            [(ngModel)]="post.importers_to_hostdefaults[$index].field"
-                                            [showClear]="false">
-                                        </oitc-select>
-                                    </c-input-group>
-                                    <div class="help-block">
-                                        {{ t('Field to match') }}
-                                    </div>
-                                </c-col>
-                                <c-col [xs]="12" [md]="12" [lg]="4">
+                        <div class="help-block mb-3 mb-2 p-2 regex-tester-bg"
+                             *ngIf="post.importers_to_hostdefaults.length > 0">
+                            <c-row>
+                                <c-col [xs]="12" [lg]="6">
                                     <c-input-group>
                                         <span cInputGroupText class="bg-info text-white">
-                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'font']"></fa-icon>
                                         </span>
                                         <input type="text" cFormControl
-                                               name="hd_regex_st{{$index}}"
-                                               id="hd_regex_st{{$index}}"
-                                               oitcDebounce
-                                               placeholder="{{ t('RegEx') }}"
-                                               [(ngModel)]="post.importers_to_hostdefaults[$index].regex"
-                                               oitcFormError [errors]="errors"
-                                               errorField="importers_to_hostdefaults.{{$index}}.regex"
+                                               name="regex_test_string"
+                                               id="regex_test_string"
+                                               [(ngModel)]="regex_test_string"
+                                               (ngModelChange)="matchImporterRegexAgainsTestString()"
+                                               [placeholder]="'Test your overwrite rules, by entering a string (e.g. a hostname) to see what RegEx will match.' | transloco"
                                         />
-                                        <span cInputGroupText>
-                                            <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
-                                        </span>
                                     </c-input-group>
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="importers_to_hostdefaults.{{$index}}.regex"></oitc-form-feedback>
                                     <div class="help-block">
-                                        {{ t('RegEx that needs to match') }}
+                                        {{ t('Matching RegEx will be marked in green color') }}
                                     </div>
-                                </c-col>
-                                <c-col [xs]="12" [md]="12" [lg]="4">
-                                    <c-input-group>
-                                        <span cInputGroupText class="bg-default">
-                                            <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                                        </span>
-                                        <oitc-select
-                                            class="flex-1"
-                                            name="hd_field_st_{{$index}}"
-                                            id="hd_field_st_{{$index}}"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [options]="hostdefaultsAsList"
-                                            [(ngModel)]="post.importers_to_hostdefaults[$index].hostdefault_id"
-                                            [showClear]="false"
-                                            oitcFormError [errors]="errors"
-                                            errorField="importers_to_hostdefaults.{{$index}}.hostdefault_id">
-                                        </oitc-select>
-                                    </c-input-group>
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="importers_to_hostdefaults.{{$index}}.hostdefault_id"></oitc-form-feedback>
                                     <div class="help-block">
-                                        {{ t('Host defaults to assign on match') }}
+                                        @if (regex_test_string !== '' && matchingImporters.filter(Boolean).length === 0) {
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['far', 'circle-xmark']"></fa-icon>
+                                                {{ t('No overwrite RegEx matches the given input string.') }}
+                                            </span>
+                                        }
+
+                                        @if (regex_test_string !== '' && matchingImporters.filter(Boolean).length > 0) {
+                                            <span class="text-success">
+                                                <fa-icon [icon]="['far', 'circle-check']"></fa-icon>
+                                                {{ matchingImporters.filter(Boolean).length }}
+                                                {{ t('matching host default overwrite found.') }}
+                                            </span>
+                                        }
+
                                     </div>
-                                </c-col>
-                                <c-col [xs]="12" [md]="12" [lg]="1">
-                                    <button class="btn btn-danger ripple waves-effect waves-themed"
-                                            type="button"
-                                            (click)="removeMatch($index)">
-                                        <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
-                                    </button>
                                 </c-col>
                             </c-row>
-                            <c-row>
-                                <c-col [xs]="12" [md]="12" [lg]="10"
-                                       *ngIf="match.hostdefault_id && match.hostdefault_id > 0">
-                                    <table cTable>
-                                        <td>
-                                            <b>{{ t('Host template') }}</b>
-                                            {{ hostdefaults[match.hostdefault_id].hosttemplate.name }}
-                                        </td>
-                                        <td>
-                                            <b>{{ t('Container') }}</b>
-                                            {{ hostdefaults[match.hostdefault_id].container.name }}
-                                            <div
-                                                *ngIf="hostdefaults[match.hostdefault_id].hostdefaults_to_containers_sharing.length > 0">
-                                                <b>{{ t('Shared containers:') }}</b>
-                                                <ul>
-                                                    <li class="py-0"
-                                                        *ngFor="let sharedcontainer of hostdefaults[match.hostdefault_id].hostdefaults_to_containers_sharing">
-                                                        {{ sharedcontainer.name }}
-                                                    </li>
-                                                </ul>
+                        </div>
+
+                        <div cdkDropList class="hostdefault-overwrites-list"
+                             cdkDropListOrientation="vertical"
+                             (cdkDropListDropped)="importerDrop($event)">
+                            @for (match of post.importers_to_hostdefaults; track $index) {
+                                <div cdkDrag>
+                                    <c-row class="mb-2 hostdefault-overwrites-box">
+                                        <c-col [xs]="12" [md]="12" [lg]="1">
+                                            <fa-icon [icon]="['fas', 'bars']"
+                                                     class="text-primary cursor-grab ps-2"
+                                                     cdkDragHandle
+                                            ></fa-icon>
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="12" [lg]="2">
+                                            <c-input-group>
+                                                <span cInputGroupText class="bg-primary text-white">
+                                                    <fa-icon [icon]="['fas', 'equals']"></fa-icon>
+                                                </span>
+                                                <oitc-select
+                                                    class="flex-1"
+                                                    name="hd_field_st_match_{{$index}}"
+                                                    id="hd_field_st_match_{{$index}}"
+                                                    optionValue="key"
+                                                    optionLabel="value"
+                                                    [options]="matchFields"
+                                                    [(ngModel)]="post.importers_to_hostdefaults[$index].field"
+                                                    [showClear]="false">
+                                                </oitc-select>
+                                            </c-input-group>
+                                            <div class="help-block">
+                                                {{ t('Field to match') }}
                                             </div>
-                                        </td>
-                                        <td class="col-6">
-                                            <ul class="list-unstyled pb-2 mb-2 hostdefaults-item-list"
-                                                *ngIf="hostdefaults[match.hostdefault_id].hostdefaults_to_servicetemplates.length > 0">
-                                                <li class="pb-1 pt-0">
-                                                    <span class="badge bg-primary me-1">
-                                                        <fa-icon [icon]="['fas', 'equals']"></fa-icon>
-                                                        {{ t('Field to match') }}
-                                                    </span>
-                                                    <span class="badge bg-info me-1">
-                                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                                        {{ t('RegEx that needs to match ') }}
-                                                    </span>
-                                                    <span class="badge bg-secondary me-1">
-                                                        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                                                        {{ t('Service template') }}
-                                                    </span>
-                                                </li>
-                                                <li class="py-0"
-                                                    *ngFor="let servicetemplate_match of hostdefaults[match.hostdefault_id].hostdefaults_to_servicetemplates">
-                                                    <span class="badge border border-primary text-primary me-1">
-                                                        <fa-icon [icon]="['fas', 'equals']"></fa-icon>
-                                                        {{ servicetemplate_match.field }}
-                                                    </span>
-                                                    <span class="badge border border-info text-info me-1">
-                                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                                        {{ servicetemplate_match.regex }}
-                                                    </span>
-                                                    <span class="badge border border-secondary text-secondary me-1">
-                                                        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                                                        {{ servicetemplate_match.servicetemplate.template_name }}
-                                                    </span>
-                                                </li>
-                                            </ul>
-                                            <ul class="list-unstyled pb-2 mb-2 hostdefaults-item-list"
-                                                *ngIf="hostdefaults[match.hostdefault_id].hostdefaults_to_servicetemplategroups.length > 0">
-                                                <li class="pb-1 pt-0">
-                                                    <span class="badge bg-primary me-1">
-                                                        <fa-icon [icon]="['fas', 'equals']"></fa-icon>
-                                                        {{ t('Field to match') }}
-                                                    </span>
-                                                    <span class="badge bg-info me-1">
-                                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                                        {{ t('RegEx that needs to match ') }}
-                                                    </span>
-                                                    <span class="badge bg-secondary me-1">
-                                                        <fa-icon [icon]="['fas', 'object-group']"></fa-icon>
-                                                        {{ t('Service template group') }}
-                                                    </span>
-                                                </li>
-                                                <li class="py-0"
-                                                    *ngFor="let servicetemplategroup_match of hostdefaults[match.hostdefault_id].hostdefaults_to_servicetemplategroups">
-                                                    <span class="badge border border-primary text-primary me-1">
-                                                        <fa-icon [icon]="['fas', 'equals']"></fa-icon>
-                                                        {{ servicetemplategroup_match.field }}
-                                                    </span>
-                                                    <span class="badge border border-info text-info me-1">
-                                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                                        {{ servicetemplategroup_match.regex }}
-                                                    </span>
-                                                    <span class="badge border border-secondary text-secondary me-1">
-                                                        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                                                        {{ servicetemplategroup_match.servicetemplategroup.container.name }}
-                                                    </span>
-                                                </li>
-                                            </ul>
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="12" [lg]="4">
+                                            <c-input-group>
+                                                <span cInputGroupText class="bg-info text-white">
+                                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                                </span>
+                                                <input type="text" cFormControl
+                                                       name="hd_regex_st{{$index}}"
+                                                       id="hd_regex_st{{$index}}"
+                                                       [ngClass]="{'is-valid': matchingImporters[$index]}"
+                                                       oitcDebounce
+                                                       placeholder="{{ t('RegEx') }}"
+                                                       [(ngModel)]="post.importers_to_hostdefaults[$index].regex"
+                                                       oitcFormError [errors]="errors"
+                                                       errorField="importers_to_hostdefaults.{{$index}}.regex"
+                                                />
+                                                <span cInputGroupText>
+                                                    <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
+                                                </span>
+                                            </c-input-group>
+                                            <oitc-form-feedback [errors]="errors"
+                                                                errorField="importers_to_hostdefaults.{{$index}}.regex"></oitc-form-feedback>
+                                            <div class="help-block">
+                                                {{ t('RegEx that needs to match') }}
+                                            </div>
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="12" [lg]="4">
+                                            <c-input-group>
+                                                <span cInputGroupText class="bg-default">
+                                                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                                </span>
+                                                <oitc-select
+                                                    class="flex-1"
+                                                    name="hd_field_st_{{$index}}"
+                                                    id="hd_field_st_{{$index}}"
+                                                    optionValue="key"
+                                                    optionLabel="value"
+                                                    [options]="hostdefaultsAsList"
+                                                    [(ngModel)]="post.importers_to_hostdefaults[$index].hostdefault_id"
+                                                    [showClear]="false"
+                                                    oitcFormError [errors]="errors"
+                                                    errorField="importers_to_hostdefaults.{{$index}}.hostdefault_id">
+                                                </oitc-select>
+                                            </c-input-group>
+                                            <oitc-form-feedback [errors]="errors"
+                                                                errorField="importers_to_hostdefaults.{{$index}}.hostdefault_id"></oitc-form-feedback>
+                                            <div class="help-block">
+                                                {{ t('Host defaults to assign on match') }}
+                                            </div>
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="12" [lg]="1">
+                                            <button class="btn btn-danger ripple waves-effect waves-themed"
+                                                    type="button"
+                                                    (click)="removeMatch($index)">
+                                                <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
+                                            </button>
+                                        </c-col>
+                                    </c-row>
+                                    <c-row>
+                                        <c-col [xs]="12" [md]="12" [lg]="10"
+                                               *ngIf="match.hostdefault_id && match.hostdefault_id > 0">
+                                            <table cTable>
+                                                <td>
+                                                    <b>{{ t('Host template') }}</b>
+                                                    {{ hostdefaults[match.hostdefault_id].hosttemplate.name }}
+                                                </td>
+                                                <td>
+                                                    <b>{{ t('Container') }}</b>
+                                                    {{ hostdefaults[match.hostdefault_id].container.name }}
+                                                    <div
+                                                        *ngIf="hostdefaults[match.hostdefault_id].hostdefaults_to_containers_sharing.length > 0">
+                                                        <b class="bg-transparent">{{ t('Shared containers:') }}</b>
+                                                        <ul>
+                                                            <li class="py-0 bg-transparent"
+                                                                *ngFor="let sharedcontainer of hostdefaults[match.hostdefault_id].hostdefaults_to_containers_sharing">
+                                                                {{ sharedcontainer.name }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                                <td class="col-6">
+                                                    <ul class="list-unstyled pb-2 mb-2 hostdefaults-item-list"
+                                                        *ngIf="hostdefaults[match.hostdefault_id].hostdefaults_to_servicetemplates.length > 0">
+                                                        <li class="pb-1 pt-0 bg-transparent">
+                                                            <span class="badge bg-primary me-1">
+                                                                <fa-icon [icon]="['fas', 'equals']"></fa-icon>
+                                                                {{ t('Field to match') }}
+                                                            </span>
+                                                            <span class="badge bg-info me-1">
+                                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                                                {{ t('RegEx that needs to match ') }}
+                                                            </span>
+                                                            <span class="badge bg-secondary me-1">
+                                                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                                                {{ t('Service template') }}
+                                                            </span>
+                                                        </li>
+                                                        <li class="py-0 bg-transparent"
+                                                            *ngFor="let servicetemplate_match of hostdefaults[match.hostdefault_id].hostdefaults_to_servicetemplates">
+                                                            <span class="badge border border-primary text-primary me-1">
+                                                                <fa-icon [icon]="['fas', 'equals']"></fa-icon>
+                                                                {{ servicetemplate_match.field }}
+                                                            </span>
+                                                            <span class="badge border border-info text-info me-1">
+                                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                                                {{ servicetemplate_match.regex }}
+                                                            </span>
+                                                            <span
+                                                                class="badge border border-secondary text-secondary me-1">
+                                                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                                                {{ servicetemplate_match.servicetemplate.template_name }}
+                                                            </span>
+                                                        </li>
+                                                    </ul>
+                                                    <ul class="list-unstyled pb-2 mb-2 hostdefaults-item-list"
+                                                        *ngIf="hostdefaults[match.hostdefault_id].hostdefaults_to_servicetemplategroups.length > 0">
+                                                        <li class="pb-1 pt-0 bg-transparent">
+                                                            <span class="badge bg-primary me-1">
+                                                                <fa-icon [icon]="['fas', 'equals']"></fa-icon>
+                                                                {{ t('Field to match') }}
+                                                            </span>
+                                                            <span class="badge bg-info me-1">
+                                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                                                {{ t('RegEx that needs to match ') }}
+                                                            </span>
+                                                            <span class="badge bg-secondary me-1">
+                                                                <fa-icon [icon]="['fas', 'object-group']"></fa-icon>
+                                                                {{ t('Service template group') }}
+                                                            </span>
+                                                        </li>
+                                                        <li class="py-0 bg-transparent"
+                                                            *ngFor="let servicetemplategroup_match of hostdefaults[match.hostdefault_id].hostdefaults_to_servicetemplategroups">
+                                                            <span class="badge border border-primary text-primary me-1">
+                                                                <fa-icon [icon]="['fas', 'equals']"></fa-icon>
+                                                                {{ servicetemplategroup_match.field }}
+                                                            </span>
+                                                            <span class="badge border border-info text-info me-1">
+                                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                                                {{ servicetemplategroup_match.regex }}
+                                                            </span>
+                                                            <span
+                                                                class="badge border border-secondary text-secondary me-1">
+                                                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                                                {{ servicetemplategroup_match.servicetemplategroup.container.name }}
+                                                            </span>
+                                                        </li>
+                                                    </ul>
 
-                                            <ul class="list-unstyled pb-2 mb-2 hostdefaults-item-list"
-                                                *ngIf="hostdefaults[match.hostdefault_id].hostdefaults_to_agentchecks.length > 0">
-                                                <li class="pb-1 pt-0">
-                                                    <span class="badge bg-primary">
-                                                        <fa-icon [icon]="['fas', 'equals']"></fa-icon>
-                                                        {{ t('Agent check') }}
-                                                    </span>
-                                                    <span class="badge bg-info">
-                                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                                        {{ t('RegEx that needs to match ') }}
-                                                    </span>
-                                                </li>
-                                                <li class="py-0"
-                                                    *ngFor="let agentcheck_match of hostdefaults[match.hostdefault_id].hostdefaults_to_agentchecks">
-                                                    <span class="badge border border-primary text-primary">
-                                                        <fa-icon [icon]="['fas', 'equals']"></fa-icon>
-                                                        {{ agentcheck_match.agentcheck.name }}
-                                                    </span>
-                                                    <span class="badge border border-info text-info">
-                                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                                        {{ agentcheck_match.regex }}
-                                                    </span>
-                                                </li>
-                                            </ul>
+                                                    <ul class="list-unstyled pb-2 mb-2 hostdefaults-item-list"
+                                                        *ngIf="hostdefaults[match.hostdefault_id].hostdefaults_to_agentchecks.length > 0">
+                                                        <li class="pb-1 pt-0 bg-transparent">
+                                                            <span class="badge bg-primary">
+                                                                <fa-icon [icon]="['fas', 'equals']"></fa-icon>
+                                                                {{ t('Agent check') }}
+                                                            </span>
+                                                            <span class="badge bg-info">
+                                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                                                {{ t('RegEx that needs to match ') }}
+                                                            </span>
+                                                        </li>
+                                                        <li class="py-0 bg-transparent"
+                                                            *ngFor="let agentcheck_match of hostdefaults[match.hostdefault_id].hostdefaults_to_agentchecks">
+                                                            <span class="badge border border-primary text-primary">
+                                                                <fa-icon [icon]="['fas', 'equals']"></fa-icon>
+                                                                {{ agentcheck_match.agentcheck.name }}
+                                                            </span>
+                                                            <span class="badge border border-info text-info">
+                                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                                                {{ agentcheck_match.regex }}
+                                                            </span>
+                                                        </li>
+                                                    </ul>
 
-                                            <ul class="list-unstyled pb-2 mb-2 hostdefaults-item-list"
-                                                *ngIf="hostdefaults[match.hostdefault_id].hostdefaults_to_servicetemplates_external_monitoring.length > 0">
-                                                <li class="pb-1 pt-0">
-                                                    <span class="badge bg-info">
-                                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                                        {{ t('RegEx that needs to match') }}
-                                                    </span>
-                                                    <span class="badge bg-secondary">
-                                                        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                                                        {{ t('Service template ') }}
-                                                    </span>
-                                                </li>
-                                                <li class="py-0"
-                                                    *ngFor="let external_monitoring_check of hostdefaults[match.hostdefault_id].hostdefaults_to_servicetemplates_external_monitoring">
-                                                    <span class="badge border border-info text-info">
-                                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                                        {{ external_monitoring_check.regex }}
-                                                    </span>
-                                                    <span class="badge border border-secondary text-secondary">
-                                                        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                                                        {{ external_monitoring_check.servicetemplate.template_name }}
-                                                    </span>
-                                                </li>
-                                            </ul>
+                                                    <ul class="list-unstyled pb-2 mb-2 hostdefaults-item-list"
+                                                        *ngIf="hostdefaults[match.hostdefault_id].hostdefaults_to_servicetemplates_external_monitoring.length > 0">
+                                                        <li class="pb-1 pt-0 bg-transparent">
+                                                            <span class="badge bg-info">
+                                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                                                {{ t('RegEx that needs to match') }}
+                                                            </span>
+                                                            <span class="badge bg-secondary">
+                                                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                                                {{ t('Service template ') }}
+                                                            </span>
+                                                        </li>
+                                                        <li class="py-0 bg-transparent"
+                                                            *ngFor="let external_monitoring_check of hostdefaults[match.hostdefault_id].hostdefaults_to_servicetemplates_external_monitoring">
+                                                            <span class="badge border border-info text-info">
+                                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                                                {{ external_monitoring_check.regex }}
+                                                            </span>
+                                                            <span class="badge border border-secondary text-secondary">
+                                                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                                                {{ external_monitoring_check.servicetemplate.template_name }}
+                                                            </span>
+                                                        </li>
+                                                    </ul>
 
-                                        </td>
-                                    </table>
-                                </c-col>
-                            </c-row>
-                        }
-
-
-
-
-
+                                                </td>
+                                            </table>
+                                        </c-col>
+                                    </c-row>
+                                </div>
+                            }
+                        </div>
 
 
                         <c-row>

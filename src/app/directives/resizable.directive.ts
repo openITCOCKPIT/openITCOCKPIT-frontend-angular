@@ -38,11 +38,26 @@ export class ResizableDirective implements AfterViewInit, OnDestroy {
     private lastHeight: number = 0;
     private mouseUpListener: () => void;
     private mouseDownListener: () => void;
+    private mouseMoveListener: () => void;
+    private resizeObserver?: ResizeObserver;
+    private mouseMove = false;
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.renderer.addClass(this.el.nativeElement, 'resizable');
         this.mouseUpListener = this.renderer.listen(this.el.nativeElement, 'mouseup', this.onMouseUp.bind(this));
         this.mouseDownListener = this.renderer.listen(this.el.nativeElement, 'mousedown', this.onMouseDown.bind(this));
+        this.mouseMoveListener = this.renderer.listen(this.el.nativeElement, 'mousemove', this.onMouseMove.bind(this));
+        this.resizeObserver = new ResizeObserver(() => {
+            let calculatedAspectRatio = this.calculateAspectRatio();
+
+            let newWidth = calculatedAspectRatio.width;
+            let newHeight = calculatedAspectRatio.height;
+
+            if (this.mouseMove && !this.el.nativeElement.classList.contains('resize-border') && this.hasSizeChanged(newWidth, newHeight)) {
+                this.renderer.addClass(this.el.nativeElement, 'resize-border');
+            }
+        });
+        this.resizeObserver.observe(this.el.nativeElement);
     }
 
     public ngAfterViewInit(): void {
@@ -55,13 +70,39 @@ export class ResizableDirective implements AfterViewInit, OnDestroy {
     public ngOnDestroy(): void {
         this.mouseDownListener();
         this.mouseUpListener();
+        this.mouseMoveListener();
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect();
+        }
     }
 
     private onMouseDown() {
         this.setLastWidthHeightByHimself();
     }
 
+    private onMouseMove() {
+        this.mouseMove = true;
+    }
+
     private onMouseUp() {
+        let calculatedAspectRatio = this.calculateAspectRatio();
+
+        let newWidth = calculatedAspectRatio.width;
+        let newHeight = calculatedAspectRatio.height;
+
+        if (this.hasSizeChanged(newWidth, newHeight)) {
+            this.lastWidth = newWidth;
+            this.lastHeight = newHeight;
+            this.resizeStop.emit({width: newWidth, height: newHeight});
+        }
+
+        this.lastWidth = newWidth;
+        this.lastHeight = newHeight;
+        this.mouseMove = false;
+        this.renderer.removeClass(this.el.nativeElement, 'resize-border');
+    }
+
+    private calculateAspectRatio(): { width: number, height: number } {
         const rect = this.el.nativeElement.getBoundingClientRect();
         let newWidth = rect.width;
         let newHeight = rect.height;
@@ -80,14 +121,11 @@ export class ResizableDirective implements AfterViewInit, OnDestroy {
         newWidth = Math.round(newWidth);
         newHeight = Math.round(newHeight);
 
-        if ((newWidth !== this.lastWidth || newHeight !== this.lastHeight) && (this.lastWidth !== 0 && this.lastHeight !== 0)) {
-            this.lastWidth = newWidth;
-            this.lastHeight = newHeight;
-            this.resizeStop.emit({width: newWidth, height: newHeight});
-        }
+        return {width: newWidth, height: newHeight};
+    }
 
-        this.lastWidth = newWidth;
-        this.lastHeight = newHeight;
+    private hasSizeChanged(newWidth: number, newHeight: number): boolean {
+        return (newWidth !== this.lastWidth || newHeight !== this.lastHeight) && (this.lastWidth !== 0 && this.lastHeight !== 0);
     }
 
     private setLastWidthHeightByHimself() {

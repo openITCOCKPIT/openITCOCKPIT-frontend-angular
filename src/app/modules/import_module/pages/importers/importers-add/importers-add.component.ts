@@ -56,6 +56,7 @@ import { DynamicalFormFields } from '../../../../../components/dynamical-form-fi
 import {
     DynamicalFormFieldsComponent
 } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
+import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'oitc-importers-add',
@@ -101,7 +102,10 @@ import {
         DynamicalFormFieldsComponent,
         FormCheckLabelDirective,
         TranslocoPipe,
-        TableDirective
+        TableDirective,
+        CdkDropList,
+        CdkDrag,
+        CdkDragHandle
     ],
     templateUrl: './importers-add.component.html',
     styleUrl: './importers-add.component.css',
@@ -126,6 +130,9 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
     public errors: GenericValidationError | null = null;
     public formFields?: DynamicalFormFields;
+
+    public regex_test_string: string = '';
+    public matchingImporters: boolean[] = [];
 
     protected readonly DataSourceTypes = [
         {
@@ -343,4 +350,26 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
         }
     }
+
+    public importerDrop(event: CdkDragDrop<string[]>): void {
+        if (this.post && this.post.importers_to_hostdefaults) {
+            moveItemInArray(this.post.importers_to_hostdefaults, event.previousIndex, event.currentIndex);
+            this.matchImporterRegexAgainsTestString();
+        }
+    }
+
+    public matchImporterRegexAgainsTestString() {
+        this.matchingImporters = [];
+        if (this.post && this.post.importers_to_hostdefaults) {
+            this.post.importers_to_hostdefaults.forEach((importer, key) => {
+                const regex = new RegExp(importer.regex);
+                const match = regex.test(this.regex_test_string);
+                this.matchingImporters.push(match);
+            });
+        }
+        this.cdr.markForCheck();
+    }
+
+    protected readonly Boolean = Boolean;
+
 }
