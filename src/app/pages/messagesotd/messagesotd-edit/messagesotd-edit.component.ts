@@ -136,6 +136,7 @@ export class MessagesotdEditComponent implements OnInit, OnDestroy {
     ] as SelectKeyValueString[];
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected html: string = '';
+    protected placeholder: string = '';
 
     protected onChangeOfBbCode(event: any): void {
         this.html = this.BbCodeParserService.parse(this.post.content);
@@ -203,6 +204,9 @@ export class MessagesotdEditComponent implements OnInit, OnDestroy {
         this.post.expire = expiration;
         if (!expiration) {
             this.post.expiration_duration = null;
+            this.placeholder = '';
+        } else {
+            this.placeholder = '1';
         }
         this.cdr.markForCheck();
     }

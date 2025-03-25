@@ -54,45 +54,45 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 @Component({
     selector: 'oitc-messagesotd-add',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    MultiSelectComponent,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PermissionDirective,
-    RequiredIconComponent,
-    SelectComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    FormCheckComponent,
-    RowComponent,
-    ColComponent,
-    TrustAsHtmlPipe,
-    BbCodeEditorComponent,
-    InputGroupComponent,
-    DropdownComponent,
-    DropdownMenuDirective,
-    InputGroupTextDirective,
-    DropdownToggleDirective,
-    DropdownItemDirective,
-    TrueFalseDirective,
-    FormCheckLabelDirective,
-    NgClass
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormCheckInputDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        MultiSelectComponent,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        PermissionDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        FormCheckComponent,
+        RowComponent,
+        ColComponent,
+        TrustAsHtmlPipe,
+        BbCodeEditorComponent,
+        InputGroupComponent,
+        DropdownComponent,
+        DropdownMenuDirective,
+        InputGroupTextDirective,
+        DropdownToggleDirective,
+        DropdownItemDirective,
+        TrueFalseDirective,
+        FormCheckLabelDirective,
+        NgClass
+    ],
     templateUrl: './messagesotd-add.component.html',
     styleUrl: './messagesotd-add.component.css'
 })
@@ -119,6 +119,7 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
     ] as SelectKeyValueString[];
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected html: string = '';
+    protected placeholder: string = '';
     protected createAnother: boolean = false;
 
     constructor() {
@@ -133,7 +134,7 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
             content: '',
             style: 'primary',
             date: '',
-            expiration_duration: 0,
+            expiration_duration: null,
             expire: false,
             name: '', // This field seems unused but is transported.
             notify_users: 0,
@@ -185,6 +186,9 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
         this.post.expire = expiration;
         if (!expiration) {
             this.post.expiration_duration = null;
+            this.placeholder = '';
+        } else {
+            this.placeholder = '1';
         }
         this.cdr.markForCheck();
     }
