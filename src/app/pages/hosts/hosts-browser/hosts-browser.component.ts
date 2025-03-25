@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
@@ -118,6 +118,7 @@ import {
 import {
     IsarFlowHostBrowserTabComponent
 } from '../../../modules/isarflow_module/components/isar-flow-host-browser-tab/isar-flow-host-browser-tab.component';
+import { TitleService } from '../../../services/title.service';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -220,6 +221,8 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     private router = inject(Router);
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly TitleService: TitleService = inject(TitleService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     public readonly PermissionsService = inject(PermissionsService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
@@ -295,6 +298,10 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             this.loadSlaInformation();
 
             this.lastUpdated = new Date();
+
+            // Update the title.
+            let newTitle: string = this.result.mergedHost.name ?? this.TranslocoService.translate('Host');
+            this.TitleService.setTitle(`${newTitle} | ` + this.TranslocoService.translate('Host Browser'));
 
             if (this.router.url.includes('#acknowledge')) {
                 if (this.result && !this.acknowledgeOpened) {
