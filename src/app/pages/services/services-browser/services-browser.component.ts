@@ -128,6 +128,7 @@ import {
 import {
     CustomalertsServiceHistoryComponent
 } from '../../../modules/customalert_module/components/customalerts-service-history/customalerts-service-history.component';
+import { TitleService } from '../../../services/title.service';
 
 @Component({
     selector: 'oitc-services-browser',
@@ -236,9 +237,11 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
     public readonly PermissionsService = inject(PermissionsService);
     private router = inject(Router);
     private route = inject(ActivatedRoute);
+    private acknowledgeOpened: boolean = false;
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly ExternalCommandsService = inject(ExternalCommandsService);
     private readonly TranslocoService = inject(TranslocoService);
+    private readonly TitleService: TitleService = inject(TitleService);
     private readonly modalService = inject(ModalService);
     private readonly DowntimesService = inject(DowntimesService);
     private readonly AcknowledgementsService = inject(AcknowledgementsService);
@@ -327,6 +330,17 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
             this.loadSlaInformation();
 
             this.lastUpdated = new Date();
+
+            // Update the title.
+            let newTitle: string = this.result.host.Host.name + '/' + this.result.mergedService.name;
+            this.TitleService.setTitle(`${newTitle} | ` + this.TranslocoService.translate('Service Browser'));
+
+            if (this.router.url.includes('#acknowledge')) {
+                if (this.result && !this.acknowledgeOpened) {
+                    this.acknowledgeOpened = true;
+                    this.acknowledgeStatus(this.result.mergedService, this.result.host);
+                }
+            }
         }));
     }
 

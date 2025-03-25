@@ -6,7 +6,7 @@ import { Title } from '@angular/platform-browser';
 })
 export class TitleService extends Title {
     private systemName: string = '';
-    private titleFetchTimeout: number = 200;
+    private titleFetchTimeout: number = 300;
     private manualSetTimeout: number = 0;
 
     public setSystemName(systemName: string): void {
