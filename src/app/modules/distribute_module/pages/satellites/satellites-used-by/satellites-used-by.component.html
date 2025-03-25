@@ -29,7 +29,7 @@
 
     <c-card class="mb-3" *ngIf="satellite">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Command') }}
+            <h5 cCardTitle>{{ t('Satellite') }}
                 <small class="fw-300">
                     <i>
                         <strong>
@@ -82,6 +82,9 @@
                 </tbody>
             </table>
 
+            <oitc-not-used-by-object *ngIf="total === 0">
+                {{ t('This satellite is not used by any object') }}
+            </oitc-not-used-by-object>
 
         </c-card-body>
     </c-card>
