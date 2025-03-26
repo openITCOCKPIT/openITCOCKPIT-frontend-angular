@@ -330,7 +330,8 @@ export interface LoginGetRoot {
     customLoginBackgroundHtml: string
     isCustomLoginBackground: boolean,
     disableAnimation: boolean,
-    disableSocialButtons: boolean
+    disableSocialButtons: boolean,
+    enableColumnLayout: boolean
 }
 
 export interface LoginImage {

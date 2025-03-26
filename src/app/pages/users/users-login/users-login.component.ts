@@ -13,7 +13,7 @@ import {
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 
 
 import { UsersService } from '../users.service';
@@ -50,7 +50,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         FormCheckInputDirective,
         FormCheckLabelDirective,
         XsButtonDirective,
-        TooltipDirective
+        TooltipDirective,
+        NgClass
     ],
     templateUrl: './users-login.component.html',
     styleUrl: './users-login.component.css',
@@ -77,6 +78,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     protected disableAnimation: boolean = false;
     protected enforceDisableAnimation: boolean = false;
     protected disableSocialButtons: boolean = false;
+    protected enableColumnLayout: boolean = false;
     protected disableLogin: boolean = false;
     protected particlesOptions: any = {
         background: {
@@ -177,6 +179,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 this.enforceDisableAnimation = true;
             }
             this.disableSocialButtons = data.disableSocialButtons;
+            this.enableColumnLayout = data.enableColumnLayout;
 
             switch (data.images.particles) {
                 case 'none':
