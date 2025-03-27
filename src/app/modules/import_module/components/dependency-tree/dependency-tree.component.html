@@ -49,7 +49,7 @@
         </c-row>
 
 
-        <c-toaster [placement]="'top-end'" class="p-3 toaster-min-width" position="fixed">
+        <c-toaster [placement]="'top-end'" class="p-3 toaster-min-width toaster-max-width" position="fixed">
             <c-toast #toast="cToast"
                      (timer)="onToastTimerChange($event)"
                      (visibleChange)="onToastVisibleChange($event)"
