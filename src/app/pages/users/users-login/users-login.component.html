@@ -1,44 +1,44 @@
-<ng-container *transloco="let t" class="peers">
-    <!-- IMAGES -->
-    <ng-container *ngIf="!isCustomLoginBackground && loginAnimation">
-        <!-- Show default openITCOCKPIT background images and fade between them -->
-        <div class="login-screen">
-            <figure *ngFor="let image of images"
-                    [style.background-image]="'url(/img/login/' + image.image + ')'">
-                <figcaption>{{ image.credit }} {{ description }}</figcaption>
-            </figure>
-        </div>
-    </ng-container>
-
-    <ng-container *ngIf="!isCustomLoginBackground && !loginAnimation">
-        <!-- Show the first openITCOCKPIT background - no animation as they are disabled -->
-        @for (image of images; track $index) {
-            <div class="login-screen-vnc"
-                 *ngIf="$index === 0"
-                 [style.background-image]="'url(/img/login/' + image.image + ')'">
-                <figcaption>{{ image.credit }} {{ description }}</figcaption>
-            </div>
-        }
-    </ng-container>
-
-    <ng-container *ngIf="isCustomLoginBackground">
-        <!-- Show custom background image uploaded through DesignModule -->
-        <div class="login-screen"
-             [style.background-image]="'url(' + customLoginBackgroundHtml + ')'">
-        </div>
-    </ng-container>
-    <!-- PRTCLS -->
-    <ngx-particles
-        id="prtcls"
-        *ngIf="loginAnimation"
-        [options]="particlesOptions"
-        (particlesLoaded)="particlesLoaded($event)"
-    ></ngx-particles>
-
+<ng-container *transloco="let t">
     <!-- FORM -->
-    <c-row class="w-100 h-100 peer scrollable pos-r login-side-bg">
-        <c-col xs="12" md="6" lg="5" xl="4" class="p-5 login-side-right">
+    <c-row class="w-100 h-100 peer scrollable pos-r login-side-bg login-form-bg">
+        <c-col xs="12" md="6" lg="7" xl="8"
+               [ngClass]="{'position-absolute w-100 z-index-1': !enableColumnLayout, 'd-none d-lg-block d-md-block': enableColumnLayout}">
+            <!-- IMAGES -->
+            <ng-container *ngIf="!isCustomLoginBackground && loginAnimation">
+                <!-- Show default openITCOCKPIT background images and fade between them -->
+                <div class="login-screen">
+                    <figure *ngFor="let image of images"
+                            [style.background-image]="'url(/img/login/' + image.image + ')'">
+                        <figcaption>{{ image.credit }} {{ description }}</figcaption>
+                    </figure>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!isCustomLoginBackground && !loginAnimation">
+                <!-- Show the first openITCOCKPIT background - no animation as they are disabled -->
+                @for (image of images; track $index) {
+                    <div class="login-screen-vnc"
+                         *ngIf="$index === 0"
+                         [style.background-image]="'url(/img/login/' + image.image + ')'">
+                        <figcaption>{{ image.credit }} {{ description }}</figcaption>
+                    </div>
+                }
+            </ng-container>
 
+            <ng-container *ngIf="isCustomLoginBackground">
+                <!-- Show custom background image uploaded through DesignModule -->
+                <div class="login-screen login-screen-custom"
+                     [style.background-image]="'url(' + customLoginBackgroundHtml + ')'">
+                </div>
+            </ng-container>
+            <!-- PRTCLS -->
+            <ngx-particles
+                id="prtcls"
+                *ngIf="loginAnimation"
+                [options]="particlesOptions"
+                (particlesLoaded)="particlesLoaded($event)"
+            ></ngx-particles>
+        </c-col>
+        <c-col xs="12" md="6" lg="5" xl="4" class="p-5 login-side-right">
             <div class="col-12 text-end" *ngIf="!disableLogin">
                 <div *ngIf="!enforceDisableAnimation">
                     <input cFormCheckInput
@@ -53,7 +53,6 @@
                     </label>
                 </div>
             </div>
-
             <div class="col-12 text-center">
                 <img class="img-fluid" src="{{logoUrl}}" style="max-height: 230px;"/>
             </div>
