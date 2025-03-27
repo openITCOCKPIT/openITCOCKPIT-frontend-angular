@@ -118,7 +118,8 @@
         #modal='cModal'
         [keyboard]="true"
         id="wikiModalRecord"
-        [fullscreen]="true">
+        [fullscreen]="false"
+        size="lg">
         <c-modal-header *ngIf="modalRecord">
             <h5 cModalTitle>
                 <fa-icon [icon]="modalRecord.documentation.icon"></fa-icon>
