@@ -31,7 +31,11 @@ Password: demo123
 
 ## Screenshots
 
-![screenshot](src/assets/docs/angular-frontend.jpg)
+![Service Details](src/assets/docs/service_browser.png "Service Details")
+
+![Event correlation of a cluster](src/assets/docs/evc.png "Event correlation of a cluster")
+
+![Monitor Services of a Windows Client PC](src/assets/docs/agent.png "Monitor Services of a Windows Client PC")
 
 ## Production setup
 
