@@ -18,7 +18,7 @@ import {
     ModalToggleDirective,
     RowComponent
 } from '@coreui/angular';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { Subscription } from 'rxjs';
@@ -65,6 +65,7 @@ export class DocumentationsWikiComponent implements OnInit, OnDestroy {
     private readonly DocumentationsService: DocumentationsService = inject(DocumentationsService);
     private readonly modalService: ModalService = inject(ModalService);
     private cdr = inject(ChangeDetectorRef);
+    public readonly route = inject(ActivatedRoute);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.DocumentationsService.getWiki().subscribe(response => {
@@ -76,6 +77,11 @@ export class DocumentationsWikiComponent implements OnInit, OnDestroy {
                     icon: response.documentations.additional_help.children[key].icon
                 });
             }
+            this.route.queryParams.subscribe(params => {
+                if (params['categoryName'] && params['documentationKey']) {
+                    this.showDocumentation(params['categoryName'], params['documentationKey']);
+                }
+            });
 
             this.cdr.markForCheck();
 
