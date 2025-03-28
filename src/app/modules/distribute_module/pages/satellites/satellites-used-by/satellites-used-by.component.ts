@@ -79,7 +79,7 @@ export class SatellitesUsedByComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.satellite = result.satellite;
                 this.all_hosts = result.all_hosts;
-                this.total = result.total || 0;
+                this.total = result.all_hosts.length || 0;
                 this.cdr.markForCheck();
             }));
     }

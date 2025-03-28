@@ -37,6 +37,7 @@ export interface HostObject {
     name?: string // same as hostname
     allow_sharing?: boolean // hosts/index
     satelliteName?: string // hosts/index
+    satelliteRestricted?: boolean // hosts/index
     additionalInformationExists?: boolean // hosts/index
     type?: HostOrServiceType // hosts/index
 }
