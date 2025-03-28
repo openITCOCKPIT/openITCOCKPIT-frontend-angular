@@ -1,4 +1,4 @@
-<div *ngIf="!satellite">
+<div *ngIf="!satellite && !restrictedSatellite">
     <p-skeleton width="5rem"/>
 </div>
 
@@ -6,3 +6,10 @@
     {{ satellite.Satellite.name }} <span *ngIf="satellite.Satellite.description">({{ satellite.Satellite.description }}
     )</span>
 </div>
+
+@if (restrictedSatellite) {
+    <ng-container *transloco="let t">
+        <fa-icon [icon]="['fas', 'eye-low-vision']"></fa-icon>
+        {{ t('Restricted view') }}
+    </ng-container>
+}
