@@ -323,6 +323,7 @@
                         id="Graph"
                         optionValue="key"
                         optionLabel="value"
+                        placeholder="{{'Please select...' | transloco}}"
                         [(ngModel)]="post.Autoreport.show_time"
                         [options]="graphoptions">
                     </oitc-select>
@@ -392,6 +393,7 @@
                         [(ngModel)]="post.Autoreport.calendar_id"
                         [options]="calendars"
                         [disabled]="!post.Autoreport.consider_holidays"
+                        placeholder="{{'Please select...' | transloco}}"
                         oitcFormError [errors]="errors" errorField="calendar_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="calendar_id"></oitc-form-feedback>
@@ -410,6 +412,7 @@
                         [appendTo]="''"
                         [(ngModel)]="post.Autoreport.users._ids"
                         [options]="users"
+                        placeholder="{{'Please select...' | transloco}}"
                         oitcFormError [errors]="errors" errorField="users">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors"
