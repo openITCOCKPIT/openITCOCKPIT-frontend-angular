@@ -169,7 +169,7 @@
                                     </c-row>
                                     <c-row *ngFor="let timerange of report.autoreport.timeperiod.timeperiod_timeranges">
                                         <c-col xs="12" md="6" lg="3">
-                                            {{ timerange.weekday }}
+                                            {{ timerange.weekday | transloco }}
                                         </c-col>
                                         <c-col xs="12" md="6" lg="4">
                                             {{ timerange.start }}
