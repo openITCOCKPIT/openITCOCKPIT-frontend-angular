@@ -12,6 +12,7 @@ export enum MapItemType {
     GADGET = 'gadget',
     SUMMARYITEM = 'summaryItem',
     ICON = 'icon',
+    BACKGROUND = 'background',
 }
 
 export enum ContextActionType {

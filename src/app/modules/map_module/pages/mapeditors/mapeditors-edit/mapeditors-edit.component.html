@@ -36,6 +36,24 @@
 
             <c-nav class="card-toolbar card-header-pills">
 
+                <c-nav-item class="px-1" *ngIf="map && backgroundEditEnabled">
+                    <button cButton
+                            class="ripple"
+                            color="primary" size="xs" class="me-1"
+                            (click)="handleBackgroundEditEnabled(false)">
+                        <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                        {{ t('Edit Items') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1" *ngIf="map && !backgroundEditEnabled">
+                    <button cButton
+                            class="ripple"
+                            color="default" size="xs" class="me-1"
+                            (click)="handleBackgroundEditEnabled(true)">
+                        <fa-icon [icon]="['fas', 'image']"></fa-icon>
+                        {{ t('Edit Background') }}
+                    </button>
+                </c-nav-item>
                 <c-nav-item class="px-1">
                     <div class="checkbox small-checkbox-label me-1 mt-2">
                         <c-form-check>
@@ -169,15 +187,24 @@
                 <div id="map-editor" class="map-editor" #mapEditor>
                     <!-- start mainMapContainer -->
                     <div (click)="addNewObjectFunc($event)">
-                        <oitc-map-canvas [helplines]="Mapeditor.helplines" [background]="map.Map.background"
-                                         [isViewMode]="false" [currentDeletedItem]="currentDeletedItem">
+                        <oitc-map-canvas [helplines]="Mapeditor.helplines" [map]="map.Map"
+                                         [isViewMode]="false" [isBackgroundEditMode]="backgroundEditEnabled"
+                                         [currentDeletedItem]="currentDeletedItem">
+                            <oitc-background-item [item]="backgroundItem"
+                                                  [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                                  (contextActionEvent)="onContextAction($event)"
+                                                  (dropItemEvent)="onDropItem($event)"
+                                                  (resizedEvent)="onResizeStop($event)"
+                                                  [hidden]="!backgroundEditEnabled">
+                            </oitc-background-item>
                             <oitc-map-item *ngFor="let item of map.Mapitems" [item]="item" [refreshInterval]="0"
                                            [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
                                            [layers]="layers"
                                            (dblclick)="editItem(item)"
                                            (contextActionEvent)="onContextAction($event)"
                                            (dropItemEvent)="onDropItem($event)"
-                                           [hidden]="!item.display">
+                                           [hidden]="!item.display"
+                                           [isViewMode]="backgroundEditEnabled">
                             </oitc-map-item>
                             <oitc-map-text *ngFor="let textItem of map.Maptexts" [item]="textItem"
                                            [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
@@ -185,7 +212,8 @@
                                            (dblclick)="editText(textItem)"
                                            (contextActionEvent)="onContextAction($event)"
                                            (dropItemEvent)="onDropItem($event)"
-                                           [hidden]="!textItem.display">
+                                           [hidden]="!textItem.display"
+                                           [isViewMode]="backgroundEditEnabled">
                             </oitc-map-text>
                             <oitc-map-line *ngFor="let lineItem of map.Maplines" [item]="lineItem" [refreshInterval]="0"
                                            [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
@@ -193,7 +221,8 @@
                                            (dblclick)="editLine(lineItem)"
                                            (contextActionEvent)="onContextAction($event)"
                                            (dropItemEvent)="onDropItem($event)"
-                                           [hidden]="!lineItem.display">
+                                           [hidden]="!lineItem.display"
+                                           [isViewMode]="backgroundEditEnabled">
                             </oitc-map-line>
                             <oitc-map-icon *ngFor="let iconItem of map.Mapicons" [item]="iconItem"
                                            [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
@@ -201,7 +230,8 @@
                                            (dblclick)="editIcon(iconItem)"
                                            (contextActionEvent)="onContextAction($event)"
                                            (dropItemEvent)="onDropItem($event)"
-                                           [hidden]="!iconItem.display">
+                                           [hidden]="!iconItem.display"
+                                           [isViewMode]="backgroundEditEnabled">
                             </oitc-map-icon>
 
                             <ng-container *ngFor="let gadgetItem of map.Mapgadgets">
@@ -214,7 +244,8 @@
                                                      (contextActionEvent)="onContextAction($event)"
                                                      (dropItemEvent)="onDropItem($event)"
                                                      (resizedEvent)="onResizeStop($event)"
-                                                     [hidden]="!gadgetItem.display">
+                                                     [hidden]="!gadgetItem.display"
+                                                     [isViewMode]="backgroundEditEnabled">
                                     </oitc-graph-item>
                                     <oitc-perfdata-text-item *ngIf="gadgetItem.gadget === 'Text'" [item]="gadgetItem"
                                                              [refreshInterval]="0"
@@ -225,7 +256,8 @@
                                                              (contextActionEvent)="onContextAction($event)"
                                                              (dropItemEvent)="onDropItem($event)"
                                                              (resizedEvent)="onResizeStop($event)"
-                                                             [hidden]="!gadgetItem.display">
+                                                             [hidden]="!gadgetItem.display"
+                                                             [isViewMode]="backgroundEditEnabled">
                                     </oitc-perfdata-text-item>
                                     <oitc-tacho-item *ngIf="gadgetItem.gadget === 'Tacho'" [item]="gadgetItem"
                                                      [refreshInterval]="0"
@@ -235,7 +267,8 @@
                                                      (contextActionEvent)="onContextAction($event)"
                                                      (dropItemEvent)="onDropItem($event)"
                                                      (resizedEvent)="onResizeStop($event)"
-                                                     [hidden]="!gadgetItem.display">
+                                                     [hidden]="!gadgetItem.display"
+                                                     [isViewMode]="backgroundEditEnabled">
                                     </oitc-tacho-item>
                                     <oitc-cylinder-item *ngIf="gadgetItem.gadget === 'Cylinder'" [item]="gadgetItem"
                                                         [refreshInterval]="0"
@@ -245,7 +278,8 @@
                                                         (contextActionEvent)="onContextAction($event)"
                                                         (dropItemEvent)="onDropItem($event)"
                                                         (resizedEvent)="onResizeStop($event)"
-                                                        [hidden]="!gadgetItem.display">
+                                                        [hidden]="!gadgetItem.display"
+                                                        [isViewMode]="backgroundEditEnabled">
                                     </oitc-cylinder-item>
                                     <oitc-trafficlight-item *ngIf="gadgetItem.gadget === 'TrafficLight'"
                                                             [item]="gadgetItem"
@@ -256,7 +290,8 @@
                                                             (contextActionEvent)="onContextAction($event)"
                                                             (dropItemEvent)="onDropItem($event)"
                                                             (resizedEvent)="onResizeStop($event)"
-                                                            [hidden]="!gadgetItem.display">
+                                                            [hidden]="!gadgetItem.display"
+                                                            [isViewMode]="backgroundEditEnabled">
                                     </oitc-trafficlight-item>
                                     <oitc-temperature-item *ngIf="gadgetItem.gadget === 'Temperature'"
                                                            [item]="gadgetItem"
@@ -267,7 +302,8 @@
                                                            (contextActionEvent)="onContextAction($event)"
                                                            (dropItemEvent)="onDropItem($event)"
                                                            (resizedEvent)="onResizeStop($event)"
-                                                           [hidden]="!gadgetItem.display">
+                                                           [hidden]="!gadgetItem.display"
+                                                           [isViewMode]="backgroundEditEnabled">
                                     </oitc-temperature-item>
                                 }
                             </ng-container>
@@ -283,7 +319,8 @@
                                                               (contextActionEvent)="onContextAction($event)"
                                                               (dropItemEvent)="onDropItem($event)"
                                                               (resizedEvent)="onResizeStop($event)"
-                                                              [hidden]="!gadgetItem.display">
+                                                              [hidden]="!gadgetItem.display"
+                                                              [isViewMode]="backgroundEditEnabled">
                                     </oitc-service-output-item>
                                 }
                             </ng-container>
@@ -295,7 +332,8 @@
                                                    (contextActionEvent)="onContextAction($event)"
                                                    (dropItemEvent)="onDropItem($event)"
                                                    (resizedEvent)="onResizeStop($event)"
-                                                   [hidden]="!summaryItem.display">
+                                                   [hidden]="!summaryItem.display"
+                                                   [isViewMode]="backgroundEditEnabled">
                             </oitc-map-summary-item>
                         </oitc-map-canvas>
                     </div>
@@ -304,47 +342,50 @@
                     <div id="mapToolbar" cdkDrag cdkDragBoundary=".map-editor">
                         <div id="mapToolsDragger" cdkDragHandle></div>
 
-                        <div class="mapToolbarTool" title="{{ t('Add item') }}" (click)="addItem()">
+                        <div class="mapToolbarTool" title="{{ t('Add item') }}" (click)="addItem()"
+                             [hidden]="backgroundEditEnabled">
                             <fa-icon [icon]="['fas', 'desktop']" size="lg"></fa-icon>
                         </div>
 
-                        <div class="mapToolbarTool" title="{{ t('Add line') }}" (click)="addLine()">
+                        <div class="mapToolbarTool" title="{{ t('Add line') }}" (click)="addLine()"
+                             [hidden]="backgroundEditEnabled">
                             <fa-icon [icon]="['fas', 'pencil-alt']" size="lg"></fa-icon>
                         </div>
 
                         <div class="mapToolbarTool" title="{{ t('Add summary status item') }}"
-                             (click)="addSummaryItem()">
+                             (click)="addSummaryItem()" [hidden]="backgroundEditEnabled">
                             <fa-icon [icon]="['fas', 'dot-circle']" size="lg"></fa-icon>
                         </div>
 
-                        <div class="mapToolbarLine"></div>
+                        <div class="mapToolbarLine" [hidden]="backgroundEditEnabled"></div>
 
-                        <div class="mapToolbarTool" title="{{ t('Add gadget') }}" (click)="addGadget()">
+                        <div class="mapToolbarTool" title="{{ t('Add gadget') }}" (click)="addGadget()"
+                             [hidden]="backgroundEditEnabled">
                             <fa-icon [icon]="['fas', 'tachometer-alt']" size="lg"></fa-icon>
                         </div>
 
-                        <div class="mapToolbarLine"></div>
+                        <div class="mapToolbarLine" [hidden]="backgroundEditEnabled"></div>
 
                         <div class="mapToolbarTool" title="{{ t('Change background image') }}"
                              (click)="openChangeMapBackgroundModal()">
                             <fa-icon [icon]="['fas', 'image']" size="lg"></fa-icon>
                         </div>
 
-                        <div class="mapToolbarLine"></div>
+                        <div class="mapToolbarLine" [hidden]="backgroundEditEnabled"></div>
 
                         <div class="mapToolbarTool" title="{{ t('Add stateless text') }}"
-                             (click)="addText()">
+                             (click)="addText()" [hidden]="backgroundEditEnabled">
                             <fa-icon [icon]="['fas', 'font']" size="lg"></fa-icon>
                         </div>
 
                         <div class="mapToolbarTool" title="{{ t('Add stateless icon') }}"
-                             (click)="addIcon()">
+                             (click)="addIcon()" [hidden]="backgroundEditEnabled">
                             <fa-icon [icon]="['fas', 'object-ungroup']" size="lg"></fa-icon>
                         </div>
                     </div>
                     <!-- end mapToolbar -->
                     <!-- start layersBox -->
-                    <div id="layersBox" cdkDrag cdkDragBoundary=".map-editor">
+                    <div id="layersBox" cdkDrag cdkDragBoundary=".map-editor" [hidden]="backgroundEditEnabled">
                         <div id="layersBoxDragger" cdkDragHandle></div>
                         <div class="layersContainer">
                             <div class="mapLayer" *ngFor="let value of layers"
@@ -1410,13 +1451,13 @@
 
     <!-- Change background image modal -->
     <c-modal #changeBackgroundModal fullscreen="md" size="xl" id="changeBackgroundModal">
-        <form cForm (ngSubmit)="saveItem()">
+        <form cForm (ngSubmit)="saveBackground()">
             <c-modal-header>
                 <h5 cModalTitle>
                     <fa-icon [icon]="['fas', 'image']"></fa-icon>
                     {{ t('Change background image') }}
                 </h5>
-                <button [cModalToggle]="changeBackgroundModal.id" cButtonClose></button>
+                <button [cModalToggle]="changeBackgroundModal.id" (click)="resetBackgroundItem()" cButtonClose></button>
             </c-modal-header>
             <c-modal-body>
                 <c-row [hidden]="brokenImageDetected === false">
@@ -1510,10 +1551,116 @@
                         </div>
                     </c-col>
                 </c-row>
+                <c-row class="mt-3">
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="mapBackgroundPosX">
+                                {{ t('Position X') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="mapBackgroundPosX"
+                                       type="number"
+                                       name="mapBackgroundPosX"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="backgroundItem.x"
+                                       oitcFormError [errors]="errors" errorField="x">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="x"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="mapBackgroundPosY">
+                                {{ t('Position Y') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="mapBackgroundPosY"
+                                       type="number"
+                                       name="mapBackgroundPosY"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="backgroundItem.y"
+                                       oitcFormError [errors]="errors" errorField="y">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="y"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="mapBackgroundWidth">
+                                {{ t('Width') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'arrows-alt-h']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="mapBackgroundWidth"
+                                       type="number"
+                                       name="mapBackgroundWidth"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="backgroundItem.size_x"
+                                       oitcFormError [errors]="errors" errorField="size_x">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="size_x"></oitc-form-feedback>
+                            <span class="help-block">
+                                {{ t('Keep blank for default width') }}
+                            </span>
+                        </div>
+                    </c-col>
+                    <c-col lg="6">
+                        <div class="mb-3">
+                            <label cLabel for="mapBackgroundHeight">
+                                {{ t('Height') }}
+                            </label>
+
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'arrows-alt-v']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       required
+                                       id="mapBackgroundHeight"
+                                       type="number"
+                                       name="mapBackgroundHeight"
+                                       min="0"
+                                       [placeholder]="'0' | transloco"
+                                       [(ngModel)]="backgroundItem.size_y"
+                                       oitcFormError [errors]="errors" errorField="size_y">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="size_y"></oitc-form-feedback>
+                            <span class="help-block">
+                                {{ t('Keep blank for default width') }}
+                            </span>
+                        </div>
+                    </c-col>
+                </c-row>
 
             </c-modal-body>
             <c-modal-footer>
-                <button [cModalToggle]="changeBackgroundModal.id" cButton color="default" class="ripple">
+                <button cButton color="success" type="submit" class="ripple">
+                    {{ t('Save') }}
+                </button>
+                <button [cModalToggle]="changeBackgroundModal.id" cButton color="default" class="ripple"
+                        (click)="resetBackgroundItem()">
                     {{ t('Close') }}
                 </button>
             </c-modal-footer>

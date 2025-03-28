@@ -53,3 +53,7 @@
 .invalid-image-src {
     color: #CC0000;
 }
+
+.background-image-container {
+    position: relative;
+}

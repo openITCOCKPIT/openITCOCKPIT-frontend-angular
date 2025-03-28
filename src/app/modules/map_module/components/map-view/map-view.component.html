@@ -1,4 +1,4 @@
-<oitc-map-canvas [background]="map.Map.background" *ngIf="map"
+<oitc-map-canvas [map]="map.Map" *ngIf="map"
                  [isViewMode]="true">
     <oitc-map-item *ngFor="let item of map.Mapitems" [item]="item" [refreshInterval]="refreshInterval"
                    [isViewMode]="true"

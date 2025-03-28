@@ -128,7 +128,7 @@ export class ResizableDirective implements AfterViewInit, OnDestroy {
         return (newWidth !== this.lastWidth || newHeight !== this.lastHeight) && (this.lastWidth !== 0 && this.lastHeight !== 0);
     }
 
-    private setLastWidthHeightByHimself() {
+    public setLastWidthHeightByHimself() {
         const rect = this.el.nativeElement.getBoundingClientRect();
         this.setLastWidthHeight(rect.width, rect.height);
     }

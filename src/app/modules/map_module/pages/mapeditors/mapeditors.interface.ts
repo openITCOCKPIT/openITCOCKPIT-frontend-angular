@@ -122,6 +122,12 @@ export interface MapsummaryitemPost {
     action: string
 }
 
+export interface Mapbackgrounditem extends MapitemBase {
+    size_x: number
+    size_y: number
+    background: string | null
+}
+
 /********************************
  * Editor
  ********************************/
@@ -198,7 +204,12 @@ export interface SaveBackgroundPost {
     'Map': {
         id: string
         background: string
+        background_x?: number
+        background_y?: number
+        background_size_x?: number
+        background_size_y?: number
     }
+    action: string
 }
 
 /********************************
