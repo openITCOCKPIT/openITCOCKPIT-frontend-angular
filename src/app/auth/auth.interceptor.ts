@@ -21,6 +21,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                 router.navigate(['/error/404']);
             }
 
+            if (error.status === HttpStatusCode.Forbidden) {
+                router.navigate(['/error/403']);
+            }
+
             // re-throw all other errors so components can handle them
             return throwError(() => error);
         })
