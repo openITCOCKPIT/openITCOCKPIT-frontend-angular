@@ -2,8 +2,8 @@
     <c-modal #dashboardAllocateModal fullscreen="md" id="dashboardAllocateModal" size="lg">
         <c-modal-header>
             <h5 cModalTitle>
-                <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
-                {{ t('Rename tab') }}
+                <fa-icon [icon]="['fas', 'table']"></fa-icon>
+                {{ t(' Allocate Dashboard') }}
             </h5>
             <button [cModalToggle]="dashboardAllocateModal.id" cButtonClose></button>
         </c-modal-header>
@@ -25,7 +25,8 @@
                         [(ngModel)]="tab.dashboard_tab_allocation.container_id"
                         [options]="containers"
                         (onChange)="loadElements()"
-                        oitcFormError [errors]="errors" errorField="container_id">
+                        oitcFormError [errors]="errors" errorField="container_id"
+                        [appendTo]="''">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                 </div>
@@ -57,7 +58,8 @@
                         [disabled]="true"
                         [(ngModel)]="tab.dashboard_tab_allocation.dashboard_tab_id"
                         [options]="dashboardTabs"
-                        oitcFormError [errors]="errors" errorField="dashboard_tab_id">
+                        oitcFormError [errors]="errors" errorField="dashboard_tab_id"
+                        [appendTo]="''">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="dashboard_tab_id"></oitc-form-feedback>
                 </div>
@@ -72,7 +74,8 @@
                         optionValue="key"
                         optionLabel="value"
                         [options]="users"
-                        [(ngModel)]="tab.dashboard_tab_allocation.users._ids">
+                        [(ngModel)]="tab.dashboard_tab_allocation.users._ids"
+                        [appendTo]="''">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="users"></oitc-form-feedback>
                 </div>
@@ -87,7 +90,8 @@
                         optionValue="key"
                         optionLabel="value"
                         [options]="usergroups"
-                        [(ngModel)]="tab.dashboard_tab_allocation.usergroups._ids">
+                        [(ngModel)]="tab.dashboard_tab_allocation.usergroups._ids"
+                        [appendTo]="''">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="usergroups"></oitc-form-feedback>
                 </div>
