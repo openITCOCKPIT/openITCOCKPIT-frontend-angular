@@ -133,7 +133,7 @@ export class HostsBarChartComponent implements OnDestroy {
             xAxis: {
                 type: 'category',
                 data: this.barChartData().labels.map((label) => {
-                    return label.substring(0, 16) + ( label.length > 16 ? '...' : '');
+                    return label.substring(0, 12) + ( label.length > 12 ? '...' : '');
                 }),
                 min: 0,
                 max: 9
