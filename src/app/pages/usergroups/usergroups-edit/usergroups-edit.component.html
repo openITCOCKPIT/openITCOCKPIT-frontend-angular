@@ -250,12 +250,13 @@
                     <ng-container *ngFor="let plugin of acos.acos[0].children | keyvalue: keepOrder">
                         <ng-container
                             *ngIf="showController(plugin.value.children) && plugin.value.alias.endsWith('Module')">
+                            <hr />
                             <h5 class="ok">
                                 <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
                                 {{ plugin.value.alias }}
                             </h5>
                             <c-row>
-                                <c-col md="4"
+                                <c-col md="2"
                                        *ngFor="let controller of plugin.value.children | keyvalue: keepOrder">
                                     <h5>
                                         {{ controller.value.alias }}
@@ -273,6 +274,7 @@
                                                    [trueValue]="1"
                                                    [falseValue]="0"
                                                    [(ngModel)]="post.Acos[action.value.id]"
+                                                   class="ml-2"
                                             />
                                             <label cFormCheckLabel for="post.Acos[{{action.value.id}}]">
                                                 {{ action.value.alias }}
