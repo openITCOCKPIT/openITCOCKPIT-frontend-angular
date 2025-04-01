@@ -56,7 +56,8 @@
                             </c-card-header>
                             <c-card-body>
                                 <c-row>
-                                    <c-col [xs]="12" *ngIf="host.Host._pieChartMetrics">
+                                    <c-col [xs]="12"
+                                           *ngIf="host.Host._pieChartMetrics && host.Host._pieChartMetrics.length > 0">
                                         <oitc-host-simple-pie-chart
                                             class="mb-2"
                                             [pieData]="host.Host._pieChartMetrics"

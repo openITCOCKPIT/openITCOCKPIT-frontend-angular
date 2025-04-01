@@ -87,12 +87,15 @@ export class InstantreportViewerComponent {
                     }
 
                     let hostPieChartMetrics: PieChartMetric[] = [];
-                    for (let i = 0; i <= 2; i++) {
-                        hostPieChartMetrics.push({
-                            name: host.Host.reportData.percentage[i] || 'Error',
-                            // @ts-ignore
-                            value: host.Host.reportData[i.toString()] || 0
-                        });
+                    if (host.Host.reportData) {
+                        // Only available if report evaluation is for hosts or hosts + services
+                        for (let i = 0; i <= 2; i++) {
+                            hostPieChartMetrics.push({
+                                name: host.Host.reportData.percentage[i] || 'Error',
+                                // @ts-ignore
+                                value: host.Host.reportData[i.toString()] || 0
+                            });
+                        }
                     }
 
                     host.Host._pieChartMetrics = hostPieChartMetrics;
@@ -110,7 +113,7 @@ export class InstantreportViewerComponent {
                         }
                         service.Service._chartAbsolutValues = serviceChartAbsolutValues;
                     });
-
+                    
                     this.hostsWithServices.push({
                             Host: host.Host,
                             Services: services
