@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import {
     FaIconComponent,
 } from '@fortawesome/angular-fontawesome';
@@ -51,7 +51,6 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
         FormCheckInputDirective,
         TrueFalseDirective,
         FormControlDirective,
-        TranslocoPipe,
         TooltipDirective,
         CardFooterComponent,
         XsButtonDirective,
