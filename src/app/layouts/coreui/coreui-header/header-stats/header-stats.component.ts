@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ButtonDirective, TooltipDirective } from '@coreui/angular';
+import { ButtonDirective, HeaderNavComponent, TooltipDirective } from '@coreui/angular';
 import { HeaderStatsService } from './header-stats.service';
 import { RouterLink } from '@angular/router';
 
@@ -16,7 +16,8 @@ import { RouterLink } from '@angular/router';
         FaIconComponent,
         ButtonDirective,
         TooltipDirective,
-        RouterLink
+        RouterLink,
+        HeaderNavComponent
     ],
     templateUrl: './header-stats.component.html',
     styleUrl: './header-stats.component.css',

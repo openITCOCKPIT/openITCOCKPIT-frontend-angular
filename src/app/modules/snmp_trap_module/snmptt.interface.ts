@@ -19,7 +19,7 @@ export interface Snmptt {
     hostname: string
     agentip: string
     category: string
-    severity: string | number
+    severity: string
     uptime: string
     traptime: string
     formatline: string
