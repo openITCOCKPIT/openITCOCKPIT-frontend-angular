@@ -21,7 +21,7 @@
     </nav>
 
 
-    <oitc-form-loader [isVisible]="post.User.id === 0" />
+    <oitc-form-loader [isVisible]="post.User.id === 0"/>
     <form cForm (ngSubmit)="updateUser()" *ngIf="post.User.id !== 0">
         <c-card class="mb-3">
             <c-card-header>
@@ -468,14 +468,18 @@
                 </div>
 
                 <!-- ENABLE LOGIN OAUTH2 -->
-                <div class="mb-3" *ngIf="!isLdapUser">
+                <!--
+                An oAuth user will be an oAuth user forever
+                This can be changed later the user would only need to get an password and is_oauth=0 in the database
+                -->
+                <div class="mb-3" *ngIf="post.User.is_oauth">
                     <c-form-check>
                         <input cFormCheckInput
                                name="post.User.is_oauth"
                                id="post.User.is_oauth"
                                type="checkbox"
-                               trueFalseValue
                                [(ngModel)]="post.User.is_oauth"
+                               [disabled]="true"
                                oitcFormError [errors]="errors" errorField="is_oauth"/>
                         <oitc-form-feedback [errors]="errors" errorField="is_oauth"></oitc-form-feedback>
                         <label cFormCheckLabel for="post.User.is_oauth">
@@ -708,8 +712,11 @@
                     </div>
                 </div>
 
+                <!-- Prevent FireFox and Chrome from filling the users email into the timezone select box  :facepalm: -->
+                <input type="text" name="name" style="display:none">
+
                 <!-- New password -->
-                <div class="mb-3">
+                <div class="mb-3" *ngIf="isLdapUser === false && post.User.is_oauth === false">
                     <label cLabel for="post.User.password">
                         {{ t('New password') }}
                         <oitc-required-icon/>
@@ -727,9 +734,9 @@
                     </div>
                 </div>
                 <!-- confirm new password -->
-                <div class="mb-3">
+                <div class="mb-3" *ngIf="isLdapUser === false && post.User.is_oauth === false">
                     <label cLabel for="post.User.confirm_password">
-                        {{ t('New password') }}
+                        {{ t('Confirm new password') }}
                         <oitc-required-icon/>
                     </label>
                     <input cFormControl

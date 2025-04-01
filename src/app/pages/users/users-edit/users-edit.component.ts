@@ -226,7 +226,8 @@ export class UsersEditComponent implements OnDestroy, OnInit {
                 firstname: '',
                 i18n: 'en_US',
                 is_active: 1,
-                is_oauth: 0,
+                is_oauth: false,
+                image: null,
                 lastname: '',
                 paginatorlength: 25,
                 password: '',
@@ -384,34 +385,36 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     }
 
     private loadLdapUserDetails(): void {
-        this.subscriptions.add(this.UsersService.loadLdapUserDetails(this.post.User.samaccountname)
-            .subscribe((result: LoadLdapUserDetailsRoot) => {
-                this.cdr.markForCheck();
-                this.ldapUserDetails = result.ldapUser;
+        if (this.post.User.samaccountname) {
+            this.subscriptions.add(this.UsersService.loadLdapUserDetails(this.post.User.samaccountname)
+                .subscribe((result: LoadLdapUserDetailsRoot) => {
+                    this.cdr.markForCheck();
+                    this.ldapUserDetails = result.ldapUser;
 
-                this.ldapUserDetails.ldapgroupIds = this.ldapUserDetails.ldapgroups.map((entry) => {
-                    return entry.id;
-                });
-
-                // SET NAME AND EMAIL
-                this.post.User.firstname = this.ldapUserDetails.givenname;
-                this.post.User.lastname = this.ldapUserDetails.sn;
-                this.post.User.email = this.ldapUserDetails.email;
-
-                // From every object of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap, take every key of object user_roles and attach it to this.post.User.usercontainerroles_ldap._ids.
-                this.post.User.usercontainerroles_ldap._ids = [];
-                Object.keys(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap).forEach(key => {
-                    const userRoles = this.ldapUserDetails.userContainerRoleContainerPermissionsLdap[key].user_roles;
-                    const roleIds = Object.keys(userRoles).map(Number);
-
-                    // Only add the roleIds if they are not already in the array.
-                    roleIds.forEach((roleId) => {
-                        if (this.post.User.usercontainerroles_ldap._ids.indexOf(roleId) === -1) {
-                            this.post.User.usercontainerroles_ldap._ids.push(roleId);
-                        }
+                    this.ldapUserDetails.ldapgroupIds = this.ldapUserDetails.ldapgroups.map((entry) => {
+                        return entry.id;
                     });
-                });
-            }))
+
+                    // SET NAME AND EMAIL
+                    this.post.User.firstname = this.ldapUserDetails.givenname;
+                    this.post.User.lastname = this.ldapUserDetails.sn;
+                    this.post.User.email = this.ldapUserDetails.email;
+
+                    // From every object of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap, take every key of object user_roles and attach it to this.post.User.usercontainerroles_ldap._ids.
+                    this.post.User.usercontainerroles_ldap._ids = [];
+                    Object.keys(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap).forEach(key => {
+                        const userRoles = this.ldapUserDetails.userContainerRoleContainerPermissionsLdap[key].user_roles;
+                        const roleIds = Object.keys(userRoles).map(Number);
+
+                        // Only add the roleIds if they are not already in the array.
+                        roleIds.forEach((roleId) => {
+                            if (this.post.User.usercontainerroles_ldap._ids.indexOf(roleId) === -1) {
+                                this.post.User.usercontainerroles_ldap._ids.push(roleId);
+                            }
+                        });
+                    });
+                }))
+        }
     }
 
     protected onLdapUserChange(event: any): void {
