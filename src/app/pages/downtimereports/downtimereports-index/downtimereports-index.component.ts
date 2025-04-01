@@ -155,7 +155,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
         dayMaxEvents: 10,
         dayMaxEventRows: 10,
         weekends: true,
-        editable: true,
+        editable: false,
         selectable: true,
         selectMirror: true,
         businessHours: true,
@@ -165,8 +165,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
         eventDurationEditable: false,
         datesSet: this.handleDatesSet.bind(this),
         droppable: false,
-        dragScroll: false,
-        eventDragMinDistance: 999999999,
+        dragScroll: false
     });
 
     public handleDatesSet(dateInfo: { startStr: string, endStr: string, start: Date, end: Date, view: any }) {
