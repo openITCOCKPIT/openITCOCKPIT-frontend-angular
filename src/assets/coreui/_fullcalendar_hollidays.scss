@@ -166,3 +166,8 @@ Purple
     background: #6f42c1;
     color: #FFFFFF;
 }
+
+/* The default value from Full Calendar for z-index is 9999 which is over the CoreUI cTooltip */
+.fc .fc-popover {
+    z-index: 5 !important;
+}
