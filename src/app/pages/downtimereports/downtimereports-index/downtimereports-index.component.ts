@@ -203,6 +203,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     private fetchReport(): void {
 
         this.report = {} as DowntimeReportsResponse;
+        this.events = [];
 
         this.subscriptions.add(this.DowntimereportsService.getIndex(this.post)
             .subscribe((result) => {
