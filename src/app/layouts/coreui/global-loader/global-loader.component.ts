@@ -10,8 +10,8 @@ import { Subscription } from 'rxjs';
     styleUrl: './global-loader.component.css',
     animations: [
         trigger('fade', [
-            state('visible', style({ opacity: 1 })),
-            state('hidden', style({ opacity: 0 })),
+            state('visible', style({ opacity: 1, visibility: 'visible' })),
+            state('hidden', style({ opacity: 0 , visibility: 'hidden'})),
             transition('visible => hidden', animate('0.6s ease-out')),
             transition('hidden => visible', style('*')),
         ])

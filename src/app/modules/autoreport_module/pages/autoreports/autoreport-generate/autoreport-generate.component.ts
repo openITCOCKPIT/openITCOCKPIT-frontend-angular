@@ -83,7 +83,6 @@ import { saveAs } from 'file-saver';
         KeyValuePipe,
         FormDirective,
         CardFooterComponent,
-        TranslocoPipe,
     ],
   templateUrl: './autoreport-generate.component.html',
   styleUrl: './autoreport-generate.component.css', //'./../../../assets/autoreport.css',
