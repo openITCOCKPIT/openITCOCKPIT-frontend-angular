@@ -36,23 +36,23 @@ import {
 @Component({
     selector: 'oitc-instantreport-viewer',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FaIconComponent,
-    NgIf,
-    RowComponent,
-    TranslocoDirective,
-    HostPieEchartComponent,
-    LabelLinkComponent,
-    ServicePieEchartComponent,
-    PermissionDirective,
-    RouterLink,
-    ServiceProgressbarComponent,
-    HostSimplePieChartComponent
-],
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        FaIconComponent,
+        NgIf,
+        RowComponent,
+        TranslocoDirective,
+        HostPieEchartComponent,
+        LabelLinkComponent,
+        ServicePieEchartComponent,
+        PermissionDirective,
+        RouterLink,
+        ServiceProgressbarComponent,
+        HostSimplePieChartComponent
+    ],
     templateUrl: './instantreport-viewer.component.html',
     styleUrl: './instantreport-viewer.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -123,19 +123,26 @@ export class InstantreportViewerComponent {
                 this.hostSummary = [];
                 this.serviceSummary = [];
 
-                for (let i = 0; i <= 2; i++) {
-                    this.hostSummary.push({
-                        name: report.instantReport.reportDetails.summary_hosts?.reportData.percentage[i] || 'Error',
-                        // @ts-ignore
-                        value: report.instantReport.reportDetails.summary_hosts?.reportData[i.toString()] || 0
-                    });
+                if (report && report.instantReport.reportDetails.summary_hosts) {
+                    // Only available if report evaluation is for hosts or hosts + services
+                    for (let i = 0; i <= 2; i++) {
+                        this.hostSummary.push({
+                            name: report.instantReport.reportDetails.summary_hosts?.reportData.percentage[i] || 'Error',
+                            // @ts-ignore
+                            value: report.instantReport.reportDetails.summary_hosts?.reportData[i.toString()] || 0
+                        });
+                    }
                 }
-                for (let i = 0; i <= 3; i++) {
-                    this.serviceSummary.push({
-                        name: report.instantReport.reportDetails.summary_services?.reportData.percentage[i] || 'Error',
-                        // @ts-ignore
-                        value: report.instantReport.reportDetails.summary_services?.reportData[i.toString()] || 0
-                    });
+
+                if (report && report.instantReport.reportDetails.summary_services) {
+                    // Only available if report evaluation is for services or hosts + services
+                    for (let i = 0; i <= 3; i++) {
+                        this.serviceSummary.push({
+                            name: report.instantReport.reportDetails.summary_services?.reportData.percentage[i] || 'Error',
+                            // @ts-ignore
+                            value: report.instantReport.reportDetails.summary_services?.reportData[i.toString()] || 0
+                        });
+                    }
                 }
             }
 

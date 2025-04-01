@@ -219,7 +219,7 @@ export interface InstantreportReportDetails {
     summary_hosts?: {
         reportData: InstantreportHostReportData
     }
-    summary_services: {
+    summary_services?: {
         reportData: InstantreportServiceReportData
     },
 }
