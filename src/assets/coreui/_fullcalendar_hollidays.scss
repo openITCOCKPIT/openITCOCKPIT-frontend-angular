@@ -138,3 +138,31 @@ td.fc-day-other {
     /* will inherit .fc-bgevent's styles */
     background: #d7d7d7 !important;
 }
+
+.fc-event {
+    /* force events to be multi-line tall */
+    white-space: break-spaces;
+    word-break: break-all;
+}
+
+
+/* Calendar in downtime reports*/
+
+/**
+Purple
+500: 6f42c1
+600: 59359a
+700: 432874
+800: 2c1a4d
+900: 160d27
+ */
+
+.downtime-report-host-event {
+    background: #432874;
+    color: #FFFFFF;
+}
+
+.downtime-report-service-event {
+    background: #6f42c1;
+    color: #FFFFFF;
+}

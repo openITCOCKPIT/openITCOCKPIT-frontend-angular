@@ -228,7 +228,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
 
                     this.events.push({
                         default_holiday: false,
-                        className: '',
+                        className: 'downtime-report-host-event',
                         title: element.Hosts.name,
                         start: element.scheduled_start_time,
                         end: element.scheduled_end_time,
@@ -242,7 +242,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
                 this.report.downtimeReport?.downtimes.Services?.forEach((element) => {
                     this.events.push({
                         default_holiday: false,
-                        className: '',
+                        className: 'downtime-report-service-event',
                         title: element.Hosts.name + ' | ' + element.Servicetemplates.name,
                         start: element.scheduled_start_time,
                         end: element.scheduled_end_time,
