@@ -127,8 +127,9 @@
                         {{ t('Change calendar events') }}
                     </label>
                     <br/>
-                    <oitc-changecalendars-calendar
+                    <oitc-changecalendars-calendar-editor
                             [(events)]="events"
+                            [colour]="post.changeCalendar.colour"
                             (eventClick)="editEvent($event);"
                             (onCreateClick)="createEvent($event)"/>
                 </div>
