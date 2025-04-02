@@ -648,6 +648,9 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 case MapItemType.GADGET:
                     this.editGadget($event.item);
                     break;
+                case MapItemType.BACKGROUND:
+                    this.openChangeMapBackgroundModal();
+                    break;
                 default:
                     console.log('Unknown map object type');
                     this.notyService.genericError();
@@ -668,6 +671,9 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             this.deleteFromContextMenu($event, MapItemType.LINE, 'Maplines', this.deleteLine);
             this.deleteFromContextMenu($event, MapItemType.SUMMARYITEM, 'Mapsummaryitems', this.deleteSummaryItem);
             this.deleteFromContextMenu($event, MapItemType.GADGET, 'Mapgadgets', this.deleteGadget);
+            if ($event.itemType === MapItemType.BACKGROUND) {
+                this.resetBackground();
+            }
         }
     }
 

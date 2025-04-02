@@ -192,6 +192,7 @@
                                          [currentDeletedItem]="currentDeletedItem">
                             <oitc-background-item [item]="backgroundItem"
                                                   [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                                  (dblclick)="openChangeMapBackgroundModal()"
                                                   (contextActionEvent)="onContextAction($event)"
                                                   (dropItemEvent)="onDropItem($event)"
                                                   (resizedEvent)="onResizeStop($event)"
