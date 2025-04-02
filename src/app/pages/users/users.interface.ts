@@ -117,7 +117,7 @@ export interface CreateUser {
     company: string
     confirm_password: string | undefined
     ContainersUsersMemberships: {
-        [key: string]: number;
+        [key: string]: string;
     }
     dashboard_tab_rotation: number
     dateformat: string
