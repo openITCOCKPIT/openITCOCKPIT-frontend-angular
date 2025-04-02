@@ -22,20 +22,20 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { NgIf, NgStyle } from '@angular/common';
 
 @Component({
-    selector: 'oitc-changecalendars-calendar',
+    selector: 'oitc-changecalendars-calendar-editor',
     imports: [
         TranslocoDirective,
         FullCalendarModule,
         FaIconComponent,
         XsButtonDirective,
-        NgStyle,
-        NgIf
+        NgIf,
+        NgStyle
     ],
-    templateUrl: './changecalendars-calendar.component.html',
-    styleUrl: './changecalendars-calendar.component.css',
+    templateUrl: './changecalendars-calendar-editor.component.html',
+    styleUrl: './changecalendars-calendar-editor.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChangecalendarsCalendarComponent {
+export class ChangecalendarsCalendarEditorComponent {
     private readonly cdr = inject(ChangeDetectorRef);
     private _events: CalendarEvent[] = [];
     private _colour: string = '';
@@ -94,11 +94,11 @@ export class ChangecalendarsCalendarComponent {
         initialView: this._initialView,
         //initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
         events: this.events,
+        locale: 'de',
         weekends: true,
         editable: true,
         selectable: true,
         selectMirror: true,
-        businessHours: true,
         weekNumbers: true,
         weekNumberCalculation: 'ISO',
         eventOverlap: false,

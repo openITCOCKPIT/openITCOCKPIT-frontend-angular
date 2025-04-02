@@ -19,6 +19,7 @@ import listPlugin from '@fullcalendar/list';
 import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { NgIf, NgStyle } from '@angular/common';
 
 @Component({
     selector: 'oitc-changecalendars-calendar',
@@ -26,7 +27,9 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
         TranslocoDirective,
         FullCalendarModule,
         FaIconComponent,
-        XsButtonDirective
+        XsButtonDirective,
+        NgStyle,
+        NgIf
     ],
     templateUrl: './changecalendars-calendar.component.html',
     styleUrl: './changecalendars-calendar.component.css',
