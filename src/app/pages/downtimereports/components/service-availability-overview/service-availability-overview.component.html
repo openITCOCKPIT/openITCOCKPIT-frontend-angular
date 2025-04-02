@@ -2,10 +2,10 @@
     <c-row class="mb-3">
         <c-col md="4">
             <oitc-service-pie-echart
-                    height="100"
-                    [title]="''"
-                    [showLegend]="false"
-                    [chartData]="[
+                [title]="''"
+                [showLegend]="false"
+                [scaleSize]="10"
+                [chartData]="[
                                 {name: 'OK',value: service().pieChartData.widgetOverview[0].percent},
                                 {name: 'WARNING',value: service().pieChartData.widgetOverview[1].percent},
                                 {name: 'CRITICAL',value: service().pieChartData.widgetOverview[2].percent},

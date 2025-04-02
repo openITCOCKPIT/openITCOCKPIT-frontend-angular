@@ -30,6 +30,9 @@ export class HostPieEchartComponent implements OnDestroy {
     public title = input<string>('Host availability');
     public showLegend = input<boolean>(true);
     public chartData = input<PieChartMetric[]>([]);
+    public scaleSize = input<number>(20);
+    public scale = input<boolean>(true);
+
 
     public theme: null | 'dark' = null;
     public chartOption: EChartsOption = {};
@@ -93,8 +96,8 @@ export class HostPieEchartComponent implements OnDestroy {
                     radius: '70%',
                     data: this.chartData(),
                     emphasis: {
-                        scale: true,
-                        scaleSize: 20,
+                        scale: this.scale(),
+                        scaleSize: this.scaleSize(),
                         itemStyle: {
                             shadowBlur: 10,
                             shadowOffsetX: 0,

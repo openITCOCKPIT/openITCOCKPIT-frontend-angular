@@ -117,7 +117,7 @@ export interface CreateUser {
     company: string
     confirm_password: string | undefined
     ContainersUsersMemberships: {
-        [key: string]: number;
+        [key: string]: string;
     }
     dashboard_tab_rotation: number
     dateformat: string
@@ -185,7 +185,7 @@ export interface EditUser {
         _ids: number[]
     }
     ContainersUsersMemberships: {
-        [key: string]: number;
+        [key: string]: string;
     }
 }
 
@@ -355,6 +355,7 @@ export interface LoginGetRoot {
     isSsoEnabled: boolean
     forceRedirectSsousersToLoginScreen: boolean
     errorMessages: any[]
+    successMessages: any[]
     customLoginBackgroundHtml: string
     isCustomLoginBackground: boolean,
     disableAnimation: boolean,

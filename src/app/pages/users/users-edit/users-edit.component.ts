@@ -131,6 +131,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     private readonly route = inject(ActivatedRoute);
     private readonly cdr = inject(ChangeDetectorRef);
 
+    protected readonly keepOrder = keepOrder;
     protected post: UpdateUser = this.getDefaultPost();
     protected containerRoles: LoadContainerRolesRoot = {} as LoadContainerRolesRoot;
     protected selectedContainerIds: number[] = [];
@@ -162,14 +163,15 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         this.selectedContainerIds.map((id) => {
 
             if (id === 1) {
-                this.post.User.ContainersUsersMemberships[id] = 2;
+                this.post.User.ContainersUsersMemberships[id] = "2";
                 return;
             }
 
-            let value = parseInt(this.post.User.ContainersUsersMemberships[id] as unknown as string);
-            if (isNaN(value)) {
+            let value = this.post.User.ContainersUsersMemberships[id] as unknown as string;
+            console.warn(value);
+            if (value !== "1" && value !== "2") {
                 console.info("Fallback to 1.");
-                this.post.User.ContainersUsersMemberships[id] = 1;
+                this.post.User.ContainersUsersMemberships[id] = "1";
                 return;
             }
             this.post.User.ContainersUsersMemberships[id] = value;
@@ -465,3 +467,4 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     }
 }
 
+const keepOrder = (a: any, b: any) => a;
