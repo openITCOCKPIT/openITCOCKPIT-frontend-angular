@@ -20,7 +20,7 @@
         </ol>
     </nav>
 
-    <oitc-form-loader [isVisible]="post.Usergroup.id === 0" />
+    <oitc-form-loader [isVisible]="post.Usergroup.id === 0"/>
     <form *ngIf="post.Usergroup.id !== 0" cForm (ngSubmit)="editUserrole()">
         <c-card class="mb-3">
             <c-card-header>
@@ -76,20 +76,20 @@
 
 
                 <div class="mb-3">
-                    <label cLabel for="post.User.usercontainerroles._ids">
+                    <label cLabel for="post.User.ldapgroups._ids">
                         {{ t('LDAP Groups') }}
                     </label>
                     <oitc-multi-select
-                        name="post.User.usercontainerroles._ids"
-                        id="post.User.usercontainerroles._ids"
+                        name="post.User.ldapgroups._ids"
+                        id="post.User.ldapgroups._ids"
                         [(ngModel)]="post.Usergroup.ldapgroups._ids"
                         optionValue="key"
                         optionLabel="value"
                         [searchCallback]="loadLdapGroups"
                         [options]="ldapGroups"
-                        oitcFormError [errors]="errors" errorField="containerroles">
+                        oitcFormError [errors]="errors" errorField="ldapgroups">
                     </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="containerroles"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors" errorField="ldapgroups"></oitc-form-feedback>
                     <div class="help-block">
                         {{ t('LDAP users which are member of the selected LDAP groups will be assigned automatically to the user container role.') }}
                     </div>
@@ -219,16 +219,16 @@
                             *ngIf="controllerFilter === '' || controller.value.alias.toLowerCase().includes(controllerFilter)">
                             <ng-container
                                 *ngIf="showController(controller.value.children) && ! controller.value.alias.endsWith('Module')">
-                                <h5>
+                                <h5 class="pt-3">
                                     {{ controller.value.alias }}
                                 </h5>
-                                <c-row>
-                                    <c-col md="4"
-                                           class="mb-3"
+                                <c-row class="pb-2">
+                                    <c-col [xs]="12" [md]="4" [lg]="3"
                                            *ngFor="let action of controller.value.children | keyvalue: keepOrder"
                                            [ngClass]="{'txt-ack': action.value.alias == 'index', 'ok': action.value.alias == 'add', 'warning': action.value.alias == 'edit', 'down': action.value.alias == 'delete'}">
-                                        <c-form-check>
+                                        <c-form-check class="px-0">
                                             <input cFormCheckInput
+                                                   class="checkbox-lg checkbox-primary mx-1"
                                                    name="post.Acos[{{action.value.id}}]"
                                                    id="post.Acos[{{action.value.id}}]"
                                                    type="checkbox"
@@ -237,7 +237,8 @@
                                                    [falseValue]="0"
                                                    [(ngModel)]="post.Acos[action.value.id]"
                                             />
-                                            <label cFormCheckLabel for="post.Acos[{{action.value.id}}]">
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   for="post.Acos[{{action.value.id}}]">
                                                 {{ action.value.alias }}
                                             </label>
                                         </c-form-check>
@@ -250,23 +251,23 @@
                     <ng-container *ngFor="let plugin of acos.acos[0].children | keyvalue: keepOrder">
                         <ng-container
                             *ngIf="showController(plugin.value.children) && plugin.value.alias.endsWith('Module')">
-                            <hr />
+                            <hr/>
                             <h5 class="ok">
                                 <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
                                 {{ plugin.value.alias }}
                             </h5>
-                            <c-row>
-                                <c-col md="2"
+                            <c-row class="pb-2">
+                                <c-col [xs]="12" [md]="4" [lg]="2"
                                        *ngFor="let controller of plugin.value.children | keyvalue: keepOrder">
                                     <h5>
                                         {{ controller.value.alias }}
                                     </h5>
                                     <div
                                         *ngFor="let action of controller.value.children | keyvalue: keepOrder"
-                                        [ngClass]="{'txt-ack': action.value.alias == 'index', 'ok': action.value.alias == 'add', 'warning': action.value.alias == 'edit', 'down': action.value.alias == 'delete'}"
-                                        class="mb-3">
-                                        <c-form-check>
+                                        [ngClass]="{'txt-ack': action.value.alias == 'index', 'ok': action.value.alias == 'add', 'warning': action.value.alias == 'edit', 'down': action.value.alias == 'delete'}">
+                                        <c-form-check class="px-0">
                                             <input cFormCheckInput
+                                                   class="checkbox-lg checkbox-primary mx-1"
                                                    name="post.Acos[{{action.value.id}}]"
                                                    id="post.Acos[{{action.value.id}}]"
                                                    type="checkbox"
@@ -274,9 +275,9 @@
                                                    [trueValue]="1"
                                                    [falseValue]="0"
                                                    [(ngModel)]="post.Acos[action.value.id]"
-                                                   class="ml-2"
                                             />
-                                            <label cFormCheckLabel for="post.Acos[{{action.value.id}}]">
+                                            <label cFormCheckLabel class="mt-1 ms-1"
+                                                   for="post.Acos[{{action.value.id}}]">
                                                 {{ action.value.alias }}
                                             </label>
                                         </c-form-check>
