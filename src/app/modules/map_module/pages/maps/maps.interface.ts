@@ -18,6 +18,10 @@ export interface Map {
     title: string
     object_id?: number
     background?: string | null
+    background_x?: number | null
+    background_y?: number | null
+    background_size_x?: number | null
+    background_size_y?: number | null
     refresh_interval?: number
     json_data?: string
     created?: string

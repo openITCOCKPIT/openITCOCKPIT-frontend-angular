@@ -34,7 +34,7 @@ import { MapItemBaseService } from './map-item-base.service';
 export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewInit {
     @ViewChild('container', {static: false}) containerRef!: ElementRef<HTMLDivElement>;
 
-    public item: InputSignal<T | undefined> = input<T | undefined>();
+    public item: InputSignal<T | undefined> = input.required<T | undefined>();
     public layers: InputSignal<{ key: string, value: string }[]> = input<{ key: string, value: string }[]>([]); // Layer options for context menu
     public gridSize: InputSignal<{ x: number, y: number }> = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
     public gridEnabled: InputSignal<boolean> = input<boolean>(true);
@@ -62,7 +62,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
     // will be overridden by child components
     // this is for the drop event to know which type of item is dropped
-    protected type = MapItemType.ITEM;
+    protected type: MapItemType = MapItemType.ITEM;
 
     protected readonly TranslocoService = inject(TranslocoService);
 
@@ -98,7 +98,8 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
     public setLayer(layer: string): void {
         if (this.containerRef !== undefined && this.containerRef.nativeElement !== undefined) {
-            this.containerRef.nativeElement.style.zIndex = layer;
+            //z-index has to be one higher than the map canvas helper lines (1) and background (0)
+            this.containerRef.nativeElement.style.zIndex = (Number(layer) + 1).toString();
         }
         this.cdr.markForCheck();
     }
@@ -275,16 +276,19 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                 }
             },
             {
-                separator: true
+                separator: true,
+                visible: (layerOptions.length > 0 || extraItems.length > 0) ? true : false
             },
             {
                 label: this.TranslocoService.translate('Layers'),
                 icon: 'fa fa-layer-group',
-                items: layerOptions
+                items: layerOptions,
+                visible: (layerOptions.length > 0) ? true : false
             },
             ...extraItems,
             {
-                separator: true
+                separator: true,
+                visible: (layerOptions.length > 0 || extraItems.length > 0) ? true : false
             },
             {
                 label: this.TranslocoService.translate('Delete'),

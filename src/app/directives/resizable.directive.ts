@@ -125,10 +125,10 @@ export class ResizableDirective implements AfterViewInit, OnDestroy {
     }
 
     private hasSizeChanged(newWidth: number, newHeight: number): boolean {
-        return (newWidth !== this.lastWidth || newHeight !== this.lastHeight) && (this.lastWidth !== 0 && this.lastHeight !== 0);
+        return (newWidth !== this.lastWidth || newHeight !== this.lastHeight) && (this.lastWidth !== 0 && this.lastHeight !== 0) && (newWidth !== 0 && newHeight !== 0);
     }
 
-    private setLastWidthHeightByHimself() {
+    public setLastWidthHeightByHimself() {
         const rect = this.el.nativeElement.getBoundingClientRect();
         this.setLastWidthHeight(rect.width, rect.height);
     }
