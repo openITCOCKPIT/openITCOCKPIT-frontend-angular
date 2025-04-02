@@ -34,6 +34,7 @@ import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-dir
 
 import { EvcServicestatusToasterService } from './evc-servicestatus-toaster/evc-servicestatus-toaster.service';
 import { EvcServicestatusToasterComponent } from './evc-servicestatus-toaster/evc-servicestatus-toaster.component';
+//import { NgxResizeObserverModule } from 'ngx-resize-observer';
 
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
 interface EvcNode extends dagre.Node {
@@ -89,6 +90,7 @@ const OPERATOR_WIDTH = 100;
     selector: 'oitc-evc-tree',
     imports: [
         FFlowModule,
+       // NgxResizeObserverModule,
         NgClass,
         RowComponent,
         ColComponent,
@@ -188,7 +190,6 @@ export class EvcTreeComponent {
                     this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered unknown');
                     break;
             }
-
         });
 
         afterRenderEffect(() => {
@@ -216,8 +217,8 @@ export class EvcTreeComponent {
         this.setGraph(graph, direction);
         this.nodes = this.getNodes(graph);
         this.connections = this.getConnections(graph);
-
         this.cdr.markForCheck();
+
     }
 
     private setGraph(graph: dagre.graphlib.Graph, direction: EvcTreeDirection): void {
@@ -368,6 +369,7 @@ export class EvcTreeComponent {
     }
 
     public verticalBT(): void {
+        this.fitToScreen();
         this.direction = EvcTreeDirection.BOTTOM_TO_TOP;
         this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.BOTTOM_TO_TOP);
         this.fitToScreen();
@@ -375,17 +377,18 @@ export class EvcTreeComponent {
 
     public fitToScreen(): void {
         // Disabled for now, as it adds a scale factor to the canvas and "zooms in" on init.
-        //return;
+        return;
+       // this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
 
-         https://flow.foblex.com/docs/f-canvas-component
-        if (this.fCanvasComponent) {
+        // https://flow.foblex.com/docs/f-canvas-component
+       /* if (this.fCanvasComponent) {
             this.fCanvasComponent.resetScaleAndCenter(true);
-            this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
+            //this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
             this.cdr.markForCheck();
 
 
-            //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
-        }
+          //  this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
+        }*/
     }
 
     public toggleToaster(serviceId: number | undefined): void {
@@ -410,4 +413,5 @@ export class EvcTreeComponent {
     protected readonly AcknowledgementTypes = AcknowledgementTypes;
     protected readonly EvcTreeDirection = EvcTreeDirection;
     protected readonly EFMarkerType = EFMarkerType;
+
 }
