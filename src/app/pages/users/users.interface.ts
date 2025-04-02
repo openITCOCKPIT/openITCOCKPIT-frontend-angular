@@ -185,7 +185,7 @@ export interface EditUser {
         _ids: number[]
     }
     ContainersUsersMemberships: {
-        [key: string]: number;
+        [key: string]: string;
     }
 }
 
@@ -355,6 +355,7 @@ export interface LoginGetRoot {
     isSsoEnabled: boolean
     forceRedirectSsousersToLoginScreen: boolean
     errorMessages: any[]
+    successMessages: any[]
     customLoginBackgroundHtml: string
     isCustomLoginBackground: boolean,
     disableAnimation: boolean,
