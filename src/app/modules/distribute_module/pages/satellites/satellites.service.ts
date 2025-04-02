@@ -183,7 +183,7 @@ export class SatellitesService {
         )
     }
 
-    public getSatelliteById(id: number): Observable<SatelliteEntityCake2> {
+    public getSatelliteById(id: number): Observable<SatelliteEntityCake2 | any> {
         const proxyPath = this.proxyPath;
 
         return this.http.get<{
@@ -196,6 +196,9 @@ export class SatellitesService {
         }).pipe(
             map(data => {
                 return data.satellite;
+            }),
+            catchError((error: any) => {
+                return of(error); // Return a default value or handle the error as needed
             })
         )
     }

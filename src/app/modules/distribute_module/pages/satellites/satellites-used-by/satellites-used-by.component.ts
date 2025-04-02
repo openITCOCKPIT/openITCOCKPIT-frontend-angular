@@ -19,6 +19,9 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { SatellitesService } from '../satellites.service';
 import { Subscription } from 'rxjs';
 import { SatelliteUsedByHost, SatelliteUsedBySatellite } from '../satellites.interface';
+import {
+    NotUsedByObjectComponent
+} from '../../../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 
 @Component({
     selector: 'oitc-satellites-used-by',
@@ -38,7 +41,8 @@ import { SatelliteUsedByHost, SatelliteUsedBySatellite } from '../satellites.int
         XsButtonDirective,
         CardBodyComponent,
         NgForOf,
-        TableDirective
+        TableDirective,
+        NotUsedByObjectComponent
     ],
     templateUrl: './satellites-used-by.component.html',
     styleUrl: './satellites-used-by.component.css',
@@ -75,7 +79,7 @@ export class SatellitesUsedByComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.satellite = result.satellite;
                 this.all_hosts = result.all_hosts;
-                this.total = result.total;
+                this.total = result.all_hosts.length || 0;
                 this.cdr.markForCheck();
             }));
     }

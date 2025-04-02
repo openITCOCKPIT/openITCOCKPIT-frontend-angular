@@ -23,7 +23,7 @@ import {
 } from '@coreui/angular';
 import { delay, filter, map, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { IconDirective } from '@coreui/icons-angular';
 import { ChangeLanguageComponent } from '../change-language/change-language.component';
 import { SidebarService } from '../coreui-navbar/sidebar.service';
@@ -46,6 +46,7 @@ import { CurrentMessageOfTheDay } from '../../../pages/messagesotd/messagesotd.i
 import { HeaderAvatarComponent } from './header-avatar/header-avatar.component';
 import { PushNotificationsComponent } from '../../../components/push-notifications/push-notifications.component';
 import { HeaderInfo, HeaderInfoService } from './header-info.service';
+import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-coreui-header',
@@ -74,7 +75,8 @@ import { HeaderInfo, HeaderInfoService } from './header-info.service';
         PushNotificationsComponent,
         HeaderEditionComponent,
         HeaderExportComponent,
-        VersionCheckComponent
+        VersionCheckComponent,
+        AsyncPipe
     ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css',
@@ -91,6 +93,8 @@ export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy 
     readonly #destroyRef: DestroyRef = inject(DestroyRef);
     readonly sidebarService: SidebarService = inject(SidebarService);
     private readonly HeaderInfoService: HeaderInfoService = inject(HeaderInfoService);
+    public readonly PermissionsService = inject(PermissionsService);
+
 
     private cdr = inject(ChangeDetectorRef);
 

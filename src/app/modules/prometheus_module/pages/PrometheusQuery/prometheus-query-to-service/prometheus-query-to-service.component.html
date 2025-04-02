@@ -549,9 +549,9 @@
                                 <span class="no-padding bold ng-binding">{{ datum.metric.__name__ }}</span>
                                 {{ '{' }}
                                 <code class="no-padding ng-binding ng-scope">
-                                    <ng-container *ngFor="let a of datum.metric | keyvalue">
+                                    <ng-container *ngFor="let a of datum.metric | keyvalue; let last = last">
                                         <ng-container *ngIf="a.key !== '__name__'">
-                                            {{ a.key }}="{{ a.value }}"
+                                            {{ a.key }}="{{ a.value }}"<span *ngIf="!last">, </span>
                                         </ng-container>
                                     </ng-container>
                                 </code>

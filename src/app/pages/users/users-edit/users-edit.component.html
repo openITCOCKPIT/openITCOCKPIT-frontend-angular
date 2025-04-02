@@ -21,7 +21,7 @@
     </nav>
 
 
-    <oitc-form-loader [isVisible]="post.User.id === 0" />
+    <oitc-form-loader [isVisible]="post.User.id === 0"/>
     <form cForm (ngSubmit)="updateUser()" *ngIf="post.User.id !== 0">
         <c-card class="mb-3">
             <c-card-header>
@@ -82,7 +82,7 @@
                 <!-- for all the selected containerroles by ldap -->
                 <ng-container *ngIf="isLdapUser && ldapUserDetails.userContainerRoleContainerPermissionsLdap">
                     <c-row
-                        *ngFor="let userContainerRole of ldapUserDetails.userContainerRoleContainerPermissionsLdap | keyvalue"
+                        *ngFor="let userContainerRole of ldapUserDetails.userContainerRoleContainerPermissionsLdap | keyvalue: keepOrder"
                         class="containerRoleInheritance mb-3">
                         <c-col md="1">
                         </c-col>
@@ -129,7 +129,7 @@
                                 </c-col>
                                 <c-col md="9">
                                     <ng-container
-                                        *ngFor="let userRole of userContainerRole.value.user_roles | keyvalue">
+                                        *ngFor="let userRole of userContainerRole.value.user_roles | keyvalue: keepOrder">
                                         <button *oitcPermission="['usercontainerroles', 'edit']"
                                                 [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
                                                 cButton size="xs" color="primary" variant="outline">
@@ -183,7 +183,7 @@
 
                 <ng-container *ngIf="containerPermissions">
                     <c-row
-                        *ngFor="let userContainerRole of containerPermissions.userContainerRoleContainerPermissions | keyvalue"
+                        *ngFor="let userContainerRole of containerPermissions.userContainerRoleContainerPermissions | keyvalue: keepOrder"
                         class="containerRoleInheritance mb-3">
                         <c-col md="1">
                         </c-col>
@@ -230,7 +230,7 @@
                                 </c-col>
                                 <c-col md="9">
                                     <ng-container
-                                        *ngFor="let userRole of userContainerRole.value.user_roles | keyvalue">
+                                        *ngFor="let userRole of userContainerRole.value.user_roles | keyvalue: keepOrder">
                                         <button *oitcPermission="['usercontainerroles', 'edit']"
                                                 [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
                                                 cButton size="xs" color="primary" variant="outline">
@@ -297,7 +297,7 @@
                                                [disabled]="userContainerRole.key === 1 || containerIdsWithWritePermissions.indexOf(userContainerRole.key) === -1"
                                                [name]="userContainerRole.key + 'PermissionLevelReadEditable'"
                                                [id]="userContainerRole.key + 'PermissionLevelReadEditable'"
-                                               [value]="1"
+                                               [value]="'1'"
                                                [(ngModel)]="post.User.ContainersUsersMemberships[userContainerRole.key]"
                                         />
                                         <label cFormCheckLabel
@@ -313,7 +313,7 @@
                                                [disabled]="userContainerRole.key === 1 || containerIdsWithWritePermissions.indexOf(userContainerRole.key) === -1"
                                                [name]="userContainerRole.key + 'PermissionLevelReadWriteEditable'"
                                                [id]="userContainerRole.key + 'PermissionLevelReadWriteEditable'"
-                                               [value]="2"
+                                               [value]="'2'"
                                                [(ngModel)]="post.User.ContainersUsersMemberships[userContainerRole.key]"
                                         />
                                         <label cFormCheckLabel
@@ -468,14 +468,18 @@
                 </div>
 
                 <!-- ENABLE LOGIN OAUTH2 -->
-                <div class="mb-3" *ngIf="!isLdapUser">
+                <!--
+                An oAuth user will be an oAuth user forever
+                This can be changed later the user would only need to get an password and is_oauth=0 in the database
+                -->
+                <div class="mb-3" *ngIf="post.User.is_oauth">
                     <c-form-check>
                         <input cFormCheckInput
                                name="post.User.is_oauth"
                                id="post.User.is_oauth"
                                type="checkbox"
-                               trueFalseValue
                                [(ngModel)]="post.User.is_oauth"
+                               [disabled]="true"
                                oitcFormError [errors]="errors" errorField="is_oauth"/>
                         <oitc-form-feedback [errors]="errors" errorField="is_oauth"></oitc-form-feedback>
                         <label cFormCheckLabel for="post.User.is_oauth">
@@ -708,8 +712,11 @@
                     </div>
                 </div>
 
+                <!-- Prevent FireFox and Chrome from filling the users email into the timezone select box  :facepalm: -->
+                <input type="text" name="name" style="display:none">
+
                 <!-- New password -->
-                <div class="mb-3">
+                <div class="mb-3" *ngIf="isLdapUser === false && post.User.is_oauth === false">
                     <label cLabel for="post.User.password">
                         {{ t('New password') }}
                         <oitc-required-icon/>
@@ -727,9 +734,9 @@
                     </div>
                 </div>
                 <!-- confirm new password -->
-                <div class="mb-3">
+                <div class="mb-3" *ngIf="isLdapUser === false && post.User.is_oauth === false">
                     <label cLabel for="post.User.confirm_password">
-                        {{ t('New password') }}
+                        {{ t('Confirm new password') }}
                         <oitc-required-icon/>
                     </label>
                     <input cFormControl

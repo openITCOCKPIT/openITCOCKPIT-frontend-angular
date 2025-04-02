@@ -687,8 +687,8 @@
                      *oitcPermission="['documentations', 'wiki']">
                     <div class="col-xs-12 col-lg-12 text-info">
                         <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
-                        {{ t('Read more about browser push notification in the') }} <a
-                        href="/documentations/wiki/additional_help%3Abrowser_push_notifications">
+                        {{ t('Read more about browser push notification in the') }}
+                        <a [routerLink]="['/', 'documentations', 'wiki']" [queryParams]="{categoryName:'additional_help', documentationKey:'browser_push_notifications'}">
                         {{ t('documentation') }} </a>
                     </div>
                 </div>

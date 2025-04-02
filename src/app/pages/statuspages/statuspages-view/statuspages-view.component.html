@@ -122,7 +122,7 @@
                                     }
                                 </div>
                                 <div class="col-12">
-                                    <h6 class="{{item.cumulatedColor}}">{{ item.cumulatedStateName }}</h6>
+                                    <h6 class="{{item.cumulatedColor}}">{{ item.cumulatedStateName | transloco }}</h6>
                                 </div>
                                 <!-- Handle acknowledgement comments -->
                                 <div class="col-12 text-truncate">
@@ -135,7 +135,7 @@
                                                     *ngIf="item.acknowledgeComment && item.acknowledgeComment.length > 0"
                                                     class="text-center ps-1"
                                                     (click)="toggleAcknowledgeComments(toString(item.type + item.id))"
-                                                    title="expand comments">
+                                                    title="{{ t('expand comments') }}">
                                                     <fa-icon [icon]="['fas', 'plus-square']" class="fa-lg"
                                                              *ngIf="!showAcknowledgeComments[item.type + item.id]"/>
                                                     <fa-icon [icon]="['fas', 'minus-square']" class="fa-lg"

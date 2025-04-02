@@ -6,7 +6,7 @@ import {
     OnDestroy,
     OnInit,
 } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';

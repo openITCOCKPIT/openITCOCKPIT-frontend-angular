@@ -13,7 +13,7 @@ import {
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 
 
 import { UsersService } from '../users.service';
@@ -50,7 +50,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         FormCheckInputDirective,
         FormCheckLabelDirective,
         XsButtonDirective,
-        TooltipDirective
+        TooltipDirective,
+        NgClass
     ],
     templateUrl: './users-login.component.html',
     styleUrl: './users-login.component.css',
@@ -77,6 +78,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     protected disableAnimation: boolean = false;
     protected enforceDisableAnimation: boolean = false;
     protected disableSocialButtons: boolean = false;
+    protected enableColumnLayout: boolean = false;
     protected disableLogin: boolean = false;
     protected particlesOptions: any = {
         background: {
@@ -177,6 +179,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 this.enforceDisableAnimation = true;
             }
             this.disableSocialButtons = data.disableSocialButtons;
+            this.enableColumnLayout = data.enableColumnLayout;
 
             switch (data.images.particles) {
                 case 'none':
@@ -205,23 +208,25 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 });
             }
 
-
             this._csrfToken = data._csrfToken;
 
-            var hasSsoError = false;
-            if (data.hasOwnProperty('errorMessages')) {
-                for (var index in data.errorMessages) {
+            let hasSsoError = false;
+            if (data.hasOwnProperty('errorMessages') && data.errorMessages.length > 0) {
+                for (let index in data.errorMessages) {
                     hasSsoError = true;
                     this.NotyService.genericError(data.errorMessages[index]);
                 }
-            }
+            } else if (data.hasOwnProperty('successMessages') && data.successMessages.length > 0) {
+                for (let index in data.successMessages) {
+                    // User got redirected back from oAuth servers login screen to openITCOCKPIT
 
-            if (data.isLoggedIn) {
-                //User maybe logged in via oAuth?
-                this.isOAuthResponse(hasSsoError);
-            }
+                    this.NotyService.genericSuccess('Login successful');
 
-            if (!data.isLoggedIn && !hasSsoError) {
+                    setTimeout(() => {
+                        this.router.navigate([this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/dashboards/index')]);
+                    }, 1000);
+                }
+            } else if (!data.isLoggedIn && !hasSsoError) {
                 if (data.isSsoEnabled && data.forceRedirectSsousersToLoginScreen) {
                     setTimeout(function () {
                         window.location.href = '/users/login?redirect_sso=true';
@@ -282,31 +287,8 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
     }
 
-    protected isOAuthResponse = (hasSsoError: boolean) => {
-        if (hasSsoError === true) {
-            return;
-        }
-
-        //    var sourceUrl = parseUri(decodeURIComponent(window.location.href)).source;
-        var sourceUrl = '';
-        if (sourceUrl.includes('/#!/')) {
-            sourceUrl = sourceUrl.replace('/#!', '');
-        }
-
-        //    var query = parseUri(sourceUrl).queryKey;
-        let query = {};
-        if (query.hasOwnProperty('code') && query.hasOwnProperty('state')) {
-            // User got redirected back from oAuth servers login screen to openITCOCKPIT
-
-            this.NotyService.genericSuccess('Login successful');
-
-            window.location.href = this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/');
-        }
-
-    };
-
     private getLocalStorageItemWithDefaultAndRemoveItem = function (key: string, defaultValue: any) {
-        var val = window.localStorage.getItem(key);
+        let val = window.localStorage.getItem(key);
         if (val === null) {
             return defaultValue;
         }

@@ -131,6 +131,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     private readonly route = inject(ActivatedRoute);
     private readonly cdr = inject(ChangeDetectorRef);
 
+    protected readonly keepOrder = keepOrder;
     protected post: UpdateUser = this.getDefaultPost();
     protected containerRoles: LoadContainerRolesRoot = {} as LoadContainerRolesRoot;
     protected selectedContainerIds: number[] = [];
@@ -162,14 +163,15 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         this.selectedContainerIds.map((id) => {
 
             if (id === 1) {
-                this.post.User.ContainersUsersMemberships[id] = 2;
+                this.post.User.ContainersUsersMemberships[id] = "2";
                 return;
             }
 
-            let value = parseInt(this.post.User.ContainersUsersMemberships[id] as unknown as string);
-            if (isNaN(value)) {
+            let value = this.post.User.ContainersUsersMemberships[id] as unknown as string;
+            console.warn(value);
+            if (value !== "1" && value !== "2") {
                 console.info("Fallback to 1.");
-                this.post.User.ContainersUsersMemberships[id] = 1;
+                this.post.User.ContainersUsersMemberships[id] = "1";
                 return;
             }
             this.post.User.ContainersUsersMemberships[id] = value;
@@ -224,7 +226,8 @@ export class UsersEditComponent implements OnDestroy, OnInit {
                 firstname: '',
                 i18n: 'en_US',
                 is_active: 1,
-                is_oauth: 0,
+                is_oauth: false,
+                image: null,
                 lastname: '',
                 paginatorlength: 25,
                 password: '',
@@ -382,34 +385,36 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     }
 
     private loadLdapUserDetails(): void {
-        this.subscriptions.add(this.UsersService.loadLdapUserDetails(this.post.User.samaccountname)
-            .subscribe((result: LoadLdapUserDetailsRoot) => {
-                this.cdr.markForCheck();
-                this.ldapUserDetails = result.ldapUser;
+        if (this.post.User.samaccountname) {
+            this.subscriptions.add(this.UsersService.loadLdapUserDetails(this.post.User.samaccountname)
+                .subscribe((result: LoadLdapUserDetailsRoot) => {
+                    this.cdr.markForCheck();
+                    this.ldapUserDetails = result.ldapUser;
 
-                this.ldapUserDetails.ldapgroupIds = this.ldapUserDetails.ldapgroups.map((entry) => {
-                    return entry.id;
-                });
-
-                // SET NAME AND EMAIL
-                this.post.User.firstname = this.ldapUserDetails.givenname;
-                this.post.User.lastname = this.ldapUserDetails.sn;
-                this.post.User.email = this.ldapUserDetails.email;
-
-                // From every object of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap, take every key of object user_roles and attach it to this.post.User.usercontainerroles_ldap._ids.
-                this.post.User.usercontainerroles_ldap._ids = [];
-                Object.keys(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap).forEach(key => {
-                    const userRoles = this.ldapUserDetails.userContainerRoleContainerPermissionsLdap[key].user_roles;
-                    const roleIds = Object.keys(userRoles).map(Number);
-
-                    // Only add the roleIds if they are not already in the array.
-                    roleIds.forEach((roleId) => {
-                        if (this.post.User.usercontainerroles_ldap._ids.indexOf(roleId) === -1) {
-                            this.post.User.usercontainerroles_ldap._ids.push(roleId);
-                        }
+                    this.ldapUserDetails.ldapgroupIds = this.ldapUserDetails.ldapgroups.map((entry) => {
+                        return entry.id;
                     });
-                });
-            }))
+
+                    // SET NAME AND EMAIL
+                    this.post.User.firstname = this.ldapUserDetails.givenname;
+                    this.post.User.lastname = this.ldapUserDetails.sn;
+                    this.post.User.email = this.ldapUserDetails.email;
+
+                    // From every object of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap, take every key of object user_roles and attach it to this.post.User.usercontainerroles_ldap._ids.
+                    this.post.User.usercontainerroles_ldap._ids = [];
+                    Object.keys(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap).forEach(key => {
+                        const userRoles = this.ldapUserDetails.userContainerRoleContainerPermissionsLdap[key].user_roles;
+                        const roleIds = Object.keys(userRoles).map(Number);
+
+                        // Only add the roleIds if they are not already in the array.
+                        roleIds.forEach((roleId) => {
+                            if (this.post.User.usercontainerroles_ldap._ids.indexOf(roleId) === -1) {
+                                this.post.User.usercontainerroles_ldap._ids.push(roleId);
+                            }
+                        });
+                    });
+                }))
+        }
     }
 
     protected onLdapUserChange(event: any): void {
@@ -462,3 +467,4 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     }
 }
 
+const keepOrder = (a: any, b: any) => a;

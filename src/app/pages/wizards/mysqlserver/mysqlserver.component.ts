@@ -83,7 +83,7 @@ export class MysqlserverComponent extends WizardsAbstractComponent {
     protected override wizardLoad(result: MysqlWizardGet): void {
         this.post.username = result.username;
         this.post.password = result.password;
-        this.post.database = result.database;
+        this.post.database = result.database || this.post.database;
         this.serverAddr = result.serverAddr;
         super.wizardLoad(result);
     }

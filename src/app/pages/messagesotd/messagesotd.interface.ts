@@ -55,7 +55,7 @@ export interface MessageOfTheDay {
     content: string
     style: string
     date: string
-    expiration_duration: number
+    expiration_duration: number | null
     expire: boolean
     name: string // This field seems unused but is transported.
     notify_users: number

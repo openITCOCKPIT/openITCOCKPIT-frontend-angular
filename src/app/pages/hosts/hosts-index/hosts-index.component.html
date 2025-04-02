@@ -880,7 +880,7 @@
                         {{ t('Host output') }}
                     </th>
 
-                    <th *ngIf="fields[13]"
+                    <th *ngIf="fields[13]" class="col-1"
                         mat-sort-header="Hosts.satellite_id">
                         {{ t('Instance') }}
                     </th>
@@ -1024,7 +1024,12 @@
                     </td>
 
                     <td *ngIf="fields[13]">
-                        {{ host.Host.satelliteName }}
+                        @if (host.Host.satelliteRestricted) {
+                            <fa-icon [icon]="['fas', 'eye-low-vision']"></fa-icon>
+                            {{ t('Restricted view') }}
+                        } @else {
+                            {{ host.Host.satelliteName }}
+                        }
                     </td>
 
                     @if (this.PermissionsService.hasPermissionObservable(['services', 'serviceList'])|async) {

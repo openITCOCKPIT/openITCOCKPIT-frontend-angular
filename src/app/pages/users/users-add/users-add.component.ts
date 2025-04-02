@@ -138,12 +138,12 @@ export class UsersAddComponent implements OnDestroy, OnInit {
         // Traverse all containerids and set the value to 1.
         this.selectedContainerIds.map((id) => {
             if (id === 1) {
-                this.post.User.ContainersUsersMemberships[id] = 2;
+                this.post.User.ContainersUsersMemberships[id] = "2";
                 return;
             }
             // Only if not already set to 1 or 2.
-            if (this.post.User.ContainersUsersMemberships[id] !== 2) {
-                this.post.User.ContainersUsersMemberships[id] = 1;
+            if (this.post.User.ContainersUsersMemberships[id] !== "2") {
+                this.post.User.ContainersUsersMemberships[id] = "1";
             }
         });
         this.cdr.markForCheck();

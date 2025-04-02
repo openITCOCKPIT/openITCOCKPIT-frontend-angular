@@ -21,6 +21,12 @@ export class SnmpttService implements DeleteAllModalService {
             params: params as {}
         }).pipe(
             map(data => {
+                data.snmptt_entries.forEach(record => {
+                    // Use lowercase for severity ("ok", "warning", "critical")
+                    // This gets used to match the css class
+                    record.Snmptt.severity = record.Snmptt.severity.toString().toLowerCase();
+                });
+
                 return data;
             })
         )

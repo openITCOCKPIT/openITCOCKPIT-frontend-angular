@@ -117,7 +117,7 @@ export interface CreateUser {
     company: string
     confirm_password: string | undefined
     ContainersUsersMemberships: {
-        [key: string]: number;
+        [key: string]: string;
     }
     dashboard_tab_rotation: number
     dateformat: string
@@ -148,18 +148,44 @@ export interface CreateLdapUser extends CreateUser {
     }
 }
 
-export interface EditUser extends CreateUser {
+export interface EditUser {
     id: number
+    usergroup_id: number
+    email: string
+    firstname: string
+    lastname: string
+    position: string | null
+    company: string | null
+    phone: string
+    timezone: string
+    i18n: string
+    dateformat: string
+    samaccountname: string | null
+    ldap_dn: string | null
+    showstatsinmenu: number
+    is_active: number
+    dashboard_tab_rotation: number
+    paginatorlength: number
+    recursive_browser: number
+    image: string | null
+    is_oauth: boolean
+    password: string | undefined // Enter a new password if you want to change it - otherwise leave it empty
+    confirm_password: string | undefined
+    apikeys: Apikey[]
+    usercontainerroles: {
+        _ids: number[]
+    }
     containers: {
+        _ids: number[]
+    }
+    usercontainerroles_ldap: {
         _ids: number[]
     }
     usercontainerroles_containerids: {
         _ids: number[]
     }
-    ldap_dn: string
-    samaccountname: string
-    usercontainerroles_ldap: {
-        _ids: number[]
+    ContainersUsersMemberships: {
+        [key: string]: string;
     }
 }
 
@@ -186,6 +212,8 @@ export interface AddFromLdapRoot {
 
 
 export interface Apikey {
+    id?: number,
+    user_id?: number,
     apikey: string
     description: string
     last_use: string | null
@@ -327,10 +355,12 @@ export interface LoginGetRoot {
     isSsoEnabled: boolean
     forceRedirectSsousersToLoginScreen: boolean
     errorMessages: any[]
+    successMessages: any[]
     customLoginBackgroundHtml: string
     isCustomLoginBackground: boolean,
     disableAnimation: boolean,
-    disableSocialButtons: boolean
+    disableSocialButtons: boolean,
+    enableColumnLayout: boolean
 }
 
 export interface LoginImage {

@@ -10,6 +10,7 @@ import {
 import { ChangeLanguageService } from './change-language.service';
 import { Subscription } from 'rxjs';
 import { ProfileService } from '../../../pages/profile/profile.service';
+import { NgSelectConfig } from '@ng-select/ng-select';
 
 
 @Component({
@@ -33,11 +34,13 @@ export class ChangeLanguageComponent implements OnDestroy {
 
     constructor(private TranslocoService: TranslocoService,
                 private ChangeLanguageService: ChangeLanguageService,
+                private selectConfig: NgSelectConfig,
                 private ProfileService: ProfileService) {
         this.subscriptions.add(this.ProfileService.getProfile().subscribe(data => {
             if (data.user && data.user.i18n) {
                 this.TranslocoService.setActiveLang(data.user.i18n);
                 this.currentLanguage = data.user.i18n;
+                setTimeout(() => {this.setSelectConfig();}, 100);
 
             }
         }));
@@ -48,17 +51,24 @@ export class ChangeLanguageComponent implements OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public onChangedLanguage(langugage: string) {
+    public onChangedLanguage(language: string) {
 
-        this.subscriptions.add(this.ChangeLanguageService.changeBackendLanguage(langugage).subscribe(data => {
+        this.subscriptions.add(this.ChangeLanguageService.changeBackendLanguage(language).subscribe(data => {
             //location.reload();
 
-            this.TranslocoService.setActiveLang(langugage);
-            this.currentLanguage = langugage;
+            this.TranslocoService.setActiveLang(language);
+            this.currentLanguage = language;
             this.cdr.markForCheck();
+            setTimeout(() => {this.setSelectConfig();},100);
         }));
         //this.TranslocoService.setActiveLang(langugage);
         //this.currentLanguage = langugage
+
+    }
+
+    protected setSelectConfig() {
+        this.selectConfig.notFoundText = this.TranslocoService.translate('No entries match the selection');
+        this.selectConfig.placeholder = this.TranslocoService.translate('Please choose');
     }
 
 }

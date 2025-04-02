@@ -1,19 +1,18 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckInputDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -40,32 +39,32 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-hostgroups-add',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    NgSelectModule,
-    PermissionDirective,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    SelectComponent,
-    MultiSelectComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormCheckInputDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        SelectComponent,
+        MultiSelectComponent
+    ],
     templateUrl: './hostgroups-add.component.html',
     styleUrl: './hostgroups-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -141,16 +140,6 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
-
-                    // This is a bit of a hack, but it's the only way to get the error message to show up in the right place.
-                    if (typeof this.errors['container']['name'] !== 'undefined') {
-                        this.errors['name'] = <any>this.errors['container']['name'];
-                    }
-
-                    // This is a bit of a hack, but it's the only way to get the error message to show up in the right place.
-                    if (typeof this.errors['container']['parent_id'] !== 'undefined') {
-                        this.errors['parent_id'] = <any>this.errors['container']['parent_id'];
-                    }
                 }
             })
         );

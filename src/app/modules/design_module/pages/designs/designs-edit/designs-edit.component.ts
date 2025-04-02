@@ -13,7 +13,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
 import {
-    ButtonCloseDirective,
+    ButtonCloseDirective, ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -61,7 +61,8 @@ import {
         SelectComponent,
         ButtonCloseDirective,
         ReloadInterfaceModalComponent,
-        FormLabelDirective
+        FormLabelDirective,
+        ButtonGroupComponent
     ],
     templateUrl: './designs-edit.component.html',
     styleUrl: './designs-edit.component.css',

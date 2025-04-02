@@ -8,8 +8,8 @@ import { ColorModeService, ContainerComponent, ModalService, ShadowOnScrollDirec
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
 import { HistoryService } from './history.service';
-import { TranslocoService } from '@jsverse/transloco';
-import { NgSelectConfig } from '@ng-select/ng-select';
+//import { TranslocoService } from '@jsverse/transloco';
+//import { NgSelectConfig } from '@ng-select/ng-select';
 
 import { CoreuiHeaderComponent } from './layouts/coreui/coreui-header/coreui-header.component';
 import { CoreuiNavbarComponent } from './layouts/coreui/coreui-navbar/coreui-navbar.component';
@@ -67,8 +67,8 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     constructor(library: FaIconLibrary,
                 private router: Router,
                 private IconSetService: IconSetService,
-                private selectConfig: NgSelectConfig,
-                private TranslocoService: TranslocoService,
+               // private selectConfig: NgSelectConfig,
+               // private TranslocoService: TranslocoService,
                 private colorService: ColorModeService,
                 private cdr: ChangeDetectorRef,
                 private MessageOfTheDayService: MessagesOfTheDayService,
@@ -83,8 +83,8 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
         this.IconSetService.icons = {...iconSubset};
 
-        this.selectConfig.notFoundText = this.TranslocoService.translate('No entries match the selection');
-        this.selectConfig.placeholder = this.TranslocoService.translate('Please choose');
+       // this.selectConfig.notFoundText = this.TranslocoService.translate('No entries match the selection');
+        //this.selectConfig.placeholder = this.TranslocoService.translate('Please choose');
 
 
         // This is to sync the selected theme color from CoreUI with Angular Material

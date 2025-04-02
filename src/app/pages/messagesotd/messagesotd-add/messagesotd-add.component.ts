@@ -1,28 +1,28 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MessageOfTheDay } from '../messagesotd.interface';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  DropdownComponent,
-  DropdownItemDirective,
-  DropdownMenuDirective,
-  DropdownToggleDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -54,45 +54,45 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 @Component({
     selector: 'oitc-messagesotd-add',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    MultiSelectComponent,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PermissionDirective,
-    RequiredIconComponent,
-    SelectComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    FormCheckComponent,
-    RowComponent,
-    ColComponent,
-    TrustAsHtmlPipe,
-    BbCodeEditorComponent,
-    InputGroupComponent,
-    DropdownComponent,
-    DropdownMenuDirective,
-    InputGroupTextDirective,
-    DropdownToggleDirective,
-    DropdownItemDirective,
-    TrueFalseDirective,
-    FormCheckLabelDirective,
-    NgClass
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormCheckInputDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        MultiSelectComponent,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        PermissionDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        FormCheckComponent,
+        RowComponent,
+        ColComponent,
+        TrustAsHtmlPipe,
+        BbCodeEditorComponent,
+        InputGroupComponent,
+        DropdownComponent,
+        DropdownMenuDirective,
+        InputGroupTextDirective,
+        DropdownToggleDirective,
+        DropdownItemDirective,
+        TrueFalseDirective,
+        FormCheckLabelDirective,
+        NgClass
+    ],
     templateUrl: './messagesotd-add.component.html',
     styleUrl: './messagesotd-add.component.css'
 })
@@ -106,6 +106,7 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
     private readonly BbCodeParserService = inject(BbCodeParserService);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected post: MessageOfTheDay = this.getDefaultPost();
     protected usergroups: SelectKeyValue[] = [];
@@ -118,6 +119,7 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
     ] as SelectKeyValueString[];
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected html: string = '';
+    protected placeholder: string = '';
     protected createAnother: boolean = false;
 
     constructor() {
@@ -132,7 +134,7 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
             content: '',
             style: 'primary',
             date: '',
-            expiration_duration: 0,
+            expiration_duration: null,
             expire: false,
             name: '', // This field seems unused but is transported.
             notify_users: 0,
@@ -182,6 +184,13 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
 
     protected setExpiration(expiration: boolean): void {
         this.post.expire = expiration;
+        if (!expiration) {
+            this.post.expiration_duration = null;
+            this.placeholder = '';
+        } else {
+            this.placeholder = '1';
+        }
+        this.cdr.markForCheck();
     }
 
     public ngOnInit() {

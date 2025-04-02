@@ -88,7 +88,7 @@ import { ContainersService } from '../../../../../pages/containers/containers.se
         RouterLink,
     ],
   templateUrl: './autoreport-edit-step-one.component.html',
-  styleUrl: './autoreport-edit-step-one.component.css',
+  styleUrl: './../../../assets/autoreport.css',//'./autoreport-edit-step-one.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {

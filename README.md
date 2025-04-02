@@ -1,37 +1,88 @@
 # openITCOCKPIT Frontend Angular
 
+Next generation open source monitoring.
+
+[![Discord: ](https://img.shields.io/badge/Discord-Discord.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/G8KhxKuQ9G)
+[![Reddit: ](https://img.shields.io/reddit/subreddit-subscribers/openitcockpit?style=social)](https://www.reddit.com/r/openitcockpit/)
+[![IRC: #openitcockpit on chat.freenode.net](https://img.shields.io/badge/%23openitcockpit-Libera.Chat-blue.svg)](https://web.libera.chat/#openitcockpit)
+[![Build Status Stable](https://drone.openitcockpit.io/buildStatus/icon?job=openitcockpit-packages%2Fstable&subject=stable)](https://drone.openitcockpit.io/buildStatus/icon?job=openitcockpit-packages%2Fstable&subject=stable)
+[![Build Status Nightly](https://drone.openitcockpit.io/buildStatus/icon?job=openitcockpit-packages%2Fnightly&subject=nightly)](https://drone.openitcockpit.io/buildStatus/icon?job=openitcockpit-packages%2Fnightly&subject=nightly)
+
 ![openITCOCKPIT goes Angular](src/assets/images/logos/openitcockpit_gradient_bg.png)
 
-**THIS IS WORK IN PROGRESS!** Do not use for production! You have been warned.
+# What is openITCOCKPIT?
 
-![screenshot](src/assets/docs/angular-frontend.jpg)
+openITCOCKPIT is an Open Source system monitoring tool built for different monitoring engines like Nagios, Naemon and Prometheus.
 
-## Setup
+This is the repository for the official [openITCOCKPIT](https://openitcockpit.io/) frontend.
 
-Für das Frontend wird die aktuelle Node LTS Version benötigt. Falls Node noch nicht installiert ist, kann dies (für
-Ubuntu / Debian) hier rüber erfolgen: https://github.com/nodesource/distributions
-Bitte nach `Node.js LTS` suchen.
+The backend server code that is providing the API can be found [here](https://github.com/it-novum/openITCOCKPIT).
 
-Das Frontend ist ein **Standalone Frontend**, welches ausschließlich über die API mit openITCOCKPIT kommuniziert.
+# Demo
 
-### Angular installieren
+Play around with our [Demo](https://demo.openitcockpit.io/) system. Its equipped with the majority of modules that you will get with the community license
 
-```
-npm install -g @angular/cli
-```
+Credentials:
 
-### Nginx Konfiguration
+````
+Username(Email): demo@openitcockpit.io
+Password: demo123
+````
 
-Damit es zu keinen CORS Problemen kommt, wird das Frontend auf einem openITCOCKPIT Server installiert. Der Ort ist
-egal (`/opt/openitc/frontend-angular` zum Beispiel)
+## Screenshots
 
-Der gesamte Traffik wird über den Nginx Webserver gerouted. Dazu folgendes in die Datei `/etc/nginx/openitc/custom.conf`
-eintragen
+![Service Details](src/assets/docs/service_browser.png "Service Details")
 
-```
-# Proxy for /a/ Angular frontend
+![Event correlation of a cluster](src/assets/docs/evc.png "Event correlation of a cluster")
+
+![Monitor Services of a Windows Client PC](src/assets/docs/agent.png "Monitor Services of a Windows Client PC")
+
+## Production setup
+
+If you are only interested in using openITCOCKPIT, but do not plan to do any development, the openITCOCKPIT frontend
+is provided by the `openitcockpit-frontend-angular` package.
+
+Please refer to the [official documentation](https://openitcockpit.io/download_server/) for more information about how to install openITCOCKPIT.
+
+## Setup for Developers
+
+The openITCOCKPIT frontend is a standalone Angular application that communicates with the [openITCOCKPIT backend](https://github.com/it-novum/openITCOCKPIT)
+via the [HTTP API](https://docs.openitcockpit.io/en/development/api/).
+
+If you want to contribute to the openITCOCKPIT frontend, you can follow the instructions below to set up a development environment.
+
+### Prerequisites
+
+- Latest Node.js LTS ([Ubuntu / Debian download](https://github.com/nodesource/distributions))
+- [Angular CLI](https://angular.dev/installation) installed globally
+   ```
+   npm install -g @angular/cli
+   ```
+
+### System requirements
+
+The openITCOCKPIT Angular application is a relatively large application and requires a lot of resources to build and run.
+We recommend at least 8 GB of RAM and 4 CPU cores.
+
+### Nginx Configuration
+
+To avoid any CORS issues, the frontend should be installed on an openITCOCKPIT server. The location does not matter however
+`/opt/openitc/frontend-angular` is the recommended location.
+
+To route all traffic through the Nginx web server, edit the config file `/etc/nginx/openitc/master.conf`
+and commend out the `Proxy for the Angular Frontend (production)` section and uncomment the `Proxy for the Angular Frontend (development)` section.
+
+```nginx
+# Proxy for the Angular Frontend (production)
+#location ^~ /a/ {
+#    alias /opt/openitc/frontend-angular/browser/;
+#    index index.html;
+#    try_files $uri $uri/ /a/index.html;
+#}
+
+# Proxy for the Angular Frontend (development)
 location ^~ /a/ {
-    proxy_pass http://localhost:4200/a/;
+    proxy_pass http://127.0.0.1:4200/a/;
 
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
@@ -50,22 +101,20 @@ location ^~ /a/ {
 }
 ```
 
-Den Restart vom Webserver nicht vergessen
+To apply the changes, restart the Nginx service.
 
 ```
 systemctl restart nginx
 ```
 
-### Repo Clonen
-
-Jetzt muss noch das Repositoriy geclonted werden.
+### Clone the Repository
 
 ```
 cd /opt/openitc/
 git clone https://github.com/it-novum/openITCOCKPIT-frontend-angular.git frontend-angular
 ```
 
-Das Frontend kann jetzt über npm gestartet werden.
+You can now start the Angular development server.
 
 ```
 npm install
@@ -73,60 +122,22 @@ chown www-data:www-data /opt/openitc/frontend-angular -R
 ```
 
 ```
-sudo -u www-data -g www-data /bin/bash
-ng serve
+npm start
 ```
 
-In case you get random memory errors use this command to start the frontend:
+The frontend is now available at `https://xxx.xxx.xxx.xxx/a/`.
 
-```
-NODE_OPTIONS="--max-old-space-size=6000" ng serve
-```
-
-cd ..
-
-## Netzwerkzugriff
-
-### NFS Share
-
-Benutzer von NFS müssen einen neuen Export in der Datei `/etc/exports` erstellen
-
-```
-/opt/openitc/frontend-angular/    172.16.17.0/24(rw,no_subtree_check,no_root_squash,all_squash,anonuid=33,anongid=33) 172.16.12.0/24(rw,no_subtree_check,no_root_squash,all_squash,anonuid=33,anongid=33) 128.1.0.0/16(rw,no_subtree_check,no_root_squash,all_squash,anonuid=33,anongid=33)  192.168.56.0/24(rw,no_subtree_check,no_root_squash,all_squash,anonuid=33,anongid=33) 192.168.178.0/24(rw,no_subtree_check,no_root_squash,all_squash,anonuid=33,anongid=33) 10.212.134.0/24(rw,no_subtree_check,no_root_squash,all_squash,anonuid=33,anongid=33)
-```
-
-Aktiviert wird der neue Export über
-
-```
-exportfs -a
-```
-
-### Windows / SMB Share
-
-Unter Windows, bzw. wenn die Samba-Freigabe genutzt wird, sind keine Anpassungen erforderlich.
-
-# Build Angular Frontend for Production
+## Build Angular Frontend for Production
 
 ```
 npm install
 ng build
 ```
 
-Nginx configuration
+## Create a new module
 
-```
-# Proxy for /a/ Angular frontend
-location ^~ /a/ {
-    root /opt/openitc/frontend-angular/dist/frontend-angular/browser/;
-    index index.html;
-    try_files $uri /a/index.html;
-}
-```
-
-# Neues Module erstellen
-
-1. Neuen Ordner unter `src/app/modules` erstellen `jira_module`.
-2. Routes config hinzufügen in `jira_module/jira_module.routes.ts`
+1. Create a new directory at `src/app/modules`, for example `jira_module`.
+2. Now add a basic routes configuration for the module `jira_module/jira_module.routes.ts`
 
 ```typescript
 import { Routes } from '@angular/router';
@@ -134,7 +145,7 @@ import { Routes } from '@angular/router';
 export const jiraModuleRoutes: Routes = [];
 ```
 
-3. Route laden in `src/app/app.routes.ts`
+3. Load the routs into the Angular app: `src/app/app.routes.ts`
 
 ````typescript
 /***    Routes for modules   ***/
@@ -144,13 +155,9 @@ const moduleRoutes: Routes = [
     ];
 ````
 
-4. Unterordner `pages` erstellen, indem alle Seiten des Modules abgelegt werden.
+4. Inside of `src/app/modules/jira_module` you can create different sub-folders for `pages`, `services`, etc.
 
----
-
-Original Angular Readme (unten)
-
-# Translations (i18n)
+## Translations (i18n)
 
 openITCOCKPIT is a multi-language frontend.
 If you found errors in the translations, we are more than happy to receive pull requests.
@@ -167,7 +174,7 @@ The `key` is the original English text and the `value` is the translated text. P
 ```
 
 The `{0}` as placeholders that will be replaced by the frontend at runtime.
-It is important to use `{0}` in the key, and `{{0}}` in teh value.
+It is important to use `{0}` in the key, and `{{0}}` in the value.
 
 ```json
 {
@@ -177,14 +184,14 @@ It is important to use `{0}` in the key, and `{{0}}` in teh value.
 
 openITCOCKPIT use [Transloco](https://jsverse.gitbook.io/transloco) for translations. Please refer to the official documentation for more information.
 
-## 1. Fix typos
+### 1. Fix typos
 
 Found a typo, some grammar issues or a bad wording?
-The easiest way to help us is to fix it directly in the JSON file. Open the corosponding JSON file (e.g. `src/assets/i18n/es_ES.json`) and search for the text you want to change.
+The easiest way to help us is to fix it directly in the JSON file. Open the corresponding JSON file (e.g. `src/assets/i18n/es_ES.json`) and search for the text you want to change.
 
 After you have fixed the issue, please send us a pull request.
 
-## 2. Improve or update existing translations
+### 2. Improve or update existing translations
 
 Sometimes, some keys are missing in the translation files. To add missing translations to existing files,
 you can run the command `npm run i18n:find`. This will add all missing keys with the English text as value.
@@ -205,7 +212,7 @@ You can now start to translate all english texts to German:
 }
 ```
 
-## 3. Add new translations
+### 3. Add new translations
 
 If you plan to add a new language, you need to add the new language to the `transloco.config.js` file.
 For example add `it_IT` for Italian translations:
@@ -240,7 +247,7 @@ In the last step, you have to add the new language to the `src/app/app.config.ts
 
 and add the new language into the dropdown menu `src/app/layouts/coreui/change-language/change-language.component.html`
 
-# How to Upgrade Angular
+## How to Upgrade Angular
 
 This document describes how to upgrade the underlying Angular version.
 
@@ -281,36 +288,44 @@ This document describes how to upgrade the underlying Angular version.
 npm install --save typescript@~5.5.3
 ```
 
----
+# Need help or support?
 
-# FrontendAngular
+* Official [Discord Server](https://discord.gg/G8KhxKuQ9G)
+* Join [#openitcockpit](https://web.libera.chat/#openitcockpit) on Libera Chat
+* [it-novum GmbH](https://it-services.it-novum.com/support-2/) provides commercial support
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.2.
+# Security
 
-## Development server
+Please send security vulnerabilities found in openITCOCKPIT or software that is used by openITCOCKPIT to: `security@openitcockpit.io`.
 
-Run `ng s --disable-host-check  --public-host --host=0.0.0.0` for a dev server. Navigate to `http://localhost:4200/`.
-The application will automatically reload if you change any of the source files.
+All disclosed vulnerabilities are available here: [https://openitcockpit.io/security/](https://openitcockpit.io/security/)
 
-## Code scaffolding
+# License
 
-Run `ng generate component component-name` to generate a new component. You can also use
-`ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```
+Copyright (C) 2024 it-novum GmbH
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+openITCOCKPIT is dual licensed
 
-## Running unit tests
+1)
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3 of the License.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a
-package that implements end-to-end testing capabilities.
 
-## Further help
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-To get more help on the Angular CLI use `ng help` or go check out
-the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+2)
+If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+under the terms of the openITCOCKPIT Enterprise Edition licence agreement.
+Licence agreement and licence key will be shipped with the order
+confirmation.
+```

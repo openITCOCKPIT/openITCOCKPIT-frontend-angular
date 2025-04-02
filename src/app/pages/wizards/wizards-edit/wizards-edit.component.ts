@@ -28,6 +28,7 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-wizards-edit',
@@ -52,7 +53,8 @@ import { NgIf } from '@angular/common';
         FormDirective,
         FormsModule,
         NgIf,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        FormLoaderComponent
     ],
     templateUrl: './wizards-edit.component.html',
     styleUrl: './wizards-edit.component.css',
@@ -68,6 +70,7 @@ export class WizardsEditComponent implements OnDestroy, OnInit {
     private readonly cdr = inject(ChangeDetectorRef);
 
     protected post: WizardAssignments = {
+        uuid : '',
         servicetemplates: {
             _ids: [] as number[]
         }

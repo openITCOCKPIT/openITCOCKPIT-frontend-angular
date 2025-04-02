@@ -1,12 +1,9 @@
 import { WidgetTypes } from './widgets/widgets.enum';
-import { HoststatusObject } from '../hosts/hosts.interface';
-import { HostgroupSummaryStateHosts } from '../hosts/summary_state.interface';
 
 export interface DashboardsIndexResponse {
     tabs: DashboardTab[]
     widgets: DashboardWidget[]
     tabRotationInterval: number
-    askForHelp: boolean
     _csrfToken: string
 }
 
