@@ -11,7 +11,11 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownComponent,
     DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -58,6 +62,7 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ResetPasswordModalComponent } from '../../../components/reset-password-modal/reset-password-modal.component';
 import { IndexPage } from '../../../pages.interface';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
     selector: 'oitc-users-index',
@@ -101,7 +106,11 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
         RouterLink,
         MultiSelectComponent,
         ResetPasswordModalComponent,
-        BadgeOutlineComponent
+        BadgeOutlineComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective
     ],
     templateUrl: './users-index.component.html',
     styleUrl: './users-index.component.css',
@@ -235,4 +244,24 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.loadUsers();
         }
     }
+
+    public linkFor(format: 'csv') {
+        let baseUrl = '/users/listToCsv?';
+
+        let urlParams = {
+            'angular': true,
+            'sort': this.params.sort,
+            'direction': this.params.direction,
+            'filter[full_name]': this.params['filter[full_name]'],
+            'filter[Users.email]': this.params['filter[Users.email]'],
+            'filter[Users.company]': this.params['filter[Users.company]'],
+            'filter[Users.phone]': this.params['filter[Users.phone]'],
+            'filter[Users.usergroup_id]': this.params['filter[Users.usergroup_id][]'],
+        };
+
+        let stringParams: HttpParams = new HttpParams();
+        stringParams = stringParams.appendAll(urlParams);
+        return baseUrl + stringParams.toString();
+    }
+
 }
