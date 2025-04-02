@@ -1,0 +1,41 @@
+<ng-container *transloco="let t">
+    <div class="mb-3">
+        <full-calendar #fullCalendar [options]="calendarOptions()">
+
+            <ng-template #eventContent let-arg>
+                <div class="fc-event-title-container"
+                     [ngStyle]="{ 'width': '100%', 'background-color': colour }">
+                    <div class="fc-event-title fc-sticky">
+                        <ng-container *ngIf="arg.event.start">
+
+                            {{ formatTime(arg.event.start.getTime()) }}
+                            -
+                        </ng-container>
+                        <ng-container *ngIf="arg.event.end">
+                            {{ formatTime(arg.event.end.getTime()) }}
+                        </ng-container>
+                        {{ arg.event.title }}
+                    </div>
+                </div>
+            </ng-template>
+
+            <!-- dayCellContent  Content Injection -->
+            <!-- https://fullcalendar.io/docs/day-cell-render-hooks -->
+            <ng-template #dayCellContent let-arg>
+                <div class="d-inline-flex w-100">
+                    <div class="fc-daygrid-day-number">
+                        {{ arg.dayNumberText }}
+                    </div>
+                    <div>
+                        <button cButton
+                                (click)="onCreateClick.emit(arg)"
+                                class="ripple" size="xs"
+                                color="success">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+        </full-calendar>
+    </div>
+</ng-container>

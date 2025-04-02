@@ -176,6 +176,7 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
                                 description: event.description,
                                 end: event.end,
                                 default_holiday: false,
+                                colour: response?.changeCalendars[changeCalendarId].colour,
                             });
                         });
                     });
