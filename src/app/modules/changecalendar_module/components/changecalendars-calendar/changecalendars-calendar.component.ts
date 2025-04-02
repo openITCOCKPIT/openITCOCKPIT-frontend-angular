@@ -18,7 +18,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
@@ -27,8 +26,7 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
         TranslocoDirective,
         FullCalendarModule,
         FaIconComponent,
-        XsButtonDirective,
-        NgIf
+        XsButtonDirective
     ],
     templateUrl: './changecalendars-calendar.component.html',
     styleUrl: './changecalendars-calendar.component.css',
@@ -37,7 +35,7 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 export class ChangecalendarsCalendarComponent {
     private readonly cdr = inject(ChangeDetectorRef);
     private _events: CalendarEvent[] = [];
-    private _editable: boolean = true;
+    private _colour: string = '';
     private _initialView: string = 'dayGridMonth';
 
     @ViewChild('fullCalendar') fullCalendar!: FullCalendarComponent;
@@ -53,17 +51,18 @@ export class ChangecalendarsCalendarComponent {
     }
 
     @Input()
-    public set editable(editable: boolean) {
-        this._editable = editable;
+    public set colour(colour: string) {
+        this._colour = colour;
+        // Force reload of calendar here
+        this.calendarOptions.update(options => ({...options, eventColor: colour}));
     }
 
-    public get editable(): boolean {
-        return this._editable;
+    public get colour(): string {
+        return this._colour;
     }
 
     @Input()
     public set initialView(initialView: string) {
-
         // Force reload of calendar here
         this.calendarOptions.update(options => ({...options, initialView: initialView}));
         this._initialView = initialView;
@@ -106,7 +105,7 @@ export class ChangecalendarsCalendarComponent {
         eventsSet: this.handleEvents.bind(this),
         droppable: false,
         dragScroll: false,
-        eventDragMinDistance: 999999999,
+        eventColor: this.colour
     });
     currentEvents = signal<EventApi[]>([]);
 

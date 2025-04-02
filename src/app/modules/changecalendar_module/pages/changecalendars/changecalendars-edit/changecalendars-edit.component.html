@@ -129,6 +129,7 @@
                     <br/>
                     <oitc-changecalendars-calendar
                             [(events)]="events"
+                            [colour]="post.changeCalendar.colour"
                             (eventClick)="editEvent($event);"
                             (onCreateClick)="createEvent($event)"/>
                 </div>
