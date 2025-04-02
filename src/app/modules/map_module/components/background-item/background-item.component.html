@@ -7,6 +7,7 @@
         <div cdkDragHandle
              [ngStyle]="{'width.px': width, 'height.px': height}">
             <img [src]="'/map_module/img/backgrounds/' + this.item()?.background" class="invalid-image-src"
+                 [ngStyle]="{'width.px': width, 'height.px': height}"
                  *ngIf="this.item()?.background" [alt]="invalidBackgroundMessage"/>
         </div>
     </div>

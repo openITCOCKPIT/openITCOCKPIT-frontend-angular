@@ -2,7 +2,7 @@
     <div id="mapContent" *ngIf="this.helplines().enabled && !this.isViewMode()" [ngClass]="getHelplinesClass()"></div>
     <div #backgroundImageContainer class="background-image-container">
         <img [src]="'/map_module/img/backgrounds/' + map()?.background" class="invalid-image-src"
-             [ngStyle]="{'width.px': width, 'height.px': height}"
+             [ngStyle]="{'width.px': backgroundWidth, 'height.px': backgroundHeight}"
              *ngIf="map() && map()?.background && !isBackgroundEditMode()" [alt]="invalidBackgroundMessage"/>
     </div>
     <ng-content></ng-content>

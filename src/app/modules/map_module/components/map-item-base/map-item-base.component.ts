@@ -74,7 +74,6 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     constructor(protected parent: MapCanvasComponent) {
         this.mapCanvasComponent = parent;
         effect(() => {
-            console.error("change");
             this.id = this.item()!.id;
             this.mapId = this.item()!.map_id;
             if (this.isMapline(this.item())) {
@@ -99,7 +98,8 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
     public setLayer(layer: string): void {
         if (this.containerRef !== undefined && this.containerRef.nativeElement !== undefined) {
-            this.containerRef.nativeElement.style.zIndex = layer;
+            //z-index has to be one higher than the map canvas helper lines (1) and background (0)
+            this.containerRef.nativeElement.style.zIndex = (Number(layer) + 1).toString();
         }
         this.cdr.markForCheck();
     }

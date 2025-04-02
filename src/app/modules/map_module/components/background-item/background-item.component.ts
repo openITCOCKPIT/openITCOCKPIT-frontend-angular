@@ -36,15 +36,14 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
     protected override type = MapItemType.BACKGROUND;
 
     protected init: boolean = true;
-    protected width: number | undefined;
-    protected height: number | undefined;
+    protected width: number | undefined | null;
+    protected height: number | undefined | null;
 
     protected invalidBackgroundMessage: string = this.TranslocoService.translate('{0} Map background image is not available!!!', {0: '⚠'});
 
     constructor(parent: MapCanvasComponent) {
         super(parent);
         effect(() => {
-            console.error("background item changed");
             this.updateBackgroundSizeAndPosition();
         });
     }
@@ -66,9 +65,13 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
 
         if (this.item()!.size_x > 0) {
             this.width = this.item()!.size_x;
+        } else {
+            this.width = null;
         }
         if (this.item()!.size_y > 0) {
             this.height = this.item()!.size_y;
+        } else {
+            this.height = null;
         }
 
         if (this.resizableDirective) {
@@ -79,6 +82,16 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
             }
         }
         this.cdr.markForCheck();
+    }
+
+    public getHeight(): number {
+        let height = this.height;
+
+        if (height == null) {
+            height = this.containerRef.nativeElement.getBoundingClientRect().height;
+        }
+
+        return height;
     }
 
 }

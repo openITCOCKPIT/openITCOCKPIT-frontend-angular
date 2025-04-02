@@ -1,7 +1,9 @@
 import {
+    AfterViewInit,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    ContentChild,
     effect,
     ElementRef,
     inject,
@@ -15,6 +17,7 @@ import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { TranslocoService } from '@jsverse/transloco';
 import { Helplines } from '../../pages/mapeditors/mapeditors.interface';
 import { Map } from '../../pages/maps/maps.interface';
+import { BackgroundItemComponent } from '../background-item/background-item.component';
 
 @Component({
     selector: 'oitc-map-canvas',
@@ -28,9 +31,10 @@ import { Map } from '../../pages/maps/maps.interface';
     styleUrl: './map-canvas.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapCanvasComponent implements OnInit {
+export class MapCanvasComponent implements OnInit, AfterViewInit {
     @ViewChild('mapCanvasContainer', {static: true}) canvasContainerRef!: ElementRef<HTMLDivElement>;
     @ViewChild('backgroundImageContainer', {static: true}) backgroundImageRef!: ElementRef<HTMLDivElement>;
+    @ContentChild(BackgroundItemComponent) backgroundItem!: BackgroundItemComponent;
 
     private cdr = inject(ChangeDetectorRef);
     private readonly TranslocoService = inject(TranslocoService);
@@ -44,19 +48,29 @@ export class MapCanvasComponent implements OnInit {
         type: MapItemType
     }>();
 
-    protected width: number | undefined | null;
-    protected height: number | undefined | null;
+    protected backgroundWidth: number | undefined | null;
+    protected backgroundHeight: number | undefined | null;
+    protected canvasHeight: number | undefined | null;
 
     protected invalidBackgroundMessage: string = this.TranslocoService.translate('{0} Map background image is not available!!!', {0: '⚠'});
 
     constructor() {
         effect(() => {
             this.updateBackgroundSizeAndPosition();
+            setTimeout(() => {
+                this.setCanvasMinHeight();
+            }, 400);
         });
     }
 
     public ngOnInit(): void {
         this.updateBackgroundSizeAndPosition();
+    }
+
+    public ngAfterViewInit(): void {
+        setTimeout(() => {
+            this.setCanvasMinHeight();
+        }, 400);
     }
 
     public getHelplinesClass(): string {
@@ -75,17 +89,45 @@ export class MapCanvasComponent implements OnInit {
 
     private updateBackgroundSizeAndPosition(): void {
         if (this.map()!.background_size_x! > 0) {
-            this.width = this.map()!.background_size_x;
+            this.backgroundWidth = this.map()!.background_size_x;
         } else {
-            this.width = null;
+            this.backgroundWidth = null;
         }
         if (this.map()!.background_size_y! > 0) {
-            this.height = this.map()!.background_size_y;
+            this.backgroundHeight = this.map()!.background_size_y;
         } else {
-            this.height = null;
+            this.backgroundHeight = null;
         }
 
         this.setPosition();
+    }
+
+    private setCanvasMinHeight(): void {
+        this.canvasHeight = 600;
+        //calculate canvas height based on background position
+        if (this.canvasContainerRef) {
+
+            const mapCanvas = this.canvasContainerRef.nativeElement.getBoundingClientRect();
+
+            if (this.backgroundImageRef) {
+                const background = this.backgroundImageRef.nativeElement.getBoundingClientRect();
+                let backgroundHeight = background.height;
+
+                // because the background image is hidden in edit mode
+                if (this.isBackgroundEditMode() && this.backgroundItem) {
+                    backgroundHeight = this.backgroundItem.getHeight();
+                }
+
+                let posY = background.y - mapCanvas.y;
+                let height = posY + backgroundHeight + 11;
+
+                if (height > 600) {
+                    this.canvasHeight = height;
+                }
+            }
+
+            this.canvasContainerRef.nativeElement.style.minHeight = `${this.canvasHeight}px`;
+        }
     }
 
 }

@@ -909,6 +909,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 this.map.Map.background_y = this.backgroundItem.y;
                 this.map.Map.background_size_x = this.backgroundItem.size_x;
                 this.map.Map.background_size_y = this.backgroundItem.size_y;
+                this.backgroundItem = {...this.backgroundItem};
                 this.map.Map = {...this.map.Map};
 
                 this.modalService.toggle({
@@ -1294,14 +1295,16 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     };
 
     public editItem(item: any) {
-        this.action = 'item';
-        this.currentItem = item;
-        this.onCurrentItemTypeObjectIdChange();
-        this.modalService.toggle({
-            show: true,
-            id: 'addEditMapItemModal',
-        });
-        this.cdr.markForCheck();
+        if (!this.backgroundEditEnabled) {
+            this.action = 'item';
+            this.currentItem = item;
+            this.onCurrentItemTypeObjectIdChange();
+            this.modalService.toggle({
+                show: true,
+                id: 'addEditMapItemModal',
+            });
+            this.cdr.markForCheck();
+        }
     };
 
     public saveItem(action?: string) {
@@ -1425,14 +1428,16 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     };
 
     public editLine(lineItem: any) {
-        this.action = 'line';
-        this.currentItem = lineItem;
-        this.onCurrentItemTypeObjectIdChange();
-        this.modalService.toggle({
-            show: true,
-            id: 'addEditMapLineModal',
-        });
-        this.cdr.markForCheck();
+        if (!this.backgroundEditEnabled) {
+            this.action = 'line';
+            this.currentItem = lineItem;
+            this.onCurrentItemTypeObjectIdChange();
+            this.modalService.toggle({
+                show: true,
+                id: 'addEditMapLineModal',
+            });
+            this.cdr.markForCheck();
+        }
     };
 
     public saveLine(action?: string) {
@@ -1564,14 +1569,16 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     };
 
     public editSummaryItem(item: any) {
-        this.action = 'summaryItem';
-        this.currentItem = item;
-        this.onCurrentItemTypeObjectIdChange();
-        this.modalService.toggle({
-            show: true,
-            id: 'addEditSummaryItemModal',
-        });
-        this.cdr.markForCheck();
+        if (!this.backgroundEditEnabled) {
+            this.action = 'summaryItem';
+            this.currentItem = item;
+            this.onCurrentItemTypeObjectIdChange();
+            this.modalService.toggle({
+                show: true,
+                id: 'addEditSummaryItemModal',
+            });
+            this.cdr.markForCheck();
+        }
     };
 
     public saveSummaryItem(action?: string) {
@@ -1702,14 +1709,16 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     };
 
     public editGadget(gadgetItem: any) {
-        this.action = 'gadget';
-        this.currentItem = JSON.parse(JSON.stringify(gadgetItem));    //real clone
-        this.onCurrentItemTypeObjectIdChange();
-        this.modalService.toggle({
-            show: true,
-            id: 'addEditMapGadgetModal',
-        });
-        this.cdr.markForCheck();
+        if (!this.backgroundEditEnabled) {
+            this.action = 'gadget';
+            this.currentItem = JSON.parse(JSON.stringify(gadgetItem));    //real clone
+            this.onCurrentItemTypeObjectIdChange();
+            this.modalService.toggle({
+                show: true,
+                id: 'addEditMapGadgetModal',
+            });
+            this.cdr.markForCheck();
+        }
     };
 
     public saveGadget(action?: string) {
@@ -1851,14 +1860,16 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     };
 
     public editText(item: any) {
-        this.action = 'text';
-        this.currentItem = item;
-        this.addLink = false;
-        this.modalService.toggle({
-            show: true,
-            id: 'AddEditStatelessTextModal',
-        });
-        this.cdr.markForCheck();
+        if (!this.backgroundEditEnabled) {
+            this.action = 'text';
+            this.currentItem = item;
+            this.addLink = false;
+            this.modalService.toggle({
+                show: true,
+                id: 'AddEditStatelessTextModal',
+            });
+            this.cdr.markForCheck();
+        }
     };
 
     public saveText(action?: string) {
@@ -1985,13 +1996,15 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     };
 
     public editIcon(item: any) {
-        this.action = 'icon';
-        this.currentItem = item;
-        this.modalService.toggle({
-            show: true,
-            id: 'AddEditStatelessIconModal',
-        });
-        this.cdr.markForCheck();
+        if (!this.backgroundEditEnabled) {
+            this.action = 'icon';
+            this.currentItem = item;
+            this.modalService.toggle({
+                show: true,
+                id: 'AddEditStatelessIconModal',
+            });
+            this.cdr.markForCheck();
+        }
     };
 
     public saveIcon(action?: string) {
@@ -2600,6 +2613,22 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     protected handleBackgroundEditEnabled(enabled: boolean) {
         this.backgroundEditEnabled = enabled;
+        let objectsToUpdate = [
+            'Mapitems',
+            'Maplines',
+            'Mapgadgets',
+            'Mapicons',
+            'Maptexts',
+            'Mapsummaryitems'
+        ];
+        for (let arrayKey in objectsToUpdate) {
+            let objectName = objectsToUpdate[arrayKey];
+            if (this.map.hasOwnProperty(objectName)) {
+                for (let i in this.map[objectName as keyof MapRoot]) {
+                    this.onItemChange(objectName, parseInt(i));
+                }
+            }
+        }
         this.cdr.markForCheck();
     }
 
