@@ -17,8 +17,6 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { NgIf, NgStyle } from '@angular/common';
 
 @Component({
@@ -26,8 +24,6 @@ import { NgIf, NgStyle } from '@angular/common';
     imports: [
         TranslocoDirective,
         FullCalendarModule,
-        FaIconComponent,
-        XsButtonDirective,
         NgStyle,
         NgIf
     ],
