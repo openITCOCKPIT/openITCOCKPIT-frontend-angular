@@ -155,7 +155,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
         dayMaxEvents: 10,
         dayMaxEventRows: 10,
         weekends: true,
-        editable: true,
+        editable: false,
         selectable: true,
         selectMirror: true,
         businessHours: true,
@@ -165,8 +165,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
         eventDurationEditable: false,
         datesSet: this.handleDatesSet.bind(this),
         droppable: false,
-        dragScroll: false,
-        eventDragMinDistance: 999999999,
+        dragScroll: false
     });
 
     public handleDatesSet(dateInfo: { startStr: string, endStr: string, start: Date, end: Date, view: any }) {
@@ -203,6 +202,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
     private fetchReport(): void {
 
         this.report = {} as DowntimeReportsResponse;
+        this.events = [];
 
         this.subscriptions.add(this.DowntimereportsService.getIndex(this.post)
             .subscribe((result) => {
@@ -228,7 +228,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
 
                     this.events.push({
                         default_holiday: false,
-                        className: '',
+                        className: 'downtime-report-host-event',
                         title: element.Hosts.name,
                         start: element.scheduled_start_time,
                         end: element.scheduled_end_time,
@@ -242,7 +242,7 @@ export class DowntimereportsIndexComponent implements OnInit, OnDestroy {
                 this.report.downtimeReport?.downtimes.Services?.forEach((element) => {
                     this.events.push({
                         default_holiday: false,
-                        className: '',
+                        className: 'downtime-report-service-event',
                         title: element.Hosts.name + ' | ' + element.Servicetemplates.name,
                         start: element.scheduled_start_time,
                         end: element.scheduled_end_time,

@@ -5,7 +5,6 @@ import 'echarts/theme/dark.js';
 import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
 import { PieChartMetric } from '../charts.interface';
-import { TranslocoService } from '@jsverse/transloco';
 import { LayoutService } from '../../../layouts/coreui/layout.service';
 import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
 import { BarChart, LineChart } from 'echarts/charts';
@@ -27,7 +26,7 @@ echarts.use([LineChart, BarChart, LegendComponent, TitleComponent, TooltipCompon
 })
 export class HostsBarChartComponent implements OnDestroy {
 
-    public chartId = input.required<Number>();
+    public chartId = input.required<string>();
     public barChartData = input.required<HostBarChartData>();
     public title = input<string>('Host availability');
     public showLegend = input<boolean>(true);
@@ -40,7 +39,6 @@ export class HostsBarChartComponent implements OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private readonly LayoutService = inject(LayoutService);
-    private readonly TranslocoService = inject(TranslocoService);
     private cdr = inject(ChangeDetectorRef);
 
     public constructor() {
@@ -85,7 +83,7 @@ export class HostsBarChartComponent implements OnDestroy {
                 left: 200,
                 top: 15,
                 right: 15,
-                bottom: 30
+                bottom: 40
             },
             series: [
                 {
@@ -132,11 +130,23 @@ export class HostsBarChartComponent implements OnDestroy {
             },
             xAxis: {
                 type: 'category',
-                data: this.barChartData().labels.map((label) => {
-                    return label.substring(0, 12) + ( label.length > 12 ? '...' : '');
-                }),
-                min: 0,
-                max: 9
+                data: this.barChartData().labels,
+                axisTick: {
+                    alignWithLabel: true
+                },
+                axisLabel: {
+                    margin: 20,
+                    rotate: 10,
+                    interval: 'auto',
+                    formatter: function (value) {
+                        if (value.length > 20) {
+                            return value.substring(0, 20) + '...'; //truncate
+                        } else {
+                            return value;
+                        }
+                    },
+                    align: 'center'
+                }
             }
         };
         this.cdr.markForCheck();

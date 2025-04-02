@@ -177,7 +177,7 @@ export interface InstantreportGenerateResponse {
 export interface InstantreportHost {
     id: number,
     name: string,
-    reportData: InstantreportHostReportData,
+    reportData?: InstantreportHostReportData,
     _pieChartMetrics?: PieChartMetric[] // this is only for the eCharts pie chart and not returned by the server
     Services: {
         [key: string]: InstantreportService
@@ -219,7 +219,7 @@ export interface InstantreportReportDetails {
     summary_hosts?: {
         reportData: InstantreportHostReportData
     }
-    summary_services: {
+    summary_services?: {
         reportData: InstantreportServiceReportData
     },
 }

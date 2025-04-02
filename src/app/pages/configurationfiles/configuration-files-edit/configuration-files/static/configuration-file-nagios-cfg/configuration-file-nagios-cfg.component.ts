@@ -82,6 +82,10 @@ export class ConfigurationFileNagiosCfgComponent implements OnInit, OnDestroy {
 
     constructor() {
         effect(() => {
+            // Access the inputs to register the signals as a dependency to make sure effect will re-run when the inputs change
+            const dbKey = this.dbKey();
+            const submit$ = this.submit$();
+
             this.loadConfigFile();
         });
     }
