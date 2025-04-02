@@ -20,7 +20,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import { formatDate, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
@@ -44,8 +44,8 @@ import { TimezoneObject } from '../../../../../pages/services/timezone.interface
 import { TimezoneService } from '../../../../../services/timezone.service';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
-    ChangecalendarsCalendarComponent
-} from '../../../components/changecalendars-calendar/changecalendars-calendar.component';
+    ChangecalendarsCalendarEditorComponent
+} from '../../../components/changecalendars-calendar-editor/changecalendars-calendar-editor.component';
 
 @Component({
     selector: 'oitc-changecalendars-edit',
@@ -76,7 +76,7 @@ import {
         RouterLink,
         FormLoaderComponent,
         ChangecalendarsEventEditorComponent,
-        ChangecalendarsCalendarComponent
+        ChangecalendarsCalendarEditorComponent
     ],
     templateUrl: './changecalendars-edit.component.html',
     styleUrl: './changecalendars-edit.component.css',
@@ -90,9 +90,9 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly TimezoneService: TimezoneService = inject(TimezoneService);
-    private readonly route = inject(ActivatedRoute);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly ModalService: ModalService = inject(ModalService);
-    private readonly cdr = inject(ChangeDetectorRef);
+    private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected post: EditChangecalendarRoot = {
         changeCalendar: {}
@@ -157,12 +157,16 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
         this.event = {
             title: '',
             description: '',
-            start: '', // Fetch from event!
-            end: '', // Fetch from event!
+            start: this.formatDatex(event.date, '00:00'),
+            end: this.formatDatex(event.date, '23:59'),
             changecalendar_id: this.post.changeCalendar.id,
         } as ChangecalendarEvent;
         this.showModal();
         this.cdr.markForCheck();
+    }
+
+    private formatDatex(Date: Date, time: string): string {
+        return formatDate(Date, 'yyyy-MM-ddT', 'en-US') + time;
     }
 
     protected addEvent(): void {
@@ -211,14 +215,14 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     private hideModal(): void {
         this.ModalService.toggle({
             show: false,
-            id: 'changeCalendarViewerModal'
+            id: 'changeCalendarEditorModal'
         });
     }
 
     private showModal(): void {
         this.ModalService.toggle({
             show: true,
-            id: 'changeCalendarViewerModal'
+            id: 'changeCalendarEditorModal'
         });
     }
 
@@ -238,20 +242,7 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
         this.event.start = this.stripZone(new Date(this.event.start));
         this.event.end = this.stripZone(new Date(this.event.end));
 
-        this.ModalService.toggle({
-            show: true,
-            id: 'changeCalendarEditorModal'
-        });
-
-        this.cdr.markForCheck();
-        return;
-        /*
-        this.event = event;
-
-
-        this.cdr.markForCheck();
-
-         */
+        this.showModal();
     }
 
     public ngOnInit() {
@@ -280,12 +271,6 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
                 this.post = result;
                 this.events = result.events;
 
-                // Set the key "color" of every event from this.events to the colour from post.changeCalendar.color.
-                this.events.forEach((event: CalendarEvent) => {
-                    event.color = this.post.changeCalendar.colour;
-                });
-
-                console.warn(this.events );
                 this.cdr.markForCheck();
             }));
     }
@@ -309,8 +294,6 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
-
-                    console.warn(this.errors);
                 }
             })
         );
