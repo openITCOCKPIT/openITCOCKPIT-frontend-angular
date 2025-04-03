@@ -26,7 +26,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -51,6 +51,7 @@ import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/pa
 import { ChangecalendarsService } from '../changecalendars.service';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
+import { PermissionsService } from '../../../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-changecalendars-index',
@@ -90,7 +91,8 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
         RouterLink,
         ItemSelectComponent,
         DropdownDividerDirective,
-        SelectAllComponent
+        SelectAllComponent,
+        AsyncPipe
     ],
     templateUrl: './changecalendars-index.component.html',
     styleUrl: './changecalendars-index.component.css',
@@ -111,6 +113,7 @@ export class ChangecalendarsIndexComponent implements OnInit, OnDestroy, IndexPa
     protected selectedItems: DeleteAllItem[] = [];
     protected hideFilter: boolean = true;
 
+    public readonly PermissionsService = inject(PermissionsService);
 
     public ngOnInit() {
         this.reload();
