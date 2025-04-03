@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -19,24 +19,24 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { Subscription } from 'rxjs';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ProfileService } from '../../profile/profile.service';
-import { ContactsService } from '../../contacts/contacts.service';
+import {BackButtonDirective} from '../../../directives/back-button.directive';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {FormErrorDirective} from '../../../layouts/coreui/form-error.directive';
+import {FormFeedbackComponent} from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {KeyValuePipe, NgForOf, NgIf} from '@angular/common';
+import {MultiSelectComponent} from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import {NgOptionTemplateDirective, NgSelectComponent} from '@ng-select/ng-select';
+import {PermissionDirective} from '../../../permissions/permission.directive';
+import {RequiredIconComponent} from '../../../components/required-icon/required-icon.component';
+import {SelectComponent} from '../../../layouts/primeng/select/select/select.component';
+import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
+import {TrueFalseDirective} from '../../../directives/true-false.directive';
+import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {Subscription} from 'rxjs';
+import {NotyService} from '../../../layouts/coreui/noty.service';
+import {ProfileService} from '../../profile/profile.service';
+import {ContactsService} from '../../contacts/contacts.service';
 import {
     EditUserGet,
     LdapUser,
@@ -55,19 +55,19 @@ import {
     UserTimezonesSelect,
     UserType
 } from '../users.interface';
-import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
-import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { LdapConfig } from '../../contacts/contacts.interface';
-import { ContainersLoadContainersByStringParams } from '../../containers/containers.interface';
-import { UsersService } from '../users.service';
-import { ContainersService } from '../../containers/containers.service';
-import { HistoryService } from '../../../history.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
-import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { KeyFilterModule } from 'primeng/keyfilter';
-import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
-import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
+import {SelectKeyValue, SelectKeyValueString} from '../../../layouts/primeng/select.interface';
+import {GenericResponseWrapper, GenericValidationError} from '../../../generic-responses';
+import {LdapConfig} from '../../contacts/contacts.interface';
+import {ContainersLoadContainersByStringParams} from '../../containers/containers.interface';
+import {UsersService} from '../users.service';
+import {ContainersService} from '../../containers/containers.service';
+import {HistoryService} from '../../../history.service';
+import {ActivatedRoute, RouterLink} from '@angular/router';
+import {NgOptionHighlightDirective} from '@ng-select/ng-option-highlight';
+import {FormLoaderComponent} from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import {KeyFilterModule} from 'primeng/keyfilter';
+import {BadgeOutlineComponent} from '../../../layouts/coreui/badge-outline/badge-outline.component';
+import {SliderTimeComponent} from '../../../components/slider-time/slider-time.component';
 
 @Component({
     selector: 'oitc-users-edit',
@@ -159,6 +159,9 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     } as LdapUserDetails;
 
     public onSelectedContainerIdsChange() {
+        // Drop all existing ContainerUsersMemberships before re-creating the object.
+        this.post.User.ContainersUsersMemberships = {};
+
         // Traverse all containerids and set the value to 1.
         this.selectedContainerIds.map((id) => {
 

@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { Subject, Subscription, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ButtonDirective, HeaderNavComponent, TooltipDirective } from '@coreui/angular';
 import { HeaderStatsService } from './header-stats.service';
 import { RouterLink } from '@angular/router';
+import { PermissionsService } from '../../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-header-stats',
@@ -17,7 +18,8 @@ import { RouterLink } from '@angular/router';
         ButtonDirective,
         TooltipDirective,
         RouterLink,
-        HeaderNavComponent
+        HeaderNavComponent,
+        AsyncPipe
     ],
     templateUrl: './header-stats.component.html',
     styleUrl: './header-stats.component.css',
@@ -32,7 +34,7 @@ export class HeaderStatsComponent implements OnInit, OnDestroy {
     protected showstatsinmenu: boolean = false;
     protected hoststatusCount: { [key: number]: number } = {};
     protected servicestatusCount: { [key: number]: number } = {};
-
+    public readonly PermissionsService = inject(PermissionsService);
     public ngOnInit() {
         timer(0, 30000).pipe(takeUntil(this.destroy$)).subscribe({
             next: () => {

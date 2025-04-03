@@ -36,11 +36,10 @@ import {
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { NotyService } from '../../../layouts/coreui/noty.service';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
@@ -110,8 +109,6 @@ export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy {
     private readonly UserContainerRolesService: UsercontainerrolesService = inject(UsercontainerrolesService);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly router: Router = inject(Router);
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private readonly notyService: NotyService = inject(NotyService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected params: UserContainerRolesIndexParams = {} as UserContainerRolesIndexParams;
