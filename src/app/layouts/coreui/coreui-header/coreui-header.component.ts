@@ -21,8 +21,6 @@ import {
     HeaderComponent,
     HeaderNavComponent
 } from '@coreui/angular';
-import { delay, filter, map, tap } from 'rxjs/operators';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { IconDirective } from '@coreui/icons-angular';
 import { ChangeLanguageComponent } from '../change-language/change-language.component';
@@ -109,21 +107,9 @@ export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy 
 
     constructor() {
         super();
-        this.#colorModeService.localStorageItemName.set('coreui-free-angular-admin-template-theme-default');
+        this.#colorModeService.localStorageItemName.set('openitcockpit-theme-default');
         this.#colorModeService.eventName.set('ColorSchemeChange');
 
-        this.#activatedRoute.queryParams
-            .pipe(
-                delay(1),
-                map(params => <string>params['theme']?.match(/^[A-Za-z0-9\s]+/)?.[0]),
-                filter(theme => ['dark', 'light', 'auto'].includes(theme)),
-                tap(theme => {
-                    this.colorMode.set(theme);
-                    this.cdr.markForCheck();
-                }),
-                takeUntilDestroyed(this.#destroyRef)
-            )
-            .subscribe();
         this.getHeaderInfo();
 
     }
