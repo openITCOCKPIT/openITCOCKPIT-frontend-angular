@@ -57,6 +57,7 @@ import {
 import { sprintf } from 'sprintf-js';
 import { trim } from 'lodash';
 import { PrometheusHelpComponent } from '../../../components/prometheus-help/prometheus-help.component';
+import { PrometheusThresholdType } from '../prometheus.enum';
 
 @Component({
     selector: 'oitc-prometheus-query-to-service',
@@ -225,7 +226,7 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
             unit: '',
             warning_max: null,
             critical_max: null,
-            threshold_type: 'scalar',
+            threshold_type: PrometheusThresholdType.scalar,
             warning_longer_as: '1m',
             critical_longer_as: '2m',
             warning_operator: 'automatically',
@@ -234,7 +235,7 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     }
 
     protected onThresholdTypeChange(): void {
-        if (this.ValidateService.threshold_type === 'scalar') {
+        if (this.ValidateService.threshold_type === PrometheusThresholdType.scalar) {
             this.ValidateService.warning_max = null;
             this.ValidateService.critical_max = null;
             this.ValidateService.warning_operator = '';
@@ -264,8 +265,6 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
         this.ValidateService.promql += value;
 
     }
-
-
 
 
     protected execute(): void {
@@ -390,4 +389,5 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
         }));
     }
 
+    protected readonly PrometheusThresholdType = PrometheusThresholdType;
 }

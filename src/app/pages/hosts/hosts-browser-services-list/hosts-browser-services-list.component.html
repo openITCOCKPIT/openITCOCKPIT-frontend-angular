@@ -324,7 +324,7 @@
                                         'ok' : service.Service.priority==2, 'warning' : service.Service.priority==3,
                                         'critical-soft' : service.Service.priority==4, 'critical' : service.Service.priority==5}"></fa-icon>
                         </td>
-                        <td>
+                        <td class="word-break">
                             <span *oitcPermission="['services', 'browser']">
                                 <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
                             </span>
@@ -535,7 +535,7 @@
                             <oitc-servicestatus-simple-icon></oitc-servicestatus-simple-icon>
                         </td>
 
-                        <td>
+                        <td class="word-break">
                             <span *oitcPermission="['services', 'browser']">
                                 <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
                             </span>
@@ -654,7 +654,7 @@
                         <th class="text-center" scope="col">{{ t('State') }}
                         </th>
 
-                        <th mat-sort-header="servicename">
+                        <th mat-sort-header="servicename" class="word-break">
                             {{ t('Service name') }}
                         </th>
 
@@ -803,7 +803,7 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let service of deletedServices.all_services">
-                        <td>
+                        <td class="word-break">
                             {{ service.DeletedService.name }}
                         </td>
 

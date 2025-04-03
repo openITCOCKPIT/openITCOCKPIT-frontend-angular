@@ -12,7 +12,7 @@
     <oitc-browser-loader *ngIf="!result"></oitc-browser-loader>
     <c-card class="mb-3 mt-3" *ngIf="result">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Host') }}:
+            <h5 cCardTitle class="word-break">{{ t('Host') }}:
                 <small class="fw-300">
                     {{ result.mergedHost.name }}
                 </small>

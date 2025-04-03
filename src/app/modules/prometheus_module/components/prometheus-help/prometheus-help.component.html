@@ -1,23 +1,26 @@
 <ng-container *transloco="let t">
     <button cButton class="ripple me-1" color="primary" size="xs" cModalToggle="promQLHelpModal"
             (click)="showModal()">
-        <fa-icon [icon]="['fas', 'info']"></fa-icon>
+        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
         {{ t('PromQL help') }}
     </button>
 
     <c-modal #promQLHelpModal fullscreen="md" id="promQLHelpModal" size="lg">
         <c-modal-header>
             <h5 cModalTitle>
-                <i class="fas fa-info"></i>
+                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                 {{ t('PromQL help and example queries') }}
             </h5>
             <button [cModalToggle]="promQLHelpModal.id" cButtonClose></button>
         </c-modal-header>
         <c-modal-body>
 
-            <div class="row">
+            <div class="row mb-2">
                 <div class="col-12">
-                    <h5>{{ t('Linux memory usage in percent') }}</h5>
+                    <h5>
+                        <fa-icon [icon]="['fab', 'linux']"></fa-icon>
+                        {{ t('Linux memory usage in percent') }}
+                    </h5>
                 </div>
                 <div class="col-12">
                     <code>node_memory_MemAvailable_bytes&#123;uuid="{{ uuid }}"&#125; /
@@ -25,7 +28,7 @@
                 </div>
             </div>
 
-            <div class="row padding-top-10">
+            <div class="row mb-2">
                 <div class="col-12">
                     <h5>{{ t('Average MB/s network traffic (transmit) over the last 2 minutes') }}</h5>
                 </div>
@@ -35,7 +38,7 @@
                 </div>
             </div>
 
-            <div class="row padding-top-10">
+            <div class="row mb-2">
                 <div class="col-12">
                     <h5>{{ t('Average Mbit/s network traffic (transmit) over the last 2 minutes') }}</h5>
                 </div>
@@ -45,7 +48,7 @@
                 </div>
             </div>
 
-            <div class="row padding-top-10">
+            <div class="row mb-2">
                 <div class="col-12">
                     <h5>{{ t('Average Mbit/s network traffic (transmit) of all network interfaces over the last 2 minutes') }}</h5>
                 </div>
@@ -55,7 +58,7 @@
                 </div>
             </div>
 
-            <div class="row padding-top-10">
+            <div class="row mb-2">
                 <div class="col-12">
                     <h5>{{ t('Average MB/s written to disk sda over the last 2 minutes') }}</h5>
                 </div>
@@ -65,9 +68,12 @@
                 </div>
             </div>
 
-            <div class="row padding-top-10">
+            <div class="row mb-2 mt-3">
                 <div class="col-12">
-                    <h5>{{ t('Windows CPU usage in percentage') }}</h5>
+                    <h5>
+                        <fa-icon [icon]="['fab', 'windows']"></fa-icon>
+                        {{ t('Windows CPU usage in percentage') }}
+                    </h5>
                 </div>
                 <div class="col-12">
                     <code>100 -
@@ -76,7 +82,7 @@
                 </div>
             </div>
 
-            <div class="row padding-top-10">
+            <div class="row mb-2">
                 <div class="col-12">
                     <h5>{{ t('Windows Disk usage in percentage') }}</h5>
                 </div>
@@ -88,7 +94,7 @@
                 </div>
             </div>
 
-            <div class="row padding-top-10">
+            <div class="row mb-2">
                 <div class="col-12">
                     <h5>{{ t('Windows memory usage in percentage') }}</h5>
                 </div>
