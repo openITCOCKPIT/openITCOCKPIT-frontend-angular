@@ -266,8 +266,6 @@ export class PrometheusQueryToServiceComponent implements OnInit, OnDestroy {
     }
 
 
-
-
     protected execute(): void {
         this.subscriptions.add(this.PrometheusQueryService.loadValueByMetric(this.index.host.uuid, this.ValidateService.promql)
             .subscribe((result: GenericResponseWrapper) => {
