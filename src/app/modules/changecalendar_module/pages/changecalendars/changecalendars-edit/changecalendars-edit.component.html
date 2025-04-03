@@ -131,7 +131,8 @@
                             [(events)]="events"
                             [colour]="post.changeCalendar.colour"
                             (eventClick)="editEvent($event);"
-                            (onCreateClick)="createEvent($event)"/>
+                            (onCreateClick)="createEvent($event)"
+                            (onEventMove)="eventMove($event)"/>
                 </div>
             </c-card-body>
             <c-card-footer class="text-end">

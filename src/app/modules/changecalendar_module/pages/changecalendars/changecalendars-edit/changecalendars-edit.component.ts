@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { HistoryService } from '../../../../../history.service';
-import { ContainersService } from '../../../../../pages/containers/containers.service';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {BackButtonDirective} from '../../../../../directives/back-button.directive';
+import {HistoryService} from '../../../../../history.service';
+import {ContainersService} from '../../../../../pages/containers/containers.service';
 import {
     CardBodyComponent,
     CardComponent,
@@ -15,34 +15,39 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { ColorPicker } from 'primeng/colorpicker';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { formatDate, NgIf } from '@angular/common';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { Subscription } from 'rxjs';
-import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { ChangecalendarsService } from '../changecalendars.service';
-import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
-import { ChangecalendarEvent, EditChangecalendar, EditChangecalendarRoot } from '../changecalendars.interface';
-import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { CalendarEvent } from '../../../../../pages/calendars/calendars.interface';
+import {ColorPicker} from 'primeng/colorpicker';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {FormErrorDirective} from '../../../../../layouts/coreui/form-error.directive';
+import {FormFeedbackComponent} from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {formatDate, NgIf} from '@angular/common';
+import {PermissionDirective} from '../../../../../permissions/permission.directive';
+import {RequiredIconComponent} from '../../../../../components/required-icon/required-icon.component';
+import {SelectComponent} from '../../../../../layouts/primeng/select/select/select.component';
+import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
+import {XsButtonDirective} from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {Subscription} from 'rxjs';
+import {NotyService} from '../../../../../layouts/coreui/noty.service';
+import {ActivatedRoute, RouterLink} from '@angular/router';
+import {SelectKeyValue} from '../../../../../layouts/primeng/select.interface';
+import {GenericResponseWrapper, GenericValidationError} from '../../../../../generic-responses';
+import {ChangecalendarsService} from '../changecalendars.service';
+import {ContainersLoadContainersByStringParams} from '../../../../../pages/containers/containers.interface';
+import {
+    ChangecalendarEvent,
+    ChangecalendarEventMove,
+    EditChangecalendar,
+    EditChangecalendarRoot
+} from '../changecalendars.interface';
+import {FormLoaderComponent} from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+import {CalendarEvent} from '../../../../../pages/calendars/calendars.interface';
 import {
     ChangecalendarsEventEditorComponent
 } from '../../../components/changecalendars-event-editor/changecalendars-event-editor.component';
-import { EventClickArg } from '@fullcalendar/core';
-import { TimezoneObject } from '../../../../../pages/services/timezone.interface';
-import { TimezoneService } from '../../../../../services/timezone.service';
-import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import {EventClickArg} from '@fullcalendar/core';
+import {TimezoneObject} from '../../../../../pages/services/timezone.interface';
+import {TimezoneService} from '../../../../../services/timezone.service';
+import {DeleteAllItem} from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
     ChangecalendarsCalendarEditorComponent
 } from '../../../components/changecalendars-calendar-editor/changecalendars-calendar-editor.component';
@@ -140,6 +145,37 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
                     this.hideModal();
 
                     this.ngOnInit();
+                    return;
+                }
+                // Error
+                this.notyService.genericError();
+                const errorResponse: GenericValidationError = result.data as GenericValidationError;
+                if (result) {
+                    this.eventErrors = errorResponse;
+                }
+            })
+        );
+    }
+
+    public eventMove(event: ChangecalendarEventMove): void {
+        // Fill this event with the same event from this.events where the originId matches event.id
+        this.event = this.post.changeCalendar.changecalendar_events.find((eventItem: ChangecalendarEvent) => {
+            return eventItem.id === event.id;
+        }) as ChangecalendarEvent;
+
+        // Then update start and end.
+        this.event.start = formatDate(event.start, 'yyyy-MM-ddTHH:mm', 'en-US');
+        this.event.end = formatDate(event.end, 'yyyy-MM-ddTHH:mm', 'en-US');
+
+        this.subscriptions.add(this.ChangecalendarsService.updateEvent(this.event)
+            .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+                    const title: string = this.TranslocoService.translate('Event');
+                    const msg: string = this.TranslocoService.translate('updated successfully');
+
+                    this.notyService.genericSuccess(msg, title);
+
                     return;
                 }
                 // Error
