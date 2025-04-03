@@ -68,11 +68,12 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
     public map!: MapeditorsViewMap;
     private init = true;
     protected mapId: number = 0;
-    private rotate: null | string | string[] = null;
+    protected rotate: null | string | string[] = null;
 
     protected fullscreen: boolean = false;
     private rotationInterval: number = 0;
     private rotationPosition: number = 1;
+    protected intervalParam: number = 0;
 
     private interval = null;
     private refreshInterval: number = 0;
@@ -85,6 +86,7 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
         let intervalParam = this.route.snapshot.paramMap.get('interval');
         if (intervalParam != null) {
             this.rotationInterval = parseInt(intervalParam, 10) * 1000;
+            this.intervalParam = parseInt(intervalParam, 10);
         }
         this.loadMapDetails();
 
@@ -157,4 +159,5 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
         this.cdr.markForCheck();
     }
 
+    protected readonly Array = Array;
 }

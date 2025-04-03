@@ -29,7 +29,7 @@
             <h5 cCardTitle>
                 {{ t('Edit map:') }}
 
-                <small class="fw-300" *ngIf="map">
+                <small class="fw-300 word-break" *ngIf="map">
                     {{ map.Map.name }}
                 </small>
             </h5>
@@ -38,8 +38,8 @@
 
                 <c-nav-item class="px-1" *ngIf="map && backgroundEditEnabled">
                     <button cButton
-                            class="ripple"
-                            color="primary" size="xs" class="me-1"
+                            class="ripple me-1"
+                            color="primary" size="xs"
                             (click)="handleBackgroundEditEnabled(false)">
                         <fa-icon [icon]="['fas', 'edit']"></fa-icon>
                         {{ t('Edit Items') }}
@@ -47,8 +47,8 @@
                 </c-nav-item>
                 <c-nav-item class="px-1" *ngIf="map && !backgroundEditEnabled">
                     <button cButton
-                            class="ripple"
-                            color="default" size="xs" class="me-1"
+                            class="ripple me-1"
+                            color="default" size="xs"
                             (click)="handleBackgroundEditEnabled(true)">
                         <fa-icon [icon]="['fas', 'image']"></fa-icon>
                         {{ t('Edit Background') }}
@@ -190,7 +190,7 @@
                         <oitc-map-canvas [helplines]="Mapeditor.helplines" [map]="map.Map"
                                          [isViewMode]="false" [isBackgroundEditMode]="backgroundEditEnabled"
                                          [currentDeletedItem]="currentDeletedItem">
-                            <oitc-background-item [item]="backgroundItem"
+                            <oitc-background-item *ngIf="map && map.Map && map.Map.background" [item]="backgroundItem"
                                                   [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
                                                   (dblclick)="openChangeMapBackgroundModal()"
                                                   (contextActionEvent)="onContextAction($event)"

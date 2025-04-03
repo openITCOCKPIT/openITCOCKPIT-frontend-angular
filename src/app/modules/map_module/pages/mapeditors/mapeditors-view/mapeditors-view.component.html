@@ -29,7 +29,7 @@
             <h5 cCardTitle>
                 {{ t('View map:') }}
 
-                <small class="fw-300" *ngIf="map">
+                <small class="fw-300 word-break" *ngIf="map">
                     {{ map.Map.name }}
                 </small>
             </h5>
@@ -56,7 +56,18 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1" *ngIf="map" [hidden]="fullscreen">
-                    <button [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id, 'true']" cButton
+                    <button *ngIf="!rotate"
+                            [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id, 'true']"
+                            cButton
+                            (click)="toggleFullscreenMode()"
+                            class="ripple"
+                            color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'expand']"></fa-icon>
+                        {{ t('Fullscreen') }}
+                    </button>
+                    <button *ngIf="rotate"
+                            [routerLink]="'/map_module/mapeditors/view/' +  map.Map.id + '/true/' + rotate.toString() + '/' + intervalParam"
+                            cButton
                             (click)="toggleFullscreenMode()"
                             class="ripple"
                             color="default" size="xs">
@@ -65,7 +76,18 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1" *ngIf="map" [hidden]="!fullscreen">
-                    <button [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id, 'false']" cButton
+                    <button *ngIf="!rotate"
+                            [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id, 'false']"
+                            cButton
+                            (click)="toggleFullscreenMode()"
+                            class="ripple"
+                            color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'compress']"></fa-icon>
+                        {{ t('Leave fullscreen') }}
+                    </button>
+                    <button *ngIf="rotate"
+                            [routerLink]="'/map_module/mapeditors/view/' + map.Map.id + '/false/' + rotate.toString() + '/' +  intervalParam"
+                            cButton
                             (click)="toggleFullscreenMode()"
                             class="ripple"
                             color="default" size="xs">
