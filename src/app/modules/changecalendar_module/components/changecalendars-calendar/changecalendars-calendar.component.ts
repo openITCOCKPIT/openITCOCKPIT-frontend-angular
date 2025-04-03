@@ -9,15 +9,15 @@ import {
     signal,
     ViewChild
 } from '@angular/core';
-import { TranslocoDirective } from '@jsverse/transloco';
-import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions, EventApi, EventClickArg } from '@fullcalendar/core';
+import {TranslocoDirective} from '@jsverse/transloco';
+import {FullCalendarComponent, FullCalendarModule} from '@fullcalendar/angular';
+import {CalendarOptions, EventApi, EventClickArg} from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
-import { NgIf, NgStyle } from '@angular/common';
+import {CalendarEvent} from '../../../../pages/calendars/calendars.interface';
+import {NgIf, NgStyle} from '@angular/common';
 
 @Component({
     selector: 'oitc-changecalendars-calendar',
@@ -91,7 +91,7 @@ export class ChangecalendarsCalendarComponent {
         //initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
         events: this.events,
         weekends: true,
-        editable: true,
+        editable: false,
         selectable: true,
         selectMirror: true,
         businessHours: true,
