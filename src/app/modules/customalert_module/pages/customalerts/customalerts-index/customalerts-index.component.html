@@ -30,10 +30,14 @@
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
                     <oitc-interval-picker (change)="onRefreshChange($event)"></oitc-interval-picker>
+                </c-nav-item>
+                <c-nav-item class="px-1">
                     <button (click)="refresh()" cButton class="ripple" color="light" size="xs">
                         <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
                         {{ t('Refresh') }}
                     </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
                     <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                         {{ t('Filter') }}
@@ -176,7 +180,7 @@
                                 <c-form-check class="mb-2">
                                     <input cFormCheckInput id="filter.Customalerts.state[CustomAlertsState.New]"
                                            type="checkbox"
-                                           class="checkbox-lg custom-check-default"
+                                           class="checkbox-lg checkbox-danger"
                                            [(ngModel)]="filter.Customalerts.state[CustomAlertsState.New]"
                                            name="filter.Customalerts.state[CustomAlertsState.New]"
                                            (debouncedValue)="onFilterChange($event)"
@@ -189,7 +193,7 @@
                                 <c-form-check class="mb-2">
                                     <input cFormCheckInput id="filter.Customalerts.state[CustomAlertsState.InProgress]"
                                            type="checkbox"
-                                           class="checkbox-lg custom-check-default"
+                                           class="checkbox-lg checkbox-secondary"
                                            [(ngModel)]="filter.Customalerts.state[CustomAlertsState.InProgress]"
                                            name="filter.Customalerts.state[CustomAlertsState.InProgress]"
                                            (debouncedValue)="onFilterChange($event)"
@@ -202,7 +206,7 @@
                                 <c-form-check class="mb-2">
                                     <input cFormCheckInput id="filter.Customalerts.state[CustomAlertsState.Done]"
                                            type="checkbox"
-                                           class="checkbox-lg custom-check-default"
+                                           class="checkbox-lg checkbox-success"
                                            [(ngModel)]="filter.Customalerts.state[CustomAlertsState.Done]"
                                            name="filter.Customalerts.state[CustomAlertsState.Done]"
                                            (debouncedValue)="onFilterChange($event)"
@@ -520,7 +524,7 @@
                             <span class="text-info">{{ customAlertRule.CustomalertComments.entry_time }}</span>
                             {{ customAlertRule.CustomalertComments.comment }}
                         </td>
-                        <td [ngClass]="{'text-success': customAlertRule.last24hoursAlerts === 0}" class="text-center">
+                        <td [ngClass]="{'text-success': customAlertRule.last24hoursAlerts === 0, 'text-danger': customAlertRule.last24hoursAlerts > 1}">
                             {{ customAlertRule.last24hoursAlerts }}
                         </td>
                         <td>
