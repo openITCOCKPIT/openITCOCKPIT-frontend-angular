@@ -467,14 +467,14 @@
                 >
                 <oitc-form-feedback [errors]="errors" errorField="unit"></oitc-form-feedback>
                 <div class="help-block">
-                    Unit of the metric. <br>
-                    Examples:
+                    {{ t('Unit of the metric.') }} <br>
+                    {{ t('Examples:') }}
                     <ul>
-                        <li>"b" for bytes.</li>
-                        <li>"KB" for kilobytes.</li>
-                        <li>"s" for seconds.</li>
-                        <li>"Mbps" or "Mbit/s"</li>
-                        <li>"MB/s" for megabytes per second</li>
+                        <li>{{ t('"b" for bytes.') }}</li>
+                        <li>{{ t('"KB" for kilobytes.') }}</li>
+                        <li>{{ t('"s" for seconds.') }}</li>
+                        <li>{{ t('"Mbps" or "Mbit/s"') }}</li>
+                        <li>{{ t('"MB/s" for megabytes per second') }}</li>
                     </ul>
                 </div>
             </div>
