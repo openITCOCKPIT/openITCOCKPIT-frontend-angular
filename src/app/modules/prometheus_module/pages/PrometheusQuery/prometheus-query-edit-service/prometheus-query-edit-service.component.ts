@@ -55,6 +55,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 import { HistoryService } from '../../../../../history.service';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { PrometheusThresholdType } from '../prometheus.enum';
 
 @Component({
     selector: 'oitc-prometheus-query-edit-service',
@@ -225,7 +226,7 @@ export class PrometheusQueryEditServiceComponent implements OnInit, OnDestroy {
     }
 
     protected onThresholdTypeChange(): void {
-        if (this.post.Service.prometheus_alert_rule.threshold_type === 'scalar') {
+        if (this.post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.scalar) {
             this.post.Service.prometheus_alert_rule.warning_operator = '';
             this.post.Service.prometheus_alert_rule.critical_operator = '';
             return;
@@ -383,4 +384,5 @@ export class PrometheusQueryEditServiceComponent implements OnInit, OnDestroy {
         }));
     }
 
+    protected readonly PrometheusThresholdType = PrometheusThresholdType;
 }

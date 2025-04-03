@@ -39,13 +39,13 @@
                     <oitc-required-icon/>
                 </label>
                 <oitc-multi-select
-                        name="selectedMetrics"
-                        id="selectedMetrics"
-                        optionValue="metric"
-                        optionLabel="metric"
-                        [(ngModel)]="selectedMetrics"
-                        [options]="index.targets.data"
-                        (onChange)="onMetricsChange()">
+                    name="selectedMetrics"
+                    id="selectedMetrics"
+                    optionValue="metric"
+                    optionLabel="metric"
+                    [(ngModel)]="selectedMetrics"
+                    [options]="index.targets.data"
+                    (onChange)="onMetricsChange()">
                 </oitc-multi-select>
             </div>
 
@@ -79,22 +79,28 @@
                 <c-col md="3">
                     <fieldset>
                         <h5>{{ t('Arithmetic binary operators') }}</h5>
-                        <button cButton size="xs" color="success" class="m-1" [title]="'addition' | transloco" (click)="addToString('+')">
+                        <button cButton size="xs" color="success" class="m-1" [title]="'addition' | transloco"
+                                (click)="addToString('+')">
                             +
                         </button>
-                        <button cButton size="xs" color="success" class="m-1" [title]="'subtraction'  | transloco" (click)="addToString('-')">
+                        <button cButton size="xs" color="success" class="m-1" [title]="'subtraction'  | transloco"
+                                (click)="addToString('-')">
                             -
                         </button>
-                        <button cButton size="xs" color="success" class="m-1" [title]="'multiplication'  | transloco" (click)="addToString('*')">
+                        <button cButton size="xs" color="success" class="m-1" [title]="'multiplication'  | transloco"
+                                (click)="addToString('*')">
                             *
                         </button>
-                        <button cButton size="xs" color="success" class="m-1" [title]="'division'  | transloco" (click)="addToString('/')">
+                        <button cButton size="xs" color="success" class="m-1" [title]="'division'  | transloco"
+                                (click)="addToString('/')">
                             /
                         </button>
-                        <button cButton size="xs" color="success" class="m-1" [title]="'modulo'  | transloco" (click)="addToString('%')">
+                        <button cButton size="xs" color="success" class="m-1" [title]="'modulo'  | transloco"
+                                (click)="addToString('%')">
                             %
                         </button>
-                        <button cButton size="xs" color="success" class="m-1" [title]="'power/exponentiation' | transloco" (click)="addToString('^')">
+                        <button cButton size="xs" color="success" class="m-1"
+                                [title]="'power/exponentiation' | transloco" (click)="addToString('^')">
                             ^
                         </button>
                     </fieldset>
@@ -197,13 +203,13 @@
                     <oitc-required-icon/>
                 </label>
                 <oitc-select
-                        name="thresholdType"
-                        id="thresholdType"
-                        optionValue="key"
-                        optionLabel="value"
-                        (onChange)="onThresholdTypeChange()"
-                        [(ngModel)]="ValidateService.threshold_type"
-                        [options]="thresholdTypes">
+                    name="thresholdType"
+                    id="thresholdType"
+                    optionValue="key"
+                    optionLabel="value"
+                    (onChange)="onThresholdTypeChange()"
+                    [(ngModel)]="ValidateService.threshold_type"
+                    [options]="thresholdTypes">
                 </oitc-select>
             </div>
 
@@ -221,28 +227,28 @@
                         <label cLabel for="ValidateService.warning_operator" class="text-warning">
                             {{ t('Operator') }}
                         </label>
-                        <ng-container *ngIf="ValidateService.threshold_type === 'scalar'">
+                        <ng-container *ngIf="ValidateService.threshold_type === PrometheusThresholdType.scalar">
                             <oitc-select
-                                    name="ValidateService.warning_operator"
-                                    id="ValidateService.warning_operator"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [options]="operators"
-                                    [(ngModel)]="ValidateService.warning_operator"
-                                    oitcFormError [errors]="errors" errorField="warning_operator">
+                                name="ValidateService.warning_operator"
+                                id="ValidateService.warning_operator"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="operators"
+                                [(ngModel)]="ValidateService.warning_operator"
+                                oitcFormError [errors]="errors" errorField="warning_operator">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="warning_operator"></oitc-form-feedback>
                         </ng-container>
-                        <ng-container *ngIf="ValidateService.threshold_type !== 'scalar'">
+                        <ng-container *ngIf="ValidateService.threshold_type !== PrometheusThresholdType.scalar">
                             <oitc-select
-                                    name="ValidateService.warning_operatorOnlyAuto"
-                                    id="ValidateService.warning_operatorOnlyAuto"
-                                    [disabled]="true"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [options]="onlyAutoOperator"
-                                    [(ngModel)]="ValidateService.warning_operator"
-                                    oitcFormError [errors]="errors" errorField="warning_operator">
+                                name="ValidateService.warning_operatorOnlyAuto"
+                                id="ValidateService.warning_operatorOnlyAuto"
+                                [disabled]="true"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="onlyAutoOperator"
+                                [(ngModel)]="ValidateService.warning_operator"
+                                oitcFormError [errors]="errors" errorField="warning_operator">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="warning_operator"></oitc-form-feedback>
                         </ng-container>
@@ -252,7 +258,8 @@
                     <div class="mb-3">
                         <label cLabel for="ValidateService.warning_min" class="text-warning">
                             {{ t('Warning') }}
-                            <span [hidden]="ValidateService.threshold_type === 'scalar'">{{ t('min') }}</span>
+                            <span
+                                [hidden]="ValidateService.threshold_type === PrometheusThresholdType.scalar">{{ t('min') }}</span>
                             <oitc-required-icon/>
                         </label>
                         <input cFormControl
@@ -265,7 +272,7 @@
                         <oitc-form-feedback [errors]="errors" errorField="warning_min"></oitc-form-feedback>
                     </div>
                 </c-col>
-                <c-col [hidden]="ValidateService.threshold_type === 'scalar'">
+                <c-col [hidden]="ValidateService.threshold_type === PrometheusThresholdType.scalar">
                     <div class="mb-3">
                         <label cLabel for="ValidateService.warning_max" class="text-warning">
                             {{ t('Warning max') }}
@@ -288,22 +295,22 @@
                             <oitc-required-icon/>
                         </label>
                         <oitc-select
-                                name="intervalWarn"
-                                id="intervalWarn"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="ValidateService.warning_longer_as"
-                                [options]="longerThanValues">
+                            name="intervalWarn"
+                            id="intervalWarn"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="ValidateService.warning_longer_as"
+                            [options]="longerThanValues">
                         </oitc-select>
                     </div>
                 </c-col>
                 <c-col>
                     <oitc-prometheus-thresholds
-                            *ngIf="ValidateService.threshold_type !== 'scalar'"
-                            [inclusive]="(ValidateService.threshold_type === 'range_inclusive')"
-                            [min]="ValidateService.warning_min"
-                            [max]="ValidateService.warning_max"
-                            [type]="'warning'"></oitc-prometheus-thresholds>
+                        *ngIf="ValidateService.threshold_type !== PrometheusThresholdType.scalar"
+                        [inclusive]="(ValidateService.threshold_type === PrometheusThresholdType.range_inclusive)"
+                        [min]="ValidateService.warning_min"
+                        [max]="ValidateService.warning_max"
+                        [type]="'warning'"></oitc-prometheus-thresholds>
                 </c-col>
             </c-row>
             <c-row>
@@ -320,28 +327,28 @@
                         <label cLabel for="ValidateService.critical_operator" class="text-danger">
                             {{ t('Operator') }}
                         </label>
-                        <ng-container *ngIf="ValidateService.threshold_type == 'scalar'">
+                        <ng-container *ngIf="ValidateService.threshold_type == PrometheusThresholdType.scalar">
                             <oitc-select
-                                    name="ValidateService.critical_operator"
-                                    id="ValidateService.critical_operator"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [options]="operators"
-                                    [(ngModel)]="ValidateService.critical_operator"
-                                    oitcFormError [errors]="errors" errorField="critical_operator">
+                                name="ValidateService.critical_operator"
+                                id="ValidateService.critical_operator"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="operators"
+                                [(ngModel)]="ValidateService.critical_operator"
+                                oitcFormError [errors]="errors" errorField="critical_operator">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="critical_operator"></oitc-form-feedback>
                         </ng-container>
-                        <ng-container *ngIf="ValidateService.threshold_type !== 'scalar'">
+                        <ng-container *ngIf="ValidateService.threshold_type !== PrometheusThresholdType.scalar">
                             <oitc-select
-                                    name="ValidateService.critical_operatorOnlyAuto"
-                                    id="ValidateService.critical_operatorOnlyAuto"
-                                    [disabled]="true"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [options]="onlyAutoOperator"
-                                    [(ngModel)]="ValidateService.critical_operator"
-                                    oitcFormError [errors]="errors" errorField="critical_operator">
+                                name="ValidateService.critical_operatorOnlyAuto"
+                                id="ValidateService.critical_operatorOnlyAuto"
+                                [disabled]="true"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="onlyAutoOperator"
+                                [(ngModel)]="ValidateService.critical_operator"
+                                oitcFormError [errors]="errors" errorField="critical_operator">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="critical_operator"></oitc-form-feedback>
                         </ng-container>
@@ -351,7 +358,8 @@
                     <div class="mb-3">
                         <label cLabel for="ValidateService.critical_min" class="text-danger">
                             {{ t('Critical') }}
-                            <span [hidden]="ValidateService.threshold_type === 'scalar'">{{ t('min') }}</span>
+                            <span
+                                [hidden]="ValidateService.threshold_type === PrometheusThresholdType.scalar">{{ t('min') }}</span>
                             <oitc-required-icon/>
                         </label>
                         <input cFormControl
@@ -364,7 +372,7 @@
                         <oitc-form-feedback [errors]="errors" errorField="critical_min"></oitc-form-feedback>
                     </div>
                 </c-col>
-                <c-col [hidden]="ValidateService.threshold_type === 'scalar'">
+                <c-col [hidden]="ValidateService.threshold_type === PrometheusThresholdType.scalar">
                     <div class="mb-3">
                         <label cLabel for="ValidateService.critical_max" class="text-danger">
                             {{ t('Critical') }}
@@ -387,22 +395,22 @@
                             <oitc-required-icon/>
                         </label>
                         <oitc-select
-                                name="intervalCrit"
-                                id="intervalCrit"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="ValidateService.critical_longer_as"
-                                [options]="longerThanValues">
+                            name="intervalCrit"
+                            id="intervalCrit"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="ValidateService.critical_longer_as"
+                            [options]="longerThanValues">
                         </oitc-select>
                     </div>
                 </c-col>
                 <c-col>
                     <oitc-prometheus-thresholds
-                            *ngIf="ValidateService.threshold_type !== 'scalar'"
-                            [inclusive]="(ValidateService.threshold_type === 'range_inclusive')"
-                            [min]="ValidateService.warning_min"
-                            [max]="ValidateService.warning_max"
-                            [type]="'critical'"></oitc-prometheus-thresholds>
+                        *ngIf="ValidateService.threshold_type !== PrometheusThresholdType.scalar"
+                        [inclusive]="(ValidateService.threshold_type === PrometheusThresholdType.range_inclusive)"
+                        [min]="ValidateService.critical_min"
+                        [max]="ValidateService.critical_max"
+                        [type]="'critical'"></oitc-prometheus-thresholds>
                 </c-col>
             </c-row>
 
@@ -415,13 +423,13 @@
                     </a>
                 </label>
                 <oitc-select
-                        name="ValidateService.servicetemplate_id"
-                        id="ValidateService.servicetemplate_id"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="ValidateService.servicetemplate_id"
-                        [options]="serviceTemplates"
-                        oitcFormError [errors]="errors" errorField="servicetemplate_id">
+                    name="ValidateService.servicetemplate_id"
+                    id="ValidateService.servicetemplate_id"
+                    optionValue="key"
+                    optionLabel="value"
+                    [(ngModel)]="ValidateService.servicetemplate_id"
+                    [options]="serviceTemplates"
+                    oitcFormError [errors]="errors" errorField="servicetemplate_id">
                 </oitc-select>
                 <oitc-form-feedback [errors]="errors" errorField="servicetemplate_id"></oitc-form-feedback>
             </div>
