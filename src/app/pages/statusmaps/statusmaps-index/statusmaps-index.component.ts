@@ -2,24 +2,24 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  FormCheckInputDirective,
-  FormControlDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent,
-  ProgressBarComponent,
-  ProgressComponent,
-  RowComponent,
-  ToastBodyComponent,
-  ToastComponent,
-  ToasterComponent,
-  ToastHeaderComponent
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    ProgressBarComponent,
+    ProgressComponent,
+    RowComponent,
+    ToastBodyComponent,
+    ToastComponent,
+    ToasterComponent,
+    ToastHeaderComponent
 } from '@coreui/angular';
 import { DecimalPipe, DOCUMENT, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -42,7 +42,6 @@ import { DataSet } from 'vis-data/peer';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 
-
 import { SummaryState } from '../../hosts/summary_state.interface';
 import { HostEntity } from '../../hosts/hosts.interface';
 import { HostSummaryStatusmapComponent } from './host-summary-statusmap/host-summary-statusmap.component';
@@ -50,40 +49,40 @@ import { HostSummaryStatusmapComponent } from './host-summary-statusmap/host-sum
 @Component({
     selector: 'oitc-statusmaps-index',
     imports: [
-    BlockLoaderComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    DecimalPipe,
-    FaIconComponent,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PermissionDirective,
-    ProgressComponent,
-    RowComponent,
-    SelectComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    RouterLink,
-    FormControlDirective,
-    ReactiveFormsModule,
-    FormsModule,
-    DebounceDirective,
-    NoRecordsComponent,
-    FaIconComponent,
-    ProgressBarComponent,
-    ToastBodyComponent,
-    ToastComponent,
-    ToastHeaderComponent,
-    ToasterComponent,
-    HostSummaryStatusmapComponent,
-    FormCheckInputDirective
-],
+        BlockLoaderComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        DecimalPipe,
+        FaIconComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        PermissionDirective,
+        ProgressComponent,
+        RowComponent,
+        SelectComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        RouterLink,
+        FormControlDirective,
+        ReactiveFormsModule,
+        FormsModule,
+        DebounceDirective,
+        NoRecordsComponent,
+        FaIconComponent,
+        ProgressBarComponent,
+        ToastBodyComponent,
+        ToastComponent,
+        ToastHeaderComponent,
+        ToasterComponent,
+        HostSummaryStatusmapComponent,
+        FormCheckInputDirective
+    ],
     templateUrl: './statusmaps-index.component.html',
     styleUrl: './statusmaps-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -150,6 +149,11 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
 
             this.renderVisNetwork(edges, nodes);
+
+            if (this.isEmpty) {
+                this.showProgressbar = false;
+            }
+
         }));
     }
 
