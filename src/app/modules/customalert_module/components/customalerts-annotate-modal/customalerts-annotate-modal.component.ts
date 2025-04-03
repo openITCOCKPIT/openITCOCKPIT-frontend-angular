@@ -26,7 +26,7 @@ import {
     RowComponent,
     TextColorDirective
 } from '@coreui/angular';
-import { TranslocoDirective, TranslocoService} from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -112,7 +112,6 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
     protected checkHoststatusForAcknowledgements = () => {
         this.loadingHoststate = true;
         this.cdr.markForCheck();
-        console.warn(this.items);
         let params: CheckHoststatusForAcknowledgementsRequest = {
             hostIds: this.items.map(item => item.service.host.id as unknown as string)
         };
@@ -141,12 +140,13 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
             return;
         }
         this.isProcessing = true;
+
+        let count = this.items.length;
+        let responseCount = 0;
+        let issueCount = 0;
+
         for (let i in this.items) {
             const item = this.items[i];
-            let responseCount = 0;
-            let count = this.items.length;
-            let issueCount = 0;
-
 
             this.CustomAlertsService.annotate(item.id, this.comment, true, this.acknowlage).subscribe({
                 next: (value: any) => {
