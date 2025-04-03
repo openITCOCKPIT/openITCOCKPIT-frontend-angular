@@ -229,7 +229,7 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
     protected forceTicks(actionToTick: string, tick: boolean) {
         for (let aco in this.acos.acos) {
             for (let controller in this.acos.acos[aco].children) {
-                let isModule = this.acos.acos[aco].children[controller].alias.substring(-6) === 'Module';
+                let isModule = this.acos.acos[aco].children[controller].alias.endsWith('Module');
 
                 if (isModule) {
                     for (let pluginController in this.acos.acos[aco].children[controller].children) {
