@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { GrafanaService } from '../../../grafana.service';
-import { GrafanaConfigurationPost } from '../../../grafana.interface';
-import { SelectKeyValueString, SelectKeyValueWithDisabled } from '../../../../../layouts/primeng/select.interface';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {NotyService} from '../../../../../layouts/coreui/noty.service';
+import {TranslocoDirective, TranslocoPipe, TranslocoService} from '@jsverse/transloco';
+import {GrafanaService} from '../../../grafana.service';
+import {GrafanaConfigurationPost} from '../../../grafana.interface';
+import {SelectKeyValueString, SelectKeyValueWithDisabled} from '../../../../../layouts/primeng/select.interface';
 import {
     CardBodyComponent,
     CardComponent,
@@ -18,22 +18,22 @@ import {
     FormDirective,
     FormLabelDirective
 } from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { RouterLink } from '@angular/router';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { GenericValidationError } from '../../../../../generic-responses';
-import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
-import { HttpErrorResponse } from '@angular/common/http';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {FormLoaderComponent} from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {NgIf} from '@angular/common';
+import {PermissionDirective} from '../../../../../permissions/permission.directive';
+import {XsButtonDirective} from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {RouterLink} from '@angular/router';
+import {FormErrorDirective} from '../../../../../layouts/coreui/form-error.directive';
+import {FormFeedbackComponent} from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import {RequiredIconComponent} from '../../../../../components/required-icon/required-icon.component';
+import {GenericValidationError} from '../../../../../generic-responses';
+import {TrueFalseDirective} from '../../../../../directives/true-false.directive';
+import {SelectComponent} from '../../../../../layouts/primeng/select/select/select.component';
+import {MultiSelectComponent} from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import {OitcAlertComponent} from '../../../../../components/alert/alert.component';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
     selector: 'oitc-grafana-configuration-index',
@@ -130,8 +130,8 @@ export class GrafanaConfigurationIndexComponent implements OnInit, OnDestroy {
             this.post.use_proxy = config.use_proxy;
             this.post.ignore_ssl_certificate = config.ignore_ssl_certificate;
             this.post.dashboard_style = config.dashboard_style;
-            this.post.Hostgroup = config.Hostgroup;
-            this.post.Hostgroup_excluded = config.Hostgroup_excluded;
+            this.post.Hostgroup = config.Hostgroup || [];
+            this.post.Hostgroup_excluded = config.Hostgroup_excluded || [];
 
             this.processHostgroups();
 
