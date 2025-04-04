@@ -102,12 +102,14 @@
                             {{ t('Use Proxy Server') }}
                         </label>
                         <div class="help-block">
-                            <span *oitcPermission="['proxy', 'index'];negate:true">
+                            <span *oitcPermission="['proxy', 'index']">
+                                {{ t('Determine if the ') }}
+                                <a [routerLink]="['/', 'proxy', 'index']">{{ t('configured proxy') }}</a>
+                                {{ t(' should be used.') }}
+                            </span>
+                            <span *oitcPermission="['proxy', 'index']; negate: true">
                                 {{ t('Determine if the configured proxy should be used.') }}
                             </span>
-                            <a *oitcPermission="['proxy', 'index']" [routerLink]="['/', 'proxy', 'index']">
-                                {{ t('Determine if the configured proxy should be used.') }}
-                            </a>
                         </div>
                     </c-form-check>
                 </div>
