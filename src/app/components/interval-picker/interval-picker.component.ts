@@ -5,6 +5,8 @@ import {
     EventEmitter,
     inject,
     Input,
+    OnDestroy,
+    OnInit,
     Output
 } from '@angular/core';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -20,26 +22,27 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { NgClass, NgForOf } from '@angular/common';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 @Component({
     selector: 'oitc-interval-picker',
     imports: [
-    DropdownComponent,
-    FaIconComponent,
-    XsButtonDirective,
-    DropdownToggleDirective,
-    RowComponent,
-    ColComponent,
-    DropdownMenuDirective,
-    NgClass,
-    TranslocoDirective,
-    NgForOf
-],
+        DropdownComponent,
+        FaIconComponent,
+        XsButtonDirective,
+        DropdownToggleDirective,
+        RowComponent,
+        ColComponent,
+        DropdownMenuDirective,
+        NgClass,
+        TranslocoDirective,
+        NgForOf
+    ],
     templateUrl: './interval-picker.component.html',
     styleUrl: './interval-picker.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class IntervalPickerComponent {
+export class IntervalPickerComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
 
     public refreshRates: SelectKeyValue[] = [
@@ -59,9 +62,19 @@ export class IntervalPickerComponent {
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
 
+    private readonly LocalStorageService = inject(LocalStorageService);
 
     public ngOnInit(): void {
-        this.setHumanNames();
+        // Restore the selected auto refresh from local storage
+        let storedRefreshRate = Number(this.LocalStorageService.getItemWithDefault('auto-refresh-rate', 0));
+        if (storedRefreshRate > 1) {
+            this.refreshRates.forEach((refreshRate) => {
+                if (refreshRate.key === storedRefreshRate) {
+                    this.changeRefresh(refreshRate);
+                }
+            });
+        }
+
         this.cdr.markForCheck();
     }
 
@@ -72,14 +85,12 @@ export class IntervalPickerComponent {
     public changeRefresh(refreshValue: SelectKeyValue) {
         this.selectedAutoRefresh = refreshValue;
 
-        this.setHumanNames();
+        this.LocalStorageService.setItem('auto-refresh-rate', String(refreshValue.key));
+
         this.cdr.markForCheck();
 
         this.change.emit(refreshValue);
     }
 
-    private setHumanNames(): void {
-        this.cdr.markForCheck()
-    }
 
 }

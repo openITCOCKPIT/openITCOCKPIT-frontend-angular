@@ -300,7 +300,7 @@
                         <oitc-servicestatus-simple-icon
                             [servicestatus]="notification.NotificationService.state"></oitc-servicestatus-simple-icon>
                     </td>
-                    <td>
+                    <td class="word-break">
                         <a *oitcPermission="['hosts', 'browser']"
                            [routerLink]="['/', 'hosts', 'browser', notification.Host.id]">
                             {{ notification.Host.name }}
@@ -309,7 +309,7 @@
                             {{ notification.Host.name }}
                         </span>
                     </td>
-                    <td>
+                    <td class="word-break">
                         <a *oitcPermission="['services', 'browser']"
                            [routerLink]="['/', 'services', 'browser', notification.Service.id]">
                             {{ notification.Service.servicename }}

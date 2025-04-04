@@ -5401,5 +5401,14 @@
   "Flap detection disabled": "Flap detection disabled",
   "Bookmark": "Bookmark",
   "Command Argument": "Command Argument",
-  "Host availability": "Host availability"
+  "Host availability": "Host availability",
+  "expand comments": "expand comments",
+  "Test your overwrite rules, by entering a string (e.g. a hostname) to see what RegEx will match.": "Test your overwrite rules, by entering a string (e.g. a hostname) to see what RegEx will match.",
+  "Matching RegEx will be marked in green color": "Matching RegEx will be marked in green color",
+  "No overwrite RegEx matches the given input string.": "No overwrite RegEx matches the given input string.",
+  "matching host default overwrite found.": "matching host default overwrite found.",
+  "This satellite is not used by any object": "This satellite is not used by any object",
+  "Upload": "Upload",
+  "Service Browser": "Service Browser",
+  "Host Browser": "Host Browser"
 }

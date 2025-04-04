@@ -144,10 +144,11 @@
                             [item]="rotation"></oitc-item-select>
 
                     </td>
-                    <td><a *ngIf="rotation.ids?.length"
+                    <td class="word-break">
+                        <a *ngIf="rotation.ids?.length"
                            [routerLink]="['/', 'map_module', 'mapeditors', 'view', rotation.first_id, false, rotation.ids, rotation.interval]">
-                        {{ rotation.name }}
-                    </a>
+                            {{ rotation.name }}
+                        </a>
                         <a *ngIf="!rotation.ids?.length && rotation.allowEdit"
                            [routerLink]="['/', 'map_module', 'rotations', 'edit', rotation.id]">
                             {{ rotation.name }}

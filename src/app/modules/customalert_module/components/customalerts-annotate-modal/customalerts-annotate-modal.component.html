@@ -28,7 +28,7 @@
                           [(ngModel)]="comment"
                           [ngClass]="{'is-invalid': comment.length > 1024}"
                 ></textarea>
-                <oitc-form-feedback [errors]="errors" errorField="comment" ></oitc-form-feedback>
+                <oitc-form-feedback [errors]="errors" errorField="comment"></oitc-form-feedback>
 
                 <div class="help-block mb-3"
                      [ngClass]="{'text-danger': comment.length > 1024}">
@@ -81,12 +81,13 @@
                     <h4>{{ t('Annotating...') }}</h4>
                 </c-col>
                 <c-col sm="12">
-                    <c-progress [animated]="true" [value]="percentage" [max]="100" color="danger" variant="striped"/>
+                    <c-progress [animated]="true" [value]="percentage" [max]="100" color="primary" variant="striped"/>
                 </c-col>
             </c-row>
         </c-modal-body>
         <c-modal-footer>
-            <button (click)="annotate()" [disabled]="isProcessing || comment.length > 1024 || comment.length === 0" cButton class="ripple" color="primary">
+            <button (click)="annotate()" [disabled]="isProcessing || comment.length > 1024 || comment.length === 0"
+                    cButton class="ripple" color="primary">
                 <fa-icon [hidden]="!isProcessing" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
                 {{ t('Annotate') }}
             </button>
