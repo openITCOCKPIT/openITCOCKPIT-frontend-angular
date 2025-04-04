@@ -362,7 +362,7 @@
                         <oitc-downtime-simple-icon
                             [downtime]="serviceDowntime.DowntimeService"></oitc-downtime-simple-icon>
                     </td>
-                    <td>
+                    <td class="word-break">
                         <a *oitcPermission="['hosts', 'browser']"
                            [routerLink]="['/', 'hosts', 'browser', serviceDowntime.Host.id]">
                             {{ serviceDowntime.Host.hostname }}
@@ -371,7 +371,7 @@
                             {{ serviceDowntime.Host.hostname }}
                         </span>
                     </td>
-                    <td>
+                    <td class="word-break">
                         <a *oitcPermission="['services', 'browser']"
                            [routerLink]="['/', 'services', 'browser', serviceDowntime.Service.id]">
                             {{ serviceDowntime.Service.servicename }}

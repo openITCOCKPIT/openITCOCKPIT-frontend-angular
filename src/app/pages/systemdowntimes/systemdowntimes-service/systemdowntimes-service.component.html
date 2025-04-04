@@ -280,7 +280,7 @@
                                 [item]="serviceSystemdowntime"></oitc-item-select>
                         </div>
                     </td>
-                    <td>
+                    <td class="word-break">
                         <a *oitcPermission="['hosts', 'browser']"
                            [routerLink]="['/', 'hosts', 'browser', serviceSystemdowntime.Host.id]">
                             {{ serviceSystemdowntime.Host.hostname }}
@@ -289,7 +289,7 @@
                             {{ serviceSystemdowntime.Host.hostname }}
                         </span>
                     </td>
-                    <td>
+                    <td class="word-break">
                         <a *oitcPermission="['services', 'browser']"
                            [routerLink]="['/', 'services', 'browser', serviceSystemdowntime.Service.id]">
                             {{ serviceSystemdowntime.Service.servicename }}

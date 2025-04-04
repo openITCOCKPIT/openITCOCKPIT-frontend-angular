@@ -32,7 +32,7 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AsyncPipe, DecimalPipe, formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, DecimalPipe, formatDate, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -87,8 +87,7 @@ import { SlaAvailabilityStatusLogIndexParams } from '../../slas/slas.interface';
         CopyToClipboardComponent,
         FilterPipe,
         DecimalPipe,
-        AsyncPipe,
-        NgClass
+        AsyncPipe
     ],
     templateUrl: './sla-availability-status-hosts-log-index.component.html',
     styleUrl: './sla-availability-status-hosts-log-index.component.css',

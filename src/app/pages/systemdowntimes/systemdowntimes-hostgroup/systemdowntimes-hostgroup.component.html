@@ -262,7 +262,7 @@
                                 [item]="hostgroupSystemdowntime"></oitc-item-select>
                         </div>
                     </td>
-                    <td>
+                    <td class="word-break">
                         <a *oitcPermission="['hostgroups', 'edit']"
                            [routerLink]="['/', 'hostgroups', 'edit', hostgroupSystemdowntime.Hostgroup.id]">
                             {{ hostgroupSystemdowntime.Container.name }}
