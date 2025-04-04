@@ -50,7 +50,7 @@
             </c-nav>
         </c-card-header>
         <c-card-body>
-            <div  *ngIf="result" class="alert border-faded bg-transparent text-secondary">
+            <div *ngIf="result" class="alert border-faded bg-transparent text-secondary">
                 <div class="d-flex align-items-center">
                     <div class="alert-icon me-2">
                         <span class="icon-stack icon-stack-md">
@@ -66,10 +66,11 @@
                             </a>
                         </span>
                         <br>
-                        {{t('Overview of all affected services. Please refresh your configuration after configuration changes!')}}
+                        {{ t('Overview of all affected services. Please refresh your configuration after configuration changes!') }}
                     </div>
 
-                    <a class="btn btn-outline-info btn-sm ripple" *oitcPermission="['customalertmodule', 'customalertRules', 'index']"
+                    <a class="btn btn-outline-info btn-sm ripple"
+                       *oitcPermission="['customalertmodule', 'customalertRules', 'index']"
                        [routerLink]="['/', 'customalert_module', 'customalert_rules', 'edit', CustomAlertRuleId]">
                         <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
                         {{ t('Go to "Custom rule configuration"') }}
@@ -133,7 +134,8 @@
 
             <oitc-table-loader *ngIf="!result"></oitc-table-loader>
 
-            <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+            <table *ngIf="result" bordered cTable class="mt-2 mb-0" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
                 <tr>
@@ -148,15 +150,15 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="result">
+                <tbody>
                 <tr *ngFor="let service of result.services">
-                    <td>
+                    <td class="word-break">
                         <a *oitcPermission="['hosts', 'browser']"
                            [routerLink]="['/', 'hosts', 'browser', service.Hosts.id]">
                             {{ service.Hosts.name }}
                         </a>
                     </td>
-                    <td>
+                    <td class="word-break">
                         <a *oitcPermission="['services', 'browser']"
                            [routerLink]="['/', 'services', 'browser', service.id]">
                             {{ service.servicename }}
@@ -172,16 +174,16 @@
 
 
             <oitc-no-records
-                    *ngIf="result && result.services.length === 0"></oitc-no-records>
+                *ngIf="result && result.services.length === 0"></oitc-no-records>
 
             <c-container
-                    [fluid]="true">
+                [fluid]="true">
                 <c-row class="mt-3">
                     <c-col>
                         <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="result"
-                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="result"
+                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>

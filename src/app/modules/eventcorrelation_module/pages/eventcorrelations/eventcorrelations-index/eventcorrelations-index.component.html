@@ -149,7 +149,7 @@
                             [item]="evcHost"></oitc-item-select>
                     </td>
 
-                    <td>
+                    <td class="word-break">
                         @if (( PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'view'])|async ) && evcHost.hasViewPermission) {
                             <a [routerLink]="['/','eventcorrelation_module','eventcorrelations','view', + evcHost.Host.id]">
                                 {{ evcHost.Host.name }}
