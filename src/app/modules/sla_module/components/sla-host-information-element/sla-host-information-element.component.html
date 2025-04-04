@@ -379,7 +379,7 @@
                 <tbody>
                     @if (sla_information !== null) {
                         <tr *ngFor="let service of sla_information.services">
-                            <td>
+                            <td class="word-break">
                                 <span class="border-left border-{{service.state}} ps-1 border-5">
                                     @if (this.PermissionsService.hasPermissionObservable(['services', 'browser']) | async) {
                                         <a [routerLink]="['/', 'services', 'browser', service.service_id]">

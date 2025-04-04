@@ -558,7 +558,7 @@
                         <tbody>
                         <ng-container *ngFor="let hostStatus of details.slaDetails; let i = index">
                             <tr class="btn-{{hostStatus.host_state}}-opacity ps-1">
-                                <td class="btn-{{hostStatus.host_state}}-opacity">
+                                <td class="btn-{{hostStatus.host_state}}-opacity word-break">
                                     <fa-icon [icon]="['fas', 'desktop']" class="fa-lg"></fa-icon>
                                     <span class="ps-1">
                                         @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser']) | async) {
@@ -631,7 +631,7 @@
                             </tr>
                             <ng-container *ngFor="let serviceStatus of hostStatus.sla_availability_status_services">
                                 <tr>
-                                    <td class="ps-3">
+                                    <td class="ps-3 word-break">
                                         <span class="border-left border-{{serviceStatus.state}} ps-1 border-5">
                                             @if (this.PermissionsService.hasPermissionObservable(['services', 'browser']) | async) {
                                                 <a [routerLink]="['/', 'services', 'browser', serviceStatus.service_id]">
