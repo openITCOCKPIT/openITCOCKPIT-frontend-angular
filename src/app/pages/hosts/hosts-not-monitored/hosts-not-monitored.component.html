@@ -260,7 +260,7 @@
                         </strong>
                     </td>
 
-                    <td>
+                    <td class="word-break">
                         @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                             <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
                                 {{ host.Host.name }}

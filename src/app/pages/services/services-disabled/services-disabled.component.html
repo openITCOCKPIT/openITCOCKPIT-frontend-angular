@@ -225,7 +225,7 @@
                                 <oitc-servicestatus-simple-icon></oitc-servicestatus-simple-icon>
                             </td>
 
-                            <td>
+                            <td class="word-break">
                                 @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
                                     <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
                                         {{ service.Service.servicename }}

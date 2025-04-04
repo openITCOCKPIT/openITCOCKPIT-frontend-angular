@@ -255,7 +255,7 @@
                         <oitc-hoststatus-simple-icon></oitc-hoststatus-simple-icon>
                     </td>
 
-                    <td>
+                    <td class="word-break">
                         @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                             <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
                                 {{ host.Host.name }}
@@ -271,7 +271,7 @@
                         </oitc-copy-to-clipboard>
                     </td>
 
-                    <td>
+                    <td class="word-break">
                         {{ host.Hosttemplate.name }}
                     </td>
 
