@@ -8,6 +8,10 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Changecalendar Module') }}
+            </li>
+            <li class="breadcrumb-item">
                 <a *oitcPermission="['ChangecalendarModule', 'Changecalendars', 'index']"
                    [routerLink]="['/', 'changecalendar_module', 'changecalendars', 'index']">
                     <fa-icon [icon]="['fas', 'calendar']"></fa-icon>

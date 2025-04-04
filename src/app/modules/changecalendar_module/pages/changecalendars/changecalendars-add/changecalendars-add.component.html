@@ -8,6 +8,10 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Changecalendar Module') }}
+            </li>
+            <li class="breadcrumb-item">
                 <a *oitcPermission="['ChangecalendarModule', 'Changecalendars', 'index']"
                    [routerLink]="['/', 'changecalendar_module', 'changecalendars', 'index']">
                     <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
@@ -49,13 +53,13 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                            name="post.Changecalendar.container_id"
-                            id="post.Changecalendar.container_id"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.Changecalendar.container_id"
-                            [options]="containers"
-                            oitcFormError [errors]="errors" errorField="container_id">
+                        name="post.Changecalendar.container_id"
+                        id="post.Changecalendar.container_id"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.Changecalendar.container_id"
+                        [options]="containers"
+                        oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
 
@@ -102,12 +106,12 @@
                     </label>
                     <br/>
                     <p-color-picker
-                            required
-                            id="post.Changecalendar.colour"
-                            type="text"
-                            name="post.Changecalendar.colour"
-                            [(ngModel)]="post.Changecalendar.colour"
-                            oitcFormError [errors]="errors" errorField="colour">
+                        required
+                        id="post.Changecalendar.colour"
+                        type="text"
+                        name="post.Changecalendar.colour"
+                        [(ngModel)]="post.Changecalendar.colour"
+                        oitcFormError [errors]="errors" errorField="colour">
                     </p-color-picker>
                     <oitc-form-feedback [errors]="errors" errorField="colour"></oitc-form-feedback>
                 </div>
