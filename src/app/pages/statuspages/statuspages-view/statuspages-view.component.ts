@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -43,7 +43,6 @@ import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loa
         AsyncPipe,
         RowComponent,
         BlockLoaderComponent,
-        TranslocoPipe,
     ],
     templateUrl: './statuspages-view.component.html',
     styleUrl: './statuspages-view.component.css',

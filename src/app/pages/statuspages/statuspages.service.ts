@@ -23,13 +23,13 @@
  *     confirmation.
  */
 
-import {inject, Injectable} from '@angular/core';
-import {DeleteAllItem} from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import {catchError, map, Observable, of} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
-import {PROXY_PATH} from '../../tokens/proxy-path.token';
-import {SelectKeyValue} from '../../layouts/primeng/select.interface';
-import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../generic-responses';
+import { inject, Injectable } from '@angular/core';
+import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { catchError, map, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { PROXY_PATH } from '../../tokens/proxy-path.token';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import {
     StatuspagesParams,
     StatuspagesIndexRoot
@@ -52,10 +52,10 @@ export class StatuspagesService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    constructor () {
+    constructor() {
     }
 
-    public getStatuspagesIndex (params: StatuspagesParams): Observable<StatuspagesIndexRoot> {
+    public getStatuspagesIndex(params: StatuspagesParams): Observable<StatuspagesIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<StatuspagesIndexRoot>(`${proxyPath}/statuspages/index.json`, {
             params: params as {}
@@ -66,7 +66,7 @@ export class StatuspagesService {
         )
     }
 
-    public getStatuspageViewData (statuspageId: number): Observable<StatuspageRoot> {
+    public getStatuspageViewData(statuspageId: number): Observable<StatuspageRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<StatuspageRoot>(`${proxyPath}/statuspages/view/${statuspageId}.json`, {
             params: {'angular': true}
@@ -77,7 +77,7 @@ export class StatuspagesService {
         )
     }
 
-    public loadContainers (): Observable<SelectKeyValue[]> {
+    public loadContainers(): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{ containers: SelectKeyValue[] }>(`${proxyPath}/statuspages/loadContainers.json`, {
             params: {
@@ -90,7 +90,7 @@ export class StatuspagesService {
         )
     }
 
-    public loadHostgroups (containerId: number, search: string, selected: number[]): Observable<SelectKeyValue[]> {
+    public loadHostgroups(containerId: number, search: string, selected: number[]): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             hostgroups: SelectKeyValue[]
@@ -100,8 +100,6 @@ export class StatuspagesService {
                 'containerId': containerId,
                 'filter[Containers.name]': search,
                 'selected[]': selected,
-                'resolveContainerIds': true
-
             }
         }).pipe(
             map(data => {
@@ -110,18 +108,16 @@ export class StatuspagesService {
         )
     }
 
-    public loadServicegroups (containerId: number, search: string, selected: number[]): Observable<SelectKeyValue[]> {
+    public loadServicegroups(containerId: number, search: string, selected: number[]): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             servicegroups: SelectKeyValue[]
-        }>(`${proxyPath}/servicegroups/loadServicegroupsByContainerId.json`, {
+        }>(`${proxyPath}/servicegroups/loadServicegroupsByStringAndContainers.json`, {
             params: {
                 'angular': true,
                 'containerId': containerId,
                 'filter[Containers.name]': search,
                 'selected[]': selected,
-                'resolveContainerIds': true
-
             }
         }).pipe(
             map(data => {
@@ -130,18 +126,16 @@ export class StatuspagesService {
         )
     }
 
-    public loadHosts (containerId: number, search: string, selected: number[]): Observable<SelectKeyValue[]> {
+    public loadHosts(containerId: number, search: string, selected: number[]): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             hosts: SelectKeyValue[]
-        }>(`${proxyPath}/hosts/loadHostsByContainerId.json`, {
+        }>(`${proxyPath}/hosts/loadHostsByContainerId.json?angular=true`, {
             params: {
-                'angular': true,
                 'containerId': containerId,
                 'filter[Hosts.name]': search,
                 'selected[]': selected,
                 'resolveContainerIds': true
-
             }
         }).pipe(
             map(data => {
@@ -150,18 +144,16 @@ export class StatuspagesService {
         )
     }
 
-    public loadServices (containerId: number, search: string, selected: number[]): Observable<SelectValueExtended[]> {
+    public loadServices(containerId: number, search: string, selected: number[]): Observable<SelectValueExtended[]> {
         const proxyPath = this.proxyPath;
         return this.http.post<{
             services: SelectValueExtended[]
         }>(`${proxyPath}/services/loadServicesByContainerIdCake4.json?angular=true`, {
-            params: {
-                'containerId': containerId,
-                'filter': {
-                    'servicename': search,
-                },
-                'selected': selected
-            }
+            'containerId': containerId,
+            'filter': {
+                'servicename': search,
+            },
+            'selected': selected
         }).pipe(
             map(data => {
                 return data.services
@@ -169,7 +161,7 @@ export class StatuspagesService {
         )
     }
 
-    public addStatuspage (params: StatuspagePostEdit): Observable<GenericResponseWrapper> {
+    public addStatuspage(params: StatuspagePostEdit): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<GenericIdResponse>(`${proxyPath}/statuspages/add.json?angular=true`, {Statuspage: params})
             .pipe(
@@ -190,7 +182,7 @@ export class StatuspagesService {
             );
     }
 
-    public editStatuspage(id: number): Observable<StatuspagePostEdit>  {
+    public editStatuspage(id: number): Observable<StatuspagePostEdit> {
         const proxyPath = this.proxyPath;
         return this.http.get<any>(`${proxyPath}/statuspages/edit/${id}.json`, {params: {angular: true}})
             .pipe(
@@ -222,7 +214,7 @@ export class StatuspagesService {
     }
 
 
-    public delete (item: DeleteAllItem): Observable<Object> {
+    public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/statuspages/delete/${item.id}.json?angular=true`, {});
     }
