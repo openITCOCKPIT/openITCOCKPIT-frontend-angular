@@ -146,7 +146,7 @@
                                             <span *ngIf="i < sla_information.service.log.length - 1">
                                                 <span
                                                     *ngIf="sla_information.service.log[i + 1].determined_availability_percent - log.determined_availability_percent > 0"
-                                                    class="small color-danger-50">
+                                                    class="small text-red-400">
                                                     <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
                                                     {{ ( sla_information.service.log[i + 1].determined_availability_percent - log.determined_availability_percent ) | number: '1.2-2' }}
                                                     %

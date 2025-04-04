@@ -235,7 +235,7 @@
                         <span *ngIf="!last">
                             <span>
                                 <span [hidden]="!(declineValues[i] > 0)"
-                                      class="small color-danger-50">
+                                      class="small text-red-400">
                                     <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
                                     {{ declineValues[i] | number:'1.2-2' }}%
                                 </span>
