@@ -5622,5 +5622,15 @@
   "Flap detection disabled": "Flatter-Erkennung deaktiviert",
   "Bookmark": "Lesezeichen",
   "Command Argument": "Kommand Argument",
-  "Host availability": "Verfügbarkeit des Hosts"
+  "Host availability": "Verfügbarkeit des Hosts",
+  "expand comments": "Kommentare erweitern",
+  "Test your overwrite rules, by entering a string (e.g. a hostname) to see what RegEx will match.": "Testen Sie Ihre Überschreibregeln, indem Sie eine Zeichenfolge (z. B. einen Hostnamen) eingeben, um zu sehen, was dem RegEx entspricht.",
+  "Matching RegEx will be marked in green color": "Passende RegEx werden in grüner Farbe markiert",
+  "No overwrite RegEx matches the given input string.": "Kein Überschreibungs-RegEx stimmt mit der angegebenen Eingabezeichenfolge überein.",
+  "matching host default overwrite found.": "Übereinstimmende Host-Standardüberschreibung gefunden.",
+  "Navigator": "Navigator",
+  "This satellite is not used by any object": "Dieser Satellit wird von keinem Objekt verwendet",
+  "Upload": "Upload",
+  "Service Browser": "Service Browser",
+  "Host Browser": "Host Browser"
 }

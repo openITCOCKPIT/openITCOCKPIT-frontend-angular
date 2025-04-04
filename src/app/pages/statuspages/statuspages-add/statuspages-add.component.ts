@@ -30,16 +30,16 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { Router, RouterLink } from '@angular/router';
 import {
-  CardBodyComponent,
-  CardComponent, CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective, ColComponent,
-  FormCheckInputDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective, InputGroupComponent, InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent, RowComponent
+    CardBodyComponent,
+    CardComponent, CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective, ColComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective, InputGroupComponent, InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent, RowComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -51,51 +51,52 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import {
-    StatuspagePost, SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit}
+    StatuspagePost, SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit
+}
     from '../statuspage.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
-import {AsyncPipe, NgIf} from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import {intersection} from 'lodash';
+import { intersection } from 'lodash';
 
 
 @Component({
     selector: 'oitc-statuspages-add',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    BackButtonDirective,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    FormErrorDirective,
-    SelectComponent,
-    FormDirective,
-    FormsModule,
-    PaginatorModule,
-    NgIf,
-    FormFeedbackComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    MultiSelectComponent,
-    CardFooterComponent,
-    RowComponent,
-    InputGroupComponent,
-    AsyncPipe,
-    ColComponent,
-    InputGroupTextDirective
-],
+        TranslocoDirective,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        BackButtonDirective,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        FormErrorDirective,
+        SelectComponent,
+        FormDirective,
+        FormsModule,
+        PaginatorModule,
+        NgIf,
+        FormFeedbackComponent,
+        FormCheckInputDirective,
+        FormControlDirective,
+        MultiSelectComponent,
+        CardFooterComponent,
+        RowComponent,
+        InputGroupComponent,
+        AsyncPipe,
+        ColComponent,
+        InputGroupTextDirective
+    ],
     templateUrl: './statuspages-add.component.html',
     styleUrl: './statuspages-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -117,12 +118,13 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError | null = null;
     public noItemsSelected: boolean = false;
 
-    constructor(private _router: Router) { }
+    constructor(private _router: Router) {
+    }
 
     public ngOnInit(): void {
-            //Fire on page load
-            this.post = this.getDefaultPost();
-            this.loadContainers();
+        //Fire on page load
+        this.post = this.getDefaultPost();
+        this.loadContainers();
         this.cdr.markForCheck();
     }
 
@@ -140,35 +142,45 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     }
 
     loadHostgroups = (searchString: string) => {
-        if(this.post.container_id === null){
+        if (this.post.container_id === null) {
             return;
         }
-        this.subscriptions.add(this.StatuspagesService.loadHostgroups(this.post.container_id, '',[] )
+        this.subscriptions.add(this.StatuspagesService.loadHostgroups(this.post.container_id, searchString, this.post.selected_hostgroups._ids)
             .subscribe((result) => {
-                let hostgroupObjects:SelectKeyValueExtended[]  = [];
+                let hostgroupObjects: SelectKeyValueExtended[] = [];
                 result.map((item: SelectKeyValue) => {
-                    let objectEntry: SelectKeyValueExtended = {key: 0, value: '', id: 0, _joinData: {display_alias: ''}};
+                    let objectEntry: SelectKeyValueExtended = {
+                        key: 0,
+                        value: '',
+                        id: 0,
+                        _joinData: {display_alias: ''}
+                    };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
                     objectEntry._joinData.display_alias = "";
                     hostgroupObjects.push(objectEntry);
                 });
-                this.hostgroups= hostgroupObjects;
+                this.hostgroups = hostgroupObjects;
                 this.cdr.markForCheck();
             })
         );
     }
     public loadHosts = (searchString: string) => {
-        if(this.post.container_id === null){
+        if (this.post.container_id === null) {
             return;
         }
-        this.subscriptions.add(this.StatuspagesService.loadHosts(this.post.container_id, '',[] )
+        this.subscriptions.add(this.StatuspagesService.loadHosts(this.post.container_id, searchString, this.post.selected_hosts._ids)
             .subscribe((result) => {
-                let hostsObjects:SelectKeyValueExtended[]  = [];
+                let hostsObjects: SelectKeyValueExtended[] = [];
 
                 result.map((item: SelectKeyValue) => {
-                    let objectEntry: SelectKeyValueExtended = {key: 0, value: '', id: 0, _joinData: {display_alias: ''}};
+                    let objectEntry: SelectKeyValueExtended = {
+                        key: 0,
+                        value: '',
+                        id: 0,
+                        _joinData: {display_alias: ''}
+                    };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
@@ -182,18 +194,21 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     }
 
     public loadServices = (searchString: string) => {
-        if(this.post.container_id === null){
+        if (this.post.container_id === null) {
             return;
         }
-        this.subscriptions.add(this.StatuspagesService.loadServices(this.post.container_id, '',[] )
+        console.log('searchString', searchString);
+        this.subscriptions.add(this.StatuspagesService.loadServices(this.post.container_id, searchString, this.post.selected_services._ids)
             .subscribe((result) => {
-                let servicesObjects:SelectKeyValueExtended[]  = [];
+                let servicesObjects: SelectKeyValueExtended[] = [];
 
                 result.map((item: SelectValueExtended) => {
-                    let objectEntry: SelectKeyValueExtended = {key: 0,
-                         value: '',
+                    let objectEntry: SelectKeyValueExtended = {
+                        key: 0,
+                        value: '',
                         id: 0,
-                        _joinData: {display_alias: ''}};
+                        _joinData: {display_alias: ''}
+                    };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value.servicename;
@@ -207,15 +222,20 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     }
 
     public loadServicegroups = (searchString: string) => {
-        if(this.post.container_id === null){
+        if (this.post.container_id === null) {
             return;
         }
-        this.subscriptions.add(this.StatuspagesService.loadServicegroups(this.post.container_id, '',[] )
+        this.subscriptions.add(this.StatuspagesService.loadServicegroups(this.post.container_id, searchString, this.post.selected_servicegroups._ids)
             .subscribe((result) => {
-                let servicegroupsObjects:SelectKeyValueExtended[]  = [];
+                let servicegroupsObjects: SelectKeyValueExtended[] = [];
 
                 result.map((item: SelectKeyValue) => {
-                    let objectEntry: SelectKeyValueExtended = {key: 0, value: '', id: 0, _joinData: {display_alias: ''}};
+                    let objectEntry: SelectKeyValueExtended = {
+                        key: 0,
+                        value: '',
+                        id: 0,
+                        _joinData: {display_alias: ''}
+                    };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
@@ -229,7 +249,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     }
 
 
-    public onContainerChange(){
+    public onContainerChange() {
         this.loadHostgroups('');
         this.loadServicegroups('');
         this.loadHosts('');
@@ -266,7 +286,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
         };
     }
 
-    public submit = ()=> {
+    public submit = () => {
         this.cleanUpForSubmit();
         this.filterForSubmit();
 
@@ -292,7 +312,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.noItemsSelected = false;
                     this.errors = errorResponse;
-                    if(this.errors.hasOwnProperty('selected_hostgroups') ||
+                    if (this.errors.hasOwnProperty('selected_hostgroups') ||
                         this.errors.hasOwnProperty('selected_servicegroups') ||
                         this.errors.hasOwnProperty('selected_hosts') ||
                         this.errors.hasOwnProperty('selected_services')
@@ -310,47 +330,54 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
 
     private filterForSubmit = () => {
 
-        // @ts-ignore
         this.post.hostgroups = this.hostgroups.filter((hostgroup) => {
-            if(this.post.selected_hostgroups._ids.indexOf(hostgroup.id) !== -1) {
+            if (this.post.selected_hostgroups._ids.indexOf(hostgroup.id) !== -1) {
                 return hostgroup;
+            } else {
+                return;
             }
         });
-        // @ts-ignore
+
         this.post.servicegroups = this.hostgroups.filter((servicegroup) => {
-            if(this.post.selected_servicegroups._ids.indexOf(servicegroup.id) !== -1) {
+            if (this.post.selected_servicegroups._ids.indexOf(servicegroup.id) !== -1) {
                 return servicegroup;
+            } else {
+                return;
             }
         });
-        // @ts-ignore
+
         this.post.hosts = this.hosts.filter((host) => {
-            if(this.post.selected_hosts._ids.indexOf(host.id) !== -1) {
+            if (this.post.selected_hosts._ids.indexOf(host.id) !== -1) {
                 return host;
+            } else {
+                return;
             }
         });
-        // @ts-ignore
+
         this.post.services = this.services.filter((service) => {
-            if(this.post.selected_services._ids.indexOf(service.id) !== -1) {
+            if (this.post.selected_services._ids.indexOf(service.id) !== -1) {
                 return service;
+            } else {
+                return;
             }
         });
     }
 
     private cleanUpForSubmit = () => {
-        this.post.selected_hostgroups._ids  = intersection(
+        this.post.selected_hostgroups._ids = intersection(
             this.hostgroups.map(hostgroup => hostgroup.key),
             this.post.selected_hostgroups._ids
         );
         this.post.selected_servicegroups._ids = intersection(
-            this.servicegroups.map(servicegroup  => servicegroup.key),
+            this.servicegroups.map(servicegroup => servicegroup.key),
             this.post.selected_servicegroups._ids
         );
         this.post.selected_hosts._ids = intersection(
-            this.hosts.map(host  => host.key),
+            this.hosts.map(host => host.key),
             this.post.selected_hosts._ids
         );
         this.post.selected_services._ids = intersection(
-            this.services.map(service  => service.key),
+            this.services.map(service => service.key),
             this.post.selected_services._ids
         );
     }
