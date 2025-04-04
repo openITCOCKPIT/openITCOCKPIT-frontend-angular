@@ -7,17 +7,14 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['PrometheusModule', 'PrometheusQuery', 'index']"
-                   [routerLink]="['/', 'prometheus_module', 'PrometheusQuery', 'index']">
-                    <fa-icon [icon]="['fas', 'burn']"></fa-icon>
-                    {{ t('Prometheus Module') }}
-                </a>
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Prometheus Module') }}
             </li>
             <li class="breadcrumb-item">
                 <a *oitcPermission="['PrometheusModule', 'PrometheusExporters', 'index']"
                    [routerLink]="['/', 'prometheus_module', 'PrometheusExporters', 'index']">
-                    <fa-icon [icon]="['fas', 'broadcast-tower']"></fa-icon>
-                    {{ t('Exporters Overview') }}
+                    <fa-icon [icon]="['fas', 'burn']"></fa-icon>
+                    {{ t('Exporters') }}
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
@@ -57,14 +54,14 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
-                            name="container"
-                            id="container"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.PrometheusExporter.container_id"
-                            [options]="containers"
-                            [debounce]="true"
-                            oitcFormError [errors]="errors" errorField="container_id">
+                        name="container"
+                        id="container"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.PrometheusExporter.container_id"
+                        [options]="containers"
+                        [debounce]="true"
+                        oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
                     <div *ngIf="!post.PrometheusExporter.container_id" class="text-warning-glow pt-1">
                         {{ t('Please select a container.') }}
@@ -94,16 +91,16 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
-                            name="post.PrometheusExporter.scrape_interval"
-                            id="post.PrometheusExporter.scrape_interval"
-                            [(ngModel)]="post.PrometheusExporter.scrape_interval"
-                            oitcFormError
-                            optionValue="key"
-                            optionLabel="value"
-                            [required]="true"
-                            required="required"
-                            [errors]="errors" errorField="scrape_interval"
-                            [options]="intervals">
+                        name="post.PrometheusExporter.scrape_interval"
+                        id="post.PrometheusExporter.scrape_interval"
+                        [(ngModel)]="post.PrometheusExporter.scrape_interval"
+                        oitcFormError
+                        optionValue="key"
+                        optionLabel="value"
+                        [required]="true"
+                        required="required"
+                        [errors]="errors" errorField="scrape_interval"
+                        [options]="intervals">
                     </oitc-select>
                     <div class="help-block">
                         {{ t('How frequently Prometheus will request data from the exporter.') }}
@@ -117,16 +114,16 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
-                            name="post.PrometheusExporter.scrape_timeout"
-                            id="post.PrometheusExporter.scrape_timeout"
-                            [(ngModel)]="post.PrometheusExporter.scrape_timeout"
-                            oitcFormError
-                            optionValue="key"
-                            optionLabel="value"
-                            [required]="true"
-                            required="required"
-                            [errors]="errors" errorField="scrape_timeout"
-                            [options]="intervals">
+                        name="post.PrometheusExporter.scrape_timeout"
+                        id="post.PrometheusExporter.scrape_timeout"
+                        [(ngModel)]="post.PrometheusExporter.scrape_timeout"
+                        oitcFormError
+                        optionValue="key"
+                        optionLabel="value"
+                        [required]="true"
+                        required="required"
+                        [errors]="errors" errorField="scrape_timeout"
+                        [options]="intervals">
                     </oitc-select>
                     <div class="help-block">
                         {{ t('How long Prometheus will wait for an request to complete before it will timeout.') }}

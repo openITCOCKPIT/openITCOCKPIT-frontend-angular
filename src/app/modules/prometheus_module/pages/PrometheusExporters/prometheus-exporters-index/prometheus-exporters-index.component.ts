@@ -20,6 +20,7 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownDividerDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -86,7 +87,8 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
         NgForOf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
-        DeleteAllModalComponent
+        DeleteAllModalComponent,
+        DropdownDividerDirective
     ],
     templateUrl: './prometheus-exporters-index.component.html',
     styleUrl: './prometheus-exporters-index.component.css',

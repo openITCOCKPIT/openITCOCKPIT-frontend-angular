@@ -8,10 +8,14 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Prometheus Module') }}
+            </li>
+            <li class="breadcrumb-item">
                 <a *oitcPermission="['PrometheusModule', 'PrometheusQuery', 'index']"
                    [routerLink]="['/', 'prometheus_module', 'PrometheusQuery', 'index']">
                     <fa-icon [icon]="['fas', 'burn']"></fa-icon>
-                    {{ t('Prometheus Module') }}
+                    {{ t('Query') }}
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">

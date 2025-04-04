@@ -8,15 +8,19 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Prometheus Module') }}
+            </li>
+            <li class="breadcrumb-item">
                 <a *oitcPermission="['PrometheusModule', 'PrometheusQuery', 'index']"
                    [routerLink]="['/', 'prometheus_module', 'PrometheusQuery', 'index']">
                     <fa-icon [icon]="['fas', 'burn']"></fa-icon>
-                    {{ t('Prometheus Module') }}
+                    {{ t('Query') }}
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'code']"></fa-icon>
-                {{ t('Query Overview') }}
+                {{ t('Overview') }}
             </li>
         </ol>
     </nav>
@@ -80,7 +84,7 @@
                         {{ t('Metrics') }}
                     </a>
                 </c-nav-item>
-                <c-nav-item>
+                <c-nav-item *oitcPermission="['PrometheusModule', 'PrometheusAlertRules', 'index']">
                     <a [routerLink]="['/', 'prometheus_module', 'PrometheusAlertRules', 'index', this.params.hostId]"
                        class="nav-link">
                         <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
