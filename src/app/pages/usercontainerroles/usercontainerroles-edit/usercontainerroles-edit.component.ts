@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {BackButtonDirective} from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
     CardComponent,
@@ -17,28 +17,28 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgForOf, NgIf } from '@angular/common';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ProfileService } from '../../profile/profile.service';
-import { EditableUserContainerRole, UserContainerRole } from '../usercontainerroles.interface';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { ContainersLoadContainersByStringParams } from '../../containers/containers.interface';
-import { UsercontainerrolesService } from '../usercontainerroles.service';
-import { ContainersService } from '../../containers/containers.service';
-import { HistoryService } from '../../../history.service';
-import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {FormErrorDirective} from '../../../layouts/coreui/form-error.directive';
+import {FormFeedbackComponent} from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MultiSelectComponent} from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import {NgForOf, NgIf} from '@angular/common';
+import {PermissionDirective} from '../../../permissions/permission.directive';
+import {RequiredIconComponent} from '../../../components/required-icon/required-icon.component';
+import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
+import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {ActivatedRoute, RouterLink} from '@angular/router';
+import {Subscription} from 'rxjs';
+import {NotyService} from '../../../layouts/coreui/noty.service';
+import {ProfileService} from '../../profile/profile.service';
+import {EditableUserContainerRole, UserContainerRole} from '../usercontainerroles.interface';
+import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../../generic-responses';
+import {SelectKeyValue} from '../../../layouts/primeng/select.interface';
+import {ContainersLoadContainersByStringParams} from '../../containers/containers.interface';
+import {UsercontainerrolesService} from '../usercontainerroles.service';
+import {ContainersService} from '../../containers/containers.service';
+import {HistoryService} from '../../../history.service';
+import {FormLoaderComponent} from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-usercontainerroles-edit',
@@ -179,6 +179,9 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
 
 
     public onSelectedContainerIdsChange() {
+        // Drop all existing ContainerUsersMemberships before re-creating the object.
+        this.post.ContainersUsercontainerrolesMemberships = {};
+
         // Traverse all containerids and set the value to 1.
         this.selectedContainerIds.map((id) => {
             if (id === 1) {

@@ -144,9 +144,10 @@
                             [item]="map"></oitc-item-select>
 
                     </td>
-                    <td><a [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.id, false]">{{ map.name }}</a>
+                    <td class="word-break"><a
+                        [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.id, false]">{{ map.name }}</a>
                     </td>
-                    <td>{{ map.title }}</td>
+                    <td class="word-break">{{ map.title }}</td>
 
                     <td class="width-50">
                         <oitc-actions-button [allowEdit]="map.allowEdit"

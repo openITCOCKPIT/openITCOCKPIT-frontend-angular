@@ -2,6 +2,7 @@ import { ServiceEntity } from '../../../../pages/services/services.interface';
 import { Datasource } from '../../../../components/popover-graph/popover-graph.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { GenericValidationError } from '../../../../generic-responses';
+import { PrometheusThresholdType } from './prometheus.enum';
 
 export interface PrometheusQueryApiResult {
     metricValue: {
@@ -32,7 +33,7 @@ export interface PrometheusAlertRule {
     service_id: number
     promql: string
     unit: string
-    threshold_type: string
+    threshold_type: PrometheusThresholdType
     warning_min: number
     warning_max: number | null
     critical_min: number
@@ -227,7 +228,7 @@ export interface PrometheusAlertRule2 {
     host_id: number
     promql: string
     unit: string
-    threshold_type: string
+    threshold_type: PrometheusThresholdType
     warning_min: number
     warning_max: number | null
     critical_min: number

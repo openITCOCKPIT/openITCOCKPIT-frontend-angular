@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { RouterLink } from '@angular/router';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {PermissionDirective} from '../../../permissions/permission.directive';
+import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
+import {RouterLink} from '@angular/router';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -23,13 +23,13 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import {BackButtonDirective} from '../../../directives/back-button.directive';
+import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormErrorDirective} from '../../../layouts/coreui/form-error.directive';
+import {FormFeedbackComponent} from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import {MultiSelectComponent} from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import {RequiredIconComponent} from '../../../components/required-icon/required-icon.component';
 import {
     AddFromLdapRoot,
     LdapUser,
@@ -45,23 +45,23 @@ import {
     UserLocaleOption,
     UserTimezonesSelect
 } from '../users.interface';
-import { UsersService } from '../users.service';
-import { Subscription } from 'rxjs';
-import { ContainersService } from '../../containers/containers.service';
-import { ContainersLoadContainersByStringParams } from '../../containers/containers.interface';
-import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
-import { HistoryService } from '../../../history.service';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ProfileService } from '../../profile/profile.service';
-import { ContactsService } from '../../contacts/contacts.service';
-import { LdapConfig } from '../../contacts/contacts.interface';
-import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
-import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
-import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
+import {UsersService} from '../users.service';
+import {Subscription} from 'rxjs';
+import {ContainersService} from '../../containers/containers.service';
+import {ContainersLoadContainersByStringParams} from '../../containers/containers.interface';
+import {SelectKeyValue, SelectKeyValueString} from '../../../layouts/primeng/select.interface';
+import {SelectComponent} from '../../../layouts/primeng/select/select/select.component';
+import {TrueFalseDirective} from '../../../directives/true-false.directive';
+import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../../generic-responses';
+import {KeyValuePipe, NgForOf, NgIf} from '@angular/common';
+import {HistoryService} from '../../../history.service';
+import {NotyService} from '../../../layouts/coreui/noty.service';
+import {ProfileService} from '../../profile/profile.service';
+import {ContactsService} from '../../contacts/contacts.service';
+import {LdapConfig} from '../../contacts/contacts.interface';
+import {NgOptionTemplateDirective, NgSelectComponent} from '@ng-select/ng-select';
+import {NgOptionHighlightDirective} from '@ng-select/ng-option-highlight';
+import {SliderTimeComponent} from '../../../components/slider-time/slider-time.component';
 
 @Component({
     selector: 'oitc-users-ldap',
@@ -144,6 +144,9 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     } as LdapUserDetails;
 
     public onSelectedContainerIdsChange() {
+        // Drop all existing ContainerUsersMemberships before re-creating the object.
+        this.post.User.ContainersUsersMemberships = {};
+
         // Traverse all containerids and set the value to 1.
         this.selectedContainerIds.map((id) => {
             if (id === 1) {

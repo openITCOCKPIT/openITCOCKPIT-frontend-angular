@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    signal
+} from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -10,7 +18,6 @@ import { iconSubset } from './icons/icon-subset';
 import { HistoryService } from './history.service';
 //import { TranslocoService } from '@jsverse/transloco';
 //import { NgSelectConfig } from '@ng-select/ng-select';
-
 import { CoreuiHeaderComponent } from './layouts/coreui/coreui-header/coreui-header.component';
 import { CoreuiNavbarComponent } from './layouts/coreui/coreui-navbar/coreui-navbar.component';
 import { GlobalLoaderComponent } from './layouts/coreui/global-loader/global-loader.component';
@@ -31,18 +38,18 @@ import { SystemnameService } from './services/systemname.service';
 @Component({
     selector: 'oitc-root',
     imports: [
-    RouterOutlet,
-    FontAwesomeModule,
-    ContainerComponent,
-    CoreuiHeaderComponent,
-    CoreuiNavbarComponent,
-    GlobalLoaderComponent,
-    ShadowOnScrollDirective,
-    NgIf,
-    AsyncPipe,
-    NgClass,
-    MessageOfTheDayModalComponent
-],
+        RouterOutlet,
+        FontAwesomeModule,
+        ContainerComponent,
+        CoreuiHeaderComponent,
+        CoreuiNavbarComponent,
+        GlobalLoaderComponent,
+        ShadowOnScrollDirective,
+        NgIf,
+        AsyncPipe,
+        NgClass,
+        MessageOfTheDayModalComponent
+    ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -63,12 +70,13 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     protected systemName: string = '';
 
     private subscription: Subscription = new Subscription();
+    private mediaQueryList: MediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
 
     constructor(library: FaIconLibrary,
                 private router: Router,
                 private IconSetService: IconSetService,
-               // private selectConfig: NgSelectConfig,
-               // private TranslocoService: TranslocoService,
+                // private selectConfig: NgSelectConfig,
+                // private TranslocoService: TranslocoService,
                 private colorService: ColorModeService,
                 private cdr: ChangeDetectorRef,
                 private MessageOfTheDayService: MessagesOfTheDayService,
@@ -83,34 +91,25 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
         this.IconSetService.icons = {...iconSubset};
 
-       // this.selectConfig.notFoundText = this.TranslocoService.translate('No entries match the selection');
-        //this.selectConfig.placeholder = this.TranslocoService.translate('Please choose');
-
-
-        // This is to sync the selected theme color from CoreUI with Angular Material
-        // --force --brechstange
-        const colorMode$ = toObservable(this.colorService.colorMode);
-
 
         // Subscribe to the color mode changes (drop down menu in header)
+        // This is to sync the selected theme color from CoreUI with Angular Material and PrimeNG
+        const colorMode$ = toObservable(this.colorService.colorMode);
         this.subscription.add(colorMode$.subscribe((theme) => {
-
-            // theme can be one of 'light', 'dark', 'auto'
-            if (theme === 'dark') {
-                this.document.body.classList.add('dark-theme');
-                this.document.querySelector("html")!.classList.add("dark-theme"); // PrimeNG needs this
-                this.LayoutService.setTheme('dark');
-            } else if (theme === 'auto') {
-                const osSystemDarkModeEnabled = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (osSystemDarkModeEnabled) {
+            // theme can be one of 'light', 'dark', 'auto' or undefined
+            if (theme) {
+                if (theme === 'dark') {
                     this.LayoutService.setTheme('dark');
+                } else if (theme === 'auto') {
+                    const osSystemDarkModeEnabled = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (osSystemDarkModeEnabled) {
+                        this.LayoutService.setTheme('dark');
+                    } else {
+                        this.LayoutService.setTheme('light');
+                    }
                 } else {
                     this.LayoutService.setTheme('light');
                 }
-            } else {
-                this.document.body.classList.remove('dark-theme');
-                this.document.querySelector("html")!.classList.remove("dark-theme"); // PrimeNG needs this
-                this.LayoutService.setTheme('light');
             }
         }));
 
@@ -156,6 +155,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     }
 
     public ngOnDestroy(): void {
+        this.mediaQueryList.removeEventListener('change', this.mediaQueryEventHandler);
         this.subscription.unsubscribe();
     }
 
@@ -170,24 +170,43 @@ export class AppComponent implements OnDestroy, AfterViewInit {
             }
         }));
 
-        const osSystemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const coreUiTheme: 'light' | 'dark' | 'auto' | null = this.colorService.getStoredTheme('coreui-free-angular-admin-template-theme-default');
-        this.LayoutService.setTheme('light');
-
-        if (osSystemDarkMode && coreUiTheme !== 'light') {
-            // Enable dark mode for Angular Material because the OS wants dark mode
-            // quick and dirty hack
+        // We are in the first page load (or hard refresh F5)
+        // Check if the user has any preferred theme set in the local storage
+        const coreUiTheme: 'light' | 'dark' | 'auto' | null = this.colorService.getStoredTheme('openitcockpit-theme-default');
+        if (coreUiTheme === 'light' || coreUiTheme === 'dark') {
+            // User has set a theme
             setTimeout(() => {
-                this.LayoutService.setTheme('dark');
-                this.document.body.classList.add('dark-theme');
+                // Tell CoreUi about the theme choice so it is marked in the dropdown menu
+                this.LayoutService.setTheme(coreUiTheme);
             }, 100);
-        }
-
-        if (coreUiTheme === 'auto' || coreUiTheme === null) {
+        } else {
+            // User has not set a theme - let the OS decide
             setTimeout(() => {
                 // Force CoreUI to use the OS theme
                 this.colorService.colorMode.set('auto');
             }, 100);
+        }
+
+        // Add new Event Listener to fetch when the OS theme changes
+        // Auto Dark Mode on macOS or Windows for example
+        this.mediaQueryList.addEventListener('change', this.mediaQueryEventHandler);
+    }
+
+    private mediaQueryEventHandler = (event: MediaQueryListEvent) => {
+        const coreUiTheme: 'light' | 'dark' | 'auto' | null = this.colorService.getStoredTheme('openitcockpit-theme-default');
+        if (coreUiTheme === 'auto' || coreUiTheme === null) {
+            let theme: 'light' | 'dark' = 'light';
+            if (event.matches) {
+                theme = 'dark';
+            }
+
+            // Update CoreUI
+            this.document.documentElement.dataset['coreuiTheme'] = theme;
+            const eventName = signal('ColorSchemeChange');
+            this.document.documentElement.dispatchEvent(new Event(eventName()));
+
+            // Update Angular Material and PrimeNG
+            this.LayoutService.setTheme(theme);
         }
     }
 
