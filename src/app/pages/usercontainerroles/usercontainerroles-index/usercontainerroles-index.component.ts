@@ -163,6 +163,7 @@ export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy, Inde
 
     public resetFilter() {
         this.params = getUsercontainerrolesIndexParams();
+        this.load();
     }
 
     // Generic callback whenever a mass action (like delete all) has been finished
