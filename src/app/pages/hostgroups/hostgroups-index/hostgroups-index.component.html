@@ -133,9 +133,9 @@
                 <tr *ngFor="let hostgroup of hostgroups.all_hostgroups">
                     <td class="text-center">
                         <oitc-item-select
-                            *oitcPermission="['hostgroups', 'delete']"
-                            [disabled]="false"
-                            [item]="hostgroup"></oitc-item-select>
+                                *oitcPermission="['hostgroups', 'delete']"
+                                [disabled]="false"
+                                [item]="hostgroup"></oitc-item-select>
 
                     </td>
                     <td class="word-break">
@@ -160,7 +160,7 @@
                         }
                         @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
                             <span
-                                *oitcPermission="['importmodule', 'importedhostgroups', 'dependencytree']">
+                                    *oitcPermission="['importmodule', 'importedhostgroups', 'dependencytree']">
                                 <c-badge *ngIf="hostgroup.additionalInformationExists"
                                          textColor="info"
                                          class="badge-border badge-clickable margin-right-5"
@@ -233,7 +233,7 @@
             </table>
 
             <oitc-no-records
-                *ngIf="hostgroups && hostgroups.all_hostgroups.length === 0"></oitc-no-records>
+                    *ngIf="hostgroups && hostgroups.all_hostgroups.length === 0"></oitc-no-records>
 
 
             <ng-container *ngIf="hostgroups && hostgroups.all_hostgroups">
@@ -242,16 +242,18 @@
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                [itemsCount]="hostgroups.all_hostgroups.length"></oitc-select-all>
+                                    [itemsCount]="hostgroups.all_hostgroups.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        *oitcPermission="['hostgroups', 'add']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['hostgroups', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -278,13 +280,13 @@
             </ng-container>
 
             <c-container
-                [fluid]="true" class="mb-3 py-3">
+                    [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="hostgroups"
-                            [paginateOrScroll]="hostgroups"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="hostgroups"
+                                [paginateOrScroll]="hostgroups"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>
