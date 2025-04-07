@@ -24,32 +24,31 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { User } from '../../pages/users/users.interface';
 import { Subscription } from 'rxjs';
 import { UsersService } from '../../pages/users/users.service';
 
 @Component({
     selector: 'oitc-reset-password-modal',
     imports: [
-    ButtonCloseDirective,
-    ColComponent,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective
-],
+        ButtonCloseDirective,
+        ColComponent,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective
+    ],
     templateUrl: './reset-password-modal.component.html',
     styleUrl: './reset-password-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResetPasswordModalComponent implements OnInit, OnDestroy {
     @Output() completed = new EventEmitter<boolean>();
-    @Input({required: true}) public user: User = {} as User;
+    @Input({required: true}) public user: any; //todo fix me
     private readonly modalService: ModalService = inject(ModalService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly UsersService: UsersService = inject(UsersService);
