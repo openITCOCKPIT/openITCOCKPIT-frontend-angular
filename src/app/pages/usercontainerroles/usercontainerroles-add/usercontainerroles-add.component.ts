@@ -41,6 +41,7 @@ import { ContainersLoadContainersByStringParams } from '../../containers/contain
 import { NgIf } from '@angular/common';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import _, { parseInt } from 'lodash';
+import { PermissionLevelString } from '../../users/permission-level';
 
 @Component({
     selector: 'oitc-usercontainerroles-add',
@@ -137,9 +138,9 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
         this.cleanUpContainersUsercontainerrolesMemberships();
         this.selectedContainers.forEach(containerId => {
             if (this.post.ContainersUsercontainerrolesMemberships[containerId] === undefined) {
-                let permissionLevel = '1';
+                let permissionLevel = PermissionLevelString.READ_RIGHT;
                 if (containerId === this.ROOT_CONTAINER) {
-                    permissionLevel = '2';
+                    permissionLevel = PermissionLevelString.WRITE_RIGHT;
                 }
                 this.post.ContainersUsercontainerrolesMemberships[containerId] = permissionLevel;
             }
@@ -212,7 +213,7 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
                 return this.containers[index].value;
             }
         }
-        return this.TranslocoService.translate('ERROR UNKNOWN CONTAINER');
+        return this.TranslocoService.translate('RESTRICTED CONTAINER');
     }
 
     private cleanUpContainersUsercontainerrolesMemberships() {
@@ -225,4 +226,6 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
         });
         this.cdr.markForCheck();
     }
+
+    protected readonly PermissionLevelString = PermissionLevelString;
 }
