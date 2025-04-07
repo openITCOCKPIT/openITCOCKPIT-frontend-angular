@@ -5,6 +5,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgIf } from '@angular/common';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -59,7 +60,8 @@ import { ScmSettingsIndex, ScmSettingsPost } from '../scmsettings.interface';
         RowComponent,
         ColComponent,
         CardTitleDirective,
-        FormDirective
+        FormDirective,
+        AlertComponent
     ],
     templateUrl: './scm-settings-index.component.html',
     styleUrl: './scm-settings-index.component.css',

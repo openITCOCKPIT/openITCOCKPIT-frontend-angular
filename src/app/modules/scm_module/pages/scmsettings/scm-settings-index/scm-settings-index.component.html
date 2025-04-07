@@ -23,7 +23,7 @@
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
     <c-row>
         <c-col>
-            <div class="alert bg-warning-500 border-warning text-dark">
+            <c-alert color="warning">
                 <div class="d-flex align-items-center">
                     <div class="alert-icon me-2">
                         <span class="icon-stack icon-stack-md">
@@ -43,7 +43,7 @@
                         </ng-container>
                     </div>
                 </div>
-            </div>
+            </c-alert>
         </c-col>
     </c-row>
     <form cForm (ngSubmit)="updateScmSettings()" *ngIf="post">
