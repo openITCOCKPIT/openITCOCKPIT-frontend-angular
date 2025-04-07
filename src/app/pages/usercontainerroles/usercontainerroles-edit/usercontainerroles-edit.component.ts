@@ -34,7 +34,6 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -44,7 +43,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { PermissionLevelString } from '../../users/permission-level';
+import { PermissionLevel } from '../../users/permission-level';
 
 @Component({
     selector: 'oitc-usercontainerroles-edit',
@@ -59,7 +58,6 @@ import { PermissionLevelString } from '../../users/permission-level';
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-        DebounceDirective,
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -136,9 +134,10 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
                     this.selectedContainerWithPermission[containerId] = {
                         name: this.getContainerName(parseInt(containerId, 10)),
                         container_id: parseInt(containerId, 10),
-                        permission_level: this.post.ContainersUsercontainerrolesMemberships[containerId].toString(), //String is required for AngularJS Front End value="2",
+                        permission_level: this.post.ContainersUsercontainerrolesMemberships[containerId],
                         readonly: (typeof notPermittetCheck === "undefined")
                     };
+                    console.log(this.post.ContainersUsercontainerrolesMemberships[containerId]);
                 }
                 if (this.notPermittedContainers.length > 0) {
                     //remove not permitted containers from selected containers
@@ -177,9 +176,9 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
         this.cleanUpContainersUsercontainerrolesMemberships();
         this.selectedContainers.forEach(containerId => {
             if (this.post.ContainersUsercontainerrolesMemberships[containerId] === undefined) {
-                let permissionLevel = PermissionLevelString.READ_RIGHT;
+                let permissionLevel = PermissionLevel.READ_RIGHT;
                 if (containerId === this.ROOT_CONTAINER) {
-                    permissionLevel = PermissionLevelString.WRITE_RIGHT;
+                    permissionLevel = PermissionLevel.WRITE_RIGHT;
                 }
                 this.post.ContainersUsercontainerrolesMemberships[containerId] = permissionLevel;
             }
@@ -250,5 +249,5 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     }
 
-    protected readonly PermissionLevelString = PermissionLevelString;
+    protected readonly PermissionLevel = PermissionLevel;
 }

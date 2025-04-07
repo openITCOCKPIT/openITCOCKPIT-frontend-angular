@@ -101,13 +101,13 @@ export interface UsercontainerrolesPost {
 }
 
 export interface ContainersUsercontainerrolesMemberships {
-    [key: number]: string
+    [key: number]: number
 }
 
 export interface SelectedContainerWithPermission {
     name: string
     container_id: number
-    permission_level: string
+    permission_level: number
     readonly?: boolean
 }
 

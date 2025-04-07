@@ -28,10 +28,7 @@ export class PushNotificationsService implements OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        if (this.keepAliveInterval) {
-            clearInterval(this.keepAliveInterval);
-            this.keepAliveInterval = null;
-        }
+        this.disconnect();
     }
 
     private _onSuccess(event: MessageEvent) {
@@ -215,5 +212,12 @@ export class PushNotificationsService implements OnDestroy {
             }
         }));
     };
+
+    public disconnect() {
+        if (this.keepAliveInterval) {
+            clearInterval(this.keepAliveInterval);
+            this.keepAliveInterval = null;
+        }
+    }
 
 }

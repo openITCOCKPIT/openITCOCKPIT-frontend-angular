@@ -39,9 +39,8 @@ import { ROOT_CONTAINER } from '../../changelogs/object-types.enum';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { ContainersLoadContainersByStringParams } from '../../containers/containers.interface';
 import { NgIf } from '@angular/common';
-import { DebounceDirective } from '../../../directives/debounce.directive';
 import _, { parseInt } from 'lodash';
-import { PermissionLevelString } from '../../users/permission-level';
+import { PermissionLevel } from '../../users/permission-level';
 
 @Component({
     selector: 'oitc-usercontainerroles-add',
@@ -81,7 +80,6 @@ import { PermissionLevelString } from '../../users/permission-level';
         ColComponent,
         FormCheckComponent,
         FormCheckLabelDirective,
-        DebounceDirective,
         NgIf
     ],
     templateUrl: './usercontainerroles-add.component.html',
@@ -138,16 +136,18 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
         this.cleanUpContainersUsercontainerrolesMemberships();
         this.selectedContainers.forEach(containerId => {
             if (this.post.ContainersUsercontainerrolesMemberships[containerId] === undefined) {
-                let permissionLevel = PermissionLevelString.READ_RIGHT;
+                let permissionLevel = PermissionLevel.READ_RIGHT;
                 if (containerId === this.ROOT_CONTAINER) {
-                    permissionLevel = PermissionLevelString.WRITE_RIGHT;
+                    permissionLevel = PermissionLevel.WRITE_RIGHT;
                 }
                 this.post.ContainersUsercontainerrolesMemberships[containerId] = permissionLevel;
             }
         });
+        console.log(this.post.ContainersUsercontainerrolesMemberships);
         this.selectedContainerWithPermission = [];
         _.each(this.post.ContainersUsercontainerrolesMemberships, (value, key) => {
             let containerId = parseInt(key, 10);
+            console.log(value);
             this.selectedContainerWithPermission.push({
                 name: this.getContainerName(containerId),
                 container_id: containerId,
@@ -227,5 +227,5 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     }
 
-    protected readonly PermissionLevelString = PermissionLevelString;
+    protected readonly PermissionLevel = PermissionLevel;
 }

@@ -108,11 +108,9 @@
                                 <c-form-check inline>
                                     <input type="radio"
                                            [(ngModel)]="post.ContainersUsercontainerrolesMemberships[selectedContainer.container_id]"
-                                           oitcDebounce
                                            cFormCheckInput
-                                           value="1"
+                                           [value]="PermissionLevel.READ_RIGHT"
                                            [disabled]="selectedContainer.container_id === ROOT_CONTAINER || (selectedContainer.readonly !== undefined && selectedContainer.readonly)"
-                                           [checked]="selectedContainer.permission_level == PermissionLevelString.READ_RIGHT"
                                            [name]="'ucgroup-read-'+selectedContainer.container_id"
                                            [id]="'ucgroup-read-'+selectedContainer.container_id"/>
                                     <label cFormCheckLabel [for]="'ucgroup-read-'+selectedContainer.container_id">
@@ -122,11 +120,9 @@
                                 <c-form-check inline>
                                     <input type="radio"
                                            [(ngModel)]="post.ContainersUsercontainerrolesMemberships[selectedContainer.container_id]"
-                                           oitcDebounce
                                            cFormCheckInput
-                                           value="2"
+                                           [value]="PermissionLevel.WRITE_RIGHT"
                                            [disabled]="selectedContainer.container_id  === ROOT_CONTAINER || (selectedContainer.readonly !== undefined && selectedContainer.readonly)"
-                                           [checked]="selectedContainer.permission_level == PermissionLevelString.WRITE_RIGHT"
                                            [name]="'ucgroup-write-'+selectedContainer.container_id"
                                            [id]="'ucgroup-write-'+selectedContainer.container_id"/>
                                     <label cFormCheckLabel

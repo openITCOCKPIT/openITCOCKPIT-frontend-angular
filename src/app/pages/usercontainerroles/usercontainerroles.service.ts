@@ -7,11 +7,12 @@ import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.
 import {
     CopyUserContainerRoleDatum,
     CopyUserContainerRolesRequest,
-    UsercontainerrolesGet, UsercontainerrolesIndex, UsercontainerrolesIndexParams,
+    UsercontainerrolesGet,
+    UsercontainerrolesIndex,
+    UsercontainerrolesIndexParams,
     UsercontainerrolesPost
 } from './usercontainerroles.interface';
 import { LoadLdapgroups, UsergroupsCopyPostRoot } from '../usergroups/usergroups.interface';
-import { ResourcesIndex } from '../../modules/scm_module/pages/resources/resources.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -52,7 +53,7 @@ export class UsercontainerrolesService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data.usercontainerrole as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {

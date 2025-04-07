@@ -155,7 +155,7 @@
                     <td class="text-center">
                         <oitc-item-select
                             *oitcPermission="['slamodule', 'slas', 'delete']"
-                            [disabled]="false"
+                            [disabled]="!sla.allowEdit"
                             [item]="sla"></oitc-item-select>
 
                     </td>

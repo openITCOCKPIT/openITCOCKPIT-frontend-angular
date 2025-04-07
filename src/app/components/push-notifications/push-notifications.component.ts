@@ -43,6 +43,7 @@ export class PushNotificationsComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+        this.PushNotificationsService.disconnect();
     }
 
     private checkBrowserSupport() {

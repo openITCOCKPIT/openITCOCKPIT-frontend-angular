@@ -1,4 +1,4 @@
 .nodes-overview {
     max-height: 250px;
-    overflow: scroll;
+    overflow: auto;
 }
