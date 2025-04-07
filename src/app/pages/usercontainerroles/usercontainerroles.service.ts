@@ -7,13 +7,11 @@ import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.
 import {
     CopyUserContainerRoleDatum,
     CopyUserContainerRolesRequest,
-    UserContainerRole,
-    UsercontainerrolesGet,
-    UserContainerRolesIndexParams,
-    UserContainerRolesIndexRoot,
+    UsercontainerrolesGet, UsercontainerrolesIndex, UsercontainerrolesIndexParams,
     UsercontainerrolesPost
 } from './usercontainerroles.interface';
 import { LoadLdapgroups, UsergroupsCopyPostRoot } from '../usergroups/usergroups.interface';
+import { ResourcesIndex } from '../../modules/scm_module/pages/resources/resources.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -22,35 +20,6 @@ export class UsercontainerrolesService {
     private readonly http: HttpClient = inject(HttpClient);
     private readonly proxyPath: string = inject(PROXY_PATH);
 
-    public getIndex(params: UserContainerRolesIndexParams): Observable<UserContainerRolesIndexRoot> {
-        return this.http.get<UserContainerRolesIndexRoot>(`${this.proxyPath}/usercontainerroles/index.json?angular=true`, {
-            params: params as {}
-        }).pipe(
-            map((data: UserContainerRolesIndexRoot) => {
-                return data;
-            })
-        )
-    }
-
-    public addUserContainerRole(userContainerRole: UserContainerRole): Observable<GenericResponseWrapper> {
-        const proxyPath = this.proxyPath;
-        return this.http.post<GenericResponseWrapper>(`${proxyPath}/usercontainerroles/add.json?angular=true`, {Usercontainerrole: userContainerRole})
-            .pipe(
-                map(data => {
-                    return {
-                        success: true,
-                        data: data as unknown as GenericIdResponse
-                    };
-                }),
-                catchError((error: any) => {
-                    const err: GenericValidationError = error.error.error as GenericValidationError;
-                    return of({
-                        success: false,
-                        data: err
-                    });
-                })
-            );
-    }
 
     public getCopy(ids: number[]): Observable<CopyUserContainerRolesRequest> {
         return this
@@ -64,10 +33,6 @@ export class UsercontainerrolesService {
 
     public saveCopy(post: CopyUserContainerRoleDatum[]): Observable<UsergroupsCopyPostRoot> {
         return this.http.post<UsergroupsCopyPostRoot>(`${this.proxyPath}/usercontainerroles/copy/.json?angular=true`, {data: post});
-    }
-
-    public loadLdapgroupsForAngular(searchString: string) {
-        return this.http.get<LoadLdapgroups>(`${this.proxyPath}/usercontainerroles/loadLdapgroupsForAngular.json?angular=true&filter[Ldapgroups.cn]=${searchString}`);
     }
 
     public loadLdapGroups(searchString: string) {
@@ -147,4 +112,14 @@ export class UsercontainerrolesService {
         return this.http.post(`${proxyPath}/usercontainerroles/delete/${item.id}.json?angular=true`, {});
     }
 
+    public getUsercontainerrolesIndex(params: UsercontainerrolesIndexParams) {
+        const proxyPath = this.proxyPath;
+        return this.http.get<UsercontainerrolesIndex>(`${proxyPath}/usercontainerroles/index.json`, {
+            params: params as {} // cast UsercontainerrolesIndexParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
 }

@@ -1,51 +1,73 @@
 // INDEX PARAMS
-import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericValidationError } from '../../generic-responses';
 import { GenericIdAndName } from '../../generic.interfaces';
+import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { Container } from '../containers/containers.interface';
+import { UsersIndexContainer, UsersIndexUsercontainerrole } from '../users/users.interface';
 
-export interface UserContainerRolesIndexParams {
+/**** Index ****/
+
+export interface UsercontainerrolesIndex extends PaginateOrScroll {
+    all_usercontainerroles: Usercontainerrole[]
+    _csrfToken: string
+}
+
+export interface Usercontainerrole {
+    id: number
+    name: string
+    users: UsercontainerroleUser[]
+    containers: Container[]
+    _matchingData: UsercontainerroleMatchingData
+    allow_edit: boolean
+}
+
+export interface UsercontainerroleUser {
+    id: number
+    name: string
+    full_name: string
+    _joinData: {
+        id: number
+        user_id: number
+        usercontainerrole_id: number
+        through_ldap: boolean
+    }
+    containers: UsersIndexContainer[]
+    usercontainerroles: UsersIndexUsercontainerrole[]
+}
+
+export interface UsercontainerroleMatchingData {
+    ContainersUsercontainerrolesMemberships: {
+        Containers: Container
+        ContainersUsercontainerrolesMemberships: {
+            id: number
+            usercontainerrole_id: number
+            container_id: number
+            permission_level: number
+        }
+    }
+}
+
+export interface UsercontainerrolesIndexParams {
     angular: true,
     scroll: boolean,
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
-
-    "filter[Usercontainerroles.name]": string
-    //https://master/usercontainerroles/index.json?angular=true&direction=asc&filter%5BUsercontainerroles.name%5D=&page=1&scroll=true&sort=Usercontainerroles.name
+    'filter[Usercontainerroles.id][]': number[],
+    'filter[Usercontainerroles.name]': string
 }
 
 
-export function getDefaultContainerRolesIndexParams(): UserContainerRolesIndexParams {
+export function getUsercontainerrolesIndexParams(): UsercontainerrolesIndexParams {
     return {
         angular: true,
         scroll: true,
         sort: 'Usercontainerroles.name',
         page: 1,
         direction: 'asc',
-        "filter[Usercontainerroles.name]": ''
+        'filter[Usercontainerroles.id][]': [],
+        'filter[Usercontainerroles.name]': ''
     }
-}
-
-// INDEX RESPONSE
-export interface UserContainerRolesIndexRoot extends PaginateOrScroll {
-    all_usercontainerroles: UserContainerRolesIndex[]
-    _csrfToken: string
-}
-
-export interface UserContainerRolesIndex {
-    id: number
-    name: string
-    users: {
-        id: number
-        firstname: string
-        lastname: string
-        full_name: string
-        allow_edit: boolean,
-        _joinData?: {
-            through_ldap: any
-        }
-    }[]
-    allow_edit: boolean
 }
 
 
@@ -66,21 +88,6 @@ export interface CopyUserContainerRoleDatum {
     Error: GenericValidationError | null
 }
 
-
-// ADD
-
-export interface UserContainerRole {
-    ContainersUsercontainerrolesMemberships: {
-        [key: string]: string
-    }
-    ldapgroups: {
-        _ids: number[]
-    }
-    name: string
-}
-
-/***********************/
-
 export interface UsercontainerrolesPost {
     id?: number
     name: string
@@ -93,7 +100,6 @@ export interface UsercontainerrolesPost {
     ContainersUsercontainerrolesMemberships: ContainersUsercontainerrolesMemberships
 }
 
-
 export interface ContainersUsercontainerrolesMemberships {
     [key: number]: string
 }
@@ -105,6 +111,6 @@ export interface SelectedContainerWithPermission {
     readonly?: boolean
 }
 
-export interface  UsercontainerrolesGet {
-    usercontainerrole:  UsercontainerrolesPost
+export interface UsercontainerrolesGet {
+    usercontainerrole: UsercontainerrolesPost
 }
