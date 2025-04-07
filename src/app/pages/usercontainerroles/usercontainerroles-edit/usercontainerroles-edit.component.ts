@@ -44,6 +44,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { PermissionLevelString } from '../../users/permission-level';
 
 @Component({
     selector: 'oitc-usercontainerroles-edit',
@@ -98,6 +99,7 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
     private UsercontainerrolesService = inject(UsercontainerrolesService);
     public containers: SelectKeyValue[] = [];
     public selectedContainers: number[] = [];
+    public notPermittedContainers: number[] = [];
     public selectedContainerWithPermission: SelectedContainerWithPermission[] = [];
     public ldapgroups: SelectKeyValue[] = [];
     public isLdapAuth: boolean = false;
@@ -118,15 +120,18 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.UsercontainerrolesService.getEdit(this.id)
             .subscribe((result) => {
                 //Fire on page load
+                this.notPermittedContainers = [];
                 this.post = result.usercontainerrole;
                 if (result.usercontainerrole.containers?._ids) {
                     this.selectedContainers = result.usercontainerrole.containers._ids;
                     delete result.usercontainerrole.containers;
                 }
-
                 //Add new selected containers
                 for (let containerId in this.post.ContainersUsercontainerrolesMemberships) {
                     let notPermittetCheck = this.containers.find(({key}) => key === parseInt(containerId, 10));
+                    if (typeof notPermittetCheck === "undefined") {
+                        this.notPermittedContainers.push(parseInt(containerId, 10));
+                    }
 
                     this.selectedContainerWithPermission[containerId] = {
                         name: this.getContainerName(parseInt(containerId, 10)),
@@ -134,6 +139,10 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
                         permission_level: this.post.ContainersUsercontainerrolesMemberships[containerId].toString(), //String is required for AngularJS Front End value="2",
                         readonly: (typeof notPermittetCheck === "undefined")
                     };
+                }
+                if (this.notPermittedContainers.length > 0) {
+                    //remove not permitted containers from selected containers
+                    this.selectedContainers = _.difference(this.selectedContainers, this.notPermittedContainers);
                 }
                 this.cdr.markForCheck();
 
@@ -160,7 +169,7 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
 
 
     public onContainerChange() {
-        if (this.selectedContainers.length === 0) {
+        if (this.selectedContainers.length === 0 && this.notPermittedContainers.length === 0) {
             this.post.ContainersUsercontainerrolesMemberships = {};
             this.selectedContainerWithPermission = [];
             return;
@@ -168,9 +177,9 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
         this.cleanUpContainersUsercontainerrolesMemberships();
         this.selectedContainers.forEach(containerId => {
             if (this.post.ContainersUsercontainerrolesMemberships[containerId] === undefined) {
-                let permissionLevel = '1';
+                let permissionLevel = PermissionLevelString.READ_RIGHT;
                 if (containerId === this.ROOT_CONTAINER) {
-                    permissionLevel = '2';
+                    permissionLevel = PermissionLevelString.WRITE_RIGHT;
                 }
                 this.post.ContainersUsercontainerrolesMemberships[containerId] = permissionLevel;
             }
@@ -178,10 +187,12 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
         this.selectedContainerWithPermission = [];
         _.each(this.post.ContainersUsercontainerrolesMemberships, (value, key) => {
             let containerId = parseInt(key, 10);
+            let notPermittetCheck = this.containers.find(({key}) => key === containerId);
             this.selectedContainerWithPermission.push({
                 name: this.getContainerName(containerId),
                 container_id: containerId,
-                permission_level: value
+                permission_level: value,
+                readonly: (typeof notPermittetCheck === "undefined")
             });
         });
         this.cdr.markForCheck();
@@ -225,17 +236,19 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
                 return this.containers[index].value;
             }
         }
-        return this.TranslocoService.translate('ERROR UNKNOWN CONTAINER');
+        return this.TranslocoService.translate('RESTRICTED CONTAINER');
     }
 
     private cleanUpContainersUsercontainerrolesMemberships() {
         _.each(this.post.ContainersUsercontainerrolesMemberships, (value, key) => {
             let containerId = parseInt(key, 10);
-            //Remove "unselected" containers
-            if (this.selectedContainers.indexOf(containerId) === -1) {
+            //Remove "unselected" containers, consider not permitted containers too
+            if (this.selectedContainers.indexOf(containerId) === -1 && this.notPermittedContainers.indexOf(containerId) === -1) {
                 delete this.post.ContainersUsercontainerrolesMemberships[containerId];
             }
         });
         this.cdr.markForCheck();
     }
+
+    protected readonly PermissionLevelString = PermissionLevelString;
 }

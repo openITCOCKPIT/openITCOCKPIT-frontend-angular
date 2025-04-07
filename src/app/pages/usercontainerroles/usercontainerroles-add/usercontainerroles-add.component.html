@@ -107,7 +107,7 @@
                                            cFormCheckInput
                                            value="1"
                                            [disabled]="selectedContainer.container_id === ROOT_CONTAINER"
-                                           [checked]="selectedContainer.permission_level == '1'"
+                                           [checked]="selectedContainer.permission_level == PermissionLevelString.READ_RIGHT"
                                            [name]="'ucgroup-read-'+selectedContainer.container_id"
                                            [id]="'ucgroup-read-'+selectedContainer.container_id"/>
                                     <label cFormCheckLabel [for]="'ucgroup-read-'+selectedContainer.container_id">
@@ -121,7 +121,7 @@
                                            cFormCheckInput
                                            value="2"
                                            [disabled]="selectedContainer.container_id  === ROOT_CONTAINER"
-                                           [checked]="selectedContainer.permission_level == '2'"
+                                           [checked]="selectedContainer.permission_level == PermissionLevelString.WRITE_RIGHT"
                                            [name]="'ucgroup-write-'+selectedContainer.container_id"
                                            [id]="'ucgroup-write-'+selectedContainer.container_id"/>
                                     <label cFormCheckLabel
