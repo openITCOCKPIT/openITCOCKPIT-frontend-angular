@@ -46,12 +46,12 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import { UsercontainerrolesService } from '../usercontainerroles.service';
 import {
     getDefaultContainerRolesIndexParams,
-    UserContainerRolesIndex,
     UserContainerRolesIndexParams,
     UserContainerRolesIndexRoot
 } from '../usercontainerroles.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
+import { GenericIdAndName } from '../../../generic.interfaces';
 
 @Component({
     selector: 'oitc-usercontainerroles-index',
@@ -99,7 +99,7 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
     styleUrl: './usercontainerroles-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: UsercontainerrolesService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: UsercontainerrolesService} // Inject the UsercontainerrolesService into the DeleteAllModalComponent
     ]
 })
 export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy {
@@ -180,17 +180,15 @@ export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy {
     }
 
 
-    public toggleDeleteAllModal(userContainerRole?: UserContainerRolesIndex) {
+    public toggleDeleteAllModal(usercontainterrole?: GenericIdAndName) {
         let items: DeleteAllItem[] = [];
 
-        if (userContainerRole) {
-            // User just want to delete a single Servicetemplate
-            items = [
-                {
-                    id: userContainerRole.id as number,
-                    displayName: userContainerRole.name
-                }
-            ];
+        if (usercontainterrole) {
+            // User just want to delete a single calendar
+            items = [{
+                id: usercontainterrole.id,
+                displayName: usercontainterrole.name
+            }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
@@ -203,6 +201,7 @@ export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({

@@ -29,7 +29,7 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { selectedContainerWithPermission, UsercontainerrolesPost } from '../usercontainerroles.interface';
+import { SelectedContainerWithPermission, UsercontainerrolesPost } from '../usercontainerroles.interface';
 import { ContainersService } from '../../containers/containers.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { HistoryService } from '../../../history.service';
@@ -99,7 +99,7 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
     private UsercontainerrolesService = inject(UsercontainerrolesService);
     public containers: SelectKeyValue[] = [];
     public selectedContainers: number[] = [];
-    public selectedContainerWithPermission: selectedContainerWithPermission[] = [];
+    public selectedContainerWithPermission: SelectedContainerWithPermission[] = [];
     public ldapgroups: SelectKeyValue[] = [];
     public isLdapAuth: boolean = false;
     protected readonly ROOT_CONTAINER = ROOT_CONTAINER;

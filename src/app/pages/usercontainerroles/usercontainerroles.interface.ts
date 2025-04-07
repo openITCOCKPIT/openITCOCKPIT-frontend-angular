@@ -69,10 +69,6 @@ export interface CopyUserContainerRoleDatum {
 
 // ADD
 
-export interface AddUserContainerRole {
-    Usercontainerrole: UserContainerRole
-}
-
 export interface UserContainerRole {
     ContainersUsercontainerrolesMemberships: {
         [key: string]: string
@@ -83,19 +79,15 @@ export interface UserContainerRole {
     name: string
 }
 
-export interface EditableUserContainerRole extends UserContainerRole {
-    id: number
-    containers?: {
-        _ids: number[]
-    }
-}
-
 /***********************/
 
 export interface UsercontainerrolesPost {
     id?: number
     name: string
     ldapgroups: {
+        _ids: number[]
+    },
+    containers?: {
         _ids: number[]
     },
     ContainersUsercontainerrolesMemberships: ContainersUsercontainerrolesMemberships
@@ -106,9 +98,13 @@ export interface ContainersUsercontainerrolesMemberships {
     [key: number]: string
 }
 
-export interface selectedContainerWithPermission {
+export interface SelectedContainerWithPermission {
     name: string
     container_id: number
     permission_level: string
     readonly?: boolean
+}
+
+export interface  UsercontainerrolesGet {
+    usercontainerrole:  UsercontainerrolesPost
 }
