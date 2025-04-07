@@ -134,9 +134,9 @@
                 <tr *ngFor="let servicegroup of servicegroups.all_servicegroups">
                     <td class="text-center">
                         <oitc-item-select
-                            *oitcPermission="['servicegroups', 'delete']"
-                            [disabled]="false"
-                            [item]="servicegroup"></oitc-item-select>
+                                *oitcPermission="['servicegroups', 'delete']"
+                                [disabled]="false"
+                                [item]="servicegroup"></oitc-item-select>
                     </td>
                     <td class="word-break">
                         <span *oitcPermission="['servicegroups', 'extended']">
@@ -194,7 +194,7 @@
             </table>
 
             <oitc-no-records
-                *ngIf="servicegroups && servicegroups.all_servicegroups && servicegroups.all_servicegroups.length === 0"></oitc-no-records>
+                    *ngIf="servicegroups && servicegroups.all_servicegroups && servicegroups.all_servicegroups.length === 0"></oitc-no-records>
 
 
             <ng-container *ngIf="servicegroups && servicegroups.all_servicegroups">
@@ -203,16 +203,18 @@
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                [itemsCount]="servicegroups.all_servicegroups.length"></oitc-select-all>
+                                    [itemsCount]="servicegroups.all_servicegroups.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        *oitcPermission="['servicegroups', 'add']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['servicegroups', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -239,13 +241,13 @@
             </ng-container>
 
             <c-container
-                [fluid]="true">
+                    [fluid]="true">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="servicegroups"
-                            [paginateOrScroll]="servicegroups"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="servicegroups"
+                                [paginateOrScroll]="servicegroups"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>

@@ -144,9 +144,9 @@
 
                     <td class="text-center">
                         <oitc-item-select
-                            *oitcPermission="['ChangecalendarModule', 'Changecalendars', 'delete']"
-                            [disabled]="!changecalendar.allowEdit"
-                            [item]="changecalendar"></oitc-item-select>
+                                *oitcPermission="['ChangecalendarModule', 'Changecalendars', 'delete']"
+                                [disabled]="!changecalendar.allowEdit"
+                                [item]="changecalendar"></oitc-item-select>
 
                     </td>
                     <td>
@@ -188,7 +188,7 @@
             </table>
 
             <oitc-no-records
-                *ngIf="result && result.all_changecalendars.length === 0"></oitc-no-records>
+                    *ngIf="result && result.all_changecalendars.length === 0"></oitc-no-records>
 
             <ng-container *ngIf="result && result.all_changecalendars">
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
@@ -196,11 +196,12 @@
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                [itemsCount]="result.all_changecalendars.length"></oitc-select-all>
+                                    [itemsCount]="result.all_changecalendars.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['ChangecalendarModule','changecalendars', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -213,13 +214,13 @@
             </ng-container>
 
             <c-container
-                [fluid]="true">
+                    [fluid]="true">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="result"
-                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="result"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>

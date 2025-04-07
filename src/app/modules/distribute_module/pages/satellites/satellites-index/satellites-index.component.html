@@ -264,12 +264,13 @@
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleDeleteAllModal()"
                                         class="btn btn-outline-danger col-3 border-0"
+                                        *oitcPermission="['DistributeModule','satellites', 'delete']"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete selected') }}
                                 </button>
 
-                                <c-dropdown>
+                                <c-dropdown *oitcPermission="['hosts', 'externalcommands']">
                                     <button cButton cDropdownToggle color="default">
                                         {{ t('More actions') }}
                                     </button>
