@@ -1,14 +1,15 @@
 <ng-container *transloco="let t">
-
     <nav aria-label="breadcrumb" class="mt-3">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a [routerLink]="['/']">
                     <fa-icon [icon]="['fas', 'home']"></fa-icon>
                     {{ t('Home') }}
-                </a></li>
+                </a>
+            </li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['usercontainerroles', 'index']" [routerLink]="['/', 'usercontainerroles', 'index']">
+                <a *oitcPermission="['usercontainerroles', 'index']"
+                   [routerLink]="['/', 'usercontainerroles', 'index']">
                     <fa-icon [icon]="['fas', 'users']"></fa-icon>
                     {{ t('User container roles') }}
                 </a>
@@ -19,18 +20,14 @@
             </li>
         </ol>
     </nav>
-
-    <form cForm (ngSubmit)="addUserContainerRole()">
-
+    <form cForm (ngSubmit)="submit()" autocomplete="off">
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>
-                    {{ t('Create new user container role') }}
-                </h5>
-
+                <h5 cCardTitle>{{ t('Create new user container role') }}</h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['usercontainerroles', 'index']" cButton class="ripple" color="default"
+                        <button [fallbackUrl]="['usercontainerroles', 'index']" cButton class="ripple"
+                                color="default"
                                 oitcBackButton
                                 size="xs">
                             <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
@@ -39,112 +36,101 @@
                     </c-nav-item>
                 </c-nav>
             </c-card-header>
-
             <c-card-body>
-
                 <div class="mb-3">
-                    <label cLabel for="post.name">
-                        {{ t('Role name') }}
-                        <oitc-required-icon/>
+                    <label cLabel for="UsercontainerroleName">
+                        {{ t('Name') }}
+                        <oitc-required-icon></oitc-required-icon>
                     </label>
-                    <input cFormControl
-                           id="post.name"
-                           type="text"
-                           name="post.name"
-                           oitcFormError [errors]="errors" errorField="name"
-                           [(ngModel)]="post.name">
+                    <input cFormControl id="UsercontainerroleName" required type="text"
+                           name="name"
+                           [(ngModel)]="post.name"
+                           oitcFormError [errors]="errors" errorField="name">
                     <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                 </div>
 
 
-                <div class="mb-3">
-                    <label cLabel for="post.ldapgroups._ids">
-                        {{ t('LDAP Groups') }}
+                <div class="mb-3" *ngIf="isLdapAuth">
+                    <label cLabel for="ldapGroups">
+                        {{ t('LDAP groups') }}
                     </label>
                     <oitc-multi-select
-                            name="post.ldapgroups._ids"
-                            id="post.ldapgroups._ids"
-                            [(ngModel)]="post.ldapgroups._ids"
-                            optionValue="key"
-                            optionLabel="value"
-                            [searchCallback]="loadLdapGroups"
-                            [options]="ldapGroups"
-                            oitcFormError [errors]="errors" errorField="containerroles">
+                        name="ldapGroups"
+                        id="ldapGroups"
+                        optionValue="key"
+                        optionLabel="value"
+                        [appendTo]="''"
+                        [(ngModel)]="post.ldapgroups._ids"
+                        [options]="ldapgroups"
+                        [searchCallback]="loadLdapGroups"
+                        oitcFormError [errors]="errors" errorField="ldapgroups">
                     </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="containerroles"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="ldapgroups"></oitc-form-feedback>
                     <div class="help-block">
                         {{ t('LDAP users which are member of the selected LDAP groups will be assigned automatically to the user container role.') }}
                     </div>
                 </div>
 
-
                 <div class="mb-3">
-                    <label cLabel for="selectedContainerIds" class="hintmark">
+                    <label cLabel for="Container">
                         {{ t('Container') }}
+                        <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-multi-select
-                            name="selectedContainerIds"
-                            id="selectedContainerIds"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="selectedContainerIds"
-                            [options]="containers"
-                            (onChange)="onSelectedContainerIdsChange()"
-                            oitcFormError [errors]="errors" errorField="containers">
+                        name="Container"
+                        id="Container"
+                        optionValue="key"
+                        optionLabel="value"
+                        [appendTo]="''"
+                        [(ngModel)]="selectedContainers"
+                        [options]="containers"
+                        [placeholder]="'Please choose'|transloco"
+                        (onChange)="onContainerChange()"
+                        oitcFormError [errors]="errors" errorField="containers">
                     </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="containers"></oitc-form-feedback>
                 </div>
-                <!--
-                each selectedContainerIds will have a dropdown for the user to select the role
-                -->
-                <ng-container *ngFor="let userContainerRole of containers">
-                    <c-row *ngIf="selectedContainerIds.indexOf(userContainerRole.key) !== -1"
-                           class="containerRoleInheritance mb-3">
-                        <c-col md="1">
-                        </c-col>
-                        <c-col md="11">
-                            <legend class="txt-ack">
-                                {{ userContainerRole.value }}
+                <!-- User Container Roles permissions read/write -->
+                @for (selectedContainer of selectedContainerWithPermission; track $index) {
+                    <c-row *ngIf="selectedContainer" class="mb-2">
+                        <c-col [offset]="2">
+                            <legend class="text-primary fs-6 pt-1">
+                                {{ selectedContainer.name }}
                             </legend>
-                            <c-row>
-                                <c-col md="1">
-                                </c-col>
-                                <c-col md="1">
-                                    <c-form-check>
-                                        <input cFormCheckInput
-                                               type="radio"
-                                               [disabled]="userContainerRole.key === 1"
-                                               [name]="userContainerRole.key + 'PermissionLevelReadEditable'"
-                                               [id]="userContainerRole.key + 'PermissionLevelReadEditable'"
-                                               [value]="'1'"
-                                               [(ngModel)]="post.ContainersUsercontainerrolesMemberships[userContainerRole.key]"
-                                        />
-                                        <label cFormCheckLabel
-                                               [for]="userContainerRole.key + 'PermissionLevelReadEditable'">
-                                            {{ t('read') }}
-                                        </label>
-                                    </c-form-check>
-                                </c-col>
-                                <c-col md="1">
-                                    <c-form-check>
-                                        <input cFormCheckInput
-                                               type="radio"
-                                               [disabled]="userContainerRole.key === 1"
-                                               [name]="userContainerRole.key + 'PermissionLevelReadWriteEditable'"
-                                               [id]="userContainerRole.key + 'PermissionLevelReadWriteEditable'"
-                                               [value]="'2'"
-                                               [(ngModel)]="post.ContainersUsercontainerrolesMemberships[userContainerRole.key]"
-                                        />
-                                        <label cFormCheckLabel
-                                               [for]="userContainerRole.key + 'PermissionLevelReadWriteEditable'">
-                                            {{ t('read/write') }}
-                                        </label>
-                                    </c-form-check>
-                                </c-col>
-                            </c-row>
+                            <div class="pb-1">
+                                <c-form-check inline>
+                                    <input type="radio"
+                                           [(ngModel)]="post.ContainersUsercontainerrolesMemberships[selectedContainer.container_id]"
+                                           oitcDebounce
+                                           cFormCheckInput
+                                           value="1"
+                                           [disabled]="selectedContainer.container_id === ROOT_CONTAINER"
+                                           [checked]="selectedContainer.permission_level == '1'"
+                                           [name]="'ucgroup-read-'+selectedContainer.container_id"
+                                           [id]="'ucgroup-read-'+selectedContainer.container_id"/>
+                                    <label cFormCheckLabel [for]="'ucgroup-read-'+selectedContainer.container_id">
+                                        {{ t('read') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check inline>
+                                    <input type="radio"
+                                           [(ngModel)]="post.ContainersUsercontainerrolesMemberships[selectedContainer.container_id]"
+                                           oitcDebounce
+                                           cFormCheckInput
+                                           value="2"
+                                           [disabled]="selectedContainer.container_id  === ROOT_CONTAINER"
+                                           [checked]="selectedContainer.permission_level == '2'"
+                                           [name]="'ucgroup-write-'+selectedContainer.container_id"
+                                           [id]="'ucgroup-write-'+selectedContainer.container_id"/>
+                                    <label cFormCheckLabel
+                                           [for]="'ucgroup-write-'+selectedContainer.container_id">{{ t('read/write') }}</label>
+                                </c-form-check>
+                            </div>
                         </c-col>
                     </c-row>
-                </ng-container>
+                }
             </c-card-body>
             <c-card-footer class="text-end">
                 <label class="me-2">
@@ -152,7 +138,6 @@
                            [(ngModel)]="createAnother">
                     {{ t('Create another') }}
                 </label>
-
                 <button cButton class="ripple" color="primary" type="submit">
                     {{ t('Create user container role') }}
                 </button>
@@ -161,10 +146,7 @@
                         type="button">
                     {{ t('Cancel') }}
                 </button>
-
-
             </c-card-footer>
         </c-card>
     </form>
-
 </ng-container>

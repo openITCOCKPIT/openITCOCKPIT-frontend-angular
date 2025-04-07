@@ -15,10 +15,9 @@ import {
     EditableUserContainerRole,
     UserContainerRole,
     UserContainerRolesIndexParams,
-    UserContainerRolesIndexRoot
+    UserContainerRolesIndexRoot, UsercontainerrolesPost
 } from './usercontainerroles.interface';
-import { UsergroupsCopyPostRoot } from '../usergroups/usergroups.interface';
-import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { LoadLdapgroups, UsergroupsCopyPostRoot } from '../usergroups/usergroups.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -113,11 +112,44 @@ export class UsercontainerrolesService {
                 })
             )
     }
+
     public saveCopy(post: CopyUserContainerRoleDatum[]): Observable<UsergroupsCopyPostRoot> {
         return this.http.post<UsergroupsCopyPostRoot>(`${this.proxyPath}/usercontainerroles/copy/.json?angular=true`, {data: post});
     }
 
-    public loadLdapgroupsForAngular(search: string = ''): Observable<{ ldapgroups: SelectKeyValue[] }> {
-        return this.http.get<{ ldapgroups: SelectKeyValue[] }>(`${this.proxyPath}/usercontainerroles/loadLdapgroupsForAngular.json?angular=true&filter[Ldapgroups.cn]=${search}`);
+    public loadLdapgroupsForAngular(searchString:string) {
+        return this.http.get<LoadLdapgroups>(`${this.proxyPath}/usercontainerroles/loadLdapgroupsForAngular.json?angular=true&filter[Ldapgroups.cn]=${searchString}`);
     }
+
+    public loadLdapGroups(searchString:string) {
+        return this.http.get<LoadLdapgroups>(`${this.proxyPath}/usercontainerroles/loadLdapgroupsForAngular.json?angular=true&filter[Ldapgroups.cn]=${searchString}`);
+    }
+
+    /**********************
+     *    Add action    *
+     **********************/
+    public createUsercontainerrole(usercontainerrole: UsercontainerrolesPost) {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/usercontainerroles/add.json?angular=true`, {
+            Usercontainerrole: usercontainerrole
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+
 }

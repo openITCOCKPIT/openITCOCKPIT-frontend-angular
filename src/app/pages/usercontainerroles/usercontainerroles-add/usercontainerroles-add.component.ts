@@ -1,8 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {PermissionDirective} from '../../../permissions/permission.directive';
-import {RouterLink} from '@angular/router';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -20,94 +16,98 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {BackButtonDirective} from '../../../directives/back-button.directive';
-import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {FormErrorDirective} from '../../../layouts/coreui/form-error.directive';
-import {FormFeedbackComponent} from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import {MultiSelectComponent} from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import {RequiredIconComponent} from '../../../components/required-icon/required-icon.component';
-import {Subscription} from 'rxjs';
-import {NotyService} from '../../../layouts/coreui/noty.service';
-import {ProfileService} from '../../profile/profile.service';
-import {UsercontainerrolesService} from '../usercontainerroles.service';
-import {HistoryService} from '../../../history.service';
-import {UserContainerRole} from '../usercontainerroles.interface';
-import {SelectKeyValue} from '../../../layouts/primeng/select.interface';
-import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../../generic-responses';
-import {NgForOf, NgIf} from '@angular/common';
-import {ContainersLoadContainersByStringParams} from '../../containers/containers.interface';
-import {ContainersService} from '../../containers/containers.service';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { UsercontainerrolesService } from '../usercontainerroles.service';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { selectedContainerWithPermission, UsercontainerrolesPost } from '../usercontainerroles.interface';
+import { ContainersService } from '../../containers/containers.service';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { HistoryService } from '../../../history.service';
+import { PermissionsService } from '../../../permissions/permissions.service';
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { ROOT_CONTAINER } from '../../changelogs/object-types.enum';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import { ContainersLoadContainersByStringParams } from '../../containers/containers.interface';
+import { NgIf } from '@angular/common';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import _, { parseInt } from 'lodash';
 
 @Component({
     selector: 'oitc-usercontainerroles-add',
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        ReactiveFormsModule,
+        BackButtonDirective,
+        CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        BackButtonDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
-        MultiSelectComponent,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
         RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        MultiSelectComponent,
+        CardFooterComponent,
+        FormCheckInputDirective,
+        BackButtonDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        MultiSelectComponent,
+        PermissionDirective,
+        RequiredIconComponent,
+        XsButtonDirective,
+        TranslocoPipe,
+        RowComponent,
         ColComponent,
         FormCheckComponent,
-        FormCheckInputDirective,
         FormCheckLabelDirective,
-        NgForOf,
-        NgIf,
-        RowComponent,
-        CardFooterComponent,
-        FormControlDirective
+        DebounceDirective,
+        NgIf
     ],
     templateUrl: './usercontainerroles-add.component.html',
     styleUrl: './usercontainerroles-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
-    private readonly subscriptions: Subscription = new Subscription();
-    private readonly UserContainerRolesService: UsercontainerrolesService = inject(UsercontainerrolesService);
-    private readonly ContainersService: ContainersService = inject(ContainersService);
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private subscriptions: Subscription = new Subscription();
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly ContainersService = inject(ContainersService);
+    private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
-    private readonly notyService: NotyService = inject(NotyService);
-    private readonly profileService: ProfileService = inject(ProfileService);
-    private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+    public post = this.getClearForm();
+    public createAnother: boolean = false;
+    public PermissionsService: PermissionsService = inject(PermissionsService);
+    private UsercontainerrolesService = inject(UsercontainerrolesService);
+    public containers: SelectKeyValue[] = [];
+    public selectedContainers: number[] = [];
+    public selectedContainerWithPermission: selectedContainerWithPermission[] = [];
+    public ldapgroups: SelectKeyValue[] = [];
+    public isLdapAuth: boolean = false;
+    protected readonly ROOT_CONTAINER = ROOT_CONTAINER;
 
-    protected post: UserContainerRole = this.getDefaultPost();
-    protected errors: GenericValidationError = {} as GenericValidationError;
-    protected ldapGroups: SelectKeyValue[] = [];
-    protected selectedContainerIds: number[] = [];
-    protected containers: SelectKeyValue[] = [];
-    protected createAnother: boolean = false;
+    private cdr = inject(ChangeDetectorRef);
+    public errors: GenericValidationError | null = null;
 
-    private getDefaultPost(): UserContainerRole {
-        return {
-            name: '',
-            ContainersUsercontainerrolesMemberships: {},
-            ldapgroups: {
-                _ids: []
-            }
-        };
-    }
-
-    public ngOnDestroy() {
-        this.subscriptions.unsubscribe();
-    }
-
-    public ngOnInit() {
+    public ngOnInit(): void {
         this.loadContainers();
         this.loadLdapGroups('');
     }
@@ -120,75 +120,109 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
             }));
     }
 
-
-    public addUserContainerRole(): void {
-        this.subscriptions.add(this.UserContainerRolesService.addUserContainerRole(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    this.cdr.markForCheck();
-
-                    const response: { usercontainerrole: GenericIdResponse } = result.data as {
-                        usercontainerrole: GenericIdResponse
-                    };
-
-                    const title: string = this.TranslocoService.translate('User container role');
-                    const msg: string = this.TranslocoService.translate('added successfully');
-                    const url: (string | number)[] = ['usercontainerroles', 'edit', response.usercontainerrole.id];
-
-                    this.notyService.genericSuccess(msg, title, url);
-
-                    if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/usercontainerroles/index']);
-                        return;
-                    }
-                    this.post = this.getDefaultPost();
-                    this.errors = {} as GenericValidationError;
-                    this.selectedContainerIds = [];
-                    this.ngOnInit();
-                    this.notyService.scrollContentDivToTop();
-                    this.cdr.markForCheck();
-
-                    return;
-                }
-
-                // Error
-                this.notyService.genericError();
-                const errorResponse: GenericValidationError = result.data as GenericValidationError;
-                if (result) {
-                    this.errors = errorResponse;
-
-                    console.warn(this.errors);
-                }
-            })
-        );
+    public loadLdapGroups = (searchString: string) => {
+        this.subscriptions.add(this.UsercontainerrolesService.loadLdapGroups(searchString).subscribe((result) => {
+            this.isLdapAuth = result.isLdapAuth;
+            this.ldapgroups = result.ldapgroups;
+            this.cdr.markForCheck();
+        }));
     }
 
-
-    public onSelectedContainerIdsChange() {
-        // Drop all existing ContainerUsersMemberships before re-creating the object.
-        this.post.ContainersUsercontainerrolesMemberships = {};
-
-        // Traverse all containerids and set the value to 1.
-        this.selectedContainerIds.map((id) => {
-            if (id === 1) {
-                this.post.ContainersUsercontainerrolesMemberships[id] = "2";
-                return;
+    public onContainerChange() {
+        if (this.selectedContainers.length === 0) {
+            this.post.ContainersUsercontainerrolesMemberships = {};
+            this.selectedContainerWithPermission = [];
+            return;
+        }
+        this.cleanUpContainersUsercontainerrolesMemberships();
+        this.selectedContainers.forEach(containerId => {
+            if (this.post.ContainersUsercontainerrolesMemberships[containerId] === undefined) {
+                let permissionLevel = '1';
+                if (containerId === this.ROOT_CONTAINER) {
+                    permissionLevel = '2';
+                }
+                this.post.ContainersUsercontainerrolesMemberships[containerId] = permissionLevel;
             }
-            // Only if not already set to 1 or 2.
-            if (this.post.ContainersUsercontainerrolesMemberships[id] !== "2") {
-                this.post.ContainersUsercontainerrolesMemberships[id] = "1";
-            }
+        });
+        this.selectedContainerWithPermission = [];
+        _.each(this.post.ContainersUsercontainerrolesMemberships, (value, key) => {
+            let containerId = parseInt(key, 10);
+            this.selectedContainerWithPermission.push({
+                name: this.getContainerName(containerId),
+                container_id: containerId,
+                permission_level: value
+            });
         });
         this.cdr.markForCheck();
     }
 
-    protected loadLdapGroups = (search: string = ''): void => {
-        this.subscriptions.add(this.UserContainerRolesService.loadLdapgroupsForAngular(search).subscribe((ldapgroups: {
-            ldapgroups: SelectKeyValue[]
-        }) => {
-            this.ldapGroups = ldapgroups.ldapgroups;
-            this.cdr.markForCheck();
-        }));
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
+    public getClearForm(): UsercontainerrolesPost {
+        this.selectedContainers = [];
+        this.selectedContainerWithPermission = [];
+        return {
+            name: '',
+            ContainersUsercontainerrolesMemberships: {},
+            ldapgroups: {
+                _ids: []
+            }
+        }
+    }
+
+    public submit() {
+        this.subscriptions.add(this.UsercontainerrolesService.createUsercontainerrole(this.post)
+            .subscribe((result) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
+
+                    const title = this.TranslocoService.translate('User container role');
+                    const msg = this.TranslocoService.translate('created successfully');
+                    const url = ['usercontainerroles', 'edit', response.id];
+                    this.notyService.genericSuccess(msg, title, url);
+
+                    if (!this.createAnother) {
+                        this.HistoryService.navigateWithFallback(['/usercontainerroles/index']);
+                        this.notyService.scrollContentDivToTop();
+                        return;
+                    }
+
+                    this.post = this.getClearForm();
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
+                    this.errors = null;
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            }));
+    }
+
+    private getContainerName(containerId: number) {
+        for (let index in this.containers) {
+            if (this.containers[index].key === containerId) {
+                return this.containers[index].value;
+            }
+        }
+        return this.TranslocoService.translate('ERROR UNKNOWN CONTAINER');
+    }
+
+    private cleanUpContainersUsercontainerrolesMemberships() {
+        _.each(this.post.ContainersUsercontainerrolesMemberships, (value, key) => {
+            let containerId = parseInt(key, 10);
+            //Remove "unselected" containers
+            if (this.selectedContainers.indexOf(containerId) === -1) {
+                delete this.post.ContainersUsercontainerrolesMemberships[containerId];
+            }
+        });
+        this.cdr.markForCheck();
     }
 }

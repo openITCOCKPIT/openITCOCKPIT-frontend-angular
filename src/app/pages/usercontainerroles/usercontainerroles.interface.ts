@@ -1,6 +1,7 @@
 // INDEX PARAMS
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericValidationError } from '../../generic-responses';
+import { GenericIdAndName } from '../../generic.interfaces';
 
 export interface UserContainerRolesIndexParams {
     angular: true,
@@ -50,18 +51,8 @@ export interface UserContainerRolesIndex {
 
 // COPY GET
 export interface CopyUserContainerRolesRequest {
-    usercontainerroles: CopyUserContainerRole[]
+    usercontainerroles: GenericIdAndName[]
     _csrfToken: string
-}
-
-export interface CopyUserContainerRole {
-    id: number
-    name: string
-}
-
-// COPY POST
-export interface CopyUserContainerRolesPost {
-    data: CopyUserContainerRoleDatum[]
 }
 
 export interface CopyUserContainerRoleDatum {
@@ -75,11 +66,6 @@ export interface CopyUserContainerRoleDatum {
     Error: GenericValidationError | null
 }
 
-
-// COPY POST RESPONSE
-export interface saveUserContainerRolesCopy {
-
-}
 
 // ADD
 
@@ -99,9 +85,30 @@ export interface UserContainerRole {
 
 export interface EditableUserContainerRole extends UserContainerRole {
     id: number
-    containers: {
+    containers?: {
         _ids: number[]
     }
 }
 
+/***********************/
 
+export interface UsercontainerrolesPost {
+    id?: number
+    name: string
+    ldapgroups: {
+        _ids: number[]
+    },
+    ContainersUsercontainerrolesMemberships: ContainersUsercontainerrolesMemberships
+}
+
+
+export interface ContainersUsercontainerrolesMemberships {
+    [key: number]: string
+}
+
+export interface selectedContainerWithPermission {
+    name: string
+    container_id: number
+    permission_level: string
+    readonly?: boolean
+}
