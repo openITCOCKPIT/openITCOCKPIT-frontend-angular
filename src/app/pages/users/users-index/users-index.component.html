@@ -35,24 +35,24 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <button *oitcPermission="['users', 'add']" [routerLink]="['/', 'users', 'add']"
-                            cButton
-                            class="ripple"
-                            color="success"
-                            size="xs">
+                    <a *oitcPermission="['users', 'add']" [routerLink]="['/', 'users', 'add']"
+                       cButton
+                       class="ripple"
+                       color="success"
+                       size="xs">
                         <fa-icon [icon]="['fas', 'plus']"></fa-icon>
                         {{ t('New local user') }}
-                    </button>
+                    </a>
                 </c-nav-item>
                 <c-nav-item class="px-1" *oitcPermission="['users', 'add']">
-                    <button *ngIf="users?.isLdapAuth" [routerLink]="['/', 'users', 'add']"
-                            cButton
-                            class="ripple"
-                            color="warning"
-                            size="xs">
+                    <a *ngIf="users?.isLdapAuth" [routerLink]="['/', 'users', 'ldap']"
+                       cButton
+                       class="ripple"
+                       color="warning"
+                       size="xs">
                         <fa-icon [icon]="['fas', 'plus']"></fa-icon>
                         {{ t('Import from LDAP') }}
-                    </button>
+                    </a>
                 </c-nav-item>
                 <c-nav-item class="px-1">
                     <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">

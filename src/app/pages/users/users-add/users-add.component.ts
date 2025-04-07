@@ -212,7 +212,7 @@ export class UsersAddComponent implements OnInit, OnDestroy {
     public addApikey(): void {
         this.subscriptions.add(this.ProfileService.generateNewApiKey()
             .subscribe((result) => {
-                this.post.apikeys.push(result);
+                this.post.apikeys = [...this.post.apikeys, result];
                 this.cdr.markForCheck();
             })
         );
@@ -334,7 +334,6 @@ export class UsersAddComponent implements OnInit, OnDestroy {
 
                 // Error
                 const errorResponse = result.data as GenericValidationError;
-                console.log(result.data);
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;

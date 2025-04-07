@@ -11,6 +11,8 @@ import {
     UserPost,
     UsersIndexParams,
     UsersIndexRoot,
+    UsersLdapUser,
+    UsersLdapUserDetails,
     UserTimezoneGroup,
     UserTimezonesSelect
 } from './users.interface';
@@ -214,6 +216,34 @@ export class UsersService {
 
                 return containerRoles;
 
+            })
+        )
+    }
+
+    public loadLdapUserByString(samAccountName: string = ''): Observable<UsersLdapUser[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ ldapUsers: UsersLdapUser[] }>(`${proxyPath}/users/loadLdapUserByString.json`, {
+            params: {
+                angular: true,
+                samaccountname: samAccountName
+            }
+        }).pipe(
+            map(data => {
+                return data.ldapUsers
+            })
+        )
+    }
+
+    public loadLdapUserDetails(samAccountName: string = ''): Observable<UsersLdapUserDetails> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ ldapUser: UsersLdapUserDetails }>(`${proxyPath}/users/loadLdapUserDetails.json`, {
+            params: {
+                angular: true,
+                samaccountname: samAccountName
+            }
+        }).pipe(
+            map(data => {
+                return data.ldapUser
             })
         )
     }

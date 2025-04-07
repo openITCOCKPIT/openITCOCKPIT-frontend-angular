@@ -209,9 +209,15 @@ export interface UserPost {
     confirm_password?: string
     is_oauth: boolean  // (number for add but boolean for edit)
 
+    samaccountname?: string
+    ldap_dn?: string
+
     usergroup_id: number
     usercontainerroles: {
         _ids: number[]
+    },
+    usercontainerroles_ldap?: {
+        _ids: []
     },
     ContainersUsersMemberships: {
         [key: number]: PermissionLevel
@@ -261,4 +267,40 @@ export interface UserContainerPermission {
     container_id: number,
     container_name: string,
     permission_level: PermissionLevel
+}
+
+export interface UsersLdapUser {
+    givenname: string
+    sn: string
+    samaccountname: string
+    email: string
+    dn: string
+    memberof: string[]
+    display_name: string
+}
+
+export interface UsersLdapUserDetails {
+    givenname: string
+    sn: string
+    samaccountname: string
+    email: string
+    dn: string
+    memberof: string[]
+    display_name: string
+    ldapgroups: UsersLdapGroup[]
+    userContainerRoleContainerPermissionsLdap: UserAddUserContainerRoleContainerPermissionsResponse
+    usergroupLdap: {
+        id: number
+        name: string
+        description: string
+        created: string
+        modified: string
+    }
+}
+
+export interface UsersLdapGroup {
+    id: number
+    cn: string
+    dn: string
+    description: string
 }
