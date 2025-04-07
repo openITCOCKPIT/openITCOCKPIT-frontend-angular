@@ -1,5 +1,7 @@
 import { SelectKeyValue, SelectKeyValueString } from '../../layouts/primeng/select.interface';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { PermissionLevel } from './permission-level';
+import { GenericIdAndName } from '../../generic.interfaces';
 
 /****************************
  *    Generic interfaces    *
@@ -193,23 +195,27 @@ export interface UserPost {
     lastname: string
     email: string
     phone: string
-    is_active: number | boolean // (number for add but boolean for edit)
-    showstatsinmenu: number
+    is_active: 0 | 1
+    showstatsinmenu: 0 | 1
     paginatorlength: number
     dashboard_tab_rotation: number
-    recursive_browser: number
+    company?: string
+    position?: string
+    recursive_browser: 0 | 1
     dateformat: string
     timezone: string
     i18n: string
     password?: string
     confirm_password?: string
-    is_oauth: number
+    is_oauth: boolean  // (number for add but boolean for edit)
 
     usergroup_id: number
     usercontainerroles: {
         _ids: number[]
     },
-    ContainersUsersMemberships: {},
+    ContainersUsersMemberships: {
+        [key: number]: PermissionLevel
+    }
     apikeys: UserAddEditApiKey[]
 }
 
@@ -219,4 +225,40 @@ export interface UserAddEditApiKey {
     last_use?: string | null // edit only
     apikey: string
     description: string
+}
+
+// The server response is a list of containers with their permissions,
+// but we have to convert this into an array to make Angular for happy
+export interface UserAddUserContainerRoleContainerPermissionsResponse {
+    [key: string]: UserAddContainerRolePermission
+}
+
+export interface UserAddContainerRolePermission {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id: number
+    lft: number
+    rght: number
+    _joinData: {
+        id: number
+        usercontainerrole_id: number
+        container_id: number
+        permission_level: PermissionLevel
+    }
+    path: string,
+
+    // Server response this as hahmap
+    user_roles: {
+        [key: string]: GenericIdAndName
+    }
+
+    // we use the array version in the Frontend to make Angular happy
+    user_roles_array?: GenericIdAndName[]
+}
+
+export interface UserContainerPermission {
+    container_id: number,
+    container_name: string,
+    permission_level: PermissionLevel
 }
