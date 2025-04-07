@@ -130,7 +130,7 @@
                     <td class="text-center">
                         <oitc-item-select
                             *oitcPermission="['timeperiods', 'delete']"
-                            [disabled]="false"
+                            [disabled]="!timeperiod.Timeperiod.allow_edit"
                             [item]="timeperiod"></oitc-item-select>
 
                     </td>

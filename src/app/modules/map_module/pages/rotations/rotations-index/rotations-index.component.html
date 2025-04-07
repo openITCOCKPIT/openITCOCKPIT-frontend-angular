@@ -153,6 +153,9 @@
                            [routerLink]="['/', 'map_module', 'rotations', 'edit', rotation.id]">
                             {{ rotation.name }}
                         </a>
+                        <span *ngIf="!rotation.ids?.length && !rotation.allowEdit">
+                            {{ rotation.name }}
+                        </span>
                     </td>
                     <td>{{ rotation.interval }}</td>
 
