@@ -6,6 +6,8 @@ import {
     LoginGetRoot,
     UserDateformatsRoot,
     UserLocaleOption,
+    UsersIndexParams,
+    UsersIndexRoot,
     UserTimezoneGroup,
     UserTimezonesSelect
 } from './users.interface';
@@ -130,5 +132,29 @@ export class UsersService {
                 return data.users;
             })
         );
+    }
+
+    public getIndex(params: UsersIndexParams): Observable<UsersIndexRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<UsersIndexRoot>(`${proxyPath}/users/index.json`, {
+            params: params as {} // cast UsersIndexParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadUsergroups(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ usergroups: SelectKeyValue[] }>(`${proxyPath}/users/loadUsergroups.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.usergroups;
+            })
+        )
     }
 }

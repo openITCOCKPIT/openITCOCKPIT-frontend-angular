@@ -96,7 +96,7 @@ export interface UsersIndexParams {
     'filter[full_name]': string,
     'filter[Users.email]': string,
     'filter[Users.phone]': string,
-    'filter[Users.usergroup_id]': number[],
+    'filter[Users.usergroup_id][]': number[],
     'filter[Users.company]': string,
 }
 
@@ -104,13 +104,13 @@ export function getDefaultUsersIndexParams(): UsersIndexParams {
     return {
         angular: true,
         scroll: true,
-        sort: 'Containers.name',
+        sort: 'full_name',
         page: 1,
         direction: 'asc',
         'filter[full_name]': '',
         'filter[Users.email]': '',
         'filter[Users.phone]': '',
-        'filter[Users.usergroup_id]': [],
+        'filter[Users.usergroup_id][]': [],
         'filter[Users.company]': '',
     }
 }

@@ -547,6 +547,9 @@ const coreRoutes: Routes = [{
     path: 'users/login',
     loadComponent: () => import('./pages/users/users-login/users-login.component').then(m => m.UsersLoginComponent)
 }, {
+    path: 'users/index',
+    loadComponent: () => import('./pages/users/users-index/users-index.component').then(m => m.UsersIndexComponent)
+}, {
     path: 'acknowledgements/host/:id',
     loadComponent: () => import('./pages/acknowledgements/acknowledgements-host/acknowledgements-host.component').then(m => m.AcknowledgementsHostComponent)
 }, {

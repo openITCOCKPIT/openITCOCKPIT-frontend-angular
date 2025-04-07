@@ -26,6 +26,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
 import { UsersService } from '../../pages/users/users.service';
+import { AllUser } from '../../pages/users/users.interface';
 
 @Component({
     selector: 'oitc-reset-password-modal',
@@ -47,8 +48,10 @@ import { UsersService } from '../../pages/users/users.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResetPasswordModalComponent implements OnInit, OnDestroy {
+
     @Output() completed = new EventEmitter<boolean>();
-    @Input({required: true}) public user: any; //todo fix me
+    @Input({required: true}) public user?: AllUser;
+
     private readonly modalService: ModalService = inject(ModalService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly UsersService: UsersService = inject(UsersService);
@@ -82,8 +85,6 @@ export class ResetPasswordModalComponent implements OnInit, OnDestroy {
             },
             error: (error) => {
                 this.hideModal();
-
-
             }
         });
     }
