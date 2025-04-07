@@ -270,7 +270,7 @@
                                     {{ t('Delete selected') }}
                                 </button>
 
-                                <c-dropdown>
+                                <c-dropdown *oitcPermission="['hosts', 'externalcommands']">
                                     <button cButton cDropdownToggle color="default">
                                         {{ t('More actions') }}
                                     </button>
