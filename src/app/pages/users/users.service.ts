@@ -4,8 +4,11 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
     LoginGetRoot,
+    UserAddContainerRolePermission,
+    UserAddUserContainerRoleContainerPermissionsResponse,
     UserDateformatsRoot,
     UserLocaleOption,
+    UserPost,
     UsersIndexParams,
     UsersIndexRoot,
     UserTimezoneGroup,
@@ -156,5 +159,85 @@ export class UsersService {
                 return data.usergroups;
             })
         )
+    }
+
+    public loadUserContainerRoles(searchString: string = '', selected: number[] = []): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ usercontainerroles: SelectKeyValue[] }>(`${proxyPath}/users/loadContainerRoles.json`, {
+            params: {
+                angular: true,
+                'filter[Usercontainerroles.name]': searchString,
+                'selected[]': selected
+            }
+        }).pipe(
+            map(data => {
+                return data.usercontainerroles;
+            })
+        )
+    }
+
+    public loadContainersForAngular(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            containers: SelectKeyValue[]
+        }>(`${proxyPath}/users/loadContainersForAngular.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.containers;
+            })
+        )
+    }
+
+    public loadContainerPermissions(usercontainerRoleIds: number[]): Observable<UserAddContainerRolePermission[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            userContainerRoleContainerPermissions: UserAddUserContainerRoleContainerPermissionsResponse,
+            _csrfToken: string
+        }>(`${proxyPath}/users/loadContainerPermissions.json`, {
+            params: {
+                angular: true,
+                'usercontainerRoleIds[]': usercontainerRoleIds
+            }
+        }).pipe(
+            map(data => {
+                const containerRoles: UserAddContainerRolePermission[] = [];
+
+                // Convert hashmap to array
+                for (const index in data.userContainerRoleContainerPermissions) {
+                    const cr = data.userContainerRoleContainerPermissions[index];
+                    cr.user_roles_array = Object.values(cr.user_roles);
+                    containerRoles.push(cr);
+                }
+
+                return containerRoles;
+
+            })
+        )
+    }
+
+    public add(user: UserPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/users/add.json?angular=true`, {
+            User: user
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.user as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 }
