@@ -183,3 +183,40 @@ export interface UsersIndexUserContainer {
         permission_level: number
     }
 }
+
+/**********************
+ *    Add action    *
+ **********************/
+export interface UserPost {
+    id?: number
+    firstname: string
+    lastname: string
+    email: string
+    phone: string
+    is_active: number | boolean // (number for add but boolean for edit)
+    showstatsinmenu: number
+    paginatorlength: number
+    dashboard_tab_rotation: number
+    recursive_browser: number
+    dateformat: string
+    timezone: string
+    i18n: string
+    password?: string
+    confirm_password?: string
+    is_oauth: number
+
+    usergroup_id: number
+    usercontainerroles: {
+        _ids: number[]
+    },
+    ContainersUsersMemberships: {},
+    apikeys: UserAddEditApiKey[]
+}
+
+export interface UserAddEditApiKey {
+    id?: number // edit only
+    index?: number // edit only
+    last_use?: string | null // edit only
+    apikey: string
+    description: string
+}
