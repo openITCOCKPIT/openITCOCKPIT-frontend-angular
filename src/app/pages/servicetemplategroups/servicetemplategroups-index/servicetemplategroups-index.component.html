@@ -181,13 +181,13 @@
                                 <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
                                 {{ t('Used By') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['servicetemplategroups', 'copy']"></li>
                             <oitc-actions-button-element [permission]="'servicetemplategroups.copy'"
                                                          [url]="'/servicetemplategroups/copy/' + servicetemplategroup.id">
                                 <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                 {{ t('Copy') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['servicetemplategroups', 'delete']"></li>
                             <oitc-actions-button-element (click)="toggleDeleteAllModal(servicetemplategroup)"
                                                          [permission]="'servicetemplategroups.delete'">
                                 <span class="text-danger">
