@@ -177,13 +177,13 @@
                                 <fa-icon [icon]="['fas', 'book']"></fa-icon>
                                 {{ t('Documentation') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['hosttemplates', 'copy']"></li>
                             <oitc-actions-button-element [permission]="'hosttemplates.copy'"
                                                          [url]="'/hosttemplates/copy/' + hosttemplate.Hosttemplate.id">
                                 <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                 {{ t('Copy') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['hosttemplates', 'delete']"></li>
                             <oitc-actions-button-element (click)="toggleDeleteAllModal(hosttemplate)"
                                                          [permission]="'hosttemplates.delete'">
                                 <span class="text-danger">
