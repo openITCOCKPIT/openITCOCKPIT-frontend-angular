@@ -34,7 +34,7 @@
                         {{ t('Refresh') }}
                     </button>
                 </c-nav-item>
-                <c-nav-item class="px-1">
+                <c-nav-item class="px-1" *ngIf="tenants?.hasRootPrivileges">
                     <button *oitcPermission="['tenants', 'add']" [routerLink]="['/', 'tenants', 'add']"
                             cButton
                             class="ripple"
