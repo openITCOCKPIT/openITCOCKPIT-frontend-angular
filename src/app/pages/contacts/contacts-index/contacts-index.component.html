@@ -262,13 +262,13 @@
                                 <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
                                 {{ t('Used By') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['contacts', 'copy']"></li>
                             <oitc-actions-button-element [permission]="'contacts.copy'"
                                                          [url]="'/contacts/copy/' + contact.Contact.id">
                                 <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                 {{ t('Copy') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['contacts', 'delete']"></li>
                             <oitc-actions-button-element (click)="toggleDeleteAllModal(contact)"
                                                          [permission]="'contacts.delete'">
                                 <span class="text-danger">
