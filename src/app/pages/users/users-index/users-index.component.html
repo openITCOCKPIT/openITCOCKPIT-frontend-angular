@@ -239,10 +239,12 @@
                         </oitc-badge-outline>
                     </td>
                     <td>
-                        <oitc-badge-outline class="{{ user.UserTypes[0].class }} {{ user.UserTypes[0].color }}"
-                                            [color]="user.UserTypes[0].color">
-                            {{ user.UserTypes[0].title }}
-                        </oitc-badge-outline>
+                        @for (userType of user.UserTypes; track $index) {
+                            <oitc-badge-outline class="{{ userType.class }} {{ userType.color }} pe-1"
+                                                [color]="userType.color">
+                                {{ userType.title }}
+                            </oitc-badge-outline>
+                        }
                     </td>
                     <td>
                         {{ user.usergroup.name }}
