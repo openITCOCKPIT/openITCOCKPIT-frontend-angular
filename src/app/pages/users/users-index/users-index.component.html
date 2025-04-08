@@ -305,6 +305,18 @@
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete selected') }}
                                 </button>
+
+                                <c-dropdown>
+                                    <button cButton cDropdownToggle color="default">
+                                        {{ t('More actions') }}
+                                    </button>
+                                    <ul cDropdownMenu>
+                                        <li><a href="{{linkFor('csv')}}" cDropdownItem>
+                                            <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                            {{ t('List as csv') }}</a></li>
+                                    </ul>
+                                </c-dropdown>
+
                             </div>
                         </c-col>
                     </c-row>
