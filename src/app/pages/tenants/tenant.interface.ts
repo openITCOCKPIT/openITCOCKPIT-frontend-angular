@@ -28,6 +28,7 @@ export function getDefaultTenantsIndexParams(): TenantsIndexParams {
 
 export interface TenantsIndexRoot extends PaginateOrScroll {
     all_tenants: AllTenant[]
+    hasRootPrivileges: boolean
     _csrfToken: string
 }
 
