@@ -391,7 +391,7 @@
                         [appendTo]="''"
                         [(ngModel)]="post.Autoreport.calendar_id"
                         [options]="calendars"
-                        [disabled]="!post.Autoreport.consider_holidays"
+                        [disabled]="!post.Autoreport.consider_holidays"post.Autoreport.report_send_interval
                         oitcFormError [errors]="errors" errorField="calendar_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="calendar_id"></oitc-form-feedback>
@@ -399,10 +399,11 @@
                 <div class="mb-3">
                     <label cLabel for="UsersSelect">
                         {{ t('Users') }}
+                        <oitc-required-icon *ngIf="post.Autoreport.report_send_interval && post.Autoreport.report_send_interval !== 'NEVER'"></oitc-required-icon>
                     </label>
 
                     <oitc-multi-select
-                        [disabled]="post.Autoreport.report_send_interval === 'NEVER'"
+                        [disabled]="post.Autoreport.report_send_interval === 'NEVER' || post.Autoreport.report_send_interval === null"
                         name="UsersSelect"
                         id="UsersSelect"
                         optionValue="key"

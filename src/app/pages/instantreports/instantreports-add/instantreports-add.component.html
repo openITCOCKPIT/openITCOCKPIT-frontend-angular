@@ -338,6 +338,7 @@
                 <div class="mb-3">
                     <label cLabel for="UsersSelect">
                         {{ t('Users to send') }}
+                        <oitc-required-icon *ngIf="post.send_email"></oitc-required-icon>
                     </label>
 
                     <oitc-multi-select
@@ -348,10 +349,10 @@
                         optionLabel="value"
                         [(ngModel)]="post.users._ids"
                         [options]="users"
-                        oitcFormError [errors]="errors" errorField="users">
+                        oitcFormError [errors]="errors" errorField="send_email">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors"
-                                        errorField="users"></oitc-form-feedback>
+                                        errorField="send_email"></oitc-form-feedback>
                 </div>
 
             </c-card-body>

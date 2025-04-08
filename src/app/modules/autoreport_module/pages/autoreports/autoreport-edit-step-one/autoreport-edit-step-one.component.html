@@ -405,6 +405,7 @@
                 <div class="mb-3">
                     <label cLabel for="UsersSelect">
                         {{ t('Users') }}
+                        <oitc-required-icon *ngIf="post.Autoreport.report_send_interval !== 'NEVER'"></oitc-required-icon>
                     </label>
 
                     <oitc-multi-select
