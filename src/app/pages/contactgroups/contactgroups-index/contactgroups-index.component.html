@@ -164,13 +164,13 @@
                                 <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
                                 {{ t('Used By') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['contactgroups', 'copy']"></li>
                             <oitc-actions-button-element [permission]="'contactgroups.copy'"
                                                          [url]="'/contactgroups/copy/' + contactgroup.Contactgroup.id">
                                 <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                 {{ t('Copy') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['contactgroups', 'delete']"></li>
                             <oitc-actions-button-element (click)="toggleDeleteAllModal(contactgroup)"
                                                          [permission]="'contactgroups.delete'">
                                 <span class="text-danger">
