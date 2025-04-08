@@ -48,6 +48,7 @@ import { ServicesService } from '../../services/services.service';
 import { ServicegroupsService } from '../../servicegroups/servicegroups.service';
 import { UsersService } from '../../users/users.service';
 import { HistoryService } from '../../../history.service';
+import { DebounceDirective } from '../../../directives/debounce.directive';
 
 @Component({
     selector: 'oitc-instantreports-edit',
@@ -81,7 +82,8 @@ import { HistoryService } from '../../../history.service';
         TrueFalseDirective,
         XsButtonDirective,
         RouterLink,
-        FormLoaderComponent
+        FormLoaderComponent,
+        DebounceDirective
     ],
     templateUrl: './instantreports-edit.component.html',
     styleUrl: './instantreports-edit.component.css',
@@ -144,10 +146,6 @@ export class InstantreportsEditComponent {
     ];
 
     protected readonly SendIntervalSelect: SelectKeyValue[] = [
-        {
-            key: 0,
-            value: this.TranslocoService.translate('NEVER')
-        },
         {
             key: 1,
             value: this.TranslocoService.translate('DAY')
@@ -311,6 +309,13 @@ export class InstantreportsEditComponent {
             case InstantreportObjectTypes.Servicegroups:
                 this.loadServicegroups();
                 break;
+        }
+    }
+
+    public onSendCheckboxChange(event:any) {
+        if(event === 1 && this.post.send_interval === 0) {
+            this.post.send_interval = 1; // Day
+            this.cdr.markForCheck();
         }
     }
 
