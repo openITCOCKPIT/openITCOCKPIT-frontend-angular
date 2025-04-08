@@ -260,6 +260,7 @@
                                     {{ t('Copy') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['servicetemplates', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
