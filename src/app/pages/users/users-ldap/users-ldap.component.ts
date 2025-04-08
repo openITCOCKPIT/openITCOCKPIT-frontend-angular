@@ -412,13 +412,11 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
         });
         this.post.ContainersUsersMemberships = ContainersUsersMemberships;
 
-        if (this.post.is_oauth) {
-            //oAuth 2 users don't have a password
-            this.post.password = '';
-            this.post.confirm_password = '';
-        }
+        //LDAP users don't have a password
+        this.post.password = '';
+        this.post.confirm_password = '';
 
-        this.subscriptions.add(this.UsersService.add(this.post)
+        this.subscriptions.add(this.UsersService.addLdap(this.post)
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
