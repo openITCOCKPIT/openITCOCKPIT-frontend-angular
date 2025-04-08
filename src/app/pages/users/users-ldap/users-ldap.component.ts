@@ -31,7 +31,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
@@ -57,6 +57,8 @@ import { ROOT_CONTAINER } from '../../changelogs/object-types.enum';
 import { ContactsService } from '../../contacts/contacts.service';
 import { LdapConfig } from '../../contacts/contacts.interface';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
+import _ from 'lodash';
+import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
 
 @Component({
     selector: 'oitc-users-ldap',
@@ -99,7 +101,9 @@ import { OitcAlertComponent } from '../../../components/alert/alert.component';
         BadgeOutlineComponent,
         AsyncPipe,
         FormSelectDirective,
-        OitcAlertComponent
+        OitcAlertComponent,
+        UiBlockerComponent,
+        TranslocoPipe
     ],
     templateUrl: './users-ldap.component.html',
     styleUrl: './users-ldap.component.css',
@@ -121,6 +125,12 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
     public timezones: UserTimezonesSelect[] = [];
     public serverTime: string = '';
     public serverTimeZone: string = '';
+
+    public selectedUserContainerRolesLdapReadOnly: number[] = [];
+    public userContainerRoleContainerPermissionsLdap: UserAddContainerRolePermission[] = [];
+
+    public selectedUserContainerRolesContainerIds: number[] = [];
+    public selectedUserRoleThroughLdap: number = 0;
 
     public selectedUserContainers: number[] = [];
     public selectedUserContainerWithPermission: UserContainerPermission[] = [];
@@ -283,6 +293,9 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
         this.post.lastname = '';
         this.post.email = '';
         this.ldapUserDetails = undefined;
+        this.selectedUserContainerRolesLdapReadOnly = [];
+        this.userContainerRoleContainerPermissionsLdap = [];
+        this.selectedUserRoleThroughLdap = 0;
         this.cdr.markForCheck();
 
         if (this.post.samaccountname) {
@@ -294,9 +307,30 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
 
                 this.ldapUserDetails = result;
 
-                // todo implement handling of ldap groups
-                //$scope.loadLdapUserDetailsBySamAccountName($scope.ldapUsers[index].samaccountname);
-                console.log('todo implement handling of ldap groups');
+                this.selectedUserRoleThroughLdap = result.usergroupLdap.id || 0;
+
+                // Make sure the array is defined
+                if (!this.post.usercontainerroles_ldap) {
+                    this.post.usercontainerroles_ldap = {
+                        _ids: []
+                    };
+                }
+
+                const idsString = Object.keys(result.userContainerRoleContainerPermissionsLdap);
+                this.post.usercontainerroles_ldap._ids = idsString.map(Number);
+
+                // Mark container roles mapped through LDAP as selected
+                for (let i in result.userContainerRoleContainerPermissionsLdap) {
+                    this.selectedUserContainerRolesLdapReadOnly.push(
+                        result.userContainerRoleContainerPermissionsLdap[i]._joinData.usercontainerrole_id
+                    );
+                }
+
+                // Remove duplicates otherwise the PrimeNG will select the same item multiple times
+                this.selectedUserContainerRolesLdapReadOnly = _.uniq(this.selectedUserContainerRolesLdapReadOnly);
+
+                // Store permissions for the read / write radio buttons
+                this.userContainerRoleContainerPermissionsLdap = result.userContainerRoleContainerPermissionsLdapArray || [];
 
                 this.cdr.markForCheck();
             }));
@@ -308,12 +342,14 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
 
         if (this.post.usercontainerroles._ids.length === 0) {
             this.userContainerRoleContainerPermissions = [];
+            this.selectedUserContainerRolesContainerIds = [];
             this.cdr.markForCheck();
             return;
         }
 
         this.subscriptions.add(this.UsersService.loadContainerPermissions(this.post.usercontainerroles._ids).subscribe((result) => {
             this.userContainerRoleContainerPermissions = result;
+            this.selectedUserContainerRolesContainerIds = result.map((item) => item.id);
             this.cdr.markForCheck();
         }));
     }

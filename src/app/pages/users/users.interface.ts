@@ -217,7 +217,7 @@ export interface UserPost {
         _ids: number[]
     },
     usercontainerroles_ldap?: {
-        _ids: []
+        _ids: number[]
     },
     ContainersUsersMemberships: {
         [key: number]: PermissionLevel
@@ -288,7 +288,8 @@ export interface UsersLdapUserDetails {
     memberof: string[]
     display_name: string
     ldapgroups: UsersLdapGroup[]
-    userContainerRoleContainerPermissionsLdap: UserAddUserContainerRoleContainerPermissionsResponse
+    userContainerRoleContainerPermissionsLdap: UserAddUserContainerRoleContainerPermissionsResponse // Response
+    userContainerRoleContainerPermissionsLdapArray?: UserAddContainerRolePermission[] // For Angular
     usergroupLdap: {
         id: number
         name: string

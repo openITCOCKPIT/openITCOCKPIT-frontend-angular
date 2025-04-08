@@ -243,7 +243,21 @@ export class UsersService {
             }
         }).pipe(
             map(data => {
-                return data.ldapUser
+                const ldapUser = data.ldapUser
+                ldapUser.userContainerRoleContainerPermissionsLdapArray = [];
+
+                const containerRoles: UserAddContainerRolePermission[] = [];
+
+                // Convert hashmap to array
+                for (const index in ldapUser.userContainerRoleContainerPermissionsLdap) {
+                    const cr = ldapUser.userContainerRoleContainerPermissionsLdap[index];
+                    cr.user_roles_array = Object.values(cr.user_roles);
+                    containerRoles.push(cr);
+                }
+
+                ldapUser.userContainerRoleContainerPermissionsLdapArray = containerRoles;
+
+                return ldapUser;
             })
         )
     }

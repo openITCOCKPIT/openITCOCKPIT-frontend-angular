@@ -114,6 +114,91 @@
                 </oitc-alert>
 
                 <div class="mb-3">
+                    <!-- We do not submit this data, the UsersController will ask the LDAP server again so no manipulations could occur -->
+                    <label cLabel for="UserContainerrolesLdap" class="hintmark">
+                        {{ t('Container Roles through LDAP') }}
+                    </label>
+                    <oitc-ui-blocker [blocked]="true">
+                        <oitc-multi-select
+                            [placeholder]="'No matches' | transloco"
+                            name="UserContainerrolesLdap"
+                            id="UserContainerrolesLdap"
+                            optionValue="key"
+                            optionLabel="value"
+                            [options]="usercontainerroles"
+                            [(ngModel)]="selectedUserContainerRolesLdapReadOnly"
+                            oitcFormError [errors]="errors" errorField="usercontainerroles">
+                        </oitc-multi-select>
+                    </oitc-ui-blocker>
+                    <!-- ngModel is just for Angular. The UsersController will pull the data from the LDAP server on save -->
+                    <oitc-form-feedback [errors]="errors" errorField="usercontainerroles"></oitc-form-feedback>
+                    <div class="help-block text-info">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Automatically assigned container roles based on the LDAP groups of the current user.') }}
+                    </div>
+                </div>
+                <!-- User Container Roles permissions read/write (LDAP) -->
+                @for (userContainerRoleLdap of userContainerRoleContainerPermissionsLdap; track $index) {
+                    <c-row class="mb-2">
+                        <c-col [md]="1"><!-- spacer --></c-col>
+                        <c-col [md]="11">
+                            <legend class="p-0 text-success fs-6">
+                                {{ userContainerRoleLdap.path }}
+                                <fa-icon [icon]="['fas', 'minus-square']" class="text-danger"
+                                         *ngIf="selectedUserContainers.indexOf(userContainerRoleLdap._joinData.container_id) !== -1 ||
+                                                selectedUserContainerRolesContainerIds.indexOf(userContainerRoleLdap._joinData.container_id) !== -1"></fa-icon>
+                            </legend>
+                            <div class="d-inline-block"
+                                 [ngClass]="{'user-strike' : selectedUserContainers.indexOf(userContainerRoleLdap._joinData.container_id) !== -1 ||
+                                                             selectedUserContainerRolesContainerIds.indexOf(userContainerRoleLdap._joinData.container_id) !== -1}">
+                                <input cFormCheckInput
+                                       [attr.id]="'ldap_group-'+userContainerRoleLdap.id+'_read'"
+                                       [name]="'ldap_group-'+userContainerRoleLdap.id"
+                                       type="radio"
+                                       disabled="disabled"
+                                       [value]="PermissionLevel.READ_RIGHT"
+                                       [(ngModel)]="userContainerRoleLdap._joinData.permission_level"/>
+                                <label cFormCheckLabel class="ps-2 pe-4">
+                                    {{ t('read') }}
+                                </label>
+
+                                <input cFormCheckInput
+                                       [attr.id]="'ldap_group-'+userContainerRoleLdap.id+'_write'"
+                                       [name]="'ldap_group-'+userContainerRoleLdap.id"
+                                       type="radio"
+                                       disabled="disabled"
+                                       [value]="PermissionLevel.WRITE_RIGHT"
+                                       [(ngModel)]="userContainerRoleLdap._joinData.permission_level"/>
+                                <label cFormCheckLabel class="ps-2 pe-4">
+                                    {{ t('read/write') }}
+                                </label>
+                            </div>
+
+                            @for (userRole of userContainerRoleLdap.user_roles_array; track $index) {
+                                <oitc-badge-outline color="primary" class="me-1">
+                                    @if (PermissionsService.hasPermissionObservable(['usercontainerroles', 'edit'])|async) {
+                                        <a [routerLink]="['/', 'usercontainerroles', 'edit', userRole.id]">
+                                            {{ userRole.name }}
+                                        </a>
+                                    } @else {
+                                        {{ userRole.name }}
+
+                                    }
+                                </oitc-badge-outline>
+                            }
+                        </c-col>
+                    </c-row>
+                }
+                <c-row>
+                    <c-col [md]="4" class="text-end font-xs text-primary italic mt-2"
+                           *ngIf="selectedUserContainerRolesLdapReadOnly.length > 0 && (post.usercontainerroles._ids.length > 0 || selectedUserContainers.length > 0)">
+                        {{ t('The user permissions will be extended or adapted with additional user roles or containers') }}
+                        <fa-icon [icon]="['fas', 'down-long']"></fa-icon>
+                    </c-col>
+                </c-row>
+
+
+                <div class="mb-3">
                     <label cLabel for="post.usercontainerroles._ids" class="hintmark">
                         {{ t('Container Roles') }}
                     </label>
@@ -129,8 +214,9 @@
                         oitcFormError [errors]="errors" errorField="usercontainerroles">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="usercontainerroles"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('Container Roles are handy to grant the same permissions to multiple users.') }}
+                    <div class="help-block text-info">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Container Roles are handy to grant the same permissions to multiple users. Container Roles will overwrite automatically assignments via LDAP groups.') }}
                     </div>
                 </div>
 
@@ -217,8 +303,8 @@
                 <!-- Container permissions read/write -->
                 @for (userContainer of selectedUserContainerWithPermission; track $index) {
                     <c-row class="mb-2">
-                        <c-col [md]="2"><!-- spacer --></c-col>
-                        <c-col [md]="10">
+                        <c-col [md]="3"><!-- spacer --></c-col>
+                        <c-col [md]="9">
                             <legend class="p-0 text-info fs-6">
                                 {{ userContainer.container_name }}
                             </legend>
@@ -251,9 +337,32 @@
                     </c-row>
                 }
 
+
+                <div class="mb-3">
+                    <label cLabel for="ldapUserDetails.usergroupLdap.id">
+                        {{ t('User role through LDAP') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-ui-blocker [blocked]="true">
+                        <oitc-select
+                            name="ldapUserDetails.usergroupLdap.id"
+                            id="ldapUserDetails.usergroupLdap.id"
+                            optionValue="key"
+                            optionLabel="value"
+                            [placeholder]="'No matches' | transloco"
+                            [disabled]="true"
+                            [(ngModel)]="selectedUserRoleThroughLdap"
+                            [options]="usergroups"
+                            oitcFormError [errors]="errors" errorField="usergroup_id">
+                            <!-- ngModel is just for Angular. The data gets pull from the LDAP server on login -->
+                        </oitc-select>
+                    </oitc-ui-blocker>
+                    <oitc-form-feedback [errors]="errors" errorField="usergroup_id"></oitc-form-feedback>
+                </div>
+
                 <div class="mb-3">
                     <label cLabel for="post.usergroup_id">
-                        {{ t('User role') }}
+                        {{ t('Fallback User role') }}
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
@@ -266,6 +375,10 @@
                         oitcFormError [errors]="errors" errorField="usergroup_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="usergroup_id"></oitc-form-feedback>
+                    <div class="help-block text-info">
+                        <fa-icon [icon]="['fas', 'info-circle']"/>
+                        {{ t('Fall back user role that is used by the system, when no user role assignment through LDAP is possible.') }}
+                    </div>
                 </div>
 
                 <div class="mb-3">
