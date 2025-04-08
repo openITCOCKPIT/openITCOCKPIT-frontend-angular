@@ -173,13 +173,13 @@
                                 <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
                                 {{ t('Used By') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['servicegroups', 'copy']"></li>
                             <oitc-actions-button-element [permission]="'servicegroups.copy'"
                                                          [url]="'/servicegroups/copy/' + servicegroup.id">
                                 <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                 {{ t('Copy') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['servicegroups', 'delete']"></li>
                             <oitc-actions-button-element (click)="toggleDeleteAllModal(servicegroup)"
                                                          [permission]="'servicegroups.delete'">
                                 <span class="text-danger">
