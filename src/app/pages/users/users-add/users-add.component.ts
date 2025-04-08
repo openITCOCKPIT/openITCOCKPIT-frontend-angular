@@ -251,7 +251,10 @@ export class UsersAddComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public onSelectedContainerIdsChange(event: any) {
+    public onSelectedContainerIdsChange(values: number[]) {
+        console.log('onSelectedContainerIdsChange', values);
+        console.log(this.selectedUserContainers);
+
         // Called when a container is selected or unselected
         if (this.selectedUserContainers.length === 0) {
             // No user containers selected
@@ -279,12 +282,16 @@ export class UsersAddComponent implements OnInit, OnDestroy {
         });
 
         //Remove "unselected" containers
+        const selectedUserContainerWithPermission: UserContainerPermission[] = [];
+
         this.selectedUserContainerWithPermission.forEach((container, index) => {
-            if (this.selectedUserContainers.indexOf(container.container_id) === -1) {
-                // Container not selected anymore
-                this.selectedUserContainerWithPermission.splice(index, 1);
+            if (this.selectedUserContainers.indexOf(container.container_id) !== -1) {
+                // Container is still selected
+                selectedUserContainerWithPermission.push(container);
             }
         });
+
+        this.selectedUserContainerWithPermission = selectedUserContainerWithPermission;
 
         this.cdr.markForCheck();
     }

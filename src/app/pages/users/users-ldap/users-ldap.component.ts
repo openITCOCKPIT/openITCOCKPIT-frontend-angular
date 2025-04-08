@@ -346,12 +346,16 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
         });
 
         //Remove "unselected" containers
+        const selectedUserContainerWithPermission: UserContainerPermission[] = [];
+
         this.selectedUserContainerWithPermission.forEach((container, index) => {
-            if (this.selectedUserContainers.indexOf(container.container_id) === -1) {
-                // Container not selected anymore
-                this.selectedUserContainerWithPermission.splice(index, 1);
+            if (this.selectedUserContainers.indexOf(container.container_id) !== -1) {
+                // Container is still selected
+                selectedUserContainerWithPermission.push(container);
             }
         });
+
+        this.selectedUserContainerWithPermission = selectedUserContainerWithPermission;
 
         this.cdr.markForCheck();
     }

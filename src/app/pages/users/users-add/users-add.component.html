@@ -50,6 +50,7 @@
                         [searchCallback]="loadContainerRoles"
                         (onChange)="onUsercontainerrolesSelectChange($event)"
                         [options]="usercontainerroles"
+                        [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
                         oitcFormError [errors]="errors" errorField="usercontainerroles">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="usercontainerroles"></oitc-form-feedback>
@@ -128,7 +129,8 @@
                         optionLabel="value"
                         [(ngModel)]="selectedUserContainers"
                         [options]="containers"
-                        (onChange)="onSelectedContainerIdsChange($event)"
+                        (ngModelChange)="onSelectedContainerIdsChange($event)"
+                        [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
                         oitcFormError [errors]="errors" errorField="containers">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
