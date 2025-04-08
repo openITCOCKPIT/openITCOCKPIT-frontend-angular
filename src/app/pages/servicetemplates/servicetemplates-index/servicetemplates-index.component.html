@@ -221,13 +221,13 @@
                                 <fa-icon [icon]="['fas', 'book']"></fa-icon>
                                 {{ t('Documentation') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['servicetemplates', 'copy']"></li>
                             <oitc-actions-button-element [permission]="'servicetemplates.copy'"
                                                          [url]="'/servicetemplates/copy/' + servicetemplate.Servicetemplate.id">
                                 <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                 {{ t('Copy') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['servicetemplates', 'delete']"></li>
                             <oitc-actions-button-element (click)="toggleDeleteAllModal(servicetemplate)"
                                                          [permission]="'servicetemplates.delete'">
                                 <span class="text-danger">
@@ -254,11 +254,13 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        *oitcPermission="['servicetemplates', 'copy']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['servicetemplates', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
