@@ -221,13 +221,13 @@
                                 <fa-icon [icon]="['fas', 'book']"></fa-icon>
                                 {{ t('Documentation') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['servicetemplates', 'copy']"></li>
                             <oitc-actions-button-element [permission]="'servicetemplates.copy'"
                                                          [url]="'/servicetemplates/copy/' + servicetemplate.Servicetemplate.id">
                                 <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                 {{ t('Copy') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['servicetemplates', 'delete']"></li>
                             <oitc-actions-button-element (click)="toggleDeleteAllModal(servicetemplate)"
                                                          [permission]="'servicetemplates.delete'">
                                 <span class="text-danger">
