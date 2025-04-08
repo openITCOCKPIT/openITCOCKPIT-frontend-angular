@@ -137,7 +137,6 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
                         permission_level: this.post.ContainersUsercontainerrolesMemberships[containerId],
                         readonly: (typeof notPermittetCheck === "undefined")
                     };
-                    console.log(this.post.ContainersUsercontainerrolesMemberships[containerId]);
                 }
                 if (this.notPermittedContainers.length > 0) {
                     //remove not permitted containers from selected containers

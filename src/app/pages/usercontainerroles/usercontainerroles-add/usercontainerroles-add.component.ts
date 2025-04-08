@@ -143,11 +143,9 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
                 this.post.ContainersUsercontainerrolesMemberships[containerId] = permissionLevel;
             }
         });
-        console.log(this.post.ContainersUsercontainerrolesMemberships);
         this.selectedContainerWithPermission = [];
         _.each(this.post.ContainersUsercontainerrolesMemberships, (value, key) => {
             let containerId = parseInt(key, 10);
-            console.log(value);
             this.selectedContainerWithPermission.push({
                 name: this.getContainerName(containerId),
                 container_id: containerId,
