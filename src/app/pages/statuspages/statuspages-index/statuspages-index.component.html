@@ -235,7 +235,7 @@
                                                          [permission]="'statuspages.view'"
                                                          >
                                 <a href="/statuspages/publicView/{{statuspage.id}}" target="_blank">
-                                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'users-rectangle']"></fa-icon>
                                     {{ t('Public view') }}
                                 </a>
 
@@ -267,6 +267,7 @@
                         <c-col>
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleDeleteAllModal()"
+                                         *oitcPermission="['statuspages', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
