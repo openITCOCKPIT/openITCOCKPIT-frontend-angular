@@ -162,6 +162,15 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
     }
 
     private getDefaultPost(): UserPost {
+        this.ldapUserDetails = undefined;
+        this.selectedUserContainerRolesLdapReadOnly = [];
+        this.userContainerRoleContainerPermissionsLdap = [];
+        this.selectedUserRoleThroughLdap = 0;
+
+        this.selectedUserContainers = [];
+        this.selectedUserContainerWithPermission = [];
+        this.userContainerRoleContainerPermissions = [];
+
         return {
             firstname: '',
             lastname: '',
@@ -189,7 +198,7 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
             },
             ContainersUsersMemberships: {},
             apikeys: []
-        }
+        };
     }
 
     public loadLdapConfig() {
