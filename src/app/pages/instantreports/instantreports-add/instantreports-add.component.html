@@ -315,44 +315,44 @@
                                for="send_email">{{ t('Send email') }}</label>
                     </c-form-check>
                 </div>
+                <div *ngIf="post.send_email">
+                    <div class="mb-3">
+                        <label cLabel for="SendInterval">
+                            {{ t('Send interval') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
 
-                <div class="mb-3">
-                    <label cLabel for="SendInterval">
-                        {{ t('Send interval') }}
-                    </label>
+                        <oitc-select
+                            name="SendInterval"
+                            id="SendInterval"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.send_interval"
+                            [options]="SendIntervalSelect"
+                            oitcFormError [errors]="errors" errorField="send_interval">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="send_interval"></oitc-form-feedback>
+                    </div>
 
-                    <oitc-select
-                        [disabled]="!post.send_email"
-                        name="SendInterval"
-                        id="SendInterval"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.send_interval"
-                        [options]="SendIntervalSelect"
-                        oitcFormError [errors]="errors" errorField="send_interval">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors"
-                                        errorField="send_interval"></oitc-form-feedback>
-                </div>
+                    <div class="mb-3">
+                        <label cLabel for="UsersSelect">
+                            {{ t('Users to send') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
 
-                <div class="mb-3">
-                    <label cLabel for="UsersSelect">
-                        {{ t('Users to send') }}
-                        <oitc-required-icon *ngIf="post.send_email"></oitc-required-icon>
-                    </label>
-
-                    <oitc-multi-select
-                        [disabled]="!post.send_email"
-                        name="UsersSelect"
-                        id="UsersSelect"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.users._ids"
-                        [options]="users"
-                        oitcFormError [errors]="errors" errorField="send_email">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors"
-                                        errorField="send_email"></oitc-form-feedback>
+                        <oitc-multi-select
+                            name="UsersSelect"
+                            id="UsersSelect"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.users._ids"
+                            [options]="users"
+                            oitcFormError [errors]="errors" errorField="send_email">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="send_email"></oitc-form-feedback>
+                    </div>
                 </div>
 
             </c-card-body>
