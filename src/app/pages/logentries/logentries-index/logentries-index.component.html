@@ -57,6 +57,38 @@
                         <c-col md="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
+                                    {{ t('From') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="from"
+                                       [placeholder]="'From date' | transloco"
+                                       aria-label="from"
+                                       name="from"
+                                       cFormControl
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{ t('To') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="to"
+                                       [placeholder]="'From date' | transloco"
+                                       aria-label="to"
+                                       name="to"
+                                       cFormControl
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
@@ -170,4 +202,3 @@
         </c-card-footer>
     </c-card>
 </ng-container>
-
