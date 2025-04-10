@@ -48,7 +48,7 @@ import {
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 import { LdapConfig } from '../../contacts/contacts.interface';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import _ from 'lodash';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -117,7 +117,7 @@ export class UsersEditComponent implements OnInit, OnDestroy {
     public notPermittedContainerIds: number[] = [];
     public userTypes: UserType[] = [];
 
-    public post: UserPost = this.getDefaultPost();
+    public post?: UserPost;
     public errors: GenericValidationError | null = null;
 
     public ldapUsers: SelectKeyValueString[] = [];
@@ -126,6 +126,7 @@ export class UsersEditComponent implements OnInit, OnDestroy {
     public usercontainerroles: SelectKeyValue[] = [];
     public usergroups: SelectKeyValue[] = [];
     public containers: SelectKeyValue[] = [];
+    public containerIdsWithWritePermissions: number[] = [];
     public localeOptions: UserLocaleOption[] = [];
     public dateformats: SelectKeyValueString[] = [];
     public timezones: UserTimezonesSelect[] = [];
@@ -161,15 +162,10 @@ export class UsersEditComponent implements OnInit, OnDestroy {
             const id = Number(this.route.snapshot.paramMap.get('id'));
             this.loadUser(id);
 
-            this.loadContainerRoles('');
-            this.loadContainer();
             this.loadUsergroups();
             this.loadDateformats();
             this.loadLocaleOptions();
         });
-
-        this.loadLdapConfig();
-        this.loadLdapUsersByString('');
 
     }
 
@@ -178,53 +174,99 @@ export class UsersEditComponent implements OnInit, OnDestroy {
     }
 
     public loadUser(id: number) {
-        this.subscriptions.add(this.UsersService.getUserEdit(id).subscribe(user => {
-            this.post = user.user;
-            this.isLdapUser = user.isLdapUser;
-            this.userTypes = user.UserTypes;
-            this.notPermittedContainerIds = user.notPermittedContainerIds;
-            this.cdr.markForCheck();
-        }));
-    }
 
-    private getDefaultPost(): UserPost {
-        this.ldapUserDetails = undefined;
-        this.selectedUserContainerRolesLdapReadOnly = [];
-        this.userContainerRoleContainerPermissionsLdap = [];
-        this.selectedUserRoleThroughLdap = 0;
-
-        this.selectedUserContainers = [];
-        this.selectedUserContainerWithPermission = [];
-        this.userContainerRoleContainerPermissions = [];
-
-        return {
-            firstname: '',
-            lastname: '',
-            email: '',
-            phone: '',
-            is_active: 1,
-            showstatsinmenu: 0,
-            paginatorlength: 25,
-            dashboard_tab_rotation: 0,
-            recursive_browser: 0,
-            dateformat: 'H:i:s - d.m.Y',
-            timezone: 'Europe/Berlin',
-            i18n: 'en_US',
-            password: '',
-            confirm_password: '',
-            is_oauth: false,
-            samaccountname: '',
-            ldap_dn: '',
-            usergroup_id: 0,
-            usercontainerroles: {
-                _ids: []
-            },
-            usercontainerroles_ldap: {
-                _ids: []
-            },
-            ContainersUsersMemberships: {},
-            apikeys: []
+        let requests = {
+            container: this.UsersService.loadContainersForAngular(),
+            user: this.UsersService.getUserEdit(id)
         };
+
+        this.subscriptions.add(forkJoin(requests).subscribe(
+            (results) => {
+                // Store container data
+                this.containers = results.container.containers;
+                this.containerIdsWithWritePermissions = results.container.containerIdsWithWritePermissions;
+
+                // Store user data
+                this.post = results.user.user;
+                this.post.password = '';
+                this.post.confirm_password = '';
+                this.isLdapUser = results.user.isLdapUser;
+                this.userTypes = results.user.UserTypes;
+                this.notPermittedContainerIds = results.user.notPermittedContainerIds;
+
+                this.ldapUserDetails = undefined;
+                this.selectedUserContainerWithPermission = [];
+                this.selectedUserContainerRolesLdapReadOnly = [];
+                this.userContainerRoleContainerPermissionsLdap = [];
+                this.selectedUserRoleThroughLdap = 0;
+
+                if (results.user.user.containers) {
+                    //Reformat data that it looks like the same as it looks in the add method...
+
+                    // Pre-select the container select element
+                    this.selectedUserContainers = results.user.user.containers._ids;
+
+                    for (let containerId in results.user.user.ContainersUsersMemberships) {
+                        this.selectedUserContainerWithPermission.push({
+                            container_id: Number(containerId),
+                            container_name: this.getContainerName(Number(containerId)),
+                            permission_level: results.user.user.ContainersUsersMemberships[containerId]
+                        });
+                    }
+
+                    this.onSelectedContainerIdsChange(null);
+                }
+
+                if (results.user.isLdapUser) {
+                    // Load container permissions based on LDAP groups
+                    this.loadLdapConfig();
+
+                    this.subscriptions.add(this.UsersService.loadLdapUserDetails(this.post.samaccountname).subscribe((result) => {
+                        if (this.post) {
+                            // Update values with current LDAP values
+                            this.post.ldap_dn = result.dn;
+                            this.post.firstname = result.givenname;
+                            this.post.lastname = result.sn;
+                            this.post.email = result.email;
+
+                            this.ldapUserDetails = result;
+
+                            this.selectedUserRoleThroughLdap = result.usergroupLdap.id || 0;
+
+                            // Make sure the array is defined
+                            if (!this.post.usercontainerroles_ldap) {
+                                this.post.usercontainerroles_ldap = {
+                                    _ids: []
+                                };
+                            }
+
+                            const idsString = Object.keys(result.userContainerRoleContainerPermissionsLdap);
+                            this.post.usercontainerroles_ldap._ids = idsString.map(Number);
+
+                            // Mark container roles mapped through LDAP as selected
+                            for (let i in result.userContainerRoleContainerPermissionsLdap) {
+                                this.selectedUserContainerRolesLdapReadOnly.push(
+                                    result.userContainerRoleContainerPermissionsLdap[i]._joinData.usercontainerrole_id
+                                );
+                            }
+
+                            // Remove duplicates otherwise the PrimeNG will select the same item multiple times
+                            this.selectedUserContainerRolesLdapReadOnly = _.uniq(this.selectedUserContainerRolesLdapReadOnly);
+
+                            // Store permissions for the read / write radio buttons
+                            this.userContainerRoleContainerPermissionsLdap = result.userContainerRoleContainerPermissionsLdapArray || [];
+
+                            this.cdr.markForCheck();
+                        }
+                    }));
+                }
+
+                this.loadContainerRoles('');
+                this.onUsercontainerrolesSelectChange(null);
+
+                this.cdr.markForCheck();
+
+            }));
     }
 
     public loadLdapConfig() {
@@ -234,24 +276,12 @@ export class UsersEditComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public loadLdapUsersByString = (searchString: string) => {
-        this.subscriptions.add(this.UsersService.loadLdapUserByString(searchString)
-            .subscribe((result) => {
-                this.ldapUsers = [];
-
-                result.forEach((user) => {
-                    this.ldapUsers.push({
-                        key: user.samaccountname,
-                        value: user.display_name,
-                    });
-                });
-
-                this.cdr.markForCheck();
-            })
-        );
-    }
-
     public loadContainerRoles = (searchString: string): void => {
+        if (!this.post) {
+            console.log("ERROR: this.post is undefined - Can not load container roles");
+            return;
+        }
+
         let selected = this.post.usercontainerroles._ids;
 
         this.subscriptions.add(this.UsersService.loadUserContainerRoles(searchString, selected)
@@ -259,13 +289,6 @@ export class UsersEditComponent implements OnInit, OnDestroy {
                 this.usercontainerroles = result;
                 this.cdr.markForCheck();
             }));
-    }
-
-    public loadContainer() {
-        this.subscriptions.add(this.UsersService.loadContainersForAngular().subscribe((result) => {
-            this.containers = result;
-            this.cdr.markForCheck();
-        }));
     }
 
     public loadUsergroups() {
@@ -278,7 +301,6 @@ export class UsersEditComponent implements OnInit, OnDestroy {
     public loadDateformats() {
         this.subscriptions.add(this.UsersService.getDateformats().subscribe((result) => {
             this.dateformats = result.dateformats;
-            this.post.dateformat = result.defaultDateFormat;
             this.timezones = result.timezones;
             this.serverTimeZone = result.serverTimeZone;
             this.serverTime = result.serverTime;
@@ -297,96 +319,52 @@ export class UsersEditComponent implements OnInit, OnDestroy {
     public addApikey(): void {
         this.subscriptions.add(this.ProfileService.generateNewApiKey()
             .subscribe((result) => {
-                this.post.apikeys = [...this.post.apikeys, result];
-                this.cdr.markForCheck();
+                if (this.post) {
+                    this.post.apikeys = [...this.post.apikeys, result];
+                    this.cdr.markForCheck();
+                }
             })
         );
     }
 
     public removeApikey(index: number): void {
-        this.post.apikeys.splice(index, 1);
-        this.cdr.markForCheck();
+        if (this.post) {
+            this.post.apikeys.splice(index, 1);
+            this.cdr.markForCheck();
+        }
     }
 
     public refreshApiKey(index: number): void {
         this.subscriptions.add(this.ProfileService.generateNewApiKey()
             .subscribe((result) => {
-                this.post.apikeys[index].apikey = result.apikey;
+                if (this.post) {
+                    this.post.apikeys[index].apikey = result.apikey;
 
-                // Get a new reference to trigger the change detection
-                this.post.apikeys = [...this.post.apikeys];
+                    // Get a new reference to trigger the change detection
+                    this.post.apikeys = [...this.post.apikeys];
 
-                this.cdr.markForCheck();
+                    this.cdr.markForCheck();
+                }
             })
         );
     }
 
-    public onLdapUserChange(event: any) {
-        // Called when an LDAP user is selected
-        this.post.ldap_dn = '';
-        this.post.firstname = '';
-        this.post.lastname = '';
-        this.post.email = '';
-        this.ldapUserDetails = undefined;
-        this.selectedUserContainerRolesLdapReadOnly = [];
-        this.userContainerRoleContainerPermissionsLdap = [];
-        this.selectedUserRoleThroughLdap = 0;
-        this.cdr.markForCheck();
+    public onUsercontainerrolesSelectChange(event: any) {
+        // Called when an usercontainerrole is selected or unselected
+        if (this.post) {
+            if (this.post.usercontainerroles._ids.length === 0) {
+                this.userContainerRoleContainerPermissions = [];
+                this.selectedUserContainerRolesContainerIds = [];
+                this.cdr.markForCheck();
+                return;
+            }
 
-        if (this.post.samaccountname) {
-            this.subscriptions.add(this.UsersService.loadLdapUserDetails(this.post.samaccountname).subscribe((result) => {
-                this.post.ldap_dn = result.dn;
-                this.post.firstname = result.givenname;
-                this.post.lastname = result.sn;
-                this.post.email = result.email;
-
-                this.ldapUserDetails = result;
-
-                this.selectedUserRoleThroughLdap = result.usergroupLdap.id || 0;
-
-                // Make sure the array is defined
-                if (!this.post.usercontainerroles_ldap) {
-                    this.post.usercontainerroles_ldap = {
-                        _ids: []
-                    };
-                }
-
-                const idsString = Object.keys(result.userContainerRoleContainerPermissionsLdap);
-                this.post.usercontainerroles_ldap._ids = idsString.map(Number);
-
-                // Mark container roles mapped through LDAP as selected
-                for (let i in result.userContainerRoleContainerPermissionsLdap) {
-                    this.selectedUserContainerRolesLdapReadOnly.push(
-                        result.userContainerRoleContainerPermissionsLdap[i]._joinData.usercontainerrole_id
-                    );
-                }
-
-                // Remove duplicates otherwise the PrimeNG will select the same item multiple times
-                this.selectedUserContainerRolesLdapReadOnly = _.uniq(this.selectedUserContainerRolesLdapReadOnly);
-
-                // Store permissions for the read / write radio buttons
-                this.userContainerRoleContainerPermissionsLdap = result.userContainerRoleContainerPermissionsLdapArray || [];
-
+            this.subscriptions.add(this.UsersService.loadContainerPermissions(this.post.usercontainerroles._ids).subscribe((result) => {
+                this.userContainerRoleContainerPermissions = result;
+                this.selectedUserContainerRolesContainerIds = result.map((item) => item.id);
                 this.cdr.markForCheck();
             }));
         }
-    }
-
-    public onUsercontainerrolesSelectChange(event: any) {
-        // Called when an usercontainerrole is selected or unselected
-
-        if (this.post.usercontainerroles._ids.length === 0) {
-            this.userContainerRoleContainerPermissions = [];
-            this.selectedUserContainerRolesContainerIds = [];
-            this.cdr.markForCheck();
-            return;
-        }
-
-        this.subscriptions.add(this.UsersService.loadContainerPermissions(this.post.usercontainerroles._ids).subscribe((result) => {
-            this.userContainerRoleContainerPermissions = result;
-            this.selectedUserContainerRolesContainerIds = result.map((item) => item.id);
-            this.cdr.markForCheck();
-        }));
     }
 
     public onSelectedContainerIdsChange(event: any) {
@@ -436,7 +414,7 @@ export class UsersEditComponent implements OnInit, OnDestroy {
         if (container) {
             return container.value;
         }
-        return 'ERROR UNKNOWN CONTAINER';
+        return this.TranslocoService.translate('Hidden due to insufficient permissions');
     }
 
     public submit() {
@@ -456,7 +434,7 @@ export class UsersEditComponent implements OnInit, OnDestroy {
             this.post.confirm_password = '';
         }
 
-        this.subscriptions.add(this.UsersService.addLdap(this.post)
+        this.subscriptions.add(this.UsersService.saveUserEdit(this.post)
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {

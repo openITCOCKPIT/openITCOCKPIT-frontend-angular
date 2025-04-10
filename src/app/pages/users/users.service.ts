@@ -179,17 +179,21 @@ export class UsersService {
         )
     }
 
-    public loadContainersForAngular(): Observable<SelectKeyValue[]> {
+    public loadContainersForAngular(): Observable<{
+        containers: SelectKeyValue[]
+        containerIdsWithWritePermissions: number[]
+    }> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             containers: SelectKeyValue[]
+            containerIdsWithWritePermissions: number[]
         }>(`${proxyPath}/users/loadContainersForAngular.json`, {
             params: {
                 angular: true
             }
         }).pipe(
             map(data => {
-                return data.containers;
+                return data;
             })
         )
     }
@@ -320,5 +324,28 @@ export class UsersService {
                 return data;
             })
         );
+    }
+
+    public saveUserEdit(user: UserPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/users/edit/${user.id}.json?angular=true`, {
+            User: user
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.user as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 }

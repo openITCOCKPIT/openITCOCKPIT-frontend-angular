@@ -214,6 +214,10 @@ export interface UserPost {
     samaccountname?: string
     ldap_dn?: string
 
+    containers?: { // Edit only
+        _ids: number[]
+    }
+
     usergroup_id: number
     usercontainerroles: {
         _ids: number[]

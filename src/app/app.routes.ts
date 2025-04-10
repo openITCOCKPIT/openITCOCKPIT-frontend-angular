@@ -556,6 +556,9 @@ const coreRoutes: Routes = [{
     path: 'users/ldap',
     loadComponent: () => import('./pages/users/users-ldap/users-ldap.component').then(m => m.UsersLdapComponent)
 }, {
+    path: 'users/edit/:id',
+    loadComponent: () => import('./pages/users/users-edit/users-edit.component').then(m => m.UsersEditComponent)
+}, {
     path: 'acknowledgements/host/:id',
     loadComponent: () => import('./pages/acknowledgements/acknowledgements-host/acknowledgements-host.component').then(m => m.AcknowledgementsHostComponent)
 }, {
