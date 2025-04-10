@@ -214,7 +214,21 @@ export class UsersEditComponent implements OnInit, OnDestroy {
                         });
                     }
 
+                    // Create the read/write list of containers
                     this.onSelectedContainerIdsChange(null);
+
+                    // filter containers from the select box where the user has no permissions.
+                    // this is to avoid PrimeNG showing empty options in the select.
+                    // It is imporant to call onSelectedContainerIdsChange first - otherwise the container overview is empty.
+                    if (this.notPermittedContainerIds.length > 0) {
+                        // When notPermittedContainerIds is NOT empty, the select box is disabled.
+                        // The value of selectedUserContainers is not send to the server anymore, so we can remove the
+                        // not permitted container ids from selectedUserContainers without causing problems.
+                        this.selectedUserContainers = this.selectedUserContainers.filter(containerId => {
+                            return this.notPermittedContainerIds.indexOf(containerId) === -1;
+                        });
+                    }
+
                 }
 
                 if (results.user.isLdapUser) {
