@@ -9,6 +9,7 @@ import {
     UserDateformatsRoot,
     UserLocaleOption,
     UserPost,
+    UsersEditResponse,
     UsersIndexParams,
     UsersIndexRoot,
     UsersLdapUser,
@@ -306,5 +307,18 @@ export class UsersService {
                     });
                 })
             );
+    }
+
+    public getUserEdit(id: number): Observable<UsersEditResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<UsersEditResponse>(`${proxyPath}/users/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
     }
 }
