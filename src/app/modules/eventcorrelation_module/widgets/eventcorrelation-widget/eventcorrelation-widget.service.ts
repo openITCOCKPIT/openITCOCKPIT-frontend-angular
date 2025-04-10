@@ -3,7 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import { GenericResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
-import { EventcorrelationWidgetConfigRootResponse } from './eventcorrelation-widget.interface';
+import {
+    EventcorrelationWidgetConfig,
+    EventcorrelationWidgetConfigRootResponse
+} from './eventcorrelation-widget.interface';
 import {
     EventcorrelationsIndexParams,
     EventcorrelationsIndexRoot
@@ -37,9 +40,10 @@ export class EventcorrelationWidgetService {
         )
     }
 
-    public saveWidgetConfig(widgetId: string, host_id: number): Observable<GenericResponseWrapper> {
+    public saveWidgetConfig(widgetId: string, host_id: number, config: EventcorrelationWidgetConfig): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/eventcorrelation_module/eventcorrelations/evcWidget.json?angular=true`, {
+            ...config,
             Widget: {
                 id: widgetId
             },
