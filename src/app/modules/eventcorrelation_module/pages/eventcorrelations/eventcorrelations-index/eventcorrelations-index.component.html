@@ -187,14 +187,14 @@
                                 <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                 {{ t('Edit host') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider *ngIf="evcHost.hasViewPermission"></li>
+                            <li cDropdownDivider *ngIf="evcHost.hasWritePermission"></li>
                             <oitc-actions-button-element
                                 [permission]="'EventcorrelationModule.eventcorrelations.usedBy'"
                                 [url]="'/eventcorrelation_module/eventcorrelations/usedBy/' + evcHost.Host.id">
                                 <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
                                 {{ t('Used by') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider *ngIf="evcHost.hasViewPermission"></li>
+                            <li cDropdownDivider *ngIf="evcHost.hasWritePermission"></li>
                             <oitc-actions-button-element [permission]="'EventcorrelationModule.eventcorrelations.view'"
                                                          [url]="'/eventcorrelation_module/eventcorrelations/view/' + evcHost.Host.id">
                                 <fa-icon [icon]="['fas', 'eye']"></fa-icon>
@@ -243,6 +243,7 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>

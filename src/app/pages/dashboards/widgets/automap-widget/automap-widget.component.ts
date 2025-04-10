@@ -71,6 +71,7 @@ export class AutomapWidgetComponent extends BaseWidgetComponent implements After
     public automaps: SelectKeyValue[] = [];
     private scrollIntervalId: any = null;
     public currentPage: number = 1;
+    public useScroll: boolean = true;
 
     public result!: AutomapsViewRoot;
 
@@ -160,6 +161,7 @@ export class AutomapWidgetComponent extends BaseWidgetComponent implements After
 
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.currentPage = change.page;
+        this.useScroll = change.scroll;
         this.cdr.markForCheck();
         this.loadAutomap();
     }
@@ -169,7 +171,7 @@ export class AutomapWidgetComponent extends BaseWidgetComponent implements After
 
             const params: AutomapsViewParams = {
                 angular: true,
-                scroll: true,
+                scroll: this.useScroll,
                 page: this.currentPage,
                 limit: this.config.limit
             };

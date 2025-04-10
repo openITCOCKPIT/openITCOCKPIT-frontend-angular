@@ -37,4 +37,5 @@ export enum ContainerTypesEnum {
     'CT_HOSTGROUP' = 7,
     'CT_SERVICEGROUP' = 8,
     'CT_SERVICETEMPLATEGROUP' = 9,
+    'CT_RESOURCEGROUP' = 10
 }

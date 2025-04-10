@@ -99,7 +99,7 @@
                                         <oitc-downtime-simple-icon
                                             [downtime]="serviceDowntime.DowntimeService"></oitc-downtime-simple-icon>
                                     </td>
-                                    <td>
+                                    <td class="word-break">
                                         <oitc-label-link
                                             [objectId]="serviceDowntime.Host.id"
                                             [route]="'/hosts/browser'"
@@ -107,7 +107,7 @@
                                             {{ serviceDowntime.Host.hostname }}
                                         </oitc-label-link>
                                     </td>
-                                    <td>
+                                    <td class="word-break">
                                         <oitc-label-link
                                             [objectId]="serviceDowntime.Service.id"
                                             [route]="'/services/browser'"
