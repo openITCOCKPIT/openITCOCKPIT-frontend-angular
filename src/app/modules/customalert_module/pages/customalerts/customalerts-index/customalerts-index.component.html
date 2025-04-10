@@ -57,7 +57,7 @@
                     <c-row>
                         <c-col lg="4" md="12" xs="12">
                             <div
-                                class="p-2 new-flame-bg bg-danger rounded overflow-hidden position-relative text-white mb-4">
+                                    class="p-2 new-flame-bg bg-danger rounded overflow-hidden position-relative text-white mb-4">
                                 <div>
                                     <h6 class="display-4 d-block l-h-n m-0 fw-500 ng-binding">
                                         {{ result.customalertGlobalOverview['0'] }}
@@ -235,14 +235,14 @@
 
                                 <h5>{{ t('Container') }}</h5>
                                 <oitc-multi-select
-                                    name="filter.Hosts.container_id"
-                                    id="filter.Hosts.container_id"
-                                    [(ngModel)]="filter.Hosts.container_id"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    (debouncedValue)="onFilterChange($event)"
-                                    oitcDebounce
-                                    [options]="containers">
+                                        name="filter.Hosts.container_id"
+                                        id="filter.Hosts.container_id"
+                                        [(ngModel)]="filter.Hosts.container_id"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        (debouncedValue)="onFilterChange($event)"
+                                        oitcDebounce
+                                        [options]="containers">
                                 </oitc-multi-select>
                                 <br/>
 
@@ -366,9 +366,9 @@
                             <td class="text-center">
                                 <div>
                                     <oitc-item-select
-                                        *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
-                                        [disabled]="false"
-                                        [item]="customAlertRule"></oitc-item-select>
+                                            *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
+                                            [disabled]="false"
+                                            [item]="customAlertRule"></oitc-item-select>
                                 </div>
                             </td>
                             <td class="text-center">
@@ -481,9 +481,9 @@
                         <td class="text-center">
                             <div>
                                 <oitc-item-select
-                                    *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
-                                    [disabled]="false"
-                                    [item]="customAlertRule"></oitc-item-select>
+                                        *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
+                                        [disabled]="false"
+                                        [item]="customAlertRule"></oitc-item-select>
                             </div>
                         </td>
                         <td class="text-center">
@@ -562,17 +562,18 @@
             </ng-container>
 
             <oitc-no-records *ngIf="result && result.customalerts.length === 0"></oitc-no-records>
-            <ng-container *ngIf="result && result.customalerts.length !== 0">
+            <ng-container *ngIf="result">
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                [itemsCount]="result.customalerts.length"></oitc-select-all>
+                                    [itemsCount]="result.customalerts.length"></oitc-select-all>
                         </c-col>
                         <c-col md="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleAnnotateModal()"
+                                        *oitcPermission="['CustomalertModule','Customalerts', 'annotate']"
                                         class="btn btn-outline-primary col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'comment']"></fa-icon>
@@ -580,6 +581,7 @@
                                 </button>
                                 <button (click)="toggleCloseModal()"
                                         class="btn btn-outline-primary col-3 border-0"
+                                        *oitcPermission="['CustomalertModule','Customalerts', 'close']"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'folder']"></fa-icon>
                                     {{ t('Close selected manually') }}
@@ -591,13 +593,13 @@
             </ng-container>
 
             <c-container
-                [fluid]="true">
+                    [fluid]="true">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="result"
-                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="result"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>
