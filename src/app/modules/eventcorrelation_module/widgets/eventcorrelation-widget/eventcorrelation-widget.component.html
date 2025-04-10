@@ -63,6 +63,61 @@
                             </oitc-select>
                         </div>
 
+                        <c-row class="mb-2" *ngIf="config && widget">
+                            <c-col>
+                                <fieldset>
+                                    <legend class="fs-5">
+                                        {{ t('Eventcorrelation view type') }}
+                                    </legend>
+                                    @for (EvcViewType of EvcViewTypes; track $index) {
+                                        <c-form-check class="mb-1" inline>
+                                            <input cFormCheckInput
+                                                   class="radio-lg radio-primary border-primary"
+                                                   type="radio"
+                                                   [id]="EvcViewType.label+widget.id"
+                                                   [name]="EvcViewType.label+widget.id"
+                                                   [value]="EvcViewType.value"
+                                                   [(ngModel)]="config.type"
+                                            />
+                                            <label cFormCheckLabel class="ms-1 me-2 mt-1"
+                                                   [for]="EvcViewType.label+widget.id">
+                                                <fa-icon [icon]="EvcViewType.icon"></fa-icon>
+                                                {{ EvcViewType.label }}
+                                            </label>
+                                        </c-form-check>
+                                    }
+
+                                </fieldset>
+                                <fieldset class="mt-2" *ngIf="config.type === 'tree'">
+                                    <legend class="fs-5">
+                                        {{ t('Direction (For tree view only)') }}
+                                    </legend>
+                                    @for (direction of EvcTreeDirections; track $index) {
+                                        <c-form-check class="mb-1" inline>
+                                            <input cFormCheckInput
+                                                   class="radio-lg radio-primary border-primary"
+                                                   type="radio"
+                                                   [id]="direction.key+widget.id"
+                                                   [name]="direction.key+widget.id"
+                                                   [value]="direction.key"
+                                                   [(ngModel)]="config.direction"
+                                            />
+                                            <label cFormCheckLabel class="ms-1 me-2 mt-1"
+                                                   [for]="direction.key+widget.id">
+                                                @if (direction.rotate) {
+                                                    <fa-icon [icon]="['fas', 'sitemap']"
+                                                             [rotate]="direction.rotate"></fa-icon>
+                                                } @else {
+                                                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                                }
+                                                {{ direction.label }}
+                                            </label>
+                                        </c-form-check>
+                                    }
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+
 
                         <div class="mt-1 text-end">
                             <button cButton type="button" class="ripple" (click)="saveConfig()">
@@ -78,9 +133,3 @@
     </div>
 
 </ng-container>
-
-
-
-
-
-
