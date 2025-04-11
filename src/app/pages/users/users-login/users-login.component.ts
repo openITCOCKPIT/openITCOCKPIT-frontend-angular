@@ -253,7 +253,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
             if (data.success) {
                 this.disableLogin = false;
-                this.NotyService.genericSuccess('Login successful', 'success');
+                this.NotyService.genericSuccess('Login successful');
 
                 // Load user permissions
                 this.PermissionsService.loadPermissions();

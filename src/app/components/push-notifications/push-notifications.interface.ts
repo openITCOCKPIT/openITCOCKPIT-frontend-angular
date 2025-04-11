@@ -1,5 +1,3 @@
-import { User } from '../../pages/users/users.interface';
-
 export interface PushConfigurationRoot {
     websocket: {
         [key: string]: string
@@ -7,6 +5,7 @@ export interface PushConfigurationRoot {
     user: PushConfigurationUser
 }
 
-export interface PushConfigurationUser extends User {
+export interface PushConfigurationUser {
+    id: number
     hasPushContact: boolean
 }
