@@ -115,12 +115,12 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 export class UsersEditComponent implements OnInit, OnDestroy {
     public isLdapUser: boolean = false;
     public notPermittedContainerIds: number[] = [];
+    public userContainerRolesReadonly: boolean = true;
     public userTypes: UserType[] = [];
 
     public post?: UserPost;
     public errors: GenericValidationError | null = null;
 
-    public ldapUsers: SelectKeyValueString[] = [];
     public ldapUserDetails?: UsersLdapUserDetails;
     public ldapConfig?: LdapConfig;
     public usercontainerroles: SelectKeyValue[] = [];
@@ -192,7 +192,8 @@ export class UsersEditComponent implements OnInit, OnDestroy {
                 this.post.confirm_password = '';
                 this.isLdapUser = results.user.isLdapUser;
                 this.userTypes = results.user.UserTypes;
-                this.notPermittedContainerIds = results.user.notPermittedContainerIds;
+                this.notPermittedContainerIds = results.user.notPermittedContainerIds; // User has not written permissions to all selected containers
+                this.userContainerRolesReadonly = results.user.userContainerRolesReadonly; // User has not written permissions to all container roles or container roles via LDAP
 
                 this.ldapUserDetails = undefined;
                 this.selectedUserContainerWithPermission = [];

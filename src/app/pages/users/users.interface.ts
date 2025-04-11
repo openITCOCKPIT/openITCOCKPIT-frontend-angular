@@ -318,4 +318,5 @@ export interface UsersEditResponse {
     isLdapUser: boolean
     UserTypes: UserType[]
     notPermittedContainerIds: number[]
+    userContainerRolesReadonly: boolean
 }
