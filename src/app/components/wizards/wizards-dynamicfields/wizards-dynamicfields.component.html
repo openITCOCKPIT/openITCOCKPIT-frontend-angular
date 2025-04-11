@@ -52,7 +52,7 @@
                                    class="alert-icon"
                                    name="checkbox"
                                    (change)="toggleCheck(service)"
-                                   [ngModel]="service.createService"/>
+                                   [(ngModel)]="service.createService"/>
                             <label class="custom-control-label custom-control-label-ok"
                                    [for]="service.name">
                                 {{ service.name }}
@@ -68,7 +68,7 @@
                         <input class="form-control"
                                type="text"
                                [disabled]="!service.createService"
-                               [ngModel]="commandArgument.value">
+                               [(ngModel)]="commandArgument.value">
                     </div>
                 </ng-container>
             </ol>
