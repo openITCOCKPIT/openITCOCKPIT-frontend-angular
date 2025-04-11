@@ -147,10 +147,10 @@
                                         <oitc-servicestatus-simple-icon
                                             [servicestatus]="serviceAlert.NotificationService.state"></oitc-servicestatus-simple-icon>
                                     </td>
-                                    <td>
+                                    <td class="word-break">
                                         {{ serviceAlert.Host.name }}
                                     </td>
-                                    <td>
+                                    <td class="word-break">
                                         @if (PermissionsService.hasPermissionObservable(['notifications', 'index'])|async) {
                                             <a [routerLink]="['/', 'notifications', 'serviceNotification', serviceAlert.Service.id]">
                                                 {{ serviceAlert.Service.servicename }}

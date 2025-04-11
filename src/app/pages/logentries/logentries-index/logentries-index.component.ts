@@ -30,7 +30,7 @@ import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+import { formatDate, NgForOf, NgIf } from '@angular/common';
 
 
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
@@ -104,6 +104,8 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
 
     private readonly HostsService = inject(HostsService);
+    public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+    public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public entryTypesForSelect: any[] = [];
 
     private cdr = inject(ChangeDetectorRef);
@@ -157,6 +159,8 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public loadLogentries() {
+        this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
+        this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
         this.subscriptions.add(this.LogentriesService.getIndex(this.params)
             .subscribe((result) => {
                 this.logentries = result;
@@ -172,6 +176,8 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public resetFilter() {
         this.params = getDefaultLogentriesParams();
+        this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+        this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.loadLogentries();
     }
 

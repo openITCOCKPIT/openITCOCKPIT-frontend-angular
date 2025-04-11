@@ -178,7 +178,7 @@ export class UsersAddComponent implements OnInit, OnDestroy {
 
     public loadContainer() {
         this.subscriptions.add(this.UsersService.loadContainersForAngular().subscribe((result) => {
-            this.containers = result;
+            this.containers = result.containers;
             this.cdr.markForCheck();
         }));
     }

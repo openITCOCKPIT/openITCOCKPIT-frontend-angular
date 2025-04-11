@@ -199,8 +199,8 @@ export interface UserPost {
     showstatsinmenu: 0 | 1
     paginatorlength: number
     dashboard_tab_rotation: number
-    company?: string
-    position?: string
+    company?: string | null
+    position?: string | null
     recursive_browser: 0 | 1
     dateformat: string
     timezone: string
@@ -209,8 +209,14 @@ export interface UserPost {
     confirm_password?: string
     is_oauth: boolean  // (number for add but boolean for edit)
 
+    image?: null | string
+
     samaccountname?: string
     ldap_dn?: string
+
+    containers?: { // Edit only
+        _ids: number[]
+    }
 
     usergroup_id: number
     usercontainerroles: {
@@ -227,7 +233,8 @@ export interface UserPost {
 
 export interface UserAddEditApiKey {
     id?: number // edit only
-    index?: number // edit only
+    user_id?: number // edit only
+    //index?: number // edit only
     last_use?: string | null // edit only
     apikey: string
     description: string
@@ -304,4 +311,11 @@ export interface UsersLdapGroup {
     cn: string
     dn: string
     description: string
+}
+
+export interface UsersEditResponse {
+    user: UserPost
+    isLdapUser: boolean
+    UserTypes: UserType[]
+    notPermittedContainerIds: number[]
 }

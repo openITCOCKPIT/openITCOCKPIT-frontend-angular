@@ -119,7 +119,8 @@
                                             type="services"
                                             [objectId]="service.Service.id"></oitc-downtime-icon>
                                     </td>
-                                    <td [ngClass]="{'bg-up': service.Hoststatus.currentState === 0, 'bg-down': service.Hoststatus.currentState === 1, 'bg-unreachable': service.Hoststatus.currentState === 2, 'text-white': service.Hoststatus.isInMonitoring}">
+                                    <td [ngClass]="{'bg-up': service.Hoststatus.currentState === 0, 'bg-down': service.Hoststatus.currentState === 1, 'bg-unreachable': service.Hoststatus.currentState === 2, 'text-white': service.Hoststatus.isInMonitoring}"
+                                        class="word-break">
                                         @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                             <a [routerLink]="['/', 'hosts', 'browser', service.Host.id]">
                                                 {{ service.Host.name }}
@@ -128,7 +129,7 @@
                                             {{ service.Host.name }}
                                         }
                                     </td>
-                                    <td>
+                                    <td class="word-break">
                                         @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
                                             <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
                                                 {{ service.Service.servicename }}

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { Scroll } from '../paginator.interface';
 import { ColComponent, PageItemDirective, PageLinkDirective, PaginationComponent, RowComponent } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleLeft, faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faAngleRight, faAnglesLeft } from '@fortawesome/free-solid-svg-icons';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { NgIf } from '@angular/common';
 
@@ -29,7 +29,7 @@ export class ScrollIndexComponent {
     @Output() pageChange = new EventEmitter<number>();
     protected readonly faAnglesLeft = faAnglesLeft;
     protected readonly faAngleLeft = faAngleLeft;
-    protected readonly faAnglesRight = faAnglesRight;
+    protected readonly faAngleRight = faAngleRight;
 
     // Go to first page
     public firstPage() {
