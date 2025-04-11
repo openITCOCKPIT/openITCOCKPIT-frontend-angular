@@ -90,7 +90,7 @@ const OPERATOR_WIDTH = 100;
     selector: 'oitc-evc-tree',
     imports: [
         FFlowModule,
-       // NgxResizeObserverModule,
+        // NgxResizeObserverModule,
         NgClass,
         RowComponent,
         ColComponent,
@@ -105,7 +105,7 @@ const OPERATOR_WIDTH = 100;
         RouterLink,
         XsButtonDirective,
         ButtonGroupComponent,
-        EvcServicestatusToasterComponent
+        EvcServicestatusToasterComponent,
     ],
     templateUrl: './evc-tree.component.html',
     styleUrl: './evc-tree.component.css',
@@ -369,7 +369,6 @@ export class EvcTreeComponent {
     }
 
     public verticalBT(): void {
-        this.fitToScreen();
         this.direction = EvcTreeDirection.BOTTOM_TO_TOP;
         this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.BOTTOM_TO_TOP);
         this.fitToScreen();
@@ -389,6 +388,34 @@ export class EvcTreeComponent {
 
           //  this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
         }*/
+    }
+
+    public fit2screen(): void {
+        console.log(this.fFlowComponent.hostElement.offsetHeight, this.fCanvasComponent.getPosition());
+        if (this.fCanvasComponent) {
+           // this.updateGraph(new dagre.graphlib.Graph(), this.direction);
+           this.fCanvasComponent.resetScale();
+            //this.fCanvasComponent.resetScaleAndCenter(true);
+            this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
+            //this.cdr.markForCheck();
+            //this.updateGraph(new dagre.graphlib.Graph(), this.direction);
+            this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
+        }
+    }
+    public resetScreen(): void {
+        console.log(this.fFlowComponent.hostElement.offsetHeight, this.fCanvasComponent.getPosition());
+        if (this.fCanvasComponent) {
+            // this.updateGraph(new dagre.graphlib.Graph(), this.direction);
+            // this.fCanvasComponent.resetScale();
+            //this.fCanvasComponent.resetScaleAndCenter(true);
+            //this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
+            //this.cdr.markForCheck();
+            //this.fCanvasComponent.resetScale();
+            //this.fCanvasComponent.setPosition({x:0,y:0});
+            this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
+            //this.updateGraph(new dagre.graphlib.Graph(), this.direction);
+            //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
+        }
     }
 
     public toggleToaster(serviceId: number | undefined): void {
