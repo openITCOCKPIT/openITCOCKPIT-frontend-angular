@@ -93,6 +93,7 @@ export class RotationsEditComponent implements OnInit, OnDestroy {
     protected requiredContainersList: SelectKeyValue[] = []
     protected areContainersChangeable: boolean = true;
     protected containersSelection: number[] = [];
+    private init: boolean = true;
 
 
     private route = inject(ActivatedRoute);
@@ -131,10 +132,21 @@ export class RotationsEditComponent implements OnInit, OnDestroy {
                 this.post.Rotation.interval = parseInt(String(this.rotation.interval), 10);
                 this.loadContainers();
                 this.onContainerChange();
+                this.init = false;
             }));
     }
 
     public updateRotation(): void {
+
+        //update container ids if it was edited
+        if (this.areContainersChangeable) {
+            this.post.Rotation.container_id = this.post.Rotation.container_id.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
 
         this.post.Rotation.container_id = _.uniq(
             this.post.Rotation.container_id.concat(this.containersSelection).concat(this.requiredContainers)
@@ -205,6 +217,17 @@ export class RotationsEditComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
             return;
         }
+
+        //update container ids if it was edited
+        if (this.areContainersChangeable && !this.init) {
+            this.post.Rotation.container_id = this.post.Rotation.container_id.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
+
         const param = {
             'containerIds[]': this.post.Rotation.container_id.concat(this.containersSelection).concat(this.requiredContainers)
         };

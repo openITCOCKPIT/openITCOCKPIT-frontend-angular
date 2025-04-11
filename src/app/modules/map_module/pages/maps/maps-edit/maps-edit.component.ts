@@ -89,6 +89,7 @@ export class MapsEditComponent implements OnInit, OnDestroy {
     protected requiredContainersList: SelectKeyValue[] = []
     protected areContainersChangeable: boolean = true;
     protected containersSelection: number[] = [];
+    private init: boolean = true;
 
     protected mapId: number = 0;
     private readonly HistoryService: HistoryService = inject(HistoryService);
@@ -105,6 +106,7 @@ export class MapsEditComponent implements OnInit, OnDestroy {
                 this.areContainersChangeable = result.areContainersChangeable;
                 this.loadContainers();
                 this.onContainerChange();
+                this.init = false;
             }));
     }
 
@@ -113,6 +115,16 @@ export class MapsEditComponent implements OnInit, OnDestroy {
     }
 
     public updateMap(): void {
+
+        //update container ids if it was edited
+        if (this.areContainersChangeable) {
+            this.post.Map.containers._ids = this.post.Map.containers._ids.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
 
         this.post.Map.containers._ids = _.uniq(
             this.post.Map.containers._ids.concat(this.containersSelection).concat(this.requiredContainers)
@@ -181,6 +193,16 @@ export class MapsEditComponent implements OnInit, OnDestroy {
             this.satellites = [];
             this.cdr.markForCheck();
             return;
+        }
+
+        //update container ids if it was edited
+        if (this.areContainersChangeable && !this.init) {
+            this.post.Map.containers._ids = this.post.Map.containers._ids.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
         }
 
         let containerIds = this.post.Map.containers._ids.concat(this.containersSelection).concat(this.requiredContainers)
