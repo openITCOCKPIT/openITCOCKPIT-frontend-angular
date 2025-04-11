@@ -131,7 +131,7 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
                         this.notPermittedContainers.push(parseInt(containerId, 10));
                     }
 
-                    this.selectedContainerWithPermission[containerId] = {
+                    this.selectedContainerWithPermission[parseInt(containerId, 10)] = {
                         name: this.getContainerName(parseInt(containerId, 10)),
                         container_id: parseInt(containerId, 10),
                         permission_level: this.post.ContainersUsercontainerrolesMemberships[containerId],
