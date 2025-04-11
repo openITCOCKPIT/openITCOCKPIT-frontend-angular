@@ -84,6 +84,12 @@
                         <em>
                             {{ t('Servicetemplategroup') }}
                         </em>
+                        @if (PermissionsService.hasModuleObservable('ScmModule') | async) {
+                            <fa-icon [icon]="['fas', 'user-group']"></fa-icon>
+                            <em>
+                                {{ t('Resourcegroup') }}
+                            </em>
+                        }
                     </div>
                 </c-col>
             </c-row>
@@ -141,6 +147,10 @@
                                     }
                                     @case (ContainerTypesEnum.CT_SERVICETEMPLATEGROUP) {
                                         <i class="fas fa-pen-to-square"></i>
+                                    }
+                                    @case (ContainerTypesEnum.CT_RESOURCEGROUP) {
+                                        <i class="fas fa-user-group"
+                                           *ngIf="( PermissionsService.hasModuleObservable('ScmModule') | async )"></i>
                                     }
                                     @default {
                                         <i class="fas fa-question"></i>
@@ -216,6 +226,18 @@
                                     >
                                         {{ container.Container.name }}
                                     </oitc-label-link>
+
+                                    <!-- Link for Resource groups -->
+                                    @if (PermissionsService.hasModuleObservable('ScmModule') | async) {
+                                        <oitc-label-link
+                                            *ngSwitchCase="ContainerTypesEnum.CT_RESOURCEGROUP"
+                                            [objectId]="container.Container.linkedId"
+                                            [route]="'/scm_module/resourcegroups/edit'"
+                                            [permissions]="'scmmodule.resourcegroups.edit'"
+                                        >
+                                            {{ container.Container.name }}
+                                        </oitc-label-link>
+                                    }
 
                                     <!-- All other container types do just print the name -->
                                     <span *ngSwitchDefault>
@@ -319,6 +341,22 @@
                                         {{ container.Container.servicetemplates }}
                                     </span>
                                 </span>
+
+                                @if (PermissionsService.hasModuleObservable('ScmModule') | async) {
+                                    <span class="float-end"
+                                          *ngIf="container.Container.containertype_id == ContainerTypesEnum.CT_RESOURCEGROUP">
+                                        <span [title]="'Resources' | transloco">
+                                            <i class="fas fa-chalkboard-user"></i>
+                                            {{ container.Container.resources }}
+                                        </span>
+
+                                        <span [title]="'Users' | transloco">
+                                            <i class="fas fa-users"></i>
+                                            {{ container.Container.users }}
+                                        </span>
+                                    </span>
+
+                                }
                                 <!-- End of Sub containers badge and count interformation -->
 
                             </div>
@@ -348,5 +386,3 @@
         [container]="selectedContainerForEdit"
         (completed)="onMassActionComplete($event)"></oitc-edit-container-modal>
 </ng-container>
-
-
