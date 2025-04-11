@@ -78,15 +78,19 @@
                 <div class="mb-3" *ngIf="requiredContainers.length > 0">
                     <label cLabel for="requiredContainers">
                         {{ t('Required containers') }}
-
-                        <a [routerLink]="['/', 'contacts', 'usedBy', contactId, requiredContainersString]">
-                            <fa-icon [icon]="['fas', 'reply-all']"
-                                     class="fa-flip-horizontal text-primary"></fa-icon>
-                            {{ t('Used by') }}
-                            <sup>
-                                <fa-icon [icon]="['fas', 'info-circle']" class="text-info"/>
-                            </sup>
-                        </a>
+                        @if (PermissionsService.hasPermissionObservable(['contacts', 'usedBy'])|async) {
+                            <oitc-label-link
+                                [objectId]="id"
+                                [route]="'/contacts/usedBy'"
+                                [permissions]="'contacts.usedBy'">
+                                <fa-icon [icon]="['fas', 'reply-all']"
+                                         class="fa-flip-horizontal text-primary"></fa-icon>
+                                {{ t('Used by') }}
+                                <sup>
+                                    <fa-icon [icon]="['fas', 'info-circle']" class="text-info"/>
+                                </sup>
+                            </oitc-label-link>
+                        }
                     </label>
 
                     <oitc-multi-select
@@ -95,7 +99,7 @@
                         [(ngModel)]="requiredContainers"
                         optionValue="key"
                         optionLabel="value"
-                        [labelSuffix]="'🔐'"
+                        [labelSuffix]="' 🔐'"
                         [disabled]="true"
                         [options]="this.requiredContainersList">
                     </oitc-multi-select>
@@ -688,8 +692,9 @@
                     <div class="col-xs-12 col-lg-12 text-info">
                         <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
                         {{ t('Read more about browser push notification in the') }}
-                        <a [routerLink]="['/', 'documentations', 'wiki']" [queryParams]="{categoryName:'additional_help', documentationKey:'browser_push_notifications'}">
-                        {{ t('documentation') }} </a>
+                        <a [routerLink]="['/', 'documentations', 'wiki']"
+                           [queryParams]="{categoryName:'additional_help', documentationKey:'browser_push_notifications'}">
+                            {{ t('documentation') }} </a>
                     </div>
                 </div>
 

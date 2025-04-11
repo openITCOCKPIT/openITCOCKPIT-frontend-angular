@@ -23,7 +23,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MacrosComponent } from '../../../components/macros/macros.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -51,6 +51,8 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
 import { HistoryService } from '../../../history.service';
 import { PushNotificationsService } from '../../../services/push-notifications.service';
+import _ from 'lodash';
+import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-contacts-edit',
@@ -89,7 +91,8 @@ import { PushNotificationsService } from '../../../services/push-notifications.s
         SelectComponent,
         LabelLinkComponent,
         FormLoaderComponent,
-        AlertComponent
+        AlertComponent,
+        AsyncPipe
     ],
     templateUrl: './contacts-edit.component.html',
     styleUrl: './contacts-edit.component.css',
@@ -117,9 +120,8 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
 
     protected requiredContainers: number[] = [];
     protected requiredContainersString: string = '';
-    protected allContainers: SelectKeyValue[] = []
     protected requiredContainersList: SelectKeyValue[] = []
-    protected contactId: number = 0;
+    protected id: number = 0;
     protected selectedContainers: number[] = [];
     protected containersSelection: number[] = [];
     private readonly HistoryService: HistoryService = inject(HistoryService);
@@ -127,11 +129,15 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
 
     public pushNotificationConnected: boolean | undefined;
     public pushNotificationHasPermission: boolean | undefined;
+    public PermissionsService = inject(PermissionsService);
 
-    public ngOnInit() {
-        this.loadCommands();
-        this.contactId = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.ContactService.getEdit(this.contactId)
+    public ngOnInit(): void {
+        this.id = Number(this.route.snapshot.paramMap.get('id'));
+        this.loadContact();
+    }
+
+    public loadContact() {
+        this.subscriptions.add(this.ContactService.getEdit(this.id)
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 this.post = result.contact.Contact;
@@ -139,11 +145,8 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                 this.requiredContainersString = this.requiredContainers.join(',');
                 this.areContainersChangeable = result.areContainersChangeable;
 
-                this.onContainerChange();
-
                 // Force empty container selection.
                 this.selectedContainers = this.post.containers._ids;
-                this.post.containers._ids = [];
                 this.loadContainers();
             }));
     }
@@ -153,8 +156,9 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     }
 
     public updateContact(): void {
-
-        this.post.containers._ids = this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers);
+        this.post.containers._ids = _.uniq(
+            this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers)
+        );
         this.subscriptions.add(this.ContactService.updateContact(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
@@ -176,7 +180,6 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
-
                     this.hasMacroErrors = false;
                     if (typeof (this.errors['customvariables']['custom']) === "string") {
                         this.hasMacroErrors = true;
@@ -190,47 +193,33 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private loadContainers(): void {
         this.subscriptions.add(this.ContactService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
-                this.cdr.markForCheck();
-                // Fetch all containers.
-                this.allContainers = result.containers;
-
-                // Unbind the containers list for the required dropdown. Otherwise, a reference will created that adds label suffixes to all dropdowns.
-                this.requiredContainersList = result.containers.splice(0, this.requiredContainers.length);
-
-                // If no containers are required, the selectedContainers can remain where they belong.
-                if (this.requiredContainers.length === 0) {
-                    this.containersSelection = this.selectedContainers;
-                    this.containers = this.allContainers;
-                    this.cdr.markForCheck();
-                    return;
-                }
-
-                let newContainers: SelectKeyValue[] = [];
-                let newPostIds: number[] = [];
-
-                // Otherwise, we need to only add the selected containers that are not required to the container list.
-                for (var i in this.allContainers) {
-                    let index = parseInt(i),
-                        container: SelectKeyValue = this.allContainers[index];
-
-                    // The container is required? Then skip.
-                    if (this.requiredContainers.indexOf(container.key) !== -1) {
-                        continue;
+                this.containersSelection = [];
+                this.requiredContainersList = [];
+                this.containers = result.containers;
+                this.post.containers._ids.forEach(value => {
+                    let permittetCheck = this.containers.find(({key}) => key === value);
+                    if (permittetCheck && this.requiredContainers.indexOf(value) === -1) {
+                        this.containersSelection.push(value);
                     }
+                });
 
-                    // Otherwise add to the container dropdown.
-                    newContainers.push(container);
-
-                    // And if it is selected, add it to the overwrite-array.
-                    if (this.selectedContainers.indexOf(container.key) !== -1) {
-                        newPostIds.push(container.key);
+                this.requiredContainers.forEach(value => {
+                    let existsCheck = this.containers.find(({key}) => key === value);
+                    if (existsCheck) {
+                        this.requiredContainersList.push({
+                            key: value,
+                            value: existsCheck.value
+                        });
+                    } else {
+                        this.requiredContainersList.push({
+                            key: value,
+                            value: this.TranslocoService.translate('RESTRICTED CONTAINER')
+                        });
                     }
+                });
 
-                }
-                this.containers = newContainers;
-                this.containersSelection = newPostIds;
                 this.cdr.markForCheck();
-            }))
+            }));
     }
 
     private loadUsers() {

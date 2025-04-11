@@ -1,5 +1,4 @@
 <ng-container *transloco="let t">
-
     <nav aria-label="breadcrumb" class="mt-3">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -19,9 +18,7 @@
             </li>
         </ol>
     </nav>
-
-
-    <form cForm (ngSubmit)="addUser()">
+    <form cForm (ngSubmit)="submit()">
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>
@@ -41,286 +38,259 @@
                         </button>
                     </c-nav-item>
                 </c-nav>
+
             </c-card-header>
-
-
             <c-card-body>
+
                 <div class="mb-3">
                     <label cLabel for="samaccountname">
                         {{ t('SAM-Account-Name') }}
-                        <oitc-required-icon/>
+                        <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
                         name="samaccountname"
                         id="samaccountname"
-                        optionValue="samaccountname"
-                        optionLabel="display_name"
-                        [(ngModel)]="this.post.User.samaccountname"
-                        [searchCallback]="loadLdapUsers"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="this.post.samaccountname"
+                        [searchCallback]="loadLdapUsersByString"
                         (onChange)="onLdapUserChange($event)"
-                        [options]="samaccountnames"
+                        [options]="ldapUsers"
                         oitcFormError [errors]="errors" errorField="samaccountname">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="samaccountname"></oitc-form-feedback>
                 </div>
 
-
                 <div class="mb-3">
-                    <label cLabel for="dn">
+                    <label cLabel for="ldap_dn">
                         {{ t('DN') }}
-                        <oitc-required-icon/>
+                        <oitc-required-icon></oitc-required-icon>
                     </label>
                     <input cFormControl
                            required
-                           id="dn"
+                           id="ldap_dn"
+                           name="ldap_dn"
                            type="text"
                            disabled
-                           name="dn"
-                           [(ngModel)]="post.User.ldap_dn"
-                           oitcFormError [errors]="errors" errorField="email">
-                    <oitc-form-feedback [errors]="errors" errorField="email"></oitc-form-feedback>
+                           readonly
+                           [(ngModel)]="post.ldap_dn"
+                           oitcFormError [errors]="errors" errorField="ldap_dn">
+                    <oitc-form-feedback [errors]="errors" errorField="ldap_dn"></oitc-form-feedback>
                     <div class="help-block text-info">
                         {{ t('Value imported from LDAP Server') }}
                     </div>
                 </div>
 
+                <!-- This field is jut for user information and has no impact on the user creation -->
                 <div class="mb-3">
-                    <label cLabel for="ldapUserDetails.ldapgroups">
+                    <label cLabel for="ldapgroups">
                         {{ t('LDAP Groups') }}
                     </label>
-                    <oitc-multi-select
-                        name="ldapUserDetails.ldapgroups"
-                        id="ldapUserDetails.ldapgroups"
-                        optionValue="id"
-                        optionLabel="cn"
-                        [disabled]="true"
-                        [(ngModel)]="ldapUserDetails.ldapgroupIds"
-                        [options]="ldapUserDetails.ldapgroups"
-                        oitcFormError [errors]="errors" errorField="containerroles">
-                    </oitc-multi-select>
+
+                    <select cSelect multiple size="6" id="ldapgroups"
+                            disabled>
+                        @for (ldapGroup of ldapUserDetails?.ldapgroups; track $index) {
+                            <option [value]="ldapGroup.dn">{{ ldapGroup.cn }}</option>
+                        }
+                    </select>
                 </div>
 
-                <c-alert color="info">
-                    <h4 cAlertHeading>
-                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('LDAP Configuration') }}
-                    </h4>
-                    <p class="mb-0">
+                <ng-template #contentTemplate let-data>
+                    <div [ngClass]="['text-'+data.color]">
                         {{ t('Connected LDAP server') }}:
-                        <b>{{ ldapConfig.host }}</b>
-                        <br>
+                        <strong>{{ ldapConfig?.host }}</strong>
+                        <br/>
                         {{ t('Used filter query') }}:
-                        <b>{{ ldapConfig.query }}</b>
-                        <br>
-                        {{ t('Base DN') }}:
-                        <b>{{ ldapConfig.base_dn }}</b>
-                    </p>
-                </c-alert>
+                        <strong>{{ ldapConfig?.query }}</strong>
+                        <br/>
+                        {{ t('Base DN') }};
+                        <strong>{{ ldapConfig?.base_dn }}</strong>
+                    </div>
+                </ng-template>
+                <oitc-alert color="info"
+                            [baseIcon]="'circle'"
+                            [icon]="['fas', 'info']"
+                            [contentTemplate]="contentTemplate">
+                </oitc-alert>
 
                 <div class="mb-3">
-                    <label cLabel for="post.User.usercontainerroles_ldap._ids">
+                    <!-- We do not submit this data, the UsersController will ask the LDAP server again so no manipulations could occur -->
+                    <label cLabel for="UserContainerrolesLdap" class="hintmark">
                         {{ t('Container Roles through LDAP') }}
-                        <oitc-required-icon/>
                     </label>
-                    <oitc-multi-select
-                        name="post.User.usercontainerroles_ldap._ids"
-                        id="post.User.usercontainerroles_ldap._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [disabled]="true"
-                        [(ngModel)]="post.User.usercontainerroles_ldap._ids"
-                        [options]="containerRoles.usercontainerroles"
-                        oitcFormError [errors]="errors" errorField="containerroles">
-                    </oitc-multi-select>
+                    <oitc-ui-blocker [blocked]="true">
+                        <oitc-multi-select
+                            [placeholder]="'No matches' | transloco"
+                            name="UserContainerrolesLdap"
+                            id="UserContainerrolesLdap"
+                            optionValue="key"
+                            optionLabel="value"
+                            [options]="usercontainerroles"
+                            [(ngModel)]="selectedUserContainerRolesLdapReadOnly"
+                            oitcFormError [errors]="errors" errorField="usercontainerroles">
+                        </oitc-multi-select>
+                    </oitc-ui-blocker>
+                    <!-- ngModel is just for Angular. The UsersController will pull the data from the LDAP server on save -->
+                    <oitc-form-feedback [errors]="errors" errorField="usercontainerroles"></oitc-form-feedback>
                     <div class="help-block text-info">
-                        <fa-icon [icon]="['fas', 'info-circle']"/>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('Automatically assigned container roles based on the LDAP groups of the current user.') }}
                     </div>
                 </div>
-
-                <!-- for all the selected containerroles by ldap -->
-                <ng-container *ngIf="this.ldapUserDetails.userContainerRoleContainerPermissionsLdap">
-                    <c-row
-                        *ngFor="let userContainerRole of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap | keyvalue"
-                        class="containerRoleInheritance mb-3">
-                        <c-col md="1">
-                        </c-col>
-                        <c-col md="11">
-                            <legend class="text-success">
-                                {{ userContainerRole.value.path }}
+                <!-- User Container Roles permissions read/write (LDAP) -->
+                @for (userContainerRoleLdap of userContainerRoleContainerPermissionsLdap; track $index) {
+                    <c-row class="mb-2">
+                        <c-col [md]="1"><!-- spacer --></c-col>
+                        <c-col [md]="11">
+                            <legend class="p-0 text-success fs-6">
+                                {{ userContainerRoleLdap.path }}
                                 <fa-icon [icon]="['fas', 'minus-square']" class="text-danger"
-                                         *ngIf="selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1 || containerRoleContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1"/>
+                                         *ngIf="selectedUserContainers.indexOf(userContainerRoleLdap._joinData.container_id) !== -1 ||
+                                                selectedUserContainerRolesContainerIds.indexOf(userContainerRoleLdap._joinData.container_id) !== -1"></fa-icon>
                             </legend>
-                            <c-row>
-                                <c-col md="1">
-                                </c-col>
-                                <c-col md="2">
-                                    <c-form-check class="formCheckInline"
-                                                  [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1 || containerRoleContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
-                                        <input cFormCheckInput
-                                               disabled
-                                               type="radio"
-                                               [name]="userContainerRole.value.id + 'PermissionLevelRead'"
-                                               [id]="userContainerRole.value.id + 'PermissionLevelRead'"
-                                               [value]="1"
-                                               [(ngModel)]="userContainerRole.value._joinData.permission_level"
-                                        />
-                                        <label cFormCheckLabel
-                                               [for]="userContainerRole.value.id + 'PermissionLevelRead'">
-                                            {{ t('read') }}
-                                        </label>
-                                    </c-form-check>
-                                    <c-form-check class="formCheckInline"
-                                                  [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1 || containerRoleContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
-                                        <input cFormCheckInput
-                                               disabled
-                                               type="radio"
-                                               [name]="userContainerRole.value.id + 'PermissionLevelReadWrite'"
-                                               [id]="userContainerRole.value.id + 'PermissionLevelReadWrite'"
-                                               [value]="2"
-                                               [(ngModel)]="userContainerRole.value._joinData.permission_level"
-                                        />
-                                        <label cFormCheckLabel
-                                               [for]="userContainerRole.value.id + 'PermissionLevelReadWrite'">
-                                            {{ t('read/write') }}
-                                        </label>
-                                    </c-form-check>
-                                </c-col>
-                                <c-col md="9">
-                                    <ng-container
-                                        *ngFor="let userRole of userContainerRole.value.user_roles | keyvalue">
-                                        <button *oitcPermission="['usercontainerroles', 'edit']"
-                                                [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
-                                                cButton size="xs" color="primary" variant="outline">
-                                            {{ userRole.value.name }}
-                                        </button>
-                                        <button *oitcPermission="['usercontainerroles', 'edit'];negate:true"
-                                                [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
-                                                cButton size="xs" color="primary" variant="outline">
-                                            {{ userRole.value.name }}
-                                        </button>
-                                    </ng-container>
-                                </c-col>
-                            </c-row>
+                            <div class="d-inline-block"
+                                 [ngClass]="{'user-strike' : selectedUserContainers.indexOf(userContainerRoleLdap._joinData.container_id) !== -1 ||
+                                                             selectedUserContainerRolesContainerIds.indexOf(userContainerRoleLdap._joinData.container_id) !== -1}">
+                                <input cFormCheckInput
+                                       [attr.id]="'ldap_group-'+userContainerRoleLdap.id+'_read'"
+                                       [name]="'ldap_group-'+userContainerRoleLdap.id"
+                                       type="radio"
+                                       disabled="disabled"
+                                       [value]="PermissionLevel.READ_RIGHT"
+                                       [(ngModel)]="userContainerRoleLdap._joinData.permission_level"/>
+                                <label cFormCheckLabel class="ps-2 pe-4">
+                                    {{ t('read') }}
+                                </label>
+
+                                <input cFormCheckInput
+                                       [attr.id]="'ldap_group-'+userContainerRoleLdap.id+'_write'"
+                                       [name]="'ldap_group-'+userContainerRoleLdap.id"
+                                       type="radio"
+                                       disabled="disabled"
+                                       [value]="PermissionLevel.WRITE_RIGHT"
+                                       [(ngModel)]="userContainerRoleLdap._joinData.permission_level"/>
+                                <label cFormCheckLabel class="ps-2 pe-4">
+                                    {{ t('read/write') }}
+                                </label>
+                            </div>
+
+                            @for (userRole of userContainerRoleLdap.user_roles_array; track $index) {
+                                <oitc-badge-outline color="primary" class="me-1">
+                                    @if (PermissionsService.hasPermissionObservable(['usercontainerroles', 'edit'])|async) {
+                                        <a [routerLink]="['/', 'usercontainerroles', 'edit', userRole.id]">
+                                            {{ userRole.name }}
+                                        </a>
+                                    } @else {
+                                        {{ userRole.name }}
+
+                                    }
+                                </oitc-badge-outline>
+                            }
                         </c-col>
                     </c-row>
-                    <c-row
-                        *ngIf="post.User.usercontainerroles._ids.length > 0 && (selectedContainerIds.length > 0 || post.User.usercontainerroles._ids.length > 0 )">
-                        <c-col md="4" class="text-end div-bottom-arrow font-xs text-primary italic">
-                            {{ t('The user permissions will be extended or adapted with additional user roles or containers') }}
-                        </c-col>
-                    </c-row>
-                </ng-container>
+                }
+                <c-row>
+                    <c-col [md]="4" class="text-end font-xs text-primary italic mt-2"
+                           *ngIf="selectedUserContainerRolesLdapReadOnly.length > 0 && (post.usercontainerroles._ids.length > 0 || selectedUserContainers.length > 0)">
+                        {{ t('The user permissions will be extended or adapted with additional user roles or containers') }}
+                        <fa-icon [icon]="['fas', 'down-long']"></fa-icon>
+                    </c-col>
+                </c-row>
+
 
                 <div class="mb-3">
-                    <label cLabel for="post.User.usercontainerroles._ids">
+                    <label cLabel for="post.usercontainerroles._ids" class="hintmark">
                         {{ t('Container Roles') }}
-                        <oitc-required-icon/>
                     </label>
                     <oitc-multi-select
-                        name="post.User.usercontainerroles._ids"
-                        id="post.User.usercontainerroles._ids"
+                        name="post.usercontainerroles._ids"
+                        id="post.usercontainerroles._ids"
                         optionValue="key"
                         optionLabel="value"
-                        [(ngModel)]="post.User.usercontainerroles._ids"
+                        [(ngModel)]="post.usercontainerroles._ids"
                         [searchCallback]="loadContainerRoles"
-                        (onChange)="onContainerRolesChange($event)"
-                        [options]="containerRoles.usercontainerroles"
-                        oitcFormError [errors]="errors" errorField="containerroles">
+                        (onChange)="onUsercontainerrolesSelectChange($event)"
+                        [options]="usercontainerroles"
+                        oitcFormError [errors]="errors" errorField="usercontainerroles">
                     </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="containerroles"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors" errorField="usercontainerroles"></oitc-form-feedback>
                     <div class="help-block text-info">
-                        <fa-icon [icon]="['fas', 'info-circle']"/>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('Container Roles are handy to grant the same permissions to multiple users. Container Roles will overwrite automatically assignments via LDAP groups.') }}
                     </div>
                 </div>
 
-                <ng-container *ngIf="containerPermissions">
-                    <c-row
-                        *ngFor="let userContainerRole of containerPermissions.userContainerRoleContainerPermissions | keyvalue"
-                        class="containerRoleInheritance mb-3">
-                        <c-col md="1">
-                        </c-col>
-                        <c-col md="11">
-                            <legend class="txt-ack">
-                                {{ userContainerRole.value.path }}
+                <!-- User Container Roles permissions read/write -->
+                @for (userContainerRole of userContainerRoleContainerPermissions; track $index) {
+                    <c-row class="mb-2">
+                        <c-col [md]="2"><!-- spacer --></c-col>
+                        <c-col [md]="10">
+                            <legend class="p-0 text-primary fs-6">
+                                {{ userContainerRole.path }}
                                 <fa-icon [icon]="['fas', 'minus-square']" class="text-danger"
-                                         *ngIf="selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1"/>
+                                         *ngIf="selectedUserContainers.indexOf(userContainerRole._joinData.container_id) !== -1"></fa-icon>
                             </legend>
-                            <c-row>
-                                <c-col md="1">
-                                </c-col>
-                                <c-col md="2">
-                                    <c-form-check class="formCheckInline"
-                                                  [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
-                                        <input cFormCheckInput
-                                               disabled
-                                               type="radio"
-                                               [name]="userContainerRole.value.id + 'PermissionLevelRead'"
-                                               [id]="userContainerRole.value.id + 'PermissionLevelRead'"
-                                               [value]="1"
-                                               [(ngModel)]="userContainerRole.value._joinData.permission_level"
-                                        />
-                                        <label cFormCheckLabel
-                                               [for]="userContainerRole.value.id + 'PermissionLevelRead'">
-                                            {{ t('read') }}
-                                        </label>
-                                    </c-form-check>
-                                    <c-form-check class="formCheckInline"
-                                                  [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
-                                        <input cFormCheckInput
-                                               disabled
-                                               type="radio"
-                                               [name]="userContainerRole.value.id + 'PermissionLevelReadWrite'"
-                                               [id]="userContainerRole.value.id + 'PermissionLevelReadWrite'"
-                                               [value]="2"
-                                               [(ngModel)]="userContainerRole.value._joinData.permission_level"
-                                        />
-                                        <label cFormCheckLabel
-                                               [for]="userContainerRole.value.id + 'PermissionLevelReadWrite'">
-                                            {{ t('read/write') }}
-                                        </label>
-                                    </c-form-check>
-                                </c-col>
-                                <c-col md="9">
-                                    <ng-container
-                                        *ngFor="let userRole of userContainerRole.value.user_roles | keyvalue">
-                                        <button *oitcPermission="['usercontainerroles', 'edit']"
-                                                [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
-                                                cButton size="xs" color="primary" variant="outline">
-                                            {{ userRole.value.name }}
-                                        </button>
-                                        <button *oitcPermission="['usercontainerroles', 'edit'];negate:true"
-                                                [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
-                                                cButton size="xs" color="primary" variant="outline">
-                                            {{ userRole.value.name }}
-                                        </button>
-                                    </ng-container>
-                                </c-col>
-                            </c-row>
+                            <div class="d-inline-block"
+                                 [ngClass]="{'user-strike' : selectedUserContainers.indexOf(userContainerRole._joinData.container_id) !== -1}">
+                                <input cFormCheckInput
+                                       [attr.id]="'group-'+userContainerRole.id+'_read'"
+                                       [name]="'group-'+userContainerRole.id"
+                                       type="radio"
+                                       disabled="disabled"
+                                       [value]="PermissionLevel.READ_RIGHT"
+                                       [(ngModel)]="userContainerRole._joinData.permission_level"/>
+                                <label cFormCheckLabel class="ps-2 pe-4">
+                                    {{ t('read') }}
+                                </label>
+
+                                <input cFormCheckInput
+                                       [attr.id]="'group-'+userContainerRole.id+'_write'"
+                                       [name]="'group-'+userContainerRole.id"
+                                       type="radio"
+                                       disabled="disabled"
+                                       [value]="PermissionLevel.WRITE_RIGHT"
+                                       [(ngModel)]="userContainerRole._joinData.permission_level"/>
+                                <label cFormCheckLabel class="ps-2 pe-4">
+                                    {{ t('read/write') }}
+                                </label>
+                            </div>
+
+                            @for (userRole of userContainerRole.user_roles_array; track $index) {
+                                <oitc-badge-outline color="primary" class="me-1">
+                                    @if (PermissionsService.hasPermissionObservable(['usercontainerroles', 'edit'])|async) {
+                                        <a [routerLink]="['/', 'usercontainerroles', 'edit', userRole.id]">
+                                            {{ userRole.name }}
+                                        </a>
+                                    } @else {
+                                        {{ userRole.name }}
+
+                                    }
+                                </oitc-badge-outline>
+                            }
                         </c-col>
                     </c-row>
-                    <c-row *ngIf="post.User.usercontainerroles._ids.length > 0 && selectedContainerIds.length > 0">
-                        <c-col md="4" class="text-end div-bottom-arrow font-xs text-primary italic">
-                            {{ t('The user permissions will be extended or adapted with additional containers') }}
-                        </c-col>
-                    </c-row>
-                </ng-container>
+                }
+                <c-row>
+                    <c-col [md]="4" class="text-end font-xs text-primary italic mt-2"
+                           *ngIf="post.usercontainerroles._ids.length > 0 && selectedUserContainers.length > 0">
+                        {{ t('The user permissions will be extended or adapted with additional containers') }}
+                        <fa-icon [icon]="['fas', 'down-long']"></fa-icon>
+                    </c-col>
+                </c-row>
 
 
                 <div class="mb-3">
-                    <label cLabel for="selectedContainerIds">
+                    <label cLabel for="selectedContainerIds" class="hintmark">
                         {{ t('Container') }}
-                        <oitc-required-icon/>
                     </label>
                     <oitc-multi-select
                         name="selectedContainerIds"
                         id="selectedContainerIds"
                         optionValue="key"
                         optionLabel="value"
-                        [(ngModel)]="selectedContainerIds"
+                        [(ngModel)]="selectedUserContainers"
                         [options]="containers"
-                        (onChange)="onSelectedContainerIdsChange()"
+                        (onChange)="onSelectedContainerIdsChange($event)"
                         oitcFormError [errors]="errors" errorField="containers">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
@@ -329,88 +299,78 @@
                         {{ t('Container assignments defined in the user will overwrite permissions inherited from Container Roles!') }}
                     </div>
                 </div>
-                <!--
-                each selectedContainerIds will have a dropdown for the user to select the role
-                -->
-                <ng-container *ngFor="let userContainerRole of containers">
-                    <c-row *ngIf="selectedContainerIds.indexOf(userContainerRole.key) !== -1"
-                           class="containerRoleInheritance mb-3">
-                        <c-col md="1">
-                        </c-col>
-                        <c-col md="11">
-                            <legend class="txt-ack">
-                                {{ userContainerRole.value }}
+
+                <!-- Container permissions read/write -->
+                @for (userContainer of selectedUserContainerWithPermission; track $index) {
+                    <c-row class="mb-2">
+                        <c-col [md]="3"><!-- spacer --></c-col>
+                        <c-col [md]="9">
+                            <legend class="p-0 text-info fs-6">
+                                {{ userContainer.container_name }}
                             </legend>
-                            <c-row>
-                                <c-col md="1">
-                                </c-col>
-                                <c-col md="1">
-                                    <c-form-check>
-                                        <input cFormCheckInput
-                                               type="radio"
-                                               [disabled]="userContainerRole.key === 1"
-                                               [name]="userContainerRole.key + 'PermissionLevelReadEditable'"
-                                               [id]="userContainerRole.key + 'PermissionLevelReadEditable'"
-                                               [value]="'1'"
-                                               [(ngModel)]="post.User.ContainersUsersMemberships[userContainerRole.key]"
-                                        />
-                                        <label cFormCheckLabel
-                                               [for]="userContainerRole.key + 'PermissionLevelReadEditable'">
-                                            {{ t('read') }}
-                                        </label>
-                                    </c-form-check>
-                                </c-col>
-                                <c-col md="1">
-                                    <c-form-check>
-                                        <input cFormCheckInput
-                                               type="radio"
-                                               [disabled]="userContainerRole.key === 1"
-                                               [name]="userContainerRole.key + 'PermissionLevelReadWriteEditable'"
-                                               [id]="userContainerRole.key + 'PermissionLevelReadWriteEditable'"
-                                               [value]="'2'"
-                                               [(ngModel)]="post.User.ContainersUsersMemberships[userContainerRole.key]"
-                                        />
-                                        <label cFormCheckLabel
-                                               [for]="userContainerRole.key + 'PermissionLevelReadWriteEditable'">
-                                            {{ t('read/write') }}
-                                        </label>
-                                    </c-form-check>
-                                </c-col>
-                            </c-row>
+                            <div class="d-inline-block">
+                                <input cFormCheckInput
+                                       [attr.id]="'ucgroup-'+userContainer.container_id+'_read'"
+                                       [name]="'ucgroup-'+userContainer.container_id"
+                                       type="radio"
+                                       [disabled]="userContainer.container_id === ROOT_CONTAINER"
+                                       [value]="PermissionLevel.READ_RIGHT"
+                                       [(ngModel)]="userContainer.permission_level"/>
+                                <label cFormCheckLabel class="ps-2 pe-4"
+                                       [for]="'ucgroup-'+userContainer.container_id+'_read'">
+                                    {{ t('read') }}
+                                </label>
+
+                                <input cFormCheckInput
+                                       [attr.id]="'ucgroup-'+userContainer.container_id+'_write'"
+                                       [name]="'ucgroup-'+userContainer.container_id"
+                                       type="radio"
+                                       [disabled]="userContainer.container_id === ROOT_CONTAINER"
+                                       [value]="PermissionLevel.WRITE_RIGHT"
+                                       [(ngModel)]="userContainer.permission_level"/>
+                                <label cFormCheckLabel class="ps-2 pe-4"
+                                       [for]="'ucgroup-'+userContainer.container_id+'_write'">
+                                    {{ t('read/write') }}
+                                </label>
+                            </div>
                         </c-col>
                     </c-row>
-                </ng-container>
+                }
+
 
                 <div class="mb-3">
                     <label cLabel for="ldapUserDetails.usergroupLdap.id">
                         {{ t('User role through LDAP') }}
-                        <oitc-required-icon/>
+                        <oitc-required-icon></oitc-required-icon>
                     </label>
-                    <oitc-select
-                        name="ldapUserDetails.usergroupLdap.id"
-                        id="ldapUserDetails.usergroupLdap.id"
-                        optionValue="key"
-                        optionLabel="value"
-                        [disabled]="true"
-                        [(ngModel)]="ldapUserDetails.usergroupLdap.id"
-                        [options]="usergroups"
-                        oitcFormError [errors]="errors" errorField="usergroup_id">
-                    </oitc-select>
+                    <oitc-ui-blocker [blocked]="true">
+                        <oitc-select
+                            name="ldapUserDetails.usergroupLdap.id"
+                            id="ldapUserDetails.usergroupLdap.id"
+                            optionValue="key"
+                            optionLabel="value"
+                            [placeholder]="'No matches' | transloco"
+                            [disabled]="true"
+                            [(ngModel)]="selectedUserRoleThroughLdap"
+                            [options]="usergroups"
+                            oitcFormError [errors]="errors" errorField="usergroup_id">
+                            <!-- ngModel is just for Angular. The data gets pull from the LDAP server on login -->
+                        </oitc-select>
+                    </oitc-ui-blocker>
                     <oitc-form-feedback [errors]="errors" errorField="usergroup_id"></oitc-form-feedback>
                 </div>
 
-                <!-- USER ROLE DROPDOWN -->
                 <div class="mb-3">
-                    <label cLabel for="post.User.usergroup_id">
+                    <label cLabel for="post.usergroup_id">
                         {{ t('Fallback User role') }}
-                        <oitc-required-icon/>
+                        <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
-                        name="post.User.usergroup_id"
-                        id="post.User.usergroup_id"
+                        name="post.usergroup_id"
+                        id="post.usergroup_id"
                         optionValue="key"
                         optionLabel="value"
-                        [(ngModel)]="post.User.usergroup_id"
+                        [(ngModel)]="post.usergroup_id"
                         [options]="usergroups"
                         oitcFormError [errors]="errors" errorField="usergroup_id">
                     </oitc-select>
@@ -421,230 +381,241 @@
                     </div>
                 </div>
 
-                <!-- IS ACTIVE -->
                 <div class="mb-3">
                     <c-form-check>
-                        <input cFormCheckInput
-                               name="post.User.is_active"
-                               id="post.User.is_active"
-                               type="checkbox"
-                               [(ngModel)]="post.User.is_active"
-                               oitcFormError [errors]="errors" errorField="is_active"/>
+                        <input
+                            cFormCheckInput
+                            class="checkbox-lg checkbox-primary"
+                            name="post.is_active"
+                            id="post.is_active"
+                            type="checkbox"
+                            trueFalseValue
+                            [trueValue]="1"
+                            [falseValue]="0"
+                            [(ngModel)]="post.is_active"
+                            oitcFormError [errors]="errors" errorField="is_active"/>
                         <oitc-form-feedback [errors]="errors" errorField="is_active"></oitc-form-feedback>
-                        <label cFormCheckLabel for="post.User.is_active">
+                        <label cFormCheckLabel class="ms-1 mt-1"
+                               for="post.is_active">
                             {{ t('Is active') }}
                         </label>
                     </c-form-check>
                 </div>
 
-                <!-- EMAIL ADDRESS -->
-                <div class="mb-3">
-                    <label cLabel for="post.User.email">
+                <div class="mb-1">
+                    <label cLabel for="post.email">
                         {{ t('Email address') }}
                         <oitc-required-icon/>
                     </label>
                     <input cFormControl
                            required
-                           id="post.User.email"
-                           type="text"
+                           id="post.email"
+                           type="email"
+                           name="post.email"
+                           [(ngModel)]="post.email"
                            disabled
-                           name="post.User.email"
-                           [(ngModel)]="post.User.email"
-                           oitcFormError [errors]="errors" errorField="email">
+                           oitcFormError [errors]="errors" errorField="email"/>
                     <oitc-form-feedback [errors]="errors" errorField="email"></oitc-form-feedback>
                     <div class="help-block text-info">
                         {{ t('Value imported from LDAP Server') }}
                     </div>
                 </div>
 
-                <!-- ENABLE LOGIN OAUTH2 -->
                 <div class="mb-3">
                     <c-form-check>
-                        <input cFormCheckInput
-                               name="post.User.is_oauth"
-                               id="post.User.is_oauth"
-                               type="checkbox"
-                               trueFalseValue
-                               [(ngModel)]="post.User.is_oauth"
-                               oitcFormError [errors]="errors" errorField="is_oauth"/>
+                        <input
+                            cFormCheckInput
+                            class="checkbox-lg checkbox-primary"
+                            name="post.is_oauth"
+                            id="post.is_oauth"
+                            type="checkbox"
+                            [(ngModel)]="post.is_oauth"
+                            oitcFormError [errors]="errors" errorField="is_oauth"/>
                         <oitc-form-feedback [errors]="errors" errorField="is_oauth"></oitc-form-feedback>
-                        <label cFormCheckLabel for="post.User.is_oauth">
+                        <label cFormCheckLabel class="ms-1 mt-1"
+                               for="post.is_oauth">
                             {{ t('Enable login through oAuth2') }}
                         </label>
                     </c-form-check>
                 </div>
 
-                <!-- FIRST NAME -->
                 <div class="mb-3">
-                    <label cLabel for="post.User.firstname">
+                    <label cLabel for="post.firstname">
                         {{ t('First name') }}
+                        <oitc-required-icon/>
                     </label>
                     <input cFormControl
                            required
-                           disabled
-                           id="post.User.firstname"
+                           id="post.firstname"
                            type="text"
-                           name="post.User.firstname"
-                           [(ngModel)]="post.User.firstname"
-                           oitcFormError [errors]="errors" errorField="firstname">
+                           name="post.firstname"
+                           [(ngModel)]="post.firstname"
+                           disabled
+                           oitcFormError [errors]="errors" errorField="firstname"/>
                     <oitc-form-feedback [errors]="errors" errorField="firstname"></oitc-form-feedback>
                     <div class="help-block text-info">
                         {{ t('Value imported from LDAP Server') }}
                     </div>
                 </div>
 
-                <!-- LAST NAME -->
                 <div class="mb-3">
-                    <label cLabel for="post.User.lastname">
+                    <label cLabel for="post.lastname">
                         {{ t('Last name') }}
+                        <oitc-required-icon/>
                     </label>
                     <input cFormControl
-                           disabled
-                           id="post.User.lastname"
+                           required
+                           id="post.lastname"
                            type="text"
-                           name="post.User.lastname"
-                           [(ngModel)]="post.User.lastname"
-                           oitcFormError [errors]="errors" errorField="lastname">
+                           name="post.lastname"
+                           [(ngModel)]="post.lastname"
+                           disabled
+                           oitcFormError [errors]="errors" errorField="lastname"/>
                     <oitc-form-feedback [errors]="errors" errorField="lastname"></oitc-form-feedback>
                     <div class="help-block text-info">
                         {{ t('Value imported from LDAP Server') }}
                     </div>
                 </div>
 
-                <!-- COMPANY -->
                 <div class="mb-3">
-                    <label cLabel for="post.User.company">
+                    <label cLabel for="post.company">
                         {{ t('Company') }}
                     </label>
                     <input cFormControl
-                           id="post.User.company"
+                           required
+                           id="post.company"
                            type="text"
-                           name="post.User.company"
-                           [(ngModel)]="post.User.company"
-                           oitcFormError [errors]="errors" errorField="company">
+                           name="post.company"
+                           [(ngModel)]="post.company"
+                           oitcFormError [errors]="errors" errorField="company"/>
                     <oitc-form-feedback [errors]="errors" errorField="company"></oitc-form-feedback>
                 </div>
 
-                <!-- COMPANY POSITION -->
                 <div class="mb-3">
-                    <label cLabel for="post.User.position">
+                    <label cLabel for="post.position">
                         {{ t('Company position') }}
                     </label>
                     <input cFormControl
-                           id="post.User.position"
+                           required
+                           id="post.position"
                            type="text"
-                           name="post.User.position"
-                           [(ngModel)]="post.User.position"
-                           oitcFormError [errors]="errors" errorField="position">
+                           name="post.position"
+                           [(ngModel)]="post.position"
+                           oitcFormError [errors]="errors" errorField="position"/>
                     <oitc-form-feedback [errors]="errors" errorField="position"></oitc-form-feedback>
                 </div>
 
-                <!-- PHONE NUMBER -->
                 <div class="mb-3">
-                    <label cLabel for="post.User.phone">
+                    <label cLabel for="post.phone">
                         {{ t('Phone Number') }}
                     </label>
                     <input cFormControl
-                           id="post.User.phone"
+                           required
+                           id="post.phone"
                            type="text"
-                           name="post.User.phone"
-                           [(ngModel)]="post.User.phone"
-                           oitcFormError [errors]="errors" errorField="phone">
+                           name="post.phone"
+                           [(ngModel)]="post.phone"
+                           oitcFormError [errors]="errors" errorField="phone"/>
                     <oitc-form-feedback [errors]="errors" errorField="phone"></oitc-form-feedback>
                 </div>
 
-                <!-- LENGTH OF LISTS -->
                 <div class="mb-3">
-                    <label cLabel for="post.User.paginatorlength">
+                    <label cLabel for="post.paginatorlength">
                         {{ t('Length of lists') }}
                     </label>
                     <input cFormControl
-                           id="post.User.paginatorlength"
+                           required
+                           id="post.paginatorlength"
                            type="number"
-                           name="post.User.paginatorlength"
-                           [(ngModel)]="post.User.paginatorlength"
-                           oitcFormError [errors]="errors" errorField="paginatorlength">
+                           name="post.paginatorlength"
+                           [(ngModel)]="post.paginatorlength"
+                           oitcFormError [errors]="errors" errorField="paginatorlength"/>
                     <oitc-form-feedback [errors]="errors" errorField="paginatorlength"></oitc-form-feedback>
                 </div>
 
-                <!-- SHOW STATUS BADGES IN MENU -->
                 <div class="mb-3">
                     <c-form-check>
-                        <input cFormCheckInput
-                               name="post.User.showstatsinmenu"
-                               id="post.User.showstatsinmenu"
-                               type="checkbox"
-                               trueFalseValue
-                               [(ngModel)]="post.User.showstatsinmenu"
-                               oitcFormError [errors]="errors" errorField="showstatsinmenu"/>
+                        <input
+                            cFormCheckInput
+                            class="checkbox-lg checkbox-primary"
+                            name="post.showstatsinmenu"
+                            id="post.showstatsinmenu"
+                            type="checkbox"
+                            trueFalseValue
+                            [trueValue]="1"
+                            [falseValue]="0"
+                            [(ngModel)]="post.showstatsinmenu"
+                            oitcFormError [errors]="errors" errorField="showstatsinmenu"/>
                         <oitc-form-feedback [errors]="errors" errorField="showstatsinmenu"></oitc-form-feedback>
-                        <label cFormCheckLabel for="post.User.showstatsinmenu">
+                        <label cFormCheckLabel class="ms-1 mt-1"
+                               for="post.showstatsinmenu">
                             {{ t('Show status badges in menu') }}
                         </label>
                     </c-form-check>
                 </div>
 
-                <!-- RECURSIVE BROWSER -->
                 <div class="mb-3">
                     <c-form-check>
-                        <input cFormCheckInput
-                               name="post.User.recursive_browser"
-                               id="post.User.recursive_browser"
-                               type="checkbox"
-                               trueFalseValue
-                               [(ngModel)]="post.User.recursive_browser"
-                               oitcFormError [errors]="errors" errorField="recursive_browser"/>
+                        <input
+                            cFormCheckInput
+                            class="checkbox-lg checkbox-primary"
+                            name="post.recursive_browser"
+                            id="post.recursive_browser"
+                            type="checkbox"
+                            trueFalseValue
+                            [trueValue]="1"
+                            [falseValue]="0"
+                            [(ngModel)]="post.recursive_browser"
+                            oitcFormError [errors]="errors" errorField="recursive_browser"/>
                         <oitc-form-feedback [errors]="errors" errorField="recursive_browser"></oitc-form-feedback>
-                        <label cFormCheckLabel for="post.User.recursive_browser">
+                        <label cFormCheckLabel class="ms-1 mt-1"
+                               for="post.recursive_browser">
                             {{ t('Recursive Browser') }}
                         </label>
                     </c-form-check>
                 </div>
 
-                <!-- TAB ROTATION INTERVAL SLIDER -->
                 <div class="mb-3">
-                    <label cLabel for="post.User.dashboard_tab_rotation">
+                    <label cLabel for="post.dashboard_tab_rotation">
                         {{ t('Tab rotation interval') }}
                     </label>
                     <oitc-slider-time
-                        id="post.User.dashboard_tab_rotation"
-                        name="post.User.dashboard_tab_rotation"
-                        [(ngModel)]="post.User.dashboard_tab_rotation"></oitc-slider-time>
+                        id="post.dashboard_tab_rotation"
+                        name="post.dashboard_tab_rotation"
+                        [(ngModel)]="post.dashboard_tab_rotation"></oitc-slider-time>
                     <oitc-form-feedback [errors]="errors" errorField="dashboard_tab_rotation"></oitc-form-feedback>
                 </div>
 
-                <!-- DATE FORMAT -->
                 <div class="mb-3">
-                    <label cLabel for="post.User.dateformat">
+                    <label cLabel for="post.dateformat">
                         {{ t('Date format') }}
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                        name="post.User.dateformat"
-                        id="post.User.dateformat"
+                        name="post.dateformat"
+                        id="post.dateformat"
                         optionValue="key"
                         optionLabel="value"
-                        [(ngModel)]="post.User.dateformat"
+                        [(ngModel)]="post.dateformat"
                         [options]="dateformats"
                         oitcFormError [errors]="errors" errorField="dateformat">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="dateformat"></oitc-form-feedback>
                 </div>
 
-                <!-- Time zone -->
                 <div class="mb-3">
-                    <label cLabel for="post.User.timezone">
+                    <label cLabel for="UserTimezone">
                         {{ t('Timezone') }}
-                        <oitc-required-icon/>
+                        <oitc-required-icon></oitc-required-icon>
                     </label>
-                    <ng-select id="post.User.timezone"
-                               name="post.User.timezone"
+                    <ng-select id="UserTimezone"
+                               name="UserTimezone"
                                [items]="timezones"
                                groupBy="group"
                                bindLabel="name"
                                bindValue="value"
                                [clearable]="false"
-                               [(ngModel)]="post.User.timezone"
+                               [(ngModel)]="post.timezone"
                                oitcFormError [errors]="errors" errorField="timezone">
                         <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
                             <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
@@ -653,28 +624,27 @@
                     <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>
                     <div class="help-block">
                         {{ t('Server timezone is:') }}
-                        <b>
-                            {{ serverTimeZone }}
-                        </b>
+                        <strong>
+                            {{ serverTimeZone }}.
+                        </strong>
                         {{ t('Current server time:') }}
-                        <b>
+                        <strong>
                             {{ serverTime }}
-                        </b>
+                        </strong>
                     </div>
                 </div>
 
-                <!-- frontend language -->
                 <div class="mb-3">
-                    <label cLabel for="post.User.i18n">
+                    <label cLabel for="post.i18n">
                         {{ t('Frontend language') }}
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                        name="post.User.i18n"
-                        id="post.User.i18n"
+                        name="post.i18n"
+                        id="post.i18n"
                         optionValue="i18n"
                         optionLabel="name"
-                        [(ngModel)]="post.User.i18n"
+                        [(ngModel)]="post.i18n"
                         [options]="localeOptions"
                         oitcFormError [errors]="errors" errorField="i18n">
                     </oitc-select>
@@ -686,83 +656,92 @@
                     </div>
                 </div>
 
-                <!-- API KEYS -->
-                <h4>
-                    {{ t('Api keys') }}
-                </h4>
-                <c-row *ngFor="let apiKey of post.User.apikeys; let i = index; trackBy: trackByIndex">
-                    <c-col md="3">
-                        <div class="mb-3">
-                            <label cLabel [for]="post.User.apikeys[i].description">
-                                {{ t('Description') }}
-                                <oitc-required-icon/>
-                            </label>
-                            <input cFormControl
-                                   required
-                                   [id]="post.User.apikeys[i].description"
-                                   type="text"
-                                   [name]="post.User.apikeys[i].description"
-                                   [ngModelOptions]="{standalone: true}"
-                                   [(ngModel)]="post.User.apikeys[i].description"
-                                   oitcFormError [errors]="errors"
-                                   errorField="apikeys.{{i}}.description">
-                            <oitc-form-feedback [errors]="errors"
-                                                errorField="apikeys.{{i}}.description"></oitc-form-feedback>
-                            <div class="help-block">
-                                {{ t('Last used:') }}
-                                <span class="text-info"
-                                      *ngIf="post.User.apikeys[i].last_use === null">{{ t('never') }}</span>
-                                <span class="text-info"
-                                      *ngIf="post.User.apikeys[i].last_use !== null">{{ post.User.apikeys[i].last_use }}</span>
-                            </div>
-                        </div>
-                    </c-col>
-                    <c-col md="8">
-                        <div class="mb-3">
-                            <label cLabel [for]="post.User.apikeys[i].apikey">
-                                {{ t('Api key') }}
-                                <oitc-required-icon/>
-                            </label>
+                <!-- Prevent FireFox and Chrome from filling the users email into the timezone select box  :facepalm: -->
+                <input type="text" name="name" style="display:none"/>
 
-                            <c-input-group>
+                <fieldset>
+                    <legend class="m-0 pt-2">
+                        <h4>
+                            {{ t('Api keys') }}
+                        </h4>
+                    </legend>
+
+                    @for (apiKey of post.apikeys; track $index) {
+                        <c-row class="mb-3">
+                            <c-col [md]="3">
+                                <label cLabel [for]="'post.apikeys'+$index+'description'">
+                                    {{ t('Description') }}
+                                    <oitc-required-icon/>
+                                </label>
                                 <input cFormControl
                                        required
-                                       disabled
-                                       [id]="post.User.apikeys[i].apikey"
-                                       type="text"
-                                       [name]="post.User.apikeys[i].apikey"
+                                       [attr.id]="'post.apikeys'+$index+'description'"
+                                       [name]="'post.apikeys'+$index+'description'"
                                        [ngModelOptions]="{standalone: true}"
-                                       disabled
-                                       [(ngModel)]="post.User.apikeys[i].apikey">
-                                <button cButton color="success" (click)="refreshApiKey(i)">
-                                    <fa-icon [icon]="['fas', 'key']"></fa-icon>
-                                    {{ t('Generate new API key') }}
-                                </button>
-                                <button cButton color="danger" (click)="deleteApiKey(i)">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                </button>
-                            </c-input-group>
-                        </div>
-                    </c-col>
-                </c-row>
-                <c-row>
-                    <c-col md="12" class="text-end">
+                                       [(ngModel)]="apiKey.description"
+                                       oitcFormError [errors]="errors"
+                                       errorField="apikeys.{{$index}}.description"/>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="apikeys.{{$index}}.description"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('Last used:') }}
+                                    <span class="text-info"
+                                          *ngIf="apiKey.last_use === null">{{ t('never') }}</span>
+                                    <span class="text-info"
+                                          *ngIf="apiKey.last_use !== null">{{ apiKey.last_use }}</span>
+                                </div>
+                            </c-col>
+                            <c-col md="8">
+                                <label cLabel [for]="'post.apikeys'+$index+'apikey'">
+                                    {{ t('Api key') }}
+                                    <oitc-required-icon/>
+                                </label>
 
-                        <button cButton (click)="createApiKey()" color="success">
-                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                            {{ t('Add ApiKey') }}
-                        </button>
-                    </c-col>
-                </c-row>
+                                <c-input-group>
+                                    <input cFormControl
+                                           required
+                                           readonly
+                                           disabled
+                                           [attr.id]="'post.apikeys'+$index+'apikey'"
+                                           [name]="'post.apikeys'+$index+'apikey'"
+                                           type="text"
+                                           [ngModelOptions]="{standalone: true}"
+                                           [(ngModel)]="apiKey.apikey"
+                                           oitcFormError [errors]="errors"
+                                           errorField="apikeys.{{$index}}.apikey"/>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="apikeys.{{$index}}.apikey"></oitc-form-feedback>
+                                    <button cButton color="success" (click)="refreshApiKey($index)" class="ripple">
+                                        <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                                        {{ t('Generate new API key') }}
+                                    </button>
+                                    <button cButton color="danger" (click)="removeApikey($index)" class="ripple">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    </button>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                    }
+
+                    <c-row>
+                        <c-col [md]="12" class="text-end">
+                            <button cButton (click)="addApikey()" color="success">
+                                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                {{ t('Add ApiKey') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+
+
+                </fieldset>
+
             </c-card-body>
-
             <c-card-footer class="text-end">
                 <label class="me-2">
                     <input cFormCheckInput type="checkbox" name="createAnother"
                            [(ngModel)]="createAnother">
                     {{ t('Create another') }}
                 </label>
-
                 <button cButton class="ripple" color="primary" type="submit">
                     {{ t('Create user from LDAP') }}
                 </button>
@@ -773,9 +752,9 @@
                 </button>
 
             </c-card-footer>
-
         </c-card>
     </form>
 </ng-container>
+
 
 
