@@ -61,6 +61,7 @@ import { ContactsService } from '../../contacts/contacts.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
 
 @Component({
     selector: 'oitc-users-edit',
@@ -106,7 +107,8 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         OitcAlertComponent,
         UiBlockerComponent,
         TranslocoPipe,
-        FormLoaderComponent
+        FormLoaderComponent,
+        FakeSelectComponent
     ],
     templateUrl: './users-edit.component.html',
     styleUrl: './users-edit.component.css',

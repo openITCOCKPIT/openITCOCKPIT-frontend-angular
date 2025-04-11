@@ -61,7 +61,7 @@
                     <label cLabel for="UserContainerrolesLdap" class="hintmark">
                         {{ t('Container Roles through LDAP') }}
                     </label>
-                    <oitc-ui-blocker [blocked]="true">
+                    <oitc-ui-blocker [blocked]="true" *ngIf="!userContainerRolesReadonly">
                         <oitc-multi-select
                             [placeholder]="'No matches' | transloco"
                             name="UserContainerrolesLdap"
@@ -73,6 +73,9 @@
                             oitcFormError [errors]="errors" errorField="usercontainerroles">
                         </oitc-multi-select>
                     </oitc-ui-blocker>
+                    <oitc-fake-select *ngIf="userContainerRolesReadonly">
+                        {{ t('Restricted view') }}
+                    </oitc-fake-select>
                     <!-- ngModel is just for Angular. The UsersController will pull the data from the LDAP server on save -->
                     <oitc-form-feedback [errors]="errors" errorField="usercontainerroles"></oitc-form-feedback>
                     <div class="help-block text-info">
@@ -146,6 +149,7 @@
                         {{ t('Container Roles') }}
                     </label>
                     <oitc-multi-select
+                        *ngIf="!userContainerRolesReadonly"
                         name="post.usercontainerroles._ids"
                         id="post.usercontainerroles._ids"
                         optionValue="key"
@@ -156,6 +160,9 @@
                         [options]="usercontainerroles"
                         oitcFormError [errors]="errors" errorField="usercontainerroles">
                     </oitc-multi-select>
+                    <oitc-fake-select *ngIf="userContainerRolesReadonly">
+                        {{ t('Restricted view') }}
+                    </oitc-fake-select>
                     <oitc-form-feedback [errors]="errors" errorField="usercontainerroles"></oitc-form-feedback>
                     <div class="help-block text-info">
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
