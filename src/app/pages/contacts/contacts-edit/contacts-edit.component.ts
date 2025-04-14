@@ -130,6 +130,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     public pushNotificationConnected: boolean | undefined;
     public pushNotificationHasPermission: boolean | undefined;
     public PermissionsService = inject(PermissionsService);
+    private init: boolean = true;
 
     public ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));
@@ -148,6 +149,9 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                 // Force empty container selection.
                 this.selectedContainers = this.post.containers._ids;
                 this.loadContainers();
+                this.loadCommands();
+                this.onContainerChange();
+                this.init = false;
             }));
     }
 
@@ -156,6 +160,17 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     }
 
     public updateContact(): void {
+
+        //update container ids if it was edited
+        if (this.areContainersChangeable) {
+            this.post.containers._ids = this.post.containers._ids.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
+
         this.post.containers._ids = _.uniq(
             this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers)
         );
@@ -228,6 +243,17 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
             return;
         }
+
+        //update container ids if it was edited
+        if (this.areContainersChangeable && !this.init) {
+            this.post.containers._ids = this.post.containers._ids.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
+
         const param = {
             containerIds: this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers)
         };
@@ -245,6 +271,17 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
             return;
         }
+
+        //update container ids if it was edited
+        if (this.areContainersChangeable && !this.init) {
+            this.post.containers._ids = this.post.containers._ids.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
+
         const param: LoadTimeperiodsPost = {
             container_ids: this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers)
         };

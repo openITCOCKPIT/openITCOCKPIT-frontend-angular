@@ -80,7 +80,13 @@ export interface LoadMapsRoot {
 
 export interface RotationsEditRoot {
     rotation: Rotation
+    areContainersChangeable: boolean
+    requiredContainers: number[]
     _csrfToken: string
+}
+
+export interface LoadMapsByContainerIdRequest {
+    'containerIds[]': number[]
 }
 
 

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
+    LoadMapsByContainerIdRequest,
     LoadMapsRoot,
     RotationPost,
     RotationsEditRoot,
@@ -45,9 +46,11 @@ export class RotationsService {
         )
     }
 
-    public loadMaps(): Observable<LoadMapsRoot> {
+    public loadMaps(params: LoadMapsByContainerIdRequest): Observable<LoadMapsRoot> {
         const proxyPath: string = this.proxyPath;
-        return this.http.get<LoadMapsRoot>(`${proxyPath}/map_module/rotations/loadMaps.json?angular=true`).pipe(
+        return this.http.get<LoadMapsRoot>(`${proxyPath}/map_module/rotations/loadMaps.json?angular=true`, {
+            params: params as {}
+        }).pipe(
             map((data: LoadMapsRoot) => {
                 return data;
             })

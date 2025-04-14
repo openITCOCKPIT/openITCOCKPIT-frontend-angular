@@ -36,6 +36,7 @@ import { LoadSatellitesRoot, MapPost } from '../maps.interface';
 
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { LoadContainersRoot } from '../../../../../pages/containers/containers.interface';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-maps-edit',
@@ -84,19 +85,28 @@ export class MapsEditComponent implements OnInit, OnDestroy {
     protected satellites: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute);
 
+    protected requiredContainers: number[] = [];
+    protected requiredContainersList: SelectKeyValue[] = []
+    protected areContainersChangeable: boolean = true;
+    protected containersSelection: number[] = [];
+    private init: boolean = true;
+
     protected mapId: number = 0;
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
-        this.loadContainers();
         this.mapId = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.MapsService.getEdit(this.mapId)
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 this.post = result.map;
                 this.post.Map.refresh_interval = (parseInt(this.post.Map.refresh_interval.toString(), 10) / 1000);
+                this.requiredContainers = result.requiredContainers;
+                this.areContainersChangeable = result.areContainersChangeable;
+                this.loadContainers();
                 this.onContainerChange();
+                this.init = false;
             }));
     }
 
@@ -106,6 +116,19 @@ export class MapsEditComponent implements OnInit, OnDestroy {
 
     public updateMap(): void {
 
+        //update container ids if it was edited
+        if (this.areContainersChangeable) {
+            this.post.Map.containers._ids = this.post.Map.containers._ids.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
+
+        this.post.Map.containers._ids = _.uniq(
+            this.post.Map.containers._ids.concat(this.containersSelection).concat(this.requiredContainers)
+        );
         this.subscriptions.add(this.MapsService.updateMap(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
@@ -135,13 +158,56 @@ export class MapsEditComponent implements OnInit, OnDestroy {
     private loadContainers(): void {
         this.subscriptions.add(this.MapsService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
+                this.containersSelection = [];
+                this.requiredContainersList = [];
                 this.containers = result.containers;
+                this.post.Map.containers._ids.forEach(value => {
+                    let permittetCheck = this.containers.find(({key}) => key === value);
+                    if (permittetCheck && this.requiredContainers.indexOf(value) === -1) {
+                        this.containersSelection.push(value);
+                    }
+                });
+
+                this.requiredContainers.forEach(value => {
+                    let existsCheck = this.containers.find(({key}) => key === value);
+                    if (existsCheck) {
+                        this.requiredContainersList.push({
+                            key: value,
+                            value: existsCheck.value
+                        });
+                    } else {
+                        this.requiredContainersList.push({
+                            key: value,
+                            value: this.TranslocoService.translate('RESTRICTED CONTAINER')
+                        });
+                    }
+                });
+
                 this.cdr.markForCheck();
             }))
     }
 
     private loadSatellites(): void {
-        this.subscriptions.add(this.MapsService.loadSatellites(this.post.Map.containers._ids)
+
+        if (this.post.Map.containers._ids.concat(this.containersSelection).concat(this.requiredContainers).length === 0) {
+            this.satellites = [];
+            this.cdr.markForCheck();
+            return;
+        }
+
+        //update container ids if it was edited
+        if (this.areContainersChangeable && !this.init) {
+            this.post.Map.containers._ids = this.post.Map.containers._ids.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
+
+        let containerIds = this.post.Map.containers._ids.concat(this.containersSelection).concat(this.requiredContainers)
+
+        this.subscriptions.add(this.MapsService.loadSatellites(containerIds)
             .subscribe((result: LoadSatellitesRoot) => {
                 this.satellites = result.satellites;
                 this.cdr.markForCheck();
@@ -152,8 +218,9 @@ export class MapsEditComponent implements OnInit, OnDestroy {
         if (typeof this.post === "undefined") {
             return;
         }
-        if (this.post.Map.containers._ids.length === 0) {
+        if (this.post.Map.containers._ids.concat(this.containersSelection).concat(this.requiredContainers).length === 0) {
             //Create another
+            this.satellites = [];
             return;
         }
         this.loadSatellites();
