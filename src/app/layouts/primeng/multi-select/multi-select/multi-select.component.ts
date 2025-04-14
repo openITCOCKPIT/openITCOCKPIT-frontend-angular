@@ -14,7 +14,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
-import { MultiSelect, MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
+import { MultiSelect, MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primeng/multiselect';
 import { SharedModule } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -27,9 +27,9 @@ import { AnimationEvent } from '@angular/animations';
     selector: 'oitc-multi-select',
     imports: [
         HighlightSearchPipe,
-        MultiSelectModule,
         SharedModule,
         FormsModule,
+        MultiSelect,
         MultiSelect,
         MultiSelect
     ],
