@@ -255,3 +255,6 @@ export interface MultiSelectTemplates {
      */
     removetokenicon(): TemplateRef<any>;
 }
+
+export { MultiSelect };
+

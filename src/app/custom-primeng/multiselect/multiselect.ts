@@ -129,7 +129,7 @@ export const MULTISELECT_VALUE_ACCESSOR: any = {
                 </ng-container>
             </p-checkbox>
             <span *ngIf="!template">{{ label ?? 'empty' }}</span>
-            <ng-container *ngTemplateOutlet="template; context: { $implicit: option }"></ng-container>
+            <ng-container *ngTemplateOutlet="$any(template); context: { $implicit: option }"></ng-container>
         </li>
     `,
     encapsulation: ViewEncapsulation.None
@@ -216,7 +216,7 @@ export class MultiSelectItem extends BaseComponent {
                 (focus)="onInputFocus($event)"
                 (blur)="onInputBlur($event)"
                 (keydown)="onKeyDown($event)"
-                [pAutoFocus]="autofocus"
+                [pAutoFocus]="$any(autofocus)"
                 [attr.value]="label() || 'empty'"
             />
         </div>
@@ -250,7 +250,7 @@ export class MultiSelectItem extends BaseComponent {
                                                 [attr.aria-hidden]="true"
                                             >
                                                 <ng-container
-                                                    *ngTemplateOutlet="chipIconTemplate || _chipIconTemplate || removeTokenIconTemplate || _removeTokenIconTemplate; context: { class: 'p-multiselect-chip-icon' }"></ng-container>
+                                                    *ngTemplateOutlet="$any(chipIconTemplate || _chipIconTemplate || removeTokenIconTemplate || _removeTokenIconTemplate); context: { class: 'p-multiselect-chip-icon' }"></ng-container>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -264,7 +264,7 @@ export class MultiSelectItem extends BaseComponent {
                 </ng-container>
                 <ng-container *ngIf="selectedItemsTemplate || _selectedItemsTemplate">
                     <ng-container
-                        *ngTemplateOutlet="selectedItemsTemplate || _selectedItemsTemplate; context: { $implicit: selectedOptions, removeChip: removeOption.bind(this) }"></ng-container>
+                        *ngTemplateOutlet="$any(selectedItemsTemplate || _selectedItemsTemplate); context: { $implicit: selectedOptions, removeChip: removeOption.bind(this) }"></ng-container>
                     <ng-container
                         *ngIf="!modelValue() || modelValue().length === 0">{{ placeholder() || defaultLabel || 'empty' }}
                     </ng-container>
@@ -276,13 +276,13 @@ export class MultiSelectItem extends BaseComponent {
                        (click)="clear($event)" [attr.data-pc-section]="'clearicon'" [attr.aria-hidden]="true"/>
             <span *ngIf="clearIconTemplate || _clearIconTemplate" class="p-multiselect-clear-icon"
                   (click)="clear($event)" [attr.data-pc-section]="'clearicon'" [attr.aria-hidden]="true">
-                <ng-template *ngTemplateOutlet="clearIconTemplate || _clearIconTemplate"></ng-template>
+                <ng-template *ngTemplateOutlet="$any(clearIconTemplate || _clearIconTemplate)"></ng-template>
             </span>
         </ng-container>
         <div class="p-multiselect-dropdown">
             <ng-container *ngIf="loading; else elseBlock">
                 <ng-container *ngIf="loadingIconTemplate || _loadingIconTemplate">
-                    <ng-container *ngTemplateOutlet="loadingIconTemplate || _loadingIconTemplate"></ng-container>
+                    <ng-container *ngTemplateOutlet="$any(loadingIconTemplate || _loadingIconTemplate)"></ng-container>
                 </ng-container>
                 <ng-container *ngIf="!loadingIconTemplate && !_loadingIconTemplate">
                     <span *ngIf="loadingIcon" [ngClass]="'p-multiselect-loading-icon pi-spin ' + loadingIcon"
@@ -300,26 +300,26 @@ export class MultiSelectItem extends BaseComponent {
                 </ng-container>
                 <span *ngIf="dropdownIconTemplate || _dropdownIconTemplate" class="p-multiselect-dropdown-icon"
                       [attr.data-pc-section]="'triggericon'" [attr.aria-hidden]="true">
-                    <ng-template *ngTemplateOutlet="dropdownIconTemplate || _dropdownIconTemplate"></ng-template>
+                    <ng-template *ngTemplateOutlet="$any(dropdownIconTemplate || _dropdownIconTemplate)"></ng-template>
                 </span>
             </ng-template>
         </div>
         <p-overlay
             #overlay
-            [(visible)]="overlayVisible"
-            [options]="overlayOptions"
+            [(visible)]="$any(overlayVisible)"
+            [options]="$any(overlayOptions)"
             [target]="'@parent'"
             [appendTo]="appendTo"
-            [autoZIndex]="autoZIndex"
-            [baseZIndex]="baseZIndex"
-            [showTransitionOptions]="showTransitionOptions"
-            [hideTransitionOptions]="hideTransitionOptions"
+            [autoZIndex]="$any(autoZIndex)"
+            [baseZIndex]="$any(baseZIndex)"
+            [showTransitionOptions]="$any(showTransitionOptions)"
+            [hideTransitionOptions]="$any(hideTransitionOptions)"
             (onAnimationStart)="onOverlayAnimationStart($event)"
             (onHide)="hide()"
         >
             <ng-template #content>
                 <div [attr.id]="id + '_list'" [ngClass]="'p-multiselect-overlay p-component'" [ngStyle]="panelStyle"
-                     [class]="panelStyleClass">
+                     [class]="$any(panelStyleClass)">
                     <span
                         #firstHiddenFocusableEl
                         role="presentation"
@@ -330,24 +330,24 @@ export class MultiSelectItem extends BaseComponent {
                         [attr.data-p-hidden-focusable]="true"
                     >
                     </span>
-                    <ng-container *ngTemplateOutlet="headerTemplate || _headerTemplate"></ng-container>
+                    <ng-container *ngTemplateOutlet="$any(headerTemplate || _headerTemplate)"></ng-container>
                     <div class="p-multiselect-header" *ngIf="showHeader">
                         <ng-content select="p-header"></ng-content>
                         <ng-container *ngIf="filterTemplate || _filterTemplate; else builtInFilterElement">
                             <ng-container
-                                *ngTemplateOutlet="filterTemplate || _filterTemplate; context: { options: filterOptions }"></ng-container>
+                                *ngTemplateOutlet="$any(filterTemplate || _filterTemplate); context: { options: filterOptions }"></ng-container>
                         </ng-container>
                         <ng-template #builtInFilterElement>
                             <p-checkbox [ngModel]="allSelected()" [ariaLabel]="toggleAllAriaLabel" [binary]="true"
                                         (onChange)="onToggleAll($event)" *ngIf="showToggleAll && !selectionLimit"
-                                        [variant]="variant" [disabled]="disabled" #headerCheckbox>
+                                        [variant]="variant" [disabled]="$any(disabled)" #headerCheckbox>
                                 <ng-template #checkboxicon let-klass="class">
                                     <CheckIcon
                                         *ngIf="!headerCheckboxIconTemplate && !_headerCheckboxIconTemplate && allSelected()"
                                         [styleClass]="klass" [attr.data-pc-section]="'icon'"/>
                                     <ng-template
                                         *ngTemplateOutlet="
-                                            headerCheckboxIconTemplate || _headerCheckboxIconTemplate;
+                                            $any(headerCheckboxIconTemplate || _headerCheckboxIconTemplate);
                                             context: {
                                                 checked: allSelected(),
                                                 partialSelected: partialSelected(),
@@ -385,7 +385,7 @@ export class MultiSelectItem extends BaseComponent {
                                         <span *ngIf="filterIconTemplate || _filterIconTemplate"
                                               class="p-multiselect-filter-icon">
                                             <ng-template
-                                                *ngTemplateOutlet="filterIconTemplate || _filterIconTemplate"></ng-template>
+                                                *ngTemplateOutlet="$any(filterIconTemplate || _filterIconTemplate)"></ng-template>
                                         </span>
                                     </p-inputicon>
                                 </p-iconfield>
@@ -399,7 +399,7 @@ export class MultiSelectItem extends BaseComponent {
                             #scroller
                             [items]="visibleOptions()"
                             [style]="{ height: scrollHeight }"
-                            [itemSize]="virtualScrollItemSize || _itemSize"
+                            [itemSize]="$any(virtualScrollItemSize || _itemSize)"
                             [autoSize]="true"
                             [tabindex]="-1"
                             [lazy]="lazy"
@@ -413,7 +413,7 @@ export class MultiSelectItem extends BaseComponent {
                             <ng-container *ngIf="loaderTemplate || _loaderTemplate">
                                 <ng-template #loader let-scrollerOptions="options">
                                     <ng-container
-                                        *ngTemplateOutlet="loaderTemplate || _loaderTemplate; context: { options: scrollerOptions }"></ng-container>
+                                        *ngTemplateOutlet="$any(loaderTemplate || _loaderTemplate); context: { options: scrollerOptions }"></ng-container>
                                 </ng-template>
                             </ng-container>
                         </p-scroller>
@@ -434,7 +434,7 @@ export class MultiSelectItem extends BaseComponent {
                                             <span
                                                 *ngIf="!groupTemplate">{{ getOptionGroupLabel(option.optionGroup) }}</span>
                                             <ng-container
-                                                *ngTemplateOutlet="groupTemplate; context: { $implicit: option.optionGroup }"></ng-container>
+                                                *ngTemplateOutlet="$any(groupTemplate); context: { $implicit: option.optionGroup }"></ng-container>
                                         </li>
                                     </ng-container>
                                     <ng-container *ngIf="!isOptionGroup(option)">
@@ -465,7 +465,7 @@ export class MultiSelectItem extends BaseComponent {
                                         {{ emptyFilterMessageLabel }}
                                     } @else {
                                         <ng-container
-                                            *ngTemplateOutlet="emptyFilterTemplate || _emptyFilterTemplate || emptyTemplate || _emptyFilterTemplate"></ng-container>
+                                            *ngTemplateOutlet="$any(emptyFilterTemplate || _emptyFilterTemplate || emptyTemplate || _emptyFilterTemplate)"></ng-container>
                                     }
                                 </li>
                                 <li *ngIf="!hasFilter() && isEmpty()" class="p-multiselect-empty-message"
@@ -474,7 +474,7 @@ export class MultiSelectItem extends BaseComponent {
                                         {{ emptyMessageLabel }}
                                     } @else {
                                         <ng-container
-                                            *ngTemplateOutlet="emptyTemplate || _emptyTemplate"></ng-container>
+                                            *ngTemplateOutlet="$any(emptyTemplate || _emptyTemplate)"></ng-container>
                                     }
                                 </li>
                             </ul>
@@ -482,7 +482,7 @@ export class MultiSelectItem extends BaseComponent {
                     </div>
                     <div *ngIf="footerFacet || footerTemplate || _footerTemplate">
                         <ng-content select="p-footer"></ng-content>
-                        <ng-container *ngTemplateOutlet="footerTemplate || _footerTemplate"></ng-container>
+                        <ng-container *ngTemplateOutlet="$any(footerTemplate || _footerTemplate)"></ng-container>
                     </div>
 
                     <span
