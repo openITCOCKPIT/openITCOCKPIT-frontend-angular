@@ -26,9 +26,15 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { AnimationEvent } from '@angular/animations';
 import { EventcorrelationWidgetService } from './eventcorrelation-widget.service';
-import { EvcTree, EventcorrelationRootElement } from '../../pages/eventcorrelations/eventcorrelations.interface';
+import {
+    EvcSummaryService,
+    EvcTree,
+    EventcorrelationRootElement
+} from '../../pages/eventcorrelations/eventcorrelations.interface';
+import { EvcTreeDirection } from '../../pages/eventcorrelations/eventcorrelations-view/evc-tree/evc-tree.enum';
 import { EventcorrelationsService } from '../../pages/eventcorrelations/eventcorrelations.service';
 import { EvcTreeComponent } from '../../pages/eventcorrelations/eventcorrelations-view/evc-tree/evc-tree.component';
+import { EvcTableComponent } from '../../pages/eventcorrelations/eventcorrelations-view/evc-table/evc-table.component';
 import { EventcorrelationWidgetConfig } from './eventcorrelation-widget.interface';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
@@ -44,6 +50,7 @@ import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
         TranslocoDirective,
         XsButtonDirective,
         EvcTreeComponent,
+        EvcTableComponent,
         ColComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -72,8 +79,10 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
 
     // Variables for the EVC View
     public evcTree: EvcTree[] = [];
+    public evcSummaryTree: EvcSummaryService[][] = [];
     public rootElement?: EventcorrelationRootElement;
     public hasWritePermission: boolean = false;
+
 
     public showInfoForDisabledService: number = 0;
     public disabledServices: number = 0; //number of disabled services in the EVC
@@ -86,6 +95,7 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
 
     // widget config will be loaded from the server
     public config!: EventcorrelationWidgetConfig;
+    public direction: EvcTreeDirection = EvcTreeDirection.TOP_TO_BOTTOM;
 
     protected readonly EvcViewTypes: ({
         value: string;
@@ -134,6 +144,7 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
             this.EventcorrelationWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {
                 this.host_id = response.host_id;
                 this.config = response.config;
+                this.direction= EvcTreeDirection[this.config.direction];
 
                 if (this.host_id) {
                     this.loadEventcorrelation();
@@ -238,6 +249,7 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
             this.cdr.markForCheck();
 
             this.evcTree = result.evcTree;
+            this.evcSummaryTree = result.evcSummaryTree;
             this.rootElement = result.rootElement;
             this.hasWritePermission = result.hasWritePermission;
             this.showInfoForDisabledService = result.showInfoForDisabledService;

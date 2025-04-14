@@ -1,14 +1,15 @@
-<!--<ng-container *transloco="let t">-->
+
     <c-row>
         <c-col [xs]="12" class="text-end">
-            <button cButton color="default" [size]="'xs'" class="me-2" (click)="resetScreen()">
+            <button cButton *ngIf="!isWidget()" color="default" [size]="'xs'" class="ms-2 me-2" (click)="resetScreen()">
                 <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                Reset scale
+                {{'Reset scale' | transloco }}
             </button>
-            <button cButton color="default" [size]="'xs'" class="me-2" (click)="fit2screen()">
+            <button cButton *ngIf="!isWidget()" color="default" [size]="'xs'" class="me-2" (click)="fit2screen()">
                 <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                Fit to screen
+                {{'Fit to screen' | transloco }}
             </button>
+
             <c-button-group aria-label="Rotation" role="group">
                 <button cButton [size]="'xs'" color="default" [active]="EvcTreeDirection.RIGHT_TO_LEFT === direction"
                         (click)="horizontalRL()">
