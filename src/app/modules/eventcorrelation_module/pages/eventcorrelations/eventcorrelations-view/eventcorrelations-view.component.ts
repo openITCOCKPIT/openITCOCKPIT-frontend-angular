@@ -26,6 +26,7 @@ import { EventcorrelationsService } from '../eventcorrelations.service';
 import { EvcTree, EventcorrelationRootElement } from '../eventcorrelations.interface';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { EvcTreeComponent } from './evc-tree/evc-tree.component';
+import { EvcTreeDirection } from './evc-tree/evc-tree.enum';
 
 
 @Component({
@@ -62,6 +63,7 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
     public id: number = 0;
 
     public evcTree: EvcTree[] = [];
+    public evcTreeDirection: EvcTreeDirection = EvcTreeDirection.RIGHT_TO_LEFT;
     public rootElement?: EventcorrelationRootElement;
     public hasWritePermission: boolean = false;
 
