@@ -15,7 +15,13 @@ import { generateGuid } from '@foblex/utils';
 import { EvcTreeDirection } from './evc-tree.enum';
 import { EvcService, EvcTree } from '../../eventcorrelations.interface';
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
-import { ButtonGroupComponent, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
+import {
+    ButtonGroupComponent,
+    ColComponent, FormCheckComponent,
+    FormCheckInputDirective, FormCheckLabelDirective,
+    RowComponent,
+    TooltipDirective
+} from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum';
 import { DowntimeIconComponent } from '../../../../../../pages/downtimes/downtime-icon/downtime-icon.component';
@@ -34,6 +40,9 @@ import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-dir
 
 import { EvcServicestatusToasterService } from './evc-servicestatus-toaster/evc-servicestatus-toaster.service';
 import { EvcServicestatusToasterComponent } from './evc-servicestatus-toaster/evc-servicestatus-toaster.component';
+import { DebounceDirective } from '../../../../../../directives/debounce.directive';
+import { FormsModule } from '@angular/forms';
+import { TrueFalseDirective } from '../../../../../../directives/true-false.directive';
 //import { NgxResizeObserverModule } from 'ngx-resize-observer';
 
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
@@ -90,7 +99,7 @@ const OPERATOR_WIDTH = 100;
     selector: 'oitc-evc-tree',
     imports: [
         FFlowModule,
-       // NgxResizeObserverModule,
+        // NgxResizeObserverModule,
         NgClass,
         RowComponent,
         ColComponent,
@@ -105,7 +114,13 @@ const OPERATOR_WIDTH = 100;
         RouterLink,
         XsButtonDirective,
         ButtonGroupComponent,
-        EvcServicestatusToasterComponent
+        EvcServicestatusToasterComponent,
+        FormCheckInputDirective,
+        FormsModule,
+        TrueFalseDirective,
+        FormCheckLabelDirective,
+        FormCheckComponent,
+
     ],
     templateUrl: './evc-tree.component.html',
     styleUrl: './evc-tree.component.css',
@@ -119,6 +134,8 @@ export class EvcTreeComponent {
     public stateForDisabledService = input<number>(3);
     public connectionLine = input<string>('bezier');
     public animated = input<number>(0);
+    public evcDirection = input<EvcTreeDirection>(EvcTreeDirection.RIGHT_TO_LEFT);
+    public isWidget = input<boolean>(false);
 
     public downtimeStateTitle: string = '';
     public disabledStateTitle: string = '';
@@ -130,14 +147,14 @@ export class EvcTreeComponent {
     public nodes: INodeViewModel[] = [];
     public connections: ConnectionOperator[] = [];
     public direction: EvcTreeDirection = EvcTreeDirection.RIGHT_TO_LEFT;
-    public configuration = CONFIGURATION[EvcTreeDirection.RIGHT_TO_LEFT];
+    public configuration = CONFIGURATION[this.direction];
 
     @ViewChild(FFlowComponent, {static: true})
     public fFlowComponent!: FFlowComponent;
     @ViewChild(FCanvasComponent, {static: true})
     public fCanvasComponent!: FCanvasComponent;
 
-    public isAutoLayout: boolean = false;
+    public isAutoLayout: boolean = true;
 
 
     private cdr = inject(ChangeDetectorRef);
@@ -151,7 +168,10 @@ export class EvcTreeComponent {
         this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered unknown');
 
         effect(() => {
+            this.direction = this.evcDirection();
+            this.configuration = CONFIGURATION[this.direction];
             if (this.isInitialized) {
+                this.direction = this.evcDirection();
                 this.updateGraph(new dagre.graphlib.Graph(), this.direction);
             }
 
@@ -193,6 +213,7 @@ export class EvcTreeComponent {
         });
 
         afterRenderEffect(() => {
+            // @ts-ignore
             // DOM rendering completed for this component
             this.isInitialized = true;
             this.updateGraph(new dagre.graphlib.Graph(), this.direction);
@@ -369,7 +390,6 @@ export class EvcTreeComponent {
     }
 
     public verticalBT(): void {
-        this.fitToScreen();
         this.direction = EvcTreeDirection.BOTTOM_TO_TOP;
         this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.BOTTOM_TO_TOP);
         this.fitToScreen();
@@ -378,17 +398,28 @@ export class EvcTreeComponent {
     public fitToScreen(): void {
         // Disabled for now, as it adds a scale factor to the canvas and "zooms in" on init.
         return;
-       // this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
 
         // https://flow.foblex.com/docs/f-canvas-component
        /* if (this.fCanvasComponent) {
             this.fCanvasComponent.resetScaleAndCenter(true);
             //this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
+             this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
             this.cdr.markForCheck();
-
-
-          //  this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
         }*/
+    }
+
+    public fit2screen(): void {
+        if (this.fCanvasComponent) {
+            this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 400), false);
+            this.cdr.markForCheck();
+        }
+    }
+    public resetScreen(): void {
+
+        if (this.fCanvasComponent) {
+            this.fCanvasComponent.resetScaleAndCenter();
+            this.cdr.markForCheck();
+        }
     }
 
     public toggleToaster(serviceId: number | undefined): void {
