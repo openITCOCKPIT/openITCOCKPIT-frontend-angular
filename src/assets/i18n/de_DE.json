@@ -5640,5 +5640,10 @@
   "Direction (For tree view only)": "Richtung (nur für Baumansicht)",
   "Reset scale": "Zoom zurücksetzen",
   "Fit to screen": "An Bildschirm anpassen",
-  "Changecalendar Module": "Changecalendar Modul"
+  "Changecalendar Module": "Changecalendar Modul",
+  "Table": "Tabelle",
+  "right to left": "von rechts nach links",
+  "left to right": "von links nach rechts",
+  "top to bottom": "von oben nach unten",
+  "bottom to top": "von unten nach oben"
 }

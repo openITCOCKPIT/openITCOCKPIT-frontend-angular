@@ -22,22 +22,24 @@
                         {{ t('No element selected') }}
                     </div>
 
-                    <div class="d-flex" [style.height.px]="widgetHeight" *ngIf="host_id && config.type==='tree' && show">
+                    <div class="d-flex" [style.height.px]="widgetHeight"
+                         *ngIf="host_id && config.type==='tree' && show">
 
-                            <oitc-evc-tree
-                                class="w-100 h-100"
-                                [evcId]="host_id"
-                                [evcTree]="evcTree"
-                                [downtimedServices]="downtimedServices"
-                                [stateForDowntimedService]="stateForDowntimedService"
-                                [stateForDisabledService]="stateForDisabledService"
-                                [animated]="animated"
-                                [connectionLine]="connectionLine"
-                                [evcDirection]="direction"
-                                [isWidget]="true"></oitc-evc-tree>
+                        <oitc-evc-tree
+                            class="w-100 h-100"
+                            [evcId]="host_id"
+                            [evcTree]="evcTree"
+                            [downtimedServices]="downtimedServices"
+                            [stateForDowntimedService]="stateForDowntimedService"
+                            [stateForDisabledService]="stateForDisabledService"
+                            [animated]="animated"
+                            [connectionLine]="connectionLine"
+                            [evcDirection]="direction"
+                            [isWidget]="true"></oitc-evc-tree>
 
                     </div>
-                    <div class="d-flex" [style.height.px]="widgetHeight" *ngIf="host_id && config.type==='table' && show">
+                    <div class="d-flex" [style.height.px]="widgetHeight"
+                         *ngIf="host_id && config.type==='table' && show">
                         <oitc-evc-table
                             [evcSummaryTree]="evcSummaryTree"
                             [stateForDowntimedService]="stateForDowntimedService"
