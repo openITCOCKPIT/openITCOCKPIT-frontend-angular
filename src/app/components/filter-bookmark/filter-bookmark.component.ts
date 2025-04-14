@@ -39,12 +39,12 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgIf } from '@angular/common';
 import {
-  ButtonGroupComponent,
-  CardHeaderComponent,
-  ColComponent,
-  ContainerComponent,
-  ModalService,
-  RowComponent
+    ButtonGroupComponent,
+    CardHeaderComponent,
+    ColComponent,
+    ContainerComponent,
+    ModalService,
+    RowComponent
 } from '@coreui/angular';
 import { DELETE_SERVICE_TOKEN } from '../../tokens/delete-injection.token';
 import { DeleteBookmarkModalComponent } from '../delete-bookmark-modal/delete-bookmark-modal.component';
@@ -56,7 +56,6 @@ import { Subscription } from 'rxjs';
 import { BookmarksService } from './bookmarks.service';
 
 import { GenericValidationError } from '../../generic-responses';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { FilterBookmarkSaveModalComponent } from '../filter-bookmark-save-modal/filter-bookmark-save-modal.component';
 import {
     FilterBookmarkExportModalComponent
@@ -68,36 +67,32 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
-import {
-    CustomAlertsIndexFilter,
-    CustomAlertsIndexParams
-} from '../../modules/customalert_module/pages/customalerts/customalerts.interface';
+import { CustomAlertsIndexFilter } from '../../modules/customalert_module/pages/customalerts/customalerts.interface';
 
 
 @Component({
     selector: 'oitc-filter-bookmark',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    NgIf,
-    RowComponent,
-    ColComponent,
-    CardHeaderComponent,
-    MultiSelectModule,
-    FilterBookmarkSaveModalComponent,
-    XsButtonDirective,
-    ButtonGroupComponent,
-    DeleteBookmarkModalComponent,
-    FilterBookmarkExportModalComponent,
-    NgSelectModule,
-    FormsModule,
-    NgOptionHighlightModule,
-    ContainerComponent
-],
+        TranslocoDirective,
+        FaIconComponent,
+        NgIf,
+        RowComponent,
+        ColComponent,
+        CardHeaderComponent,
+        FilterBookmarkSaveModalComponent,
+        XsButtonDirective,
+        ButtonGroupComponent,
+        DeleteBookmarkModalComponent,
+        FilterBookmarkExportModalComponent,
+        NgSelectModule,
+        FormsModule,
+        NgOptionHighlightModule,
+        ContainerComponent
+    ],
     templateUrl: './filter-bookmark.component.html',
     styleUrl: './filter-bookmark.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: BookmarksService }
+        {provide: DELETE_SERVICE_TOKEN, useClass: BookmarksService}
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
-import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
+import { MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primeng/multiselect';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { TranslocoService } from '@jsverse/transloco';
 import { debounceTime } from 'rxjs/operators';
@@ -26,7 +26,6 @@ import { Select } from 'primeng/select';
 @Component({
     selector: 'oitc-select',
     imports: [
-        MultiSelectModule,
         FormsModule,
         HighlightSearchPipe,
         Select
