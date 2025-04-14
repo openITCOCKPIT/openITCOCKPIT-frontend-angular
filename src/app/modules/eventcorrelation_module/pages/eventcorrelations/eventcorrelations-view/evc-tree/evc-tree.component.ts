@@ -112,6 +112,7 @@ const OPERATOR_WIDTH = 100;
         XsButtonDirective,
         ButtonGroupComponent,
         EvcServicestatusToasterComponent,
+        FormCheckInputDirective,
         FormsModule,
     ],
     templateUrl: './evc-tree.component.html',
@@ -392,12 +393,12 @@ export class EvcTreeComponent {
         return;
 
         // https://flow.foblex.com/docs/f-canvas-component
-        /* if (this.fCanvasComponent) {
-             this.fCanvasComponent.resetScaleAndCenter(true);
-             //this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
-              this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
-             this.cdr.markForCheck();
-         }*/
+       /* if (this.fCanvasComponent) {
+            this.fCanvasComponent.resetScaleAndCenter(true);
+            //this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
+             this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
+            this.cdr.markForCheck();
+        }*/
     }
 
     public fit2screen(): void {
@@ -406,8 +407,8 @@ export class EvcTreeComponent {
             this.cdr.markForCheck();
         }
     }
-
     public resetScreen(): void {
+
         if (this.fCanvasComponent) {
             this.fCanvasComponent.resetScaleAndCenter();
             this.cdr.markForCheck();
