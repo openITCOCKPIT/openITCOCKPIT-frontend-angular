@@ -23,14 +23,15 @@ import { debounceTime } from 'rxjs/operators';
 import _ from 'lodash';
 import { AnimationEvent } from '@angular/animations';
 
-
 @Component({
     selector: 'oitc-multi-select',
     imports: [
         HighlightSearchPipe,
         MultiSelectModule,
         SharedModule,
-        FormsModule
+        FormsModule,
+        MultiSelect,
+        MultiSelect
     ],
     providers: [
         {
