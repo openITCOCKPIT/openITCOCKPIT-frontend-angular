@@ -15,13 +15,7 @@ import { generateGuid } from '@foblex/utils';
 import { EvcTreeDirection } from './evc-tree.enum';
 import { EvcService, EvcTree } from '../../eventcorrelations.interface';
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
-import {
-    ButtonGroupComponent,
-    ColComponent, FormCheckComponent,
-    FormCheckInputDirective, FormCheckLabelDirective,
-    RowComponent,
-    TooltipDirective
-} from '@coreui/angular';
+import { ButtonGroupComponent, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum';
 import { DowntimeIconComponent } from '../../../../../../pages/downtimes/downtime-icon/downtime-icon.component';
@@ -40,9 +34,7 @@ import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-dir
 
 import { EvcServicestatusToasterService } from './evc-servicestatus-toaster/evc-servicestatus-toaster.service';
 import { EvcServicestatusToasterComponent } from './evc-servicestatus-toaster/evc-servicestatus-toaster.component';
-import { DebounceDirective } from '../../../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
-import { TrueFalseDirective } from '../../../../../../directives/true-false.directive';
 //import { NgxResizeObserverModule } from 'ngx-resize-observer';
 
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
@@ -115,11 +107,8 @@ const OPERATOR_WIDTH = 100;
         XsButtonDirective,
         ButtonGroupComponent,
         EvcServicestatusToasterComponent,
-        FormCheckInputDirective,
         FormsModule,
-        TrueFalseDirective,
-        FormCheckLabelDirective,
-        FormCheckComponent,
+        
 
     ],
     templateUrl: './evc-tree.component.html',
@@ -400,12 +389,12 @@ export class EvcTreeComponent {
         return;
 
         // https://flow.foblex.com/docs/f-canvas-component
-       /* if (this.fCanvasComponent) {
-            this.fCanvasComponent.resetScaleAndCenter(true);
-            //this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
-             this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
-            this.cdr.markForCheck();
-        }*/
+        /* if (this.fCanvasComponent) {
+             this.fCanvasComponent.resetScaleAndCenter(true);
+             //this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
+              this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), false);
+             this.cdr.markForCheck();
+         }*/
     }
 
     public fit2screen(): void {
@@ -414,6 +403,7 @@ export class EvcTreeComponent {
             this.cdr.markForCheck();
         }
     }
+
     public resetScreen(): void {
 
         if (this.fCanvasComponent) {
