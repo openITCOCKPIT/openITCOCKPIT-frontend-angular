@@ -112,7 +112,6 @@ const OPERATOR_WIDTH = 100;
         XsButtonDirective,
         ButtonGroupComponent,
         EvcServicestatusToasterComponent,
-        FormCheckInputDirective,
         FormsModule,
     ],
     templateUrl: './evc-tree.component.html',
