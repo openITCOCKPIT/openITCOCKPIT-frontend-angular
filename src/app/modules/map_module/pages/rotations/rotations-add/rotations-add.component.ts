@@ -142,11 +142,26 @@ export class RotationsAddComponent implements OnInit, OnDestroy {
     }
 
     private loadMaps(): void {
-        this.subscriptions.add(this.RotationsService.loadMaps()
+        if (this.post.Rotation.container_id.length === 0) {
+            this.maps = [];
+            return;
+        }
+        const param = {
+            'containerIds[]': this.post.Rotation.container_id
+        };
+        this.subscriptions.add(this.RotationsService.loadMaps(param)
             .subscribe((result: LoadMapsRoot) => {
                 this.maps = result.maps;
                 this.cdr.markForCheck();
             }))
+    }
+
+    public onContainerChange(): void {
+        if (this.post.Rotation.container_id.length === 0) {
+            this.maps = [];
+            return;
+        }
+        this.loadMaps();
     }
 
 }

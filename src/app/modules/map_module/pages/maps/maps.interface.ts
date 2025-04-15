@@ -104,6 +104,8 @@ export interface LoadSatellitesRoot {
 
 export interface MapsEditRoot {
     map: MapPost
+    areContainersChangeable: boolean;
+    requiredContainers: number[];
     _csrfToken: any
 }
 

@@ -4,14 +4,20 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { HttpClient } from '@angular/common/http';
 import {
-    ContactCopyGet, ContactCopyPost,
+    ContactCopyGet,
+    ContactCopyPost,
     ContactPost,
     ContactsEditRoot,
     ContactsIndexParams,
-    ContactsIndexRoot, ContactUsedBy, LdapConfigRoot, LoadLdapUserByStringRoot,
+    ContactsIndexRoot,
+    ContactUsedBy,
+    LdapConfigRoot,
+    LoadContainersRoot,
+    LoadLdapUserByStringRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
-    LoadContainersRoot, LoadUsersByContainerId, LoadUsersByContainerIdRequest
+    LoadUsersByContainerId,
+    LoadUsersByContainerIdRequest
 } from './contacts.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
@@ -172,9 +178,7 @@ export class ContactsService implements DeleteAllModalService {
 
     public loadUsersByContainerId(params: LoadUsersByContainerIdRequest): Observable<LoadUsersByContainerId> {
         const proxyPath = this.proxyPath;
-        return this.http.get<LoadUsersByContainerId>(`${proxyPath}/contacts/loadUsersByContainerId.json?angular=true`, {
-            params: params as {}
-        }).pipe(
+        return this.http.post<LoadUsersByContainerId>(`${proxyPath}/contacts/loadUsersByContainerId.json?angular=true`, params).pipe(
             map(data => {
                 return data;
             })
