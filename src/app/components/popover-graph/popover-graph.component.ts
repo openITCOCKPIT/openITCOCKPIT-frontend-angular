@@ -216,7 +216,8 @@ export class PopoverGraphComponent implements OnDestroy {
             GraphDefaults.height = this.chartHeight;// - 25;  // 27px for label
             GraphDefaults.width = elm.offsetWidth;
             //GraphDefaults.label = this.perfData[i].datasource.name;
-            GraphDefaults.label = false;
+            GraphDefaults.label = '';
+            GraphDefaults.unit = this.perfData[i].datasource.unit;
 
             // Get options object for uPlot
             let options = GraphDefaults.getOptions();
