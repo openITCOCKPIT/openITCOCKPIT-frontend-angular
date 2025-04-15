@@ -20,6 +20,8 @@ export class PopoverConfigBuilder {
     public width: number = 350;
     public timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone
     public lineWidth: number = 3;
+    public min: number | null = null;
+    public max: number | null = null;
 
     public datasource?: Datasource;
 
@@ -122,6 +124,10 @@ export class PopoverConfigBuilder {
                     max: this.end,
                     //range: [opts.start, opts.end],
                 },
+                y: {
+                    min: this.min,
+                    max: this.max
+                }
             },
             series: [
                 {},
