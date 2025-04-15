@@ -31,7 +31,8 @@
 </c-row>
 
 <!-- Docs: https://flow.foblex.com/ -->
-<f-flow fDraggable (fLoaded)="onLoaded()" [style.height]="'80vh'">
+
+<f-flow fDraggable (fLoaded)="onLoaded()">
     <f-minimap [fMinSize]="2000" [title]="'Navigator' | transloco" class="cursor-grab"></f-minimap>
     <f-canvas fZoom>
         @for (connection of connections; track connection.id) {
@@ -183,6 +184,7 @@
     </f-canvas>
 
 </f-flow>
+
 
 
 <oitc-evc-servicestatus-toaster></oitc-evc-servicestatus-toaster>
