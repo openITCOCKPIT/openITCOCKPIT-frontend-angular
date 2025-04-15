@@ -418,7 +418,8 @@
             </c-container>
             <!-- End Filter -->
             <oitc-table-loader *ngIf="!allImportedHosts"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+            <table *ngIf="allImportedHosts && importedhosts" bordered cTable class="mt-2 mb-0 table table-fit" hover
+                   striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
@@ -462,7 +463,7 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="importedhosts">
+                <tbody>
                 <tr *ngFor="let importedhost of importedhosts"
                     [ngClass]="{'bg-host-marked-for-disable':  ((importedhost.host && importedhost.host.disabled==0) || importedhost.host_id == null ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE),
                                 'bg-host-marked-for-re-enable':  (importedhost.host && importedhost.host.disabled==1) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)}">
@@ -895,7 +896,7 @@
 
             <oitc-no-records
                 *ngIf="importedhosts && importedhosts.length === 0"></oitc-no-records>
-            <ng-container *ngIf="importedhosts">
+            <ng-container *ngIf="allImportedHosts && importedhosts">
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>

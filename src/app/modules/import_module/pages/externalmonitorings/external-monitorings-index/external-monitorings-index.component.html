@@ -107,7 +107,7 @@
             </c-container>
             <!-- End Filter -->
             <oitc-table-loader *ngIf="!externalMonitorings"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+            <table *ngIf="externalMonitorings" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
@@ -133,7 +133,7 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="externalMonitorings">
+                <tbody>
                 <tr *ngFor="let externalMonitoring of externalMonitorings.externalMonitorings">
                     <td class="text-center">
                         <oitc-item-select

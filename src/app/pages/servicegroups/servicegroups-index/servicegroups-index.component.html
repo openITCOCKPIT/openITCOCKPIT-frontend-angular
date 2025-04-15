@@ -112,7 +112,8 @@
 
             <oitc-table-loader *ngIf="! servicegroups.all_servicegroups"></oitc-table-loader>
 
-            <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+            <table *ngIf="servicegroups" bordered cTable class="mt-2 mb-0" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
                 <tr>
@@ -130,13 +131,13 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="servicegroups">
+                <tbody>
                 <tr *ngFor="let servicegroup of servicegroups.all_servicegroups">
                     <td class="text-center">
                         <oitc-item-select
-                                *oitcPermission="['servicegroups', 'delete']"
-                                [disabled]="false"
-                                [item]="servicegroup"></oitc-item-select>
+                            *oitcPermission="['servicegroups', 'delete']"
+                            [disabled]="false"
+                            [item]="servicegroup"></oitc-item-select>
                     </td>
                     <td class="word-break">
                         <span *oitcPermission="['servicegroups', 'extended']">
@@ -194,7 +195,7 @@
             </table>
 
             <oitc-no-records
-                    *ngIf="servicegroups && servicegroups.all_servicegroups && servicegroups.all_servicegroups.length === 0"></oitc-no-records>
+                *ngIf="servicegroups && servicegroups.all_servicegroups && servicegroups.all_servicegroups.length === 0"></oitc-no-records>
 
 
             <ng-container *ngIf="servicegroups && servicegroups.all_servicegroups">
@@ -203,7 +204,7 @@
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                    [itemsCount]="servicegroups.all_servicegroups.length"></oitc-select-all>
+                                [itemsCount]="servicegroups.all_servicegroups.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
@@ -241,13 +242,13 @@
             </ng-container>
 
             <c-container
-                    [fluid]="true">
+                [fluid]="true">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="servicegroups"
-                                [paginateOrScroll]="servicegroups"></oitc-paginate-or-scroll>
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="servicegroups"
+                            [paginateOrScroll]="servicegroups"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>

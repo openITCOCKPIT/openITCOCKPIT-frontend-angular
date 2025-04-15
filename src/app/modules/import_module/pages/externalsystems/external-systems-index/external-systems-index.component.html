@@ -107,7 +107,7 @@
             </c-container>
             <!-- End Filter -->
             <oitc-table-loader *ngIf="!externalSystems"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+            <table *ngIf="externalSystems" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
@@ -132,7 +132,7 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="externalSystems">
+                <tbody>
                 <tr *ngFor="let externalSystem of externalSystems.externalSystems">
                     <td class="text-center">
                         <oitc-item-select
