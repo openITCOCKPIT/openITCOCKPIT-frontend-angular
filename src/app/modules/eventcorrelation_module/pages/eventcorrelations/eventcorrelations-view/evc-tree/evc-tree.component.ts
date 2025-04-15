@@ -145,8 +145,7 @@ export class EvcTreeComponent {
     public fFlowComponent!: FFlowComponent;
     @ViewChild(FCanvasComponent, {static: true})
     public fCanvasComponent!: FCanvasComponent;
-
-    public isAutoLayout: boolean = true;
+    public isAutoLayout: boolean = false;
 
 
     private cdr = inject(ChangeDetectorRef);
@@ -205,7 +204,6 @@ export class EvcTreeComponent {
         });
 
         afterRenderEffect(() => {
-            // @ts-ignore
             // DOM rendering completed for this component
             this.isInitialized = true;
             this.updateGraph(new dagre.graphlib.Graph(), this.direction);
@@ -226,12 +224,10 @@ export class EvcTreeComponent {
                 // if auto layout is disabled, onLoaded will be called only after the first rendering of the flow
             }
         }
-
         this.setGraph(graph, direction);
         this.nodes = this.getNodes(graph);
         this.connections = this.getConnections(graph);
         this.cdr.markForCheck();
-
     }
 
     private setGraph(graph: dagre.graphlib.Graph, direction: EvcTreeDirection): void {
@@ -402,12 +398,11 @@ export class EvcTreeComponent {
 
     public fit2screen(): void {
         if (this.fCanvasComponent) {
-            this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 400), false);
+            this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0,0), true);
             this.cdr.markForCheck();
         }
     }
     public resetScreen(): void {
-
         if (this.fCanvasComponent) {
             this.fCanvasComponent.resetScaleAndCenter();
             this.cdr.markForCheck();
