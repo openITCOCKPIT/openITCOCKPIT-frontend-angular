@@ -1367,7 +1367,7 @@
                                     {{ t('Documentation') }}
                                 </oitc-actions-button-element>
 
-                                <li cDropdownDivider></li>
+                                <li cDropdownDivider *oitcPermission="['hosts', 'copy']"></li>
                                 <oitc-actions-button-element [permission]="'hosts.copy'"
                                                              [url]="'/hosts/copy/' + host.Host.id">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
