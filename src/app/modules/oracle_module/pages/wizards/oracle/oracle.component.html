@@ -190,10 +190,11 @@ grant select on sys.v_$session to nagios;</pre>
             </fieldset>
 
             <oitc-wizards-dynamicfields
-                    [post]="post.services"
+                    [(post)]="post.services"
                     [title]="'Oracle Database services'|transloco"
             />
         </c-card-body>
     </c-card>
 
 </ng-container>
+
