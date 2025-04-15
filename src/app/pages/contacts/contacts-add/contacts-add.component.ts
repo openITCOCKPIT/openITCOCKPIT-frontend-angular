@@ -42,7 +42,6 @@ import {
     LoadTimeperiodsRoot,
 } from '../contacts.interface';
 import { LoadUsersByContainerIdRoot } from '../../users/users.interface';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
@@ -74,7 +73,6 @@ import { PushNotificationsService } from '../../../services/push-notifications.s
         FormsModule,
         MacrosComponent,
         MultiSelectComponent,
-        MultiSelectModule,
         NavComponent,
         NavItemComponent,
         NgForOf,

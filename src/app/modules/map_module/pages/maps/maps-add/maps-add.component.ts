@@ -157,6 +157,11 @@ export class MapsAddComponent implements OnInit, OnDestroy {
     }
 
     private loadSatellites(): void {
+        if (this.post.Map.containers._ids.length === 0) {
+            this.satellites = [];
+            return;
+        }
+
         this.subscriptions.add(this.MapsService.loadSatellites(this.post.Map.containers._ids)
             .subscribe((result: LoadSatellitesRoot) => {
                 this.satellites = result.satellites;
@@ -167,6 +172,7 @@ export class MapsAddComponent implements OnInit, OnDestroy {
     public onContainerChange(): void {
         if (this.post.Map.containers._ids.length === 0) {
             //Create another
+            this.satellites = [];
             return;
         }
         this.loadSatellites();

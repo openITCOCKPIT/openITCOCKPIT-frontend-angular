@@ -842,9 +842,11 @@
                                 </td>
                                 <td class="width-50">
                                     <oitc-actions-button [permission]="'services.edit'"
-                                                         [url]="'/services/edit/' + service.Service.id">
+                                                         [url]="'/services/edit/' + service.Service.id"
+                                                         [allowEdit]="service.Service.allow_edit">
                                         <oitc-actions-button-element [permission]="'services.edit'"
-                                                                     [url]="'/services/edit/' + service.Service.id">
+                                                                     [url]="'/services/edit/' + service.Service.id"
+                                                                     *ngIf="service.Service.allow_edit">
                                             <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                             {{ t('Edit') }}
                                         </oitc-actions-button-element>

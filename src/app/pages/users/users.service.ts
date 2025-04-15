@@ -3,29 +3,23 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
-    EditUserGet,
-    LoadContainerPermissionsRequest,
-    LoadContainerPermissionsRoot,
-    LoadContainerRolesRequest,
-    LoadContainerRolesRoot,
-    LoadContainersResponse,
-    LoadLdapUserByStringRoot,
-    LoadLdapUserDetailsRoot,
-    LoadUsergroupsRoot,
     LoginGetRoot,
-    UpdateUser,
+    UserAddContainerRolePermission,
+    UserAddUserContainerRoleContainerPermissionsResponse,
     UserDateformatsRoot,
     UserLocaleOption,
-    UsersAddRoot,
+    UserPost,
+    UsersEditResponse,
     UsersIndexParams,
     UsersIndexRoot,
+    UsersLdapUser,
+    UsersLdapUserDetails,
     UserTimezoneGroup,
     UserTimezonesSelect
 } from './users.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import { SelectKeyValue, SelectKeyValueString } from '../../layouts/primeng/select.interface';
-import { ContainersLoadContainersByStringParams } from '../containers/containers.interface';
 
 
 @Injectable({
@@ -39,42 +33,6 @@ export class UsersService {
     private readonly http: HttpClient = inject(HttpClient);
     private readonly proxyPath: string = inject(PROXY_PATH);
 
-    public getIndex(params: UsersIndexParams): Observable<UsersIndexRoot> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.get<UsersIndexRoot>(`${proxyPath}/users/index.json`, {
-            params: {
-                ...params
-            }
-        }).pipe(
-            map((data: UsersIndexRoot): UsersIndexRoot => {
-                return data;
-            })
-        );
-    }
-
-    public loadContainersByString(params: ContainersLoadContainersByStringParams): Observable<LoadContainersResponse> {
-        const proxyPath: string = this.proxyPath;
-
-        return this.http.get<LoadContainersResponse>(`${proxyPath}/users/loadContainersForAngular.json?angular=true`, {
-            params: params as {}
-        }).pipe(
-            map((data: LoadContainersResponse) => {
-                return data;
-            })
-        );
-    }
-
-    public loadContainerRoles(params: LoadContainerRolesRequest): Observable<LoadContainerRolesRoot> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<LoadContainerRolesRoot>(`${proxyPath}/users/loadContainerRoles.json`, {
-            params: params as {}
-        }).pipe(
-            map(data => {
-                return data;
-            })
-        );
-    }
-
     public getLoginDetails(): Observable<LoginGetRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<LoginGetRoot>(`${proxyPath}/users/login.json`).pipe(
@@ -82,18 +40,6 @@ export class UsersService {
                 return data;
             })
         );
-    }
-
-    public loadContainerPermissions(params: LoadContainerPermissionsRequest): Observable<LoadContainerPermissionsRoot> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<LoadContainerPermissionsRoot>(`${proxyPath}/users/loadContainerPermissions.json`, {
-            params: params as {}
-        }).pipe(
-            map(data => {
-                return data;
-            })
-        );
-
     }
 
     // Generic function for the Delete All Modal
@@ -113,119 +59,6 @@ export class UsersService {
                 return data.localeOptions;
             })
         );
-    }
-
-    public getUsergroups(): Observable<LoadUsergroupsRoot> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<LoadUsergroupsRoot>(`${proxyPath}/users/loadUsergroups.json`, {
-            params: {
-                angular: true
-            }
-        }).pipe(
-            map(data => {
-                return data;
-            })
-        );
-    }
-
-    public loadLdapUserByString(samaccountname: string): Observable<LoadLdapUserByStringRoot> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<LoadLdapUserByStringRoot>(`${proxyPath}/users/loadLdapUserByString.json`, {
-            params: {
-                angular: true,
-                samaccountname: samaccountname
-            }
-        }).pipe(
-            map(data => {
-                return data;
-            })
-        );
-    }
-
-    public loadLdapUserDetails(samaccountname: string): Observable<LoadLdapUserDetailsRoot> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<LoadLdapUserDetailsRoot>(`${proxyPath}/users/loadLdapUserDetails.json`, {
-            params: {
-                angular: true,
-                samaccountname: samaccountname
-            }
-        }).pipe(
-            map(data => {
-                return data;
-            })
-        );
-    }
-
-    public addUser(user: UsersAddRoot): Observable<GenericResponseWrapper> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/users/add.json?angular=true`, user)
-            .pipe(
-                map(data => {
-                    return {
-                        success: true,
-                        data: data.user as GenericIdResponse
-                    };
-                }),
-                catchError((error: any) => {
-                    const err = error.error.error as GenericValidationError;
-                    return of({
-                        success: false,
-                        data: err
-                    });
-                })
-            );
-
-    }
-
-    public addFromLdap(user: UsersAddRoot): Observable<GenericResponseWrapper> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/users/addFromLdap.json?angular=true`, user)
-            .pipe(
-                map(data => {
-                    return {
-                        success: true,
-                        data: data.user as GenericIdResponse
-                    };
-                }),
-                catchError((error: any) => {
-                    const err = error.error.error as GenericValidationError;
-                    return of({
-                        success: false,
-                        data: err
-                    });
-                })
-            );
-    }
-
-    public getEdit(id: number): Observable<EditUserGet> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.get<EditUserGet>(`${proxyPath}/users/edit/${id}.json?angular=true`)
-            .pipe(
-                map(data => {
-                    return data;
-                })
-            );
-    }
-
-    public updateUser(user: UpdateUser): Observable<GenericResponseWrapper> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/users/edit/${user.User.id}.json?angular=true`, user)
-            .pipe(
-                map(data => {
-                    return {
-                        success: true,
-                        data: data.user as GenericIdResponse
-                    };
-                }),
-                catchError((error: any) => {
-                    const err = error.error.error as GenericValidationError;
-                    return of({
-                        success: false,
-                        data: err
-                    });
-                })
-            );
-
     }
 
     public resetPassword(id: number): Observable<GenericResponseWrapper> {
@@ -305,5 +138,214 @@ export class UsersService {
                 return data.users;
             })
         );
+    }
+
+    public getIndex(params: UsersIndexParams): Observable<UsersIndexRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<UsersIndexRoot>(`${proxyPath}/users/index.json`, {
+            params: params as {} // cast UsersIndexParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadUsergroups(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ usergroups: SelectKeyValue[] }>(`${proxyPath}/users/loadUsergroups.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.usergroups;
+            })
+        )
+    }
+
+    public loadUserContainerRoles(searchString: string = '', selected: number[] = []): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ usercontainerroles: SelectKeyValue[] }>(`${proxyPath}/users/loadContainerRoles.json`, {
+            params: {
+                angular: true,
+                'filter[Usercontainerroles.name]': searchString,
+                'selected[]': selected
+            }
+        }).pipe(
+            map(data => {
+                return data.usercontainerroles;
+            })
+        )
+    }
+
+    public loadContainersForAngular(): Observable<{
+        containers: SelectKeyValue[]
+        containerIdsWithWritePermissions: number[]
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            containers: SelectKeyValue[]
+            containerIdsWithWritePermissions: number[]
+        }>(`${proxyPath}/users/loadContainersForAngular.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadContainerPermissions(usercontainerRoleIds: number[]): Observable<UserAddContainerRolePermission[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            userContainerRoleContainerPermissions: UserAddUserContainerRoleContainerPermissionsResponse,
+            _csrfToken: string
+        }>(`${proxyPath}/users/loadContainerPermissions.json`, {
+            params: {
+                angular: true,
+                'usercontainerRoleIds[]': usercontainerRoleIds
+            }
+        }).pipe(
+            map(data => {
+                const containerRoles: UserAddContainerRolePermission[] = [];
+
+                // Convert hashmap to array
+                for (const index in data.userContainerRoleContainerPermissions) {
+                    const cr = data.userContainerRoleContainerPermissions[index];
+                    cr.user_roles_array = Object.values(cr.user_roles);
+                    containerRoles.push(cr);
+                }
+
+                return containerRoles;
+
+            })
+        )
+    }
+
+    public loadLdapUserByString(samAccountName: string = ''): Observable<UsersLdapUser[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ ldapUsers: UsersLdapUser[] }>(`${proxyPath}/users/loadLdapUserByString.json`, {
+            params: {
+                angular: true,
+                samaccountname: samAccountName
+            }
+        }).pipe(
+            map(data => {
+                return data.ldapUsers
+            })
+        )
+    }
+
+    public loadLdapUserDetails(samAccountName: string = ''): Observable<UsersLdapUserDetails> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ ldapUser: UsersLdapUserDetails }>(`${proxyPath}/users/loadLdapUserDetails.json`, {
+            params: {
+                angular: true,
+                samaccountname: samAccountName
+            }
+        }).pipe(
+            map(data => {
+                const ldapUser = data.ldapUser
+                ldapUser.userContainerRoleContainerPermissionsLdapArray = [];
+
+                const containerRoles: UserAddContainerRolePermission[] = [];
+
+                // Convert hashmap to array
+                for (const index in ldapUser.userContainerRoleContainerPermissionsLdap) {
+                    const cr = ldapUser.userContainerRoleContainerPermissionsLdap[index];
+                    cr.user_roles_array = Object.values(cr.user_roles);
+                    containerRoles.push(cr);
+                }
+
+                ldapUser.userContainerRoleContainerPermissionsLdapArray = containerRoles;
+
+                return ldapUser;
+            })
+        )
+    }
+
+    public add(user: UserPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/users/add.json?angular=true`, {
+            User: user
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.user as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public addLdap(user: UserPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/users/addFromLdap.json?angular=true`, {
+            User: user
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.user as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getUserEdit(id: number): Observable<UsersEditResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<UsersEditResponse>(`${proxyPath}/users/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    public saveUserEdit(user: UserPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/users/edit/${user.id}.json?angular=true`, {
+            User: user
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.user as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 }

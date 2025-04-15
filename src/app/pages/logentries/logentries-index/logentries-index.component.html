@@ -53,8 +53,8 @@
                     </c-col>
                 </c-row>
                 <form cForm>
-                    <c-row>
-                        <c-col md="6" class="mb-2">
+                    <c-row class="mb-2">
+                        <c-col xs="12" md="6">
                             <c-input-group>
                                 <span cInputGroupText>
                                     {{ t('From') }}
@@ -70,7 +70,7 @@
                                 />
                             </c-input-group>
                         </c-col>
-                        <c-col md="6" class="mb-2">
+                        <c-col xs="12" md="6">
                             <c-input-group>
                                 <span cInputGroupText>
                                     {{ t('To') }}
@@ -86,7 +86,9 @@
                                 />
                             </c-input-group>
                         </c-col>
-                        <c-col md="6" class="mb-2">
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col xs="12" md="6">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -102,7 +104,7 @@
                                 />
                             </c-input-group>
                         </c-col>
-                        <c-col md="6" class="mb-2">
+                        <c-col xs="12" md="6">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
@@ -121,7 +123,9 @@
                                 </oitc-multi-select>
                             </c-input-group>
                         </c-col>
-                        <c-col md="12" class="mb-2">
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col xs="12" md="12">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'file-alt']"></fa-icon>

@@ -1,5 +1,14 @@
 <c-row>
     <c-col [xs]="12" class="text-end">
+        <button cButton *ngIf="!isWidget()" color="default" [size]="'xs'" class="ms-2 me-2" (click)="resetScreen()">
+            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+            {{ 'Reset scale' | transloco }}
+        </button>
+        <button cButton *ngIf="!isWidget()" color="default" [size]="'xs'" class="me-2" (click)="fit2screen()">
+            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+            {{ 'Fit to screen' | transloco }}
+        </button>
+
         <c-button-group aria-label="Rotation" role="group">
             <button cButton [size]="'xs'" color="default" [active]="EvcTreeDirection.RIGHT_TO_LEFT === direction"
                     (click)="horizontalRL()">
@@ -22,7 +31,8 @@
 </c-row>
 
 <!-- Docs: https://flow.foblex.com/ -->
-<f-flow fDraggable (fLoaded)="onLoaded()" class="h-100">
+<f-flow fDraggable (fLoaded)="onLoaded()" [style.height]="'80vh'">
+    <f-minimap [fMinSize]="2000" [title]="'Navigator' | transloco" class="cursor-grab"></f-minimap>
     <f-canvas fZoom>
         @for (connection of connections; track connection.id) {
             <f-connection [fOffset]="8" [fOutputId]="connection.from" [fInputId]="connection.to"
@@ -171,7 +181,9 @@
 
         }
     </f-canvas>
-    <f-minimap [fMinSize]="2000" [title]="'Navigator' | transloco" class="cursor-grab"></f-minimap>
+
 </f-flow>
 
+
 <oitc-evc-servicestatus-toaster></oitc-evc-servicestatus-toaster>
+<!--</ng-container>-->
