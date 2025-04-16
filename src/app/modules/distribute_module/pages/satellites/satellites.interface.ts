@@ -127,7 +127,7 @@ export interface SatelliteTasksParams {
 export function getDefaultSatelliteTasksParams(): SatelliteTasksParams {
     return {
         angular: true,
-        direction: 'asc',
+        direction: 'desc',
         page: 1,
         scroll: true,
         sort: 'SatelliteTasks.id',
@@ -277,6 +277,7 @@ export interface EditSatelliteRoot {
     proxyProtocol?: string
     proxyUrl?: string
 }
+
 export interface EditSatellitePostRoot {
     Satellite: EditableSatellite
     frontendUrl?: string
