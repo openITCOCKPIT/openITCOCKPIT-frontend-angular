@@ -422,6 +422,16 @@
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </oitc-actions-button-element>
+                                <oitc-actions-button-element (click)="toggleDisableModal(service.Service)"
+                                                             [permission]="'services.deactivate'">
+                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                    {{ t('Disable') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'services.usedBy'"
+                                                             [url]="'/services/usedBy/' + service.Service.id">
+                                    <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                    {{ t('Used By') }}
+                                </oitc-actions-button-element>
 
                                 <li cDropdownDivider *ngIf="service.Service.allow_edit"></li>
                                 <oitc-actions-button-element (click)="toggleDeleteAllModal(service.Service)"

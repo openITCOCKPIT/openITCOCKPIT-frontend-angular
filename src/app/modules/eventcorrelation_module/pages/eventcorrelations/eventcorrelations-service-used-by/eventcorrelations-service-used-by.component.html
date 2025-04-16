@@ -24,10 +24,10 @@
     <c-card class="mb-3" *ngIf="service">
         <c-card-header>
             <h5 cCardTitle>{{ t('Service') }}
-                <small class="fw-300">
+                <small class="fw-300 word-break">
                     <i>
                         <strong>
-                            »{{service.host?.name}}/{{ service.servicename }}«
+                            »{{ service.host?.name }}/{{ service.servicename }}«
                         </strong>
                         {{ t('is used by') }}
                         {{ total }}
@@ -66,9 +66,14 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let evchost of usedBy">
-
                         <td>
-                            @if (( PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'view'])|async ) && evchost.hasViewPermission) {
+                            @if (( PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'editCorrelation'])|async ) && evchost.hasWritePermission) {
+                                <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', evchost.Hosts.id]"
+                                   [queryParams]="{'highlightServiceId': service.id}">
+                                    {{ evchost.Hosts.name }}
+                                </a>
+                            } @else if (!( PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'editCorrelation'])|async ) &&
+                            ( PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'view'])|async ) && evchost.hasViewPermission) {
                                 <a [routerLink]="['/','eventcorrelation_module','eventcorrelations','view', + evchost.Hosts.id]">
                                     {{ evchost.Hosts.name }}
                                 </a>
