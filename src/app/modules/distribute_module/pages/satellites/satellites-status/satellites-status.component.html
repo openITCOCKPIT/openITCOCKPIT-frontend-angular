@@ -132,15 +132,15 @@
                                 </span>
 
                                 <oitc-multi-select
-                                        name="SyncMethodFilter"
-                                        id="SyncMethodFilter"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        [(ngModel)]="params['filter[Satellites.sync_method][]']"
-                                        [options]="syncMethods"
-                                        [debounce]="true"
-                                        [placeholder]="'Filter by sync method' | transloco"
-                                        (onChange)="onFilterChange(true)"
+                                    name="SyncMethodFilter"
+                                    id="SyncMethodFilter"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="params['filter[Satellites.sync_method][]']"
+                                    [options]="syncMethods"
+                                    [debounce]="true"
+                                    [placeholder]="'Filter by sync method' | transloco"
+                                    (onChange)="onFilterChange(true)"
                                 >
                                 </oitc-multi-select>
                             </c-input-group>
@@ -152,15 +152,15 @@
                                 </span>
 
                                 <oitc-multi-select
-                                        name="SyncStatusFilter"
-                                        id="SyncStatusFilter"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        [(ngModel)]="params['filter[status][]']"
-                                        [options]="syncStatus"
-                                        [debounce]="true"
-                                        [placeholder]="'Filter by sync status' | transloco"
-                                        (onChange)="onFilterChange(true)"
+                                    name="SyncStatusFilter"
+                                    id="SyncStatusFilter"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="params['filter[status][]']"
+                                    [options]="syncStatus"
+                                    [debounce]="true"
+                                    [placeholder]="'Filter by sync status' | transloco"
+                                    (onChange)="onFilterChange(true)"
                                 >
                                 </oitc-multi-select>
                             </c-input-group>
@@ -222,14 +222,15 @@
                     </td>
                     <td>
                         <c-badge
-                                [title]="satellite.satellite_status.status_human"
-                                class="mr-5"
-                                [ngClass]="{
+                            [title]="satellite.satellite_status.status_human"
+                            class="mr-5"
+                            [ngClass]="{
                                     'bg-success': satellite.satellite_status.status === 1,
                                     'bg-secondary': satellite.satellite_status.status === 0,
                                     'bg-danger': satellite.satellite_status.status === 2
                                 }"
-                        >{{ satellite.satellite_status.status_human }}</c-badge>
+                        >{{ satellite.satellite_status.status_human }}
+                        </c-badge>
 
                     </td>
                     <td>
@@ -247,16 +248,22 @@
 
 
             <oitc-no-records
-                    *ngIf="result && result.all_satellites.length === 0"></oitc-no-records>
+                *ngIf="result && result.all_satellites.length === 0"></oitc-no-records>
 
+
+            <ng-container *ngIf="result && result.all_satellites">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                </c-container>
+            </ng-container>
             <c-container
-                    [fluid]="true">
+                [fluid]="true">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="result"
-                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="result"
+                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>
