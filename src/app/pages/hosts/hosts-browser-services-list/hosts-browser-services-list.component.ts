@@ -621,6 +621,12 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
 
@@ -635,6 +641,11 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Service.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'services', 'copy', ids]);
+        } else {
+
+                const message = this.TranslocoService.translate('No items selected!');
+                this.notyService.genericError(message);
+                return;
         }
     }
 

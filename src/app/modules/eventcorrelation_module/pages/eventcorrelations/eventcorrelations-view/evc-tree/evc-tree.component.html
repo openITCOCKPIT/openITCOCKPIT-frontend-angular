@@ -32,8 +32,7 @@
 
 <!-- Docs: https://flow.foblex.com/ -->
 
-<f-flow fDraggable (fLoaded)="onLoaded()">
-    <f-minimap [fMinSize]="2000" [title]="'Navigator' | transloco" class="cursor-grab"></f-minimap>
+<f-flow fDraggable (fLoaded)="onLoaded()" class="h-100">
     <f-canvas fZoom>
         @for (connection of connections; track connection.id) {
             <f-connection [fOffset]="8" [fOutputId]="connection.from" [fInputId]="connection.to"
@@ -178,11 +177,9 @@
                 }
 
             </div>
-
-
         }
     </f-canvas>
-
+    <f-minimap [fMinSize]="2000" [title]="'Navigator' | transloco" class="cursor-grab"></f-minimap>
 </f-flow>
 
 
