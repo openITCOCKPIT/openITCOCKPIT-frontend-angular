@@ -40,7 +40,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -58,52 +58,54 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 import { HttpParams } from '@angular/common/http';
 import { IndexPage } from '../../../pages.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-servicegroups-index',
     imports: [
-    TranslocoDirective,
-    DeleteAllModalComponent,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    DropdownDividerDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ItemSelectComponent,
-    MatSort,
-    MatSortHeader,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    ReactiveFormsModule,
-    RowComponent,
-    SelectAllComponent,
-    TableDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    TableLoaderComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective
-],
+        TranslocoDirective,
+        DeleteAllModalComponent,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        DropdownDividerDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        ReactiveFormsModule,
+        RowComponent,
+        SelectAllComponent,
+        TableDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        TableLoaderComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        AsyncPipe
+    ],
     templateUrl: './servicegroups-index.component.html',
     styleUrl: './servicegroups-index.component.css',
     providers: [
@@ -118,6 +120,7 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage
     private readonly notyService = inject(NotyService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
+    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly router: Router = inject(Router);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);

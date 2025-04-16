@@ -671,6 +671,12 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
                 };
             });
         }
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
         this.selectedItems = items;
         if (items.length === 0) {
             const message = this.TranslocoService.translate('No items selected!');

@@ -133,11 +133,11 @@
                 <tbody>
                 <tr *ngFor="let hostgroup of hostgroups.all_hostgroups">
                     <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['hostgroups', 'delete']"
-                            [disabled]="false"
-                            [item]="hostgroup"></oitc-item-select>
-
+                        @if (( PermissionsService.hasPermissionObservable(['hostgroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['hostgroups', 'copy'])|async )) {
+                            <oitc-item-select
+                                [disabled]="!hostgroup.allowEdit"
+                                [item]="hostgroup"></oitc-item-select>
+                        }
                     </td>
                     <td class="word-break">
                         <span *oitcPermission="['hostgroups', 'extended']">
@@ -248,7 +248,7 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
-                                        *oitcPermission="['hostgroups', 'add']"
+                                        *oitcPermission="['hostgroups', 'copy']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}

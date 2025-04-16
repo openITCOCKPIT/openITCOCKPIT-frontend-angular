@@ -170,11 +170,11 @@
                 <tbody>
                 <tr *ngFor="let contact of contacts.all_contacts">
                     <td class="text-center">
-                        <oitc-item-select
-                                *oitcPermission="['contacts', 'delete']"
+                        @if (( PermissionsService.hasPermissionObservable(['contacts', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['contacts', 'copy'])|async )) {
+                            <oitc-item-select
                                 [disabled]="false"
                                 [item]="contact"></oitc-item-select>
-
+                        }
                     </td>
                     <td>{{ contact.Contact.name }}</td>
                     <td>{{ contact.Contact.description }}</td>
@@ -289,12 +289,12 @@
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                    [itemsCount]="contacts.all_contacts.length"></oitc-select-all>
+                                [itemsCount]="contacts.all_contacts.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
-                                        *oitcPermission="['contacts', 'add']"
+                                        *oitcPermission="['contacts', 'copy']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
@@ -313,13 +313,13 @@
             </ng-container>
 
             <c-container
-                    [fluid]="true">
+                [fluid]="true">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="contacts"
-                                [paginateOrScroll]="contacts"></oitc-paginate-or-scroll>
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="contacts"
+                            [paginateOrScroll]="contacts"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>

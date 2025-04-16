@@ -245,7 +245,6 @@
                     <tr *ngFor="let service of services.all_services">
                         <td class="text-center">
                             <oitc-item-select
-                                *oitcPermission="['services', 'delete']"
                                 [disabled]="!service.Service.allow_edit"
                                 [item]="service"></oitc-item-select>
                         </td>

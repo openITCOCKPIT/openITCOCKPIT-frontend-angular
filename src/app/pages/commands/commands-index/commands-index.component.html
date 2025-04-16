@@ -166,11 +166,11 @@
                 <tbody *ngIf="commands">
                 <tr *ngFor="let command of commands.all_commands">
                     <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['commands', 'delete']"
-                            [disabled]="false"
-                            [item]="command"></oitc-item-select>
-
+                        @if (( PermissionsService.hasPermissionObservable(['commands', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['commands', 'copy'])|async )) {
+                            <oitc-item-select
+                                [disabled]="false"
+                                [item]="command"></oitc-item-select>
+                        }
                     </td>
                     <td>{{ command.Command.name }}</td>
                     <td>{{ command.Command.type }}</td>
@@ -226,11 +226,13 @@
                         <c-col>
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        *oitcPermission="['commands', 'copy']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['commands', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>

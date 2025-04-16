@@ -907,7 +907,6 @@
                 <tr *ngFor="let host of hosts.all_hosts">
                     <td class="text-center">
                         <oitc-item-select
-                            *oitcPermission="['hosts', 'delete']"
                             [disabled]="!host.Host.allow_edit"
                             [item]="host"></oitc-item-select>
                     </td>

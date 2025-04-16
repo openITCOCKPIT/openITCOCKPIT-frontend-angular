@@ -36,7 +36,7 @@ import {
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe,TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -58,6 +58,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 import {
     SynchronizeGrafanaModalComponent
 } from '../../../components/synchronize-grafana-modal/synchronize-grafana-modal.component';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-grafana-userdashboards-index',
@@ -126,6 +127,8 @@ export class GrafanaUserdashboardsIndexComponent implements OnInit, OnDestroy, I
     private readonly GrafanaUserdashboardsService = inject(GrafanaUserdashboardsService);
     private subscriptions: Subscription = new Subscription();
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private readonly notyService: NotyService = inject(NotyService);
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
@@ -204,6 +207,12 @@ export class GrafanaUserdashboardsIndexComponent implements OnInit, OnDestroy, I
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
 
@@ -227,6 +236,10 @@ export class GrafanaUserdashboardsIndexComponent implements OnInit, OnDestroy, I
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'grafana_module', 'grafana_userdashboards', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 
@@ -251,6 +264,13 @@ export class GrafanaUserdashboardsIndexComponent implements OnInit, OnDestroy, I
                 };
             });
         }
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
 
         // Pass selection to the modal
         this.selectedItems = items;

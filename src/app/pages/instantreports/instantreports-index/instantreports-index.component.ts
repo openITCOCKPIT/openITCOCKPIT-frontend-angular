@@ -42,7 +42,7 @@ import {
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../directives/debounce.directive';
@@ -64,6 +64,7 @@ import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 
 @Component({
@@ -130,6 +131,8 @@ export class InstantreportsIndexComponent implements OnInit, OnDestroy, IndexPag
 
     private subscriptions: Subscription = new Subscription();
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private readonly notyService: NotyService = inject(NotyService);
     private readonly InstantreportsService: InstantreportsService = inject(InstantreportsService);
     private readonly modalService = inject(ModalService);
 
@@ -221,6 +224,12 @@ export class InstantreportsIndexComponent implements OnInit, OnDestroy, IndexPag
                     displayName: item.Instantreport.name
                 };
             });
+        }
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
 
         // Pass selection to the modal

@@ -20,7 +20,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { SnmpttService } from '../../../snmptt.service';
 import {
@@ -54,6 +54,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { IndexPage } from '../../../../../pages.interface';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 
 @Component({
@@ -78,6 +79,8 @@ export class SnmpttListIndexComponent implements OnInit, OnDestroy, IndexPage {
     private subscriptions: Subscription = new Subscription();
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private readonly notyService: NotyService = inject(NotyService);
     private cdr = inject(ChangeDetectorRef);
 
 
@@ -153,6 +156,12 @@ export class SnmpttListIndexComponent implements OnInit, OnDestroy, IndexPage {
                     displayName: item.Snmptt.eventname
                 };
             });
+        }
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
 
         // Pass selection to the modal

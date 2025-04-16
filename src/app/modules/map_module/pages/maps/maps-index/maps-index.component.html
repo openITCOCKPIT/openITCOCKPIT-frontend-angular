@@ -138,11 +138,11 @@
                 <tbody>
                 <tr *ngFor="let map of maps.all_maps">
                     <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['mapmodule','maps', 'delete']"
-                            [disabled]="!map.allowEdit"
-                            [item]="map"></oitc-item-select>
-
+                        @if (( PermissionsService.hasPermissionObservable(['MapModule', 'maps', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['MapModule', 'maps', 'copy'])|async )) {
+                            <oitc-item-select
+                                [disabled]="!map.allowEdit"
+                                [item]="map"></oitc-item-select>
+                        }
                     </td>
                     <td class="word-break"><a
                         [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.id, false]">{{ map.name }}</a>
@@ -210,11 +210,13 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        *oitcPermission="['MapModule', 'maps', 'copy']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['MapModule', 'maps', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>

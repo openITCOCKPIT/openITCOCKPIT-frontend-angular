@@ -211,7 +211,6 @@ export class AutomapsIndexComponent implements OnInit, OnDestroy, IndexPage {
             });
         }
 
-
         if (items.length === 0) {
             const message = this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
@@ -231,6 +230,10 @@ export class AutomapsIndexComponent implements OnInit, OnDestroy, IndexPage {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'automaps', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 
