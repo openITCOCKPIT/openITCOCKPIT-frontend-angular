@@ -41,7 +41,7 @@
 
 
         <ul style="margin:0;padding:0">
-            <ol style="margin:0;padding:0" *ngFor="let service of post()">
+            <ol style="margin:0;padding:0" *ngFor="let service of post">
                 <ng-container *ngIf="hasName(service.name)">
 
                     <div class="mb-3 form-group">
@@ -51,8 +51,7 @@
                                    [id]="service.name"
                                    class="alert-icon"
                                    name="checkbox"
-                                   (change)="toggleCheck(service)"
-                                   [ngModel]="service.createService"/>
+                                   [(ngModel)]="service.createService"/>
                             <label class="custom-control-label custom-control-label-ok"
                                    [for]="service.name">
                                 {{ service.name }}
@@ -68,7 +67,7 @@
                         <input class="form-control"
                                type="text"
                                [disabled]="!service.createService"
-                               [ngModel]="commandArgument.value">
+                               [(ngModel)]="commandArgument.value">
                     </div>
                 </ng-container>
             </ol>

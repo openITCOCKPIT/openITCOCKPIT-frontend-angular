@@ -85,13 +85,13 @@
                         [options]="hosts"
                         oitcFormError [errors]="errors" errorField="hostId">
                     </oitc-select>
-                    <div *ngIf="hostId === null" class="text-warning-glow pt-1">
+                    <div *ngIf="hostId === 0" class="text-warning-glow pt-1">
                         {{ t('Please select a host.') }}
                     </div>
                     <oitc-form-feedback [errors]="errors" errorField="hostId"></oitc-form-feedback>
                 </div>
 
-                <ng-container *ngIf="hostId !== null">
+                <ng-container *ngIf="hostId !== 0">
                     <c-alert color="light">
                         <div class="d-flex align-items-center">
                             <div class="alert-icon">
@@ -111,7 +111,7 @@
                     </c-alert>
                 </ng-container>
 
-                <ng-container *ngIf="hostId !== null">
+                <ng-container *ngIf="hostId !== 0">
                     <fieldset class="hostWithServicesToDeploy">
                         <h5>{{ t('Service/s to deploy on target host:') }}</h5>
                         <div
@@ -148,7 +148,7 @@
                 </ng-container>
 
 
-                <div class="row padding-left-10 padding-top-10" *ngIf="hostId !== null">
+                <div class="row padding-left-10 padding-top-10" *ngIf="hostId !== 0">
                     <div class="col-xs-6 col-md-2">
                         <span (click)="selectAll()" class="pointer">
                             <fa-icon [icon]="['fas', 'check-square']"></fa-icon>
@@ -165,7 +165,7 @@
 
                 <div class="row padding-top-15"><!-- spacer--></div>
 
-                <c-progress-bar [value]="percentage"></c-progress-bar>
+                <c-progress *ngIf="isProcessing" [value]="percentage" class="m-3"></c-progress>
 
             </c-card-body>
             <c-card-footer class="text-end">

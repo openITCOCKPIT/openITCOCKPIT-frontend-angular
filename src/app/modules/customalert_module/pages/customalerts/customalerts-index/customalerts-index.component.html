@@ -306,7 +306,8 @@
             <oitc-table-loader *ngIf="!result"></oitc-table-loader>
 
             <ng-container *ngIf="groupViewByHost">
-                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+                <table *ngIf="result" bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
                     <tr>
@@ -340,7 +341,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="result">
+                    <tbody>
 
                     <ng-container *ngFor="let hostId of this.hostIdsInOrder">
                         <tr>
@@ -435,7 +436,8 @@
                 </table>
             </ng-container>
             <ng-container *ngIf="! groupViewByHost">
-                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+                <table *ngIf="result" bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
                     <tr>
@@ -475,7 +477,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="result">
+                    <tbody>
                     <tr *ngFor="let customAlertRule of result.customalerts">
 
                         <td class="text-center">

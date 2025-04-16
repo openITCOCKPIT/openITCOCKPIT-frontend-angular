@@ -81,6 +81,7 @@ import { InstantreportViewerComponent } from './instantreport-viewer/instantrepo
 })
 export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
     public isGeneratingReport: boolean = false;
+    public isReportGenerated: boolean = false;
     public selectedTab: 'generate' | 'report' = 'generate';
     public errors: GenericValidationError | null = null;
 
@@ -194,10 +195,12 @@ export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
             }
 
             this.isGeneratingReport = true;
+            this.isReportGenerated = false;
             this.subscriptions.add(this.InstantreportsService.generateReportHtml(params)
                 .subscribe((result) => {
                     this.cdr.markForCheck();
                     this.isGeneratingReport = false;
+                    this.isReportGenerated = true;
                     if (result.success) {
                         // Success - Form data is valid - now we can generate the report
                         this.report = result.data as InstantreportGenerateResponse;

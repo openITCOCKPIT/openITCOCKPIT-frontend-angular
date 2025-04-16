@@ -22,7 +22,9 @@
                         {{ t('No element selected') }}
                     </div>
 
-                    <div class="d-flex" [style.height.px]="widgetHeight" *ngIf="host_id && show">
+                    <div class="d-flex" [style.height.px]="widgetHeight"
+                         *ngIf="host_id && config.type==='tree' && show">
+
                         <oitc-evc-tree
                             class="w-100 h-100"
                             [evcId]="host_id"
@@ -31,7 +33,17 @@
                             [stateForDowntimedService]="stateForDowntimedService"
                             [stateForDisabledService]="stateForDisabledService"
                             [animated]="animated"
-                            [connectionLine]="connectionLine"></oitc-evc-tree>
+                            [connectionLine]="connectionLine"
+                            [evcDirection]="direction"
+                            [isWidget]="true"></oitc-evc-tree>
+
+                    </div>
+                    <div class="d-flex" [style.height.px]="widgetHeight"
+                         *ngIf="host_id && config.type==='table' && show">
+                        <oitc-evc-table
+                            [evcSummaryTree]="evcSummaryTree"
+                            [stateForDowntimedService]="stateForDowntimedService"
+                            [stateForDisabledService]="stateForDisabledService"></oitc-evc-table>
                     </div>
 
                     <!-- End Widget Content -->

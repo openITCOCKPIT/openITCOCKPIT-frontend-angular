@@ -22,7 +22,13 @@
         "lib": [
             "ES2022",
             "dom"
-        ]
+        ],
+        "paths": {
+            "primeng/multiselect": [
+                "./src/app/custom-primeng/multiselect/multiselect.interface.ts",
+                "./src/app/custom-primeng/multiselect/multiselect.ts"
+            ]
+        }
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,

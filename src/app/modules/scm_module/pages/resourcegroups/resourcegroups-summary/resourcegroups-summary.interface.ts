@@ -1,5 +1,5 @@
 import { PaginateOrScroll } from '../../../../../layouts/coreui/paginator/paginator.interface';
-import { User, UserIdAndUsername } from '../../../../../pages/users/users.interface';
+import { UserIdAndUsername } from '../../../../../pages/users/users.interface';
 import { Container } from '../../../../../pages/containers/containers.interface';
 
 export interface ResourcegroupsSummaryResponse extends PaginateOrScroll {
@@ -40,7 +40,7 @@ export interface ResourceMap {
     last_update: string
     comment?: string
     username?: string
-    user?: User
+    user?: UserIdAndUsername
 }
 
 

@@ -14,7 +14,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
-import { MultiSelect, MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
+import { MultiSelect, MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primeng/multiselect';
 import { SharedModule } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -23,14 +23,15 @@ import { debounceTime } from 'rxjs/operators';
 import _ from 'lodash';
 import { AnimationEvent } from '@angular/animations';
 
-
 @Component({
     selector: 'oitc-multi-select',
     imports: [
         HighlightSearchPipe,
-        MultiSelectModule,
         SharedModule,
-        FormsModule
+        FormsModule,
+        MultiSelect,
+        MultiSelect,
+        MultiSelect
     ],
     providers: [
         {
@@ -124,11 +125,6 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
     /**
      * Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name).
      * Set this to an empty string for Modals !!!
-     *
-     * UPDATE 11.02.2025.
-     * With PrimeNG 19, we changed the default value from 'body' to ''.
-     * This will fix the issue with the dropdown not showing in modals and als resolve a style issue where the dropdown
-     * is 100% width of the body.
      *
      * @group Props
      */

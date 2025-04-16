@@ -23,6 +23,10 @@ export class NotyService {
             message = this.TranslocoService.translate('Data saved successfully');
         }
 
+        if (!title) {
+            title = this.TranslocoService.translate('Success');
+        }
+
         const toast = this.toastr.success(message, title, {
             timeOut: (timeout) ? timeout : 5000,
             progressBar: true,
@@ -46,6 +50,11 @@ export class NotyService {
             message = this.TranslocoService.translate('Error while saving data');
         }
 
+
+        if (!title) {
+            title = this.TranslocoService.translate('Error');
+        }
+
         const toast = this.toastr.error(message, title, {
             timeOut: 5000,
             progressBar: true,
@@ -67,6 +76,10 @@ export class NotyService {
             message = this.TranslocoService.translate('Warning - something unexpected happened');
         }
 
+        if (!title) {
+            title = this.TranslocoService.translate('Warning');
+        }
+
         const toast = this.toastr.warning(message, title, {
             timeOut: 5000,
             progressBar: true,
@@ -86,6 +99,10 @@ export class NotyService {
     genericInfo(message?: string, title?: string, url?: any[]) {
         if (!message) {
             message = this.TranslocoService.translate('Please wait while processing ...');
+        }
+
+        if (!title) {
+            title = this.TranslocoService.translate('Info');
         }
 
         const toast = this.toastr.info(message, title, {

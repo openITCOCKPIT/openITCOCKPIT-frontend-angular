@@ -37,14 +37,14 @@ type PerfParams = {
 @Component({
     selector: 'oitc-popover-graph',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    NgClass,
-    NgIf,
-    ChartLoaderComponent,
-    Popover,
-    PopoverModule
-],
+        TranslocoDirective,
+        FaIconComponent,
+        NgClass,
+        NgIf,
+        ChartLoaderComponent,
+        Popover,
+        PopoverModule
+    ],
     templateUrl: './popover-graph.component.html',
     styleUrl: './popover-graph.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -216,7 +216,18 @@ export class PopoverGraphComponent implements OnDestroy {
             GraphDefaults.height = this.chartHeight;// - 25;  // 27px for label
             GraphDefaults.width = elm.offsetWidth;
             //GraphDefaults.label = this.perfData[i].datasource.name;
-            GraphDefaults.label = false;
+            GraphDefaults.label = '';
+            GraphDefaults.min = null;
+            GraphDefaults.max = null;
+            if (this.perfData[i].datasource.unit) {
+                GraphDefaults.unit = this.perfData[i].datasource.unit;
+            }
+            if (this.perfData[i].datasource.setup.scale.min !== null) {
+                GraphDefaults.min = this.perfData[i].datasource.setup.scale.min;
+            }
+            if (this.perfData[i].datasource.setup.scale.max !== null) {
+                GraphDefaults.max = this.perfData[i].datasource.setup.scale.max;
+            }
 
             // Get options object for uPlot
             let options = GraphDefaults.getOptions();

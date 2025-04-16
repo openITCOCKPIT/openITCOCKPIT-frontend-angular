@@ -26,7 +26,7 @@ import { Container, Engine, MoveDirection, OutMode, } from "@tsparticles/engine"
 import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
 import { NgParticlesService, NgxParticlesModule } from "@tsparticles/angular";
 import { LayoutOptions, LayoutService } from '../../../layouts/coreui/layout.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { LoginResponse } from '../../../auth/auth.interface';
 import { TitleService } from '../../../services/title.service';
@@ -51,7 +51,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         FormCheckLabelDirective,
         XsButtonDirective,
         TooltipDirective,
-        NgClass
+        NgClass,
+        RouterLink
     ],
     templateUrl: './users-login.component.html',
     styleUrl: './users-login.component.css',
@@ -253,7 +254,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
             if (data.success) {
                 this.disableLogin = false;
-                this.NotyService.genericSuccess('Login successful', 'success');
+                this.NotyService.genericSuccess('Login successful');
 
                 // Load user permissions
                 this.PermissionsService.loadPermissions();

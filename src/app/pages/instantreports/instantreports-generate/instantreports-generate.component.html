@@ -35,7 +35,7 @@
                         {{ t('Configuration') }}
                     </button>
                 </c-nav-item>
-                <c-nav-item>
+                <c-nav-item [hidden]="!isReportGenerated">
                     <button
                         class="nav-link"
                         [ngClass]="{'active': selectedTab == 'report'}"

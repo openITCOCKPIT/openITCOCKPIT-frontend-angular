@@ -544,20 +544,20 @@ const coreRoutes: Routes = [{
     path: 'usergroups/index',
     loadComponent: () => import('./pages/usergroups/usergroups-index/usergroups-index.component').then(m => m.UsergroupsIndexComponent)
 }, {
-    path: 'users/add',
-    loadComponent: () => import('./pages/users/users-add/users-add.component').then(m => m.UsersAddComponent)
-}, {
-    path: 'users/edit/:id',
-    loadComponent: () => import('./pages/users/users-edit/users-edit.component').then(m => m.UsersEditComponent)
+    path: 'users/login',
+    loadComponent: () => import('./pages/users/users-login/users-login.component').then(m => m.UsersLoginComponent)
 }, {
     path: 'users/index',
     loadComponent: () => import('./pages/users/users-index/users-index.component').then(m => m.UsersIndexComponent)
 }, {
+    path: 'users/add',
+    loadComponent: () => import('./pages/users/users-add/users-add.component').then(m => m.UsersAddComponent)
+}, {
     path: 'users/ldap',
     loadComponent: () => import('./pages/users/users-ldap/users-ldap.component').then(m => m.UsersLdapComponent)
 }, {
-    path: 'users/login',
-    loadComponent: () => import('./pages/users/users-login/users-login.component').then(m => m.UsersLoginComponent)
+    path: 'users/edit/:id',
+    loadComponent: () => import('./pages/users/users-edit/users-edit.component').then(m => m.UsersEditComponent)
 }, {
     path: 'acknowledgements/host/:id',
     loadComponent: () => import('./pages/acknowledgements/acknowledgements-host/acknowledgements-host.component').then(m => m.AcknowledgementsHostComponent)
