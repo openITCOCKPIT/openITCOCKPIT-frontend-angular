@@ -219,6 +219,12 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
 
@@ -235,6 +241,10 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
         }).join(',');
         if (ids) {
             this.router.navigate(['/', 'servicetemplategroups', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 }

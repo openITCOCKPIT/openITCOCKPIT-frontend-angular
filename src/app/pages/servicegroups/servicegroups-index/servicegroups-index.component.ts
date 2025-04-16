@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { Subscription } from 'rxjs';
 import { ServicegroupsService } from '../servicegroups.service';
@@ -57,6 +57,7 @@ import {
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { HttpParams } from '@angular/common/http';
 import { IndexPage } from '../../../pages.interface';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-servicegroups-index',
@@ -113,6 +114,8 @@ import { IndexPage } from '../../../pages.interface';
 export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService: ModalService = inject(ModalService);
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
     private readonly router: Router = inject(Router);
@@ -219,6 +222,12 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
 
@@ -233,6 +242,10 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'servicegroups', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 

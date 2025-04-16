@@ -26,7 +26,7 @@ import {
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../directives/debounce.directive';
@@ -57,6 +57,7 @@ import { CancelHostdowntimeModalComponent } from '../cancel-hostdowntime-modal/c
 import { CancelAllItem } from '../cancel-hostdowntime-modal/cancel-hostdowntime.interface';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 
 @Component({
@@ -124,6 +125,8 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public PermissionsService: PermissionsService = inject(PermissionsService);
@@ -207,6 +210,12 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
                     id: item
                 };
             });
+        }
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
 
         // Pass selection to the modal

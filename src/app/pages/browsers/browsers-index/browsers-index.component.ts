@@ -735,13 +735,13 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
                 downtimetype: ''
             };
         });
-
-        this.selectedItems = items;
         if (items.length === 0) {
             const message = this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
             return;
         }
+        this.selectedItems = items;
+
         this.modalService.toggle({
             show: true,
             id: 'hostMaintenanceModal',

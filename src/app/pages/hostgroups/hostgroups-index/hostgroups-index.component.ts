@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { Subscription } from 'rxjs';
 import { HostgroupsService } from '../hostgroups.service';
@@ -61,6 +61,7 @@ import { HttpParams } from '@angular/common/http';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { HostgroupExtendedTabs } from '../hostgroups.enum';
 import { IndexPage } from '../../../pages.interface';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-hostgroups-index',
@@ -122,6 +123,8 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private subscriptions: Subscription = new Subscription();
     private HostgroupsService: HostgroupsService = inject(HostgroupsService);
     public readonly PermissionsService = inject(PermissionsService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
 
     public params: HostgroupsIndexParams = getDefaultHostgroupsIndexParams();
 
@@ -226,6 +229,12 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
         this.cdr.markForCheck();
@@ -241,6 +250,10 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'hostgroups', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 

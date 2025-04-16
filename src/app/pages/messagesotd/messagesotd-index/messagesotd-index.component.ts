@@ -201,6 +201,12 @@ export class MessagesotdIndexComponent implements IndexPage, OnInit, OnDestroy {
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
 

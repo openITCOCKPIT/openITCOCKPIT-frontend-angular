@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { Subscription } from 'rxjs';
 import { ContactgroupsService } from '../contactgroups.service';
@@ -53,6 +53,7 @@ import {
 } from '../contactgroups.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { IndexPage } from '../../../pages.interface';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-contactgroups-index',
@@ -105,6 +106,8 @@ import { IndexPage } from '../../../pages.interface';
 export class ContactgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
     private subscriptions: Subscription = new Subscription();
     private ContactgroupsService: ContactgroupsService = inject(ContactgroupsService);
 
@@ -210,6 +213,12 @@ export class ContactgroupsIndexComponent implements OnInit, OnDestroy, IndexPage
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
 
@@ -224,6 +233,10 @@ export class ContactgroupsIndexComponent implements OnInit, OnDestroy, IndexPage
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Contactgroup.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'contactgroups', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 }
