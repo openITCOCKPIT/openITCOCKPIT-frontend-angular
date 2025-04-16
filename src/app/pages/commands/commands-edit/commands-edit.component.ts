@@ -59,6 +59,7 @@ import { MacroIndex } from '../../macros/macros.interface';
 import { MacrosService } from '../../macros/macros.service';
 import { HistoryService } from '../../../history.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { DefaultMacrosModalComponent } from '../default-macros-modal/default-macros-modal.component';
 
 @Component({
     selector: 'oitc-commands-edit',
@@ -103,7 +104,8 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         ModalToggleDirective,
         ObjectUuidComponent,
         CodeMirrorContainerComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        DefaultMacrosModalComponent
     ],
     templateUrl: './commands-edit.component.html',
     styleUrl: './commands-edit.component.css',
