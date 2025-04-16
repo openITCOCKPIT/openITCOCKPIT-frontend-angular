@@ -71,7 +71,7 @@
             </c-row>
             <!-- Dropzone end -->
 
-            <fieldset *ngIf="fileInformation || hasError">
+            <fieldset *ngIf="(fileInformation || hasError) && !importSuccessful">
                 <legend class="fs-md fieldset-legend-border-bottom mt-1"
                         [ngClass]="{'fieldset-legend-border-bottom-danger': hasError}">
                     <h4>
@@ -212,7 +212,7 @@
             </fieldset>
 
             <!-- Import errors -->
-            <fieldset *ngIf="uploadSuccessful && filenameOnServer">
+            <fieldset *ngIf="(uploadSuccessful && filenameOnServer) && !importSuccessful">
                 <legend class="fs-md fieldset-legend-border-bottom mt-1"
                         [ngClass]="{'fieldset-legend-border-bottom-danger': hasImportError}">
                     <h4>
@@ -473,6 +473,38 @@
 
                 </c-col>
 
+            </c-row>
+
+            <!-- Import finished successfully -->
+            <c-row *ngIf="importSuccessful">
+                <c-col [xs]="12">
+                    <div class="alert border-faded bg-transparent">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack icon-stack-md">
+                                    <i class="base-circle icon-stack-3x text-success"></i>
+                                    <i class="fas fa-check icon-stack-1x text-white"></i>
+                                </span>
+                            </div>
+                            <div class="flex-1">
+                                <span class="h5 text-success">
+                                    {{ t('Import finished successfully') }}
+                                </span>
+                                <br>
+                                {{ t('The new configuration got imported successfully. All changes where documented within the change log.') }}
+                            </div>
+                            <div class="ms-2"
+                                 *oitcPermission="['changelogs', 'index']">
+                                <a class="btn btn-outline-success btn-sm ripple"
+                                   [routerLink]="['/', 'changelogs', 'index']"
+                                >
+                                    <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+                                    {{ t('Change log') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </c-col>
             </c-row>
 
         </c-card-body>

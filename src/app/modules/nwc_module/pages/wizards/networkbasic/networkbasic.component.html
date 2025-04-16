@@ -198,7 +198,7 @@
             </fieldset>
 
             <oitc-wizards-dynamicfields
-                    [post]="post.services"
+                    [(post)]="post.services"
                     [title]="'SNMP services'|transloco"
             />
 
@@ -283,8 +283,7 @@
                                            [id]="interface.name"
                                            class="alert-icon"
                                            name="checkbox"
-                                           (change)="toggleCheck(interface)"
-                                           [ngModel]="interface.createService"/>
+                                           [(ngModel)]="interface.createService"/>
                                     <label class="custom-control-label custom-control-label-ok"
                                            [for]="interface.name">
                                         {{ interface.name }}
@@ -300,13 +299,12 @@
                                 <input class="form-control"
                                        type="text"
                                        [disabled]="!interface.createService"
-                                       [ngModel]="commandArgument.value">
+                                       [(ngModel)]="commandArgument.value">
                             </div>
                         </ng-container>
                     </ol>
                 </ul>
             </fieldset>
-
 
 
         </c-card-body>

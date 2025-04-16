@@ -83,11 +83,15 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
     }
 
     public submit(): void {
-        // Remove all services from this.post where createService is false.
-        this.post.services = this.post.services.filter((service: Service) => {
+        // Create a deep copy of this.post
+        const updatedPost = JSON.parse(JSON.stringify(this.post));
+
+        // Remove all services from the copied object where createService is false
+        updatedPost.services = updatedPost.services.filter((service: Service) => {
             return service.createService;
         });
-        this.subscriptions.add(this.WizardService.submit(this.post)
+
+        this.subscriptions.add(this.WizardService.submit(updatedPost)
             .subscribe((result: GenericResponseWrapper) => {
                 if (result.success) {
                     const title: string = this.TranslocoService.translate('Success');
