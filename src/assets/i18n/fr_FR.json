@@ -4681,5 +4681,13 @@
   "right to left": "right to left",
   "left to right": "left to right",
   "top to bottom": "top to bottom",
-  "bottom to top": "bottom to top"
+  "bottom to top": "bottom to top",
+  "No matches": "No matches",
+  "Last Login": "Last Login",
+  "Edit local user:": "Edit local user:",
+  "LDAP groups": "LDAP groups",
+  "Import finished successfully": "Import finished successfully",
+  "The new configuration got imported successfully. All changes where documented within the change log.": "The new configuration got imported successfully. All changes where documented within the change log.",
+  "Hidden due to insufficient permissions": "Hidden due to insufficient permissions",
+  "RESTRICTED CONTAINER": "RESTRICTED CONTAINER"
 }
