@@ -259,6 +259,10 @@ export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Service.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'services', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 
