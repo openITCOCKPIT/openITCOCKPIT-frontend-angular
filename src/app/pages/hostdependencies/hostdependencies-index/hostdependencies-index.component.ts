@@ -58,6 +58,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { IndexPage } from '../../../pages.interface';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-hostdependencies-index',
@@ -130,6 +131,7 @@ export class HostdependenciesIndexComponent implements OnInit, OnDestroy, IndexP
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly notyService = inject(NotyService);
     private readonly modalService = inject(ModalService);
     private cdr = inject(ChangeDetectorRef);
 
@@ -203,6 +205,12 @@ export class HostdependenciesIndexComponent implements OnInit, OnDestroy, IndexP
                     displayName: this.TranslocoService.translate('Host dependency #{0}', {'0': item.id})
                 };
             });
+        }
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
 
         // Pass selection to the modal

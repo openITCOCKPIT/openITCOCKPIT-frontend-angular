@@ -148,10 +148,11 @@
                 <tbody>
                 <tr *ngFor="let automap of automaps.all_automaps">
                     <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['automaps', 'delete']"
-                            [disabled]="!automap.allow_edit"
-                            [item]="automap"></oitc-item-select>
+                        @if (( PermissionsService.hasPermissionObservable(['automaps', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['automaps', 'copy'])|async )) {
+                            <oitc-item-select
+                                [disabled]="!automap.allow_edit"
+                                [item]="automap"></oitc-item-select>
+                        }
                     </td>
                     <td>
                         @if (this.PermissionsService.hasPermissionObservable(['automaps', 'view'])|async) {

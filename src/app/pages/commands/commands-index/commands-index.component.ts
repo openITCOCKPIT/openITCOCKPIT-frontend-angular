@@ -25,7 +25,7 @@
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
   CardBodyComponent,
   CardComponent,
@@ -59,7 +59,7 @@ import {
     CommandsIndexParams,
     getDefaultCommandsIndexParams
 } from '../commands.interface';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
@@ -86,51 +86,54 @@ import {
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { IndexPage } from '../../../pages.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-commands-index',
     imports: [
-    TranslocoDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    FaIconComponent,
-    PaginateOrScrollComponent,
-    NgIf,
-    TableDirective,
-    ContainerComponent,
-    RowComponent,
-    ColComponent,
-    FormDirective,
-    FormControlDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    TranslocoPipe,
-    RouterLink,
-    FormsModule,
-    DebounceDirective,
-    NgForOf,
-    PermissionDirective,
-    NoRecordsComponent,
-    MatCheckboxModule,
-    SelectAllComponent,
-    ItemSelectComponent,
-    DeleteAllModalComponent,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    DropdownDividerDirective,
-    MatSort,
-    MatSortHeader,
-    TableLoaderComponent
-],
+        TranslocoDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        FaIconComponent,
+        PaginateOrScrollComponent,
+        NgIf,
+        TableDirective,
+        ContainerComponent,
+        RowComponent,
+        ColComponent,
+        FormDirective,
+        FormControlDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TranslocoPipe,
+        RouterLink,
+        FormsModule,
+        DebounceDirective,
+        NgForOf,
+        PermissionDirective,
+        NoRecordsComponent,
+        MatCheckboxModule,
+        SelectAllComponent,
+        ItemSelectComponent,
+        DeleteAllModalComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        DropdownDividerDirective,
+        MatSort,
+        MatSortHeader,
+        TableLoaderComponent,
+        AsyncPipe
+    ],
     templateUrl: './commands-index.component.html',
     styleUrl: './commands-index.component.css',
     providers: [
@@ -156,6 +159,9 @@ export class CommandsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private subscriptions: Subscription = new Subscription();
     private CommandsService = inject(CommandsService)
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
+    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private cdr = inject(ChangeDetectorRef);
 
     constructor(private _liveAnnouncer: LiveAnnouncer) {
@@ -265,6 +271,12 @@ export class CommandsIndexComponent implements OnInit, OnDestroy, IndexPage {
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
 
@@ -286,6 +298,10 @@ export class CommandsIndexComponent implements OnInit, OnDestroy, IndexPage {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Command.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'commands', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 

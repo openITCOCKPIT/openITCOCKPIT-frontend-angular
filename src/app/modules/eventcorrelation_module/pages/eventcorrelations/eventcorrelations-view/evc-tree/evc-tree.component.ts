@@ -403,6 +403,10 @@ export class EvcTreeComponent {
         }
     }
     public resetScreen(): void {
+
+        //this.fFlowComponent.hostElement.innerHTML = '';
+        //this.updateGraph(new dagre.graphlib.Graph(), this.direction);
+       // this.cdr.markForCheck();
         if (this.fCanvasComponent) {
             this.fCanvasComponent.resetScaleAndCenter();
             this.cdr.markForCheck();

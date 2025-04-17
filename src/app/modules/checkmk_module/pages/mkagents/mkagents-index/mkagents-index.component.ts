@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -52,6 +52,7 @@ import {
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-mkagents-index',
@@ -111,6 +112,8 @@ export class MkagentsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private subscriptions: Subscription = new Subscription();
     private MkagentsService = inject(MkagentsService)
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
@@ -130,7 +133,7 @@ export class MkagentsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public loadAgents(): void {
         this.SelectionServiceService.deselectAll();
-        
+
         this.subscriptions.add(this.MkagentsService.getIndex(this.params).subscribe(data => {
             this.agents = data;
             this.cdr.markForCheck();
@@ -188,6 +191,12 @@ export class MkagentsIndexComponent implements OnInit, OnDestroy, IndexPage {
                     displayName: item.Mkagent.name
                 };
             });
+        }
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
 
         // Pass selection to the modal

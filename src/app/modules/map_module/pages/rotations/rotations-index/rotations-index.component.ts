@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { Subscription } from 'rxjs';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
@@ -53,6 +53,7 @@ import {
     RotationsIndexRoot
 } from '../rotations.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-rotations-index',
@@ -106,6 +107,8 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 export class RotationsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private readonly notyService: NotyService = inject(NotyService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private subscriptions: Subscription = new Subscription();
     private RotationsService: RotationsService = inject(RotationsService);
@@ -206,6 +209,12 @@ export class RotationsIndexComponent implements OnInit, OnDestroy, IndexPage {
                     displayName: item.name
                 };
             });
+        }
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
 
         // Pass selection to the modal

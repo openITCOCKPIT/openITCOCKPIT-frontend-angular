@@ -525,6 +525,10 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Host.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'hosts', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 
@@ -731,13 +735,13 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
                 downtimetype: ''
             };
         });
-
-        this.selectedItems = items;
         if (items.length === 0) {
             const message = this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
             return;
         }
+        this.selectedItems = items;
+
         this.modalService.toggle({
             show: true,
             id: 'hostMaintenanceModal',

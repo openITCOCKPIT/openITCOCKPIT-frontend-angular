@@ -136,11 +136,11 @@
                 <tbody>
                 <tr *ngFor="let servicetemplategroup of servicetemplategroups.all_servicetemplategroups">
                     <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['servicetemplategroups', 'delete']"
-                            [disabled]="false"
-                            [item]="servicetemplategroup"></oitc-item-select>
-
+                        @if (( PermissionsService.hasPermissionObservable(['servicetemplategroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['servicetemplategroups', 'copy'])|async )) {
+                            <oitc-item-select
+                                [disabled]="!servicetemplategroup.allow_edit"
+                                [item]="servicetemplategroup"></oitc-item-select>
+                        }
                     </td>
                     <td>{{ servicetemplategroup.container.name }}</td>
                     <td>{{ servicetemplategroup.description }}</td>
@@ -215,7 +215,7 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
-                                        *oitcPermission="['servicetemplategroups', 'add']"
+                                        *oitcPermission="['servicetemplategroups', 'copy']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}

@@ -34,7 +34,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { UsercontainerrolesService } from '../usercontainerroles.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -54,6 +54,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-usercontainerroles-index',
@@ -114,6 +115,8 @@ export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy, Inde
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
     public readonly PermissionsService = inject(PermissionsService);
     private readonly UsercontainerrolesService = inject(UsercontainerrolesService);
     private cdr = inject(ChangeDetectorRef);
@@ -193,6 +196,12 @@ export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy, Inde
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
         this.cdr.markForCheck();
@@ -208,6 +217,10 @@ export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy, Inde
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'usercontainerroles', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 

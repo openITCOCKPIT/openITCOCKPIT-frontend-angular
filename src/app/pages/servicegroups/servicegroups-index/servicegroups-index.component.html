@@ -134,10 +134,11 @@
                 <tbody>
                 <tr *ngFor="let servicegroup of servicegroups.all_servicegroups">
                     <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['servicegroups', 'delete']"
-                            [disabled]="false"
-                            [item]="servicegroup"></oitc-item-select>
+                        @if (( PermissionsService.hasPermissionObservable(['servicegroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['servicegroups', 'copy'])|async )) {
+                            <oitc-item-select
+                                [disabled]="!servicegroup.allow_edit"
+                                [item]="servicegroup"></oitc-item-select>
+                        }
                     </td>
                     <td class="word-break">
                         <span *oitcPermission="['servicegroups', 'extended']">

@@ -35,7 +35,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -54,6 +54,7 @@ import {
 import { NotyService } from "../../../layouts/coreui/noty.service";
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { IndexPage } from '../../../pages.interface';
+import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-servicetemplategroups-index',
@@ -94,7 +95,8 @@ import { IndexPage } from '../../../pages.interface';
         TableDirective,
         TranslocoPipe,
         XsButtonDirective,
-        TableLoaderComponent
+        TableLoaderComponent,
+        AsyncPipe
     ],
     templateUrl: './servicetemplategroups-index.component.html',
     styleUrl: './servicetemplategroups-index.component.css',
@@ -111,6 +113,7 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
+    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly cdr = inject(ChangeDetectorRef);
 
     protected params: ServiceTemplateGroupsIndexParams = {} as ServiceTemplateGroupsIndexParams;
@@ -219,6 +222,12 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
 
@@ -235,6 +244,10 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
         }).join(',');
         if (ids) {
             this.router.navigate(['/', 'servicetemplategroups', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 }

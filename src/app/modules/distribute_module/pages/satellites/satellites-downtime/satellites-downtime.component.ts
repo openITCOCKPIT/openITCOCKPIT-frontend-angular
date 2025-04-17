@@ -23,7 +23,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
@@ -54,6 +54,7 @@ import {
     SystemdowntimeSatelliteIndexRoot
 } from '../satellites.interface';
 import { SystemdowntimesService } from '../../../../../pages/systemdowntimes/systemdowntimes.service';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 
 @Component({
@@ -116,6 +117,8 @@ export class SatellitesDowntimeComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private cdr = inject(ChangeDetectorRef);
 
@@ -191,6 +194,12 @@ export class SatellitesDowntimeComponent implements OnInit, OnDestroy {
                     displayName: item.Satellite.name
                 };
             });
+        }
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
 
         // Pass selection to the modal
