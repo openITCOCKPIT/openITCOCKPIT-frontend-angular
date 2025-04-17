@@ -64,6 +64,9 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     // this is for the drop event to know which type of item is dropped
     protected type: MapItemType = MapItemType.ITEM;
 
+    // can be overridden by child components
+    protected isCopyable: boolean = true; // if item is copyable
+
     protected readonly TranslocoService = inject(TranslocoService);
 
     protected cdr = inject(ChangeDetectorRef);
@@ -263,6 +266,25 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                 command: () => {
                     this.contextActionEvent.emit({
                         type: ContextActionType.EDIT,
+                        data: {
+                            id: this.id,
+                            x: this.x,
+                            y: this.y,
+                            map_id: this.mapId,
+                        },
+                        itemType: this.type,
+                        item: this.item()
+                    });
+                    this.cdr.markForCheck();
+                }
+            },
+            {
+                label: this.TranslocoService.translate('Copy'),
+                icon: 'fa fa-copy',
+                visible: this.isCopyable,
+                command: () => {
+                    this.contextActionEvent.emit({
+                        type: ContextActionType.COPY,
                         data: {
                             id: this.id,
                             x: this.x,

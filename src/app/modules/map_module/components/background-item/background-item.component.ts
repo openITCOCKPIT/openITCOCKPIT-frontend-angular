@@ -35,6 +35,8 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
 
     protected override type = MapItemType.BACKGROUND;
 
+    protected override isCopyable: boolean = false;
+
     protected init: boolean = true;
     protected width: number | undefined | null;
     protected height: number | undefined | null;
