@@ -133,7 +133,7 @@ export class ServicesCopyComponent {
 
     public loadServices() {
         if (this.ids) {
-            this.subscriptions.add(this.ServicesService.getServicesCopy(this.ids, 1).subscribe(response => {
+            this.subscriptions.add(this.ServicesService.getServicesCopy(this.ids, this.host_id).subscribe(response => {
                 this.cdr.markForCheck();
                 this.commands = response.commands;
 

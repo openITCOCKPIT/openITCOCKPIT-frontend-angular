@@ -12,7 +12,7 @@ import {
     FormLabelDirective,
     NavComponent,
     NavItemComponent,
-    ProgressBarComponent,
+    ProgressComponent,
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -74,7 +74,7 @@ import { HistoryService } from '../../../history.service';
     RowComponent,
     MatTooltip,
     TranslocoPipe,
-    ProgressBarComponent,
+    ProgressComponent,
     RouterLink,
     SelectComponent
 ],

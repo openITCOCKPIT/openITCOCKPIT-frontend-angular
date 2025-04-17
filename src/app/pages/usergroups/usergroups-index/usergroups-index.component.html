@@ -131,10 +131,10 @@
                 <tr *ngFor="let usergroup of usergroups.allUsergroups">
                     <td class="text-center">
                         <oitc-item-select
-                            *oitcPermission="['usergroups', 'delete']"
-                            [disabled]="false"
-                            [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"
-                            [item]="usergroup"></oitc-item-select>
+                                *oitcPermission="['usergroups', 'delete']"
+                                [disabled]="false"
+                                [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"
+                                [item]="usergroup"></oitc-item-select>
 
                     </td>
                     <td>{{ usergroup.name }}</td>
@@ -172,23 +172,25 @@
             </table>
 
             <oitc-no-records
-                *ngIf="usergroups && usergroups.allUsergroups.length === 0"></oitc-no-records>
+                    *ngIf="usergroups && usergroups.allUsergroups.length === 0"></oitc-no-records>
             <ng-container *ngIf="usergroups && usergroups.allUsergroups">
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                [itemsCount]="usergroups.allUsergroups.length"></oitc-select-all>
+                                    [itemsCount]="usergroups.allUsergroups.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        *oitcPermission="['usergroups', 'add']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['usergroups', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -201,13 +203,13 @@
             </ng-container>
 
             <c-container
-                [fluid]="true">
+                    [fluid]="true">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="usergroups"
-                            [paginateOrScroll]="usergroups"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="usergroups"
+                                [paginateOrScroll]="usergroups"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>
