@@ -675,6 +675,9 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 this.resetBackground();
             }
         }
+        if (type === 'copy') {
+            this.copyObject($event.item, $event.itemType);
+        }
     }
 
     private changeLabelPositionFromContextMenu(event: ContextAction, itemType: MapItemType, objectName: keyof MapRoot, saveMethod: (action: string) => void) {
@@ -725,6 +728,97 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }
         }
     }
+
+    //Gets called if existed object gets copied
+    public copyObject(item: any, itemType: MapItemType) {
+
+        let copiedItem = structuredClone(item);
+
+        // remove id for new object
+        delete copiedItem['id'];
+
+        switch (itemType) {
+            case MapItemType.ITEM:
+
+
+                // Set X and Y poss of the new copied object
+                this.currentItem = copiedItem;
+                this.currentItem.x = copiedItem.x + 10;
+                this.currentItem.y = copiedItem.y + 10;
+
+                this.saveItem();
+
+                this.cdr.markForCheck();
+                break;
+
+            case MapItemType.LINE:
+
+                // Set X and Y poss of the new copied object
+                this.currentItem = copiedItem;
+                this.currentItem.startX = copiedItem.startX + 10;
+                this.currentItem.startY = copiedItem.startY + 10;
+                this.currentItem.endX = copiedItem.endX + 10;
+                this.currentItem.endY = copiedItem.endY + 10;
+
+                this.saveLine();
+
+                this.cdr.markForCheck();
+                break;
+
+            case MapItemType.GADGET:
+
+                // Set X and Y poss of the new copied object
+                this.currentItem = copiedItem;
+                this.currentItem.x = copiedItem.x + 10;
+                this.currentItem.y = copiedItem.y + 10;
+
+                this.saveGadget();
+
+                this.cdr.markForCheck();
+                break;
+
+            case MapItemType.TEXT:
+
+                // Set X and Y poss of the new copied object
+                this.currentItem = copiedItem;
+                this.currentItem.x = copiedItem.x + 10;
+                this.currentItem.y = copiedItem.y + 10;
+
+                this.saveText();
+
+                this.cdr.markForCheck();
+                break;
+
+            case MapItemType.ICON:
+
+                // Set X and Y poss of the new copied object
+                this.currentItem = copiedItem;
+                this.currentItem.x = copiedItem.x + 10;
+                this.currentItem.y = copiedItem.y + 10;
+
+                this.saveIcon();
+
+                this.cdr.markForCheck();
+                break;
+
+            case MapItemType.SUMMARYITEM:
+
+                // Set X and Y poss of the new copied object
+                this.currentItem = copiedItem;
+                this.currentItem.x = copiedItem.x + 10;
+                this.currentItem.y = copiedItem.y + 10;
+
+                this.saveSummaryItem();
+
+                this.cdr.markForCheck();
+                break;
+
+            default:
+                this.notyService.genericWarning('Unknown action - sorry :(');
+                this.cdr.markForCheck();
+                break;
+        }
+    };
 
     public onResizeStop(event: ResizedEvent) {
         const id = event.id;

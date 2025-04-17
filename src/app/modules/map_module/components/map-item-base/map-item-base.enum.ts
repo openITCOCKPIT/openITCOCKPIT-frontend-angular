@@ -19,5 +19,6 @@ export enum ContextActionType {
     LABEL_POSITION = 'labelPosition',
     DELETE = 'delete',
     EDIT = 'edit',
-    LAYER = 'layer'
+    LAYER = 'layer',
+    COPY = 'copy',
 }
