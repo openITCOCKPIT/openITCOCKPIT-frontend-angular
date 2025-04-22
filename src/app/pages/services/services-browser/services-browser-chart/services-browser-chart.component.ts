@@ -277,36 +277,36 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                     this.currentGraphUnit = perfdata.performance_data[0].datasource.unit;
                 }
 
-                if (this.currentYMin === undefined) {
-                    /**
-                     * If the plugin leaves one of the values for minimum or maximum blank, the server API will return
-                     * a "best guess" 🚀 value instead of blank. This was probably implemented for the tachometer gauges.
-                     * However, for charts, this is bad. Instead of using the "best guess" value, we use the original
-                     * plugin output to make sure that min or max are present, and if they are, we use the min or max
-                     * values.
-                     *
-                     * If min is empty, we simply do not set the corresponding value in the graph.
-                     */
-                    if (perfdata.performance_data[0].datasource.min !== null) {
-                        this.currentYMin = perfdata.performance_data[0].datasource.setup.scale.min || undefined;
-                    }
+                // Reset min/max values on reload of data
+                // This is important if the use changes the data source
+                this.currentYMin = undefined;
+                this.currentYMax = undefined;
 
+                /**
+                 * If the plugin leaves one of the values for minimum or maximum blank, the server API will return
+                 * a "best guess" 🚀 value instead of blank. This was probably implemented for the tachometer gauges.
+                 * However, for charts, this is bad. Instead of using the "best guess" value, we use the original
+                 * plugin output to make sure that min or max are present, and if they are, we use the min or max
+                 * values.
+                 *
+                 * If min is empty, we simply do not set the corresponding value in the graph.
+                 */
+                if (perfdata.performance_data[0].datasource.min !== null) {
+                    this.currentYMin = perfdata.performance_data[0].datasource.setup.scale.min || undefined;
                 }
 
-                if (this.currentYMax === undefined) {
-                    /**
-                     * If the plugin leaves one of the values for minimum or maximum blank, the server API will return
-                     * a "best guess" 🚀 value instead of blank. This was probably implemented for the tachometer gauges.
-                     * However, for charts, this is bad. Instead of using the "best guess" value, we use the original
-                     * plugin output to make sure that min or max are present, and if they are, we use the min or max
-                     * values.
-                     *
-                     * If max is empty, we simply do not set the corresponding value in the graph.
-                     */
-                    if (perfdata.performance_data[0].datasource.max !== null) {
-                        this.currentYMax = perfdata.performance_data[0].datasource.setup.scale.max || undefined;
-                    }
 
+                /**
+                 * If the plugin leaves one of the values for minimum or maximum blank, the server API will return
+                 * a "best guess" 🚀 value instead of blank. This was probably implemented for the tachometer gauges.
+                 * However, for charts, this is bad. Instead of using the "best guess" value, we use the original
+                 * plugin output to make sure that min or max are present, and if they are, we use the min or max
+                 * values.
+                 *
+                 * If max is empty, we simply do not set the corresponding value in the graph.
+                 */
+                if (perfdata.performance_data[0].datasource.max !== null) {
+                    this.currentYMax = perfdata.performance_data[0].datasource.setup.scale.max || undefined;
                 }
 
                 // Store the last timestamp with data
