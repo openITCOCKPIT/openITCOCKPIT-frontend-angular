@@ -292,7 +292,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                  * If min is empty, we simply do not set the corresponding value in the graph.
                  */
                 if (perfdata.performance_data[0].datasource.min !== null) {
-                    this.currentYMin = perfdata.performance_data[0].datasource.setup.scale.min || undefined;
+                    this.currentYMin = perfdata.performance_data[0].datasource.setup.scale.min ?? undefined;
                 }
 
 
@@ -306,7 +306,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                  * If max is empty, we simply do not set the corresponding value in the graph.
                  */
                 if (perfdata.performance_data[0].datasource.max !== null) {
-                    this.currentYMax = perfdata.performance_data[0].datasource.setup.scale.max || undefined;
+                    this.currentYMax = perfdata.performance_data[0].datasource.setup.scale.max ?? undefined;
                 }
 
                 // Store the last timestamp with data

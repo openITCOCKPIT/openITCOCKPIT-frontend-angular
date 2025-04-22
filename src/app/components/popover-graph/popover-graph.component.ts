@@ -222,11 +222,31 @@ export class PopoverGraphComponent implements OnDestroy {
             if (this.perfData[i].datasource.unit) {
                 GraphDefaults.unit = this.perfData[i].datasource.unit;
             }
-            if (this.perfData[i].datasource.setup.scale.min !== null) {
-                GraphDefaults.min = this.perfData[i].datasource.setup.scale.min;
+
+            /**
+             * If the plugin leaves one of the values for minimum or maximum blank, the server API will return
+             * a "best guess" 🚀 value instead of blank. This was probably implemented for the tachometer gauges.
+             * However, for charts, this is bad. Instead of using the "best guess" value, we use the original
+             * plugin output to make sure that min or max are present, and if they are, we use the min or max
+             * values.
+             *
+             * If min is empty, we simply do not set the corresponding value in the graph.
+             */
+            if (this.perfData[i].datasource.min !== null) {
+                GraphDefaults.min = this.perfData[i].datasource.setup.scale.min ?? null;
             }
-            if (this.perfData[i].datasource.setup.scale.max !== null) {
-                GraphDefaults.max = this.perfData[i].datasource.setup.scale.max;
+
+            /**
+             * If the plugin leaves one of the values for minimum or maximum blank, the server API will return
+             * a "best guess" 🚀 value instead of blank. This was probably implemented for the tachometer gauges.
+             * However, for charts, this is bad. Instead of using the "best guess" value, we use the original
+             * plugin output to make sure that min or max are present, and if they are, we use the min or max
+             * values.
+             *
+             * If max is empty, we simply do not set the corresponding value in the graph.
+             */
+            if (this.perfData[i].datasource.max !== null) {
+                GraphDefaults.max = this.perfData[i].datasource.setup.scale.max ?? null;
             }
 
             // Get options object for uPlot

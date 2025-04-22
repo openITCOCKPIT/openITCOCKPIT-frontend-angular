@@ -96,6 +96,14 @@ export class PopoverConfigBuilder {
 
         let cssTextColor = getComputedStyle(document.documentElement).getPropertyValue('--cui-body-color').trim();
 
+        // uPlot requires min and max to be set
+        // ERROR TypeError: CanvasRenderingContext2D.createLinearGradient: Argument 2 is not a finite floating-point value.
+        if (this.min === null || this.max === null) {
+            console.log('PopoverConfigBuilder: min or max value for Y-Axis is null - using default values');
+            this.min = null;
+            this.max = null;
+        }
+
         let uPlotOptions = {
             unit: this.unit,
             title: this.title,
