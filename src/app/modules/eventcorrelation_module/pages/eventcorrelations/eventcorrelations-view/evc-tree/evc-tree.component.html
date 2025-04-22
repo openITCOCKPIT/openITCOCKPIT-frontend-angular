@@ -1,6 +1,6 @@
 <c-row>
     <c-col [xs]="12" class="text-end">
-        <button cButton *ngIf="!isWidget()" color="default" [size]="'xs'" class="ms-2 me-2" (click)="resetScreen()">
+        <button cButton color="default" [size]="'xs'" class="ms-2 me-2" (click)="reset()">
             <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
             {{ 'Reset scale' | transloco }}
         </button>

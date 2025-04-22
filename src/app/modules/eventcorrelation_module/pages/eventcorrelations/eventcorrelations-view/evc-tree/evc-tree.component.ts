@@ -6,7 +6,9 @@ import {
     effect,
     inject,
     input,
-    ViewChild
+    ViewChild,
+    Output,
+    EventEmitter
 } from '@angular/core';
 import { EFConnectableSide, EFMarkerType, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
 import * as dagre from "@dagrejs/dagre"
@@ -119,6 +121,8 @@ const OPERATOR_WIDTH = 100;
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EvcTreeComponent {
+
+    @Output() resetEvent = new EventEmitter<EvcTreeDirection>();
     public evcId = input<number>(0);
     public evcTree = input<EvcTree[]>([]);
     public downtimedServices = input<number>(0);
@@ -402,16 +406,6 @@ export class EvcTreeComponent {
             this.cdr.markForCheck();
         }
     }
-    public resetScreen(): void {
-
-        //this.fFlowComponent.hostElement.innerHTML = '';
-        //this.updateGraph(new dagre.graphlib.Graph(), this.direction);
-       // this.cdr.markForCheck();
-        if (this.fCanvasComponent) {
-            this.fCanvasComponent.resetScaleAndCenter();
-            this.cdr.markForCheck();
-        }
-    }
 
     public toggleToaster(serviceId: number | undefined): void {
         this.cancelToaster();
@@ -428,6 +422,10 @@ export class EvcTreeComponent {
         }
 
         this.toasterTimeout = null;
+    }
+
+    public reset() {
+        this.resetEvent.emit(this.direction);
     }
 
     protected readonly ServiceTypesEnum = ServiceTypesEnum;

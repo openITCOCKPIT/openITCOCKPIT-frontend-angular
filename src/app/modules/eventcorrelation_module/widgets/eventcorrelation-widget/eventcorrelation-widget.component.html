@@ -24,7 +24,7 @@
 
                     <div class="d-flex" [style.height.px]="widgetHeight"
                          *ngIf="host_id && config.type==='tree' && show">
-
+                        <!--<c-row><c-col class="mb-2 text-end"><button cButton [size]="'xs'" color="default" (click)="reload()">Reload</button></c-col></c-row>-->
                         <oitc-evc-tree
                             class="w-100 h-100"
                             [evcId]="host_id"
@@ -35,6 +35,7 @@
                             [animated]="animated"
                             [connectionLine]="connectionLine"
                             [evcDirection]="direction"
+                            (resetEvent)="resetHandler($event)"
                             [isWidget]="true"></oitc-evc-tree>
 
                     </div>

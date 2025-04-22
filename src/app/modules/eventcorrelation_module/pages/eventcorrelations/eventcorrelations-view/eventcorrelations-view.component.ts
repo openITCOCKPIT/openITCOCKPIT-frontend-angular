@@ -61,6 +61,7 @@ import { EvcTreeDirection } from './evc-tree/evc-tree.enum';
 export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
 
     public id: number = 0;
+    public show:boolean = true;
 
     public evcTree: EvcTree[] = [];
     public evcTreeDirection: EvcTreeDirection = EvcTreeDirection.RIGHT_TO_LEFT;
@@ -91,6 +92,13 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    public resetHandler($event: EvcTreeDirection) {
+        this.show = false;
+        this.cdr.markForCheck();
+        this.evcTreeDirection = $event;
+        setTimeout(() =>{this.show = true; this.cdr.markForCheck();}, 100);
     }
 
     public loadEventcorrelation() {

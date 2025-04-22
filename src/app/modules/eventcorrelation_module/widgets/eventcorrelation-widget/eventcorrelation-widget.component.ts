@@ -39,6 +39,7 @@ import { EventcorrelationWidgetConfig } from './eventcorrelation-widget.interfac
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
 
+
 @Component({
     selector: 'oitc-eventcorrelation-widget',
     imports: [
@@ -203,6 +204,13 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
 
         this.widgetHeight = height;
         this.cdr.markForCheck();
+    }
+
+    public resetHandler($event: EvcTreeDirection) {
+        this.show = false;
+        this.cdr.markForCheck();
+        this.direction = $event;
+        setTimeout(() =>{this.show = true; this.cdr.markForCheck();}, 100);
     }
 
     public saveConfig() {
