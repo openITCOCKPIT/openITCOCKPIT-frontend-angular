@@ -168,11 +168,20 @@
 
                                 </c-card-header>
                                 <c-card-body class="overflow-auto pt-2 pb-0" [attr.id]="'widget-body-'+widget.id">
-
-                                    <oitc-widget-container
-                                        [widgetInput]="widget"
-                                        [isReadonly]="isReadonly"></oitc-widget-container>
-
+                                    <ng-container *ngIf="isWidgetAvailable(widget)">
+                                        <oitc-widget-container
+                                                [widgetInput]="widget"
+                                                [isReadonly]="isReadonly"></oitc-widget-container>
+                                    </ng-container>
+                                    <ng-container *ngIf="!isWidgetAvailable(widget)">
+                                        <c-alert color="warning">
+                                            <h4 cAlertHeading>
+                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                {{ t('Missing permissions') }}
+                                            </h4>
+                                            <p>{{ t('Sorry, this widget is not accessible using your permissions.') }}</p>
+                                        </c-alert>
+                                    </ng-container>
                                 </c-card-body>
                             </c-card>
 
