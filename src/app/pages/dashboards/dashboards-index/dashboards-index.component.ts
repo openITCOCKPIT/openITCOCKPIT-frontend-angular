@@ -30,6 +30,8 @@ import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { MatSelectChange } from '@angular/material/select';
 import { debounceTime, filter } from 'rxjs/operators';
 import {
+    AlertComponent,
+    AlertHeadingDirective,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -121,7 +123,9 @@ import {
         DashboardAddWidgetModalComponent,
         HostsBrowserModalComponent,
         ServiceBrowserModalComponent,
-        ChangecalendarsEventViewerComponent
+        ChangecalendarsEventViewerComponent,
+        AlertComponent,
+        AlertHeadingDirective
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
@@ -552,6 +556,10 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
     public WidgetTrackById(index: number, item: WidgetGetForRender) {
         return item.id;
+    }
+
+    public isWidgetAvailable(checkWidget: WidgetGetForRender): boolean {
+        return this.availableWidgets.filter(availableWidget => availableWidget.directive === checkWidget.directive).length === 1;
     }
 
     public toggleRenameWidgetModal(widget: WidgetGetForRender): void {
