@@ -172,6 +172,7 @@ export class SatellitesEditComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.SatellitesService.getEdit(id)
             .subscribe((result: EditSatelliteRoot) => {
                 this.post = {
+                    frontendUrl: '',
                     Satellite: result.satellite
                 }
 
