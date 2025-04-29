@@ -118,6 +118,7 @@
                                             [optionLabel]="'value'"
                                             [(ngModel)]="selectedPushAgentId"
                                             [options]="pushAgentsSelect"
+                                            [disabled]="isLoading"
                                             (onChange)="enableNextButton()">
                                         </oitc-select>
                                         <div class="help-block">
