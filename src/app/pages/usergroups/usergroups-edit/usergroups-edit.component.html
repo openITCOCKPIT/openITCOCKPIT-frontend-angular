@@ -132,76 +132,82 @@
                                     {{ t('Cancel') }}
                                 </button>
 
-                                <c-dropdown class="text-end cDropdownInline">
-                                    <button cButton cDropdownToggle class="ms-1 ripple" color="default"
-                                            [caret]="true">
+                                <c-dropdown [autoClose]="'outside'" variant="btn-group">
+                                    <button cButton cDropdownToggle class="ms-1" color="default" [caret]="true">
                                         {{ t('Bulk actions') }}
                                     </button>
                                     <ul cDropdownMenu>
                                         <li>
-                                            <button cDropdownItem type="button" (click)="forceTicks('all', true)">
+                                            <button cDropdownItem type="button" class="ripple" [autoClose]="false"
+                                                    (click)="forceTicks('all', true)">
                                                 <fa-icon [icon]="['fas', 'check-square']" class="text-primary"/>
                                                 {{ t('Tick all') }}
                                             </button>
                                         </li>
                                         <li>
-                                            <button cDropdownItem type="button" (click)="forceTicks('all', false)">
+                                            <button cDropdownItem type="button" class="ripple" [autoClose]="false"
+                                                    (click)="forceTicks('all', false)">
                                                 <fa-icon [icon]="['far', 'square']"/>
                                                 {{ t('Untick all') }}
                                             </button>
                                         </li>
                                         <li cDropdownDivider></li>
                                         <li>
-                                            <button cDropdownItem type="button" (click)="forceTicks('index', true)">
-                                                <fa-icon [icon]="['fas', 'check-square']" class="text-ack"/>
+                                            <button cDropdownItem type="button" class="ripple" [autoClose]="false"
+                                                    (click)="forceTicks('index', true)">
+                                                <fa-icon [icon]="['fas', 'check-square']" class="text-primary"/>
                                                 {{ t('Tick all: index') }}
                                             </button>
                                         </li>
                                         <li>
-                                            <button cDropdownItem type="button"
+                                            <button cDropdownItem type="button" class="ripple" [autoClose]="false"
                                                     (click)="forceTicks('index', false)">
-                                                <fa-icon [icon]="['fas', 'check-square']"/>
+                                                <fa-icon [icon]="['far', 'square']"/>
                                                 {{ t('Untick all: index') }}
                                             </button>
                                         </li>
                                         <li cDropdownDivider></li>
                                         <li>
-                                            <button cDropdownItem type="button" (click)="forceTicks('add', true)">
-                                                <fa-icon [icon]="['fas', 'check-square']" class="ok"/>
+                                            <button cDropdownItem type="button" class="ripple" [autoClose]="false"
+                                                    (click)="forceTicks('add', true)">
+                                                <fa-icon [icon]="['fas', 'check-square']" class="text-success"/>
                                                 {{ t('Tick all: add') }}
                                             </button>
                                         </li>
                                         <li>
-                                            <button cDropdownItem type="button" (click)="forceTicks('add', false)">
-                                                <fa-icon [icon]="['fas', 'check-square']"/>
+                                            <button cDropdownItem type="button" [autoClose]="false" class="ripple"
+                                                    (click)="forceTicks('add', false)">
+                                                <fa-icon [icon]="['far', 'square']"/>
                                                 {{ t('Untick all: add') }}
                                             </button>
                                         </li>
                                         <li cDropdownDivider></li>
                                         <li>
-                                            <button cDropdownItem type="button" (click)="forceTicks('edit', true)">
-                                                <fa-icon [icon]="['fas', 'check-square']" class="warning"/>
+                                            <button cDropdownItem type="button" [autoClose]="false" class="ripple"
+                                                    (click)="forceTicks('edit', true)">
+                                                <fa-icon [icon]="['fas', 'check-square']" class="text-warning"/>
                                                 {{ t('Tick all: edit') }}
                                             </button>
                                         </li>
                                         <li>
-                                            <button cDropdownItem type="button" (click)="forceTicks('edit', false)">
-                                                <fa-icon [icon]="['fas', 'check-square']"/>
+                                            <button cDropdownItem type="button" [autoClose]="false" class="ripple"
+                                                    (click)="forceTicks('edit', false)">
+                                                <fa-icon [icon]="['far', 'square']"/>
                                                 {{ t('Untick all: edit') }}
                                             </button>
                                         </li>
                                         <li cDropdownDivider></li>
                                         <li>
-                                            <button cDropdownItem type="button"
+                                            <button cDropdownItem type="button" [autoClose]="false" class="ripple"
                                                     (click)="forceTicks('delete', true)">
-                                                <fa-icon [icon]="['fas', 'check-square']" class="down"/>
+                                                <fa-icon [icon]="['fas', 'check-square']" class="text-danger"/>
                                                 {{ t('Tick all: delete') }}
                                             </button>
                                         </li>
                                         <li>
-                                            <button cDropdownItem type="button"
+                                            <button cDropdownItem type="button" [autoClose]="false" class="ripple"
                                                     (click)="forceTicks('delete', false)">
-                                                <fa-icon [icon]="['fas', 'check-square']"/>
+                                                <fa-icon [icon]="['far', 'square']"/>
                                                 {{ t('Untick all: delete') }}
                                             </button>
                                         </li>
@@ -225,7 +231,7 @@
                                 <c-row class="pb-2">
                                     <c-col [xs]="12" [md]="4" [lg]="3"
                                            *ngFor="let action of controller.value.children | keyvalue: keepOrder"
-                                           [ngClass]="{'txt-ack': action.value.alias == 'index', 'ok': action.value.alias == 'add', 'warning': action.value.alias == 'edit', 'down': action.value.alias == 'delete'}">
+                                           [ngClass]="{'text-primary': action.value.alias == 'index', 'text-success': action.value.alias == 'add', 'text-warning': action.value.alias == 'edit', 'text-danger': action.value.alias == 'delete'}">
                                         <c-form-check class="px-0">
                                             <input cFormCheckInput
                                                    class="checkbox-lg checkbox-primary mx-1"
@@ -264,7 +270,7 @@
                                     </h5>
                                     <div
                                         *ngFor="let action of controller.value.children | keyvalue: keepOrder"
-                                        [ngClass]="{'txt-ack': action.value.alias == 'index', 'ok': action.value.alias == 'add', 'warning': action.value.alias == 'edit', 'down': action.value.alias == 'delete'}">
+                                        [ngClass]="{'text-primary': action.value.alias == 'index', 'text-success': action.value.alias == 'add', 'text-warning': action.value.alias == 'edit', 'text-danger': action.value.alias == 'delete'}">
                                         <c-form-check class="px-0">
                                             <input cFormCheckInput
                                                    class="checkbox-lg checkbox-primary mx-1"
