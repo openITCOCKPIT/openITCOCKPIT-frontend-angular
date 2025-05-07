@@ -62,7 +62,7 @@
             <c-nav class="card-toolbar card-header-pills">
                 @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
                     <span
-                        *oitcPermission="['importmodule', 'importedhostgroups', 'dependencytree']">
+                        *oitcPermission="['importModule', 'importedhostgroups', 'dependencytree']">
                         <c-nav-item class="px-1" *ngIf="AdditionalInformationExists">
                             <button cButton class="ripple" color="primary" size="xs"
                                     [routerLink]="['/', 'import_module', 'ImportedHostgroups', 'dependencyTree', hostgroupExtended.Hostgroup.id]">
