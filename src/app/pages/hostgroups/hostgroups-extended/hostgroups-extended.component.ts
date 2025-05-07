@@ -2,32 +2,31 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enable-modal.component';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownComponent,
-  DropdownDividerDirective,
-  DropdownItemDirective,
-  DropdownMenuDirective,
-  DropdownToggleDirective,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownComponent,
+    DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective,
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-
 
 
 import { FormsModule } from '@angular/forms';
@@ -117,69 +116,73 @@ import { HostsService } from '../../hosts/hosts.service';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { ServicesService } from '../../services/services.service';
+import { EnableItem } from '../../../layouts/coreui/enable-modal/enable.interface';
+import { ENABLE_SERVICE_TOKEN } from '../../../tokens/enable-injection.token';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PaginatorModule,
-    PermissionDirective,
-    SelectComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    DropdownDividerDirective,
-    ServiceResetChecktimeModalComponent,
-    DisableModalComponent,
-    HostsMaintenanceModalComponent,
-    HostsDisableNotificationsModalComponent,
-    HostsEnableNotificationsModalComponent,
-    DebounceDirective,
-    TableDirective,
-    NgForOf,
-    HoststatusIconComponent,
-    TranslocoPipe,
-    ServiceCumulatedStatusIconComponent,
-    RowComponent,
-    ColComponent,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ServicestatusIconComponent,
-    PopoverGraphComponent,
-    DropdownComponent,
-    DropdownToggleDirective,
-    DropdownMenuDirective,
-    DropdownItemDirective,
-    ContainerComponent,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    HostAcknowledgeModalComponent,
-    TableLoaderComponent,
-    ObjectUuidComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    NgClass,
-    SlaHostgroupHostsStatusOverviewComponent,
-    DeleteAllModalComponent,
-    AsyncPipe
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        PaginatorModule,
+        PermissionDirective,
+        SelectComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        DropdownDividerDirective,
+        ServiceResetChecktimeModalComponent,
+        DisableModalComponent,
+        HostsMaintenanceModalComponent,
+        HostsDisableNotificationsModalComponent,
+        HostsEnableNotificationsModalComponent,
+        DebounceDirective,
+        TableDirective,
+        NgForOf,
+        HoststatusIconComponent,
+        TranslocoPipe,
+        ServiceCumulatedStatusIconComponent,
+        RowComponent,
+        ColComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ServicestatusIconComponent,
+        PopoverGraphComponent,
+        DropdownComponent,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        DropdownItemDirective,
+        ContainerComponent,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        HostAcknowledgeModalComponent,
+        TableLoaderComponent,
+        ObjectUuidComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        NgClass,
+        SlaHostgroupHostsStatusOverviewComponent,
+        DeleteAllModalComponent,
+        AsyncPipe,
+        EnableModalComponent
+    ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css',
     providers: [
-        { provide: DISABLE_SERVICE_TOKEN, useClass: HostsService },
-        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService }
+        {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
+        {provide: ENABLE_SERVICE_TOKEN, useClass: HostsService},
+        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService}
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -269,13 +272,14 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         if (selectedTab !== null) {
             this.changeTab(selectedTab as HostgroupExtendedTabs);
         }
-        this.cdr.markForCheck();
 
         // Fetch the users timezone
         this.getUserTimezone();
 
         // Load all hostgroups for the dropdown
         this.loadHostgroups('');
+
+        this.cdr.markForCheck();
     }
 
     protected onHostgroupChange(): void {
@@ -286,6 +290,8 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
         // Load additional information
         this.loadAdditionalInformation();
+
+        this.cdr.markForCheck();
     }
 
 
@@ -319,7 +325,6 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     private loadHostgroupExtended(): void {
         this.subscriptions.add(this.HostgroupsService.loadHostgroupWithHostsById(this.hostgroupId, this.hostParams)
             .subscribe((result: HostgroupExtendedRoot) => {
-                this.cdr.markForCheck();
                 this.hostgroupExtended = result.hostgroup;
                 this.userFullname = result.username;
                 this.hostgroupExtended.Hosts.forEach((host: HostGroupExtendedHost) => {
@@ -337,6 +342,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
                     }
                 });
                 this.hostgroupExtendedRoot = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -350,18 +356,18 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
             .subscribe((result: SelectKeyValue[]) => {
                 // Put the hostgroups to the instance
                 this.hostgroups = result;
-                this.cdr.markForCheck();
 
                 // Then load the selected data.
                 this.onHostgroupChange();
+                this.cdr.markForCheck();
             }));
     }
 
     private loadAdditionalInformation(): void {
         this.subscriptions.add(this.HostgroupsService.loadAdditionalInformation(this.hostgroupId)
             .subscribe((result: HostgroupAdditionalInformation) => {
-                this.cdr.markForCheck();
                 this.AdditionalInformationExists = result.AdditionalInformationExists;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -615,6 +621,37 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         this.modalService.toggle({
             show: true,
             id: 'disableModal',
+        });
+    }
+
+    public toggleEnableModal(host?: HostObject) {
+        let items: EnableItem[] = [];
+
+        if (host) {
+            // User just want to delete a single command
+            items = [{
+                id: Number(host.id),
+                displayName: String(host.name)
+            }];
+        } else {
+            items = this.SelectionServiceService.getSelectedItems().map((item): EnableItem => {
+                return {
+                    id: item.Host.id,
+                    displayName: item.Host.name
+                };
+            });
+        }
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.selectedItems = items;
+        this.cdr.markForCheck();
+
+        this.modalService.toggle({
+            show: true,
+            id: 'enableModal',
         });
     }
 
