@@ -89,7 +89,17 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     protected satellites: SelectKeyValue[] = [];
     protected hostId: number = 0;
     protected parenthosts: SelectKeyValue[] = [];
-    protected hostPost: HostPost = {} as HostPost;
+    protected hostPost: HostPost = {
+        address: '',
+        container_id: 0,
+        description: '',
+        hosts_to_containers_sharing: {
+            _ids: [] as number []
+        },
+        hosttemplate_id: 0,
+        name: '',
+        satellite_id: 0
+    } as HostPost;
     protected errors: GenericValidationError | null = null;
     protected useExistingHost: boolean = false;
     protected useExistingHostReadonly: boolean = false;
