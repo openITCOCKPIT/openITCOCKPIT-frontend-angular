@@ -52,11 +52,8 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         TranslocoPipe,
         RequiredIconComponent,
         SelectComponent,
-        FormFeedbackComponent,
-        FormErrorDirective,
         FormLabelDirective,
         FormControlDirective,
-        FormsModule,
         NgIf,
         WizardsDynamicfieldsComponent,
         TranslocoDirective,
@@ -71,7 +68,10 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         NgForOf,
         NgSelectComponent,
         RowComponent,
-        BackButtonDirective
+        BackButtonDirective,
+        FormFeedbackComponent,
+        FormErrorDirective,
+        FormsModule
     ],
     templateUrl: './networkbasic.component.html',
     styleUrl: './networkbasic.component.css',

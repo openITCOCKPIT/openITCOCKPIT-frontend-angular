@@ -39,9 +39,6 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
         CardHeaderComponent,
         CardTitleDirective,
         CardBodyComponent,
-        FormsModule,
-        FormErrorDirective,
-        FormFeedbackComponent,
         FormControlDirective,
         RequiredIconComponent,
         AccordionComponent,
@@ -51,7 +48,10 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
         TranslocoPipe,
         FormLabelDirective,
         WizardsDynamicfieldsComponent,
-        BackButtonDirective
+        BackButtonDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormsModule
     ],
     templateUrl: './mysqlserver.component.html',
     styleUrl: './mysqlserver.component.css',
