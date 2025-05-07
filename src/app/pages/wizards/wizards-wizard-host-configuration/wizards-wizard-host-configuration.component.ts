@@ -13,6 +13,8 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     LocalStorageService
 } from '@coreui/angular';
 import { HostsService } from '../../hosts/hosts.service';
@@ -32,6 +34,8 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { AnimateCssService } from '../../../services/animate-css.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ValidateInputFromAngularPost, WizardElement, WizardsIndex } from '../wizards.interface';
+import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
+import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
 
 @Component({
     selector: 'oitc-wizards-wizard-host-configuration',
@@ -57,7 +61,10 @@ import { ValidateInputFromAngularPost, WizardElement, WizardsIndex } from '../wi
         FormLabelDirective,
         TranslocoPipe,
         AsyncPipe,
-        LabelLinkComponent
+        LabelLinkComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TemplateDiffComponent
     ],
     templateUrl: './wizards-wizard-host-configuration.component.html',
     styleUrl: './wizards-wizard-host-configuration.component.css',
@@ -94,6 +101,8 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     protected p5: string = '';
     protected containers: SelectKeyValue[] = [];
     protected hosts: SelectKeyValue[] = [];
+
+    protected hosttemplate?: HosttemplatePost;
 
     public data = {
         createAnother: false,
@@ -180,13 +189,23 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     };
 
     protected onContainerChange(): void {
-        console.warn('containerIdChanged');
-
-        this.Subscriptions.add(this.HostsService.loadElements(this.hostPost.container_id)
+        this.Subscriptions.add(this.WizardsService.loadElements(this.hostPost.container_id)
             .subscribe((result) => {
                 this.hosttemplates = result.hosttemplates;
                 this.hostgroups = result.hostgroups;
                 this.satellites = result.satellites;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    protected onHosttemplateChange(): void {
+        console.warn('hosttemplate Change');
+
+        this.Subscriptions.add(this.HostsService.loadHosttemplate(this.hostPost.hosttemplate_id)
+            .subscribe((result) => {
+                this.hosttemplate = result;
+                this.hostPost.description = this.hosttemplate.description;
                 this.cdr.markForCheck();
             })
         );

@@ -13,6 +13,7 @@ import {
 } from './wizards.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { HostElements } from '../hosts/hosts.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -48,6 +49,26 @@ export abstract class WizardsService {
                     });
                 })
             );
+    }
+
+    public loadElements(containerId: number, hostId: number = 0): Observable<HostElements> {
+        const proxyPath = this.proxyPath;
+        let url = `${proxyPath}/wizards/loadElementsByContainerId/${containerId}.json`;
+
+        if (hostId) {
+            url = `${proxyPath}/wizards/loadElementsByContainerId/${containerId}/${hostId}.json`
+        }
+
+
+        return this.http.get<HostElements>(url, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data
+            })
+        )
     }
 
     public loadHostsByString(name: string, typeId: string = ''): Observable<SelectKeyValue[]> {
