@@ -35,9 +35,9 @@
             <c-nav variant="underline" class="card-toolbar card-header-pills margin-right-8">
                 <c-nav-item>
                     <button
-                        class="nav-link"
-                        [ngClass]="{'active': selectedTab == HostgroupExtendedTabs.Hosts}"
-                        (click)="changeTab(HostgroupExtendedTabs.Hosts)">
+                            class="nav-link"
+                            [ngClass]="{'active': selectedTab == HostgroupExtendedTabs.Hosts}"
+                            (click)="changeTab(HostgroupExtendedTabs.Hosts)">
                         <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                         {{ t('Hosts') }}
                     </button>
@@ -47,9 +47,9 @@
                     <span *oitcPermission="['slamodule', 'slas', 'slahostgrouphostsstatusoverview']">
                         <c-nav-item *ngIf="hostgroupExtended.hasSLAHosts">
                             <button
-                                class="nav-link"
-                                [ngClass]="{'active': selectedTab == HostgroupExtendedTabs.SlaHostsStatus}"
-                                (click)="changeTab(HostgroupExtendedTabs.SlaHostsStatus)">
+                                    class="nav-link"
+                                    [ngClass]="{'active': selectedTab == HostgroupExtendedTabs.SlaHostsStatus}"
+                                    (click)="changeTab(HostgroupExtendedTabs.SlaHostsStatus)">
                                 <fa-icon [icon]="['fas', 'award']"></fa-icon>
                                 {{ t('SLA Hosts Status') }}
                             </button>
@@ -62,7 +62,7 @@
             <c-nav class="card-toolbar card-header-pills">
                 @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
                     <span
-                        *oitcPermission="['importModule', 'importedhostgroups', 'dependencytree']">
+                            *oitcPermission="['importmodule', 'importedhostgroups', 'dependencytree']">
                         <c-nav-item class="px-1" *ngIf="AdditionalInformationExists">
                             <button cButton class="ripple" color="primary" size="xs"
                                     [routerLink]="['/', 'import_module', 'ImportedHostgroups', 'dependencyTree', hostgroupExtended.Hostgroup.id]">
@@ -110,14 +110,14 @@
 
                         <c-col lg="9">
                             <oitc-select
-                                name="hostgroupId"
-                                id="hostgroupId"
-                                [(ngModel)]="hostgroupId"
-                                optionValue="key"
-                                optionLabel="value"
-                                [options]="hostgroups"
-                                [searchCallback]="loadHostgroups"
-                                (onChange)="onHostgroupChange()">
+                                    name="hostgroupId"
+                                    id="hostgroupId"
+                                    [(ngModel)]="hostgroupId"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [options]="hostgroups"
+                                    [searchCallback]="loadHostgroups"
+                                    (onChange)="onHostgroupChange()">
                             </oitc-select>
                         </c-col>
                         <c-col lg="1" class="ms-3">
@@ -167,8 +167,8 @@
                                     <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
 
                                         <a
-                                            href="javascript:void(0);" cDropdownItem
-                                            (click)="acknowledgeStatus()">
+                                                href="javascript:void(0);" cDropdownItem
+                                                (click)="acknowledgeStatus()">
                                             <fa-icon [icon]="['fas', 'user']"></fa-icon>
                                             {{ t('Acknowledge host status') }}
                                         </a>
@@ -209,15 +209,15 @@
                                     {{ t('Host') }}
                                 </span>
                                 <input
-                                    [(ngModel)]="hostParams['filter[Hosts.name]']"
-                                    aria-label="host group name"
-                                    cFormControl
-                                    [placeholder]="'Filter by host name' | transloco"
-                                    name="filter.Host.name"
-                                    id="filter.Host.name"
-                                    oitcDebounce
-                                    (debouncedValue)="onHostFilterChange($event)"
-                                    type="text"
+                                        [(ngModel)]="hostParams['filter[Hosts.name]']"
+                                        aria-label="host group name"
+                                        cFormControl
+                                        [placeholder]="'Filter by host name' | transloco"
+                                        name="filter.Host.name"
+                                        id="filter.Host.name"
+                                        oitcDebounce
+                                        (debouncedValue)="onHostFilterChange($event)"
+                                        type="text"
                                 />
                             </c-input-group>
                         </td>
@@ -303,32 +303,32 @@
                             </td>
                             <td class="text-center">
                                 <oitc-service-cumulated-status-icon
-                                    [cumulatedState]="host.ServicestatusSummary.cumulatedState"/>
+                                        [cumulatedState]="host.ServicestatusSummary.cumulatedState"/>
                             </td>
                             <td class="text-center">
                                 <ng-container *ngIf="host.Hoststatus.problemHasBeenAcknowledged">
                                     <fa-icon
-                                        *ngIf="host.Hoststatus.acknowledgement_type === AcknowledgementTypes.Normal"
-                                        [icon]="['far', 'user']"
-                                        [title]="'Acknowledgement' | transloco"
+                                            *ngIf="host.Hoststatus.acknowledgement_type === AcknowledgementTypes.Normal"
+                                            [icon]="['far', 'user']"
+                                            [title]="'Acknowledgement' | transloco"
                                     ></fa-icon>
                                     <fa-icon
-                                        *ngIf="host.Hoststatus.acknowledgement_type === AcknowledgementTypes.Sticky"
-                                        [icon]="['fas', 'user']"
-                                        [title]="'Sticky Acknowledgement' | transloco"
+                                            *ngIf="host.Hoststatus.acknowledgement_type === AcknowledgementTypes.Sticky"
+                                            [icon]="['fas', 'user']"
+                                            [title]="'Sticky Acknowledgement' | transloco"
                                     ></fa-icon>
                                 </ng-container>
                             </td>
                             <td class="text-center">
                                 <fa-icon
-                                    *ngIf="host.Hoststatus.scheduledDowntimeDepth && host.Hoststatus.scheduledDowntimeDepth > 0"
-                                    [icon]="['fas', 'power-off']"
+                                        *ngIf="host.Hoststatus.scheduledDowntimeDepth && host.Hoststatus.scheduledDowntimeDepth > 0"
+                                        [icon]="['fas', 'power-off']"
                                 ></fa-icon>
                             </td>
                             <td class="text-center">
                                 <span
-                                    *ngIf="host.Host.active_checks_enabled === false || host.Host.is_satellite_host === true"
-                                    [title]="'Passively transferred host' | transloco"
+                                        *ngIf="host.Host.active_checks_enabled === false || host.Host.is_satellite_host === true"
+                                        [title]="'Passively transferred host' | transloco"
                                 >P</span>
                             </td>
                             <td class="word-break">
@@ -341,20 +341,21 @@
                                     {{ host.Host.name }}
                                 </span>
                             </td>
-                            <td>{{ host.Hoststatus.lastHardStateChange }}</td>
+                            <td>{{ host.Hoststatus.last_state_change }}</td>
                             <td>{{ host.Hoststatus.lastCheck }}</td>
                             <td>
                                 <span
-                                    *ngIf="host.Hoststatus.activeChecksEnabled && host.Host.is_satellite_host === false">
+                                        *ngIf="host.Hoststatus.activeChecksEnabled && host.Host.is_satellite_host === false">
                                     {{ host.Hoststatus.nextCheck }}
                                 </span>
                                 <span
-                                    *ngIf="host.Hoststatus.activeChecksEnabled === false || host.Host.is_satellite_host === true">
+                                        *ngIf="host.Hoststatus.activeChecksEnabled === false || host.Host.is_satellite_host === true">
                                     n/a
                                 </span>
                             </td>
                             <td>
-                                <div class="btn-group btn-group-justified w-100" role="group">
+                                <div *oitcPermission="['services', 'index']" class="btn-group btn-group-justified w-100"
+                                     role="group">
                                     <a class="btn btn-success state-button-small"
                                        [queryParams]="{servicestate:0,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
                                        [routerLink]="['/', 'services', 'index']">
@@ -376,6 +377,21 @@
                                         {{ host.ServicestatusSummary.state.unknown }}
                                     </a>
                                 </div>
+                                <div *oitcPermission="['services', 'index'];negate:true"
+                                     class="btn-group btn-group-justified w-100" role="group">
+                                    <a class="btn btn-success state-button-small">
+                                        {{ host.ServicestatusSummary.state.ok }}
+                                    </a>
+                                    <a class="btn btn-warning state-button-small">
+                                        {{ host.ServicestatusSummary.state.warning }}
+                                    </a>
+                                    <a class="btn btn-danger state-button-small">
+                                        {{ host.ServicestatusSummary.state.critical }}
+                                    </a>
+                                    <a class="btn btn-secondary state-button-small">
+                                        {{ host.ServicestatusSummary.state.unknown }}
+                                    </a>
+                                </div>
                             </td>
                             <td class="text-center">
                                 <oitc-actions-button [permission]="'hosts.edit'"
@@ -389,11 +405,18 @@
                                     </oitc-actions-button-element>
 
                                     <oitc-actions-button-element [permission]="'hosts.deactivate'"
-                                                                 *ngIf="host.Host.allow_edit"
+                                                                 *ngIf="host.Host.allow_edit && !host.Host.disabled"
                                                                  (click)="toggleDisableModal(host.Host)">
                                         <fa-icon [icon]="['fas', 'plug']"></fa-icon>
                                         {{ t('Disable') }}
-                                        <!-- todo implement -->
+                                    </oitc-actions-button-element>
+
+                                    <oitc-actions-button-element
+                                            [permission]="'hosts.enable'"
+                                            *ngIf="host.Host.allow_edit && host.Host.disabled"
+                                            (click)="toggleEnableModal(host.Host)">
+                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                        {{ t('Enable') }}
                                     </oitc-actions-button-element>
 
                                     <oitc-actions-button-element [permission]="'changelogs.index'"
@@ -405,6 +428,7 @@
 
                                     <li cDropdownDivider></li>
                                     <oitc-actions-button-element [permission]="'hosts.copy'"
+                                                                 *ngIf="host.Host.allow_edit"
                                                                  [url]="'/hosts/copy/' + host.Host.id">
                                         <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                         {{ t('Copy') }}
@@ -412,6 +436,7 @@
 
                                     <li cDropdownDivider *ngIf="host.Host.allow_edit"></li>
                                     <oitc-actions-button-element (click)="toggleDeleteAllHostsModal(host.Host)"
+                                                                 *ngIf="host.Host.allow_edit"
                                                                  [permission]="'hosts.delete'">
                                         <span class="text-danger">
                                             <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -436,15 +461,15 @@
                                                     {{ t('Service') }}
                                                 </span>
                                                 <input
-                                                    [(ngModel)]="host.serviceParams['filter[servicename]']"
-                                                    aria-label="service name"
-                                                    cFormControl
-                                                    [placeholder]="'Filter by service name' | transloco"
-                                                    name="filter.Service.name"
-                                                    id="filter.Service.name"
-                                                    oitcDebounce
-                                                    (debouncedValue)="onServiceFilterChange($event, host)"
-                                                    type="text"
+                                                        [(ngModel)]="host.serviceParams['filter[servicename]']"
+                                                        aria-label="service name"
+                                                        cFormControl
+                                                        [placeholder]="'Filter by service name' | transloco"
+                                                        name="filter.Service.name"
+                                                        id="filter.Service.name"
+                                                        oitcDebounce
+                                                        (debouncedValue)="onServiceFilterChange($event, host)"
+                                                        type="text"
                                                 />
                                             </c-input-group>
                                         </td>
@@ -560,27 +585,27 @@
                                         <td class="text-center">
                                             <ng-container *ngIf="service.Servicestatus.problemHasBeenAcknowledged">
                                                 <fa-icon
-                                                    *ngIf="service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Normal"
-                                                    [icon]="['far', 'user']"
-                                                    [title]="'Acknowledgement' | transloco"
+                                                        *ngIf="service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Normal"
+                                                        [icon]="['far', 'user']"
+                                                        [title]="'Acknowledgement' | transloco"
                                                 ></fa-icon>
                                                 <fa-icon
-                                                    *ngIf="service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Sticky"
-                                                    [icon]="['fas', 'user']"
-                                                    [title]="'Sticky Acknowledgement' | transloco"
+                                                        *ngIf="service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Sticky"
+                                                        [icon]="['fas', 'user']"
+                                                        [title]="'Sticky Acknowledgement' | transloco"
                                                 ></fa-icon>
                                             </ng-container>
                                         </td>
                                         <td class="text-center">
                                             <fa-icon
-                                                *ngIf="service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0"
-                                                [icon]="['fas', 'power-off']"
+                                                    *ngIf="service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0"
+                                                    [icon]="['fas', 'power-off']"
                                             ></fa-icon>
                                         </td>
                                         <td class="text-center">
                                             <span
-                                                *ngIf="!service.Service.active_checks_enabled || service.Host.is_satellite_host"
-                                                [title]="'Passively transferred service' | transloco">
+                                                    *ngIf="!service.Service.active_checks_enabled || service.Host.is_satellite_host"
+                                                    [title]="'Passively transferred service' | transloco">
                                                 P
                                             </span>
                                         </td>
@@ -616,14 +641,14 @@
                                                     {{ t('Edit') }}
                                                 </oitc-actions-button-element>
                                                 <oitc-actions-button-element
-                                                    [permission]="'changelogs.index'"
-                                                    [url]="'/changelogs/entity/service/' + service.Service.id">
+                                                        [permission]="'changelogs.index'"
+                                                        [url]="'/changelogs/entity/service/' + service.Service.id">
                                                     <fa-icon [icon]="['fas', 'timeline']"></fa-icon>
                                                     {{ t('Changelog') }}
                                                 </oitc-actions-button-element>
                                                 <oitc-actions-button-element
-                                                    [permission]="'services.copy'"
-                                                    [url]="'/services/copy/' + service.Service.id">
+                                                        [permission]="'services.copy'"
+                                                        [url]="'/services/copy/' + service.Service.id">
                                                     <fa-icon [icon]="['fas', 'file']"></fa-icon>
                                                     {{ t('Copy') }}
                                                 </oitc-actions-button-element>
@@ -649,16 +674,16 @@
                                 </table>
 
                                 <oitc-no-records
-                                    *ngIf="host.services.length === 0"></oitc-no-records>
+                                        *ngIf="host.services.length === 0"></oitc-no-records>
 
                                 <c-container
-                                    [fluid]="true">
+                                        [fluid]="true">
                                     <c-row class="py-2">
                                         <c-col>
                                             <oitc-paginate-or-scroll
-                                                (paginatorChange)="onServicePaginatorChange($event, host)"
-                                                *ngIf="host.services"
-                                                [paginateOrScroll]="host.servicesRoot"></oitc-paginate-or-scroll>
+                                                    (paginatorChange)="onServicePaginatorChange($event, host)"
+                                                    *ngIf="host.services"
+                                                    [paginateOrScroll]="host.servicesRoot"></oitc-paginate-or-scroll>
                                         </c-col>
                                     </c-row>
                                 </c-container>
@@ -668,15 +693,15 @@
                     </tbody>
                 </table>
                 <oitc-no-records
-                    *ngIf="hostgroupExtended.Hosts.length === 0"></oitc-no-records>
+                        *ngIf="hostgroupExtended.Hosts.length === 0"></oitc-no-records>
                 <c-container
-                    [fluid]="true">
+                        [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll
-                                (paginatorChange)="onHostPaginatorChange($event)"
-                                *ngIf="hostgroups"
-                                [paginateOrScroll]="hostgroupExtendedRoot"></oitc-paginate-or-scroll>
+                                    (paginatorChange)="onHostPaginatorChange($event)"
+                                    *ngIf="hostgroups"
+                                    [paginateOrScroll]="hostgroupExtendedRoot"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>
@@ -685,8 +710,8 @@
             <div *ngIf="selectedTab == HostgroupExtendedTabs.SlaHostsStatus" class="mt-3">
                 @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
                     <oitc-sla-hostgroup-hosts-status-overview
-                        *oitcPermission="['slamodule', 'slas', 'slahostgrouphostsstatusoverview']"
-                        [hostgroupId]="this.hostgroupExtended.Hostgroup.id"></oitc-sla-hostgroup-hosts-status-overview>
+                            *oitcPermission="['slamodule', 'slas', 'slahostgrouphostsstatusoverview']"
+                            [hostgroupId]="this.hostgroupExtended.Hostgroup.id"></oitc-sla-hostgroup-hosts-status-overview>
                 }
             </div>
         </c-card-body>
@@ -703,6 +728,8 @@
 <oitc-host-acknowledge-modal (completed)="onResetChecktime($event)"
                              [items]="selectedItems"></oitc-host-acknowledge-modal>
 <oitc-disable-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-disable-modal>
+
+<oitc-enable-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-enable-modal>
 
 <oitc-delete-all-modal (completed)="onResetChecktime($event)" [items]="selectedItems"
                        [overrideDeleteService]="deleteService"></oitc-delete-all-modal>
