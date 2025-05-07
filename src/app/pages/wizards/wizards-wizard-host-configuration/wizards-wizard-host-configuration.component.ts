@@ -36,6 +36,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ValidateInputFromAngularPost, WizardElement, WizardsIndex } from '../wizards.interface';
 import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
 import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-wizards-wizard-host-configuration',
@@ -64,7 +65,8 @@ import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
         LabelLinkComponent,
         InputGroupComponent,
         InputGroupTextDirective,
-        TemplateDiffComponent
+        TemplateDiffComponent,
+        BackButtonDirective
     ],
     templateUrl: './wizards-wizard-host-configuration.component.html',
     styleUrl: './wizards-wizard-host-configuration.component.css',
