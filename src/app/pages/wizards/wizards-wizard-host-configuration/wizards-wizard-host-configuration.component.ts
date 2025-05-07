@@ -127,7 +127,7 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
         if (this.useExistingHost) {
             let post: ValidateInputFromAngularPost = {
                 Host: {
-                    id: this.hostPost.id
+                    id: this.hostId
                 }
             }
             this.Subscriptions.add(this.WizardsService.validateInput(post)
