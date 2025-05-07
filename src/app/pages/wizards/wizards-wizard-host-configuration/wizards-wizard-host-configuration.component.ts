@@ -13,6 +13,8 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     LocalStorageService
 } from '@coreui/angular';
 import { HostsService } from '../../hosts/hosts.service';
@@ -31,34 +33,41 @@ import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-lin
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { AnimateCssService } from '../../../services/animate-css.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { WizardElement, WizardsIndex } from '../wizards.interface';
+import { ValidateInputFromAngularPost, WizardElement, WizardsIndex } from '../wizards.interface';
+import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
+import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-wizards-wizard-host-configuration',
     imports: [
-    FaIconComponent,
-    TranslocoDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    CardBodyComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormsModule,
-    FormCheckLabelDirective,
-    RequiredIconComponent,
-    SelectComponent,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    NgIf,
-    AlertComponent,
-    FormControlDirective,
-    FormLabelDirective,
-    TranslocoPipe,
-    AsyncPipe,
-    LabelLinkComponent
-],
+        FaIconComponent,
+        TranslocoDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CardBodyComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormsModule,
+        FormCheckLabelDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        NgIf,
+        AlertComponent,
+        FormControlDirective,
+        FormLabelDirective,
+        TranslocoPipe,
+        AsyncPipe,
+        LabelLinkComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TemplateDiffComponent,
+        BackButtonDirective
+    ],
     templateUrl: './wizards-wizard-host-configuration.component.html',
     styleUrl: './wizards-wizard-host-configuration.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -80,9 +89,19 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     protected hosttemplates: SelectKeyValue[] = [];
     protected hostgroups: SelectKeyValue[] = [];
     protected satellites: SelectKeyValue[] = [];
-    protected hostId: number = 0;
+    protected hostId: number | null = null;
     protected parenthosts: SelectKeyValue[] = [];
-    protected hostPost: HostPost = {} as HostPost;
+    protected hostPost: HostPost = {
+        address: '',
+        container_id: 0,
+        description: '',
+        hosts_to_containers_sharing: {
+            _ids: [] as number []
+        },
+        hosttemplate_id: 0,
+        name: '',
+        satellite_id: 0
+    } as HostPost;
     protected errors: GenericValidationError | null = null;
     protected useExistingHost: boolean = false;
     protected useExistingHostReadonly: boolean = false;
@@ -95,6 +114,8 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     protected containers: SelectKeyValue[] = [];
     protected hosts: SelectKeyValue[] = [];
 
+    protected hosttemplate?: HosttemplatePost;
+
     public data = {
         createAnother: false,
         dnsLookUp: false,
@@ -106,8 +127,28 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
 
     public submit() {
         if (this.useExistingHost) {
-            let url: string = this.WizardElement.second_url.replaceAll(':hostId', this.hostId.toString());
-            this.router.navigate([url]);
+            let post: ValidateInputFromAngularPost = {
+                Host: {
+                    id: this.hostId
+                }
+            }
+            this.Subscriptions.add(this.WizardsService.validateInput(post)
+                .subscribe((result) => {
+                    if (result.success && this.hostId) {
+
+                        let url: string = this.WizardElement.second_url.replaceAll(':hostId', this.hostId.toString());
+                        this.router.navigate([url]);
+                        return;
+                    }
+
+                    // Error
+                    const errorResponse = result.data as GenericValidationError;
+                    this.notyService.genericError();
+                    if (result) {
+                        this.errors = errorResponse;
+                    }
+                    this.cdr.markForCheck();
+                }));
             return;
         }
         this.Subscriptions.add(this.HostsService.add(this.hostPost, false)
@@ -126,7 +167,6 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
                     this.notyService.genericSuccess(msg, title, url);
 
                     let nextStep: string = this.WizardElement.second_url.replaceAll(':hostId', result.data.id.toString());
-                    console.warn(nextStep);
                     this.router.navigate([nextStep]);
 
                     return;
@@ -160,13 +200,21 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     };
 
     protected onContainerChange(): void {
-        console.warn('containerIdChanged');
-
-        this.Subscriptions.add(this.HostsService.loadElements(this.hostPost.container_id)
+        this.Subscriptions.add(this.WizardsService.loadElements(this.hostPost.container_id)
             .subscribe((result) => {
                 this.hosttemplates = result.hosttemplates;
                 this.hostgroups = result.hostgroups;
                 this.satellites = result.satellites;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    protected onHosttemplateChange(): void {
+        this.Subscriptions.add(this.HostsService.loadHosttemplate(this.hostPost.hosttemplate_id)
+            .subscribe((result) => {
+                this.hosttemplate = result;
+                this.hostPost.description = this.hosttemplate.description;
                 this.cdr.markForCheck();
             })
         );
@@ -244,15 +292,11 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
         // /:typeId/:title/:hostId/:state/:selectedOs
         this.typeId = String(this.route.snapshot.paramMap.get('typeId'));
         this.title = String(this.route.snapshot.paramMap.get('title'));
-        this.hostId = Number(this.route.snapshot.paramMap.get('hostId'));
+        if (Number(this.route.snapshot.paramMap.get('hostId'))) {
+            this.hostId = Number(this.route.snapshot.paramMap.get('hostId'));
+        }
         this.state = String(this.route.snapshot.paramMap.get('state'));
         this.selectedOs = String(this.route.snapshot.paramMap.get('selectedOs'));
-
-        console.warn('typeId', this.typeId);
-        console.warn('title', this.title);
-        console.warn('hostId', this.hostId);
-        console.warn('state', this.state);
-        console.warn('selectedOs', this.selectedOs);
 
         this.loadWizardElement();
         this.loadContainers();
@@ -262,11 +306,8 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
         // Fetch containers on load.
         this.Subscriptions.add(this.WizardsService.getIndex().subscribe((wizards: WizardsIndex) => {
             this.WizardElement = wizards.wizards[this.typeId];
-            console.warn(wizards.wizards);
-            console.warn(this.typeId);
-            console.warn(this.WizardElement);
 
-            this.loadHosts(this.WizardElement.type_id);
+            this.loadHosts();
 
             if (this.WizardElement.type_id === "prometheus") {
                 this.useExistingHostReadonly = true;
@@ -291,7 +332,7 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     // ARROW FUNCTIONS
     protected loadHosts = (search: string = '') => {
         // Fetch containers on load.
-        this.Subscriptions.add(this.WizardsService.loadHostsByString(search).subscribe((hosts: SelectKeyValue[]) => {
+        this.Subscriptions.add(this.WizardsService.loadHostsByString(search, this.typeId).subscribe((hosts: SelectKeyValue[]) => {
             this.hosts = hosts;
             this.cdr.markForCheck();
         }));

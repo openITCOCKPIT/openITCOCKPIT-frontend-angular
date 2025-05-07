@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { HpServerHardwareWizardService } from './hpserverhardware-wizard.service';
-import { HpServerHardwareWizardGet, HpServerHardwareWizardPost } from './hpserverhardware-wizard.interface';
+import { HpServerHardwareWizardPost } from './hpserverhardware-wizard.interface';
 import {
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    FormControlDirective, FormLabelDirective
+    FormControlDirective,
+    FormLabelDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -23,6 +23,7 @@ import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-hpserverhardware',
@@ -44,7 +45,8 @@ import { RouterLink } from '@angular/router';
         TranslocoPipe,
         WizardsDynamicfieldsComponent,
         FormsModule,
-        RouterLink
+        RouterLink,
+        BackButtonDirective
     ],
     templateUrl: './hpserverhardware.component.html',
     styleUrl: './hpserverhardware.component.css',

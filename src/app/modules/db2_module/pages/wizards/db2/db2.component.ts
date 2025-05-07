@@ -1,13 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import {
-    AccordionButtonDirective, AccordionComponent, AccordionItemComponent,
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     FormControlDirective,
-    FormLabelDirective, TemplateIdDirective
+    FormLabelDirective,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -21,6 +24,7 @@ import {
 import { RouterLink } from '@angular/router';
 import { Db2WizardGet, Db2WizardPost } from './db2-wizard.interface';
 import { Db2WizardService } from './db2-wizard.service';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-db2',
@@ -43,7 +47,8 @@ import { Db2WizardService } from './db2-wizard.service';
         AccordionButtonDirective,
         AccordionComponent,
         AccordionItemComponent,
-        TemplateIdDirective
+        TemplateIdDirective,
+        BackButtonDirective
     ],
     templateUrl: './db2.component.html',
     styleUrl: './db2.component.css',

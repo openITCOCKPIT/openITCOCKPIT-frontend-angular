@@ -3,12 +3,12 @@ import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-a
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormControlDirective,
-  FormLabelDirective
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormLabelDirective
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
@@ -20,28 +20,28 @@ import { FormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { VmwareSnapshotWizardGet, VmwareSnapshotWizardPost } from './vmwaresnapshot-wizard.interface';
 import { VmwaresnapshotWizardService } from './vmwaresnapshot-wizard.service';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { MysqlWizardGet } from '../../../../../pages/wizards/mysqlserver/mysqlserver-wizard.interface';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-vmwaresnapshot',
     imports: [
-    RouterLink,
-    FaIconComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    TranslocoPipe,
-    WizardsDynamicfieldsComponent,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    RequiredIconComponent,
-    TranslocoDirective
-],
+        RouterLink,
+        FaIconComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        TranslocoPipe,
+        WizardsDynamicfieldsComponent,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        RequiredIconComponent,
+        TranslocoDirective,
+        BackButtonDirective
+    ],
     templateUrl: './vmwaresnapshot.component.html',
     styleUrl: './vmwaresnapshot.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

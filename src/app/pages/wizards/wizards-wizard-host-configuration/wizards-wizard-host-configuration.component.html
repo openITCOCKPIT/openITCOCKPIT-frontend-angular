@@ -42,7 +42,9 @@
                     <div class="btn-group btn-group-xs w-100 h-100">
                         <button type="button" class="btn btn-primary"
                                 [title]="'Back' | transloco"
-                                style="border-radius: 0;">
+                                style="border-radius: 0;"
+                                [fallbackUrl]="['wizards', 'index']"
+                                oitcBackButton>
                             <i class="fa fa-arrow-left"></i>
                         </button>
 
@@ -96,9 +98,9 @@
                                     optionLabel="value"
                                     [searchCallback]="loadHosts"
                                     [options]="hosts"
-                                    oitcFormError [errors]="errors" errorField="host_id">
+                                    oitcFormError [errors]="errors" errorField="Host">
                             </oitc-select>
-                            <oitc-form-feedback [errors]="errors" errorField="host_id"></oitc-form-feedback>
+                            <oitc-form-feedback [errors]="errors" errorField="Host"></oitc-form-feedback>
                         </div>
                     </div>
 
@@ -136,6 +138,7 @@
                                     [(ngModel)]="hostPost.hosttemplate_id"
                                     optionValue="key"
                                     optionLabel="value"
+                                    (onChange)="onHosttemplateChange()"
                                     [options]="hosttemplates"
                                     oitcFormError [errors]="errors" errorField="hosttemplate_id">
                             </oitc-select>
@@ -200,6 +203,25 @@
                         <div class="help-block text-info" *ngIf="data.dnsAddressNotFound">
                             <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
                             {{ t('Could not resolve address.') }}
+                        </div>
+
+
+                        <div class="mb-3" *ngIf="hostPost.hosttemplate_id">
+                            <label cLabel for="description">
+                                {{ t('Description') }}
+                            </label>
+                            <c-input-group>
+                                <input cFormControl id="description" type="text"
+                                       name="description"
+                                       oitcFormError [errors]="errors" errorField="description"
+                                       [(ngModel)]="hostPost.description">
+                                <oitc-template-diff cInputGroupText
+                                                    *ngIf="hosttemplate"
+                                                    [templateValue]="hosttemplate.description"
+                                                    [(value)]="hostPost.description"
+                                                    class="bg-transparent p-0"></oitc-template-diff>
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                         </div>
 
                         @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {

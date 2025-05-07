@@ -23,6 +23,7 @@ import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-ups',
@@ -44,7 +45,8 @@ import { RouterLink } from '@angular/router';
         TranslocoPipe,
         WizardsDynamicfieldsComponent,
         RouterLink,
-        FormsModule
+        FormsModule,
+        BackButtonDirective
     ],
     templateUrl: './ups.component.html',
     styleUrl: './ups.component.css',

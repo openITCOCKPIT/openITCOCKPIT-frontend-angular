@@ -39,6 +39,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { Service } from '../../../../../pages/wizards/wizards.interface';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-networkbasic',
@@ -51,11 +52,8 @@ import { Service } from '../../../../../pages/wizards/wizards.interface';
         TranslocoPipe,
         RequiredIconComponent,
         SelectComponent,
-        FormFeedbackComponent,
-        FormErrorDirective,
         FormLabelDirective,
         FormControlDirective,
-        FormsModule,
         NgIf,
         WizardsDynamicfieldsComponent,
         TranslocoDirective,
@@ -69,7 +67,11 @@ import { Service } from '../../../../../pages/wizards/wizards.interface';
         InputGroupTextDirective,
         NgForOf,
         NgSelectComponent,
-        RowComponent
+        RowComponent,
+        BackButtonDirective,
+        FormFeedbackComponent,
+        FormErrorDirective,
+        FormsModule
     ],
     templateUrl: './networkbasic.component.html',
     styleUrl: './networkbasic.component.css',
@@ -216,7 +218,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
                     servicetemplatecommandargumentvalues[0].value = data.interfaces[key].value.name;
                     this.post.interfaces.push(
                         {
-                            createService: true,
+                            createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, data.interfaces[key].value.name),
                             description: String(data.interfaces[key].value.number),
                             host_id: this.post.host_id,
                             name: String(data.interfaces[key].value.name),
