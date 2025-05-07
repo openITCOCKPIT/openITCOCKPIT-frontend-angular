@@ -87,7 +87,7 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     protected hosttemplates: SelectKeyValue[] = [];
     protected hostgroups: SelectKeyValue[] = [];
     protected satellites: SelectKeyValue[] = [];
-    protected hostId: number = 0;
+    protected hostId: number | null = null;
     protected parenthosts: SelectKeyValue[] = [];
     protected hostPost: HostPost = {
         address: '',
@@ -132,7 +132,7 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
             }
             this.Subscriptions.add(this.WizardsService.validateInput(post)
                 .subscribe((result) => {
-                    if (result.success) {
+                    if (result.success && this.hostId) {
 
                         let url: string = this.WizardElement.second_url.replaceAll(':hostId', this.hostId.toString());
                         this.router.navigate([url]);
@@ -165,7 +165,6 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
                     this.notyService.genericSuccess(msg, title, url);
 
                     let nextStep: string = this.WizardElement.second_url.replaceAll(':hostId', result.data.id.toString());
-                    console.warn(nextStep);
                     this.router.navigate([nextStep]);
 
                     return;
@@ -210,8 +209,6 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     }
 
     protected onHosttemplateChange(): void {
-        console.warn('hosttemplate Change');
-
         this.Subscriptions.add(this.HostsService.loadHosttemplate(this.hostPost.hosttemplate_id)
             .subscribe((result) => {
                 this.hosttemplate = result;
@@ -293,15 +290,11 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
         // /:typeId/:title/:hostId/:state/:selectedOs
         this.typeId = String(this.route.snapshot.paramMap.get('typeId'));
         this.title = String(this.route.snapshot.paramMap.get('title'));
-        this.hostId = Number(this.route.snapshot.paramMap.get('hostId'));
+        if (Number(this.route.snapshot.paramMap.get('hostId'))) {
+            this.hostId = Number(this.route.snapshot.paramMap.get('hostId'));
+        }
         this.state = String(this.route.snapshot.paramMap.get('state'));
         this.selectedOs = String(this.route.snapshot.paramMap.get('selectedOs'));
-
-        console.warn('typeId', this.typeId);
-        console.warn('title', this.title);
-        console.warn('hostId', this.hostId);
-        console.warn('state', this.state);
-        console.warn('selectedOs', this.selectedOs);
 
         this.loadWizardElement();
         this.loadContainers();
@@ -311,9 +304,6 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
         // Fetch containers on load.
         this.Subscriptions.add(this.WizardsService.getIndex().subscribe((wizards: WizardsIndex) => {
             this.WizardElement = wizards.wizards[this.typeId];
-            console.warn(wizards.wizards);
-            console.warn(this.typeId);
-            console.warn(this.WizardElement);
 
             this.loadHosts();
 
