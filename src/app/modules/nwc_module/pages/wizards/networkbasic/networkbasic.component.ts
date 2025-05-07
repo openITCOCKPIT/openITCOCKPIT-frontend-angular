@@ -216,7 +216,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
                     servicetemplatecommandargumentvalues[0].value = data.interfaces[key].value.name;
                     this.post.interfaces.push(
                         {
-                            createService: true,
+                            createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, data.interfaces[key].value.name),
                             description: String(data.interfaces[key].value.number),
                             host_id: this.post.host_id,
                             name: String(data.interfaces[key].value.name),

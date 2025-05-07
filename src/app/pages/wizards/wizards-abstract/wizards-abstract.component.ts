@@ -43,6 +43,7 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
 
     // These fields are implemented in the child classes
     protected WizardService: WizardsService = {} as WizardsService;
+    protected WizardGet: WizardGet = {} as WizardGet;
     protected post: WizardPost = {
         host_id: 0
     } as WizardPost;
@@ -56,6 +57,7 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
         // Fetch wizard settings and service templates. This method must be implemented in the child class
         this.subscriptions.add(this.WizardService.fetch(this.post.host_id)
             .subscribe((result: WizardGet) => {
+                this.WizardGet = result;
                 // Create services from service the templates.
                 for (let key in result.servicetemplates) {
                     this.post.services.push(
@@ -78,7 +80,9 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
         this.subscriptions.unsubscribe();
     }
 
-    private isServiceAlreadyPresent(objectOfCurrentServices: { [key: string]: string }, serviceName: string): boolean {
+    protected isServiceAlreadyPresent(objectOfCurrentServices: {
+        [key: string]: string
+    }, serviceName: string): boolean {
         return Object.values(objectOfCurrentServices).includes(serviceName);
     }
 
