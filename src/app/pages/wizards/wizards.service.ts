@@ -4,6 +4,7 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
     LoadHostsByStringRoot,
+    ValidateInputFromAngularPost,
     WizardAssignments,
     WizardGet,
     WizardGetAssignments,
@@ -29,9 +30,30 @@ export abstract class WizardsService {
         );
     }
 
-    public loadHostsByString(typeId: string = ''): Observable<SelectKeyValue[]> {
+    public validateInput(post: ValidateInputFromAngularPost): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/wizards/validateInputFromAngular.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: null
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public loadHostsByString(name: string, typeId: string = ''): Observable<SelectKeyValue[]> {
         return this.http.get<LoadHostsByStringRoot>(`${this.proxyPath}/wizards/loadHostsByString.json?angular=true`, {
             params: {
+                'filter[Hosts.name]': name,
                 typeId: typeId
             }
         }).pipe(

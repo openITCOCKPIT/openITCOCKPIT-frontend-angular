@@ -31,34 +31,34 @@ import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-lin
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { AnimateCssService } from '../../../services/animate-css.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { WizardElement, WizardsIndex } from '../wizards.interface';
+import { ValidateInputFromAngularPost, WizardElement, WizardsIndex } from '../wizards.interface';
 
 @Component({
     selector: 'oitc-wizards-wizard-host-configuration',
     imports: [
-    FaIconComponent,
-    TranslocoDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    CardBodyComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormsModule,
-    FormCheckLabelDirective,
-    RequiredIconComponent,
-    SelectComponent,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    NgIf,
-    AlertComponent,
-    FormControlDirective,
-    FormLabelDirective,
-    TranslocoPipe,
-    AsyncPipe,
-    LabelLinkComponent
-],
+        FaIconComponent,
+        TranslocoDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CardBodyComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormsModule,
+        FormCheckLabelDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        NgIf,
+        AlertComponent,
+        FormControlDirective,
+        FormLabelDirective,
+        TranslocoPipe,
+        AsyncPipe,
+        LabelLinkComponent
+    ],
     templateUrl: './wizards-wizard-host-configuration.component.html',
     styleUrl: './wizards-wizard-host-configuration.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -106,8 +106,28 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
 
     public submit() {
         if (this.useExistingHost) {
-            let url: string = this.WizardElement.second_url.replaceAll(':hostId', this.hostId.toString());
-            this.router.navigate([url]);
+            let post: ValidateInputFromAngularPost = {
+                Host: {
+                    id: this.hostPost.id
+                }
+            }
+            this.Subscriptions.add(this.WizardsService.validateInput(post)
+                .subscribe((result) => {
+                    if (result.success) {
+
+                        let url: string = this.WizardElement.second_url.replaceAll(':hostId', this.hostId.toString());
+                        this.router.navigate([url]);
+                        return;
+                    }
+
+                    // Error
+                    const errorResponse = result.data as GenericValidationError;
+                    this.notyService.genericError();
+                    if (result) {
+                        this.errors = errorResponse;
+                    }
+                    this.cdr.markForCheck();
+                }));
             return;
         }
         this.Subscriptions.add(this.HostsService.add(this.hostPost, false)
@@ -266,7 +286,7 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
             console.warn(this.typeId);
             console.warn(this.WizardElement);
 
-            this.loadHosts(this.WizardElement.type_id);
+            this.loadHosts();
 
             if (this.WizardElement.type_id === "prometheus") {
                 this.useExistingHostReadonly = true;
@@ -291,7 +311,7 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     // ARROW FUNCTIONS
     protected loadHosts = (search: string = '') => {
         // Fetch containers on load.
-        this.Subscriptions.add(this.WizardsService.loadHostsByString(search).subscribe((hosts: SelectKeyValue[]) => {
+        this.Subscriptions.add(this.WizardsService.loadHostsByString(search, this.typeId).subscribe((hosts: SelectKeyValue[]) => {
             this.hosts = hosts;
             this.cdr.markForCheck();
         }));

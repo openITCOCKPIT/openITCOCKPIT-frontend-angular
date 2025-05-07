@@ -20,6 +20,14 @@ export interface WizardElement {
     selected_os: undefined | string
 }
 
+// Host Select Validation
+export interface ValidateInputFromAngularPost {
+    Host: {
+        id: any
+    }
+}
+
+
 //
 export interface LoadHostsByStringRoot {
     hosts: SelectKeyValue[]
