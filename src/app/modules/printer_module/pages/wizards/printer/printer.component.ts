@@ -3,19 +3,18 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormControlDirective,
-  FormLabelDirective
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormLabelDirective
 } from '@coreui/angular';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { PrinterWizardService } from './printer-wizard.service';
-import { PrinterWizardGet, PrinterWizardPost } from './printer-wizard.interface';
+import { PrinterWizardPost } from './printer-wizard.interface';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -24,28 +23,30 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { NgIf } from '@angular/common';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-printer',
     imports: [
-    FaIconComponent,
-    TranslocoDirective,
-    RouterLink,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    TranslocoPipe,
-    WizardsDynamicfieldsComponent,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    RequiredIconComponent,
-    SelectComponent,
-    NgIf
-],
+        FaIconComponent,
+        TranslocoDirective,
+        RouterLink,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        TranslocoPipe,
+        WizardsDynamicfieldsComponent,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        RequiredIconComponent,
+        SelectComponent,
+        NgIf,
+        BackButtonDirective
+    ],
     templateUrl: './printer.component.html',
     styleUrl: './printer.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

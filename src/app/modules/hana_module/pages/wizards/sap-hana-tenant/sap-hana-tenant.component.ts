@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { SapHanaTenantWizardService } from './sap-hana-tenant-wizard.service';
 import { SapHanaTenantWizardGet, SapHanaTenantWizardPost } from './sap-hana-tenant-wizard.interface';
 import { RouterLink } from '@angular/router';
@@ -21,7 +20,7 @@ import { FormsModule } from '@angular/forms';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
-import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mssql-wizard.interface';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-sap-hana-tenant',
@@ -40,7 +39,8 @@ import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mss
         FormFeedbackComponent,
         FormsModule,
         WizardsDynamicfieldsComponent,
-        TranslocoDirective
+        TranslocoDirective,
+        BackButtonDirective
     ],
     templateUrl: './sap-hana-tenant.component.html',
     styleUrl: './sap-hana-tenant.component.css',

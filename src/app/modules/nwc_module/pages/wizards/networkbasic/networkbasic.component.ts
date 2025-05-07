@@ -39,6 +39,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { Service } from '../../../../../pages/wizards/wizards.interface';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-networkbasic',
@@ -69,7 +70,8 @@ import { Service } from '../../../../../pages/wizards/wizards.interface';
         InputGroupTextDirective,
         NgForOf,
         NgSelectComponent,
-        RowComponent
+        RowComponent,
+        BackButtonDirective
     ],
     templateUrl: './networkbasic.component.html',
     styleUrl: './networkbasic.component.css',

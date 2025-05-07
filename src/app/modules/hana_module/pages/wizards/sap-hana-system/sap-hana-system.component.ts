@@ -17,11 +17,10 @@ import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { SapHanaSystemWizardService } from './sap-hana-system-wizard.service';
 import { SapHanaSystemWizardGet, SapHanaSystemWizardPost } from './sap-hana-system-wizard.interface';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mssql-wizard.interface';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-sap-hana-system',
@@ -40,7 +39,8 @@ import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mss
         WizardsDynamicfieldsComponent,
         RequiredIconComponent,
         FormLabelDirective,
-        TranslocoPipe
+        TranslocoPipe,
+        BackButtonDirective
     ],
     templateUrl: './sap-hana-system.component.html',
     styleUrl: './sap-hana-system.component.css',

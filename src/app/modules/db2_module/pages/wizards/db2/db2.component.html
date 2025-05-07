@@ -46,7 +46,9 @@
                     <div class="btn-group btn-group-xs w-100 h-100">
                         <button type="button" class="btn btn-primary"
                                 [title]="'Back' | transloco"
-                                style="border-radius: 0;">
+                                style="border-radius: 0;"
+                                [fallbackUrl]="['wizards', 'index']"
+                                oitcBackButton>
                             <i class="fa fa-arrow-left"></i>
                         </button>
 
@@ -82,13 +84,14 @@
                         </ng-template>
                         <ng-template cTemplateId="accordionBodyTemplate">
                             <div class="accordion-body">
-                                {{t('Please replace XXXXX with your version.')}}
+                                {{ t('Please replace XXXXX with your version.') }}
                                 <ol>
                                     <li>
                                         <div>
                                             {{ t('Please download a recent version of the following packages from here') }}
                                             (
-                                            <a href="https://www.ibm.com/support/pages/download-initial-version-115-clients-and-drivers" target="_blank">
+                                            <a href="https://www.ibm.com/support/pages/download-initial-version-115-clients-and-drivers"
+                                               target="_blank">
                                                 https://www.ibm.com/support/pages/download-initial-version-115-clients-and-drivers
                                             </a>
                                             )
@@ -133,18 +136,18 @@ cpan -i DBD::DB2</pre>
                                     <li>
                                         <div>
                                             {{ t('Create User within Database') }}
-                                            <br />
-                                            {{ t('To ensure, that openITCOCKPIT is able to query information from the database, you need to add a operationsystem user called "nagios" (with same group name).')}}
-                                            <br />
-                                            {{ t('Maybe there is already a user {0}, wich is beeing used to monitore the operatingsystem.', {"0": '"nagios"'})}}
-                                            <br />
-                                            {{ t('Afterwords you need to enable the monitoring switches:')}}
+                                            <br/>
+                                            {{ t('To ensure, that openITCOCKPIT is able to query information from the database, you need to add a operationsystem user called "nagios" (with same group name).') }}
+                                            <br/>
+                                            {{ t('Maybe there is already a user {0}, wich is beeing used to monitore the operatingsystem.', {"0": '"nagios"'}) }}
+                                            <br/>
+                                            {{ t('Afterwords you need to enable the monitoring switches:') }}
                                         </div>
                                         <pre>update dbm cfg using dft_mon_bufpool on
 update dbm cfg using dft_mon_lock on
 update dbm cfg using dft_mon_timestamp on</pre>
                                         <div>
-                                            {{ t('The nagios user (resp. the nagios group) is going to get the needed privileges and after a restart of the database, everything is prepared.')}}
+                                            {{ t('The nagios user (resp. the nagios group) is going to get the needed privileges and after a restart of the database, everything is prepared.') }}
                                         </div>
                                         <pre>db2 update dbm cfg using sysmon_group nagios
 db2 grant select,update on table SYSTOOLS.STMG_DBSIZE_INFO to nagios

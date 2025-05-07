@@ -1,15 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { OracleWizardService } from './oracle-wizard.service';
 import { OracleWizardGet, OracleWizardPost } from './oracle-wizard.interface';
 import {
-    AccordionButtonDirective, AccordionComponent, AccordionItemComponent,
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    FormControlDirective, FormLabelDirective, TemplateIdDirective
+    FormControlDirective,
+    FormLabelDirective,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -21,7 +24,7 @@ import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
-import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mssql-wizard.interface';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-oracle',
@@ -45,7 +48,8 @@ import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mss
         AccordionButtonDirective,
         AccordionComponent,
         AccordionItemComponent,
-        TemplateIdDirective
+        TemplateIdDirective,
+        BackButtonDirective
     ],
     templateUrl: './oracle.component.html',
     styleUrl: './oracle.component.css',

@@ -3,13 +3,16 @@ import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-a
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    AccordionButtonDirective, AccordionComponent, AccordionItemComponent,
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     FormControlDirective,
-    FormLabelDirective, TemplateIdDirective
+    FormLabelDirective,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
@@ -21,6 +24,7 @@ import { FormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { VmwarehorizonWizardService } from './vmwarehorizon-wizard.service';
 import { VmwarehorizonWizardGet, VmwarehorizonWizardPost } from './vmwarehorizon-wizard.interface';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-vmwarehorizon',
@@ -43,7 +47,8 @@ import { VmwarehorizonWizardGet, VmwarehorizonWizardPost } from './vmwarehorizon
         AccordionButtonDirective,
         AccordionComponent,
         AccordionItemComponent,
-        TemplateIdDirective
+        TemplateIdDirective,
+        BackButtonDirective
     ],
     templateUrl: './vmwarehorizon.component.html',
     styleUrl: './vmwarehorizon.component.css',
