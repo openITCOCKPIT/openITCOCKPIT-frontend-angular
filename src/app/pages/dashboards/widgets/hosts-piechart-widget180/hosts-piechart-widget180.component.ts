@@ -7,6 +7,7 @@ import { StatuscountResponse } from '../../../browsers/browsers.interface';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { RouterLink } from '@angular/router';
+import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
 
 @Component({
     selector: 'oitc-hosts-piechart-widget180',
@@ -16,7 +17,8 @@ import { RouterLink } from '@angular/router';
         HostPieChartComponent,
         NgIf,
         TranslocoDirective,
-        RouterLink
+        RouterLink,
+        BlockLoaderComponent
     ],
     templateUrl: './hosts-piechart-widget180.component.html',
     styleUrl: './hosts-piechart-widget180.component.css',

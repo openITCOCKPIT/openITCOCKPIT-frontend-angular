@@ -5,11 +5,12 @@ import { forkJoin, Observable } from 'rxjs';
 import { WelcomeWidgetResponse } from '../widgets.interface';
 import { StatuscountResponse } from '../../../browsers/browsers.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { SystemnameService } from '../../../../services/systemname.service';
 import { Avatar } from 'primeng/avatar';
 import initials from 'initials';
 import { LocalNumberPipe } from '../../../../pipes/local-number.pipe';
+import { WordLoaderComponent } from '../../../../layouts/primeng/loading/word-loader/word-loader.component';
 
 @Component({
     selector: 'oitc-welcome-widget',
@@ -17,7 +18,9 @@ import { LocalNumberPipe } from '../../../../pipes/local-number.pipe';
         TranslocoDirective,
         AsyncPipe,
         Avatar,
-        LocalNumberPipe
+        LocalNumberPipe,
+        NgIf,
+        WordLoaderComponent
     ],
     templateUrl: './welcome-widget.component.html',
     styleUrl: './welcome-widget.component.css',
