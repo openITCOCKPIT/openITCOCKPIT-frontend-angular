@@ -1,0 +1,129 @@
+<ng-container *transloco="let t">
+    <div class="d-flex h-100 flex-column" *ngIf="widget">
+        <oitc-block-loader *ngIf="!cronjobStatus"></oitc-block-loader>
+        <div *ngIf="cronjobStatus">
+            <c-row>
+                <c-col class="flex-1">
+                    <h5 *ngIf="cronjobStatus.total === 0" class="fw-normal">
+                        <fa-icon [icon]="['fas', 'circle-info']" class="text-info"></fa-icon>
+                        {{ t('No resource groups defined!') }}
+                    </h5>
+                    <h5 *ngIf="cronjobStatus.total === cronjobStatus.success"
+                        class="fw-normal">
+                        {{ t('Cronjobs are successfully finished') }}
+                        <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
+                        <span class="pl-3 float-end">
+                            ⏰ {{ t('Deadline') }}
+                            <time>{{ deadline }}</time>
+                        </span>
+                        <div *ngIf="deadlineExceeded" class="text-info font-xs py-2">
+                            <fa-icon [icon]="['fas', 'circle-info']" class="text-info"></fa-icon>
+                            {{ t('Deadline has been exceeded!!') }}
+                        </div>
+                    </h5>
+                    @if (cronjobStatus.failed > 0) {
+                        <h5 class="m-0 fw-normal">
+                            {{ t('Cronjobs are not successfully finished') }}
+                            <span class="pl-3 float-end">
+                                ⏰ {{ t('Deadline') }}
+                                <time>{{ deadline }}</time>
+                            </span>
+                            <div *ngIf="deadlineExceeded" class="text-info font-xs py-2">
+                                <fa-icon [icon]="['fas', 'circle-info']" class="text-info"></fa-icon>
+                                {{ t('Deadline has been exceeded!!') }}
+                            </div>
+                        </h5>
+                    }
+                </c-col>
+            </c-row>
+            <c-row>
+                <c-col>
+                    <div>
+                        <div>
+                            <c-row>
+                                <c-col [xs]="12" [md]="6" [lg]="6">
+                                    <c-row class="h-100 py-2 pe-3 fs-5">
+                                        <c-col [xs]="12" [md]="6" [lg]="6">
+                                            {{ t('Success') }}
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="6" [lg]="6" class="text-success text-start"
+                                               [ngClass]="{'opacity-50': cronjobStatus.success === 0}">
+                                            @if (cronjobStatus.success > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
+                                                <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
+                                                   class="text-success"
+                                                   [queryParams]="{id: cronjobStatus.successIds}">
+                                                    {{ cronjobStatus.success }}
+                                                </a>
+                                            } @else {
+                                                {{ cronjobStatus.success }}
+                                            }
+
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="6" [lg]="6">
+                                            {{ t('Failed') }}
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="6" [lg]="6" class="text-danger text-start"
+                                               [ngClass]="{'opacity-50': cronjobStatus.failed === 0}">
+                                            @if (cronjobStatus.failed > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
+                                                <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
+                                                   class="text-danger"
+                                                   [queryParams]="{id: cronjobStatus.failedIds}">
+                                                    {{ cronjobStatus.failed }}
+                                                </a>
+                                            } @else {
+                                                {{ cronjobStatus.failed }}
+                                            }
+                                        </c-col>
+                                        <hr class="border-dashed m-0">
+                                        <c-col [xs]="12" [md]="12" [lg]="12" class="text-end">
+                                            {{ t('Total') }}
+                                            @if (cronjobStatus.total > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
+                                                <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
+                                                   class="text-primary"
+                                                   [queryParams]="{id: cronjobStatus.totalIds}">
+                                                    {{ cronjobStatus.total }}
+                                                </a>
+                                            } @else {
+                                                {{ cronjobStatus.total }}
+                                            }
+                                        </c-col>
+                                    </c-row>
+                                </c-col>
+                                <c-col [xs]="12" [md]="6" [lg]="6"
+                                       class="p-2 rounded overflow-hidden position-relative text-white mb-g text-center"
+                                       [ngClass]="{'bg-primary': cronjobStatus.total=== 0, 'bg-success':cronjobStatus.total === cronjobStatus.success, 'bg-danger': cronjobStatus.failed > 0}">
+                                    <h6 class="display-2 d-block l-h-n m-0 fw-500">
+                                        @if (cronjobStatus.success > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
+                                            <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
+                                               class="text-white"
+                                               [queryParams]="{id: cronjobStatus.successIds}">
+                                                {{ cronjobStatus.success }}
+                                            </a>
+                                        } @else {
+                                            {{ cronjobStatus.success }}
+                                        } /
+                                        @if (cronjobStatus.total > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
+                                            <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
+                                               class="text-white"
+                                               [queryParams]="{id: cronjobStatus.totalIds}">
+                                                {{ cronjobStatus.total }}
+                                            </a>
+                                        } @else {
+                                            {{ cronjobStatus.total }}
+                                        }
+                                    </h6>
+                                    <fa-icon [icon]="['fas', 'exclamation']" *ngIf="cronjobStatus.failed > 0"
+                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'check']" *ngIf="cronjobStatus.failed === 0"
+                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+
+                                </c-col>
+                            </c-row>
+                        </div>
+                    </div>
+                </c-col>
+            </c-row>
+
+        </div>
+    </div>
+</ng-container>
