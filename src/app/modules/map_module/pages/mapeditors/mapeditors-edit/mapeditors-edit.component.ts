@@ -237,8 +237,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             enabled: true,
             size: 15
         },
-        synchronizeGridAndHelplinesSize: true
-
+        synchronizeGridAndHelplinesSize: true,
+        maintainBackgroundAspectRatio: false
     };
 
     public addLink: boolean = false;
@@ -266,6 +266,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     ];
     public requiredIcons: string[] = [];
     public gadgetPreviews: GadgetPreviews[] = [];
+    // this var is to destroy and recreate the background item after resizing
+    public backgroundItemRerendered: boolean = true;
 
     constructor(private sanitizer: DomSanitizer) {
         this.deleteItem = this.deleteItem.bind(this);
@@ -552,6 +554,15 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         if (this.Mapeditor.synchronizeGridAndHelplinesSize && (this.Mapeditor.helplines.size != this.Mapeditor.grid.size)) {
             this.changeGridSize(this.Mapeditor.helplines.size);
         }
+    }
+
+    public onMaintainBackgroundAspectRatio() {
+        if (this.init) {
+            return;
+        }
+
+        this.onMapeditorChange();
+        this.cdr.markForCheck();
     }
 
     public onGridEnabledChange() {
@@ -871,6 +882,11 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 this.map.Map.background_size_x = newWidth;
                 this.map.Map.background_size_y = newHeight;
                 this.map.Map = {...this.map.Map};
+                this.backgroundItemRerendered = false;
+                setTimeout(() => {
+                    this.backgroundItemRerendered = true;
+                    this.cdr.markForCheck();
+                }, 100);
                 this.saveBackground('resizestop');
                 this.cdr.markForCheck();
                 break;

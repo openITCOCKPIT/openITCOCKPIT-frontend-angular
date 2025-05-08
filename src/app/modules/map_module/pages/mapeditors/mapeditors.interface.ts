@@ -146,6 +146,7 @@ export interface Mapeditor {
     synchronizeGridAndHelplinesSize: boolean
     grid: Grid
     helplines: Helplines
+    maintainBackgroundAspectRatio: boolean
 }
 
 export interface MapeditorSettingsPost {

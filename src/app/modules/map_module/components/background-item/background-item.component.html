@@ -1,5 +1,5 @@
 @if (!isViewMode()) {
-    <div cdkDrag #container oitcResizable [aspectRatio]="false" class="map-element-container"
+    <div cdkDrag #container oitcResizable [aspectRatio]="aspectRatioEnabled()" class="map-element-container"
          (cdkDragEnded)="onDragEnd($event)"
          (cdkDragMoved)="onDragMove($event)"
          (resizeStop)="onResizeStop($event, type)"
