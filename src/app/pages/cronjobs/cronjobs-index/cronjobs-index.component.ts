@@ -46,6 +46,8 @@ import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { CronjobPriorities } from '../cronjob.enum';
+import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
     selector: 'oitc-cronjobs-index',
@@ -85,7 +87,8 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         NgSelectModule,
         ModalToggleDirective,
         NgOptionHighlightModule,
-        TableLoaderComponent
+        TableLoaderComponent,
+        BadgeOutlineComponent
     ],
     templateUrl: './cronjobs-index.component.html',
     styleUrl: './cronjobs-index.component.css',
@@ -98,6 +101,11 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
 
     public plugins: string[] = [];
     public tasks: string[] = [];
+    public priorities: string[] = [
+        CronjobPriorities.Low,
+        CronjobPriorities.High
+    ];
+
 
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
@@ -118,7 +126,8 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
             enabled: 0,
             interval: 0,
             plugin: '',
-            task: ''
+            task: '',
+            priority: CronjobPriorities.Low
         };
         return c;
     }
@@ -197,8 +206,8 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
             enabled: cronjob.enabled ? 1 : 0,
             interval: cronjob.interval,
             plugin: cronjob.plugin,
-            task: cronjob.task
-
+            task: cronjob.task,
+            priority: cronjob.priority
         };
         this.errors = null;
         this.tasks = [];
@@ -278,4 +287,5 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
         );
     }
 
+    protected readonly CronjobPriorities = CronjobPriorities;
 }
