@@ -192,7 +192,9 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
                 this.hosts = result.hosts;
 
                 // Preselect hosts if they were passed in the URL.
-                this.post.hosts._ids = this.preselectedHostIds;
+                if (this.preselectedHostIds.length) {
+                    this.post.hosts._ids = this.preselectedHostIds;
+                }
                 this.cdr.markForCheck();
             }))
     }
