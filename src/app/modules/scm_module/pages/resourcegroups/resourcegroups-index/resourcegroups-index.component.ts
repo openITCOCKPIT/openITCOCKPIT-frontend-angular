@@ -27,7 +27,8 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
+    TextColorDirective
 } from '@coreui/angular';
 import { Subscription } from 'rxjs';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
@@ -96,7 +97,8 @@ import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outli
         AsyncPipe,
         ButtonGroupComponent,
         NgClass,
-        BadgeOutlineComponent
+        BadgeOutlineComponent,
+        TextColorDirective
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ResourcegroupsService} // Inject the ResourcegroupsService into the DeleteAllModalComponent
@@ -121,7 +123,15 @@ export class ResourcegroupsIndexComponent implements OnInit, OnDestroy, IndexPag
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
+
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            let resourcegroupId = params['id'] || params['id'];
+            console.log(resourcegroupId);
+            if (resourcegroupId) {
+                this.params['filter[Resourcegroups.id][]'] = [].concat(resourcegroupId); // make sure we always get an array
+            }
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
             //console.log(params);

@@ -137,6 +137,11 @@
                     <th scope="col" mat-sort-header="Resourcegroups.description">
                         {{ t('Description') }}
                     </th>
+                    <th scope="col" mat-sort-header="Resourcegroups.created">
+                        {{ t('Created') }}
+                    <th scope="col" mat-sort-header="Resourcegroups.last_update">
+                        {{ t('Last update') }}
+                    </th>
                     <th class="text-center">
                         <fa-icon [icon]="['fas', 'chalkboard-user']"
                                  [title]="'Number of resources' | transloco"></fa-icon>
@@ -175,7 +180,19 @@
                         </span>
                     </td>
                     <td>{{ resourcegroup.description }}</td>
-
+                    <td class="text-center">
+                        {{ resourcegroup.created }}
+                    </td>
+                    <td class="text-center">
+                        <span *ngIf="resourcegroup.last_update">{{ resourcegroup.last_update }}</span>
+                        <span *ngIf="!resourcegroup.last_update">
+                            {{ t('n/a') }}
+                        </span>
+                        <span *ngIf="resourcegroup.last_update_failed">
+                            <fa-icon [icon]="['fas', 'triangle-exclamation']" [cTextColor]="'danger'" class="ps-1"
+                                     [title]="'Last update failed' | transloco"></fa-icon>
+                        </span>
+                    </td>
                     <td class="text-center">
                         @if (resourcegroup.resource_count > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
                             <a [routerLink]="['/', 'scm_module', 'resources', 'index']"
@@ -190,6 +207,7 @@
                             </span>
                         }
                     </td>
+
                     <td class="col-2">
                         @if (PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async) {
                             <c-button-group role="group" class="btn-group btn-group-justified w-100">

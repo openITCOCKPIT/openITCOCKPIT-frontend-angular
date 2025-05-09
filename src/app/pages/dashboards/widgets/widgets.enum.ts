@@ -56,4 +56,5 @@ export enum WidgetTypes {
 
     // ScmModule Widgets.php (EE Module)
     MyResourcesSummaryWidget = 800,
+    ResourcegroupsCronjobStatusWidget = 801,
 }

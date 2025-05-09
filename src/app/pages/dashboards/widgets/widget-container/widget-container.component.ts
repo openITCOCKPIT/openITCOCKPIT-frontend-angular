@@ -79,6 +79,9 @@ import {
 import {
     MyResourcesSummaryWidgetComponent
 } from '../../../../modules/scm_module/widgets/my-resources-summary-widget/my-resources-summary-widget.component';
+import {
+    ResourcegroupsCronjobStatusWidgetComponent
+} from '../../../../modules/scm_module/widgets/resourcegroups-cronjob-status-widget/resourcegroups-cronjob-status-widget.component';
 
 
 @Component({
@@ -128,7 +131,8 @@ import {
         AutoreportWidgetComponent,
         MapWidgetComponent,
         ChangecalendarWidgetComponent,
-        MyResourcesSummaryWidgetComponent
+        MyResourcesSummaryWidgetComponent,
+        ResourcegroupsCronjobStatusWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

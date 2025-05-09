@@ -15,6 +15,7 @@ export interface Resourcegroup {
     description: string
     last_state: number
     last_update: string
+    last_update_failed: boolean
     last_send_date: string
     last_send_state: number
     created?: string
@@ -35,7 +36,7 @@ export interface ResourcegroupsIndexParams {
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
-    'filter[Resourcegroup.id][]': [],
+    'filter[Resourcegroups.id][]': number[],
     'filter[Containers.name]': string
     'filter[Resourcegroups.description]': string
 }
@@ -48,7 +49,7 @@ export function getResourcegroupsIndexParams(): ResourcegroupsIndexParams {
         sort: 'Containers.name',
         page: 1,
         direction: 'asc',
-        'filter[Resourcegroup.id][]': [],
+        'filter[Resourcegroups.id][]': [],
         'filter[Containers.name]': '',
         'filter[Resourcegroups.description]': ''
     }
