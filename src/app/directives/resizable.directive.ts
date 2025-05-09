@@ -41,6 +41,7 @@ export class ResizableDirective implements AfterViewInit, OnDestroy {
     private mouseMoveListener: () => void;
     private resizeObserver?: ResizeObserver;
     private mouseMove = false;
+    private mouseDown = false;
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.renderer.addClass(this.el.nativeElement, 'resizable');
@@ -53,7 +54,7 @@ export class ResizableDirective implements AfterViewInit, OnDestroy {
             let newWidth = calculatedAspectRatio.width;
             let newHeight = calculatedAspectRatio.height;
 
-            if (this.mouseMove && !this.el.nativeElement.classList.contains('resize-border') && this.hasSizeChanged(newWidth, newHeight)) {
+            if (this.mouseDown && this.mouseMove && !this.el.nativeElement.classList.contains('resize-border') && this.hasSizeChanged(newWidth, newHeight)) {
                 this.renderer.addClass(this.el.nativeElement, 'resize-border');
             }
         });
@@ -78,6 +79,7 @@ export class ResizableDirective implements AfterViewInit, OnDestroy {
 
     private onMouseDown() {
         this.setLastWidthHeightByHimself();
+        this.mouseDown = true;
     }
 
     private onMouseMove() {
@@ -98,6 +100,7 @@ export class ResizableDirective implements AfterViewInit, OnDestroy {
 
         this.lastWidth = newWidth;
         this.lastHeight = newHeight;
+        this.mouseDown = false;
         this.mouseMove = false;
         this.renderer.removeClass(this.el.nativeElement, 'resize-border');
     }

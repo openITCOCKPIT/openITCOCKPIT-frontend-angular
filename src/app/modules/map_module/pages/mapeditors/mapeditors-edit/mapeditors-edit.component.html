@@ -37,6 +37,27 @@
             <c-nav class="card-toolbar card-header-pills">
 
                 <c-nav-item class="px-1" *ngIf="map && backgroundEditEnabled">
+                    <div class="checkbox small-checkbox-label me-1 mt-2">
+                        <c-form-check>
+                            <input
+                                type="checkbox"
+                                id="maintain_aspect_ratio"
+                                cFormCheckInput
+                                name="checkbox"
+                                checked="checked"
+                                [(ngModel)]="Mapeditor.maintainBackgroundAspectRatio"
+                                (ngModelChange)="onMaintainBackgroundAspectRatio()"
+                            />
+                            <label
+                                cFormCheckLabel
+                                for="maintain_aspect_ratio">
+                                <i class="checkbox-primary"></i>
+                                {{ t('Maintain aspect ratio') }}
+                            </label>
+                        </c-form-check>
+                    </div>
+                </c-nav-item>
+                <c-nav-item class="px-1" *ngIf="map && backgroundEditEnabled">
                     <button cButton
                             class="ripple me-1"
                             color="primary" size="xs"
@@ -190,13 +211,16 @@
                         <oitc-map-canvas [helplines]="Mapeditor.helplines" [map]="map.Map"
                                          [isViewMode]="false" [isBackgroundEditMode]="backgroundEditEnabled"
                                          [currentDeletedItem]="currentDeletedItem">
-                            <oitc-background-item *ngIf="map && map.Map && map.Map.background" [item]="backgroundItem"
-                                                  [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
-                                                  (dblclick)="openChangeMapBackgroundModal()"
-                                                  (contextActionEvent)="onContextAction($event)"
-                                                  (dropItemEvent)="onDropItem($event)"
-                                                  (resizedEvent)="onResizeStop($event)"
-                                                  [hidden]="!backgroundEditEnabled">
+                            <oitc-background-item
+                                *ngIf="map && map.Map && map.Map.background && backgroundItemRerendered"
+                                [item]="backgroundItem"
+                                [aspectRatioEnabled]="Mapeditor.maintainBackgroundAspectRatio"
+                                [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                (dblclick)="openChangeMapBackgroundModal()"
+                                (contextActionEvent)="onContextAction($event)"
+                                (dropItemEvent)="onDropItem($event)"
+                                (resizedEvent)="onResizeStop($event)"
+                                [hidden]="!backgroundEditEnabled">
                             </oitc-background-item>
                             <oitc-map-item *ngFor="let item of map.Mapitems" [item]="item" [refreshInterval]="0"
                                            [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"

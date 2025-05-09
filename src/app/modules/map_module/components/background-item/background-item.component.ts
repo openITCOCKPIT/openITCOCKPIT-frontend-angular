@@ -30,6 +30,7 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
     @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
 
     public override item: InputSignal<Mapbackgrounditem | undefined> = input<Mapbackgrounditem>();
+    public aspectRatioEnabled: InputSignal<boolean> = input<boolean>(false);
 
     private subscriptions: Subscription = new Subscription();
 
