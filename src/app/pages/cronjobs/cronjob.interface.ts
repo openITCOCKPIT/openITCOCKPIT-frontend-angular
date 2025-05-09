@@ -1,3 +1,5 @@
+import { CronjobPriorities } from './cronjob.enum';
+
 export interface CronjobsIndex {
     cronjobs: CronjobDetails[]
     _csrfToken: string
@@ -14,6 +16,9 @@ export interface Cronjob {
     plugin: string
     interval: number
     enabled: boolean
+    priority: CronjobPriorities
+    created: null | string
+    modified: null | string
 }
 
 export interface Cronschedule {
@@ -22,7 +27,9 @@ export interface Cronschedule {
     is_running?: number
     start_time?: string
     end_time?: string
+    execution_time: null | number
     last_scheduled_usertime?: string
+    last_execution_time_human?: string
 }
 
 
@@ -31,5 +38,6 @@ export interface CronjobPost {
     enabled: number,
     interval: number,
     plugin: string,
-    task: string
+    task: string,
+    priority: CronjobPriorities
 }

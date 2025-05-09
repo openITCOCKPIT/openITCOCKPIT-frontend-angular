@@ -9,6 +9,7 @@ import { RouterLink } from '@angular/router';
 import { ApexGrid, ChartComponent } from 'ng-apexcharts';
 import { ChartOptions } from '../../../../components/charts/host-pie-chart/host-pie-chart.component';
 import { LayoutService } from '../../../../layouts/coreui/layout.service';
+import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
 
 @Component({
     selector: 'oitc-services-piechart-widget',
@@ -18,7 +19,8 @@ import { LayoutService } from '../../../../layouts/coreui/layout.service';
         NgIf,
         TranslocoDirective,
         RouterLink,
-        ChartComponent
+        ChartComponent,
+        BlockLoaderComponent
     ],
     templateUrl: './services-piechart-widget.component.html',
     styleUrl: './services-piechart-widget.component.css',
