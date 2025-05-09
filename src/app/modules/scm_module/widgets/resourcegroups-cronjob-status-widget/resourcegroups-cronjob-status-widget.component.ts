@@ -33,6 +33,7 @@ export class ResourcegroupsCronjobStatusWidgetComponent extends BaseWidgetCompon
     public deadline!: string;
     public cronjobStatus!: ResourcegroupsCronjobStatus;
     public deadlineExceeded!: boolean;
+    public timerangeArrives!: boolean;
     private readonly ScmWidgetService = inject(ScmWidgetService);
 
     public override load() {
@@ -42,6 +43,7 @@ export class ResourcegroupsCronjobStatusWidgetComponent extends BaseWidgetCompon
                     this.resources = result;
                     this.deadline = result.deadline;
                     this.deadlineExceeded = result.deadlineExceeded;
+                    this.timerangeArrives = result.timerangeArrives;
                     this.cronjobStatus = result.cronjobStatus;
                     this.cdr.markForCheck();
                 }));
