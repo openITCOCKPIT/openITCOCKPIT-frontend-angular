@@ -7,6 +7,7 @@ import { ServicePieChartComponent } from '../../../../components/charts/service-
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { StatuscountResponse } from '../../../browsers/browsers.interface';
+import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
 
 @Component({
     selector: 'oitc-services-piechart-widget180',
@@ -16,7 +17,8 @@ import { StatuscountResponse } from '../../../browsers/browsers.interface';
         NgIf,
         ServicePieChartComponent,
         TranslocoDirective,
-        RouterLink
+        RouterLink,
+        BlockLoaderComponent
     ],
     templateUrl: './services-piechart-widget180.component.html',
     styleUrl: './services-piechart-widget180.component.css',
