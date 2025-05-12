@@ -8,10 +8,7 @@
             <span class="help-block italic text-primary">
                 {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
             </span>
-
-            <div ng-repeat="error in errors.services">
-                <h5 class="text-danger"></h5>
-            </div>
+            <oitc-form-feedback [errors]="errors" errorField="services"></oitc-form-feedback>
 
         </legend>
 

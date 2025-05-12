@@ -145,6 +145,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
 
         this.subscriptions.add(this.WizardService.submit(request)
             .subscribe((result: GenericResponseWrapper) => {
+                this.errors = {} as GenericValidationError;
                 if (result.success) {
                     const title: string = this.TranslocoService.translate('Success');
                     const msg: string = this.TranslocoService.translate('Data saved successfully');
