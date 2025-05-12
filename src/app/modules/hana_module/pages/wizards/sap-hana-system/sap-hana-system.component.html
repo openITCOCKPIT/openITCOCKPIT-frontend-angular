@@ -106,7 +106,7 @@
                 </div>
                 <div class="mb-3">
                     <label cLabel for="post.dbsystemport">
-                        {{ t('Password') }}
+                        {{ t('HANA System port') }}
                         <oitc-required-icon/>
                     </label>
                     <input cFormControl
@@ -121,6 +121,7 @@
 
             <oitc-wizards-dynamicfields
                     [(post)]="post.services"
+                    [errors]="errors"
                     [title]="'SAP HANA Tenant Database Services'|transloco"
             />
         </c-card-body>
