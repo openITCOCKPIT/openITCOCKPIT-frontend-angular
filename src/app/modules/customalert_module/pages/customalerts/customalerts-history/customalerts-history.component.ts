@@ -12,7 +12,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import { Subscription } from 'rxjs';
 import { CustomAlertHistory } from '../customalerts.interface';
@@ -34,7 +34,6 @@ import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/blo
         TranslocoDirective,
         XsButtonDirective,
         ContainerComponent,
-        NgForOf,
         NgIf,
         NoRecordsComponent,
         PermissionDirective,
