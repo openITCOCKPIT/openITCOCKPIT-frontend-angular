@@ -24,6 +24,8 @@ import { NgForOf, NgIf } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Service } from '../../../pages/wizards/wizards.interface';
+import { GenericValidationError } from '../../../generic-responses';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 
 @Component({
     selector: 'oitc-wizards-dynamicfields',
@@ -39,7 +41,8 @@ import { Service } from '../../../pages/wizards/wizards.interface';
         NgSelectComponent,
         RowComponent,
         TranslocoPipe,
-        TranslocoDirective
+        TranslocoDirective,
+        FormFeedbackComponent
     ],
     templateUrl: './wizards-dynamicfields.component.html',
     styleUrl: './wizards-dynamicfields.component.css',
@@ -52,6 +55,7 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
     public title = input.required<string>();
 
     @Input() post: Service[] = [];
+    @Input() errors: GenericValidationError = {} as GenericValidationError;
     @Output() postChange = new EventEmitter<Service[]>();
 
     constructor() {

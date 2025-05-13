@@ -97,6 +97,7 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
 
         this.subscriptions.add(this.WizardService.submit(updatedPost)
             .subscribe((result: GenericResponseWrapper) => {
+                this.errors = {} as GenericValidationError;
                 if (result.success) {
                     const title: string = this.TranslocoService.translate('Success');
                     const msg: string = this.TranslocoService.translate('Data saved successfully');
