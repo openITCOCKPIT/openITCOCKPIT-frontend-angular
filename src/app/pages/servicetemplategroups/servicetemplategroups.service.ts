@@ -13,6 +13,7 @@ import {
     LoadServiceTemplatesRoot,
     ServiceTemplateGroupsAddPostRoot,
     ServiceTemplateGroupsAddPostServicetemplategroup,
+    ServicetemplategroupsAppendPost,
     ServiceTemplateGroupsGetCopyGetServicetemplategroup,
     ServiceTemplateGroupsGetCopyPostData,
     ServiceTemplateGroupsGetEditRoot,
@@ -123,8 +124,18 @@ export class ServicetemplategroupsService {
         return this.http.post(`${this.proxyPath}/servicetemplategroups/delete/${item.id}.json?angular=true`, {});
     }
 
-    public loadServicetemplategroupsByString(containerName: string): Observable<LoadServicetemplategroupsByString> {
-        return this.http.get<LoadServicetemplategroupsByString>(`${this.proxyPath}/servicetemplategroups/loadServicetemplategroupsByString.json?angular=true&filter[Containers.name]=${containerName}`);
+    public loadServicetemplategroupsByString(containerName: string, selected?: number[]): Observable<LoadServicetemplategroupsByString> {
+        if (selected === undefined) {
+            selected = [];
+        }
+
+        let selectedString = '';
+        if (selected.length) {
+            for (let i = 0; i < selected.length; i++) {
+                selectedString += `&selected[]=${selected[i]}`;
+            }
+        }
+        return this.http.get<LoadServicetemplategroupsByString>(`${this.proxyPath}/servicetemplategroups/loadServicetemplategroupsByString.json?angular=true&filter[Containers.name]=${containerName}${selectedString}`);
     }
 
     public loadHostgroupsByString(containerName: string): Observable<LoadHostgroupsByString> {
@@ -167,5 +178,26 @@ export class ServicetemplategroupsService {
 
     public allocateToHost(servicetemplategroupId: number, item: AllocateToHostgroupPost): Observable<GenericResponseWrapper> {
         return this.http.post<GenericResponseWrapper>(`${this.proxyPath}/servicetemplategroups/allocateToHost/${servicetemplategroupId}.json?angular=true`, item);
+    }
+
+    public append(appendPost: ServicetemplategroupsAppendPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/servicetemplategroups/append/.json?angular=true`, appendPost)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 }
