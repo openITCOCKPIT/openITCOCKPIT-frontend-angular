@@ -68,6 +68,7 @@ export interface LoginGetRoot {
     disableAnimation: boolean,
     disableSocialButtons: boolean,
     enableColumnLayout: boolean
+    demoMode?: boolean
 }
 
 export interface LoginImage {

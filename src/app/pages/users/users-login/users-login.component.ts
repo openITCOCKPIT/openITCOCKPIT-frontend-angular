@@ -234,6 +234,13 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     }, 10);
                 }
             }
+
+            // Set hardcoded demo credentials if system is running in demo mode
+            if (data.demoMode) {
+                this.post.email = 'demo@openitcockpit.io';
+                this.post.password = 'demo123';
+            }
+
             this.cdr.markForCheck();
         }));
     }
