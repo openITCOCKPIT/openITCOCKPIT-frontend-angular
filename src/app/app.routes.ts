@@ -271,6 +271,12 @@ const coreRoutes: Routes = [{
     path: 'servicetemplategroups/add',
     loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-add/servicetemplategroups-add.component').then(m => m.ServicetemplategroupsAddComponent)
 }, {
+    path: 'servicetemplategroups/add/:ids',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-add/servicetemplategroups-add.component').then(m => m.ServicetemplategroupsAddComponent)
+}, {
+    path: 'servicetemplategroups/append/:ids',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-append/servicetemplategroups-append.component').then(m => m.ServicetemplategroupsAppendComponent)
+}, {
     path: 'servicetemplategroups/allocateToHost/:id',
     loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-allocate-to-host/servicetemplategroups-allocate-to-host.component').then(m => m.ServicetemplategroupsAllocateToHostComponent)
 }, {

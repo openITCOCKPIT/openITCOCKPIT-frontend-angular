@@ -264,3 +264,13 @@ export interface LoadHostsByStringResponse {
     hosts: SelectKeyValue[]
     _csrfToken: string
 }
+
+/** Servicetemplategroups append **/
+export interface ServicetemplategroupsAppendPost {
+    Servicetemplategroup: {
+        id: number,
+        servicetemplates: {
+            _ids: number[]
+        }
+    }
+}
