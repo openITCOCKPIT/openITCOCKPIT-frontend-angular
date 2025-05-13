@@ -87,13 +87,15 @@ export interface CustomAlertsIndexParams {
     'filter[Customalerts.message]': string,
     'filter[Customalerts.state][]': number[],
     'filter[Hosts.container_id][]': number[],
+    'filter[Hosts.name]': string,
+    'filter[servicename]': string,
     'filter[from]': string,
     'filter[to]': string,
 }
 
 export interface CustomAlertsIndexFilter {
     Customalerts: {
-        message: string,
+        message: string
         state: [
             boolean,
             boolean,
@@ -103,7 +105,9 @@ export interface CustomAlertsIndexFilter {
     },
     Hosts: {
         container_id: number[]
+        name: string
     },
+    servicename: string
     from: string,
     to: string,
     recursive: boolean,
@@ -127,6 +131,8 @@ export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams {
         'filter[Customalerts.message]': '',
         'filter[Customalerts.state][]': [],
         'filter[Hosts.container_id][]': [],
+        'filter[Hosts.name]': '',
+        'filter[servicename]': '',
         'filter[from]': '',
         'filter[to]': '',
     }
@@ -150,8 +156,10 @@ export function getDefaultCustomAlertsIndexFilter(): CustomAlertsIndexFilter {
             ],
         },
         Hosts: {
-            container_id: []
+            container_id: [],
+            name: ''
         },
+        servicename: '',
         from: fromStr,
         to: toStr,
         recursive: false,

@@ -259,6 +259,8 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
             filter.Customalerts.message = bookmarkfilter.Customalerts.message || '';
             filter.Customalerts.state = bookmarkfilter.Customalerts.state || [true, true, false, false];
             filter.Hosts.container_id = bookmarkfilter.Hosts.container_id || [];
+            filter.Hosts.name = bookmarkfilter.Hosts.name || '';
+            filter.servicename = bookmarkfilter.servicename || '';
             filter.recursive = bookmarkfilter.recursive || false;
             this.setFilterAndLoad(filter);
         }

@@ -57,7 +57,7 @@
                     <c-row>
                         <c-col lg="4" md="12" xs="12">
                             <div
-                                    class="p-2 new-flame-bg bg-danger rounded overflow-hidden position-relative text-white mb-4">
+                                class="p-2 new-flame-bg bg-danger rounded overflow-hidden position-relative text-white mb-4">
                                 <div>
                                     <h6 class="display-4 d-block l-h-n m-0 fw-500 ng-binding">
                                         {{ result.customalertGlobalOverview['0'] }}
@@ -125,6 +125,38 @@
                 <c-card-body>
                     <form cForm>
                         <c-row>
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group class="mb-2">
+                                    <span cInputGroupText id="hostname">
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    </span>
+                                    <input aria-describedby="hostname"
+                                           aria-label="hostname"
+                                           name="hostname"
+                                           cFormControl
+                                           placeholder="{{t('Filter by host name')}}"
+                                           (debouncedValue)="onFilterChange($event)"
+                                           oitcDebounce
+                                           [(ngModel)]="filter.Hosts.name"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group class="mb-2">
+                                    <span cInputGroupText id="servicename">
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    </span>
+                                    <input aria-describedby="servicename"
+                                           aria-label="servicename"
+                                           cFormControl
+                                           name="servicename"
+                                           placeholder="{{t('Filter by service name')}}"
+                                           (debouncedValue)="onFilterChange($event)"
+                                           oitcDebounce
+                                           [(ngModel)]="filter.servicename"
+                                    />
+                                </c-input-group>
+                            </c-col>
                             <c-col md="12">
                                 <c-input-group>
                                     <span cInputGroupText>
@@ -235,14 +267,14 @@
 
                                 <h5>{{ t('Container') }}</h5>
                                 <oitc-multi-select
-                                        name="filter.Hosts.container_id"
-                                        id="filter.Hosts.container_id"
-                                        [(ngModel)]="filter.Hosts.container_id"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        (debouncedValue)="onFilterChange($event)"
-                                        oitcDebounce
-                                        [options]="containers">
+                                    name="filter.Hosts.container_id"
+                                    id="filter.Hosts.container_id"
+                                    [(ngModel)]="filter.Hosts.container_id"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    (debouncedValue)="onFilterChange($event)"
+                                    oitcDebounce
+                                    [options]="containers">
                                 </oitc-multi-select>
                                 <br/>
 
@@ -367,9 +399,9 @@
                             <td class="text-center">
                                 <div>
                                     <oitc-item-select
-                                            *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
-                                            [disabled]="false"
-                                            [item]="customAlertRule"></oitc-item-select>
+                                        *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
+                                        [disabled]="false"
+                                        [item]="customAlertRule"></oitc-item-select>
                                 </div>
                             </td>
                             <td class="text-center">
@@ -483,9 +515,9 @@
                         <td class="text-center">
                             <div>
                                 <oitc-item-select
-                                        *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
-                                        [disabled]="false"
-                                        [item]="customAlertRule"></oitc-item-select>
+                                    *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
+                                    [disabled]="false"
+                                    [item]="customAlertRule"></oitc-item-select>
                             </div>
                         </td>
                         <td class="text-center">
@@ -570,7 +602,7 @@
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                    [itemsCount]="result.customalerts.length"></oitc-select-all>
+                                [itemsCount]="result.customalerts.length"></oitc-select-all>
                         </c-col>
                         <c-col md="3">
                             <div class="btn-group d-flex flex-row" role="group">
@@ -595,13 +627,13 @@
             </ng-container>
 
             <c-container
-                    [fluid]="true">
+                [fluid]="true">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="result"
-                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="result"
+                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>
