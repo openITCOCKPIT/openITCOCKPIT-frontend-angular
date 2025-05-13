@@ -188,7 +188,7 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    protected loadLdapGroups(search: string = ''): void {
+    protected loadLdapGroups = (search: string = '') => {
         this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search).subscribe((ldapgroups: LoadLdapgroups) => {
             this.ldapGroups = ldapgroups.ldapgroups;
             this.cdr.markForCheck();
