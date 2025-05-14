@@ -6,10 +6,6 @@
     max-width: 800px;
 }
 
-.txt-color-blueDark {
-    color: #4c4f53 !important;
-}
-
 .cropText {
     /*width: 20px;*/
     white-space: nowrap;

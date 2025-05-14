@@ -39,6 +39,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     public gridSize: InputSignal<{ x: number, y: number }> = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
     public gridEnabled: InputSignal<boolean> = input<boolean>(true);
     public isViewMode: InputSignal<boolean> = input<boolean>(false); // View mode for disabling drag and drop and context menu
+    public enablePointerCursor: InputSignal<boolean> = input<boolean>(false); // Enable pointer cursor for drag and drop
 
     @Output() resizedEvent = new EventEmitter<ResizedEvent>();
     @Output() dropItemEvent = new EventEmitter<MapitemBaseActionObject>();
@@ -190,11 +191,12 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
             let distanceY = this.oldStartY! - posY;
             distanceY = distanceY * -1;
 
-            this.endX = this.oldEndX! + distanceX;
-            this.endY = this.oldEndY! + distanceY;
+            //parseInt to prevent save bug with decimal numbers
+            this.endX = parseInt((this.oldEndX! + distanceX).toString(), 10);
+            this.endY = parseInt((this.oldEndY! + distanceY).toString(), 10);
 
-            this.startX = posX;
-            this.startY = posY;
+            this.startX = parseInt((posX).toString(), 10);
+            this.startY = parseInt((posY).toString(), 10);
 
             this.oldStartX = this.startX;
             this.oldStartY = this.startY;
@@ -202,8 +204,8 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
             this.oldEndY = this.endY;
 
         } else {
-            this.x = posX;
-            this.y = posY;
+            this.x = parseInt((posX).toString(), 10);
+            this.y = parseInt((posY).toString(), 10);
         }
 
         this.setPosition();

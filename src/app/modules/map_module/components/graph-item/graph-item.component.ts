@@ -19,7 +19,7 @@ import { forkJoin, interval, Subscription } from 'rxjs';
 import { GraphItemService } from './graph-item.service';
 import { GraphItemParams, GraphItemRoot, PerfdataParams } from './graph-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { EChartsOption, VisualMapComponentOption } from 'echarts';
 import { DateTime } from 'luxon';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
@@ -50,7 +50,7 @@ echarts.use([LineChart, GridComponent, LegendComponent, TitleComponent, TooltipC
 @Component({
     selector: 'oitc-graph-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf, NgxEchartsDirective, AlertComponent, FaIconComponent],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf, NgxEchartsDirective, AlertComponent, FaIconComponent, NgClass],
     templateUrl: './graph-item.component.html',
     styleUrl: './graph-item.component.css',
     providers: [

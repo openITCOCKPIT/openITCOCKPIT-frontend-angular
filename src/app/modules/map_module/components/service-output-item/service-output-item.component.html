@@ -15,7 +15,7 @@
     <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
                    appendTo="body"></p-contextMenu>
 } @else {
-    <div #container class="map-element-container cursor-pointer">
+    <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
         <div *ngIf="allowView"
              [ngStyle]="{'width.px': width, 'height.px': height, 'font-size.px': item()!.font_size}">
             <span [hidden]="!item()!.show_label" class="bold">

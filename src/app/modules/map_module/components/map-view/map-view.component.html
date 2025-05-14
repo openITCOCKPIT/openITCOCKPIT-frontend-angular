@@ -4,7 +4,8 @@
                    [isViewMode]="true"
                    (mouseenter)="showSummaryStateDelayed(item, false)"
                    (mouseleave)="cancelTimer()"
-                   (click)="navigate(item)">
+                   (click)="navigate(item)"
+                   [enablePointerCursor]="true">
     </oitc-map-item>
     <oitc-map-text *ngFor="let textItem of map.Maptexts" [item]="textItem"
                    [isViewMode]="true">
@@ -15,7 +16,8 @@
                    [isViewMode]="true"
                    (mouseenter)="showSummaryStateDelayed(lineItem, false)"
                    (mouseleave)="cancelTimer()"
-                   (click)="navigate(lineItem)">
+                   (click)="navigate(lineItem)"
+                   [enablePointerCursor]="true">
     </oitc-map-line>
     <oitc-map-line *ngFor="let lineItem of map.Maplines" [item]="lineItem"
                    [hidden]="lineItem.type !== 'stateless'"
@@ -32,28 +34,32 @@
                          [isViewMode]="true"
                          (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
                          (mouseleave)="cancelTimer()"
-                         (click)="navigate(gadgetItem)">
+                         (click)="navigate(gadgetItem)"
+                         [enablePointerCursor]="true">
         </oitc-graph-item>
         <oitc-perfdata-text-item *ngIf="gadgetItem.gadget === 'Text'" [item]="gadgetItem"
                                  [refreshInterval]="refreshInterval"
                                  [isViewMode]="true"
                                  (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
                                  (mouseleave)="cancelTimer()"
-                                 (click)="navigate(gadgetItem)">
+                                 (click)="navigate(gadgetItem)"
+                                 [enablePointerCursor]="true">
         </oitc-perfdata-text-item>
         <oitc-tacho-item *ngIf="gadgetItem.gadget === 'Tacho'" [item]="gadgetItem"
                          [refreshInterval]="refreshInterval"
                          [isViewMode]="true"
                          (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
                          (mouseleave)="cancelTimer()"
-                         (click)="navigate(gadgetItem)">
+                         (click)="navigate(gadgetItem)"
+                         [enablePointerCursor]="true">
         </oitc-tacho-item>
         <oitc-cylinder-item *ngIf="gadgetItem.gadget === 'Cylinder'" [item]="gadgetItem"
                             [refreshInterval]="refreshInterval"
                             [isViewMode]="true"
                             (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
                             (mouseleave)="cancelTimer()"
-                            (click)="navigate(gadgetItem)">
+                            (click)="navigate(gadgetItem)"
+                            [enablePointerCursor]="true">
         </oitc-cylinder-item>
         <oitc-trafficlight-item *ngIf="gadgetItem.gadget === 'TrafficLight'"
                                 [item]="gadgetItem"
@@ -61,7 +67,8 @@
                                 [isViewMode]="true"
                                 (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
                                 (mouseleave)="cancelTimer()"
-                                (click)="navigate(gadgetItem)">
+                                (click)="navigate(gadgetItem)"
+                                [enablePointerCursor]="true">
         </oitc-trafficlight-item>
         <oitc-temperature-item *ngIf="gadgetItem.gadget === 'Temperature'"
                                [item]="gadgetItem"
@@ -69,7 +76,8 @@
                                [isViewMode]="true"
                                (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
                                (mouseleave)="cancelTimer()"
-                               (click)="navigate(gadgetItem)">
+                               (click)="navigate(gadgetItem)"
+                               [enablePointerCursor]="true">
         </oitc-temperature-item>
         <oitc-service-output-item *ngIf="gadgetItem.gadget === 'ServiceOutput'"
                                   [item]="gadgetItem"
@@ -77,7 +85,8 @@
                                   [isViewMode]="true"
                                   (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
                                   (mouseleave)="cancelTimer()"
-                                  (click)="navigate(gadgetItem)">
+                                  (click)="navigate(gadgetItem)"
+                                  [enablePointerCursor]="true">
         </oitc-service-output-item>
     </ng-container>
     <oitc-map-summary-item *ngFor="let summaryItem of map.Mapsummaryitems" [item]="summaryItem"
@@ -85,7 +94,8 @@
                            [isViewMode]="true"
                            (mouseenter)="showSummaryStateDelayed(summaryItem, true)"
                            (mouseleave)="cancelTimer()"
-                           (click)="navigate(summaryItem)">
+                           (click)="navigate(summaryItem)"
+                           [enablePointerCursor]="true">
     </oitc-map-summary-item>
 </oitc-map-canvas>
 

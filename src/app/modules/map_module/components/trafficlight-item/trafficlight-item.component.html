@@ -87,7 +87,7 @@
     <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
                    appendTo="body"></p-contextMenu>
 } @else {
-    <div #container class="map-element-container cursor-pointer">
+    <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
         <div [id]="'map-trafficlight-' + item()?.id" [style.width.px]="width + 10"
              [style.height.px]="height + 10">
             <svg [attr.width]="width" [attr.height]="height">
