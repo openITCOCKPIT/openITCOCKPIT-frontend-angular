@@ -236,7 +236,7 @@
                                 *ngIf="satellite.allow_edit"></li>
                             <oitc-actions-button-element (click)="toggleDeleteAllModal(satellite)"
                                                          *ngIf="satellite.allow_edit"
-                                                         [permission]="'users.delete'">
+                                                         [permission]="'distributeModule.satellites.delete'">
                                 <span class="text-danger">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete') }}
