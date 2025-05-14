@@ -123,6 +123,20 @@ export class SatellitesAddComponent implements OnDestroy, OnInit {
         this.getTimeZones();
     }
 
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
+    protected setUrlProtocol(protocol: string): void {
+        this.post.protocol = protocol;
+        this.cdr.markForCheck();
+    }
+
+    protected setProxyProtocol(protocol: string): void {
+        this.post.proxyProtocol = protocol;
+        this.cdr.markForCheck();
+    }
+
     public loadContainers = (): void => {
         this.subscriptions.add(this.SatellitesService.loadAllContainers()
             .subscribe((result: SelectKeyValue[]) => {
@@ -154,17 +168,15 @@ export class SatellitesAddComponent implements OnDestroy, OnInit {
         );
     }
 
-    public ngOnDestroy() {
-        this.subscriptions.unsubscribe();
-    }
-
     public addSatellite(): void {
+        this.post.Satellite.url = `${this.post.protocol}://${this.post.Satellite.address}/${this.post.frontendUrl}`;
+        this.post.Satellite.proxy_url = '';
+        if (this.post.Satellite.use_proxy) {
+            this.post.Satellite.proxy_url = `${this.post.proxyProtocol}://${this.post.proxyUrl}`;
+        }
         this.subscriptions.add(this.SatellitesService.addSatellite(this.post)
             .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
                 if (result.success) {
-                    this.cdr.markForCheck();
-
                     const title: string = this.TranslocoService.translate('Satellite');
                     const msg: string = this.TranslocoService.translate('added successfully');
                     const url: (string | number)[] = ['distribute_module', 'satellites', 'edit', result.data.id];
@@ -180,6 +192,7 @@ export class SatellitesAddComponent implements OnDestroy, OnInit {
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
 
+                    this.cdr.markForCheck();
                     return;
                 }
 
@@ -189,18 +202,9 @@ export class SatellitesAddComponent implements OnDestroy, OnInit {
                 if (result) {
                     this.errors = errorResponse;
                 }
+                this.cdr.markForCheck();
             })
         );
-    }
-
-    protected setUrlProtocol(protocol: string): void {
-        this.post.protocol = protocol;
-        this.cdr.markForCheck();
-    }
-
-    protected setProxyProtocol(protocol: string): void {
-        this.post.proxyProtocol = protocol;
-        this.cdr.markForCheck();
     }
 
     private getDefaultPost(): SatellitesAddRoot {
