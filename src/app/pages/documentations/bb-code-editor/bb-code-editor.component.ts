@@ -196,7 +196,7 @@ export class BbCodeEditorComponent {
     }
 
     protected onLinkUrlInputChange(newUrl: string) {
-        if (this.selectionStart === 0 && this.selectionEnd === 0) {
+        if (this.selectionStart === this.selectionEnd) {
             this.selectedText = newUrl;
         }
         this.cdr.markForCheck();
