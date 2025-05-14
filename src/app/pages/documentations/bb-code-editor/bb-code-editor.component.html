@@ -148,7 +148,7 @@
                     *ngIf="isDisplayedAsModal">
                 <fa-icon [icon]="['fas', 'link']"></fa-icon>
             </button>
-            <button cButton size="xs" color="default" class="ripple" (click)="isLinkAreaOpen = true"
+            <button cButton size="xs" color="default" class="ripple" (click)="openLinkArea()"
                     *ngIf="!isDisplayedAsModal">
                 <fa-icon [icon]="['fas', 'link']"></fa-icon>
             </button>
