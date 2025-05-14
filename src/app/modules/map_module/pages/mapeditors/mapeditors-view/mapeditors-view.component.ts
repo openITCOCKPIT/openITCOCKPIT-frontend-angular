@@ -108,6 +108,13 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
                 this.cdr.markForCheck();
             });
         }
+
+        this.subscriptions.add(this.route.params.subscribe(params => {
+            // reload page to display new map
+            if (params['id'] !== undefined && params['id'] !== null && params['id'] !== '' && params['id'] !== this.mapId.toString()) {
+                window.location.reload();
+            }
+        }));
     }
 
     public ngOnDestroy(): void {

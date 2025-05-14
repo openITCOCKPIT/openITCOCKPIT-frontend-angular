@@ -659,8 +659,16 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         //label = this.HtmlspecialcharsPipe.transform(label);
 
         let showTicks = true;
+        let left = 80;
+        let right = 50;
+        let top = 25;
+        let bottom = 50;
         if (this.height < 130) {
             showTicks = false;
+            left = 50;
+            right = 20;
+            top = 20;
+            bottom = 20;
         }
 
         const thresholdsLines = this.getThresholdLines(performance_data);
@@ -713,7 +721,8 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     formatter: (value) => {
                         const dateTime = DateTime.fromMillis(value as number).setZone(this.timezone.user_timezone);
                         return dateTime.toFormat('HH:mm:ss');
-                    }
+                    },
+                    show: showTicks
                 },
                 splitLine: {
                     show: true,
@@ -746,10 +755,10 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
             },
 
             grid: {
-                left: 80,
-                right: 50,
-                top: 25,
-                bottom: 50
+                left: left,
+                right: right,
+                top: top,
+                bottom: bottom
             },
 
 
