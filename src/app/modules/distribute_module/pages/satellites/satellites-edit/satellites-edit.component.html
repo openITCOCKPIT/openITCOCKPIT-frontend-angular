@@ -37,7 +37,8 @@
                 </h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['users', 'index']" cButton class="ripple" color="default"
+                        <button [fallbackUrl]="['distributeModule', 'satellites', 'index']" cButton class="ripple"
+                                color="default"
                                 oitcBackButton
                                 size="xs">
                             <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
@@ -150,21 +151,21 @@
                                 <button *ngIf="post.protocol === 'http'"
                                         cButton cDropdownToggle color="primary">
                                     <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                                    {{ t('http') }}
+                                    {{ t('HTTP') }}
                                 </button>
                                 <button *ngIf="post.protocol === 'https'"
                                         cButton cDropdownToggle color="primary">
                                     <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                                    {{ t('https') }}
+                                    {{ t('HTTPS') }}
                                 </button>
                                 <ul cDropdownMenu>
                                     <li cDropdownItem (click)="setUrlProtocol('http')">
                                         <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                                        {{ t('http') }}
+                                        {{ t('HTTP') }}
                                     </li>
                                     <li cDropdownItem (click)="setUrlProtocol('https')">
                                         <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                                        {{ t('https') }}
+                                        {{ t('HTTPS') }}
                                     </li>
                                 </ul>
                             </c-dropdown>
@@ -184,8 +185,10 @@
                                    id="post.frontendUrl"
                                    type="text"
                                    name="post.frontendUrl"
-                                   [(ngModel)]="post.frontendUrl"/>
+                                   [(ngModel)]="post.frontendUrl"
+                                   oitcFormError [errors]="errors" errorField="url"/>
                         </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="url"></oitc-form-feedback>
                     </div>
 
                     <!-- Verify Certificate -->
@@ -240,21 +243,21 @@
                                 <button *ngIf="post.proxyProtocol === 'http'"
                                         cButton cDropdownToggle color="primary">
                                     <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                                    {{ t('http') }}
+                                    {{ t('HTTP') }}
                                 </button>
                                 <button *ngIf="post.proxyProtocol === 'https'"
                                         cButton cDropdownToggle color="primary">
                                     <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                                    {{ t('https') }}
+                                    {{ t('HTTPS') }}
                                 </button>
                                 <ul cDropdownMenu>
                                     <li cDropdownItem (click)="setProxyProtocol('http')">
                                         <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                                        {{ t('http') }}
+                                        {{ t('HTTP') }}
                                     </li>
                                     <li cDropdownItem (click)="setProxyProtocol('https')">
                                         <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                                        {{ t('https') }}
+                                        {{ t('HTTPS') }}
                                     </li>
                                 </ul>
                             </c-dropdown>
@@ -265,13 +268,19 @@
                                    id="this.post.proxyUrl"
                                    type="text"
                                    name="this.post.proxyUrl"
-                                   [(ngModel)]="this.post.proxyUrl"/>
+                                   [(ngModel)]="this.post.proxyUrl"
+                                   oitcFormError [errors]="errors" errorField="proxy_url"/>
                             <span cInputGroupText>
                                 /
                             </span>
                         </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="proxy_url"></oitc-form-feedback>
                     </div>
 
+
+                </ng-container>
+
+                <ng-container *ngIf="post.Satellite.sync_method !== 'ssh'">
                     <!-- API Key -->
                     <div class="mb-3">
                         <label cLabel for="post.Satellite.api_key">
@@ -296,24 +305,27 @@
                         <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
                     </div>
 
-                    <!-- interval -->
-                    <div class="mb-3">
-                        <label cLabel for="post.Satellite.interval">
-                            {{ t('Interval') }}
-                            <oitc-required-icon/>
-                        </label>
-                        <input cFormControl
-                               required
-                               id="post.Satellite.interval"
-                               type="text"
-                               name="post.Satellite.interval"
-                               [(ngModel)]="post.Satellite.interval"
-                               oitcFormError [errors]="errors" errorField="interval">
-                        <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Time interval in seconds the master system will pickup check results') }}
+                    <ng-container *ngIf="post.Satellite.sync_method === 'https_pull'">
+
+                        <!-- interval -->
+                        <div class="mb-3">
+                            <label cLabel for="post.Satellite.interval">
+                                {{ t('Interval') }}
+                                <oitc-required-icon/>
+                            </label>
+                            <input cFormControl
+                                   required
+                                   id="post.Satellite.interval"
+                                   type="text"
+                                   name="post.Satellite.interval"
+                                   [(ngModel)]="post.Satellite.interval"
+                                   oitcFormError [errors]="errors" errorField="interval">
+                            <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Time interval in seconds the master system will pickup check results') }}
+                            </div>
                         </div>
-                    </div>
+                    </ng-container>
 
                     <!-- Timeout -->
                     <div class="mb-3">
@@ -415,8 +427,6 @@
                         </div>
                     </div>
                 </ng-container>
-
-
 
                 <!-- Time zone -->
                 <div class="mb-3">

@@ -103,7 +103,7 @@ export class SatellitesEditComponent implements OnDestroy, OnInit {
     private readonly TimezoneService: TimezoneService = inject(TimezoneService);
     private readonly ProfileService: ProfileService = inject(ProfileService);
     private readonly cdr = inject(ChangeDetectorRef);
-
+    private readonly route = inject(ActivatedRoute);
 
     protected timezone!: TimezoneObject;
     protected createAnother: boolean = false;
@@ -119,7 +119,6 @@ export class SatellitesEditComponent implements OnDestroy, OnInit {
     protected post: EditSatellitePostRoot = {Satellite: {id: 0}} as EditSatellitePostRoot;
     protected serverTime: string = '';
     protected serverTimeZone: string = '';
-
 
     public ngOnInit() {
         this.loadContainers();
@@ -164,8 +163,14 @@ export class SatellitesEditComponent implements OnDestroy, OnInit {
         }));
     }
 
-
-    private readonly route = inject(ActivatedRoute);
+    protected refreshApiKey(): void {
+        this.subscriptions.add(this.ProfileService.generateNewApiKey()
+            .subscribe((result) => {
+                this.post.Satellite.api_key = result.apikey;
+                this.cdr.markForCheck();
+            })
+        );
+    }
 
     private loadEditSatellite(): void {
         const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -199,11 +204,13 @@ export class SatellitesEditComponent implements OnDestroy, OnInit {
     }
 
     protected updateSatellite(): void {
-
         this.post.Satellite.url = `${this.post.protocol}://${this.post.Satellite.address}/${this.post.frontendUrl}`;
+        this.post.Satellite.proxy_url = '';
+        if (this.post.Satellite.use_proxy) {
+            this.post.Satellite.proxy_url = `${this.post.proxyProtocol}://${this.post.proxyUrl}`;
+        }
         this.subscriptions.add(this.SatellitesService.updateSatellite(this.post.Satellite.id, this.post)
             .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
                 if (result.success) {
                     const title: string = this.TranslocoService.translate('Satellite');
                     const msg: string = this.TranslocoService.translate('updated successfully');
@@ -211,22 +218,16 @@ export class SatellitesEditComponent implements OnDestroy, OnInit {
 
                     this.notyService.genericSuccess(msg, title, url);
                     this.HistoryService.navigateWithFallback(['/distribute_module/satellites/index']);
+                    this.cdr.markForCheck();
                     return;
                 }
+
                 // Error
                 this.notyService.genericError();
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
                 }
-            })
-        );
-    }
-
-    protected refreshApiKey(): void {
-        this.subscriptions.add(this.ProfileService.generateNewApiKey()
-            .subscribe((result) => {
-                this.post.Satellite.api_key = result.apikey;
                 this.cdr.markForCheck();
             })
         );
