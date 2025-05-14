@@ -163,7 +163,7 @@
                   cols="30"
                   rows="15"
                   name="bbcodeTextarea"
-                  [(ngModel)]="bbcode" (ngModelChange)="updateBbcode($event)" (select)="selection($event)"></textarea>
+                  [(ngModel)]="bbcode" (ngModelChange)="updateBbcode($event)" (selectionchange)="selection($event)"></textarea>
         </div>
     </div>
 
