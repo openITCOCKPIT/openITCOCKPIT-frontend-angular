@@ -125,62 +125,64 @@ export class ResourcegroupsSummaryComponent implements OnInit, OnDestroy {
             this.containerWidth = this.scmSummaryContainer?.nativeElement.offsetWidth;
         }
         if (sunburstChartElement) {
-            this.sunburstChartInstance = new Sunburst(this.scmSummaryContainer?.nativeElement)
-                .data(this.mapSummary)
-                .excludeRoot(true)
-                .centerRadius(0.1)
-                .sort((a, b) => a['data'].state - b['data'].state)
-                .size('size')
-                .color('color')
-                .strokeColor('white')
-                .width(this.containerWidth * 0.95)
-                .height(this.containerWidth * 0.95)
-                .radiusScaleExponent(1)
-                .tooltipContent(function (d, node) {
-                    return node.depth === 0 ? '<i class="fa-solid fa-reply"></i>' : '';
-                })
-                .handleNonFittingLabel((label, availablePx) => {
-                    const numFitChars = Math.round(availablePx / 7); // ~7px per char
-                    return numFitChars < 5
-                        ? null
-                        : `${label.slice(0, Math.round(numFitChars) - 3)}...`;
-                })
-                .onClick((node, event) => {
-                    if (node) {
-                        if (node['type'] === 'resourcegroup') {
-                            this.selectedResouceId = null;
-                            this.selectedResoucegroup = _.find(this.resourcegroups, function (resourcegroup) {
-                                return resourcegroup.id == node['id'];
-                            });
-                            if (node.children && node.children.length > 0) {
-                                this.sunburstChartInstance.focusOnNode(node);
-                            }
-                            this.cdr.markForCheck();
-
-                        } else if (node['type'] === 'resource') {
-                            this.selectedResoucegroup = _.find(this.resourcegroups, function (resourcegroup) {
-                                return resourcegroup.id == node['resourcegroup_id'];
-                            });
-                            if (this.selectedResoucegroup && this.selectedResoucegroup.resources) {
-                                this.selectedResouce = _.find(this.selectedResoucegroup.resources, function (resource) {
-                                    return resource.id == node['id'];
+            if (!this.sunburstChartInstance) {
+                this.sunburstChartInstance = new Sunburst(this.scmSummaryContainer?.nativeElement)
+                    .data(this.mapSummary)
+                    .excludeRoot(true)
+                    .centerRadius(0.1)
+                    .sort((a, b) => a['data'].state - b['data'].state)
+                    .size('size')
+                    .color('color')
+                    .strokeColor('white')
+                    .width(this.containerWidth * 0.95)
+                    .height(this.containerWidth * 0.95)
+                    .radiusScaleExponent(1)
+                    .tooltipContent(function (d, node) {
+                        return node.depth === 0 ? '<i class="fa-solid fa-reply"></i>' : '';
+                    })
+                    .handleNonFittingLabel((label, availablePx) => {
+                        const numFitChars = Math.round(availablePx / 7); // ~7px per char
+                        return numFitChars < 5
+                            ? null
+                            : `${label.slice(0, Math.round(numFitChars) - 3)}...`;
+                    })
+                    .onClick((node, event) => {
+                        if (node) {
+                            if (node['type'] === 'resourcegroup') {
+                                this.selectedResouceId = null;
+                                this.selectedResoucegroup = _.find(this.resourcegroups, function (resourcegroup) {
+                                    return resourcegroup.id == node['id'];
                                 });
-                            }
+                                if (node.children && node.children.length > 0) {
+                                    this.sunburstChartInstance.focusOnNode(node);
+                                }
+                                this.cdr.markForCheck();
 
-                            //set focus on resource group as parent of resource
-                            if (node.__dataNode && node.__dataNode.parent) {
-                                this.sunburstChartInstance.focusOnNode(node.__dataNode.parent.data);
-                                this.selectedResouceId = node['id'];
-                            }
-                            this.cdr.markForCheck();
+                            } else if (node['type'] === 'resource') {
+                                this.selectedResoucegroup = _.find(this.resourcegroups, function (resourcegroup) {
+                                    return resourcegroup.id == node['resourcegroup_id'];
+                                });
+                                if (this.selectedResoucegroup && this.selectedResoucegroup.resources) {
+                                    this.selectedResouce = _.find(this.selectedResoucegroup.resources, function (resource) {
+                                        return resource.id == node['id'];
+                                    });
+                                }
 
-                        } else {
-                            this.selectedResouceId = null;
-                            this.sunburstChartInstance.focusOnNode(null);
-                            this.cdr.markForCheck();
+                                //set focus on resource group as parent of resource
+                                if (node.__dataNode && node.__dataNode.parent) {
+                                    this.sunburstChartInstance.focusOnNode(node.__dataNode.parent.data);
+                                    this.selectedResouceId = node['id'];
+                                }
+                                this.cdr.markForCheck();
+
+                            } else {
+                                this.selectedResouceId = null;
+                                this.sunburstChartInstance.focusOnNode(null);
+                                this.cdr.markForCheck();
+                            }
                         }
-                    }
-                });
+                    });
+            }
             this.cdr.markForCheck();
         }
     }
