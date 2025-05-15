@@ -112,9 +112,9 @@
                 </ng-container>
 
                 <ng-container *ngIf="hostId !== 0">
-                    <fieldset class="hostWithServicesToDeploy">
+                    <fieldset class="mb-3 hostWithServicesToDeploy">
                         <h5>{{ t('Service/s to deploy on target host:') }}</h5>
-                        <div
+                        <div class="mb-1"
                             *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
 
                             <label for="checkbox_{{hostWithServicesToDeploy.servicetemplate.id}}">
@@ -126,7 +126,7 @@
 
                                 {{ hostWithServicesToDeploy.servicetemplate.name }}
 
-                                <span class="text-info">
+                                <span class="text-info" *ngIf="hostWithServicesToDeploy.servicetemplate.description">
                                     ({{ hostWithServicesToDeploy.servicetemplate.description }})
                                 </span>
 
