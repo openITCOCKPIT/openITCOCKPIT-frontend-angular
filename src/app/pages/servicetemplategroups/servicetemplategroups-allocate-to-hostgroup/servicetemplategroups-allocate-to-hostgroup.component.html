@@ -132,7 +132,7 @@
                                 </label>
                             </h5>
 
-                            <div *ngFor="let serviceToDeploy of hostWithServicesToDeploy.services">
+                            <div class="mb-1" *ngFor="let serviceToDeploy of hostWithServicesToDeploy.services">
                                 <label
                                     for="{{hostWithServicesToDeploy.host.id}}_{{serviceToDeploy.servicetemplate.id}}">
                                     <input type="checkbox" cFormCheckInput
