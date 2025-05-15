@@ -133,12 +133,6 @@
                                 [disabled]="!timeperiod.Timeperiod.allow_edit"
                                 [item]="timeperiod"></oitc-item-select>
                         }
-
-                        <oitc-item-select
-                            *oitcPermission="['timeperiods', 'delete']"
-                            [disabled]="!timeperiod.Timeperiod.allow_edit"
-                            [item]="timeperiod"></oitc-item-select>
-
                     </td>
                     <td *oitcPermission="['timeperiods', 'viewdetails']" class="word-break">
                         <a [routerLink]="['/', 'timeperiods', 'viewDetails', timeperiod.Timeperiod.id]">
