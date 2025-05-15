@@ -93,6 +93,10 @@
                         [disabled]="true"
                         [options]="this.requiredContainersList">
                     </oitc-multi-select>
+                    <div class="col-12 help-block text-info">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('The required containers are needed to display the map in the rotations. If you want to edit them, remove the map from the respective rotations that are assigned to these containers. When saving, the required containers are saved together with the containers entered above.') }}
+                    </div>
                 </div>
 
                 @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {

@@ -93,6 +93,10 @@
                         [disabled]="true"
                         [options]="this.requiredContainersList">
                     </oitc-multi-select>
+                    <div class="col-12 help-block text-info">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('The required containers are needed to display the maps in the rotation. If you want to edit them, remove the maps that are assigned to the respective containers from this rotation. When saving, the required containers are saved together with the containers entered above.') }}
+                    </div>
                 </div>
 
                 <div class="mb-3">
