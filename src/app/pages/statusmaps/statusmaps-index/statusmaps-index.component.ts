@@ -45,6 +45,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { SummaryState } from '../../hosts/summary_state.interface';
 import { HostEntity } from '../../hosts/hosts.interface';
 import { HostSummaryStatusmapComponent } from './host-summary-statusmap/host-summary-statusmap.component';
+import { LayoutService } from '../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-statusmaps-index',
@@ -104,13 +105,29 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
     // Progress is only necessary if physics is enabled
     public showProgressbar: boolean = false;
     public progress: number = 0;
+    public theme: null | 'dark' = null;
+    private edges: Edge[] = [];
+    private nodes: StatusmapExtendedNode[] = [];
 
     private subscriptions: Subscription = new Subscription();
     public readonly PermissionsService = inject(PermissionsService);
     private readonly StatusmapService = inject(StatusmapService);
+    private readonly LayoutService = inject(LayoutService);
     private readonly route = inject(ActivatedRoute);
     private readonly document = inject(DOCUMENT);
     private cdr = inject(ChangeDetectorRef);
+
+
+    constructor() {
+        this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
+            this.theme = null;
+            if (theme === 'dark') {
+                this.theme = 'dark';
+            }
+            this.renderVisNetwork(this.edges, this.nodes);
+            this.cdr.markForCheck();
+        }));
+    }
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -139,16 +156,16 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
 
         this.isLoading = true;
         this.subscriptions.add(this.StatusmapService.getIndex(this.params).subscribe(statusmap => {
-            const edges = statusmap.statusMap.edges;
-            const nodes = statusmap.statusMap.nodes;
+            this.edges = statusmap.statusMap.edges;
+            this.nodes = statusmap.statusMap.nodes;
 
-            this.isEmpty = nodes.length === 0;
+            this.isEmpty = this.nodes.length === 0;
 
             this.sattelites = statusmap.satellites;
             this.isLoading = false;
             this.cdr.markForCheck();
 
-            this.renderVisNetwork(edges, nodes);
+            this.renderVisNetwork(this.edges, this.nodes);
 
             if (this.isEmpty) {
                 this.showProgressbar = false;
@@ -157,7 +174,12 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
         }));
     }
 
-    private renderVisNetwork(edgesData: Edge[], nodesData: StatusmapExtendedNode[]): void {
+    private renderVisNetwork(edgesData: Edge[] | null, nodesData: StatusmapExtendedNode[] | null): void {
+
+        if (edgesData === null || nodesData === null) {
+            return;
+        }
+
         const elem = this.document.getElementById('statusmapNetwork');
         if (!elem) {
             // Just to make TS happy
@@ -187,6 +209,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
         const colorUnreachable = '#727b84';
         const colorNotMonitored = '#4285F4';
 
+        const labelFontColor: string = this.theme === 'dark' ? "rgba(255, 255, 255, 0.87)" : "rgba(37, 43, 54, 0.95)";
 
         let options: Options = {
             autoResize: true,
@@ -374,6 +397,9 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
             },
             nodes: {
                 borderWidth: 0.5,
+                font: {
+                    color: labelFontColor
+                }
             },
             edges: {
                 width: 0.2,
