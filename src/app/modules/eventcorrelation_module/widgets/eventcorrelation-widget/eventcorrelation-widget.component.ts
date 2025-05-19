@@ -10,7 +10,14 @@ import {
 import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormLabelDirective } from '@coreui/angular';
+import {
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormLabelDirective,
+    RowComponent
+} from '@coreui/angular';
 import { NgIf } from '@angular/common';
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
@@ -19,9 +26,19 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { AnimationEvent } from '@angular/animations';
 import { EventcorrelationWidgetService } from './eventcorrelation-widget.service';
-import { EvcTree, EventcorrelationRootElement } from '../../pages/eventcorrelations/eventcorrelations.interface';
+import {
+    EvcSummaryService,
+    EvcTree,
+    EventcorrelationRootElement
+} from '../../pages/eventcorrelations/eventcorrelations.interface';
+import { EvcTreeDirection } from '../../pages/eventcorrelations/eventcorrelations-view/evc-tree/evc-tree.enum';
 import { EventcorrelationsService } from '../../pages/eventcorrelations/eventcorrelations.service';
 import { EvcTreeComponent } from '../../pages/eventcorrelations/eventcorrelations-view/evc-tree/evc-tree.component';
+import { EvcTableComponent } from '../../pages/eventcorrelations/eventcorrelations-view/evc-table/evc-table.component';
+import { EventcorrelationWidgetConfig } from './eventcorrelation-widget.interface';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
+
 
 @Component({
     selector: 'oitc-eventcorrelation-widget',
@@ -33,7 +50,15 @@ import { EvcTreeComponent } from '../../pages/eventcorrelations/eventcorrelation
         SelectComponent,
         TranslocoDirective,
         XsButtonDirective,
-        EvcTreeComponent
+        EvcTreeComponent,
+        EvcTableComponent,
+        ColComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        FormsModule
     ],
     templateUrl: './eventcorrelation-widget.component.html',
     styleUrl: './eventcorrelation-widget.component.css',
@@ -55,8 +80,10 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
 
     // Variables for the EVC View
     public evcTree: EvcTree[] = [];
+    public evcSummaryTree: EvcSummaryService[][] = [];
     public rootElement?: EventcorrelationRootElement;
     public hasWritePermission: boolean = false;
+
 
     public showInfoForDisabledService: number = 0;
     public disabledServices: number = 0; //number of disabled services in the EVC
@@ -67,10 +94,58 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
     public downtimedServices: number = 0; //number of services in a downtime in the EVC
     public stateForDowntimedService: number = 3; // Unknown
 
+    // widget config will be loaded from the server
+    public config!: EventcorrelationWidgetConfig;
+    public direction: EvcTreeDirection = EvcTreeDirection.TOP_TO_BOTTOM;
+
+    protected readonly EvcViewTypes: ({
+        value: string;
+        label: string;
+        icon: IconProp
+    })[] = [
+        {
+            value: 'tree',
+            label: this.TranslocoService.translate('Tree'),
+            icon: ['fas', 'sitemap']
+        },
+        {
+            value: 'table',
+            label: this.TranslocoService.translate('Table'),
+            icon: ['fas', 'table-columns']
+        }
+    ];
+    protected readonly EvcTreeDirections: ({
+        key: string;
+        label: string;
+        rotate?: RotateProp
+    })[] = [
+        {
+            key: 'RIGHT_TO_LEFT',
+            label: this.TranslocoService.translate('right to left'),
+            rotate: 90
+        },
+        {
+            key: 'BOTTOM_TO_TOP',
+            label: this.TranslocoService.translate('bottom to top'),
+            rotate: 180
+        },
+        {
+            key: 'LEFT_TO_RIGHT',
+            label: this.TranslocoService.translate('left to right'),
+            rotate: 270
+        },
+        {
+            key: 'TOP_TO_BOTTOM',
+            label: this.TranslocoService.translate('top to bottom')
+        }
+    ];
+
     public override load() {
         if (this.widget) {
             this.EventcorrelationWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {
                 this.host_id = response.host_id;
+                this.config = response.config;
+                this.direction= EvcTreeDirection[this.config.direction];
 
                 if (this.host_id) {
                     this.loadEventcorrelation();
@@ -131,9 +206,16 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
         this.cdr.markForCheck();
     }
 
+    public resetHandler($event: EvcTreeDirection) {
+        this.show = false;
+        this.cdr.markForCheck();
+        this.direction = $event;
+        setTimeout(() =>{this.show = true; this.cdr.markForCheck();}, 100);
+    }
+
     public saveConfig() {
         if (this.host_id && this.widget) {
-            this.EventcorrelationWidgetService.saveWidgetConfig(this.widget.id, this.host_id).subscribe((response) => {
+            this.EventcorrelationWidgetService.saveWidgetConfig(this.widget.id, this.host_id, this.config).subscribe((response) => {
                 // Update the markdown content
                 this.load();
 
@@ -175,6 +257,7 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
             this.cdr.markForCheck();
 
             this.evcTree = result.evcTree;
+            this.evcSummaryTree = result.evcSummaryTree;
             this.rootElement = result.rootElement;
             this.hasWritePermission = result.hasWritePermission;
             this.showInfoForDisabledService = result.showInfoForDisabledService;

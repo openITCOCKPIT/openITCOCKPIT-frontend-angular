@@ -12,7 +12,7 @@ import {
   FormLabelDirective,
   NavComponent,
   NavItemComponent,
-  ProgressBarComponent,
+  ProgressComponent,
   TooltipDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -72,7 +72,7 @@ import { HistoryService } from '../../../history.service';
     XsButtonDirective,
     AlertComponent,
     TranslocoPipe,
-    ProgressBarComponent,
+    ProgressComponent,
     RouterLink,
     SelectComponent,
     TooltipDirective
@@ -100,7 +100,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
     protected hostsWithServicetemplatesForDeploy: AllocateToHostGetServicetemplatesForDeploy[] = [];
     protected servicetemplategroupId: number = 0;
     protected hostId: number = 0;
-    protected percentage: number = 42;
+    protected percentage: number = 0;
     protected isProcessing: boolean = false;
 
     public ngOnInit() {
@@ -172,7 +172,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
         }
         this.isProcessing = true;
         let i = 0;
-        let count = 42;
+        let count =  item.Servicetemplates._ids.length;
         this.ServicetemplategroupsService.allocateToHost(this.servicetemplategroupId, item);
 
 

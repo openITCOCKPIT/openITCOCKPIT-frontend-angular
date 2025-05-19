@@ -53,52 +53,53 @@ import { HistoryService } from '../../../history.service';
 import { UsergroupsService } from '../usergroups.service';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 
 @Component({
     selector: 'oitc-usergroups-add',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    MultiSelectComponent,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PaginatorModule,
-    PermissionDirective,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RowComponent,
-    ColComponent,
-    FormCheckComponent,
-    FormCheckLabelDirective,
-    RouterLink,
-    NgForOf,
-    NgClass,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    TranslocoPipe,
-    KeyValuePipe,
-    DropdownComponent,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    DropdownItemDirective,
-    DropdownDividerDirective
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormCheckInputDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        MultiSelectComponent,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        PaginatorModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RowComponent,
+        ColComponent,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        RouterLink,
+        NgForOf,
+        NgClass,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TranslocoPipe,
+        KeyValuePipe,
+        DropdownComponent,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        DropdownItemDirective,
+        DropdownDividerDirective,
+        TrueFalseDirective
+    ],
     templateUrl: './usergroups-add.component.html',
     styleUrl: './usergroups-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -192,11 +193,6 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
-
-                    // This is a bit of a hack, but it's the only way to get the error message to show up in the right place.
-                    if (typeof this.errors['container']['name'] !== 'undefined') {
-                        this.errors['name'] = <any>this.errors['container']['name'];
-                    }
                 }
             })
         );
@@ -205,7 +201,7 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
     protected forceTicks(actionToTick: string, tick: boolean) {
         for (let aco in this.acos.acos) {
             for (let controller in this.acos.acos[aco].children) {
-                let isModule = this.acos.acos[aco].children[controller].alias.substring(-6) === 'Module';
+                let isModule = this.acos.acos[aco].children[controller].alias.endsWith('Module');
 
                 if (isModule) {
                     for (let pluginController in this.acos.acos[aco].children[controller].children) {

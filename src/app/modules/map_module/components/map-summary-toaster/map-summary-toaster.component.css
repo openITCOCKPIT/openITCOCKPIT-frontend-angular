@@ -1,9 +1,9 @@
 .toaster-min-width {
-    min-width: 30%;
+    min-width: 600px;
 }
 
-.txt-color-blueDark {
-    color: #4c4f53 !important;
+.toaster-max-width {
+    max-width: 800px;
 }
 
 .cropText {

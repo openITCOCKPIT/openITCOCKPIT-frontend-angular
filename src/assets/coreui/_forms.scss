@@ -63,3 +63,22 @@
 input[type="range"] {
     accent-color: $primary;
 }
+
+
+/*************************
+ * User container Strike *
+ *************************/
+
+.user-strike {
+    position: relative;
+
+}
+
+.user-strike::before {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    border-bottom: 1px solid #C00;
+    width: 100%;
+}

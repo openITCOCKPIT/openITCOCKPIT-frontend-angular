@@ -119,70 +119,70 @@ import { HoststatusObject } from '../hosts.interface';
 @Component({
     selector: 'oitc-hosts-browser-services-list',
     imports: [
-    TranslocoDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    NgClass,
-    AcknowledgementIconComponent,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    ColComponent,
-    ContainerComponent,
-    DowntimeIconComponent,
-    DropdownComponent,
-    DropdownDividerDirective,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FaStackComponent,
-    FaStackItemSizeDirective,
-    ItemSelectComponent,
-    MatSort,
-    MatSortHeader,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    PopoverGraphComponent,
-    RowComponent,
-    SelectAllComponent,
-    ServicestatusIconComponent,
-    ServicestatusSimpleIconComponent,
-    TableDirective,
-    TableLoaderComponent,
-    TranslocoPipe,
-    XsButtonDirective,
-    TooltipDirective,
-    RouterLink,
-    DeleteAllModalComponent,
-    DisableModalComponent,
-    EnableModalComponent,
-    ServiceAcknowledgeModalComponent,
-    ServiceMaintenanceModalComponent,
-    DebounceDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ReactiveFormsModule,
-    RegexHelperTooltipComponent,
-    FormsModule,
-    ServiceAddToServicegroupModalComponent,
-    AlertComponent
-],
+        TranslocoDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        NgClass,
+        AcknowledgementIconComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        ColComponent,
+        ContainerComponent,
+        DowntimeIconComponent,
+        DropdownComponent,
+        DropdownDividerDirective,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        FaStackComponent,
+        FaStackItemSizeDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NgForOf,
+        NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        PopoverGraphComponent,
+        RowComponent,
+        SelectAllComponent,
+        ServicestatusIconComponent,
+        ServicestatusSimpleIconComponent,
+        TableDirective,
+        TableLoaderComponent,
+        TranslocoPipe,
+        XsButtonDirective,
+        TooltipDirective,
+        RouterLink,
+        DeleteAllModalComponent,
+        DisableModalComponent,
+        EnableModalComponent,
+        ServiceAcknowledgeModalComponent,
+        ServiceMaintenanceModalComponent,
+        DebounceDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormControlDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ReactiveFormsModule,
+        RegexHelperTooltipComponent,
+        FormsModule,
+        ServiceAddToServicegroupModalComponent,
+        AlertComponent
+    ],
     templateUrl: './hosts-browser-services-list.component.html',
     styleUrl: './hosts-browser-services-list.component.css',
     providers: [
-        { provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService },
-        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService },
-        { provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService },
+        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService},
+        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService},
+        {provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService},
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -357,6 +357,7 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
     public changeTab(tab: string): void {
         if (tab !== this.activeTab) {
             this.activeTab = tab;
+            this.params.page = 1;
 
             // clear old data
             this.services = undefined;
@@ -620,6 +621,12 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
 
@@ -634,6 +641,11 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Service.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'services', 'copy', ids]);
+        } else {
+
+                const message = this.TranslocoService.translate('No items selected!');
+                this.notyService.genericError(message);
+                return;
         }
     }
 
@@ -658,6 +670,12 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
                     value: item.Service.hostname + "/" + item.Service.servicename
                 };
             });
+        }
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
         this.selectedItems = items;
         if (items.length === 0) {

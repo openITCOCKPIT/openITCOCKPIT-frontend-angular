@@ -144,10 +144,6 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
 
     protected readonly SendIntervalSelect: SelectKeyValue[] = [
         {
-            key: 0,
-            value: this.TranslocoService.translate('NEVER')
-        },
-        {
             key: 1,
             value: this.TranslocoService.translate('DAY')
         },
@@ -185,7 +181,7 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
             summary: 0,
             downtimes: 0,
             send_email: 0,
-            send_interval: 0, // 0 - NEVER
+            send_interval: 1, // 0 - NEVER
             evaluation: InstantreportEvaluationTypes.HostAndServices,
             hostgroups: {
                 _ids: []

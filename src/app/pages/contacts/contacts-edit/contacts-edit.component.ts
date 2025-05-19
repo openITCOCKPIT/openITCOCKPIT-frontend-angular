@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
+    AlertComponent,
     BadgeComponent,
     CardBodyComponent,
     CardComponent,
@@ -22,7 +23,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MacrosComponent } from '../../../components/macros/macros.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -49,6 +50,9 @@ import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-lin
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
 import { HistoryService } from '../../../history.service';
+import { PushNotificationsService } from '../../../services/push-notifications.service';
+import _ from 'lodash';
+import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-contacts-edit',
@@ -86,7 +90,9 @@ import { HistoryService } from '../../../history.service';
         MultiSelectComponent,
         SelectComponent,
         LabelLinkComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        AlertComponent,
+        AsyncPipe
     ],
     templateUrl: './contacts-edit.component.html',
     styleUrl: './contacts-edit.component.css',
@@ -95,6 +101,7 @@ import { HistoryService } from '../../../history.service';
 export class ContactsEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
+    private PushNotificationsService: PushNotificationsService = inject(PushNotificationsService);
     protected users: SelectKeyValue[] = [];
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -113,18 +120,25 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
 
     protected requiredContainers: number[] = [];
     protected requiredContainersString: string = '';
-    protected allContainers: SelectKeyValue[] = []
     protected requiredContainersList: SelectKeyValue[] = []
-    protected contactId: number = 0;
+    protected id: number = 0;
     protected selectedContainers: number[] = [];
     protected containersSelection: number[] = [];
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private cdr = inject(ChangeDetectorRef);
 
-    public ngOnInit() {
-        this.loadCommands();
-        this.contactId = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.ContactService.getEdit(this.contactId)
+    public pushNotificationConnected: boolean | undefined;
+    public pushNotificationHasPermission: boolean | undefined;
+    public PermissionsService = inject(PermissionsService);
+    private init: boolean = true;
+
+    public ngOnInit(): void {
+        this.id = Number(this.route.snapshot.paramMap.get('id'));
+        this.loadContact();
+    }
+
+    public loadContact() {
+        this.subscriptions.add(this.ContactService.getEdit(this.id)
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 this.post = result.contact.Contact;
@@ -132,12 +146,12 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                 this.requiredContainersString = this.requiredContainers.join(',');
                 this.areContainersChangeable = result.areContainersChangeable;
 
-                this.onContainerChange();
-
                 // Force empty container selection.
                 this.selectedContainers = this.post.containers._ids;
-                this.post.containers._ids = [];
                 this.loadContainers();
+                this.loadCommands();
+                this.onContainerChange();
+                this.init = false;
             }));
     }
 
@@ -147,7 +161,19 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
 
     public updateContact(): void {
 
-        this.post.containers._ids = this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers);
+        //update container ids if it was edited
+        if (this.areContainersChangeable) {
+            this.post.containers._ids = this.post.containers._ids.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
+
+        this.post.containers._ids = _.uniq(
+            this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers)
+        );
         this.subscriptions.add(this.ContactService.updateContact(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
@@ -169,7 +195,6 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
-
                     this.hasMacroErrors = false;
                     if (typeof (this.errors['customvariables']['custom']) === "string") {
                         this.hasMacroErrors = true;
@@ -183,47 +208,33 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private loadContainers(): void {
         this.subscriptions.add(this.ContactService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
-                this.cdr.markForCheck();
-                // Fetch all containers.
-                this.allContainers = result.containers;
-
-                // Unbind the containers list for the required dropdown. Otherwise, a reference will created that adds label suffixes to all dropdowns.
-                this.requiredContainersList = result.containers.splice(0, this.requiredContainers.length);
-
-                // If no containers are required, the selectedContainers can remain where they belong.
-                if (this.requiredContainers.length === 0) {
-                    this.containersSelection = this.selectedContainers;
-                    this.containers = this.allContainers;
-                    this.cdr.markForCheck();
-                    return;
-                }
-
-                let newContainers: SelectKeyValue[] = [];
-                let newPostIds: number[] = [];
-
-                // Otherwise, we need to only add the selected containers that are not required to the container list.
-                for (var i in this.allContainers) {
-                    let index = parseInt(i),
-                        container: SelectKeyValue = this.allContainers[index];
-
-                    // The container is required? Then skip.
-                    if (this.requiredContainers.indexOf(container.key) !== -1) {
-                        continue;
+                this.containersSelection = [];
+                this.requiredContainersList = [];
+                this.containers = result.containers;
+                this.post.containers._ids.forEach(value => {
+                    let permittetCheck = this.containers.find(({key}) => key === value);
+                    if (permittetCheck && this.requiredContainers.indexOf(value) === -1) {
+                        this.containersSelection.push(value);
                     }
+                });
 
-                    // Otherwise add to the container dropdown.
-                    newContainers.push(container);
-
-                    // And if it is selected, add it to the overwrite-array.
-                    if (this.selectedContainers.indexOf(container.key) !== -1) {
-                        newPostIds.push(container.key);
+                this.requiredContainers.forEach(value => {
+                    let existsCheck = this.containers.find(({key}) => key === value);
+                    if (existsCheck) {
+                        this.requiredContainersList.push({
+                            key: value,
+                            value: existsCheck.value
+                        });
+                    } else {
+                        this.requiredContainersList.push({
+                            key: value,
+                            value: this.TranslocoService.translate('RESTRICTED CONTAINER')
+                        });
                     }
+                });
 
-                }
-                this.containers = newContainers;
-                this.containersSelection = newPostIds;
                 this.cdr.markForCheck();
-            }))
+            }));
     }
 
     private loadUsers() {
@@ -232,6 +243,17 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
             return;
         }
+
+        //update container ids if it was edited
+        if (this.areContainersChangeable && !this.init) {
+            this.post.containers._ids = this.post.containers._ids.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
+
         const param = {
             containerIds: this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers)
         };
@@ -249,6 +271,17 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
             return;
         }
+
+        //update container ids if it was edited
+        if (this.areContainersChangeable && !this.init) {
+            this.post.containers._ids = this.post.containers._ids.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
+
         const param: LoadTimeperiodsPost = {
             container_ids: this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers)
         };
@@ -302,6 +335,11 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                 this.post.service_commands._ids = [...this.post.service_commands._ids.filter(item => item !== this.servicePushCommandId)];
             }
         }
+
+        if (!this.post.service_push_notifications_enabled) {
+            this.pushNotificationHasPermission = undefined;
+            this.pushNotificationConnected = undefined;
+        }
     }
 
     // Called by (click) - no manual change detection required
@@ -314,6 +352,11 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
             if (this.post.host_commands._ids.indexOf(this.hostPushCommandId) !== -1) {
                 this.post.host_commands._ids = [...this.post.host_commands._ids.filter(item => item !== this.hostPushCommandId)];
             }
+        }
+
+        if (!this.post.host_push_notifications_enabled) {
+            this.pushNotificationHasPermission = undefined;
+            this.pushNotificationConnected = undefined;
         }
     }
 
@@ -332,6 +375,17 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
             this.post.host_push_notifications_enabled = 1;
         } else {
             this.post.host_push_notifications_enabled = 0;
+        }
+    }
+
+    protected checkPushNotificationSettings(): void {
+        if (!this.pushNotificationHasPermission) {
+            this.PushNotificationsService.checkPermissions();
+        }
+        this.pushNotificationConnected = this.PushNotificationsService.isConnected();
+        this.pushNotificationHasPermission = this.PushNotificationsService.hasPermission();
+        if (this.pushNotificationConnected && this.pushNotificationHasPermission) {
+            this.PushNotificationsService.sendTestMessage();
         }
     }
 

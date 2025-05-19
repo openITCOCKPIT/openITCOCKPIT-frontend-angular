@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckInputDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
@@ -43,32 +43,32 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-servicetemplategroups-add',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    NgSelectModule,
-    PermissionDirective,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    SelectComponent,
-    MultiSelectComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormCheckInputDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        SelectComponent,
+        MultiSelectComponent
+    ],
     templateUrl: './servicetemplategroups-add.component.html',
     styleUrl: './servicetemplategroups-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -89,12 +89,29 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
     protected post: ServiceTemplateGroupsAddPostServicetemplategroup = {} as ServiceTemplateGroupsAddPostServicetemplategroup;
     protected containers: SelectKeyValue[] = [];
 
+    private preSelectedIds: number[] = [];
+
     constructor() {
         this.post = this.getDefaultPost();
     }
 
     public ngOnInit() {
         this.loadContainers();
+
+        // preSelectedIds is used for "Append to service template group from /servicetemplates/index"
+        let preSelectedIds = this.route.snapshot.paramMap.get('ids');
+        if (preSelectedIds !== null) {
+            let idsAsString = preSelectedIds.split(',');
+            this.preSelectedIds = [];
+            //int ids are required for AngularJS
+            for (let i in idsAsString) {
+                this.preSelectedIds.push(parseInt(idsAsString[i], 10));
+            }
+        }
+
+        if (preSelectedIds === null) {
+            this.preSelectedIds = [];
+        }
     }
 
     public ngOnDestroy() {
@@ -162,6 +179,8 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
             this.servicetemplates = [];
             return;
         }
+        // preselect servicetemplates if ids are passed
+        this.post.servicetemplates._ids = this.preSelectedIds;
         this.loadServicetemplates('');
     }
 

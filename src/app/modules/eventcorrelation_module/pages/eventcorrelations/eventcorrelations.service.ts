@@ -5,6 +5,8 @@ import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
     EvcHostUsedBy,
+    HostUsedByEVC,
+    ServiceUsedByEVC,
     EvcModalService,
     EvcServiceSelect,
     EvcTree,
@@ -103,6 +105,32 @@ export class EventcorrelationsService {
         }).pipe(
             map(data => {
                 return data.usedBy;
+            })
+        )
+    }
+
+    public hostUsedBy(id: number): Observable<HostUsedByEVC> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostUsedByEVC>(`${proxyPath}/eventcorrelation_module/eventcorrelations/hostUsedBy/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public serviceUsedBy(id: number): Observable<ServiceUsedByEVC> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ServiceUsedByEVC>(`${proxyPath}/eventcorrelation_module/eventcorrelations/serviceUsedBy/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
             })
         )
     }

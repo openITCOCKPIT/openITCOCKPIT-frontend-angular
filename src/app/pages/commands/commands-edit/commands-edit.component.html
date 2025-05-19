@@ -18,7 +18,7 @@
             </li>
         </ol>
     </nav>
-    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
     <form cForm (ngSubmit)="checkForMisingArguments()">
         <c-card class="mb-3" *ngIf="post">
             <c-card-header>
@@ -35,6 +35,8 @@
 
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
+                        <oitc-default-macros-modal *oitcPermission="['macros', 'index']"
+                                                   [defaultMacros]="defaultMacros"></oitc-default-macros-modal>
                         <oitc-user-macros-modal *oitcPermission="['macros', 'index']"></oitc-user-macros-modal>
 
                         <button [fallbackUrl]="['commands', 'index']" cButton class="ripple" color="default"

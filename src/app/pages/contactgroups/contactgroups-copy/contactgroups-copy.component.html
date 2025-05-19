@@ -37,7 +37,7 @@
         </c-card-header>
         <c-card-body>
 
-            <oitc-form-loader *ngIf="contactgroups.length === 0"></oitc-form-loader>
+            <oitc-form-loader [isVisible]="contactgroups.length === 0"></oitc-form-loader>
 
             <c-card class="mb-3" *ngFor="let contactgroup of contactgroups; let i = index">
                 <c-card-header>

@@ -31,7 +31,6 @@ import { Subscription } from 'rxjs';
 
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { Router, RouterLink } from '@angular/router';
-import { GenericMessageResponse } from '../../../../generic-responses';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { FormsModule } from '@angular/forms';
 import { ImportersService } from '../../pages/importers/importers.service';
@@ -88,12 +87,11 @@ export class ImportDataComponent implements OnInit, OnDestroy {
         data?: ImportedHostRawData[]
         success: boolean
         errorMessage?: string
-        notValidRawData?: any
+        message?: string
+        errors?: any
     };
     public showSynchronizingSpinner: boolean = false;
     public showSpinner: boolean = false;
-    public errors: GenericMessageResponse | null = null;
-    public hasRootPrivileges: boolean = false;
     private cdr = inject(ChangeDetectorRef);
     public dynamicFieldsNameValue: GenericKeyValueFieldType[] = [];
 
@@ -149,8 +147,11 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                                 let response = data.data as ImportDataResponse;
                                 this.importData = {
                                     success: true,
-                                    data: response.response.rawData
+                                    data: response.response.rawData,
+                                    errors: response.response.errors || null,
+                                    message: response.response.message
                                 }
+                                console.log(this.importData);
                                 this.cdr.markForCheck();
                             }
                             if (!data.success) {
@@ -162,7 +163,7 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                                 this.importData = {
                                     success: false,
                                     errorMessage: response.message,
-                                    notValidRawData: notValidData
+                                    errors: notValidData
                                 }
                             }
                             this.cdr.markForCheck();
@@ -175,7 +176,9 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                                 let response = data.data as ImportDataResponse;
                                 this.importData = {
                                     success: true,
-                                    data: response.response.rawData
+                                    data: response.response.rawData,
+                                    errors: response.response.errors || null,
+                                    message: response.message
                                 }
                                 this.cdr.markForCheck();
                             }
@@ -184,7 +187,7 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                                 this.importData = {
                                     success: false,
                                     errorMessage: response.message,
-                                    notValidRawData: response.errors.notValidRawData
+                                    errors: response.errors.notValidRawData
                                 }
                             }
                             this.cdr.markForCheck();
@@ -197,7 +200,9 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                                 let response = data.data as ImportDataResponse;
                                 this.importData = {
                                     success: true,
-                                    data: response.response.rawData
+                                    data: response.response.rawData,
+                                    errors: response.response.errors || null,
+                                    message: response.response.message
                                 }
                                 this.cdr.markForCheck();
                             }
@@ -210,8 +215,9 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                                 this.importData = {
                                     success: false,
                                     errorMessage: response.message,
-                                    notValidRawData: notValidData
+                                    errors: notValidData
                                 }
+                                this.cdr.markForCheck();
                             }
                             this.cdr.markForCheck();
 
@@ -223,7 +229,8 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                                 let response = data.data as ImportDataResponse;
                                 this.importData = {
                                     success: true,
-                                    data: response.response.rawData
+                                    data: response.response.rawData,
+                                    errors: response.response.errors || null,
                                 }
                                 this.cdr.markForCheck();
                             }
@@ -236,7 +243,7 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                                 this.importData = {
                                     success: false,
                                     errorMessage: response.message,
-                                    notValidRawData: notValidData
+                                    errors: notValidData
                                 }
                             }
                             this.cdr.markForCheck();
@@ -271,7 +278,6 @@ export class ImportDataComponent implements OnInit, OnDestroy {
         if (this.importer) {
             this.showSpinner = true;
             this.showSynchronizingSpinner = true;
-            this.errors = null;
             this.ImporterService.startDataImport(this.importer, undefined).subscribe(data => {
                 this.cdr.markForCheck();
                 this.showSynchronizingSpinner = false;
@@ -279,6 +285,12 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                 if (data.success) {
                     this.hideModal();
                     this.completed.emit(true);
+                } else {
+                    this.importData = {
+                        success: false,
+                        errorMessage: data.data.error,
+                        errors: []
+                    }
                 }
             });
         }

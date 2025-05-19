@@ -245,7 +245,6 @@
                     <tr *ngFor="let service of services.all_services">
                         <td class="text-center">
                             <oitc-item-select
-                                *oitcPermission="['services', 'delete']"
                                 [disabled]="!service.Service.allow_edit"
                                 [item]="service"></oitc-item-select>
                         </td>
@@ -324,7 +323,7 @@
                                         'ok' : service.Service.priority==2, 'warning' : service.Service.priority==3,
                                         'critical-soft' : service.Service.priority==4, 'critical' : service.Service.priority==5}"></fa-icon>
                         </td>
-                        <td>
+                        <td class="word-break">
                             <span *oitcPermission="['services', 'browser']">
                                 <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
                             </span>
@@ -405,11 +404,13 @@
                             <c-col md="6" lg="5">
                                 <div class="btn-group d-flex flex-row" role="group">
                                     <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                            *oitcPermission="['services', 'copy']"
                                             (click)="navigateCopy()">
                                         <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                         {{ t('Copy') }}
                                     </button>
                                     <button (click)="toggleDisableModal()"
+                                            *oitcPermission="['services', 'deactivate']"
                                             class="btn btn-outline-primary col-3 border-0"
                                             type="button">
                                         <fa-icon [icon]="['fas', 'plug']"></fa-icon>
@@ -535,7 +536,7 @@
                             <oitc-servicestatus-simple-icon></oitc-servicestatus-simple-icon>
                         </td>
 
-                        <td>
+                        <td class="word-break">
                             <span *oitcPermission="['services', 'browser']">
                                 <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
                             </span>
@@ -602,17 +603,20 @@
                             <c-col md="6" lg="5">
                                 <div class="btn-group d-flex flex-row" role="group">
                                     <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                            *oitcPermission="['services', 'copy']"
                                             (click)="navigateCopy()">
                                         <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                         {{ t('Copy') }}
                                     </button>
                                     <button (click)="toggleDisableModal()"
+                                            *oitcPermission="['services', 'deactivate']"
                                             class="btn btn-outline-primary col-3 border-0"
                                             type="button">
                                         <fa-icon [icon]="['fas', 'plug']"></fa-icon>
                                         {{ t('Disable services') }}
                                     </button>
                                     <button (click)="toggleDeleteAllModal()"
+                                            *oitcPermission="['services', 'delete']"
                                             class="btn btn-outline-danger col-3 border-0"
                                             type="button">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -654,7 +658,7 @@
                         <th class="text-center" scope="col">{{ t('State') }}
                         </th>
 
-                        <th mat-sort-header="servicename">
+                        <th mat-sort-header="servicename" class="word-break">
                             {{ t('Service name') }}
                         </th>
 
@@ -742,17 +746,20 @@
                             <c-col md="6" lg="5">
                                 <div class="btn-group d-flex flex-row" role="group">
                                     <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                            *oitcPermission="['services', 'copy']"
                                             (click)="navigateCopy()">
                                         <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                         {{ t('Copy') }}
                                     </button>
                                     <button (click)="toggleEnableModal()"
+                                            *oitcPermission="['services', 'enable']"
                                             class="btn btn-outline-primary col-3 border-0"
                                             type="button">
                                         <fa-icon [icon]="['fas', 'plug']"></fa-icon>
                                         {{ t('Enable services') }}
                                     </button>
                                     <button (click)="toggleDeleteAllModal()"
+                                            *oitcPermission="['services', 'delete']"
                                             class="btn btn-outline-danger col-3 border-0"
                                             type="button">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -803,7 +810,7 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let service of deletedServices.all_services">
-                        <td>
+                        <td class="word-break">
                             {{ service.DeletedService.name }}
                         </td>
 

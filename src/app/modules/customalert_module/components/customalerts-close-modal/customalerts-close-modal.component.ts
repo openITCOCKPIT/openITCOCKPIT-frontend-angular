@@ -8,17 +8,17 @@ import {
     Output
 } from '@angular/core';
 import {
-  AlertComponent,
-  ButtonCloseDirective,
-  ColComponent,
-  FormControlDirective,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective,
-  RowComponent
+    AlertComponent,
+    ButtonCloseDirective,
+    ColComponent,
+    FormControlDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    RowComponent
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -34,24 +34,24 @@ import { Customalert } from '../../pages/customalerts/customalerts.interface';
 @Component({
     selector: 'oitc-customalerts-close-modal',
     imports: [
-    ModalComponent,
-    TranslocoDirective,
-    ButtonCloseDirective,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    FaIconComponent,
-    ModalBodyComponent,
-    AlertComponent,
-    ColComponent,
-    NgForOf,
-    RowComponent,
-    FormControlDirective,
-    FormsModule,
-    ModalFooterComponent,
-    XsButtonDirective,
-    FormFeedbackComponent,
-    NgClass
-],
+        ModalComponent,
+        TranslocoDirective,
+        ButtonCloseDirective,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        FaIconComponent,
+        ModalBodyComponent,
+        AlertComponent,
+        ColComponent,
+        NgForOf,
+        RowComponent,
+        FormControlDirective,
+        FormsModule,
+        ModalFooterComponent,
+        XsButtonDirective,
+        FormFeedbackComponent,
+        NgClass
+    ],
     templateUrl: './customalerts-close-modal.component.html',
     styleUrl: './customalerts-close-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -87,12 +87,12 @@ export class CustomalertsCloseModalComponent {
         }
         this.isProcessing = true;
 
+        let count = this.items.length;
+        let responseCount = 0;
+        let issueCount = 0;
+
         for (let i in this.items) {
             const item = this.items[i];
-            let responseCount = 0;
-            let count = this.items.length;
-            let issueCount = 0;
-
 
             this.CustomAlertsService.closeManually(item.id, this.comment).subscribe({
                 next: (value: any) => {

@@ -27,30 +27,32 @@ import { MysqlWizardGet, MysqlWizardPost } from './mysqlserver-wizard.interface'
 import { MysqlserverWizardService } from './mysqlserver-wizard.service';
 import { WizardsAbstractComponent } from '../wizards-abstract/wizards-abstract.component';
 import { SystemnameService } from '../../../services/systemname.service';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-mysqlserver',
     imports: [
-    FaIconComponent,
-    TranslocoDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    CardBodyComponent,
-    FormsModule,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormControlDirective,
-    RequiredIconComponent,
-    AccordionComponent,
-    AccordionItemComponent,
-    AccordionButtonDirective,
-    TemplateIdDirective,
-    TranslocoPipe,
-    FormLabelDirective,
-    WizardsDynamicfieldsComponent
-],
+        FaIconComponent,
+        TranslocoDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CardBodyComponent,
+        FormControlDirective,
+        RequiredIconComponent,
+        AccordionComponent,
+        AccordionItemComponent,
+        AccordionButtonDirective,
+        TemplateIdDirective,
+        TranslocoPipe,
+        FormLabelDirective,
+        WizardsDynamicfieldsComponent,
+        BackButtonDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormsModule
+    ],
     templateUrl: './mysqlserver.component.html',
     styleUrl: './mysqlserver.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -83,7 +85,7 @@ export class MysqlserverComponent extends WizardsAbstractComponent {
     protected override wizardLoad(result: MysqlWizardGet): void {
         this.post.username = result.username;
         this.post.password = result.password;
-        this.post.database = result.database;
+        this.post.database = result.database || this.post.database;
         this.serverAddr = result.serverAddr;
         super.wizardLoad(result);
     }

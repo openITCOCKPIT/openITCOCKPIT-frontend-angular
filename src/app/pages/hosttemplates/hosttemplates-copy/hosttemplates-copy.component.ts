@@ -11,11 +11,10 @@ import {
     FormLabelDirective,
     NavComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -57,8 +56,7 @@ import { HistoryService } from '../../../history.service';
         FormsModule,
         SelectComponent,
         AlertComponent,
-        FormLoaderComponent,
-        NgIf
+        FormLoaderComponent
     ],
     templateUrl: './hosttemplates-copy.component.html',
     styleUrl: './hosttemplates-copy.component.css',

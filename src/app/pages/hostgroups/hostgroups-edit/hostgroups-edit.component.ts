@@ -1,18 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -26,7 +25,7 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { HostgroupsService } from '../hostgroups.service';
@@ -46,33 +45,33 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-hostgroups-edit',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    NgSelectModule,
-    PermissionDirective,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    ObjectUuidComponent,
-    SelectComponent,
-    MultiSelectComponent,
-    FormLoaderComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        ObjectUuidComponent,
+        SelectComponent,
+        MultiSelectComponent,
+        FormLoaderComponent
+    ],
     templateUrl: './hostgroups-edit.component.html',
     styleUrl: './hostgroups-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -163,11 +162,6 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
-
-                    // This is a bit of a hack, but it's the only way to get the error message to show up in the right place.
-                    if (typeof this.errors['container']['name'] !== 'undefined') {
-                        this.errors['name'] = <any>this.errors['container']['name'];
-                    }
                 }
             })
         );

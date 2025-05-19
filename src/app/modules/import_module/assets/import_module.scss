@@ -60,3 +60,11 @@
 
      */
 }
+
+.is-valid {
+    background: color.adjust($success, $alpha: -0.8);
+}
+
+.regex-tester-bg {
+    background: var(--cui-secondary-bg-subtle);
+}

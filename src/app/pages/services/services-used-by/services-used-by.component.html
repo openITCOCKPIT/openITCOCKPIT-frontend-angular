@@ -19,11 +19,11 @@
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="!service"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!service"></oitc-form-loader>
     <c-card class="mb-3" *ngIf="service">
         <c-card-header>
             <h5 cCardTitle>{{ t('Service') }}
-                <small class="fw-300">
+                <small class="fw-300 word-break">
                     <i>
                         <strong>
                             »{{ service.name }}«

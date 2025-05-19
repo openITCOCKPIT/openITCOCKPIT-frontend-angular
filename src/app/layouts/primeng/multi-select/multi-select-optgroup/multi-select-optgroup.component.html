@@ -6,7 +6,13 @@ Alternative solution in case this makes any trouble:
 https://stackoverflow.com/a/76688561
 -->
 
+<!--
+Until our pull request gets merged https://github.com/primefaces/primeng/pull/18078
+appendPreviouslySelected is provided by our custom patched multi select component
+-->
+
 <p-multiSelect
+    #multiSelectOptgroup
     [attr.id]="id"
     [name]="String(name)"
     [options]="options"
@@ -29,7 +35,9 @@ https://stackoverflow.com/a/76688561
     group="true"
     optionGroupLabel="label"
     [appendTo]="appendTo"
-    [autofocusFilter]="true">
+    [autofocusFilter]="true"
+    (onPanelShow)="onShow($event)"
+    [appendPreviouslySelected]="true">
     <ng-template let-item pTemplate="item">
         <div [innerHTML]="item | highlightSearch : this.searchText:this.optionLabel"></div>
     </ng-template>

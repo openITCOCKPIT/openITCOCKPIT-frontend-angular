@@ -6,14 +6,14 @@ import {
     OnDestroy,
     OnInit,
 } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
     AlertComponent,
     CardBodyComponent,
-    CardComponent,
+    CardComponent, CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective, ColComponent, ContainerComponent, FormControlDirective, FormDirective, FormLabelDirective,
     NavComponent,
@@ -82,6 +82,7 @@ import { saveAs } from 'file-saver';
         AsyncPipe,
         KeyValuePipe,
         FormDirective,
+        CardFooterComponent,
     ],
   templateUrl: './autoreport-generate.component.html',
   styleUrl: './autoreport-generate.component.css', //'./../../../assets/autoreport.css',

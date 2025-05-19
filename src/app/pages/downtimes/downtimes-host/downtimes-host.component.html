@@ -344,7 +344,7 @@
                         <oitc-downtime-simple-icon
                             [downtime]="hostDowntime.DowntimeHost"></oitc-downtime-simple-icon>
                     </td>
-                    <td>
+                    <td class="word-break">
                         <a *oitcPermission="['hosts', 'browser']"
                            [routerLink]="['/', 'hosts', 'browser', hostDowntime.Host.id]">
                             {{ hostDowntime.Host.hostname }}

@@ -31,11 +31,11 @@
                 </span>
 
                 <oitc-select
-                    class="col-10"
                     name="host"
                     id="host"
                     optionValue="key"
                     optionLabel="value"
+                    class="flex-fill"
                     [(ngModel)]="hostId"
                     [options]="hosts"
                     (onChange)="onHostChange()"
@@ -368,7 +368,7 @@
                                         'ok' : service.Service.priority==2, 'warning' : service.Service.priority==3,
                                         'critical-soft' : service.Service.priority==4, 'critical' : service.Service.priority==5}"></fa-icon>
                         </td>
-                        <td>
+                        <td class="word-break">
                             <span *oitcPermission="['services', 'browser']">
                                 <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
                             </span>
@@ -421,6 +421,16 @@
                                                              [url]="'/services/copy/' + service.Service.id">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element (click)="toggleDisableModal(service.Service)"
+                                                             [permission]="'services.deactivate'">
+                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                    {{ t('Disable') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'services.usedBy'"
+                                                             [url]="'/services/usedBy/' + service.Service.id">
+                                    <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                    {{ t('Used By') }}
                                 </oitc-actions-button-element>
 
                                 <li cDropdownDivider *ngIf="service.Service.allow_edit"></li>

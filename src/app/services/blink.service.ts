@@ -52,6 +52,10 @@ export class BlinkService implements OnDestroy {
         if (this.objects.hasOwnProperty(uuid)) {
             delete this.objects[uuid];
         }
+        if (Object.keys(this.objects).length === 0 && this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
     }
 
     private startInterval() {
@@ -66,6 +70,7 @@ export class BlinkService implements OnDestroy {
     public ngOnDestroy(): void {
         if (this.interval) {
             clearInterval(this.interval);
+            this.interval = null;
         }
     }
 

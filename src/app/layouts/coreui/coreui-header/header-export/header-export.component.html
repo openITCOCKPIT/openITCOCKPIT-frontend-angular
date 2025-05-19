@@ -1,0 +1,23 @@
+<ng-container *transloco="let t">
+    <div class="px-2">
+        @if (!headerinfo.exportRunningHeaderInfo) {
+            <div>
+                <a class="btn btn-default btn-xs waves-effect waves-themed"
+                   [routerLink]="['/', 'exports', 'index']"
+                   cTooltip="{{t('Refresh monitoring configuration')}}">
+                    <fa-icon [icon]="['fas', 'retweet']"></fa-icon>
+                </a>
+            </div>
+        } @else {
+            <div>
+                <a class="btn btn-default btn-xs waves-effect waves-themed"
+                   [routerLink]="['/', 'exports', 'index']"
+                   cTooltip="{{t('Refresh monitoring configuration')}}">
+                    <fa-icon [icon]="['fas', 'retweet']" *ngIf="!isRunning"></fa-icon>
+                    <fa-icon [icon]="['fas', 'refresh']" class="critical" [animation]="'spin'"
+                             *ngIf="isRunning"></fa-icon>
+                </a>
+            </div>
+        }
+    </div>
+</ng-container>

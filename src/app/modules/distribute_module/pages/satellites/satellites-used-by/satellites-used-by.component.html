@@ -1,0 +1,91 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Distribute Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['distributeModule', 'satellites', 'index']"
+                   [routerLink]="['/', 'distribute_module', 'satellites', 'index']">
+                    <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
+                    {{ t('Satellites') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+                {{ t('Used by') }}
+            </li>
+        </ol>
+    </nav>
+
+    <oitc-form-loader [isVisible]="!satellite"></oitc-form-loader>
+
+
+    <c-card class="mb-3" *ngIf="satellite">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Satellite') }}
+                <small class="fw-300">
+                    <i>
+                        <strong>
+                            »{{ satellite.name }}«
+                        </strong>
+                        {{ t('is used by') }}
+                        {{ total }}
+                        {{ t('objects.') }}
+                    </i>
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="['satellites', 'index']" cButton class="ripple" color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <table bordered cTable class="mt-2 mb-0" hover striped *ngIf="all_hosts">
+                <tbody>
+                <!-- Hosts -->
+                <tr *ngIf="all_hosts.length > 0">
+                    <th colspan="2" class="bg-secondary bg-opacity-10">
+                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                        {{ t('Hosts') }} ({{ all_hosts.length }})
+                    </th>
+                </tr>
+                <tr *ngFor="let host of all_hosts">
+                    <td colspan="2">
+                        <a *oitcPermission="['hosts', 'edit']"
+                           [routerLink]="['/', 'hosts', 'edit', host.id]">
+                            {{ host.name }} ({{host.address}})
+                        </a>
+                        <span *oitcPermission="['hosts', 'edit']; negate: true">
+                            {{ host.name }} ({{host.address}})
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <oitc-not-used-by-object *ngIf="total === 0">
+                {{ t('This satellite is not used by any object') }}
+            </oitc-not-used-by-object>
+
+        </c-card-body>
+    </c-card>
+</ng-container>

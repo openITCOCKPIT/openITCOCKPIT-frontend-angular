@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
 
 export enum LayoutOptions {
     Default = 'default',
@@ -21,11 +22,25 @@ export class LayoutService {
     private layout$$: BehaviorSubject<LayoutOptions> = new BehaviorSubject<LayoutOptions>(LayoutOptions.Default);
     public layout$: Observable<LayoutOptions> = this.layout$$.asObservable();
 
+    private readonly document = inject(DOCUMENT);
+
     constructor() {
     }
 
     public setTheme(theme: 'light' | 'dark'): void {
         this.theme$$.next(theme);
+
+        if (theme === 'dark') {
+            // Load dark theme via CSS class
+            this.document.body.classList.add('dark-theme');
+
+            // Tell PrimeNG that we are in dark mode
+            this.document.querySelector("html")!.classList.add("dark-theme");
+        } else {
+            this.document.body.classList.remove('dark-theme');
+            this.document.querySelector("html")!.classList.remove("dark-theme");
+        }
+
     }
 
     public setLayout(layout: LayoutOptions): void {

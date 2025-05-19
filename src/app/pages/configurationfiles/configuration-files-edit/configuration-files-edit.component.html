@@ -20,7 +20,7 @@
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="!ConfigFile"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!ConfigFile"></oitc-form-loader>
 
     <form *ngIf="ConfigFile && dbKey" (ngSubmit)="submit()">
         <c-card class="mb-3">

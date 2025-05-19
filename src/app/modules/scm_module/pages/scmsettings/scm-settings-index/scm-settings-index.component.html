@@ -11,19 +11,19 @@
                 {{ t('Service Capacity Management Module') }}
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'chalkboard-user']"></fa-icon>
-                {{ t('Resources') }}
+                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                {{ t('Configuration') }}
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'pen']"></fa-icon>
+                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
                 {{ t('Edit') }}
             </li>
         </ol>
     </nav>
-    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
     <c-row>
         <c-col>
-            <div class="alert bg-warning-500 border-warning text-dark">
+            <c-alert color="warning">
                 <div class="d-flex align-items-center">
                     <div class="alert-icon me-2">
                         <span class="icon-stack icon-stack-md">
@@ -43,7 +43,7 @@
                         </ng-container>
                     </div>
                 </div>
-            </div>
+            </c-alert>
         </c-col>
     </c-row>
     <form cForm (ngSubmit)="updateScmSettings()" *ngIf="post">

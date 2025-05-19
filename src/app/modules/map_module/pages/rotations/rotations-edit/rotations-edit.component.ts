@@ -36,6 +36,7 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 import { LoadContainersRoot } from '../../../../../pages/containers/containers.interface';
 import { RotationsService } from '../rotations.service';
 import { LoadMapsRoot, Rotation, RotationPost } from '../rotations.interface';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-rotations-edit',
@@ -88,6 +89,12 @@ export class RotationsEditComponent implements OnInit, OnDestroy {
 
     protected containers: SelectKeyValue[] = [];
     protected maps: SelectKeyValue[] = [];
+    protected requiredContainers: number[] = [];
+    protected requiredContainersList: SelectKeyValue[] = []
+    protected areContainersChangeable: boolean = true;
+    protected containersSelection: number[] = [];
+    private init: boolean = true;
+
 
     private route = inject(ActivatedRoute);
 
@@ -98,8 +105,6 @@ export class RotationsEditComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.rotationId = Number(this.route.snapshot.paramMap.get('id'));
-        this.loadContainers();
-        this.loadMaps();
         this.load();
     }
 
@@ -112,25 +117,40 @@ export class RotationsEditComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 this.rotation = result.rotation;
-                let selectedContainer = [];
-                let selectedMaps = [];
+                let selectedMaps: number[] = [];
 
-                for (let key in this.rotation.containers) {
-                    selectedContainer.push(parseInt(String(this.rotation.containers[key].id), 10));
-                }
+                this.requiredContainers = result.requiredContainers;
+                this.areContainersChangeable = result.areContainersChangeable;
 
                 for (let key in this.rotation.maps) {
                     selectedMaps.push(parseInt(String(this.rotation.maps[key].id), 10));
                 }
 
-                this.post.Rotation.container_id = selectedContainer;
+                this.post.Rotation.container_id = this.rotation.containers.map(container => container.id);
                 this.post.Rotation.Map = selectedMaps;
                 this.post.Rotation.name = this.rotation.name;
                 this.post.Rotation.interval = parseInt(String(this.rotation.interval), 10);
+                this.loadContainers();
+                this.onContainerChange();
+                this.init = false;
             }));
     }
 
     public updateRotation(): void {
+
+        //update container ids if it was edited
+        if (this.areContainersChangeable) {
+            this.post.Rotation.container_id = this.post.Rotation.container_id.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
+
+        this.post.Rotation.container_id = _.uniq(
+            this.post.Rotation.container_id.concat(this.containersSelection).concat(this.requiredContainers)
+        );
 
         this.subscriptions.add(this.RotationsService.updateRotation(this.post, this.rotationId)
             .subscribe((result: GenericResponseWrapper) => {
@@ -160,16 +180,71 @@ export class RotationsEditComponent implements OnInit, OnDestroy {
     private loadContainers(): void {
         this.subscriptions.add(this.RotationsService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
+                this.containersSelection = [];
+                this.requiredContainersList = [];
                 this.containers = result.containers;
+
+                this.post.Rotation.container_id.forEach(value => {
+                    let permittetCheck = this.containers.find(({key}) => key === value);
+                    if (permittetCheck && this.requiredContainers.indexOf(value) === -1) {
+                        this.containersSelection.push(value);
+                    }
+                });
+
+                this.requiredContainers.forEach(value => {
+                    let existsCheck = this.containers.find(({key}) => key === value);
+                    if (existsCheck) {
+                        this.requiredContainersList.push({
+                            key: value,
+                            value: existsCheck.value
+                        });
+                    } else {
+                        this.requiredContainersList.push({
+                            key: value,
+                            value: this.TranslocoService.translate('RESTRICTED CONTAINER')
+                        });
+                    }
+                });
+
+
                 this.cdr.markForCheck();
             }))
     }
 
     private loadMaps(): void {
-        this.subscriptions.add(this.RotationsService.loadMaps()
+        if (this.post.Rotation.container_id.concat(this.containersSelection).concat(this.requiredContainers).length === 0) {
+            this.maps = [];
+            this.cdr.markForCheck();
+            return;
+        }
+
+        //update container ids if it was edited
+        if (this.areContainersChangeable && !this.init) {
+            this.post.Rotation.container_id = this.post.Rotation.container_id.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
+
+        const param = {
+            'containerIds[]': this.post.Rotation.container_id.concat(this.containersSelection).concat(this.requiredContainers)
+        };
+        this.subscriptions.add(this.RotationsService.loadMaps(param)
             .subscribe((result: LoadMapsRoot) => {
                 this.maps = result.maps;
                 this.cdr.markForCheck();
             }))
     }
+
+    public onContainerChange(): void {
+        if (this.post.Rotation.container_id.concat(this.containersSelection).concat(this.requiredContainers).length === 0) {
+            this.maps = [];
+            this.cdr.markForCheck();
+            return;
+        }
+        this.loadMaps();
+    }
+
 }

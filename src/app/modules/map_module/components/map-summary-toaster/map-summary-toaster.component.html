@@ -1,5 +1,6 @@
 <ng-container *transloco="let t">
-    <c-toaster [placement]="'top-end'" class="p-3 toaster-min-width" position="fixed" *ngIf="summaryState">
+    <c-toaster [placement]="'top-end'" class="p-3 toaster-min-width toaster-max-width" position="fixed"
+               *ngIf="summaryState">
         <c-toast #toast="cToast"
                  (timer)="onToastTimerChange($event)"
                  (visibleChange)="onToastVisibleChange($event)"
@@ -41,9 +42,14 @@
                                             {{ t('Hostname') }}
                                         </c-col>
                                         <c-col lg="8" class="p-0">
-                                            <a [routerLink]="['/', 'hosts', 'browser', summaryState.Host.id]">
+                                            <span *oitcPermission="['hosts', 'browser']">
+                                                <a [routerLink]="['/', 'hosts', 'browser', summaryState.Host.id]">
+                                                    {{ summaryState.Host.hostname }}
+                                                </a>
+                                            </span>
+                                            <span *oitcPermission="['hosts', 'browser']; negate: true">
                                                 {{ summaryState.Host.hostname }}
-                                            </a>
+                                            </span>
                                         </c-col>
                                     </c-row>
                                     <c-row>
@@ -137,7 +143,7 @@
                                                 </c-col>
                                                 <c-col lg="11">
                                                     <div class="btn-group btn-group-xs btn-group-justified w-100"
-                                                         role="group"
+                                                         role="group" *oitcPermission="['services', 'index']"
                                                          [hidden]="summaryState.ServiceSummary.total === 0">
                                                         <a class="btn btn-success "
                                                            [routerLink]="['/', 'services', 'index']"
@@ -160,6 +166,23 @@
                                                             {{ summaryState.ServiceSummary.state[3] }}
                                                         </a>
                                                     </div>
+                                                    <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                         role="group"
+                                                         *oitcPermission="['services', 'index']; negate: true"
+                                                         [hidden]="summaryState.ServiceSummary.total === 0">
+                                                        <a class="btn btn-success ">
+                                                            {{ summaryState.ServiceSummary.state[0] }}
+                                                        </a>
+                                                        <a class="btn btn-warning ">
+                                                            {{ summaryState.ServiceSummary.state[1] }}
+                                                        </a>
+                                                        <a class="btn btn-danger ">
+                                                            {{ summaryState.ServiceSummary.state[2] }}
+                                                        </a>
+                                                        <a class="btn btn-secondary ">
+                                                            {{ summaryState.ServiceSummary.state[3] }}
+                                                        </a>
+                                                    </div>
                                                 </c-col>
                                             </c-row>
                                         </c-col>
@@ -178,9 +201,14 @@
                                     <c-row class="pt-3" *ngFor="let service of summaryState.Services">
                                         <!-- Servicename -->
                                         <c-col lg="4" class="cropText" title="{{service.Service.servicename}}">
-                                            <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
+                                            <span *oitcPermission="['services', 'browser']">
+                                                <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
+                                                    {{ service.Service.servicename }}
+                                                </a>
+                                            </span>
+                                            <span *oitcPermission="['services', 'browser']; negate: true">
                                                 {{ service.Service.servicename }}
-                                            </a>
+                                            </span>
                                         </c-col>
                                         <!-- State -->
                                         <c-col lg="3" [hidden]="!service.Servicestatus.isInMonitoring"
@@ -227,9 +255,14 @@
                                             {{ t('Hostname') }}
                                         </c-col>
                                         <c-col lg="8" class="p-0">
-                                            <a [routerLink]="['/', 'hosts', 'browser', summaryState.Host.id]">
+                                            <span *oitcPermission="['hosts', 'browser']">
+                                                <a [routerLink]="['/', 'hosts', 'browser', summaryState.Host.id]">
+                                                    {{ summaryState.Host.hostname }}
+                                                </a>
+                                            </span>
+                                            <span *oitcPermission="['hosts', 'browser']; negate: true">
                                                 {{ summaryState.Host.hostname }}
-                                            </a>
+                                            </span>
                                         </c-col>
                                     </c-row>
                                     <c-row>
@@ -255,9 +288,14 @@
                                             {{ t('Service') }}
                                         </c-col>
                                         <c-col lg="8" class="p-0">
-                                            <a [routerLink]="['/', 'services', 'browser', summaryState.Service.id]">
+                                            <span *oitcPermission="['services', 'browser']">
+                                                <a [routerLink]="['/', 'services', 'browser', summaryState.Service.id]">
+                                                    {{ summaryState.Service.servicename }}
+                                                </a>
+                                            </span>
+                                            <span *oitcPermission="['services', 'browser']; negate: true">
                                                 {{ summaryState.Service.servicename }}
-                                            </a>
+                                            </span>
                                         </c-col>
                                     </c-row>
                                     <c-row>
@@ -361,9 +399,14 @@
                                             {{ t('Host group name') }}
                                         </c-col>
                                         <c-col lg="8" class="p-0">
-                                            <a [routerLink]="['/', 'hostgroups', 'extended', summaryState.Hostgroup.id]">
+                                            <span *oitcPermission="['hostgroups', 'extended']">
+                                                <a [routerLink]="['/', 'hostgroups', 'extended', summaryState.Hostgroup.id]">
+                                                    {{ summaryState.Hostgroup.name }}
+                                                </a>
+                                            </span>
+                                            <span *oitcPermission="['hostgroups', 'extended']; negate: true">
                                                 {{ summaryState.Hostgroup.name }}
-                                            </a>
+                                            </span>
                                         </c-col>
                                     </c-row>
                                     <c-row>
@@ -402,7 +445,8 @@
                                             {{ t('Hosts overview') }}
                                         </c-col>
                                         <c-col lg="8" class="p-0">
-                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group">
+                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
+                                                 *oitcPermission="['hosts', 'index']">
                                                 <a class="btn btn-success "
                                                    [routerLink]="['/', 'hosts', 'index']"
                                                    [queryParams]="{'id': summaryState.HostIdsGroupByState[0]}">
@@ -419,6 +463,18 @@
                                                     {{ summaryState.Hostgroup.HostSummary.state[2] }}
                                                 </a>
                                             </div>
+                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
+                                                 *oitcPermission="['hosts', 'index']; negate: true">
+                                                <a class="btn btn-success ">
+                                                    {{ summaryState.Hostgroup.HostSummary.state[0] }}
+                                                </a>
+                                                <a class="btn btn-danger ">
+                                                    {{ summaryState.Hostgroup.HostSummary.state[1] }}
+                                                </a>
+                                                <a class="btn btn-secondary ">
+                                                    {{ summaryState.Hostgroup.HostSummary.state[2] }}
+                                                </a>
+                                            </div>
                                         </c-col>
                                     </c-row>
 
@@ -427,7 +483,8 @@
                                             {{ t('Services overview') }}
                                         </c-col>
                                         <c-col lg="8" class="p-0">
-                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group">
+                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
+                                                 *oitcPermission="['services', 'index']">
                                                 <a class="btn btn-success "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
@@ -449,13 +506,33 @@
                                                     {{ summaryState.Hostgroup.TotalServiceSummary.state[3] }}
                                                 </a>
                                             </div>
+                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
+                                                 *oitcPermission="['services', 'index']; negate: true">
+                                                <a class="btn btn-success ">
+                                                    {{ summaryState.Hostgroup.TotalServiceSummary.state[0] }}
+                                                </a>
+                                                <a class="btn btn-warning ">
+                                                    {{ summaryState.Hostgroup.TotalServiceSummary.state[1] }}
+                                                </a>
+                                                <a class="btn btn-danger ">
+                                                    {{ summaryState.Hostgroup.TotalServiceSummary.state[2] }}
+                                                </a>
+                                                <a class="btn btn-secondary ">
+                                                    {{ summaryState.Hostgroup.TotalServiceSummary.state[3] }}
+                                                </a>
+                                            </div>
                                         </c-col>
                                     </c-row>
                                     <c-row class="pt-2" *ngFor="let host of summaryState.Hosts">
                                         <c-col lg="3" class="cropText">
-                                            <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
+                                            <span *oitcPermission="['hosts', 'browser']">
+                                                <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
+                                                    {{ host.Host.hostname }}
+                                                </a>
+                                            </span>
+                                            <span *oitcPermission="['hosts', 'browser']; negate: true">
                                                 {{ host.Host.hostname }}
-                                            </a>
+                                            </span>
                                         </c-col>
                                         <c-col lg="4" [hidden]="!host.Hoststatus.isInMonitoring"
                                                class="text-center text-white text-capitalize bg-{{(host.Hoststatus.isHardstate)?host.Hoststatus.humanState:host.Hoststatus.humanState+'-soft'}}">
@@ -471,7 +548,8 @@
                                             <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
                                         </c-col>
                                         <c-col lg="4" class="offset-lg-1 p-0">
-                                            <div class="btn-group btn-group-xs btn-group-justified" role="group">
+                                            <div class="btn-group btn-group-xs btn-group-justified" role="group"
+                                                 *oitcPermission="['services', 'index']">
                                                 <a class="btn btn-success state-button-small font-sm"
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': host.ServiceIdsGroupByState[0]}">
@@ -490,6 +568,21 @@
                                                 <a class="btn btn-default state-button-small font-sm"
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': host.ServiceIdsGroupByState[3]}">
+                                                    {{ host.ServiceSummary.state[3] }}
+                                                </a>
+                                            </div>
+                                            <div class="btn-group btn-group-xs btn-group-justified" role="group"
+                                                 *oitcPermission="['services', 'index']; negate: true">
+                                                <a class="btn btn-success state-button-small font-sm">
+                                                    {{ host.ServiceSummary.state[0] }}
+                                                </a>
+                                                <a class="btn btn-warning state-button-small font-sm">
+                                                    {{ host.ServiceSummary.state[1] }}
+                                                </a>
+                                                <a class="btn btn-danger state-button-small font-sm">
+                                                    {{ host.ServiceSummary.state[2] }}
+                                                </a>
+                                                <a class="btn btn-default state-button-small font-sm">
                                                     {{ host.ServiceSummary.state[3] }}
                                                 </a>
                                             </div>
@@ -518,9 +611,14 @@
                                             {{ t('Service group name') }}
                                         </c-col>
                                         <c-col lg="8" class="p-0">
-                                            <a [routerLink]="['/', 'servicegroups', 'extended', summaryState.Servicegroup.id]">
+                                            <span *oitcPermission="['servicegroups', 'extended']">
+                                                <a [routerLink]="['/', 'servicegroups', 'extended', summaryState.Servicegroup.id]">
+                                                    {{ summaryState.Servicegroup.name }}
+                                                </a>
+                                            </span>
+                                            <span *oitcPermission="['servicegroups', 'extended']; negate: true">
                                                 {{ summaryState.Servicegroup.name }}
-                                            </a>
+                                            </span>
                                         </c-col>
                                     </c-row>
                                     <c-row>
@@ -563,6 +661,7 @@
                                         </c-col>
                                         <c-col lg="8" class="p-0">
                                             <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
+                                                 *oitcPermission="['services', 'index']"
                                                  [hidden]="summaryState.ServiceSummary.total === 0">
                                                 <a class="btn btn-success "
                                                    [routerLink]="['/', 'services', 'index']"
@@ -585,6 +684,22 @@
                                                     {{ summaryState.ServiceSummary.state[3] }}
                                                 </a>
                                             </div>
+                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
+                                                 *oitcPermission="['services', 'index']; negate: true"
+                                                 [hidden]="summaryState.ServiceSummary.total === 0">
+                                                <a class="btn btn-success ">
+                                                    {{ summaryState.ServiceSummary.state[0] }}
+                                                </a>
+                                                <a class="btn btn-warning ">
+                                                    {{ summaryState.ServiceSummary.state[1] }}
+                                                </a>
+                                                <a class="btn btn-danger ">
+                                                    {{ summaryState.ServiceSummary.state[2] }}
+                                                </a>
+                                                <a class="btn btn-secondary ">
+                                                    {{ summaryState.ServiceSummary.state[3] }}
+                                                </a>
+                                            </div>
                                         </c-col>
                                     </c-row>
                                     <c-row class="pt-4" [hidden]="summaryState.Services.length === 0">
@@ -601,10 +716,14 @@
                                     <c-row class="pt-2" *ngFor="let service of summaryState.Services">
                                         <c-col lg="5" class="cropText"
                                                title="{{service.Host.hostname}}/{{service.Service.servicename}}">
-
-                                            <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
+                                            <span *oitcPermission="['services', 'browser']">
+                                                <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
+                                                    {{ service.Host.hostname }}/{{ service.Service.servicename }}
+                                                </a>
+                                            </span>
+                                            <span *oitcPermission="['services', 'browser']; negate: true">
                                                 {{ service.Host.hostname }}/{{ service.Service.servicename }}
-                                            </a>
+                                            </span>
                                         </c-col>
                                         <c-col lg="2" [hidden]="!service.Servicestatus.isInMonitoring"
                                                class="text-center text-white text-capitalize bg-{{(service.Servicestatus.isHardstate)?service.Servicestatus.humanState:service.Servicestatus.humanState+'-soft'}}">
@@ -646,9 +765,14 @@
                                             {{ t('Map name') }}
                                         </c-col>
                                         <c-col lg="8" class="p-0">
-                                            <a [routerLink]="['/', 'map_module', 'mapeditors', 'view', summaryState.Map.object_id, false]">
+                                            <span *oitcPermission="['mapmodule', 'mapeditors', 'view']">
+                                                <a [routerLink]="['/', 'map_module', 'mapeditors', 'view', summaryState.Map.object_id, false]">
+                                                    {{ summaryState.Map.name }}
+                                                </a>
+                                            </span>
+                                            <span *oitcPermission="['mapmodule', 'mapeditors', 'view']; negate: true">
                                                 {{ summaryState.Map.name }}
-                                            </a>
+                                            </span>
                                         </c-col>
                                     </c-row>
                                     <c-row>
@@ -694,6 +818,7 @@
                                         </c-col>
                                         <c-col lg="8" class="p-0">
                                             <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
+                                                 *oitcPermission="['hosts', 'index']"
                                                  [hidden]="summaryState.ServiceSummary.total === 0">
                                                 <a class="btn btn-success "
                                                    [routerLink]="['/', 'hosts', 'index']"
@@ -711,6 +836,19 @@
                                                     {{ summaryState.HostSummary.state[2] }}
                                                 </a>
                                             </div>
+                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
+                                                 *oitcPermission="['hosts', 'index']; negate: true"
+                                                 [hidden]="summaryState.ServiceSummary.total === 0">
+                                                <a class="btn btn-success ">
+                                                    {{ summaryState.HostSummary.state[0] }}
+                                                </a>
+                                                <a class="btn btn-danger ">
+                                                    {{ summaryState.HostSummary.state[1] }}
+                                                </a>
+                                                <a class="btn btn-secondary ">
+                                                    {{ summaryState.HostSummary.state[2] }}
+                                                </a>
+                                            </div>
                                         </c-col>
                                     </c-row>
 
@@ -720,7 +858,7 @@
                                         </c-col>
                                         <div class="col-lg-8 p-0">
                                             <div class="btn-group btn-group-xs btn-group-justified w-100"
-                                                 role="group"
+                                                 role="group" *oitcPermission="['services', 'index']"
                                                  [hidden]="summaryState.ServiceSummary.total === 0">
                                                 <a class="btn btn-success "
                                                    [routerLink]="['/', 'services', 'index']"
@@ -740,6 +878,22 @@
                                                 <a class="btn btn-secondary "
                                                    [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
+                                                    {{ summaryState.ServiceSummary.state[3] }}
+                                                </a>
+                                            </div>
+                                            <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                 role="group" *oitcPermission="['services', 'index']; negate: true"
+                                                 [hidden]="summaryState.ServiceSummary.total === 0">
+                                                <a class="btn btn-success ">
+                                                    {{ summaryState.ServiceSummary.state[0] }}
+                                                </a>
+                                                <a class="btn btn-warning ">
+                                                    {{ summaryState.ServiceSummary.state[1] }}
+                                                </a>
+                                                <a class="btn btn-danger ">
+                                                    {{ summaryState.ServiceSummary.state[2] }}
+                                                </a>
+                                                <a class="btn btn-secondary ">
                                                     {{ summaryState.ServiceSummary.state[3] }}
                                                 </a>
                                             </div>
@@ -771,9 +925,14 @@
                                         </c-row>
                                         <c-row class="pt-1" *ngFor="let notOkHost of summaryState.NotOkHosts">
                                             <c-col lg="4" class="cropText" title="{{notOkHost.Host.hostname}}">
-                                                <a [routerLink]="['/', 'hosts', 'browser', notOkHost.Host.id]">
+                                                <span *oitcPermission="['hosts', 'browser']">
+                                                    <a [routerLink]="['/', 'hosts', 'browser', notOkHost.Host.id]">
+                                                        {{ notOkHost.Host.hostname }}
+                                                    </a>
+                                                </span>
+                                                <span *oitcPermission="['hosts', 'browser']; negate: true">
                                                     {{ notOkHost.Host.hostname }}
-                                                </a>
+                                                </span>
                                             </c-col>
                                             <c-col lg="3" [hidden]="!notOkHost.Hoststatus.isInMonitoring"
                                                    class="text-center text-white text-capitalize bg-{{(notOkHost.Hoststatus.isHardstate)?notOkHost.Hoststatus.humanState:notOkHost.Hoststatus.humanState+'-soft'}}">
@@ -808,9 +967,14 @@
                                                *ngFor="let notOkService of summaryState.NotOkServices">
                                             <c-col lg="4" class="cropText"
                                                    title="{{notOkService.Service.hostname}}/{{notOkService.Service.hostname}}">
-                                                <a [routerLink]="['/', 'services', 'browser', notOkService.Service.id]">
+                                                <span *oitcPermission="['services', 'browser']">
+                                                    <a [routerLink]="['/', 'services', 'browser', notOkService.Service.id]">
+                                                        {{ notOkService.Service.servicename }}
+                                                    </a>
+                                                </span>
+                                                <span *oitcPermission="['services', 'browser']; negate: true">
                                                     {{ notOkService.Service.servicename }}
-                                                </a>
+                                                </span>
                                             </c-col>
                                             <c-col lg="3" [hidden]="!notOkService.Servicestatus.isInMonitoring"
                                                    class="text-center text-white text-capitalize bg-{{(notOkService.Servicestatus.isHardstate)?notOkService.Servicestatus.humanState:notOkService.Servicestatus.humanState+'-soft'}}">

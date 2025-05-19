@@ -8,28 +8,32 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Prometheus Module') }}
+            </li>
+            <li class="breadcrumb-item">
                 <a *oitcPermission="['PrometheusModule', 'PrometheusQuery', 'index']"
                    [routerLink]="['/', 'prometheus_module', 'PrometheusQuery', 'index']">
                     <fa-icon [icon]="['fas', 'burn']"></fa-icon>
-                    {{ t('Prometheus Module') }}
+                    {{ t('Query') }}
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'code']"></fa-icon>
-                {{ t('Query Overview') }}
+                {{ t('Overview') }}
             </li>
         </ol>
     </nav>
 
     <div class="mb-3">
         <oitc-select
-                name="params.hostId"
-                id="params.hostId"
-                [(ngModel)]="params.hostId"
-                optionValue="key"
-                optionLabel="value"
-                (onChange)="loadIndex()"
-                [options]="hosts">
+            name="params.hostId"
+            id="params.hostId"
+            [(ngModel)]="params.hostId"
+            optionValue="key"
+            optionLabel="value"
+            (onChange)="loadIndex()"
+            [options]="hosts">
         </oitc-select>
     </div>
 
@@ -57,11 +61,11 @@
         </ng-template>
 
         <oitc-alert
-                baseIcon="circle"
-                color="info"
-                [icon]="['fas', 'info']"
-                [contentTemplate]="contentTemplate"
-                [buttonTemplate]="buttonTemplate"></oitc-alert>
+            baseIcon="circle"
+            color="info"
+            [icon]="['fas', 'info']"
+            [contentTemplate]="contentTemplate"
+            [buttonTemplate]="buttonTemplate"></oitc-alert>
 
     </div>
 
@@ -80,8 +84,9 @@
                         {{ t('Metrics') }}
                     </a>
                 </c-nav-item>
-                <c-nav-item>
-                    <a [routerLink]="['/', 'prometheus_module', 'PrometheusAlertRules', 'index', this.params.hostId]" class="nav-link">
+                <c-nav-item *oitcPermission="['PrometheusModule', 'PrometheusAlertRules', 'index']">
+                    <a [routerLink]="['/', 'prometheus_module', 'PrometheusAlertRules', 'index', this.params.hostId]"
+                       class="nav-link">
                         <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
                         {{ t('Alert rules') }}
                     </a>
@@ -183,16 +188,16 @@
                 <tr *ngFor="let datum of index.targets.data">
                     <td class="text-center">
                         <oitc-item-select
-                                *oitcPermission="['PrometheusModule', 'PrometheusExporters', 'add']"
-                                [disabled]="false"
-                                [item]="datum"></oitc-item-select>
+                            *oitcPermission="['PrometheusModule', 'PrometheusExporters', 'add']"
+                            [disabled]="false"
+                            [item]="datum"></oitc-item-select>
                     </td>
                     <td class="text-center">
                         <oitc-prometheus-popover-graph
-                                [service]="'A'"
-                                [host]="this.index.host.uuid"
-                                [timezone]="timezone"
-                                [metric]="datum.metric"
+                            [service]="'A'"
+                            [host]="this.index.host.uuid"
+                            [timezone]="timezone"
+                            [metric]="datum.metric"
                         />
 
                     </td>
@@ -216,10 +221,11 @@
                                                          [url]="'/prometheus_module/PrometheusQuery/toService/' + params.hostId"
                                                          [queryParams]="{'metrics[]': [datum.metric]}">
                                 <fa-stack>
-                                    <fa-icon [icon]="['fas', 'gear']" stackItemSize="1x" pull="right"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'cog']"
+                                             stackItemSize="1x" pull="right"></fa-icon>
                                     <fa-icon [icon]="['fas', 'plus']" class="text-success"
                                              stackItemSize="1x"
-                                             transform="shrink-8 right-6 down-6"></fa-icon>
+                                             transform="shrink-8 right-13 down-10"></fa-icon>
                                 </fa-stack>
                                 {{ t('Create service from metric') }}
                             </oitc-actions-button-element>
@@ -229,7 +235,7 @@
                 </tbody>
             </table>
             <oitc-no-records
-                    *ngIf="params.hostId !== 0 && index && index.targets.data.length === 0"></oitc-no-records>
+                *ngIf="params.hostId !== 0 && index && index.targets.data.length === 0"></oitc-no-records>
 
             <ng-container *ngIf="index && index.targets.data">
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
@@ -237,7 +243,7 @@
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                    [itemsCount]="index.targets.data.length"></oitc-select-all>
+                                [itemsCount]="index.targets.data.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">

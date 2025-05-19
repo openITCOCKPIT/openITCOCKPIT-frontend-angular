@@ -95,9 +95,7 @@
                             <div *ngIf="getFilteredContainers().length == 0">
                                 <oitc-no-records></oitc-no-records>
                             </div>
-
                         </div>
-
 
                     </c-card-body>
                 </c-card>
@@ -1103,7 +1101,6 @@
                     <tr *ngFor="let host of hosts.all_hosts">
                         <td class="text-center">
                             <oitc-item-select
-                                *oitcPermission="['hosts', 'delete']"
                                 [disabled]="!host.Host.allow_edit"
                                 [item]="host"></oitc-item-select>
                         </td>
@@ -1174,7 +1171,7 @@
                                         'critical-soft' : host.Host.priority==4, 'critical' : host.Host.priority==5}"></fa-icon>
                         </td>
 
-                        <td *ngIf="fields[7]">
+                        <td *ngIf="fields[7]" class="word-break">
                             @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                 <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
                                     {{ host.Host.name }}
@@ -1197,7 +1194,7 @@
 
                         </td>
 
-                        <td *ngIf="fields[8]">
+                        <td *ngIf="fields[8]" class="word-break">
                             {{ host.Host.description }}
                         </td>
 
@@ -1369,7 +1366,7 @@
                                     {{ t('Documentation') }}
                                 </oitc-actions-button-element>
 
-                                <li cDropdownDivider></li>
+                                <li cDropdownDivider *oitcPermission="['hosts', 'copy']"></li>
                                 <oitc-actions-button-element [permission]="'hosts.copy'"
                                                              [url]="'/hosts/copy/' + host.Host.id">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
@@ -1404,11 +1401,13 @@
                             <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                                 <div class="btn-group d-flex flex-row" role="group">
                                     <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                            *oitcPermission="['hosts', 'copy']"
                                             (click)="navigateCopy()">
                                         <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                         {{ t('Copy') }}
                                     </button>
                                     <button (click)="toggleDeleteAllModal()"
+                                            *oitcPermission="['hosts', 'delete']"
                                             class="btn btn-outline-danger col-3 border-0"
                                             type="button">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>

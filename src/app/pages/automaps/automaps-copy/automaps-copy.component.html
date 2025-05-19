@@ -8,7 +8,7 @@
                 </a></li>
             <li class="breadcrumb-item">
                 <a *oitcPermission="['automaps', 'index']" [routerLink]="['/', 'automaps', 'index']">
-                    <fa-icon [icon]="['fas', 'globe-europe']"></fa-icon>
+                    <fa-icon [icon]="['fas', 'magic-wand-sparkles']"></fa-icon>
                     {{ t('Auto Maps') }}
                 </a>
             </li>
@@ -36,7 +36,7 @@
         </c-card-header>
         <c-card-body>
 
-            <oitc-form-loader *ngIf="automaps.length === 0"></oitc-form-loader>
+            <oitc-form-loader [isVisible]="automaps.length === 0"></oitc-form-loader>
 
             <c-card class="mb-3" *ngFor="let automap of automaps; let i = index">
                 <c-card-header>

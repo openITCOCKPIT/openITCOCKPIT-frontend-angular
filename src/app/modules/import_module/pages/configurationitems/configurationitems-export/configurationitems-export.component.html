@@ -25,7 +25,7 @@
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="commands.length === 0"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="commands.length === 0"></oitc-form-loader>
     <form cForm (ngSubmit)="submit()" *ngIf="commands.length > 0">
         <c-card class="mb-3">
             <c-card-header>

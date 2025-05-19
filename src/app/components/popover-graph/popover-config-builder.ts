@@ -20,6 +20,8 @@ export class PopoverConfigBuilder {
     public width: number = 350;
     public timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone
     public lineWidth: number = 3;
+    public min: number | null = null;
+    public max: number | null = null;
 
     public datasource?: Datasource;
 
@@ -94,6 +96,14 @@ export class PopoverConfigBuilder {
 
         let cssTextColor = getComputedStyle(document.documentElement).getPropertyValue('--cui-body-color').trim();
 
+        // uPlot requires min and max to be set
+        // ERROR TypeError: CanvasRenderingContext2D.createLinearGradient: Argument 2 is not a finite floating-point value.
+        if (this.min === null || this.max === null) {
+            console.log('PopoverConfigBuilder: min or max value for Y-Axis is null - using default values');
+            this.min = null;
+            this.max = null;
+        }
+
         let uPlotOptions = {
             unit: this.unit,
             title: this.title,
@@ -122,6 +132,10 @@ export class PopoverConfigBuilder {
                     max: this.end,
                     //range: [opts.start, opts.end],
                 },
+                y: {
+                    min: this.min,
+                    max: this.max
+                }
             },
             series: [
                 {},

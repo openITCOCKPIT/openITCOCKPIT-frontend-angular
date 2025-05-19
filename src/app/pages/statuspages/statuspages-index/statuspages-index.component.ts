@@ -81,6 +81,7 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 
 import {DELETE_SERVICE_TOKEN} from '../../../tokens/delete-injection.token';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 
 @Component({
@@ -148,6 +149,8 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly router = inject(Router);
     private StatuspagesService: StatuspagesService = inject(StatuspagesService);
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private readonly notyService: NotyService = inject(NotyService);
     public readonly PermissionsService = inject(PermissionsService);
     private readonly modalService = inject(ModalService);
     private cdr = inject(ChangeDetectorRef);
@@ -217,6 +220,12 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
                     displayName: item.name
                 };
             });
+        }
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
 
         // Pass selection to the modal

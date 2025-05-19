@@ -92,35 +92,34 @@
                         <oitc-required-icon *ngIf="post.expire"/>
                     </label>
                     <c-input-group>
-                        <span cInputGroupText>
-                            <c-dropdown>
-                                <button *ngIf="post.expire"
-                                        cButton cDropdownToggle color="primary">
+                        <c-dropdown>
+                            <button *ngIf="post.expire"
+                                    cButton cDropdownToggle color="primary">
+                                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                {{ t('expiration duration') }}
+                            </button>
+                            <button *ngIf="! post.expire"
+                                    cButton cDropdownToggle color="primary">
+                                <fa-icon [icon]="['fas', 'infinity']"></fa-icon>
+                                {{ t('no expiration') }}
+                            </button>
+                            <ul cDropdownMenu>
+                                <li cDropdownItem (click)="setExpiration(true)">
                                     <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                                     {{ t('expiration duration') }}
-                                </button>
-                                <button *ngIf="! post.expire"
-                                        cButton cDropdownToggle color="primary">
+                                </li>
+                                <li cDropdownItem (click)="setExpiration(false)">
                                     <fa-icon [icon]="['fas', 'infinity']"></fa-icon>
                                     {{ t('no expiration') }}
-                                </button>
-                                <ul cDropdownMenu>
-                                    <li cDropdownItem (click)="setExpiration(true)">
-                                        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                                        {{ t('expiration duration') }}
-                                    </li>
-                                    <li cDropdownItem (click)="setExpiration(false)">
-                                        <fa-icon [icon]="['fas', 'infinity']"></fa-icon>
-                                        {{ t('no expiration') }}
-                                    </li>
-                                </ul>
-                            </c-dropdown>
-                        </span>
+                                </li>
+                            </ul>
+                        </c-dropdown>
                         <input cFormControl
                                id="post.expiration_duration"
                                type="number"
                                name="post.expiration_duration"
                                oitcFormError [errors]="errors" errorField="expiration_duration"
+                               [placeholder]="placeholder"
                                [disabled]="! post.expire"
                                [(ngModel)]="post.expiration_duration"/>
                         <span cInputGroupText>

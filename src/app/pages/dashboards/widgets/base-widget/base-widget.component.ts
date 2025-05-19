@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    effect,
+    inject,
+    input,
+    isDevMode,
+    OnDestroy
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WidgetGetForRender } from '../../dashboards.interface';
 import { WidgetsService } from '../widgets.service';
@@ -78,7 +87,9 @@ export abstract class BaseWidgetComponent implements OnDestroy {
     }
 
     public load() {
-        console.log('Implement load() method in your widget component');
+        if (isDevMode()) {
+            console.log('Implement load() method in your widget component');
+        }
     }
 
     public ngOnDestroy() {
@@ -86,10 +97,14 @@ export abstract class BaseWidgetComponent implements OnDestroy {
     }
 
     public resizeWidget(event?: KtdResizeEnd) {
-        console.log('Implement resizeWidget(event: KtdResizeEnd) method in your widget component');
+        if (isDevMode()) {
+            console.log('Implement resizeWidget(event: KtdResizeEnd) method in your widget component');
+        }
     }
 
     public layoutUpdate(event: KtdGridLayout) {
-        console.log('Implement layoutUpdate(event: KtdGridLayout) method in your widget component');
+        if (isDevMode()) {
+            console.log('Implement layoutUpdate(event: KtdGridLayout) method in your widget component');
+        }
     }
 }

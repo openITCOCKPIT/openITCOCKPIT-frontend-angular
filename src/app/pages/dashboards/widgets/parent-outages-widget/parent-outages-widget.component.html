@@ -36,9 +36,7 @@
         }
     </ul>
 
-    <c-row *ngIf="!showNoOuttagesText && parentOutages.length === 0" class="text-danger text-center">
-        <c-col>
-            {{ t('No entries match the selection') }}
-        </c-col>
-    </c-row>
+    <oitc-no-records
+        *ngIf="!showNoOuttagesText && parentOutages.length === 0"></oitc-no-records>
+
 </ng-container>

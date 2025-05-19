@@ -111,11 +111,11 @@
                             <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
                             {{ importData.errorMessage }}
                         </p>
-                        <p *ngIf="importData.notValidRawData.length>0">
+                        <p *ngIf="importData.errors.notValidRawData && importData.errors.notValidRawData.length>0">
                             <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
-                            {{ importData.notValidRawData.error }}
+                            {{ importData.errors.notValidRawData.error }}
                             <span class="help-block text-danger italic">
-                                {{ importData.notValidRawData.description }}
+                                {{ importData.errors.notValidRawData.description }}
                             </span>
                         </p>
                     </c-alert>
@@ -145,6 +145,38 @@
                                 <h5>
                                     {{ t('iTop Data preview!') }}
                                 </h5>
+                                <figure *ngIf="importData.message && importData.message.length > 0" class="text-info">
+                                    <blockquote class="blockquote">
+                                        <p>
+                                            <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                                            {{ importData.message }}
+                                        </p>
+                                    </blockquote>
+                                </figure>
+
+                                <figure *ngIf="importData.errors && !importData.errors.notValidRawData.error"
+                                        class="text-danger">
+                                    <blockquote class="blockquote">
+                                        <p>
+                                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                            {{ importData.errors }}
+                                        </p>
+                                    </blockquote>
+                                </figure>
+                                <figure *ngIf="importData.errors && importData.errors.notValidRawData.error"
+                                        class="text-danger">
+                                    <blockquote class="blockquote">
+                                        <p>
+                                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                            {{ importData.errors.notValidRawData.error }}
+                                        </p>
+                                    </blockquote>
+                                    <figcaption class="blockquote-footer mb-1"
+                                                *ngIf="importData.errors.notValidRawData.description">
+                                        {{ importData.errors.notValidRawData.description }}
+                                    </figcaption>
+                                </figure>
+
                                 <div class="help-block text-info pb-2 small">
                                     {{ t('This preview shows maximal 10 first valid records from iTop system.') }}
                                     <span>
@@ -217,22 +249,22 @@
                                     </tr>
                                 }
 
-                                @if (!importData.success && importData.notValidRawData && importData.notValidRawData.invalidData.length > 0) {
-                                    <tr *ngFor="let importInvalidHostData of importData.notValidRawData.invalidData"
+                                @if (importData.errors !== null && importData.errors.notValidRawData && importData.errors.notValidRawData.invalidData.length > 0) {
+                                    <tr *ngFor="let importInvalidHostData of importData.errors.notValidRawData.invalidData"
                                         class="word-break">
-                                        <td>
+                                        <td class="text-decoration-line-through text-decoration-color-danger">
                                             {{ importInvalidHostData.identifier }}
                                         </td>
-                                        <td>
+                                        <td class="text-decoration-line-through text-decoration-color-danger">
                                             {{ importInvalidHostData.hostname }}
                                         </td>
-                                        <td>
+                                        <td class="text-decoration-line-through text-decoration-color-danger">
                                             {{ importInvalidHostData.address }}
                                         </td>
-                                        <td>
+                                        <td class="text-decoration-line-through text-decoration-color-danger">
                                             {{ importInvalidHostData.description }}
                                         </td>
-                                        <td>
+                                        <td class="text-decoration-line-through text-decoration-color-danger">
                                             {{ importInvalidHostData.software }}
                                         </td>
                                     </tr>
@@ -247,7 +279,7 @@
         </c-modal-body>
         <c-modal-footer>
             <button cButton class="ripple" color="primary" *ngIf="importData"
-                    [disabled]="showSynchronizingSpinner || showSpinner || errors !== null"
+                    [disabled]="showSynchronizingSpinner || showSpinner || importData.errors !== null || importData.data?.length === 0"
                     (click)="startDataImport()">
                 <fa-icon [icon]="['fas', 'spinner']" animation="spin" *ngIf="showSpinner"></fa-icon>
                 {{ t('Start data import') }}

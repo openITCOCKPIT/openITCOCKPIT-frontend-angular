@@ -244,7 +244,6 @@
                 <tr *ngFor="let host of hosts.all_hosts">
                     <td class="text-center width-50">
                         <oitc-item-select
-                            *oitcPermission="['hosts', 'delete']"
                             [disabled]="!host.Host.allow_edit"
                             [item]="host"></oitc-item-select>
                     </td>
@@ -260,7 +259,7 @@
                         </strong>
                     </td>
 
-                    <td>
+                    <td class="word-break">
                         @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                             <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
                                 {{ host.Host.name }}
@@ -391,11 +390,13 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        *oitcPermission="['hosts', 'copy']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['hosts', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>

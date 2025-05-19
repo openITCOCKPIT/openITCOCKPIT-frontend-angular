@@ -1,46 +1,46 @@
-<ng-container *transloco="let t" class="peers">
-    <!-- IMAGES -->
-    <ng-container *ngIf="!isCustomLoginBackground && loginAnimation">
-        <!-- Show default openITCOCKPIT background images and fade between them -->
-        <div class="login-screen">
-            <figure *ngFor="let image of images"
-                    [style.background-image]="'url(/img/login/' + image.image + ')'">
-                <figcaption>{{ image.credit }} {{ description }}</figcaption>
-            </figure>
-        </div>
-    </ng-container>
-
-    <ng-container *ngIf="!isCustomLoginBackground && !loginAnimation">
-        <!-- Show the first openITCOCKPIT background - no animation as they are disabled -->
-        @for (image of images; track $index) {
-            <div class="login-screen-vnc"
-                 *ngIf="$index === 0"
-                 [style.background-image]="'url(/img/login/' + image.image + ')'">
-                <figcaption>{{ image.credit }} {{ description }}</figcaption>
-            </div>
-        }
-    </ng-container>
-
-    <ng-container *ngIf="isCustomLoginBackground">
-        <!-- Show custom background image uploaded through DesignModule -->
-        <div class="login-screen"
-             [style.background-image]="'url(' + customLoginBackgroundHtml + ')'">
-        </div>
-    </ng-container>
-    <!-- PRTCLS -->
-    <ngx-particles
-        id="prtcls"
-        *ngIf="loginAnimation"
-        [options]="particlesOptions"
-        (particlesLoaded)="particlesLoaded($event)"
-    ></ngx-particles>
-
+<ng-container *transloco="let t">
     <!-- FORM -->
-    <c-row class="w-100 h-100 peer scrollable pos-r login-side-bg">
-        <c-col xs="12" md="6" lg="4" class="p-5 login-side-right">
+    <c-row class="w-100 h-100 peer scrollable pos-r login-side-bg login-form-bg">
+        <c-col xs="12" md="6" lg="7" xl="8"
+               [ngClass]="{'position-absolute w-100 z-index-1': !enableColumnLayout, 'd-none d-lg-block d-md-block': enableColumnLayout}">
+            <!-- IMAGES -->
+            <ng-container *ngIf="!isCustomLoginBackground && loginAnimation">
+                <!-- Show default openITCOCKPIT background images and fade between them -->
+                <div class="login-screen">
+                    <figure *ngFor="let image of images"
+                            [style.background-image]="'url(/img/login/' + image.image + ')'">
+                        <figcaption>{{ image.credit }} {{ description }}</figcaption>
+                    </figure>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!isCustomLoginBackground && !loginAnimation">
+                <!-- Show the first openITCOCKPIT background - no animation as they are disabled -->
+                @for (image of images; track $index) {
+                    <div class="login-screen-vnc"
+                         *ngIf="$index === 0"
+                         [style.background-image]="'url(/img/login/' + image.image + ')'">
+                        <figcaption>{{ image.credit }} {{ description }}</figcaption>
+                    </div>
+                }
+            </ng-container>
 
+            <ng-container *ngIf="isCustomLoginBackground">
+                <!-- Show custom background image uploaded through DesignModule -->
+                <div class="login-screen login-screen-custom"
+                     [style.background-image]="'url(' + customLoginBackgroundHtml + ')'">
+                </div>
+            </ng-container>
+            <!-- PRTCLS -->
+            <ngx-particles
+                id="prtcls"
+                *ngIf="loginAnimation"
+                [options]="particlesOptions"
+                (particlesLoaded)="particlesLoaded($event)"
+            ></ngx-particles>
+        </c-col>
+        <c-col xs="12" md="6" lg="5" xl="4" class="p-5 login-side-right">
             <div class="col-12 text-end" *ngIf="!disableLogin">
-                <div>
+                <div *ngIf="!enforceDisableAnimation">
                     <input cFormCheckInput
                            id="animation" type="checkbox"
                            class="checkbox-lg checkbox-primary"
@@ -53,7 +53,6 @@
                     </label>
                 </div>
             </div>
-
             <div class="col-12 text-center">
                 <img class="img-fluid" src="{{logoUrl}}" style="max-height: 230px;"/>
             </div>
@@ -63,7 +62,7 @@
             <div *ngIf="isSsoEnabled" class="form-group mb-5">
                 <a id="sso-redirect-href"
                    href="/users/login?redirect_sso=true"
-                   class="btn btn-primary btn-lg w-100">
+                   class="btn btn-primary btn-lg w-100 ripple">
                     <i class="fas fa-sign-in-alt"></i>
                     {{ t('Login through Single sign-on') }}
                 </a>
@@ -106,7 +105,7 @@
 
 
                 <c-row class="mb-3">
-                    <c-col md="4">
+                    <c-col md="6" lg="8">
 
                         <c-form-check class="mb-2">
                             <input cFormCheckInput
@@ -122,10 +121,10 @@
                         </c-form-check>
 
                     </c-col>
-                    <c-col md="8" class="text-end">
+                    <c-col md="6" lg="4" class="text-end">
                         <button
                             type="submit"
-                            class="btn btn-primary text-end"
+                            class="btn btn-primary text-end ripple"
                             [disabled]="disableLogin">
                             <span>
                                 <i class="fa fa-spinner fa-spin" *ngIf="disableLogin"></i>
@@ -148,7 +147,7 @@
                         </div>
                         <div class="peer">
                             <a
-                                href="/"
+                                [routerLink]="['/']"
                                 class="btn btn-primary">
                                 {{ t('Start') }}
                             </a>
@@ -159,23 +158,30 @@
             <!-- End certificates login -->
 
 
-            <div class="text-end" style="padding-top: 100px;">
-                <a href="https://openitcockpit.io/" target="_blank" class="btn  btn-light btn-icon">
-                    <fa-icon [icon]="['fas', 'globe']"/>
-                </a>
-                <a href="https://github.com/it-novum/openITCOCKPIT" target="_blank" class="btn  btn-light btn-icon">
-                    <fa-icon [icon]="['fab', 'github']"/>
-                </a>
-                <a href="https://twitter.com/openITCOCKPIT" target="_blank" class="btn  btn-light btn-icon">
-                    <fa-icon [icon]="['fab', 'twitter']"/>
-                </a>
-                <a href="https://www.reddit.com/r/openitcockpit" target="_blank" class="btn  btn-light btn-icon">
-                    <fa-icon [icon]="['fab', 'reddit']"/>
-                </a>
-                <a href="https://discord.gg/G8KhxKuQ9G" target="_blank" class="btn  btn-light btn-icon">
-                    <fa-icon [icon]="['fab', 'discord']"/>
-                </a>
-            </div>
+            @if (!disableSocialButtons) {
+                <div class="text-end" style="padding-top: 100px;">
+                    <a href="https://openitcockpit.io/" target="_blank"
+                       cButton [color]="'default'" class="ripple"
+                       [cTooltip]="'openITCOCKPIT Website'" cTooltipPlacement="top">
+                        <fa-icon [icon]="['fas', 'globe']" [size]="'lg'"></fa-icon>
+                    </a>
+                    <a href="https://github.com/it-novum/openITCOCKPIT" target="_blank"
+                       cButton [color]="'default'" class="ripple"
+                       [cTooltip]="'GitHub - Source Code'" cTooltipPlacement="top">
+                        <fa-icon [icon]="['fab', 'github']" [size]="'lg'"></fa-icon>
+                    </a>
+                    <a href="https://www.reddit.com/r/openitcockpit" target="_blank"
+                       cButton [color]="'default'" class="ripple"
+                       [cTooltip]="'Reddit Community'" cTooltipPlacement="top">
+                        <fa-icon [icon]="['fab', 'reddit']" [size]="'lg'"></fa-icon>
+                    </a>
+                    <a href="https://discord.gg/G8KhxKuQ9G" target="_blank"
+                       cButton [color]="'default'" class="ripple"
+                       [cTooltip]="'Discord Community'" cTooltipPlacement="top">
+                        <fa-icon [icon]="['fab', 'discord']" [size]="'lg'"></fa-icon>
+                    </a>
+                </div>
+            }
 
         </c-col>
     </c-row>

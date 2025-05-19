@@ -14,7 +14,7 @@
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Index') }}
+                {{ t('Overview') }}
             </li>
         </ol>
     </nav>
@@ -111,7 +111,8 @@
 
             <oitc-table-loader *ngIf="!hostgroups"></oitc-table-loader>
 
-            <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+            <table *ngIf="hostgroups" bordered cTable class="mt-2 mb-0" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
                 <tr>
@@ -129,16 +130,16 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="hostgroups">
+                <tbody>
                 <tr *ngFor="let hostgroup of hostgroups.all_hostgroups">
                     <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['hostgroups', 'delete']"
-                            [disabled]="false"
-                            [item]="hostgroup"></oitc-item-select>
-
+                        @if (( PermissionsService.hasPermissionObservable(['hostgroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['hostgroups', 'copy'])|async )) {
+                            <oitc-item-select
+                                [disabled]="!hostgroup.allowEdit"
+                                [item]="hostgroup"></oitc-item-select>
+                        }
                     </td>
-                    <td>
+                    <td class="word-break">
                         <span *oitcPermission="['hostgroups', 'extended']">
                             <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id]">
                                 {{ hostgroup.container.name }}
@@ -247,11 +248,13 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        *oitcPermission="['hostgroups', 'copy']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['hostgroups', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>

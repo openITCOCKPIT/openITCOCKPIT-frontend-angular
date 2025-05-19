@@ -267,7 +267,7 @@
                         <oitc-hoststatus-simple-icon
                             [hoststatus]="notification.NotificationHost.state"></oitc-hoststatus-simple-icon>
                     </td>
-                    <td>
+                    <td class="word-break">
                         <a *oitcPermission="['hosts', 'browser']"
                            [routerLink]="['/', 'hosts', 'browser', notification.Host.id]">
                             {{ notification.Host.hostname }}

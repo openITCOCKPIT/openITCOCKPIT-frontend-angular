@@ -34,6 +34,9 @@ import { prometheusModuleRoutes } from './modules/prometheus_module/prometheus_m
 import { changecalendarsModuleRoutes } from './modules/changecalendar_module/changecalendar_module.routes';
 import { scmModuleRoutes } from './modules/scm_module/scm_module.routes';
 import { slackModuleRoutes } from './modules/slack_module/slack_module.routes';
+import { designModuleRoutes } from './modules/design_module/design_module.routes';
+import { mattermostModuleRoutes } from './modules/mattermost_module/mattermost_module.routes';
+import { servicenowModuleRoutes } from './modules/servicenow_module/servicenow_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -89,7 +92,10 @@ const moduleRoutes: Routes = [
     ...autoreportModuleRoutes,
     ...changecalendarsModuleRoutes,
     ...scmModuleRoutes,
-    ...slackModuleRoutes
+    ...slackModuleRoutes,
+    ...designModuleRoutes,
+    ...mattermostModuleRoutes,
+    ...servicenowModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
@@ -99,6 +105,15 @@ const coreRoutes: Routes = [{
 }, {
     path: 'dashboards/index',
     loadComponent: () => import('./pages/dashboards/dashboards-index/dashboards-index.component').then(m => m.DashboardsIndexComponent)
+}, {
+    path: 'DashboardAllocations/index',
+    loadComponent: () => import('./pages/dashboardallocations/dashboard-allocations-index/dashboard-allocations-index.component').then(m => m.DashboardAllocationsIndexComponent)
+}, {
+    path: 'DashboardAllocations/add',
+    loadComponent: () => import('./pages/dashboardallocations/dashboard-allocations-add/dashboard-allocations-add.component').then(m => m.DashboardAllocationsAddComponent)
+}, {
+    path: 'DashboardAllocations/edit/:id',
+    loadComponent: () => import('./pages/dashboardallocations/dashboard-allocations-edit/dashboard-allocations-edit.component').then(m => m.DashboardAllocationsEditComponent)
 }, {
     path: 'macros/index',
     loadComponent: () => import('./pages/macros/macro-index/macro-index.component').then(m => m.MacroIndexComponent)
@@ -256,6 +271,12 @@ const coreRoutes: Routes = [{
     path: 'servicetemplategroups/add',
     loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-add/servicetemplategroups-add.component').then(m => m.ServicetemplategroupsAddComponent)
 }, {
+    path: 'servicetemplategroups/add/:ids',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-add/servicetemplategroups-add.component').then(m => m.ServicetemplategroupsAddComponent)
+}, {
+    path: 'servicetemplategroups/append/:ids',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-append/servicetemplategroups-append.component').then(m => m.ServicetemplategroupsAppendComponent)
+}, {
     path: 'servicetemplategroups/allocateToHost/:id',
     loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-allocate-to-host/servicetemplategroups-allocate-to-host.component').then(m => m.ServicetemplategroupsAllocateToHostComponent)
 }, {
@@ -378,6 +399,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'documentations/edit/:uuid/:type',
     loadComponent: () => import('./pages/documentations/documentations-edit/documentations-edit.component').then(m => m.DocumentationsEditComponent)
+}, {
+    path: 'documentations/wiki',
+    loadComponent: () => import('./pages/documentations/documentations-wiki/documentations-wiki.component').then(m => m.DocumentationsWikiComponent)
 }, {
     path: 'messagesOtd/add',
     loadComponent: () => import('./pages/messagesotd/messagesotd-add/messagesotd-add.component').then(m => m.MessagesotdAddComponent)
@@ -526,20 +550,20 @@ const coreRoutes: Routes = [{
     path: 'usergroups/index',
     loadComponent: () => import('./pages/usergroups/usergroups-index/usergroups-index.component').then(m => m.UsergroupsIndexComponent)
 }, {
-    path: 'users/add',
-    loadComponent: () => import('./pages/users/users-add/users-add.component').then(m => m.UsersAddComponent)
-}, {
-    path: 'users/edit/:id',
-    loadComponent: () => import('./pages/users/users-edit/users-edit.component').then(m => m.UsersEditComponent)
+    path: 'users/login',
+    loadComponent: () => import('./pages/users/users-login/users-login.component').then(m => m.UsersLoginComponent)
 }, {
     path: 'users/index',
     loadComponent: () => import('./pages/users/users-index/users-index.component').then(m => m.UsersIndexComponent)
 }, {
+    path: 'users/add',
+    loadComponent: () => import('./pages/users/users-add/users-add.component').then(m => m.UsersAddComponent)
+}, {
     path: 'users/ldap',
     loadComponent: () => import('./pages/users/users-ldap/users-ldap.component').then(m => m.UsersLdapComponent)
 }, {
-    path: 'users/login',
-    loadComponent: () => import('./pages/users/users-login/users-login.component').then(m => m.UsersLoginComponent)
+    path: 'users/edit/:id',
+    loadComponent: () => import('./pages/users/users-edit/users-edit.component').then(m => m.UsersEditComponent)
 }, {
     path: 'acknowledgements/host/:id',
     loadComponent: () => import('./pages/acknowledgements/acknowledgements-host/acknowledgements-host.component').then(m => m.AcknowledgementsHostComponent)
@@ -690,6 +714,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'backups/restore',
     loadComponent: () => import('./pages/backups/backups-restore/backups-restore.component').then(m => m.BackupsRestoreComponent)
+}, {
+    path: 'administrators/debug',
+    loadComponent: () => import('./pages/administrators/administrators-debug/administrators-debug.component').then(m => m.AdministratorsDebugComponent)
 }, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)

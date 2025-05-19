@@ -37,7 +37,7 @@ import {
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -52,6 +52,7 @@ import {
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-usergroups-index',
@@ -103,6 +104,8 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 export class UsergroupsIndexComponent implements OnInit, OnDestroy {
     private readonly modalService: ModalService = inject(ModalService);
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly UsergroupsService: UsergroupsService = inject(UsergroupsService);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
@@ -157,6 +160,12 @@ export class UsergroupsIndexComponent implements OnInit, OnDestroy {
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
         this.cdr.markForCheck();
@@ -174,6 +183,10 @@ export class UsergroupsIndexComponent implements OnInit, OnDestroy {
         }).join(',');
         if (ids) {
             this.router.navigate(['/', 'usergroups', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 

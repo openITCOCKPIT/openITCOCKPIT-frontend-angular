@@ -58,6 +58,7 @@
                         [(ngModel)]="post.Rotation.container_id"
                         [options]="containers"
                         [debounce]="true"
+                        (onChange)="onContainerChange()"
                         oitcFormError [errors]="errors" errorField="containers">
                     </oitc-multi-select>
 

@@ -56,29 +56,11 @@ export function getDefaultSatelliteSystemdowntimesParams(): SatelliteSystemdownt
 /*************************
  * Host / Service Browser *
  *************************/
-export interface SatelliteEntity {
+export interface SatelliteEntity extends IndexSatellite {
     id: number
-    name: string
-    description?: string
-    address: string
-    container_id: number
     sync_instance: number
-    timezone: string
     created: string
     modified: string
-    sync_method: string
-    login: string
-    port: number
-    private_key_path: string
-    url: string
-    remote_port: number
-    api_key: string
-    interval: number
-    timeout: number
-    use_proxy: number
-    proxy_url: string
-    verify_certificate: number
-    use_timesync: number
     nsta_sync_instance: number
 }
 
@@ -99,4 +81,241 @@ export interface SatelliteStatus {
     satellite_id: number
     last_error_time: any
     status_human: string
+}
+
+// TASKS: INDEX
+export interface SatelliteTasksIndex extends PaginateOrScroll {
+    all_satellite_tasks: AllSatelliteTask[]
+}
+
+export interface AllSatelliteTask {
+    id: number
+    satellite_id: number
+    task: string
+    status: number
+    result: any
+    error: any
+    modified: string
+    created: string
+    satellite: Satellite
+    status_human: {
+        title: string
+        class: string
+    }
+    allow_edit: boolean
+}
+
+export interface Satellite {
+    id: number
+    name: string
+    container_id: number
+}
+
+// https://master/distribute_module/satellites/tasks.json?angular=true&direction=desc&filter%5BSatelliteTasks.task%5D=&filter%5BSatellites.name%5D=
+
+export interface SatelliteTasksParams {
+    angular: true,
+    direction: 'asc' | 'desc' | '',
+    page: number,
+    scroll: boolean,
+    sort: string,
+    'filter[SatelliteTasks.task]': string,
+    'filter[Satellites.name]': string,
+    'filter[SatelliteTasks.status][]': number[]
+}
+
+export function getDefaultSatelliteTasksParams(): SatelliteTasksParams {
+    return {
+        angular: true,
+        direction: 'desc',
+        page: 1,
+        scroll: true,
+        sort: 'SatelliteTasks.id',
+        'filter[SatelliteTasks.task]': '',
+        'filter[Satellites.name]': '',
+        'filter[SatelliteTasks.status][]': []
+    }
+}
+
+// STATUS INDEX
+export interface SatelliteStatusIndex extends PaginateOrScroll {
+    all_satellites: AllSatellite[]
+}
+
+export interface AllSatellite {
+    id: number
+    name: string
+    description: any
+    address: string
+    container_id: number
+    timezone: string
+    sync_method: string
+    status: number
+    satellite_status: SatelliteStatus
+    container: string
+    sync_method_name: string
+    allow_edit: boolean
+}
+
+export interface SatellitesStatusParams {
+    angular: true,
+    direction: 'asc' | 'desc' | '',
+    page: number,
+    scroll: boolean,
+    sort: string,
+
+
+    'filter[Satellites.address]': string,
+    'filter[Satellites.name]': string,
+    'filter[Satellites.sync_method][]': string[],
+    'filter[status][]': number[],
+}
+
+export function getDefaultSatellitesStatusParams(): SatellitesStatusParams {
+    return {
+        angular: true,
+        direction: 'asc',
+        page: 1,
+        scroll: true,
+        sort: 'Satellites.name',
+
+
+        'filter[Satellites.address]': '',
+        'filter[Satellites.name]': '',
+        'filter[Satellites.sync_method][]': [],
+        'filter[status][]': [],
+    } as SatellitesStatusParams;
+}
+
+// SATELLITE INDEX
+export interface SatelliteIndexParams {
+    angular: true,
+    direction: 'asc' | 'desc' | '',
+    page: number,
+    scroll: boolean,
+    sort: string,
+
+    'filter[Satellites.address]': string,
+    'filter[Satellites.name]': string,
+    'filter[Satellites.sync_method][]': string[],
+    'filter[Satellites.description]': string,
+}
+
+export function getDefaultSatelliteIndexParams(): SatelliteIndexParams {
+    return {
+        angular: true,
+        direction: 'asc',
+        page: 1,
+        scroll: true,
+        sort: 'Satellites.name',
+
+        'filter[Satellites.address]': '',
+        'filter[Satellites.name]': '',
+        'filter[Satellites.sync_method][]': [],
+        'filter[Satellites.description]': '',
+    }
+}
+
+export interface SatelliteIndex extends PaginateOrScroll {
+    all_satellites: AllIndexSatellite[]
+}
+
+export interface AllIndexSatellite extends AllSatellite {
+    sync_instance: number
+    created: string
+    modified: string
+    login: string
+    port: number
+    private_key_path: string
+    url: string
+    remote_port: number
+    api_key: string
+    interval: number
+    timeout: number
+    use_proxy: number
+    proxy_url: string
+    verify_certificate: number
+    use_timesync: number
+    nsta_sync_instance: number
+}
+
+// SATELLITE ADD
+export interface SatellitesAddRoot {
+    frontendUrl: string
+    protocol: string
+    proxyProtocol: string
+    proxyUrl: string
+    Satellite: IndexSatellite
+}
+
+
+export interface IndexSatellite {
+    address: string
+    api_key: string
+    container_id: number
+    description?: string
+    interval: number
+    login: string
+    name: string
+    port: number
+    private_key_path: string
+    proxy_url: string
+    remote_port: number
+    sync_method: string
+    timeout: number
+    timezone: string
+    url: string
+    use_proxy: number
+    use_timesync: number
+    verify_certificate: number
+}
+
+export interface EditSatelliteRoot {
+    satellite: EditableSatellite
+    frontendUrl?: string
+    protocol?: string
+    proxyProtocol?: string
+    proxyUrl?: string
+}
+
+export interface EditSatellitePostRoot {
+    Satellite: EditableSatellite
+    frontendUrl?: string
+    protocol?: string
+    proxyProtocol?: string
+    proxyUrl?: string
+}
+
+export interface EditableSatellite extends IndexSatellite {
+    id: number
+}
+
+// USED BY
+export interface SatelliteUsedBy {
+    satellite: SatelliteUsedBySatellite
+    all_hosts: SatelliteUsedByHost[]
+    total: number
+    _csrfToken: string
+}
+
+export interface SatelliteUsedBySatellite {
+    id: number
+    name: string
+}
+
+export interface SatelliteUsedByHost {
+    id: number
+    name: string
+    address: string
+    uuid: string
+}
+
+// LoadHostsBySatelliteIds
+export interface LoadHostsBySatelliteIds {
+    hosts: LoadHostsBySatelliteIdsHost[]
+}
+
+export interface LoadHostsBySatelliteIdsHost {
+    id: number,
+    uuid: string
 }

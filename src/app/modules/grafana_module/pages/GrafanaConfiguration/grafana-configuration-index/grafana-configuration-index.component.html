@@ -16,7 +16,7 @@
                 <a [routerLink]="['/', 'grafana_module', 'grafana_configuration', 'index']"
                    *oitcPermission="['GrafanaModule', 'GrafanaConfiguration', 'index']">
                     <fa-icon [icon]="['fas', 'square-poll-horizontal']"></fa-icon>
-                    {{ t('IsarFlow Settings') }}
+                    {{ t('Settings') }}
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
@@ -25,7 +25,7 @@
             </li>
         </ol>
     </nav>
-    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
 
     <form cForm (ngSubmit)="updateGrafanaSettings()" *ngIf="post">
         <c-card class="mb-3">
@@ -152,13 +152,13 @@
                     </label>
 
                     <oitc-select
-                        name="dashboard_style"
-                        id="dashboard_style"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.dashboard_style"
-                        [options]="dashboardStyles"
-                        oitcFormError [errors]="errors" errorField="dashboard_style">
+                            name="dashboard_style"
+                            id="dashboard_style"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.dashboard_style"
+                            [options]="dashboardStyles"
+                            oitcFormError [errors]="errors" errorField="dashboard_style">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="dashboard_style"></oitc-form-feedback>
                 </div>
@@ -169,15 +169,15 @@
                     </label>
 
                     <oitc-multi-select
-                        name="Hostgroup"
-                        id="Hostgroup"
-                        optionValue="key"
-                        optionLabel="value"
-                        class="flex-1"
-                        [(ngModel)]="post.Hostgroup"
-                        [options]="hostgroups"
-                        (onChange)="processHostgroups()"
-                        oitcFormError [errors]="errors" errorField="Hostgroup">
+                            name="Hostgroup"
+                            id="Hostgroup"
+                            optionValue="key"
+                            optionLabel="value"
+                            class="flex-1"
+                            [(ngModel)]="post.Hostgroup"
+                            [options]="hostgroups"
+                            (onChange)="processHostgroups()"
+                            oitcFormError [errors]="errors" errorField="Hostgroup">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="Hostgroup"></oitc-form-feedback>
                     <div class="help-block">
@@ -191,15 +191,15 @@
                     </label>
 
                     <oitc-multi-select
-                        name="Hostgroup_excluded"
-                        id="Hostgroup_excluded"
-                        optionValue="key"
-                        optionLabel="value"
-                        class="flex-1"
-                        [(ngModel)]="post.Hostgroup_excluded"
-                        [options]="hostgroups_excluded"
-                        (onChange)="processHostgroups()"
-                        oitcFormError [errors]="errors" errorField="hostgroups_excluded">
+                            name="Hostgroup_excluded"
+                            id="Hostgroup_excluded"
+                            optionValue="key"
+                            optionLabel="value"
+                            class="flex-1"
+                            [(ngModel)]="post.Hostgroup_excluded"
+                            [options]="hostgroups_excluded"
+                            (onChange)="processHostgroups()"
+                            oitcFormError [errors]="errors" errorField="hostgroups_excluded">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="hostgroups_excluded"></oitc-form-feedback>
                     <div class="help-block">

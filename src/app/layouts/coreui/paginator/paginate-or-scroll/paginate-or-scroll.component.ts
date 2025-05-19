@@ -33,7 +33,6 @@ export class PaginateOrScrollComponent {
     // Pass change page event from Paginator or Scroll Index Component
     public onPageChange(newPage: number): void {
         this.currentPage = newPage;
-
         this.paginatorChange.emit({
             page: newPage,
             scroll: this.isScrollMode
@@ -42,6 +41,12 @@ export class PaginateOrScrollComponent {
 
     public changeMode(): void {
         this.isScrollMode = !this.isScrollMode;
+        if (this.paginateOrScroll?.paging) {
+            this.currentPage = this.paginateOrScroll.paging.page;
+        }
+        if (this.paginateOrScroll?.scroll) {
+            this.currentPage = this.paginateOrScroll.scroll.page;
+        }
         this.paginatorChange.emit({
             page: this.currentPage,
             scroll: this.isScrollMode

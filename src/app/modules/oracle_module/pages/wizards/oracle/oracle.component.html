@@ -47,7 +47,9 @@
                     <div class="btn-group btn-group-xs w-100 h-100">
                         <button type="button" class="btn btn-primary"
                                 [title]="'Back' | transloco"
-                                style="border-radius: 0;">
+                                style="border-radius: 0;"
+                                [fallbackUrl]="['wizards', 'index']"
+                                oitcBackButton>
                             <i class="fa fa-arrow-left"></i>
                         </button>
 
@@ -82,13 +84,14 @@
                         </ng-template>
                         <ng-template cTemplateId="accordionBodyTemplate">
                             <div class="accordion-body">
-                                {{t('Please replace XXXXX with your version.')}}
+                                {{ t('Please replace XXXXX with your version.') }}
                                 <ol>
                                     <li>
                                         <div>
                                             {{ t('Please download a recent version of the following packages from here') }}
                                             (
-                                            <a href="https://www.oracle.com/de/database/technologies/instant-client/linux-x86-64-downloads.html" target="_blank">
+                                            <a href="https://www.oracle.com/de/database/technologies/instant-client/linux-x86-64-downloads.html"
+                                               target="_blank">
                                                 https://www.oracle.com/de/database/technologies/instant-client/linux-x86-64-downloads.html
                                             </a>
                                             )
@@ -102,18 +105,21 @@
                                     </li>
                                     <li>
                                         <div>
-                                            {{ t('Extract files')}}
+                                            {{ t('Extract files') }}
                                             <ul>
                                                 <li><code> unzip instantclient-sdk-linux.x64-XXXXXXdbru.zip </code></li>
-                                                <li><code> unzip instantclient-basic-linux.x64-XXXXXXdbru.zip </code></li>
-                                                <li><code> unzip instantclient-sqlplus-linux.x64-XXXXXXdbru.zip </code></li>
-                                                <li><code> unzip instantclient-tools-linux.x64-XXXXXXdbru.zip </code></li>
+                                                <li><code> unzip instantclient-basic-linux.x64-XXXXXXdbru.zip </code>
+                                                </li>
+                                                <li><code> unzip instantclient-sqlplus-linux.x64-XXXXXXdbru.zip </code>
+                                                </li>
+                                                <li><code> unzip instantclient-tools-linux.x64-XXXXXXdbru.zip </code>
+                                                </li>
                                             </ul>
                                         </div>
                                     </li>
                                     <li>
                                         <div>
-                                            {{t('Install')}}
+                                            {{ t('Install') }}
                                             <pre>mkdir -p /opt/oracle/
 mv instantclient_XX_X /opt/oracle/
 
@@ -126,9 +132,9 @@ copy tnsnames.ora into this folder.</pre>
                                     </li>
                                     <li>
                                         <div>
-                                            {{t('Environment Variables')}}
-                                            <br />
-                                            {{t('Add the following to {0}', {"0": "/etc/environment"})}}
+                                            {{ t('Environment Variables') }}
+                                            <br/>
+                                            {{ t('Add the following to {0}', {"0": "/etc/environment"}) }}
                                             <pre>TNS_ADMIN=/opt/oracle/instantclient_XX_X/network/admin
 ORACLE_HOME=/opt/oracle/instantclient_XX_X
 LD_LIBRARY_PATH=/opt/oracle/instantclient_XX_X/lib</pre>
@@ -190,10 +196,12 @@ grant select on sys.v_$session to nagios;</pre>
             </fieldset>
 
             <oitc-wizards-dynamicfields
-                    [post]="post.services"
+                    [(post)]="post.services"
+                    [errors]="errors"
                     [title]="'Oracle Database services'|transloco"
             />
         </c-card-body>
     </c-card>
 
 </ng-container>
+

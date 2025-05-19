@@ -7,7 +7,6 @@
                     {{ t('Home') }}
                 </a>
             </li>
-
             <li class="breadcrumb-item active">
                 <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'index']"
                    *oitcPermission="['AutoreportModule', 'autoreports', 'index']">
@@ -21,810 +20,823 @@
             </li>
         </ol>
     </nav>
-
-    <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle *ngIf="!reportWasGenerated">
-                {{ t('Generate auto report') }}
-            </h5>
-            <h5 cCardTitle *ngIf="reportWasGenerated">
-                {{ report.autoreport.name }}
-                <span class="fw-300">
-                    <i>{{ report.autoreport_data.evaluation_time.start_human }}</i>
-                    -
-                    <i>{{ report.autoreport_data.evaluation_time.end_human }}</i>
-                </span>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['autoreport_module', 'autoreports', 'index']" cButton class="ripple"
-                            color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-            <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
-                <c-nav-item>
-                    <a class="nav-link text-center active" data-toggle="tab"
-                       [ngClass]="{'active': tabName==='reportConfig'}"
-                       (click)="tabName='reportConfig'"
-                       role="tab">
-                        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                        {{ t('Configuration') }}
-                    </a>
-                </c-nav-item>
-                <c-nav-item>
-                    <a class="nav-link" data-toggle="tab"
-                       [ngClass]="{'active': tabName ==='showReport'}"
-                       (click)="tabName='showReport'"
-                       *ngIf="reportWasGenerated"
-                       role="tab">
-                        <fa-icon [icon]="['fas', 'pie-chart']"></fa-icon>
-                        {{ t('Report') }}
-                    </a>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body *ngIf="tabName === 'reportConfig'">
-            <form cForm (ngSubmit)="submitReport()">
-                <c-alert color="danger" role="alert" [hidden]="!report_error">
-                    @if (report_error) {
-                        {{ report_error.message }}
-                        <ul *ngIf="report_error.objects.length > 0">
-                            <li *ngFor=" let errorObject of report_error.objects">
-                                {{ errorObject.name }}
-
-                                <ul *ngIf="errorObject.services">
-                                    <li *ngFor=" let servicename of errorObject.services">
-                                        {{ servicename }}
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    }
-                </c-alert>
-
-                <c-row class="mb-3">
-                    <label cLabel for="report">
-                        {{ t('Auto report') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <oitc-select
-                                 name="report"
-                                 id="report"
-                                 optionValue="id"
-                                 optionLabel="name"
-                                 [(ngModel)]="post.Autoreport.id"
-                                 [options]="autoreports">
-                    </oitc-select>
-                </c-row>
-
-                <c-row class="mb-3">
-                    <label cLabel for="format">
-                        {{ t('Report format') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <oitc-select
-                        name="format"
-                        id="format"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.Autoreport.format"
-                        [options]="formatOptions">
-                    </oitc-select>
-                </c-row>
-                <c-row class="mb-3">
-                    <c-col>
-                        <label cLabel for="from_date">
-                            {{ t('From') }}
-                        </label>
-                        <input cFormControl type="date"
-                               id="from_date"
-                               name="from_date"
-                               placeholder="{{ t('DD.MM.YYYY') }}"
-                               [(ngModel)]="from"
-                               oitcFormError [errors]="errors" errorField="from_date">
-                        <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
-                    </c-col>
-                </c-row>
-                <c-row class="mb-3">
-                    <c-col>
-                        <label cLabel for="to_date">
-                            {{ t('To') }}
-                        </label>
-                        <input cFormControl type="date"
-                               id="to_date"
-                               name="to_date"
-                               placeholder="{{ t('DD.MM.YYYY') }}"
-                               [(ngModel)]="to"
-                               oitcFormError [errors]="errors" errorField="to_date">
-                        <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
-                    </c-col>
-                </c-row>
-
-                <c-row class="text-end card-footer">
-                    <c-col>
-                        <button cButton class="ripple" color="primary" type="submit">
-                            <fa-icon [icon]="['fas', 'spinner']" [hidden]="!isGenerating" animation="spin"></fa-icon>
-                            {{ t('Generate report') }}
+    <form cForm (ngSubmit)="submitReport()">
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle *ngIf="!reportWasGenerated">
+                    {{ t('Generate auto report') }}
+                </h5>
+                <h5 cCardTitle *ngIf="reportWasGenerated">
+                    {{ report.autoreport.name }}
+                    <span class="fw-300">
+                        <i>{{ report.autoreport_data.evaluation_time.start_human }}</i>
+                        -
+                        <i>{{ report.autoreport_data.evaluation_time.end_human }}</i>
+                    </span>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['autoreport_module', 'autoreports', 'index']" cButton class="ripple"
+                                color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
                         </button>
-                    </c-col>
-                </c-row>
-            </form>
-        </c-card-body>
+                    </c-nav-item>
+                </c-nav>
+                <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
+                    <c-nav-item>
+                        <a class="nav-link text-center active" data-toggle="tab"
+                           [ngClass]="{'active': tabName==='reportConfig'}"
+                           (click)="tabName='reportConfig'"
+                           role="tab">
+                            <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                            {{ t('Configuration') }}
+                        </a>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <a class="nav-link" data-toggle="tab"
+                           [ngClass]="{'active': tabName ==='showReport'}"
+                           (click)="tabName='showReport'"
+                           *ngIf="reportWasGenerated"
+                           role="tab">
+                            <fa-icon [icon]="['fas', 'pie-chart']"></fa-icon>
+                            {{ t('Report') }}
+                        </a>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <div *ngIf="tabName === 'reportConfig'">
 
-        <c-card-body *ngIf="tabName === 'showReport'">
-            <c-row class="mb-3">
-                <c-col xs="12" md="12" lg="6">
-                    <c-row>
-                        <c-col xs="12" md="6" lg="4">
-                            <h4>
-                                {{ t('Evaluated time period') }}
-                            </h4>
+                    <c-alert color="danger" role="alert" [hidden]="!report_error">
+                        @if (report_error) {
+                            {{ report_error.message }}
+                            <ul *ngIf="report_error.objects.length > 0">
+                                <li *ngFor=" let errorObject of report_error.objects">
+                                    {{ errorObject.name }}
+
+                                    <ul *ngIf="errorObject.services">
+                                        <li *ngFor=" let servicename of errorObject.services">
+                                            {{ servicename }}
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        }
+                    </c-alert>
+
+                    <div class="mb-3">
+                        <label cLabel for="report">
+                            {{ t('Auto report') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-select
+                            name="report"
+                            id="report"
+                            optionValue="id"
+                            optionLabel="name"
+                            [(ngModel)]="post.Autoreport.id"
+                            [options]="autoreports">
+                        </oitc-select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="format">
+                            {{ t('Report format') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-select
+                            name="format"
+                            id="format"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.Autoreport.format"
+                            [options]="formatOptions">
+                        </oitc-select>
+                    </div>
+                    <div class="mb-3">
+                        <c-col>
+                            <label cLabel for="from_date">
+                                {{ t('From') }}
+                            </label>
+                            <input cFormControl type="date"
+                                   id="from_date"
+                                   name="from_date"
+                                   placeholder="{{ t('DD.MM.YYYY') }}"
+                                   [(ngModel)]="from"
+                                   oitcFormError [errors]="errors" errorField="from_date">
+                            <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
                         </c-col>
-                        <c-col xs="12" md="6" lg="8">
+                    </div>
+                    <div class="mb-3">
+                        <c-col>
+                            <label cLabel for="to_date">
+                                {{ t('To') }}
+                            </label>
+                            <input cFormControl type="date"
+                                   id="to_date"
+                                   name="to_date"
+                                   placeholder="{{ t('DD.MM.YYYY') }}"
+                                   [(ngModel)]="to"
+                                   oitcFormError [errors]="errors" errorField="to_date">
+                            <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
+                        </c-col>
+                    </div>
+                </div>
+
+                <div *ngIf="tabName === 'showReport'">
+                    <c-row class="mb-3">
+                        <c-col xs="12" md="12" lg="6">
                             <c-row>
-                                <c-col>
-                                    @if (this.PermissionsService.hasPermissionObservable(['timeperiods', 'edit'])|async) {
-                                        <a [routerLink]="['/', 'timeperiods', 'edit', report.autoreport.timeperiod_id]">
-                                            {{ report.autoreport.timeperiod.name }}
-                                        </a>
-                                    } @else {
-                                        {{ report.autoreport.timeperiod.name }}
-                                    }
-                                </c-col>
-                            </c-row>
-                            <c-row *ngFor="let timerange of report.autoreport.timeperiod.timeperiod_timeranges">
-                                <c-col xs="12" md="6" lg="3">
-                                    {{ timerange.weekday }}
-                                </c-col>
                                 <c-col xs="12" md="6" lg="4">
-                                    {{ timerange.start }}
-                                    -
-                                    {{ timerange.end }}
+                                    <h4>
+                                        {{ t('Evaluated time period') }}
+                                    </h4>
                                 </c-col>
-                            </c-row>
-                        </c-col>
-                    </c-row>
-                </c-col>
-
-                <c-col xs="12" md="6" lg="6" class="text-end">
-                    <img alt="logo" [src]="logoUrl" width="200">
-                </c-col>
-            </c-row>
-            <c-row class="mb-3"
-                   *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_SUMMARY_STATISTICS.value) && report.autoreport.min_availability">
-                <c-col lg="12">
-                    <h4>
-                        {{ t('Availability overview') }}
-                    </h4>
-                </c-col>
-                <c-col class="col-12">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th style="border-top:none;" class="col-3"></th>
-                            <th style="border-top:none;"
-                                class="col-4">{{ t('Maximum allowed outage duration') }}
-                            </th>
-                            <th style="border-top:none;"
-                                class="col-4">{{ t('Measured outage duration ') }}
-                            </th>
-                            <th style="border-top:none;" class="col-1"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>{{ t('Percentage') }}</td>
-                            <td>
-                                {{ report.autoreport_data.max_outages_time_in_percent | number: '1.3-3' }} %
-                            </td>
-                            <td>
-                                {{ report.autoreport_data.total_outage_time_percentage | number: '1.3-3' }} %
-                            </td>
-                            <td>
-                                <span class="badge border border-success text-success"
-                                      *ngIf="report.autoreport_data.total_outage_time_percentage <= report.autoreport_data.max_outages_time_in_percent">
-                                    {{ t('PASSED') }}
-                                </span>
-                                <span class="badge border border-danger text-danger"
-                                      *ngIf="report.autoreport_data.total_outage_time_percentage > report.autoreport_data.max_outages_time_in_percent">
-                                    {{ t('FAILED') }}
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{ t('Minutes') }}</td>
-                            <td>
-                                {{ report.autoreport_data.max_outages_time_in_seconds_human }}
-                            </td>
-                            <td>
-                                {{ report.autoreport_data.total_outage_time_human }}
-                            </td>
-                            <td>
-                                <span class="badge border border-success text-success"
-                                      *ngIf="report.autoreport_data.total_outage_time_percentage <= report.autoreport_data.max_outages_time_in_percent">
-                                    {{ t('PASSED') }}
-                                </span>
-                                <span class="badge border border-danger text-danger"
-                                      *ngIf="report.autoreport_data.total_outage_time_percentage > report.autoreport_data.max_outages_time_in_percent">
-                                    {{ t('FAILED') }}
-                                </span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </c-col>
-            </c-row>
-            <c-row class="mb-3"
-                   *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_SUMMARY_STATISTICS.value) && report.autoreport.max_number_of_outages">
-                <c-col class="col-12">
-                    <h4>
-                        {{ t('Outages overview') }}
-                    </h4>
-                </c-col>
-                <c-col class="col-12">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th class="col-3"></th>
-                            <th class="col-4">
-                                {{ t('Maximum allowed number of outages') }}
-                            </th>
-                            <th class="col-4">
-                                {{ t('Measured number of outages') }}
-                            </th>
-                            <th class="col-1"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td></td>
-                            <td>
-                                {{ report.autoreport.max_number_of_outages }}
-                            </td>
-                            <td>
-                                {{ report.autoreport_data.total_outage_count }}
-                            </td>
-                            <td>
-                                <span class="badge border border-success text-success"
-                                      *ngIf="report.autoreport_data.total_outage_count <= report.autoreport.max_number_of_outages">
-                                    {{ t('PASSED') }}
-                                </span>
-                                <span class="badge border border-danger text-danger"
-                                      *ngIf="report.autoreport_data.total_outage_count > report.autoreport.max_number_of_outages">
-                                    {{ t('FAILED') }}
-                                </span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </c-col>
-            </c-row>
-            <c-row class="mb-3">
-                <c-col class="col-12">
-                    <h4>
-                        {{ t('Evaluated host and services') }}
-                    </h4>
-                </c-col>
-                <c-col lg="12">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th class="col-3"></th>
-                            <th class="col-4">
-                                {{ t('Name') }}
-                            </th>
-                            <th class="col-4">
-                                <span
-                                    *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value) ||hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value)">
-                                    {{ t('Availability ') }}
-                                </span>
-                            </th>
-                            <th class="col-1">
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <ng-container *ngFor="let host of report.autoreport_data.hosts | keyvalue: keepOrder">
-                            <tr>
-                                <td class="html-report-host-row"></td>
-                                <td class="html-report-host-row">
-                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                                        <a [routerLink]="['/', 'hosts', 'browser', host.value.Host.id]">
-                                            {{ host.value.Host.name }}
-                                        </a>
-                                    } @else {
-                                        {{ host.value.Host.name }}
-                                    }
-                                </td>
-                                <td class="html-report-host-row">
-                                    <div *ngIf="host.value.Host.state_overview">
-                                        <span
-                                            *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value)">
-                                            {{ host.value.Host.state_overview.percent_availability | number: '1.3-3' }}
-                                            %
-                                        </span>
-                                    </div>
-                                    <span
-                                        *ngIf="!host.value.Host.state_overview && checkIfHostInReport(host.value.Host.id)"
-                                        class="text-primary">
-                                        <i>
-                                            {{ t('No historical data available ') }}
-                                        </i>
-                                    </span>
-                                </td>
-                                <td class="html-report-host-row">
-                                    <span class="badge border border-success text-success"
-                                          *ngIf="(host.value.Host.state_overview && hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value)) &&
-                                      (100-report.autoreport_data.max_outages_time_in_percent) <= host.value.Host.state_overview.percent_availability">
-                                        {{ t('PASSED') }}
-                                    </span>
-                                    <span class="badge border border-danger text-danger"
-                                          *ngIf="(host.value.Host.state_overview && hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value)) &&
-                                      (100-report.autoreport_data.max_outages_time_in_percent) > host.value.Host.state_overview.percent_availability">
-                                        {{ t('FAILED') }}
-                                    </span>
-                                </td>
-                            </tr>
-                            <ng-container *ngIf="host.value.Services">
-                                <tr *ngFor="let service of host.value.Services | keyvalue: keepOrder ">
-                                    <td></td>
-                                    <td>
-                                        <span>
-                                            <fa-icon [icon]="['fas', 'cog']" class="ms-3"></fa-icon>
-                                            @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
-                                                <a [routerLink]="['/', 'services', 'browser', service.value.Service.id]">
-                                                    {{ service.value.Service.name }}
+                                <c-col xs="12" md="6" lg="8">
+                                    <c-row>
+                                        <c-col>
+                                            @if (this.PermissionsService.hasPermissionObservable(['timeperiods', 'edit'])|async) {
+                                                <a [routerLink]="['/', 'timeperiods', 'edit', report.autoreport.timeperiod_id]">
+                                                    {{ report.autoreport.timeperiod.name }}
                                                 </a>
                                             } @else {
-                                                {{ service.value.Service.name }}
+                                                {{ report.autoreport.timeperiod.name }}
                                             }
-                                        </span>
+                                        </c-col>
+                                    </c-row>
+                                    <c-row *ngFor="let timerange of report.autoreport.timeperiod.timeperiod_timeranges">
+                                        <c-col xs="12" md="6" lg="3">
+                                            {{ timerange.weekday }}
+                                        </c-col>
+                                        <c-col xs="12" md="6" lg="4">
+                                            {{ timerange.start }}
+                                            -
+                                            {{ timerange.end }}
+                                        </c-col>
+                                    </c-row>
+                                </c-col>
+                            </c-row>
+                        </c-col>
+
+                        <c-col xs="12" md="6" lg="6" class="text-end">
+                            <img alt="logo" [src]="logoUrl" width="200">
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-3"
+                           *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_SUMMARY_STATISTICS.value) && report.autoreport.min_availability">
+                        <c-col lg="12">
+                            <h4>
+                                {{ t('Availability overview') }}
+                            </h4>
+                        </c-col>
+                        <c-col class="col-12">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th style="border-top:none;" class="col-3"></th>
+                                    <th style="border-top:none;"
+                                        class="col-4">{{ t('Maximum allowed outage duration') }}
+                                    </th>
+                                    <th style="border-top:none;"
+                                        class="col-4">{{ t('Measured outage duration ') }}
+                                    </th>
+                                    <th style="border-top:none;" class="col-1"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>{{ t('Percentage') }}</td>
+                                    <td>
+                                        {{ report.autoreport_data.max_outages_time_in_percent | number: '1.3-3' }} %
                                     </td>
                                     <td>
-                                        <div
-                                            *ngIf="service.value.Service.state_overview">
-                                            <span
-                                                *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value)">
-                                                {{
-                                                    service.value.Service.state_overview.percent_availability | number: '1.3-3'
-                                                }} %
-                                            </span>
-                                        </div>
+                                        {{ report.autoreport_data.total_outage_time_percentage | number: '1.3-3' }} %
+                                    </td>
+                                    <td>
+                                        <span class="badge border border-success text-success"
+                                              *ngIf="report.autoreport_data.total_outage_time_percentage <= report.autoreport_data.max_outages_time_in_percent">
+                                            {{ t('PASSED') }}
+                                        </span>
+                                        <span class="badge border border-danger text-danger"
+                                              *ngIf="report.autoreport_data.total_outage_time_percentage > report.autoreport_data.max_outages_time_in_percent">
+                                            {{ t('FAILED') }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{ t('Minutes') }}</td>
+                                    <td>
+                                        {{ report.autoreport_data.max_outages_time_in_seconds_human }}
+                                    </td>
+                                    <td>
+                                        {{ report.autoreport_data.total_outage_time_human }}
+                                    </td>
+                                    <td>
+                                        <span class="badge border border-success text-success"
+                                              *ngIf="report.autoreport_data.total_outage_time_percentage <= report.autoreport_data.max_outages_time_in_percent">
+                                            {{ t('PASSED') }}
+                                        </span>
+                                        <span class="badge border border-danger text-danger"
+                                              *ngIf="report.autoreport_data.total_outage_time_percentage > report.autoreport_data.max_outages_time_in_percent">
+                                            {{ t('FAILED') }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-3"
+                           *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_SUMMARY_STATISTICS.value) && report.autoreport.max_number_of_outages">
+                        <c-col class="col-12">
+                            <h4>
+                                {{ t('Outages overview') }}
+                            </h4>
+                        </c-col>
+                        <c-col class="col-12">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="col-3"></th>
+                                    <th class="col-4">
+                                        {{ t('Maximum allowed number of outages') }}
+                                    </th>
+                                    <th class="col-4">
+                                        {{ t('Measured number of outages') }}
+                                    </th>
+                                    <th class="col-1"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        {{ report.autoreport.max_number_of_outages }}
+                                    </td>
+                                    <td>
+                                        {{ report.autoreport_data.total_outage_count }}
+                                    </td>
+                                    <td>
+                                        <span class="badge border border-success text-success"
+                                              *ngIf="report.autoreport_data.total_outage_count <= report.autoreport.max_number_of_outages">
+                                            {{ t('PASSED') }}
+                                        </span>
+                                        <span class="badge border border-danger text-danger"
+                                              *ngIf="report.autoreport_data.total_outage_count > report.autoreport.max_number_of_outages">
+                                            {{ t('FAILED') }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-3">
+                        <c-col class="col-12">
+                            <h4>
+                                {{ t('Evaluated host and services') }}
+                            </h4>
+                        </c-col>
+                        <c-col lg="12">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="col-3"></th>
+                                    <th class="col-4">
+                                        {{ t('Name') }}
+                                    </th>
+                                    <th class="col-4">
                                         <span
-                                            *ngIf="!service.value.Service.state_overview"
-                                            class="text-primary">
-                                            <i>
-                                                {{ t('No historical data available ') }}
-                                            </i>
+                                            *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value) ||hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value)">
+                                            {{ t('Availability ') }}
                                         </span>
-                                    </td>
-                                    <td>
-                                        <div
-                                            *ngIf="service.value.Service.state_overview">
+                                    </th>
+                                    <th class="col-1">
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ng-container *ngFor="let host of report.autoreport_data.hosts | keyvalue: keepOrder">
+                                    <tr>
+                                        <td class="html-report-host-row"></td>
+                                        <td class="html-report-host-row">
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                                <a [routerLink]="['/', 'hosts', 'browser', host.value.Host.id]">
+                                                    {{ host.value.Host.name }}
+                                                </a>
+                                            } @else {
+                                                {{ host.value.Host.name }}
+                                            }
+                                        </td>
+                                        <td class="html-report-host-row">
+                                            <div *ngIf="host.value.Host.state_overview">
+                                                <span
+                                                    *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value)">
+                                                    {{ host.value.Host.state_overview.percent_availability | number: '1.3-3' }}
+                                                    %
+                                                </span>
+                                            </div>
+                                            <span
+                                                *ngIf="!host.value.Host.state_overview && checkIfHostInReport(host.value.Host.id)"
+                                                class="text-primary">
+                                                <i>
+                                                    {{ t('No historical data available ') }}
+                                                </i>
+                                            </span>
+                                        </td>
+                                        <td class="html-report-host-row">
                                             <span class="badge border border-success text-success"
-                                                  *ngIf="(hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value)) &&
-                                                  (100 - report.autoreport_data.max_outages_time_in_percent) <= service.value.Service.state_overview.percent_availability">
+                                                  *ngIf="(host.value.Host.state_overview && hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value)) &&
+                                      (100-report.autoreport_data.max_outages_time_in_percent) <= host.value.Host.state_overview.percent_availability">
                                                 {{ t('PASSED') }}
                                             </span>
                                             <span class="badge border border-danger text-danger"
-                                                  *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value) &&
-                                                  (100 - report.autoreport_data.max_outages_time_in_percent) > service.value.Service.state_overview.percent_availability">
+                                                  *ngIf="(host.value.Host.state_overview && hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value)) &&
+                                      (100-report.autoreport_data.max_outages_time_in_percent) > host.value.Host.state_overview.percent_availability">
                                                 {{ t('FAILED') }}
                                             </span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </ng-container>
-                        </ng-container>
-                        </tbody>
-                    </table>
-                </c-col>
-            </c-row>
-            <c-row class="mb-3" *ngIf="report.autoreport_data.sla_graph_path">
-                <c-col class="col-12">
-                    <h4>
-                        {{ t('SLA overview') }}
-                    </h4>
-                </c-col>
-                <c-col class="col-12 text-center">
-                    <img [src]="report.autoreport_data.sla_graph_path" class="img-fluid">
-                </c-col>
-            </c-row>
-            <c-row class="mb-3">
-                <c-col class="col-12">
-                    <h4>
-                        {{ t('Host and service details') }}
-                    </h4>
-                </c-col>
-            </c-row>
-            <ng-container *ngFor="let host of report.autoreport_data.hosts | keyvalue: keepOrder">
-                <c-row class="html-report-host-row border-top pt-3 pb-3">
-                    <c-col class="col-3 d-sm-flex text-start align-items-center">
-                        <fa-icon [icon]="['fas', 'desktop']" class="pe-1"></fa-icon>
-                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                            <a [routerLink]="['/', 'hosts', 'browser', host.value.Host.id]">
-                                {{ host.value.Host.name }}
-                            </a>
-                        } @else {
-                            {{ host.value.Host.name }}
-                        }
-                        <span
-                            *ngIf="hasBitValue(host.value.Host.configuration_option, 4) && host.value.Host.description !== null">
-                            <!-- 4 == alias -->
-                            &nbsp;
-                            - {{ host.value.Host.description }}
-                        </span>
-                    </c-col>
+                                        </td>
+                                    </tr>
+                                    <ng-container *ngIf="host.value.Services">
+                                        <tr *ngFor="let service of host.value.Services | keyvalue: keepOrder ">
+                                            <td></td>
+                                            <td>
+                                                <span>
+                                                    <fa-icon [icon]="['fas', 'cog']" class="ms-3"></fa-icon>
+                                                    @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                                        <a [routerLink]="['/', 'services', 'browser', service.value.Service.id]">
+                                                            {{ service.value.Service.name }}
+                                                        </a>
+                                                    } @else {
+                                                        {{ service.value.Service.name }}
+                                                    }
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div
+                                                    *ngIf="service.value.Service.state_overview">
+                                                    <span
+                                                        *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value)">
+                                                        {{
+                                                            service.value.Service.state_overview.percent_availability | number: '1.3-3'
+                                                        }} %
+                                                    </span>
+                                                </div>
+                                                <span
+                                                    *ngIf="!service.value.Service.state_overview"
+                                                    class="text-primary">
+                                                    <i>
+                                                        {{ t('No historical data available ') }}
+                                                    </i>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div
+                                                    *ngIf="service.value.Service.state_overview">
+                                                    <span class="badge border border-success text-success"
+                                                          *ngIf="(hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value)) &&
+                                                  (100 - report.autoreport_data.max_outages_time_in_percent) <= service.value.Service.state_overview.percent_availability">
+                                                        {{ t('PASSED') }}
+                                                    </span>
+                                                    <span class="badge border border-danger text-danger"
+                                                          *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value) &&
+                                                  (100 - report.autoreport_data.max_outages_time_in_percent) > service.value.Service.state_overview.percent_availability">
+                                                        {{ t('FAILED') }}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                                </tbody>
+                            </table>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-3" *ngIf="report.autoreport_data.sla_graph_path">
+                        <c-col class="col-12">
+                            <h4>
+                                {{ t('SLA overview') }}
+                            </h4>
+                        </c-col>
+                        <c-col class="col-12 text-center">
+                            <img [src]="report.autoreport_data.sla_graph_path" class="img-fluid">
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-3">
+                        <c-col class="col-12">
+                            <h4>
+                                {{ t('Host and service details') }}
+                            </h4>
+                        </c-col>
+                    </c-row>
+                    <ng-container *ngFor="let host of report.autoreport_data.hosts | keyvalue: keepOrder">
+                        <c-row class="html-report-host-row border-top pt-3 pb-3">
+                            <c-col class="col-3 d-sm-flex text-start align-items-center">
+                                <fa-icon [icon]="['fas', 'desktop']" class="pe-1"></fa-icon>
+                                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                    <a [routerLink]="['/', 'hosts', 'browser', host.value.Host.id]">
+                                        {{ host.value.Host.name }}
+                                    </a>
+                                } @else {
+                                    {{ host.value.Host.name }}
+                                }
+                                <span
+                                    *ngIf="hasBitValue(host.value.Host.configuration_option, 4) && host.value.Host.description !== null">
+                                    <!-- 4 == alias -->
+                                    &nbsp;
+                                    - {{ host.value.Host.description }}
+                                </span>
+                            </c-col>
 
-                    <c-col md="2">
-                        <c-row class="report-border-sucess"
-                               *ngIf="host.value.Host.state_overview">
-                            <c-col class="col-12"
-                                   *ngIf="hasBitValue(host.value.Host.configuration_option, 1)">
-                                <!-- 1 == percent -->
-                                {{ host.value.Host.state_overview.percent_up | number: '1.3-3' }}
-                                %
-                            </c-col>
-                            <c-col class="col-12"
-                                   *ngIf="hasBitValue(host.value.Host.configuration_option, 2)">
-                                <!-- 2 == minute -->
-                                {{ host.value.Host.state_overview.human_up }}
-                            </c-col>
-                        </c-row>
-                    </c-col>
-                    <c-col md="2">
-                        <c-row class="report-border-danger"
-                               *ngIf="host.value.Host.state_overview">
-                            <c-col class="col-12"
-                                   *ngIf="hasBitValue(host.value.Host.configuration_option, 1)">
-                                <!-- 1 == percent -->
-                                {{ host.value.Host.state_overview.percent_down | number: '1.3-3' }}
-                                %
-                            </c-col>
-                            <c-col class="col-12"
-                                   *ngIf="hasBitValue(host.value.Host.configuration_option, 2)">
-                                <!-- 2 == minute -->
-                                {{ host.value.Host.state_overview.human_down }}
-                            </c-col>
-                        </c-row>
-                    </c-col>
-                    <c-col md="2">
-                        <c-row class="report-border-default"
-                               *ngIf="host.value.Host.state_overview">
-                            <c-col class="col-12"
-                                   *ngIf="hasBitValue(host.value.Host.configuration_option, 1)">
-                                <!-- 1 == percent -->
-                                {{ host.value.Host.state_overview.percent_unreachable | number: '1.3-3' }}
-                                %
-                            </c-col>
-                            <c-col class="col-12"
-                                   *ngIf="hasBitValue(host.value.Host.configuration_option, 2)">
-                                <!-- 2 == minute -->
-                                {{ host.value.Host.state_overview.human_unreachable }}
-                            </c-col>
-                        </c-row>
-                    </c-col>
-                </c-row>
-                <c-row class="html-report-host-row">
-                    <c-col class="col-12" *ngIf="host.value.Host.frontend && host.value.Host.frontend.show_outages">
-                        <c-row class="mt-3">
-                            <c-col xs="12" md="9" class="offset-md-3">
-                                <c-row>
-                                    <c-col xs="12" md="4" class="report-font-weight-500">
-                                        {{ host.value.Host.frontend.outages_headline }}
+                            <c-col md="2">
+                                <c-row class="report-border-sucess"
+                                       *ngIf="host.value.Host.state_overview">
+                                    <c-col class="col-12"
+                                           *ngIf="hasBitValue(host.value.Host.configuration_option, 1)">
+                                        <!-- 1 == percent -->
+                                        {{ host.value.Host.state_overview.percent_up | number: '1.3-3' }}
+                                        %
                                     </c-col>
-                                    <c-col xs="12" md="4" class="report-font-weight-500">
-                                        <span
-                                            *ngIf="host.value.Host.outage_duration !== null">
-
-                                            {{
-                                                t('Outage time exceeding the permitted limit ({0} min)', {
-                                                    '0': host.value.Host.outage_duration
-                                                })
-                                            }}
-                                        </span>
+                                    <c-col class="col-12"
+                                           *ngIf="hasBitValue(host.value.Host.configuration_option, 2)">
+                                        <!-- 2 == minute -->
+                                        {{ host.value.Host.state_overview.human_up }}
                                     </c-col>
                                 </c-row>
                             </c-col>
-                            <c-col xs="12" md="9" class="offset-md-3">
-                                <c-row
-                                    *ngFor="let outage of host.value.Host.frontend.outages"
-                                    [ngClass]="{'service_option': outage.duration === host.value.Host.frontend.maximum_outage_duration}">
-                                    <c-col xs="12" md="4">
-                                        {{ outage.start }} - {{ outage.end }}
+                            <c-col md="2">
+                                <c-row class="report-border-danger"
+                                       *ngIf="host.value.Host.state_overview">
+                                    <c-col class="col-12"
+                                           *ngIf="hasBitValue(host.value.Host.configuration_option, 1)">
+                                        <!-- 1 == percent -->
+                                        {{ host.value.Host.state_overview.percent_down | number: '1.3-3' }}
+                                        %
                                     </c-col>
-                                    <c-col xs="12" md="4">
-                                        {{ outage.duration_str }}
+                                    <c-col class="col-12"
+                                           *ngIf="hasBitValue(host.value.Host.configuration_option, 2)">
+                                        <!-- 2 == minute -->
+                                        {{ host.value.Host.state_overview.human_down }}
+                                    </c-col>
+                                </c-row>
+                            </c-col>
+                            <c-col md="2">
+                                <c-row class="report-border-default"
+                                       *ngIf="host.value.Host.state_overview">
+                                    <c-col class="col-12"
+                                           *ngIf="hasBitValue(host.value.Host.configuration_option, 1)">
+                                        <!-- 1 == percent -->
+                                        {{ host.value.Host.state_overview.percent_unreachable | number: '1.3-3' }}
+                                        %
+                                    </c-col>
+                                    <c-col class="col-12"
+                                           *ngIf="hasBitValue(host.value.Host.configuration_option, 2)">
+                                        <!-- 2 == minute -->
+                                        {{ host.value.Host.state_overview.human_unreachable }}
                                     </c-col>
                                 </c-row>
                             </c-col>
                         </c-row>
-                    </c-col>
-                    <!-- end of outages -->
-                    <c-col lg="12"
-                           *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_OUTAGES_IN_DOWNTIME.value) &&
+                        <c-row class="html-report-host-row">
+                            <c-col class="col-12"
+                                   *ngIf="host.value.Host.frontend && host.value.Host.frontend.show_outages">
+                                <c-row class="mt-3">
+                                    <c-col xs="12" md="9" class="offset-md-3">
+                                        <c-row>
+                                            <c-col xs="12" md="4" class="report-font-weight-500">
+
+                                                {{
+                                                    t('Outages of at least {0} min', {
+                                                        '0': host.value.Host.outage_duration
+                                                    })
+                                                }}
+
+
+                                            </c-col>
+                                            <c-col xs="12" md="4" class="report-font-weight-500">
+                                                <span
+                                                    *ngIf="host.value.Host.outage_duration !== null">
+
+                                                    {{
+                                                        t('Outage time exceeding the permitted limit ({0} min)', {
+                                                            '0': host.value.Host.outage_duration
+                                                        })
+                                                    }}
+                                                </span>
+                                            </c-col>
+                                        </c-row>
+                                    </c-col>
+                                    <c-col xs="12" md="9" class="offset-md-3">
+                                        <c-row
+                                            *ngFor="let outage of host.value.Host.frontend.outages"
+                                            [ngClass]="{'service_option': outage.duration === host.value.Host.frontend.maximum_outage_duration}">
+                                            <c-col xs="12" md="4">
+                                                {{ outage.start }} - {{ outage.end }}
+                                            </c-col>
+                                            <c-col xs="12" md="4">
+                                                {{ outage.duration_str }}
+                                            </c-col>
+                                        </c-row>
+                                    </c-col>
+                                </c-row>
+                            </c-col>
+                            <!-- end of outages -->
+                            <c-col lg="12"
+                                   *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_OUTAGES_IN_DOWNTIME.value) &&
                                  host.value.Host.frontend.outages_summarized_in_downtime.length > 0">
-                        <c-row class="pt-3">
-                            <c-col md="9" class="offset-md-3">
-                                <c-row>
-                                    <c-col xs="12" md="8" class="report-font-weight-500">
-                                        <fa-icon [icon]="['far', 'clock']"></fa-icon>
-                                        <span
-                                            *ngIf="host.value.Host.outage_duration !== null">
+                                <c-row class="pt-3">
+                                    <c-col md="9" class="offset-md-3">
+                                        <c-row>
+                                            <c-col xs="12" md="8" class="report-font-weight-500">
+                                                <fa-icon [icon]="['far', 'clock']"></fa-icon>
+                                                <span
+                                                    *ngIf="host.value.Host.outage_duration !== null">
 
-                                            {{
-                                                t('Outage time exceeding the permitted limit ({0} min)', {
-                                                    '0': host.value.Host.outage_duration
-                                                })
-                                            }}
+                                                    {{
+                                                        t('Outage time exceeding the permitted limit ({0} min)', {
+                                                            '0': host.value.Host.outage_duration
+                                                        })
+                                                    }}
 
-                                        </span>
-                                        <span
-                                            *ngIf="host.value.Host.outage_duration === null">
-                                            {{ t('Host outage in downtime') }}</span>
+                                                </span>
+                                                <span
+                                                    *ngIf="host.value.Host.outage_duration === null">
+                                                    {{ t('Host outage in downtime') }}</span>
+                                            </c-col>
+                                        </c-row>
+                                    </c-col>
+                                    <c-col md="9" class="offset-md-3">
+                                        <c-row
+                                            *ngFor="let outage of host.value.Host.frontend.outages_summarized_in_downtime">
+                                            <c-col xs="12" md="4">
+                                                {{ outage.start }} - {{ outage.end }}
+                                            </c-col>
+                                            <c-col xs="12" md="4">
+                                                {{ outage.duration_str }}
+                                            </c-col>
+                                        </c-row>
                                     </c-col>
                                 </c-row>
-                            </c-col>
-                            <c-col md="9" class="offset-md-3">
-                                <c-row
-                                    *ngFor="let outage of host.value.Host.frontend.outages_summarized_in_downtime">
-                                    <c-col xs="12" md="4">
-                                        {{ outage.start }} - {{ outage.end }}
-                                    </c-col>
-                                    <c-col xs="12" md="4">
-                                        {{ outage.duration_str }}
-                                    </c-col>
-                                </c-row>
-                            </c-col>
-                        </c-row>
-                    </c-col> <!-- end of outages in downtimes -->
-                    <c-col lg="12"
-                           *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_DOWNTIMES.value) &&
+                            </c-col> <!-- end of outages in downtimes -->
+                            <c-col lg="12"
+                                   *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_DOWNTIMES.value) &&
                                  host.value.Host.frontend.downtimes &&
                                 host.value.Host.frontend.downtimes.length > 0">
-                        <c-row class="pt-3 pb-3">
-                            <c-col xs="12" md="9" class="offset-md-3">
-                                <c-row>
-                                    <c-col xs="12" md="8" class="report-font-weight-500">
-                                        <i class="fas fa-power-off"></i>
-                                        {{ t('Host downtimes') }}
+                                <c-row class="pt-3 pb-3">
+                                    <c-col xs="12" md="9" class="offset-md-3">
+                                        <c-row>
+                                            <c-col xs="12" md="8" class="report-font-weight-500">
+                                                <i class="fas fa-power-off"></i>
+                                                {{ t('Host downtimes') }}
+                                            </c-col>
+                                        </c-row>
+                                    </c-col>
+                                    <c-col xs="12" md="9" class="offset-md-3">
+                                        <c-row
+                                            *ngFor="let downtime of host.value.Host.frontend.downtimes">
+                                            <c-col xs="12" md="3">
+                                                {{ downtime.start }} - {{ downtime.end }}
+                                            </c-col>
+                                            <c-col xs="12" md="2">
+                                                {{ downtime.duration_str }}
+                                            </c-col>
+                                            <c-col xs="12" md="4">
+                                                {{ downtime.comment_data }}
+                                            </c-col>
+                                        </c-row>
                                     </c-col>
                                 </c-row>
-                            </c-col>
-                            <c-col xs="12" md="9" class="offset-md-3">
-                                <c-row
-                                    *ngFor="let downtime of host.value.Host.frontend.downtimes">
-                                    <c-col xs="12" md="3">
-                                        {{ downtime.start }} - {{ downtime.end }}
-                                    </c-col>
-                                    <c-col xs="12" md="2">
-                                        {{ downtime.duration_str }}
-                                    </c-col>
-                                    <c-col xs="12" md="4">
-                                        {{ downtime.comment_data }}
-                                    </c-col>
-                                </c-row>
-                            </c-col>
+                            </c-col> <!-- end of downtimes -->
                         </c-row>
-                    </c-col> <!-- end of downtimes -->
-                </c-row>
-                <!-- show services -->
-                <ng-container *ngIf="host.value.Services">
-                    <c-row *ngFor="let service of host.value.Services | keyvalue: keepOrder">
-                        <c-col class="col-12 border-top pt-3 pb-3"
-                               *ngIf="service.value.Service.state_overview">
-                            <c-row>
-                                <c-col class="col-md-3 d-sm-flex">
-                                    <span class="ps-10">
-                                        <fa-icon [icon]="['fas', 'cog']" class="ps-3"></fa-icon>
-                                        @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
-                                            <a [routerLink]="['/', 'services', 'browser', service.value.Service.id]">
-                                                {{
-                                                    service.value.Service.name
-                                                }}
-                                            </a>
-                                        } @else {
-                                            {{ service.value.Service.name }}
-                                        }
-                                    </span>
-                                </c-col>
-
-                                <c-col md="2">
-                                    <c-row class="report-border-sucess">
-                                        <c-col class="col-12"
-                                               *ngIf="hasBitValue(service.value.Service.configuration_option, 1)">
-                                            <!-- 1 == percent -->
-                                            {{
-                                                service.value.Service.state_overview.percent_ok
-                                                    | number: '1.3-3'
-                                            }} %
-                                        </c-col>
-                                        <c-col class="col-12"
-                                               *ngIf="hasBitValue(service.value.Service.configuration_option, 2)">
-                                            <!-- 2 == minute -->
-                                            {{ service.value.Service.state_overview.human_ok }}
-                                        </c-col>
-                                    </c-row>
-                                </c-col>
-
-                                <c-col md="2">
-                                    <c-row class="report-border-warning">
-                                        <c-col lg="12"
-                                               *ngIf="hasBitValue(service.value.Service.configuration_option, 1)">
-                                            <!-- 1 == percent -->
-                                            {{
-                                                service.value.Service.state_overview.percent_warning
-                                                    | number: '1.3-3'
-                                            }} %
-                                        </c-col>
-                                        <c-col lg="12"
-                                               *ngIf="hasBitValue(service.value.Service.configuration_option, 2)">
-                                            <!-- 2 == minute -->
-                                            {{ service.value.Service.state_overview.human_warning }}
-                                        </c-col>
-                                    </c-row>
-                                </c-col>
-
-                                <c-col md="2">
-                                    <c-row class="report-border-danger">
-                                        <c-col lg="12"
-                                               *ngIf="hasBitValue(service.value.Service.configuration_option, 1)">
-                                            <!-- 1 == percent -->
-                                            {{
-                                                service.value.Service.state_overview.percent_critical
-                                                    | number: '1.3-3'
-                                            }} %
-                                        </c-col>
-                                        <c-col lg="12"
-                                               *ngIf="hasBitValue(service.value.Service.configuration_option, 2)">
-                                            <!-- 2 == minute -->
-                                            {{ service.value.Service.state_overview.human_critical }}
-                                        </c-col>
-                                    </c-row>
-                                </c-col>
-
-                                <c-col md="2">
-                                    <c-row class="report-border-default">
-                                        <c-col lg="12"
-                                               *ngIf="hasBitValue(service.value.Service.configuration_option, 1)">
-                                            <!-- 1 == percent -->
-                                            {{
-                                                service.value.Service.state_overview.percent_unknown
-                                                    | number: '1.3-3'
-                                            }} %
-                                        </c-col>
-                                        <c-col lg="12"
-                                               *ngIf="hasBitValue(service.value.Service.configuration_option, 2)">
-                                            <!-- 2 == minute -->
-                                            {{ service.value.Service.state_overview.human_unknown }}
-                                        </c-col>
-                                    </c-row>
-                                </c-col>
-                            </c-row>
-                        </c-col>
-
-                        <c-col lg="12"
-                               *ngIf="hasGraph(host.value.Host.uuid, service.value.Service.uuid) && service.value.Service.state_overview">
-                            <c-col lg="12" xs="12" md="9" class="offset-md-3"
-                                   *ngFor="let graphBlobs of report.GraphImageBlobs[host.value.Host.uuid] | keyvalue">
-                                <div *ngIf="graphBlobs.key === service.value.Service.uuid">
-                                    <div *ngFor="let graph of graphBlobs.value">
-                                        <img
-                                            class="img-fluid"
-                                            [src]="'data:image/png;base64,' + graph"
-                                            alt="Missing chart image">
-                                    </div>
-                                </div>
-                            </c-col>
-                        </c-col>
-
-                        <c-col lg="12"
-                               *ngIf="service.value.Service.frontend && service.value.Service.frontend.outages && service.value.Service.frontend.outages.length > 0">
-                            <c-row class="mb-3">
-                                <c-col xs="12" md="9" [offset]="3"
-                                       *ngIf="service.value.Service.frontend.show_outages">
+                        <!-- show services -->
+                        <ng-container *ngIf="host.value.Services">
+                            <c-row *ngFor="let service of host.value.Services | keyvalue: keepOrder">
+                                <c-col class="col-12 border-top pt-3 pb-3"
+                                       *ngIf="service.value.Service.state_overview">
                                     <c-row>
-                                        <c-col xs="12" md="4" class="report-font-weight-500">
-                                            {{ service.value.Service.frontend.outages_headline }}
+                                        <c-col class="col-md-3 d-sm-flex">
+                                            <span class="ps-10">
+                                                <fa-icon [icon]="['fas', 'cog']" class="ps-3"></fa-icon>
+                                                @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                                    <a [routerLink]="['/', 'services', 'browser', service.value.Service.id]">
+                                                        {{
+                                                            service.value.Service.name
+                                                        }}
+                                                    </a>
+                                                } @else {
+                                                    {{ service.value.Service.name }}
+                                                }
+                                            </span>
                                         </c-col>
-                                        <c-col xs="12" md="4" class="report-font-weight-500"
-                                               *ngIf="service.value.Service.outage_duration !== null">
-                                            {{
-                                                t('Outage time exceeding the permitted limit ({0} min)', {
-                                                    '0': service.value.Service.outage_duration
-                                                })
-                                            }}
+
+                                        <c-col md="2">
+                                            <c-row class="report-border-sucess">
+                                                <c-col class="col-12"
+                                                       *ngIf="hasBitValue(service.value.Service.configuration_option, 1)">
+                                                    <!-- 1 == percent -->
+                                                    {{
+                                                        service.value.Service.state_overview.percent_ok
+                                                            | number: '1.3-3'
+                                                    }} %
+                                                </c-col>
+                                                <c-col class="col-12"
+                                                       *ngIf="hasBitValue(service.value.Service.configuration_option, 2)">
+                                                    <!-- 2 == minute -->
+                                                    {{ service.value.Service.state_overview.human_ok }}
+                                                </c-col>
+                                            </c-row>
+                                        </c-col>
+
+                                        <c-col md="2">
+                                            <c-row class="report-border-warning">
+                                                <c-col lg="12"
+                                                       *ngIf="hasBitValue(service.value.Service.configuration_option, 1)">
+                                                    <!-- 1 == percent -->
+                                                    {{
+                                                        service.value.Service.state_overview.percent_warning
+                                                            | number: '1.3-3'
+                                                    }} %
+                                                </c-col>
+                                                <c-col lg="12"
+                                                       *ngIf="hasBitValue(service.value.Service.configuration_option, 2)">
+                                                    <!-- 2 == minute -->
+                                                    {{ service.value.Service.state_overview.human_warning }}
+                                                </c-col>
+                                            </c-row>
+                                        </c-col>
+
+                                        <c-col md="2">
+                                            <c-row class="report-border-danger">
+                                                <c-col lg="12"
+                                                       *ngIf="hasBitValue(service.value.Service.configuration_option, 1)">
+                                                    <!-- 1 == percent -->
+                                                    {{
+                                                        service.value.Service.state_overview.percent_critical
+                                                            | number: '1.3-3'
+                                                    }} %
+                                                </c-col>
+                                                <c-col lg="12"
+                                                       *ngIf="hasBitValue(service.value.Service.configuration_option, 2)">
+                                                    <!-- 2 == minute -->
+                                                    {{ service.value.Service.state_overview.human_critical }}
+                                                </c-col>
+                                            </c-row>
+                                        </c-col>
+
+                                        <c-col md="2">
+                                            <c-row class="report-border-default">
+                                                <c-col lg="12"
+                                                       *ngIf="hasBitValue(service.value.Service.configuration_option, 1)">
+                                                    <!-- 1 == percent -->
+                                                    {{
+                                                        service.value.Service.state_overview.percent_unknown
+                                                            | number: '1.3-3'
+                                                    }} %
+                                                </c-col>
+                                                <c-col lg="12"
+                                                       *ngIf="hasBitValue(service.value.Service.configuration_option, 2)">
+                                                    <!-- 2 == minute -->
+                                                    {{ service.value.Service.state_overview.human_unknown }}
+                                                </c-col>
+                                            </c-row>
                                         </c-col>
                                     </c-row>
                                 </c-col>
-                                <c-col xs="12" md="9" [offset]="3"
-                                       *ngIf="service.value.Service.frontend && service.value.Service.frontend.show_outages">
-                                    <c-row
-                                        *ngFor="let outage of service.value.Service.frontend.outages"
-                                        [ngClass]="{'service_option': outage.duration === service.value.Service.frontend.maximum_outage_duration}">
-                                        <c-col xs="12" md="4">
-                                            {{ outage.start }} - {{ outage.end }}
+
+                                <c-col lg="12"
+                                       *ngIf="hasGraph(host.value.Host.uuid, service.value.Service.uuid) && service.value.Service.state_overview">
+                                    <c-col xs="12" md="9" class="offset-md-3"
+                                           *ngFor="let graphBlobs of report.GraphImageBlobs[host.value.Host.uuid] | keyvalue">
+                                        <div *ngIf="graphBlobs.key === service.value.Service.uuid">
+                                            <div *ngFor="let graph of graphBlobs.value">
+                                                <img
+                                                    class="img-fluid"
+                                                    [src]="'data:image/png;base64,' + graph"
+                                                    alt="Missing chart image">
+                                            </div>
+                                        </div>
+                                    </c-col>
+                                </c-col>
+
+                                <c-col lg="12"
+                                       *ngIf="service.value.Service.frontend && service.value.Service.frontend.outages && service.value.Service.frontend.outages.length > 0">
+                                    <c-row class="mb-3">
+                                        <c-col xs="12" md="9" [offset]="3"
+                                               *ngIf="service.value.Service.frontend.show_outages">
+                                            <c-row>
+                                                <c-col xs="12" md="4" class="report-font-weight-500">
+                                                    {{
+                                                        t('Outages of at least {0} min', {
+                                                            '0': service.value.Service.outage_duration
+                                                        })
+                                                    }}
+                                                </c-col>
+                                                <c-col xs="12" md="4" class="report-font-weight-500"
+                                                       *ngIf="service.value.Service.outage_duration !== null">
+                                                    {{
+                                                        t('Outage time exceeding the permitted limit ({0} min)', {
+                                                            '0': service.value.Service.outage_duration
+                                                        })
+                                                    }}
+                                                </c-col>
+                                            </c-row>
                                         </c-col>
-                                        <c-col xs="12" md="4">
-                                            {{ outage.duration_str }}
+                                        <c-col xs="12" md="9" [offset]="3"
+                                               *ngIf="service.value.Service.frontend && service.value.Service.frontend.show_outages">
+                                            <c-row
+                                                *ngFor="let outage of service.value.Service.frontend.outages"
+                                                [ngClass]="{'service_option': outage.duration === service.value.Service.frontend.maximum_outage_duration}">
+                                                <c-col xs="12" md="4">
+                                                    {{ outage.start }} - {{ outage.end }}
+                                                </c-col>
+                                                <c-col xs="12" md="4">
+                                                    {{ outage.duration_str }}
+                                                </c-col>
+                                            </c-row>
                                         </c-col>
                                     </c-row>
-                                </c-col>
-                            </c-row>
-                        </c-col> <!-- end of outages -->
-                        <c-col lg="12"
-                               *ngIf="service.value.Service.frontend && service.value.Service.frontend.outages_summarized_in_downtime && service.value.Service.frontend.outages_summarized_in_downtime.length > 0 &&
+                                </c-col> <!-- end of outages -->
+                                <c-col lg="12"
+                                       *ngIf="service.value.Service.frontend && service.value.Service.frontend.outages_summarized_in_downtime && service.value.Service.frontend.outages_summarized_in_downtime.length > 0 &&
                                      hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_OUTAGES_IN_DOWNTIME.value) &&
                                         service.value.Service.frontend.outages_summarized_in_downtime">
-                            <c-row class="mb-3">
-                                <c-col xs="12" md="9" [offset]="3">
-                                    <c-row>
-                                        <c-col xs="12" md="8" class="report-font-weight-500">
-                                            <fa-icon [icon]="['far', 'clock']"></fa-icon>
-                                            <span
-                                                *ngIf="service.value.Service.outage_duration !== null">
-                                                {{ t('Service outage in downtime exceeding the permitted limit') }}
-                                                {{ service.value.Service.outage_duration }}
-                                                {{ t('min') }}</span>
-                                            <span
-                                                *ngIf="service.value.Service.outage_duration === null">
-                                                {{ t('Service outage in downtime') }}</span>
+                                    <c-row class="mb-3">
+                                        <c-col xs="12" md="9" [offset]="3">
+                                            <c-row>
+                                                <c-col xs="12" md="8" class="report-font-weight-500">
+                                                    <fa-icon [icon]="['far', 'clock']"></fa-icon>
+                                                    <span
+                                                        *ngIf="service.value.Service.outage_duration !== null">
+                                                        {{ t('Service outage in downtime exceeding the permitted limit') }}
+                                                        {{ service.value.Service.outage_duration }}
+                                                        {{ t('min') }}</span>
+                                                    <span
+                                                        *ngIf="service.value.Service.outage_duration === null">
+                                                        {{ t('Service outage in downtime') }}</span>
+                                                </c-col>
+                                            </c-row>
                                         </c-col>
+                                        <div class="col-xs-12 col-md-9 offset-md-3">
+                                            <div class="row"
+                                                 *ngFor="let outage of service.value.Service.frontend.outages_summarized_in_downtime">
+                                                <div class="col-xs-12 col-md-4">
+                                                    {{ outage.start }} - {{ outage.end }}
+                                                </div>
+                                                <div class="col-xs-12 col-md-4">
+                                                    {{ outage.duration_str }}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </c-row>
-                                </c-col>
-                                <div class="col-12 col-xs-12 col-md-9 offset-md-3">
-                                    <div class="row"
-                                         *ngFor="let outage of service.value.Service.frontend.outages_summarized_in_downtime">
-                                        <div class="col-xs-12 col-md-4">
-                                            {{ outage.start }} - {{ outage.end }}
-                                        </div>
-                                        <div class="col-xs-12 col-md-4">
-                                            {{ outage.duration_str }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </c-row>
-                        </c-col> <!-- end of outages in downtimes -->
-                        <c-col class="col-12"
-                               *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_DOWNTIMES.value) &&
+                                </c-col> <!-- end of outages in downtimes -->
+                                <c-col class="col-12"
+                                       *ngIf="hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_DOWNTIMES.value) &&
                                     service.value.Service.frontend &&
                                     service.value.Service.frontend.downtimes &&
                                     service.value.Service.frontend.downtimes.length > 0">
-                            <c-row>
-                                <c-col xs="12" md="9" [offset]="3">
                                     <c-row>
-                                        <c-col lg="12" xs="12" md="9" class="report-font-weight-500">
-                                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                            {{ t('Service downtimes') }}
+                                        <c-col xs="12" md="9" [offset]="3">
+                                            <c-row>
+                                                <c-col xs="12" md="9" class="report-font-weight-500">
+                                                    <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                                    {{ t('Service downtimes') }}
+                                                </c-col>
+                                            </c-row>
+                                        </c-col>
+                                        <c-col xs="12" md="9" class="offset-md-3">
+                                            <c-row
+                                                *ngFor="let downtime of service.value.Service.frontend.downtimes">
+                                                <c-col xs="12" md="3">
+                                                    {{ downtime.start }} - {{ downtime.end }}
+                                                </c-col>
+                                                <c-col xs="12" md="2">
+                                                    {{ downtime.duration_str }}
+                                                </c-col>
+                                                <c-col xs="12" md="4">
+                                                    {{ downtime.comment_data }}
+                                                </c-col>
+                                            </c-row>
                                         </c-col>
                                     </c-row>
-                                </c-col>
-                                <c-col xs="12" md="9" class="offset-md-3">
-                                    <c-row
-                                        *ngFor="let downtime of service.value.Service.frontend.downtimes">
-                                        <c-col xs="12" md="3">
-                                            {{ downtime.start }} - {{ downtime.end }}
-                                        </c-col>
-                                        <c-col xs="12" md="2">
-                                            {{ downtime.duration_str }}
-                                        </c-col>
-                                        <c-col xs="12" md="4">
-                                            {{ downtime.comment_data }}
-                                        </c-col>
-                                    </c-row>
-                                </c-col>
+                                </c-col> <!-- end of downtimes -->
                             </c-row>
-                        </c-col> <!-- end of downtimes -->
-                    </c-row>
-                </ng-container>
-            </ng-container>
+                        </ng-container>
+                    </ng-container>
 
-        </c-card-body>
-    </c-card>
+                </div>
+            </c-card-body>
+            <c-card-footer *ngIf="tabName === 'reportConfig'" class="text-end">
+                <c-col>
+                    <button cButton class="ripple" color="primary" type="submit">
+                        <fa-icon [icon]="['fas', 'spinner']" [hidden]="!isGenerating" animation="spin"></fa-icon>
+                        {{ t('Generate report') }}
+                    </button>
+                </c-col>
+            </c-card-footer>
+        </c-card>
+    </form>
 </ng-container>

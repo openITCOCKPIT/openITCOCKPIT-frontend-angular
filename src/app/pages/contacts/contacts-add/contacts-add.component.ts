@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
+    AlertComponent,
     BadgeComponent,
     CardBodyComponent,
     CardComponent,
@@ -41,7 +42,6 @@ import {
     LoadTimeperiodsRoot,
 } from '../contacts.interface';
 import { LoadUsersByContainerIdRoot } from '../../users/users.interface';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
@@ -49,44 +49,45 @@ import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HistoryService } from '../../../history.service';
+import { PushNotificationsService } from '../../../services/push-notifications.service';
 
 @Component({
     selector: 'oitc-contacts-add',
     imports: [
-    BackButtonDirective,
-    BadgeComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    MacrosComponent,
-    MultiSelectComponent,
-    MultiSelectModule,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NgSelectModule,
-    PermissionDirective,
-    RequiredIconComponent,
-    RouterLink,
-    TooltipDirective,
-    TranslocoDirective,
-    XsButtonDirective,
-    SelectComponent,
-    LabelLinkComponent
-],
+        BackButtonDirective,
+        BadgeComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        MacrosComponent,
+        MultiSelectComponent,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        RouterLink,
+        TooltipDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        SelectComponent,
+        LabelLinkComponent,
+        AlertComponent
+    ],
     templateUrl: './contacts-add.component.html',
     styleUrl: './contacts-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -94,6 +95,7 @@ import { HistoryService } from '../../../history.service';
 export class ContactsAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
+    private PushNotificationsService: PushNotificationsService = inject(PushNotificationsService);
     protected users: SelectKeyValue[] = [];
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -109,6 +111,9 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError = {} as GenericValidationError;
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private cdr = inject(ChangeDetectorRef);
+
+    public pushNotificationConnected: boolean | undefined;
+    public pushNotificationHasPermission: boolean | undefined;
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -271,6 +276,11 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
                 this.post.service_commands._ids = [...this.post.service_commands._ids.filter(item => item !== this.servicePushCommandId)];
             }
         }
+
+        if (!this.post.service_push_notifications_enabled) {
+            this.pushNotificationHasPermission = undefined;
+            this.pushNotificationConnected = undefined;
+        }
     }
 
     // Called by (click) - no manual change detection required
@@ -283,6 +293,11 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
             if (this.post.host_commands._ids.indexOf(this.hostPushCommandId) !== -1) {
                 this.post.host_commands._ids = [...this.post.host_commands._ids.filter(item => item !== this.hostPushCommandId)];
             }
+        }
+
+        if (!this.post.host_push_notifications_enabled) {
+            this.pushNotificationHasPermission = undefined;
+            this.pushNotificationConnected = undefined;
         }
     }
 
@@ -301,6 +316,17 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
             this.post.host_push_notifications_enabled = 1;
         } else {
             this.post.host_push_notifications_enabled = 0;
+        }
+    }
+
+    protected checkPushNotificationSettings(): void {
+        if (!this.pushNotificationHasPermission) {
+            this.PushNotificationsService.checkPermissions();
+        }
+        this.pushNotificationConnected = this.PushNotificationsService.isConnected();
+        this.pushNotificationHasPermission = this.PushNotificationsService.hasPermission();
+        if (this.pushNotificationConnected && this.pushNotificationHasPermission) {
+            this.PushNotificationsService.sendTestMessage();
         }
     }
 

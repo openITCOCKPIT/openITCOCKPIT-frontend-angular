@@ -15,7 +15,7 @@
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Index') }}
+                {{ t('Overview') }}
             </li>
         </ol>
     </nav>
@@ -112,7 +112,8 @@
 
             <oitc-table-loader *ngIf="! servicegroups.all_servicegroups"></oitc-table-loader>
 
-            <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+            <table *ngIf="servicegroups" bordered cTable class="mt-2 mb-0" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
                 <tr>
@@ -130,15 +131,16 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="servicegroups">
+                <tbody>
                 <tr *ngFor="let servicegroup of servicegroups.all_servicegroups">
                     <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['servicegroups', 'delete']"
-                            [disabled]="false"
-                            [item]="servicegroup"></oitc-item-select>
+                        @if (( PermissionsService.hasPermissionObservable(['servicegroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['servicegroups', 'copy'])|async )) {
+                            <oitc-item-select
+                                [disabled]="!servicegroup.allow_edit"
+                                [item]="servicegroup"></oitc-item-select>
+                        }
                     </td>
-                    <td>
+                    <td class="word-break">
                         <span *oitcPermission="['servicegroups', 'extended']">
                             <a [routerLink]="['/', 'servicegroups', 'extended', servicegroup.id]">
                                 {{ servicegroup.container.name }}
@@ -173,13 +175,13 @@
                                 <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
                                 {{ t('Used By') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['servicegroups', 'copy']"></li>
                             <oitc-actions-button-element [permission]="'servicegroups.copy'"
                                                          [url]="'/servicegroups/copy/' + servicegroup.id">
                                 <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                 {{ t('Copy') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
+                            <li cDropdownDivider *oitcPermission="['servicegroups', 'delete']"></li>
                             <oitc-actions-button-element (click)="toggleDeleteAllModal(servicegroup)"
                                                          [permission]="'servicegroups.delete'">
                                 <span class="text-danger">
@@ -208,11 +210,13 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        *oitcPermission="['servicegroups', 'copy']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['servicegroups', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>

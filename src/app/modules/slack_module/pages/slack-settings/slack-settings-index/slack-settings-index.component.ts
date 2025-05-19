@@ -65,7 +65,6 @@ export class SlackSettingsIndexComponent implements OnInit, OnDestroy {
     private readonly SlackSettingsService: SlackSettingsService = inject(SlackSettingsService);
     private readonly notyService: NotyService = inject(NotyService);
     private cdr = inject(ChangeDetectorRef);
-    public init: boolean = false;
     public errors: GenericValidationError | null = null;
     protected currentCommandAsPostRequest: string = '';
     public post!:SlackSettings;
@@ -73,7 +72,6 @@ export class SlackSettingsIndexComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.subscriptions.add(this.SlackSettingsService.getSlackSettings().subscribe(data => {
             this.post = data;
-            this.init = true;
             this.cdr.markForCheck();
         }));
 

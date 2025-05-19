@@ -37,6 +37,7 @@ export interface RemovePanelEvent {
 
 export interface OpenPanelOptionsEvent {
     panelIndex: number
+    panel_id: number
     panel: GrafanaEditorDashboardRow,
     GrafanaUnits?: GrafanaUnits
 }
@@ -106,7 +107,11 @@ export class GrafanaPanelComponent implements OnDestroy {
     constructor() {
         this.subscriptions.add(this.GrafanaPanelOptionsService.panelUpdated$.subscribe((event) => {
             // Panel got modified by the Panel Options Modal
-            if (event.panelIndex === this.panelIndex()) {
+            if (!this.panelLocal) {
+                return;
+            }
+
+            if (event.panelIndex === this.panelIndex() && event.panel_id === this.panelLocal.id) {
                 this.panelLocal = event.panel;
                 this.setHumanUnit();
 
@@ -283,6 +288,7 @@ export class GrafanaPanelComponent implements OnDestroy {
 
         this.GrafanaPanelOptionsService.togglePanelOptionsModal({
             panelIndex: this.panelIndex(),
+            panel_id: this.panelLocal.id,
             panel: this.panelLocal,
             GrafanaUnits: this.grafanaUnits()
         });

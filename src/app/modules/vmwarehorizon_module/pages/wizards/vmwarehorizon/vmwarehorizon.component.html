@@ -47,7 +47,9 @@
                     <div class="btn-group btn-group-xs w-100 h-100">
                         <button type="button" class="btn btn-primary"
                                 [title]="'Back' | transloco"
-                                style="border-radius: 0;">
+                                style="border-radius: 0;"
+                                [fallbackUrl]="['wizards', 'index']"
+                                oitcBackButton>
                             <i class="fa fa-arrow-left"></i>
                         </button>
 
@@ -141,7 +143,8 @@
             </fieldset>
 
             <oitc-wizards-dynamicfields
-                    [post]="post.services"
+                    [(post)]="post.services"
+                    [errors]="errors"
                     [title]="'VMware Horizon services'|transloco"
             />
         </c-card-body>

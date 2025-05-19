@@ -1,0 +1,327 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Distribute Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['distributeModule', 'satellites', 'index']"
+                   [routerLink]="['/', 'distribute_module', 'satellites', 'index']">
+                    <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
+                    {{ t('Satellites') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card>
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Satellites') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="reload()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['distributeModule', 'satellites', 'add']"
+                            [routerLink]="['/', 'distribute_module', 'satellites', 'add']"
+                            cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Satellites.name]']"
+                                       [placeholder]="'Filter by satellite name' | transloco"
+                                       aria-label="Filter by satellite name"
+                                       cFormControl
+                                       id="params['filter[Satellites.name]']"
+                                       name="params['filter[Satellites.name]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Satellites.address]']"
+                                       [placeholder]="'Filter by IP address' | transloco"
+                                       aria-label="Filter by IP address"
+                                       cFormControl
+                                       id="params['filter[Satellites.address]']"
+                                       name="params['filter[Satellites.address]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Satellites.description]']"
+                                       [placeholder]="'Filter by description' | transloco"
+                                       aria-label="Filter by description"
+                                       cFormControl
+                                       id="params['filter[Satellites.description]']"
+                                       name="params['filter[Satellites.description]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="6" [lg]="6" class="ui-fluid">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+
+                                <oitc-multi-select
+                                        name="SyncMethodFilter"
+                                        id="SyncMethodFilter"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="params['filter[Satellites.sync_method][]']"
+                                        [options]="syncMethods"
+                                        [debounce]="true"
+                                        [placeholder]="'Filter by sync method' | transloco"
+                                        (onChange)="onFilterChange(true)"
+                                >
+                                </oitc-multi-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset Filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+
+            <oitc-table-loader *ngIf="! result"></oitc-table-loader>
+
+
+            <table *ngIf="result" bordered cTable class="mt-2 mb-0" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th class="text-center col-1" scope="col" style="width: 5px;">
+                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                    </th>
+                    <th scope="col" mat-sort-header="Satellites.name">
+                        {{ t('Instance name') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Satellites.address">
+                        {{ t('IP address') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Satellites.sync_method">
+                        {{ t('Sync method') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Satellites.timezone">
+                        {{ t('Time zone') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Container') }}
+                    </th>
+                    <th class="text-center col-1 width-50" scope="col">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let satellite of result.all_satellites">
+                    <td class="text-center">
+                        <oitc-item-select
+                                *oitcPermission="['distributeModule', 'satellites', 'delete']"
+                                [disabled]="!satellite.allow_edit"
+                                [item]="satellite"></oitc-item-select>
+                    </td>
+                    <td>
+                        {{ satellite.name }}
+                        <oitc-badge-outline color="info">
+                            ID {{ satellite.id }}
+                        </oitc-badge-outline>
+                    </td>
+                    <td>
+                        {{ satellite.address }}
+                    </td>
+                    <td>
+                        {{ satellite.sync_method_name }}
+                    </td>
+                    <td>
+                        {{ satellite.timezone }}
+                    </td>
+                    <td>
+                        {{ satellite.container }}
+                    </td>
+                    <td class="width-50">
+                        <oitc-actions-button [permission]="'distributeModule.satellites.edit'"
+                                             [url]="'/distribute_module/satellites/edit/' + satellite.id">
+                            <oitc-actions-button-element [permission]="'distributeModule.satellites.edit'"
+                                                         [url]="'/distribute_module/satellites/edit/' + satellite.id"
+                                                         *ngIf="satellite.allow_edit">
+                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                {{ t('Edit') }}
+                            </oitc-actions-button-element>
+                            <oitc-actions-button-element [permission]="'distributeModule.satellites.usedBy'"
+                                                         [url]="'/distribute_module/satellites/usedBy/' + satellite.id">
+                                <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                {{ t('Used By') }}
+                            </oitc-actions-button-element>
+                            <li cDropdownDivider
+                                *ngIf="satellite.allow_edit"></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(satellite)"
+                                                         *ngIf="satellite.allow_edit"
+                                                         [permission]="'distributeModule.satellites.delete'">
+                                <span class="text-danger">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete') }}
+                                </span>
+                            </oitc-actions-button-element>
+                        </oitc-actions-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+            <oitc-no-records
+                    *ngIf="result && result.all_satellites.length === 0"></oitc-no-records>
+
+            <ng-container *ngIf="result && result.all_satellites">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                    [itemsCount]="result.all_satellites.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        *oitcPermission="['DistributeModule','satellites', 'delete']"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+
+                                <c-dropdown *oitcPermission="['hosts', 'externalcommands']">
+                                    <button cButton cDropdownToggle color="default">
+                                        {{ t('More actions') }}
+                                    </button>
+                                    <ul cDropdownMenu>
+                                        <li><a cDropdownItem href="javascript:void(0);"
+                                               (click)="disableNotifications()">
+                                            <fa-icon [icon]="['far', 'envelope']"></fa-icon>
+                                            {{ t('Disable notifications') }}
+                                        </a></li>
+                                        <li><a cDropdownItem href="javascript:void(0);"
+                                               (click)="enableNotifications()">
+                                            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                            {{ t('Enable notifications') }}
+                                        </a></li>
+                                        <li><a cDropdownItem href="javascript:void(0);"
+                                               (click)="toggleDowntimeModal()">
+                                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                            {{ t('Set planned maintenance times') }}
+                                        </a></li>
+                                    </ul>
+                                </c-dropdown>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </ng-container>
+
+            <c-container
+                    [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="result"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+    </c-card>
+
+    <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+
+    <oitc-hosts-maintenance-modal [items]="selectedItems"
+                                  (completed)="onMassActionComplete($event)"></oitc-hosts-maintenance-modal>
+
+    <oitc-hosts-enable-notifications-modal [items]="selectedItems"
+                                           (completed)="onMassActionComplete($event)"></oitc-hosts-enable-notifications-modal>
+
+    <oitc-hosts-disable-notifications-modal [items]="selectedItems"
+                                            (completed)="onMassActionComplete($event)"></oitc-hosts-disable-notifications-modal>
+
+</ng-container>
+

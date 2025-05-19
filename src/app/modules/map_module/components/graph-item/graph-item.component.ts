@@ -19,7 +19,7 @@ import { forkJoin, interval, Subscription } from 'rxjs';
 import { GraphItemService } from './graph-item.service';
 import { GraphItemParams, GraphItemRoot, PerfdataParams } from './graph-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { EChartsOption, VisualMapComponentOption } from 'echarts';
 import { DateTime } from 'luxon';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
@@ -50,7 +50,7 @@ echarts.use([LineChart, GridComponent, LegendComponent, TitleComponent, TooltipC
 @Component({
     selector: 'oitc-graph-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf, NgxEchartsDirective, AlertComponent, FaIconComponent],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf, NgxEchartsDirective, AlertComponent, FaIconComponent, NgClass],
     templateUrl: './graph-item.component.html',
     styleUrl: './graph-item.component.css',
     providers: [
@@ -659,8 +659,16 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         //label = this.HtmlspecialcharsPipe.transform(label);
 
         let showTicks = true;
+        let left = 80;
+        let right = 50;
+        let top = 25;
+        let bottom = 50;
         if (this.height < 130) {
             showTicks = false;
+            left = 50;
+            right = 20;
+            top = 20;
+            bottom = 20;
         }
 
         const thresholdsLines = this.getThresholdLines(performance_data);
@@ -713,7 +721,8 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     formatter: (value) => {
                         const dateTime = DateTime.fromMillis(value as number).setZone(this.timezone.user_timezone);
                         return dateTime.toFormat('HH:mm:ss');
-                    }
+                    },
+                    show: showTicks
                 },
                 splitLine: {
                     show: true,
@@ -746,10 +755,10 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
             },
 
             grid: {
-                left: 80,
-                right: 50,
-                top: 25,
-                bottom: 50
+                left: left,
+                right: right,
+                top: top,
+                bottom: bottom
             },
 
 

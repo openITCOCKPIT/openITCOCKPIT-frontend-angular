@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { SapWizardService } from './sap-wizard.service';
 import { SapWizardGet, SapWizardPost } from './sap-wizard.interface';
 import {
@@ -8,7 +7,8 @@ import {
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    FormControlDirective, FormLabelDirective
+    FormControlDirective,
+    FormLabelDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -20,7 +20,7 @@ import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
-import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mssql-wizard.interface';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-sap',
@@ -40,7 +40,8 @@ import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mss
         TranslocoPipe,
         WizardsDynamicfieldsComponent,
         RouterLink,
-        FormsModule
+        FormsModule,
+        BackButtonDirective
     ],
     templateUrl: './sap.component.html',
     styleUrl: './sap.component.css',

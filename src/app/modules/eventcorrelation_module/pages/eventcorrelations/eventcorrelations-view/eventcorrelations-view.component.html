@@ -155,7 +155,7 @@
                 </c-col>
             </c-row>
 
-            <div class="d-flex" style="height: 100vh;">
+            <div class="d-flex" style="height: 100vh;" *ngIf="show">
                 <oitc-evc-tree
                     class="w-100 h-100"
                     [evcId]="id"
@@ -164,7 +164,10 @@
                     [stateForDowntimedService]="stateForDowntimedService"
                     [stateForDisabledService]="stateForDisabledService"
                     [animated]="animated"
-                    [connectionLine]="connectionLine"></oitc-evc-tree>
+                    [connectionLine]="connectionLine"
+                    [evcDirection]="evcTreeDirection"
+                    (resetEvent)="resetHandler($event)"
+                    [isWidget]="false"></oitc-evc-tree>
             </div>
 
         </c-card-body>

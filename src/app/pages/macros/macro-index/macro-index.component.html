@@ -82,7 +82,9 @@
                 <tbody *ngIf="macros">
                 <tr *ngFor="let macro of macros">
                     <td class="text-primary code-font">
-                        {{ macro.name }}
+                        <oitc-copy-to-clipboard [data]="macro.name">
+                            {{ macro.name }}
+                        </oitc-copy-to-clipboard>
                     </td>
                     <td>
                         <code [ngClass]="{'text-blur': macro.password > 0}">

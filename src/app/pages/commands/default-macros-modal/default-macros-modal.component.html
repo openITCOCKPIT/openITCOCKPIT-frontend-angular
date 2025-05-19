@@ -1,0 +1,54 @@
+<ng-container *transloco="let t">
+    <button cButton class="ripple me-1" color="primary" size="xs" [cModalToggle]="defaultMacrosMacrosModal.id">
+        <fa-icon [icon]="['fas', 'usd']"></fa-icon>
+        {{ t('Default macros overview') }}
+    </button>
+
+    <c-modal #defaultMacrosMacrosModal fullscreen="md" id="defaultMacrosMacrosModal" size="lg">
+        <c-modal-header>
+            <h5 cModalTitle>
+                {{ t('List of all available default macros') }}
+            </h5>
+            <button [cModalToggle]="defaultMacrosMacrosModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <div class="row">
+                <div class="col-12">
+                    <ng-container *ngFor="let macroCategory of defaultMacros(); let last = last">
+                        <h4>
+                            {{ macroCategory.category }}
+                        </h4>
+                        <table bordered cTable id="macrosTable" class="mt-2 mb-0 mb-2" hover striped>
+                            <thead>
+                            <tr>
+                                <th scope="col">
+                                    {{ t('Macro') }}
+                                </th>
+                                <th scope="col">
+                                    {{ t('Description') }}
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let macro of macroCategory.macros">
+                                <td class="text-primary bold">
+                                    {{ macro.macro }}
+                                </td>
+                                <td>
+                                    {{ macro.description }}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <hr *ngIf="!last">
+                    </ng-container>
+                </div>
+            </div>
+        </c-modal-body>
+        <c-modal-footer>
+            <button [cModalToggle]="defaultMacrosMacrosModal.id" cButton color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>

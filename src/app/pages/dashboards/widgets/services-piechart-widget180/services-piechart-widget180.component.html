@@ -1,4 +1,7 @@
 <ng-container *transloco="let t">
+
+    <oitc-block-loader *ngIf="!statusCounts" height="5rem"></oitc-block-loader>
+
     <div class="w-100 text-center"
          *ngIf="statusCounts && statusCounts.servicestatusCount.length === 4">
 

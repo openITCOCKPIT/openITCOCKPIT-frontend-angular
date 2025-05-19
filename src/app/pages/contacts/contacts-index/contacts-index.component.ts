@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { Subscription } from 'rxjs';
 import { ContactsService } from '../contacts.service';
@@ -44,7 +44,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -54,49 +54,52 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { IndexPage } from '../../../pages.interface';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-contacts-index',
     imports: [
-    TranslocoDirective,
-    DeleteAllModalComponent,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    DropdownDividerDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ItemSelectComponent,
-    MatSort,
-    MatSortHeader,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    ReactiveFormsModule,
-    RowComponent,
-    SelectAllComponent,
-    TableDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    BadgeComponent,
-    TableLoaderComponent
-],
+        TranslocoDirective,
+        DeleteAllModalComponent,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        DropdownDividerDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        ReactiveFormsModule,
+        RowComponent,
+        SelectAllComponent,
+        TableDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        BadgeComponent,
+        TableLoaderComponent,
+        AsyncPipe
+    ],
     templateUrl: './contacts-index.component.html',
     styleUrl: './contacts-index.component.css',
     providers: [
@@ -107,8 +110,11 @@ import { IndexPage } from '../../../pages.interface';
 export class ContactsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
     private subscriptions: Subscription = new Subscription();
     private ContactsService: ContactsService = inject(ContactsService);
+    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
 
     public params: ContactsIndexParams = getDefaultContactsIndexParams();
 
@@ -213,6 +219,12 @@ export class ContactsIndexComponent implements OnInit, OnDestroy, IndexPage {
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
         this.cdr.markForCheck();
@@ -228,6 +240,10 @@ export class ContactsIndexComponent implements OnInit, OnDestroy, IndexPage {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Contact.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'contacts', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 }

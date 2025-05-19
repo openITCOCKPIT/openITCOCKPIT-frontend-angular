@@ -18,7 +18,7 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                {{ t('Index') }}
+                {{ t('Overview') }}
             </li>
         </ol>
     </nav>
@@ -29,7 +29,7 @@
             </h5>
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
-                    <button  cButton class="ripple" color="default" size="xs" (click)="refresh()">
+                    <button cButton class="ripple" color="default" size="xs" (click)="refresh()">
                         <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                         {{ t('Refresh') }}
                     </button>
@@ -41,7 +41,7 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <button  (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                         {{ t('Filter') }}
                     </button>
@@ -157,21 +157,21 @@
                                            for="filter.hEmpty">{{ t('Hide empty locations') }}</label>
                                 </c-form-check>
                                 <c-form-check>
-                                <input
-                                    (debouncedValue)="onFilterChange($event)"
-                                    cFormCheckInput
-                                    class="checkbox-lg checkbox-primary"
-                                    name="filter.hNML"
-                                    id="filter.hNML"
-                                    type="checkbox"
-                                    trueFalseValue
-                                    oitcDebounce
-                                    [trueValue]=1
-                                    [falseValue]=0
-                                    [(ngModel)]="settingsFilter.hide_not_monitored_locations"/>
-                                <label cFormCheckLabel class="ms-1 mt-1"
-                                       for="filter.hNML">{{ t('Hide not monitored locations') }}</label>
-                            </c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="filter.hNML"
+                                        id="filter.hNML"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [trueValue]=1
+                                        [falseValue]=0
+                                        [(ngModel)]="settingsFilter.hide_not_monitored_locations"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="filter.hNML">{{ t('Hide not monitored locations') }}</label>
+                                </c-form-check>
                             </fieldset>
                         </c-col>
                     </c-row>
@@ -214,7 +214,8 @@
                     @if (PermissionsService.hasPermissionObservable(['OpenstreetmapModule', 'openstreetmapsettings', 'index'])|async) {
                         <a [routerLink]="['/', 'openstreetmap_module', 'openstreetmap_settings', 'index']">
                             <span class="text-white">
-                                <fa-icon class="danger" [icon]="['fas', 'cogs']"></fa-icon> {{ t('Configuration / OpenStreetMap Settings') }}
+                                <fa-icon class="danger" [icon]="['fas', 'cogs']"></fa-icon>
+                                {{ t('Configuration / OpenStreetMap Settings') }}
                             </span>
                         </a>
                     } @else {
@@ -225,7 +226,8 @@
                     @if (PermissionsService.hasPermissionObservable(['locations', 'index'])|async) {
                         <a [routerLink]="['/', 'locations', 'index']">
                             <span>
-                                <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon> {{ t('Basic Monitoring / Locations') }}
+                                <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                                {{ t('Basic Monitoring / Locations') }}
                             </span>
                         </a>
                     } @else {

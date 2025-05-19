@@ -26,7 +26,7 @@
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
 
     <form cForm (ngSubmit)="submitSlackSettings()">
         <c-card *ngIf="post">
@@ -100,7 +100,7 @@
                            name="request_url"
                            placeholder="xoxp-3200670952..."
                            [(ngModel)]="currentCommandAsPostRequest"
-                    disabled>
+                           disabled>
                     <div class="help-block">
                         {{ t('Webhook URL for Slack. You need to create an openITCOCKPIT user defined API key first.') }}
                         <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
@@ -124,12 +124,14 @@
                             {{ t('Use Proxy Server') }}
                         </label>
                         <div class="help-block">
-                            <span *oitcPermission="['proxy', 'index'];negate:true">
+                            <span *oitcPermission="['proxy', 'index']">
+                                {{ t('Determine if the ') }}
+                                <a [routerLink]="['/', 'proxy', 'index']">{{ t('configured proxy') }}</a>
+                                {{ t(' should be used.') }}
+                            </span>
+                            <span *oitcPermission="['proxy', 'index']; negate: true">
                                 {{ t('Determine if the configured proxy should be used.') }}
                             </span>
-                            <a *oitcPermission="['proxy', 'index']" [routerLink]="['/', 'proxy', 'index']">
-                                {{ t('Determine if the configured proxy should be used.') }}
-                            </a>
                         </div>
                     </c-form-check>
                 </div>

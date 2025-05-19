@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
     <c-card class="mb-3">
         <c-card-header
-                [ngStyle]="{background: this.dynamicColour() ? host().pieChartData.background : ''}">
+            [ngStyle]="{background: this.dynamicColour() ? host().pieChartData.background : ''}">
             <h5 cCardTitle [ngStyle]="{color: this.dynamicColour() ? 'white' : ''}">
                 <i class="fa fa-desktop"></i>
                 <span *oitcPermission="['hosts', 'browser']; negate: true">
@@ -17,9 +17,10 @@
             <c-row>
                 <c-col md="1">
                     <oitc-host-pie-echart
-                            [showLegend]="false"
-                            [title]="''"
-                            [chartData]="[
+                        [showLegend]="false"
+                        [title]="''"
+                        [scaleSize]="10"
+                        [chartData]="[
                                 {name: 'UP',value: host().pieChartData.widgetOverview[0].percent},
                                 {name: 'DOWN',value: host().pieChartData.widgetOverview[1].percent},
                                 {name: 'UNKNOWN',value: host().pieChartData.widgetOverview[2].percent}]"/>
@@ -71,8 +72,8 @@
                 <c-col md="3"
                        *ngFor="let service of host().Services | keyvalue">
                     <oitc-service-availability-overview
-                            [service]="service.value"
-                            [dynamicColour]="dynamicColour()"/>
+                        [service]="service.value"
+                        [dynamicColour]="dynamicColour()"/>
                 </c-col>
             </c-row>
         </c-card-body>

@@ -23,25 +23,32 @@
         </div>
 
         <div class="flex-grow-1 ms-2">
-            <strong>{{ statuscount?.hoststatusSum |number }}</strong> {{ t('hosts are monitored') }}
+            <oitc-word-loader *ngIf="!statuscount"></oitc-word-loader>
+            <strong>{{ statuscount?.hoststatusSum | localNumber }}</strong> {{ t('hosts are monitored') }}
 
             <br>
-            <strong>{{ statuscount?.servicestatusSum  |number }}</strong> {{ t('services are monitored') }}
+            <oitc-word-loader *ngIf="!statuscount"></oitc-word-loader>
+            <strong>{{ statuscount?.servicestatusSum  |localNumber }}</strong> {{ t('services are monitored') }}
             <br>
             <br>
-            {{ t('Your selected Timezone is ') }} {{ welcome?.user_timezone }}
+            {{ t('Your selected Timezone is ') }}
+            <oitc-word-loader *ngIf="!statuscount" [width]="'3rem'"></oitc-word-loader>
+            {{ welcome?.user_timezone }}
             @if (welcome?.user_timezone !== welcome?.server_timezone) {
                 <br>
                 {{ t('Server timezone is:') }}
+                <oitc-word-loader *ngIf="!statuscount" [width]="'3rem'"></oitc-word-loader>
                 {{ welcome?.server_timezone }}
             }
             <br>
+            <oitc-word-loader *ngIf="!statuscount" [width]="'3rem'"></oitc-word-loader>
             {{
                 t('{0} version is {1},', {
                     '0': SystemnameService.systemName$ | async,
                     '1': welcome?.OPENITCOCKPIT_VERSION
                 })
             }}
+            <oitc-word-loader *ngIf="!statuscount" [width]="'3rem'"></oitc-word-loader>
 
             @if (welcome) {
                 @if (!welcome.hasSubscription) {

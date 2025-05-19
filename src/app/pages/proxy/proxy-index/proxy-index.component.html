@@ -19,7 +19,9 @@
         </ol>
     </nav>
 
-    <form cForm (ngSubmit)="submit()">
+    <oitc-form-loader [isVisible]="isLoading" />
+
+    <form cForm (ngSubmit)="submit()" *ngIf="! isLoading">
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>

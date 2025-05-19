@@ -1,5 +1,6 @@
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     EventEmitter,
     Inject,
@@ -24,13 +25,12 @@ import {
 } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
-import { DeleteAllItem, DeleteAllResponse, usedByModuleError } from './delete-all.interface';
-import { NgForOf, NgIf } from '@angular/common';
+import { DeleteAllItem, DeleteAllResponse } from './delete-all.interface';
+import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { HttpErrorResponse } from '@angular/common/http';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
-import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -50,7 +50,8 @@ import { RouterLink } from '@angular/router';
         ProgressComponent,
         NgIf,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        KeyValuePipe
     ],
     templateUrl: './delete-all-modal.component.html',
     styleUrl: './delete-all-modal.component.css',
@@ -176,4 +177,41 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
     public getErrorsForItem(item: DeleteAllItem): DeleteAllResponse[] {
         return this.errors.filter((error) => error.id == item.id);
     }
+
+
+    public createURL(uisref: string, id: number): (string | number)[] {
+        switch (uisref) {
+            case 'EventcorrelationsHostUsedBy':
+                return ['/', 'eventcorrelation_module', 'eventcorrelations', 'hostUsedBy', id];
+            case 'EventcorrelationsServiceUsedBy':
+                return ['/', 'eventcorrelation_module', 'eventcorrelations', 'serviceUsedBy', id];
+            case 'AutoreportsHostUsedBy':
+                return ['/', 'autoreport_module', 'autoreports', 'hostUsedBy', id];
+            case 'AutoreportsServiceUsedBy':
+                return ['/', 'autoreport_module', 'autoreports', 'serviceUsedBy', id];
+            case 'ContactsUsedBy':
+                return ['/', 'contacts', 'usedBy', id];
+            case 'ContactgroupsUsedBy':
+                return ['/', 'contactgroups', 'usedBy', id];
+            case 'CommandsUsedBy':
+                return ['/', 'commands', 'usedBy', id];
+            case 'HosttemplatesUsedBy':
+                return ['/', 'hosttemplates', 'usedBy', id];
+            case 'ServicetemplatesUsedBy':
+                return ['/', 'servicetemplates', 'usedBy', id];
+            case 'TimeperiodsUsedBy':
+                return ['/', 'timeperiods', 'usedBy', id];
+            case 'ContainersShowDetails':
+                return ['/', 'containers', 'showDetails', id];
+            case 'ImportersEdit':
+                return ['/', 'import_module', 'importers', 'edit', id];
+            case 'ResourcegroupsUsedBy':
+                return ['/', 'scm_module', 'resourcegroups', 'usedBy', id];
+
+            default:
+                return ['/', 'error', 404];
+        }
+    }
+
+    protected readonly Number = Number;
 }

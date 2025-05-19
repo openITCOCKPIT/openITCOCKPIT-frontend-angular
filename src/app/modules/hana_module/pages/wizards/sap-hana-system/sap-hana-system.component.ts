@@ -10,37 +10,37 @@ import {
     FormControlDirective,
     FormLabelDirective
 } from '@coreui/angular';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormsModule } from '@angular/forms';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormsModule } from '@angular/forms';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { SapHanaSystemWizardService } from './sap-hana-system-wizard.service';
 import { SapHanaSystemWizardGet, SapHanaSystemWizardPost } from './sap-hana-system-wizard.interface';
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { MssqlWizardGet } from '../../../../mssql_module/pages/wizards/mssql/mssql-wizard.interface';
 
 @Component({
     selector: 'oitc-sap-hana-system',
     imports: [
-        TranslocoDirective,
         RouterLink,
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,
-        CardTitleDirective,
         CardBodyComponent,
-        FormErrorDirective,
-        FormsModule,
-        FormControlDirective,
-        FormFeedbackComponent,
-        WizardsDynamicfieldsComponent,
+        CardTitleDirective,
+        TranslocoPipe,
         RequiredIconComponent,
         FormLabelDirective,
-        TranslocoPipe
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormsModule,
+        WizardsDynamicfieldsComponent,
+        TranslocoDirective,
+        BackButtonDirective
     ],
     templateUrl: './sap-hana-system.component.html',
     styleUrl: './sap-hana-system.component.css',

@@ -16,7 +16,7 @@
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Index') }}
+                {{ t('Overview') }}
             </li>
         </ol>
     </nav>
@@ -161,9 +161,9 @@
                 <tr *ngFor="let messageOfTheDay of messagesOfTheDay.messagesOtd">
                     <td class="text-center">
                         <oitc-item-select
-                            *oitcPermission="['messagesOtd', 'delete']"
-                            [disabled]="false"
-                            [item]="messageOfTheDay"></oitc-item-select>
+                                *oitcPermission="['messagesOtd', 'delete']"
+                                [disabled]="false"
+                                [item]="messageOfTheDay"></oitc-item-select>
 
                     </td>
                     <td>{{ messageOfTheDay.title }}</td>
@@ -171,7 +171,7 @@
                     <td>{{ messageOfTheDay.date }}</td>
                     <td>
                         <span
-                            *ngIf="messageOfTheDay.expiration_duration">{{ messageOfTheDay.expiration_duration }}</span>
+                                *ngIf="messageOfTheDay.expiration_duration">{{ messageOfTheDay.expiration_duration }}</span>
                         <span *ngIf="! messageOfTheDay.expiration_duration">
                             <fa-icon [icon]="['fas', 'infinity']" class="text-primary"></fa-icon>
                         </span>
@@ -202,18 +202,19 @@
             </table>
 
             <oitc-no-records
-                *ngIf="messagesOfTheDay && messagesOfTheDay.messagesOtd.length === 0"></oitc-no-records>
+                    *ngIf="messagesOfTheDay && messagesOfTheDay.messagesOtd.length === 0"></oitc-no-records>
             <ng-container *ngIf="messagesOfTheDay && messagesOfTheDay">
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                [itemsCount]="messagesOfTheDay.messagesOtd.length"></oitc-select-all>
+                                    [itemsCount]="messagesOfTheDay.messagesOtd.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['messagesotd', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -226,13 +227,13 @@
             </ng-container>
 
             <c-container
-                [fluid]="true">
+                    [fluid]="true">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="messagesOfTheDay"
-                            [paginateOrScroll]="messagesOfTheDay"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="messagesOfTheDay"
+                                [paginateOrScroll]="messagesOfTheDay"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>

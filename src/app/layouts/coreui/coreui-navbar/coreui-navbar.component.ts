@@ -6,6 +6,7 @@ import {
     ElementRef,
     inject,
     Input,
+    OnDestroy,
     OnInit,
     Renderer2
 } from '@angular/core';
@@ -23,23 +24,26 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 import { NavbarSearchComponent } from './navbar-search/navbar-search.component';
 import { SystemnameService } from '../../../services/systemname.service';
+import { TranslocoService } from '@jsverse/transloco';
+import { Skeleton } from 'primeng/skeleton';
 
 @Component({
     selector: 'oitc-coreui-navbar',
     imports: [
-    RouterLink,
-    FaIconComponent,
-    NavbarGroupComponent,
-    NgClass,
-    NgIf,
-    NavbarSearchComponent,
-    AsyncPipe
-],
+        RouterLink,
+        FaIconComponent,
+        NavbarGroupComponent,
+        NgClass,
+        NgIf,
+        NavbarSearchComponent,
+        AsyncPipe,
+        Skeleton
+    ],
     templateUrl: './coreui-navbar.component.html',
     styleUrl: './coreui-navbar.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CoreuiNavbarComponent implements OnInit {
+export class CoreuiNavbarComponent implements OnInit, OnDestroy {
     constructor(
         //@Optional() public sidebar: SidebarComponent,
         //public helper: SidebarNavHelper,
@@ -57,6 +61,7 @@ export class CoreuiNavbarComponent implements OnInit {
     @Input({transform: booleanAttribute}) groupItems?: boolean;
     @Input({transform: booleanAttribute}) compact?: boolean;
     private cdr = inject(ChangeDetectorRef);
+    private readonly TranslocoService = inject(TranslocoService);
 
     private readonly mobileBreakpoint = 767.98; // do not move this line or it is undefined
 
@@ -69,6 +74,9 @@ export class CoreuiNavbarComponent implements OnInit {
     public readonly SystemnameService = inject(SystemnameService);
 
     public menu: MenuHeadline[] = [];
+    public headerLogoForHtml: string = '';
+
+    public hasInitialized: boolean = false;
 
     public isMobile(): boolean {
         return window.innerWidth < this.mobileBreakpoint;
@@ -81,13 +89,18 @@ export class CoreuiNavbarComponent implements OnInit {
             this.isUnfoldable = false;
         }
 
-        this.subscriptions.add(this.navigationService.loadMenu()
-            .subscribe((result: NavigationInterface) => {
-                // Menu records are loaded
-                this.menu = result.menu;
+        // The TranslocoService will trigger the load as soon as the language is set in change-language.component.ts
+        //this.loadMenu();
+
+        this.subscriptions.add(this.TranslocoService.events$.subscribe(event => {
+            if (event.type === 'langChanged') {
+                // The user has changed the language, reload the menu
+                this.menu = [];
+                this.hasInitialized = false;
                 this.cdr.markForCheck();
-            })
-        );
+                this.loadMenu();
+            }
+        }));
 
         this.subscriptions.add(this.sidebarService.sidebarState$.subscribe((next: SidebarAction) => {
             // Subscribe which send show or hide of the complete sidebar navigation
@@ -120,6 +133,10 @@ export class CoreuiNavbarComponent implements OnInit {
 
     }
 
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
     // Called by (click) which will mark the change detection
     public toggleUnfoldable() {
         this.unfoldable = !this.unfoldable;
@@ -128,6 +145,18 @@ export class CoreuiNavbarComponent implements OnInit {
     // Called by (click) which will mark the change detection
     public hideMenu() {
         this.sidebarService.toggleShowOrHideSidebar();
+    }
+
+    public loadMenu() {
+        this.subscriptions.add(this.navigationService.loadMenu()
+            .subscribe((result: NavigationInterface) => {
+                // Menu records are loaded
+                this.menu = result.menu;
+                this.headerLogoForHtml = result.headerLogoForHtml + "?" + new Date().getTime();
+                this.hasInitialized = true;
+                this.cdr.markForCheck();
+            })
+        );
     }
 
     /*

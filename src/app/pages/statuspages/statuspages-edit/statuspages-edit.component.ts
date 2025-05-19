@@ -30,20 +30,20 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective, ColComponent,
-  FormCheckInputDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective, ColComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -51,7 +51,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { StatuspagesService } from '../statuspages.service';
-import {map, Subscription} from 'rxjs';
+import { map, Subscription } from 'rxjs';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit } from '../statuspage.interface';
 import { GenericValidationError } from '../../../generic-responses';
@@ -60,43 +60,43 @@ import { PaginatorModule } from 'primeng/paginator';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import {NotyService} from '../../../layouts/coreui/noty.service';
-import {intersection} from 'lodash';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { intersection } from 'lodash';
 
 @Component({
     selector: 'oitc-statuspages-edit',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    BackButtonDirective,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    FormErrorDirective,
-    SelectComponent,
-    FormDirective,
-    FormsModule,
-    PaginatorModule,
-    NgIf,
-    FormFeedbackComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    MultiSelectComponent,
-    CardFooterComponent,
-    RowComponent,
-    InputGroupComponent,
-    AsyncPipe,
-    InputGroupTextDirective,
-    ColComponent
-],
+        TranslocoDirective,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        BackButtonDirective,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        FormErrorDirective,
+        SelectComponent,
+        FormDirective,
+        FormsModule,
+        PaginatorModule,
+        NgIf,
+        FormFeedbackComponent,
+        FormCheckInputDirective,
+        FormControlDirective,
+        MultiSelectComponent,
+        CardFooterComponent,
+        RowComponent,
+        InputGroupComponent,
+        AsyncPipe,
+        InputGroupTextDirective,
+        ColComponent
+    ],
     templateUrl: './statuspages-edit.component.html',
     styleUrl: './statuspages-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -277,7 +277,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
     }
 
 
-    public onContainerChange = ()=> {
+    public onContainerChange = () => {
         this.loadHostgroups('');
         this.loadServicegroups('');
         this.loadHosts('');
@@ -315,7 +315,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         };
     }
 
-    public submit = ()=>  {
+    public submit = () => {
         this.cleanUpForSubmit();
         this.filterForSubmit();
 
@@ -357,47 +357,54 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
 
     private filterForSubmit = () => {
 
-        // @ts-ignore
         this.post.hostgroups = this.hostgroups.filter((hostgroup) => {
             if (this.post.selected_hostgroups._ids.indexOf(hostgroup.id) !== -1) {
                 return hostgroup;
+            } else {
+                return;
             }
         });
-        // @ts-ignore
+
         this.post.servicegroups = this.servicegroups.filter((servicegroup) => {
             if (this.post.selected_servicegroups._ids.indexOf(servicegroup.id) !== -1) {
                 return servicegroup;
+            } else {
+                return;
             }
         });
-        // @ts-ignore
+
         this.post.hosts = this.hosts.filter((host) => {
             if (this.post.selected_hosts._ids.indexOf(host.id) !== -1) {
                 return host;
+            } else {
+                return;
             }
         });
-        // @ts-ignore
+
         this.post.services = this.services.filter((service) => {
             if (this.post.selected_services._ids.indexOf(service.id) !== -1) {
                 return service;
+            } else {
+                return;
             }
         });
     }
 
     private cleanUpForSubmit = () => {
-        this.post.selected_hostgroups._ids  = intersection(
+        this.post.selected_hostgroups._ids = intersection(
             this.hostgroups.map(hostgroup => hostgroup.key),
             this.post.selected_hostgroups._ids
         );
         this.post.selected_servicegroups._ids = intersection(
-            this.servicegroups.map(servicegroup  => servicegroup.key),
+            this.servicegroups.map(servicegroup => servicegroup.key),
             this.post.selected_servicegroups._ids
         );
         this.post.selected_hosts._ids = intersection(
-            this.hosts.map(host  => host.key),
+            this.hosts.map(host => host.key),
             this.post.selected_hosts._ids
         );
         this.post.selected_services._ids = intersection(
-            this.services.map(service  => service.key),
+            this.services.map(service => service.key),
             this.post.selected_services._ids
         );
     }

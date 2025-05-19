@@ -217,7 +217,6 @@
                         <tr>
                             <td class="text-center">
                                 <oitc-item-select
-                                    *oitcPermission="['services', 'delete']"
                                     [disabled]="!service.Service.allow_edit"
                                     [item]="service"></oitc-item-select>
                             </td>
@@ -225,7 +224,7 @@
                                 <oitc-servicestatus-simple-icon></oitc-servicestatus-simple-icon>
                             </td>
 
-                            <td>
+                            <td class="word-break">
                                 @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
                                     <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
                                         {{ service.Service.servicename }}
@@ -246,7 +245,7 @@
                                         {{ t('Edit') }}
                                     </oitc-actions-button-element>
 
-                                    <oitc-actions-button-element [permission]="'services.deactivate'"
+                                    <oitc-actions-button-element [permission]="'services.enable'"
                                                                  *ngIf="service.Service.allow_edit"
                                                                  (click)="toggleEnableModal(service.Service)">
                                         <fa-icon [icon]="['fas', 'plug']"></fa-icon>
@@ -295,16 +294,19 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        *oitcPermission="['services', 'copy']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </button>
                                 <button (click)="toggleEnableModal()" class="btn btn-outline-primary col-3 border-0"
+                                        *oitcPermission="['services', 'enable']"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'plug']"></fa-icon>
                                     {{ t('Enable') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['services', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>

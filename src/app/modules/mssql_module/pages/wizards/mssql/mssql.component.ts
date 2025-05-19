@@ -20,6 +20,7 @@ import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-mssql',
@@ -38,7 +39,8 @@ import { RouterLink } from '@angular/router';
         TranslocoDirective,
         TranslocoPipe,
         WizardsDynamicfieldsComponent,
-        RouterLink
+        RouterLink,
+        BackButtonDirective
     ],
     templateUrl: './mssql.component.html',
     styleUrl: './mssql.component.css',

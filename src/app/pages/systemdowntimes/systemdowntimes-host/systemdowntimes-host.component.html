@@ -261,7 +261,7 @@
                                 [item]="hostSystemdowntime"></oitc-item-select>
                         </div>
                     </td>
-                    <td>
+                    <td class="word-break">
                         <a *oitcPermission="['hosts', 'browser']"
                            [routerLink]="['/', 'hosts', 'browser', hostSystemdowntime.Host.id]">
                             {{ hostSystemdowntime.Host.hostname }}

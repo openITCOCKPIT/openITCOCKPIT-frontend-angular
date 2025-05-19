@@ -28,32 +28,36 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProxyService } from '../proxy.service';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-proxy-index',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormDirective,
-    FormsModule,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    BackButtonDirective,
-    CardFooterComponent,
-    XsButtonDirective
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FormDirective,
+        FormsModule,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        BackButtonDirective,
+        CardFooterComponent,
+        XsButtonDirective,
+        FormLoaderComponent,
+        NgIf
+    ],
     templateUrl: './proxy-index.component.html',
     styleUrl: './proxy-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -72,11 +76,14 @@ export class ProxyIndexComponent implements OnInit, OnDestroy {
     private ProxyService = inject(ProxyService);
     private readonly notyService = inject(NotyService);
     private cdr = inject(ChangeDetectorRef);
+    protected isLoading: boolean = true;
 
     public ngOnInit() {
+        this.isLoading = true;
         this.subscriptions.add(
             this.ProxyService.getProxySettings().subscribe(data => {
                 this.post = data;
+                this.isLoading = false;
                 this.cdr.markForCheck();
             })
         );

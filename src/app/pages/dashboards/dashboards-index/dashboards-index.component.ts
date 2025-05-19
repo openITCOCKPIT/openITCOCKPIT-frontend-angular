@@ -15,6 +15,7 @@ import { DOCUMENT, NgClass, NgForOf, NgIf } from '@angular/common';
 import {
     KtdDragEnd,
     KtdDragStart,
+    ktdGridCompact,
     KtdGridComponent,
     KtdGridDragHandle,
     KtdGridItemComponent,
@@ -29,6 +30,8 @@ import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { MatSelectChange } from '@angular/material/select';
 import { debounceTime, filter } from 'rxjs/operators';
 import {
+    AlertComponent,
+    AlertHeadingDirective,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -120,7 +123,9 @@ import {
         DashboardAddWidgetModalComponent,
         HostsBrowserModalComponent,
         ServiceBrowserModalComponent,
-        ChangecalendarsEventViewerComponent
+        ChangecalendarsEventViewerComponent,
+        AlertComponent,
+        AlertHeadingDirective
     ],
     templateUrl: './dashboards-index.component.html',
     styleUrl: './dashboards-index.component.scss',
@@ -478,23 +483,6 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
         this.dragStartThreshold = coerceNumberProperty((event.target as HTMLInputElement).value);
     }
 
-    public generateLayout(): void {
-        const layout: KtdGridLayout = [];
-        for (let i = 0; i < this.cols; i++) {
-            const y = Math.ceil(Math.random() * 4) + 1;
-            layout.push({
-                x: Math.round(Math.random() * (Math.floor((this.cols / 2) - 1))) * 2,
-                y: Math.floor(i / 6) * y,
-                w: 2,
-                h: y,
-                id: i.toString()
-                // static: Math.random() < 0.05
-            });
-        }
-        console.log('layout', layout);
-        this.layout = layout;
-    }
-
     /** Adds a grid item to the layout */
     public addItemToLayout(): void {
         const maxId = this.layout.reduce((acc, cur) => Math.max(acc, parseInt(cur.id, 10)), -1);
@@ -531,9 +519,26 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
         this.layout = this.ktdArrayRemoveItem(this.layout, (item) => item.id === id);
         this.widgets = this.ktdArrayRemoveItem(this.widgets, (item) => item.id === id);
 
+        // https://github.com/katoid/angular-grid-layout/issues/115#issuecomment-2162674668
+        this.layout = ktdGridCompact(this.layout, this.compactType, this.cols);
+
+        // Sync the layout with the widgets
+        this.widgets.forEach(widget => {
+            const layoutItem = this.layout.find(item => item.id === widget.id);
+            if (layoutItem) {
+                widget.row = layoutItem.y;
+                widget.col = layoutItem.x;
+                widget.width = layoutItem.w;
+                widget.height = layoutItem.h;
+            }
+        });
+
+        this.widgets = [...this.widgets];
+
         this.subscriptions.add(this.DashboardsService.removeWidget(Number(id), this.currentTabId).subscribe(response => {
             if (response.success) {
-                this.notyService.genericSuccess();
+                //this.notyService.genericSuccess();
+                this.saveGrid();
             } else {
                 this.notyService.genericError();
             }
@@ -551,6 +556,10 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
     public WidgetTrackById(index: number, item: WidgetGetForRender) {
         return item.id;
+    }
+
+    public isWidgetAvailable(checkWidget: WidgetGetForRender): boolean {
+        return this.availableWidgets.filter(availableWidget => availableWidget.directive === checkWidget.directive).length === 1;
     }
 
     public toggleRenameWidgetModal(widget: WidgetGetForRender): void {
@@ -774,11 +783,25 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                     // get new reference of the layout array to trigger the change detection
                     this.layout = [newLayoutWidget, ...this.layout];
 
+                    // https://github.com/katoid/angular-grid-layout/issues/115#issuecomment-2162674668
+                    this.layout = ktdGridCompact(this.layout, this.compactType, this.cols);
+
                     // Array for ngFor id has to be a string
                     const widgetForLayout: WidgetGetForRender = {
                         ...data.widget.Widget,
                         id: data.widget.Widget.id.toString()
                     }
+
+                    // Sync the layout with the widgets
+                    this.widgets.forEach(widget => {
+                        const layoutItem = this.layout.find(item => item.id === widget.id);
+                        if (layoutItem) {
+                            widget.row = layoutItem.y;
+                            widget.col = layoutItem.x;
+                            widget.width = layoutItem.w;
+                            widget.height = layoutItem.h;
+                        }
+                    });
 
                     // get new reference of the widgets array to trigger the change detection
                     this.widgets = [widgetForLayout, ...this.widgets];

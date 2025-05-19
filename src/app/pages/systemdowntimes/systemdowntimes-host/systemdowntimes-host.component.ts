@@ -24,7 +24,7 @@ import {
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../directives/debounce.directive';
@@ -54,6 +54,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 import { getDefaultHostSystemdowntimesParams } from '../systemdowntimes.interface';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 
 @Component({
@@ -117,6 +118,8 @@ export class SystemdowntimesHostComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private cdr = inject(ChangeDetectorRef);
 
@@ -192,6 +195,11 @@ export class SystemdowntimesHostComponent implements OnInit, OnDestroy {
                     displayName: item.Host.name
                 };
             });
+        }
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
 
         // Pass selection to the modal

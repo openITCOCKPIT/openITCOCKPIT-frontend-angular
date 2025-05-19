@@ -109,17 +109,17 @@
                                     </div>
                                 </span>
                                 <ng-select
-                                        id="HostTags"
-                                        name="HostTags"
-                                        oitcDebounce
-                                        (debouncedValue)="onFilterChange($event)"
-                                        [items]="[]"
-                                        [(ngModel)]="hostTags"
-                                        [addTag]="true"
-                                        [multiple]="true"
-                                        [selectOnTab]="true"
-                                        [placeholder]="'Filter by host tags' | transloco"
-                                        [isOpen]="false">
+                                    id="HostTags"
+                                    name="HostTags"
+                                    oitcDebounce
+                                    (debouncedValue)="onFilterChange($event)"
+                                    [items]="[]"
+                                    [(ngModel)]="hostTags"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by host tags' | transloco"
+                                    [isOpen]="false">
                                 </ng-select>
                             </c-input-group>
                         </c-col>
@@ -132,17 +132,17 @@
                                     </div>
                                 </span>
                                 <ng-select
-                                        id="HostTagsExcluded"
-                                        name="HostTagsExcluded"
-                                        oitcDebounce
-                                        (debouncedValue)="onFilterChange($event)"
-                                        [items]="[]"
-                                        [(ngModel)]="hostTagsExcluded"
-                                        [addTag]="true"
-                                        [multiple]="true"
-                                        [selectOnTab]="true"
-                                        [placeholder]="'Filter by excluded host tags' | transloco"
-                                        [isOpen]="false">
+                                    id="HostTagsExcluded"
+                                    name="HostTagsExcluded"
+                                    oitcDebounce
+                                    (debouncedValue)="onFilterChange($event)"
+                                    [items]="[]"
+                                    [(ngModel)]="hostTagsExcluded"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by excluded host tags' | transloco"
+                                    [isOpen]="false">
                                 </ng-select>
                             </c-input-group>
                         </c-col>
@@ -157,17 +157,17 @@
                                     </div>
                                 </span>
                                 <ng-select
-                                        id="ServiceTags"
-                                        name="ServiceTags"
-                                        oitcDebounce
-                                        (debouncedValue)="onFilterChange($event)"
-                                        [items]="[]"
-                                        [(ngModel)]="serviceTags"
-                                        [addTag]="true"
-                                        [multiple]="true"
-                                        [selectOnTab]="true"
-                                        [placeholder]="'Filter by service tags' | transloco"
-                                        [isOpen]="false">
+                                    id="ServiceTags"
+                                    name="ServiceTags"
+                                    oitcDebounce
+                                    (debouncedValue)="onFilterChange($event)"
+                                    [items]="[]"
+                                    [(ngModel)]="serviceTags"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by service tags' | transloco"
+                                    [isOpen]="false">
                                 </ng-select>
                             </c-input-group>
                         </c-col>
@@ -180,17 +180,17 @@
                                     </div>
                                 </span>
                                 <ng-select
-                                        id="ServiceTagsExcluded"
-                                        name="ServiceTagsExcluded"
-                                        oitcDebounce
-                                        (debouncedValue)="onFilterChange($event)"
-                                        [items]="[]"
-                                        [(ngModel)]="serviceTagsExcluded"
-                                        [addTag]="true"
-                                        [multiple]="true"
-                                        [selectOnTab]="true"
-                                        [placeholder]="'Filter by excluded service tags' | transloco"
-                                        [isOpen]="false">
+                                    id="ServiceTagsExcluded"
+                                    name="ServiceTagsExcluded"
+                                    oitcDebounce
+                                    (debouncedValue)="onFilterChange($event)"
+                                    [items]="[]"
+                                    [(ngModel)]="serviceTagsExcluded"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by excluded service tags' | transloco"
+                                    [isOpen]="false">
                                 </ng-select>
                             </c-input-group>
                         </c-col>
@@ -207,7 +207,8 @@
 
             <oitc-table-loader *ngIf="!result"></oitc-table-loader>
 
-            <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+            <table *ngIf="result" bordered cTable class="mt-2 mb-0" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
                 <tr>
@@ -231,15 +232,15 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="result">
+                <tbody>
                 <tr *ngFor="let customAlertRule of result.customalertRules">
 
                     <td class="text-center">
                         <div>
                             <oitc-item-select
-                                    *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
-                                    [disabled]="false"
-                                    [item]="customAlertRule"></oitc-item-select>
+                                *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
+                                [disabled]="false"
+                                [item]="customAlertRule"></oitc-item-select>
                         </div>
                     </td>
                     <td>
@@ -290,18 +291,19 @@
             </table>
 
             <oitc-no-records
-                    *ngIf="result && result.customalertRules.length === 0"></oitc-no-records>
+                *ngIf="result && result.customalertRules.length === 0"></oitc-no-records>
             <ng-container *ngIf="result && result.customalertRules.length !== 0">
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                    [itemsCount]="result.customalertRules.length"></oitc-select-all>
+                                [itemsCount]="result.customalertRules.length"></oitc-select-all>
                         </c-col>
                         <c-col md="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['CustomalertModule', 'customalertRules', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -314,13 +316,13 @@
             </ng-container>
 
             <c-container
-                    [fluid]="true">
+                [fluid]="true">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="result"
-                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="result"
+                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>

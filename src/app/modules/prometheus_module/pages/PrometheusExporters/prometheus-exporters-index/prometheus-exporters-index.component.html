@@ -8,15 +8,19 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['PrometheusModule', 'PrometheusQuery', 'index']"
-                   [routerLink]="['/', 'prometheus_module', 'PrometheusQuery', 'index']">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Prometheus Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['PrometheusModule', 'PrometheusExporters', 'index']"
+                   [routerLink]="['/', 'prometheus_module', 'PrometheusExporters', 'index']">
                     <fa-icon [icon]="['fas', 'burn']"></fa-icon>
-                    {{ t('Prometheus Module') }}
+                    {{ t('Exporters') }}
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'broadcast-tower']"></fa-icon>
-                {{ t('Exporters Overview') }}
+                <fa-icon [icon]="['fas', 'code']"></fa-icon>
+                {{ t('Overview') }}
             </li>
         </ol>
     </nav>
@@ -139,7 +143,7 @@
 
 
             <oitc-table-loader *ngIf="!result"></oitc-table-loader>
-            
+
             <table *ngIf="result" bordered cTable class="mt-2 mb-2" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -178,7 +182,8 @@
                     </td>
                     <td class="width-50">
                         <oitc-actions-button [permission]="'PrometheusModule.PrometheusExporters.edit'"
-                                             [url]="'/prometheus_module/PrometheusExporters/edit/' + exporter.id">
+                                             [url]="'/prometheus_module/PrometheusExporters/edit/' + exporter.id"
+                                             [allowEdit]="exporter.allow_edit">
                             <oitc-actions-button-element [permission]="'PrometheusModule.PrometheusExporters.edit'"
                                                          [url]="'/prometheus_module/PrometheusExporters/edit/' + exporter.id"
                                                          *ngIf="exporter.allow_edit">

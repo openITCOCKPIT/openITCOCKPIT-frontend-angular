@@ -24,7 +24,7 @@
  */
 
 import { inject, Injectable, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { MapeditorsService } from '../modules/map_module/pages/mapeditors/mapeditors.service';
 import { Mapitem } from '../modules/map_module/pages/mapeditors/mapeditors.interface';
 import { MapItemRoot } from '../modules/map_module/components/map-item-base/map-item-base.interface';
@@ -52,6 +52,10 @@ export class MapItemReloadService implements OnDestroy {
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+        if (this.interval !== null) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
     }
 
     private loadData() {
@@ -70,7 +74,7 @@ export class MapItemReloadService implements OnDestroy {
         this.subscriptions.add(this.MapeditorsService.saveMapitemMulti({
             items: postData,
             disableGlobalLoader: true
-        }).subscribe((result) => {
+        }).pipe(take(1)).subscribe((result) => {
             if (result.success) {
                 let data = result.data.mapitems;
 

@@ -44,7 +44,7 @@
         </c-card-header>
         <c-card-body>
 
-            <oitc-form-loader *ngIf="sourceMaps.length === 0"></oitc-form-loader>
+            <oitc-form-loader [isVisible]="sourceMaps.length === 0"></oitc-form-loader>
 
             <c-card class="mb-3" *ngFor="let map of sourceMaps; let i = index">
                 <c-card-header>

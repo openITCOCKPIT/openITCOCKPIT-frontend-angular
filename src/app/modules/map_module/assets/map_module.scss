@@ -12,7 +12,8 @@
 
 .cdk-drag-dragging:not(#layersBox):not(#mapToolbar) {
     opacity: 0.5;
-    border: 2px dashed #4285F4 !important;
+    border: 2px dashed var(--cui-primary) !important;
+    /*border: 2px dashed #4285F4 !important;*/
 }
 
 .resizable {
@@ -20,6 +21,15 @@
     overflow: hidden;
 }
 
+.resize-border {
+    border: 2px dashed var(--cui-primary) !important;
+    /*border: 2px dashed #4285F4 !important;*/
+}
+
 .cursor-pointer {
-    cursor: pointer;
+    cursor: pointer !important;
+}
+
+.cursor-normal {
+    cursor: unset;
 }

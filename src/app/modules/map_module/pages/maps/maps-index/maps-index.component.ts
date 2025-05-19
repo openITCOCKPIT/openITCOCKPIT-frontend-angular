@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { Subscription } from 'rxjs';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
@@ -35,7 +35,7 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -48,6 +48,7 @@ import { IndexPage } from '../../../../../pages.interface';
 import { MapsService } from '../maps.service';
 import { getDefaultMapsIndexParams, Map, MapsIndexParams, MapsIndexRoot } from '../maps.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-maps-index',
@@ -88,7 +89,8 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
         TableDirective,
         TranslocoPipe,
         XsButtonDirective,
-        TableLoaderComponent
+        TableLoaderComponent,
+        AsyncPipe
     ],
     templateUrl: './maps-index.component.html',
     styleUrl: './maps-index.component.css',
@@ -100,6 +102,8 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private readonly notyService: NotyService = inject(NotyService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private subscriptions: Subscription = new Subscription();
     private MapsService: MapsService = inject(MapsService);
@@ -202,6 +206,12 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
         this.cdr.markForCheck();
@@ -217,6 +227,10 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'map_module', 'maps', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 }

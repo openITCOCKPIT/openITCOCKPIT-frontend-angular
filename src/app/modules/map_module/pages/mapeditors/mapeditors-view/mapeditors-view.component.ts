@@ -3,7 +3,6 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
-    HostListener,
     inject,
     OnDestroy,
     OnInit
@@ -26,10 +25,11 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { DOCUMENT, NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { parseInt } from 'lodash';
 import { MapViewComponent } from '../../../components/map-view/map-view.component';
+import { SidebarService } from '../../../../../layouts/coreui/coreui-navbar/sidebar.service';
 
 @Component({
     selector: 'oitc-mapeditors-view',
@@ -47,7 +47,8 @@ import { MapViewComponent } from '../../../components/map-view/map-view.componen
         TranslocoDirective,
         NgIf,
         XsButtonDirective,
-        MapViewComponent
+        MapViewComponent,
+        NgClass
     ],
     templateUrl: './mapeditors-view.component.html',
     styleUrl: './mapeditors-view.component.css',
@@ -55,30 +56,24 @@ import { MapViewComponent } from '../../../components/map-view/map-view.componen
 })
 export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    @HostListener('document:fullscreenchange', ['$event'])
-    handleFullscreenchangeEvent(Event: Event) {
-        if (document.fullscreenElement === null) {
-            this.fullscreen = false;
-        }
-    }
-
     private subscriptions: Subscription = new Subscription();
     private intervalSubscription: Subscription = new Subscription();
     private MapeditorsService: MapeditorsService = inject(MapeditorsService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
+    readonly sidebarService: SidebarService = inject(SidebarService);
     private route = inject(ActivatedRoute);
     public errors: GenericValidationError | null = null;
     private cdr = inject(ChangeDetectorRef);
-    private readonly document = inject(DOCUMENT);
 
     public map!: MapeditorsViewMap;
     private init = true;
     protected mapId: number = 0;
-    private rotate: null | string | string[] = null;
+    protected rotate: null | string | string[] = null;
 
     protected fullscreen: boolean = false;
     private rotationInterval: number = 0;
     private rotationPosition: number = 1;
+    protected intervalParam: number = 0;
 
     private interval = null;
     private refreshInterval: number = 0;
@@ -91,6 +86,7 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
         let intervalParam = this.route.snapshot.paramMap.get('interval');
         if (intervalParam != null) {
             this.rotationInterval = parseInt(intervalParam, 10) * 1000;
+            this.intervalParam = parseInt(intervalParam, 10);
         }
         this.loadMapDetails();
 
@@ -112,6 +108,13 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
                 this.cdr.markForCheck();
             });
         }
+
+        this.subscriptions.add(this.route.params.subscribe(params => {
+            // reload page to display new map
+            if (params['id'] !== undefined && params['id'] !== null && params['id'] !== '' && params['id'] !== this.mapId.toString()) {
+                window.location.reload();
+            }
+        }));
     }
 
     public ngOnDestroy(): void {
@@ -119,11 +122,12 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
         if (this.intervalSubscription) {
             this.intervalSubscription.unsubscribe();
         }
+        this.toggleFullscreenMode(false, true);
         this.cdr.markForCheck();
     }
 
     public ngAfterViewInit(): void {
-        this.toggleFullscreenMode(this.fullscreen);
+        this.toggleFullscreenMode(true);
     }
 
     private loadMapDetails() {
@@ -139,17 +143,28 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
             }));
     };
 
-    public toggleFullscreenMode(isFullScreen: boolean = false) {
-        const elem = this.document.getElementById('fullscreenMapeditorsView');
+    public toggleFullscreenMode(initialLoad: boolean = false, leavePage: boolean = false) {
+        let sidebarVisible = this.sidebarService.isSidebarVisible();
 
-        this.fullscreen = isFullScreen;
+        if (leavePage) {
+            if (this.fullscreen && !sidebarVisible) {
+                this.sidebarService.toggleShowOrHideSidebar();
+            }
+            return;
+        }
 
-        if (!isFullScreen && document.fullscreenElement !== null && document.exitFullscreen) {
-            document.exitFullscreen();
+        if (initialLoad) {
+            if (this.fullscreen && sidebarVisible || !this.fullscreen && !sidebarVisible) {
+                this.sidebarService.toggleShowOrHideSidebar();
+            }
+        } else {
+            if (!this.fullscreen && sidebarVisible || this.fullscreen && !sidebarVisible) {
+                this.sidebarService.toggleShowOrHideSidebar();
+            }
+            this.fullscreen = !this.fullscreen;
         }
-        if (isFullScreen && document.fullscreenElement === null && elem && elem.requestFullscreen) {
-            elem.requestFullscreen();
-        }
+        this.cdr.markForCheck();
     }
 
+    protected readonly Array = Array;
 }

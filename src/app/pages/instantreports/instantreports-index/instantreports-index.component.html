@@ -278,15 +278,6 @@
                             {{ t('No') }}
                         </oitc-badge-outline>
                     </td>
-                    <td class="text-center">
-                        <oitc-badge-outline color="success" *ngIf="instantreport.Instantreport.downtimes === 1">
-                            {{ t('Yes') }}
-                        </oitc-badge-outline>
-                        <oitc-badge-outline color="danger" *ngIf="instantreport.Instantreport.downtimes === 0">
-                            {{ t('No') }}
-                        </oitc-badge-outline>
-                    </td>
-
 
                     <td>
                         @switch (instantreport.Instantreport.send_interval) {
@@ -364,6 +355,7 @@
                         <c-col>
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['instantreports', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>

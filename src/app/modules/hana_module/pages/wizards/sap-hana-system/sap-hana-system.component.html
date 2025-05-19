@@ -50,7 +50,9 @@
                     <div class="btn-group btn-group-xs w-100 h-100">
                         <button type="button" class="btn btn-primary"
                                 [title]="'Back' | transloco"
-                                style="border-radius: 0;">
+                                style="border-radius: 0;"
+                                [fallbackUrl]="['wizards', 'index']"
+                                oitcBackButton>
                             <i class="fa fa-arrow-left"></i>
                         </button>
 
@@ -104,7 +106,7 @@
                 </div>
                 <div class="mb-3">
                     <label cLabel for="post.dbsystemport">
-                        {{ t('Password') }}
+                        {{ t('HANA System port') }}
                         <oitc-required-icon/>
                     </label>
                     <input cFormControl
@@ -118,7 +120,8 @@
             </fieldset>
 
             <oitc-wizards-dynamicfields
-                    [post]="post.services"
+                    [(post)]="post.services"
+                    [errors]="errors"
                     [title]="'SAP HANA Tenant Database Services'|transloco"
             />
         </c-card-body>

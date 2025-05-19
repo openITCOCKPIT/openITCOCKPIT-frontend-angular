@@ -880,7 +880,7 @@
                         {{ t('Host output') }}
                     </th>
 
-                    <th *ngIf="fields[13]"
+                    <th *ngIf="fields[13]" class="col-1"
                         mat-sort-header="Hosts.satellite_id">
                         {{ t('Instance') }}
                     </th>
@@ -907,7 +907,6 @@
                 <tr *ngFor="let host of hosts.all_hosts">
                     <td class="text-center">
                         <oitc-item-select
-                            *oitcPermission="['hosts', 'delete']"
                             [disabled]="!host.Host.allow_edit"
                             [item]="host"></oitc-item-select>
                     </td>
@@ -977,7 +976,7 @@
                                         'critical-soft' : host.Host.priority==4, 'critical' : host.Host.priority==5}"></fa-icon>
                     </td>
 
-                    <td *ngIf="fields[7]">
+                    <td *ngIf="fields[7]" class="word-break">
                         @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                             <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
                                 {{ host.Host.name }}
@@ -1024,7 +1023,12 @@
                     </td>
 
                     <td *ngIf="fields[13]">
-                        {{ host.Host.satelliteName }}
+                        @if (host.Host.satelliteRestricted) {
+                            <fa-icon [icon]="['fas', 'eye-low-vision']"></fa-icon>
+                            {{ t('Restricted view') }}
+                        } @else {
+                            {{ host.Host.satelliteName }}
+                        }
                     </td>
 
                     @if (this.PermissionsService.hasPermissionObservable(['services', 'serviceList'])|async) {

@@ -20,7 +20,7 @@
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Index') }}
+                {{ t('Overview') }}
             </li>
         </ol>
     </nav>
@@ -214,11 +214,8 @@
                             [item]="snmpttEntry"></oitc-item-select>
 
                     </td>
-                    <td class="text-center pt-1 pb-0 text-info"
-                        [ngClass]="{'text-danger': (snmpttEntry.Snmptt.severity == 'Critical' || Number(snmpttEntry.Snmptt.severity) === 6),
-                            'text-warning': snmpttEntry.Snmptt.severity == 'Warning' || (Number(snmpttEntry.Snmptt.severity) > 0 && Number(snmpttEntry.Snmptt.severity) < 6)}">
-                        <fa-icon [icon]="['fas', 'square']" [size]="'xl'"
-                                 title="{{snmpttEntry.Snmptt.severity}}">
+                    <td class="text-center pt-1 pb-0 text-info" [ngClass]="snmpttEntry.Snmptt.severity">
+                        <fa-icon [icon]="['fas', 'square']" [size]="'xl'" [title]="snmpttEntry.Snmptt.severity">
                         </fa-icon>
                     </td>
                     <td>
@@ -267,6 +264,7 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['snmptrapmodule', 'snmpttList', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>

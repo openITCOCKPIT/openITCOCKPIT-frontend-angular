@@ -33,6 +33,9 @@ export class CustomAlertsService {
         params['filter[Customalerts.message]'] = filter.Customalerts.message;
         params['filter[from]'] = filter.from;
         params['filter[to]'] = filter.to;
+        params['filter[Hosts.name]'] = filter.Hosts.name;
+        params['filter[servicename]'] = filter.servicename;
+        params['filter[Customalerts.message]'] = filter.Customalerts.message;
         // params['filter[Customalerts.state][]'] = filter.Customalerts.state;
 
 //        let arr : boolean[] = this.params['filter[Customalerts.state][]'] as unknown as boolean[];

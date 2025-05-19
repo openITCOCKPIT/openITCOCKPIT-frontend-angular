@@ -9,25 +9,22 @@ import {
     signal,
     ViewChild
 } from '@angular/core';
-import { TranslocoDirective } from '@jsverse/transloco';
-import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions, EventApi, EventClickArg } from '@fullcalendar/core';
+import {TranslocoDirective} from '@jsverse/transloco';
+import {FullCalendarComponent, FullCalendarModule} from '@fullcalendar/angular';
+import {CalendarOptions, EventApi, EventClickArg} from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
-import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {CalendarEvent} from '../../../../pages/calendars/calendars.interface';
+import {NgIf, NgStyle} from '@angular/common';
 
 @Component({
     selector: 'oitc-changecalendars-calendar',
     imports: [
         TranslocoDirective,
         FullCalendarModule,
-        FaIconComponent,
-        XsButtonDirective,
+        NgStyle,
         NgIf
     ],
     templateUrl: './changecalendars-calendar.component.html',
@@ -37,7 +34,7 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 export class ChangecalendarsCalendarComponent {
     private readonly cdr = inject(ChangeDetectorRef);
     private _events: CalendarEvent[] = [];
-    private _editable: boolean = true;
+    private _colour: string = '';
     private _initialView: string = 'dayGridMonth';
 
     @ViewChild('fullCalendar') fullCalendar!: FullCalendarComponent;
@@ -53,17 +50,18 @@ export class ChangecalendarsCalendarComponent {
     }
 
     @Input()
-    public set editable(editable: boolean) {
-        this._editable = editable;
+    public set colour(colour: string) {
+        this._colour = colour;
+        // Force reload of calendar here
+        this.calendarOptions.update(options => ({...options, eventColor: colour}));
     }
 
-    public get editable(): boolean {
-        return this._editable;
+    public get colour(): string {
+        return this._colour;
     }
 
     @Input()
     public set initialView(initialView: string) {
-
         // Force reload of calendar here
         this.calendarOptions.update(options => ({...options, initialView: initialView}));
         this._initialView = initialView;
@@ -93,7 +91,7 @@ export class ChangecalendarsCalendarComponent {
         //initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
         events: this.events,
         weekends: true,
-        editable: true,
+        editable: false,
         selectable: true,
         selectMirror: true,
         businessHours: true,
@@ -106,7 +104,7 @@ export class ChangecalendarsCalendarComponent {
         eventsSet: this.handleEvents.bind(this),
         droppable: false,
         dragScroll: false,
-        eventDragMinDistance: 999999999,
+        eventColor: this.colour
     });
     currentEvents = signal<EventApi[]>([]);
 

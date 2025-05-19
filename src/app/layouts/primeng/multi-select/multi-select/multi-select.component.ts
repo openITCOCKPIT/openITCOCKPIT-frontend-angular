@@ -10,25 +10,28 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    TemplateRef
+    TemplateRef,
+    ViewChild
 } from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
-import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
+import { MultiSelect, MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primeng/multiselect';
 import { SharedModule } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import _ from 'lodash';
-
+import { AnimationEvent } from '@angular/animations';
 
 @Component({
     selector: 'oitc-multi-select',
     imports: [
         HighlightSearchPipe,
-        MultiSelectModule,
         SharedModule,
-        FormsModule
+        FormsModule,
+        MultiSelect,
+        MultiSelect,
+        MultiSelect
     ],
     providers: [
         {
@@ -42,6 +45,8 @@ import _ from 'lodash';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
+    @ViewChild('multiSelectOptgroup') multiSelectOptgroup: MultiSelect | undefined;
+
     private init: boolean = false;
 
     @Input() id: string | undefined;
@@ -121,14 +126,9 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
      * Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name).
      * Set this to an empty string for Modals !!!
      *
-     * UPDATE 11.02.2025.
-     * With PrimeNG 19, we changed the default value from 'body' to ''.
-     * This will fix the issue with the dropdown not showing in modals and als resolve a style issue where the dropdown
-     * is 100% width of the body.
-     *
      * @group Props
      */
-    @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = '';
+    @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = 'body';
 
     /**
      * If the selected value (current value of ngModel) does not exist in the options, the value will be reset to 0
@@ -264,6 +264,34 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
                     element.value = this.labelPrefix + element.value;
                 }
             })
+        }
+    }
+
+    /**
+     * This method is an ugly workaround to a limitation of the PrimeNG select component.
+     * By default, PrimeNG calculates a value for "min-width" which absolutely
+     * is bad for long option labels. This behavior is not configurable.
+     * https://github.com/primefaces/primeng/issues/17363#issuecomment-2714217581
+     *
+     * This method copies the value of min-width into width to make the overlay use an absolute width
+     * so we can linebreak long option labels.
+     *
+     * @param event
+     */
+    public onShow(event: AnimationEvent) {
+        event.element.parentElement.style.width = event.element.parentElement.style.minWidth;
+
+        // 🩹
+        // Fix for long option labels
+        // PrimeNG calculates the left position with the min-width value. So if you have an option with a very long name
+        // the dropdown will be displayed outside the viewport.
+        // To fix this, PrimeNG sets left to 0. https://github.com/primefaces/primeng/blob/33b099064e75d2ba9aa5fd45889837ff9a9875e5/packages/primeng/src/dom/domhandler.ts#L194
+        // We try to fix this, when left = 0, we set it to the same position as the select box is.
+        if (this.multiSelectOptgroup) {
+            if (event.element.parentElement.style.left === '0px' && this.multiSelectOptgroup.appendTo.length !== 0) {
+                const selectBoxPosition = this.multiSelectOptgroup.el.nativeElement.getBoundingClientRect();
+                event.element.parentElement.style.left = selectBoxPosition.x + 'px';
+            }
         }
     }
 

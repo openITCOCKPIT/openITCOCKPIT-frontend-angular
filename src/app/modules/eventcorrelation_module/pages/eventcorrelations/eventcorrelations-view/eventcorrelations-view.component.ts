@@ -26,6 +26,7 @@ import { EventcorrelationsService } from '../eventcorrelations.service';
 import { EvcTree, EventcorrelationRootElement } from '../eventcorrelations.interface';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { EvcTreeComponent } from './evc-tree/evc-tree.component';
+import { EvcTreeDirection } from './evc-tree/evc-tree.enum';
 
 
 @Component({
@@ -60,8 +61,10 @@ import { EvcTreeComponent } from './evc-tree/evc-tree.component';
 export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
 
     public id: number = 0;
+    public show:boolean = true;
 
     public evcTree: EvcTree[] = [];
+    public evcTreeDirection: EvcTreeDirection = EvcTreeDirection.RIGHT_TO_LEFT;
     public rootElement?: EventcorrelationRootElement;
     public hasWritePermission: boolean = false;
 
@@ -89,6 +92,13 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    public resetHandler($event: EvcTreeDirection) {
+        this.show = false;
+        this.cdr.markForCheck();
+        this.evcTreeDirection = $event;
+        setTimeout(() =>{this.show = true; this.cdr.markForCheck();}, 100);
     }
 
     public loadEventcorrelation() {

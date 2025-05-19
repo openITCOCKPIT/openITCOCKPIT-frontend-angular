@@ -36,27 +36,27 @@
             <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
                 <c-nav-item>
                     <button
-                            class="nav-link"
-                            [ngClass]="{'active': selectedTab === DowntimereportsEnum.Edit}"
-                            (click)="changeTab(DowntimereportsEnum.Edit)">
+                        class="nav-link"
+                        [ngClass]="{'active': selectedTab === DowntimereportsEnum.Edit}"
+                        (click)="changeTab(DowntimereportsEnum.Edit)">
                         <fa-icon [icon]="['fas', 'edit']"></fa-icon>
                         {{ t('Generator') }}
                     </button>
                 </c-nav-item>
                 <c-nav-item *ngIf="report.downtimeReport">
                     <button
-                            class="nav-link"
-                            [ngClass]="{'active': selectedTab === DowntimereportsEnum.Calendar}"
-                            (click)="changeTab(DowntimereportsEnum.Calendar)">
+                        class="nav-link"
+                        [ngClass]="{'active': selectedTab === DowntimereportsEnum.Calendar}"
+                        (click)="changeTab(DowntimereportsEnum.Calendar)">
                         <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
                         {{ t('Calendar view') }}
                     </button>
                 </c-nav-item>
                 <c-nav-item *ngIf="report.downtimeReport">
                     <button
-                            class="nav-link"
-                            [ngClass]="{'active': selectedTab === DowntimereportsEnum.PieChart}"
-                            (click)="changeTab(DowntimereportsEnum.PieChart)">
+                        class="nav-link"
+                        [ngClass]="{'active': selectedTab === DowntimereportsEnum.PieChart}"
+                        (click)="changeTab(DowntimereportsEnum.PieChart)">
                         <fa-icon [icon]="['fas', 'pie-chart']"></fa-icon>
                         {{ t('Chart view') }}
                     </button>
@@ -66,7 +66,7 @@
         <c-card-body>
             <ng-container *ngIf="selectedTab === DowntimereportsEnum.Edit">
                 <c-alert color="info" *ngIf="errors['no_downtimes'] && errors['no_downtimes']['empty']">
-                    {{errors['no_downtimes']['empty']}}
+                    {{ errors['no_downtimes']['empty'] }}
                 </c-alert>
                 <!-- EVALUATION -->
                 <label cLabel>
@@ -102,13 +102,13 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                            name="post.report_format"
-                            id="post.report_format"
-                            [(ngModel)]="post.report_format"
-                            [options]="reportFormats"
-                            optionValue="key"
-                            optionLabel="value"
-                            oitcFormError [errors]="errors" errorField="report_format">
+                        name="post.report_format"
+                        id="post.report_format"
+                        [(ngModel)]="post.report_format"
+                        [options]="reportFormats"
+                        optionValue="key"
+                        optionLabel="value"
+                        oitcFormError [errors]="errors" errorField="report_format">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="report_format"></oitc-form-feedback>
                 </div>
@@ -131,14 +131,14 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                            name="post.timeperiod_id"
-                            id="post.timeperiod_id"
-                            [(ngModel)]="post.timeperiod_id"
-                            [options]="timeperiods"
-                            [placeholder]="'Please choose a timeperiod' | transloco"
-                            optionValue="key"
-                            optionLabel="value"
-                            oitcFormError [errors]="errors" errorField="timeperiod_id">
+                        name="post.timeperiod_id"
+                        id="post.timeperiod_id"
+                        [(ngModel)]="post.timeperiod_id"
+                        [options]="timeperiods"
+                        [placeholder]="'Please choose a timeperiod' | transloco"
+                        optionValue="key"
+                        optionLabel="value"
+                        oitcFormError [errors]="errors" errorField="timeperiod_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="timeperiod_id"></oitc-form-feedback>
                 </div>
@@ -180,13 +180,13 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                            name="post.reflection_state"
-                            id="post.reflection_state"
-                            [(ngModel)]="post.reflection_state"
-                            [options]="reflectionStates"
-                            optionValue="key"
-                            optionLabel="value"
-                            oitcFormError [errors]="errors" errorField="reflection_state">
+                        name="post.reflection_state"
+                        id="post.reflection_state"
+                        [(ngModel)]="post.reflection_state"
+                        [options]="reflectionStates"
+                        optionValue="key"
+                        optionLabel="value"
+                        oitcFormError [errors]="errors" errorField="reflection_state">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="reflection_state"></oitc-form-feedback>
                 </div>
@@ -255,7 +255,7 @@
                                     <c-card-body>
                                         <i class="fa fa-hourglass-start fa-xs"></i> {{ formatDate(arg.event.start.getTime()) }}
                                         <br/><i
-                                            class="fa fa-hourglass-end fa-xs"></i>   {{ formatDate(arg.event.end.getTime()) }}
+                                        class="fa fa-hourglass-end fa-xs"></i>   {{ formatDate(arg.event.end.getTime()) }}
                                         <br/><i class="fa fa-user fa-xs"></i>  {{ arg.event.extendedProps.author }}
                                         <br/><i class="fa fa-comment fa-xs"></i>  {{ arg.event.extendedProps.comment }}
                                     </c-card-body>
@@ -270,25 +270,29 @@
                 <c-card *ngIf="report.downtimeReport.hostsWithOutages" class="mb-3">
                     <c-card-header>
                         <h5 cCardTitle>
-                            <span class="fa-stack">
-                                <i class="fa fa-desktop fa-lg fa-stack-1x"></i>
-                                <i class="fa fa-exclamation-triangle fa-stack-1x fa-xs cornered cornered-lr text-danger padding-bottom-2"></i>
-                            </span>
+                            <fa-stack class="me-2">
+                                <fa-icon [icon]="['fas', 'desktop']" [stackItemSize]="'2x'"></fa-icon>
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']" [stackItemSize]="'1x'"
+                                         class="text-danger"
+                                         [transform]="'shrink-3 right-10'"
+                                         [style.bottom.px]="5" [style.position]="'absolute'"></fa-icon>
+                            </fa-stack>
                             {{ t('Involved in outages (Hosts):') }}
                         </h5>
                     </c-card-header>
                     <c-card-body>
-                        <ng-container *ngFor="let hostsWithOutages of report.downtimeReport.hostsWithOutages">
+                        <ng-container
+                            *ngFor="let hostsWithOutages of report.downtimeReport.hostsWithOutages; let i = index">
 
                             <oitc-hosts-bar-chart
-                                    [chartId]="42"
-                                    [barChartData]="hostsWithOutages.hostBarChartData"></oitc-hosts-bar-chart>
+                                [chartId]="'host-bar-chart-' + i"
+                                [barChartData]="hostsWithOutages.hostBarChartData"></oitc-hosts-bar-chart>
 
                             <oitc-host-availability-overview
-                                    *ngFor="let host of hostsWithOutages.hosts"
-                                    [host]="host"
-                                    [evaluationType]="post.evaluation_type"
-                                    [dynamicColour]="dynamicColour"
+                                *ngFor="let host of hostsWithOutages.hosts"
+                                [host]="host"
+                                [evaluationType]="post.evaluation_type"
+                                [dynamicColour]="dynamicColour"
                             />
                         </ng-container>
                     </c-card-body>
@@ -296,19 +300,22 @@
                 <c-card *ngIf="report.downtimeReport.hostsWithoutOutages" class="mb-3">
                     <c-card-header>
                         <h5 cCardTitle>
-                            <span class="fa-stack">
-                                <i class="fa fa-desktop fa-lg fa-stack-1x"></i>
-                                <i class="fa fa-check-circle fa-stack-1x fa-xs cornered cornered-lr ok padding-bottom-2"></i>
-                            </span>
+                            <fa-stack class="me-2">
+                                <fa-icon [icon]="['fas', 'desktop']" [stackItemSize]="'2x'"></fa-icon>
+                                <fa-icon [icon]="['fas', 'check-circle']" class="text-success"
+                                         [stackItemSize]="'1x'"
+                                         [transform]="'shrink-3 right-10'"
+                                         [style.bottom.px]="5" [style.position]="'absolute'"></fa-icon>
+                            </fa-stack>
                             {{ t('Hosts without outages:') }}
                         </h5>
                     </c-card-header>
                     <c-card-body>
                         <oitc-host-availability-overview
-                                *ngFor="let host of report.downtimeReport.hostsWithoutOutages.hosts"
-                                [host]="host"
-                                [evaluationType]="post.evaluation_type"
-                                [dynamicColour]="dynamicColour"
+                            *ngFor="let host of report.downtimeReport.hostsWithoutOutages.hosts"
+                            [host]="host"
+                            [evaluationType]="post.evaluation_type"
+                            [dynamicColour]="dynamicColour"
                         />
                     </c-card-body>
                 </c-card>

@@ -1,19 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  AlertComponent,
-  ColComponent,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormLabelDirective,
-  RowComponent
+    AlertComponent,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    RowComponent,
+    TooltipDirective
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgForOf, NgIf } from '@angular/common';
-
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 
 
 import { UsersService } from '../users.service';
@@ -25,30 +25,35 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Container, Engine, MoveDirection, OutMode, } from "@tsparticles/engine";
 import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
 import { NgParticlesService, NgxParticlesModule } from "@tsparticles/angular";
-import { InstantreportObjectTypes } from '../../instantreports/instantreports.enums';
 import { LayoutOptions, LayoutService } from '../../../layouts/coreui/layout.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { LoginResponse } from '../../../auth/auth.interface';
+import { TitleService } from '../../../services/title.service';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-users-login',
     imports: [
-    FaIconComponent,
-    AlertComponent,
-    FormsModule,
-    TranslocoDirective,
-    NgIf,
-    FormControlDirective,
-    FormLabelDirective,
-    FormCheckComponent,
-    RowComponent,
-    ColComponent,
-    NgxParticlesModule,
-    NgForOf,
-    FormCheckInputDirective,
-    FormCheckLabelDirective
-],
+        FaIconComponent,
+        AlertComponent,
+        FormsModule,
+        TranslocoDirective,
+        NgIf,
+        FormControlDirective,
+        FormLabelDirective,
+        FormCheckComponent,
+        RowComponent,
+        ColComponent,
+        NgxParticlesModule,
+        NgForOf,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        XsButtonDirective,
+        TooltipDirective,
+        NgClass,
+        RouterLink
+    ],
     templateUrl: './users-login.component.html',
     styleUrl: './users-login.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -63,6 +68,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     private readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly TitleService: TitleService = inject(TitleService);
     private _csrfToken: string = '';
 
     protected logoUrl: string = '';
@@ -71,8 +77,10 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     protected hasValidSslCertificate: boolean = false;
     protected loginAnimation: boolean = true;
     protected disableAnimation: boolean = false;
+    protected enforceDisableAnimation: boolean = false;
+    protected disableSocialButtons: boolean = false;
+    protected enableColumnLayout: boolean = false;
     protected disableLogin: boolean = false;
-    protected readonly InstantreportObjectTypes = InstantreportObjectTypes;
     protected particlesOptions: any = {
         background: {
             color: {
@@ -156,7 +164,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         this.LayoutService.setLayout(LayoutOptions.Blank);
 
         this.subscriptions.add(this.UsersService.getLoginDetails().subscribe(data => {
-            this.cdr.markForCheck();
+            this.TitleService.setTitle('Login');
 
             this.images = data.images.images;
             this.isSsoEnabled = data.isSsoEnabled;
@@ -167,6 +175,12 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             this.isCustomLoginBackground = data.isCustomLoginBackground;
             this.loginAnimation = !data.disableAnimation;
             this.disableAnimation = data.disableAnimation; // Server wants us to not have this feature at all
+            if (data.disableAnimation) {
+                // If DISABLE_LOGIN_ANIMATION is set to true, we remove the animation checkbox from the login screen
+                this.enforceDisableAnimation = true;
+            }
+            this.disableSocialButtons = data.disableSocialButtons;
+            this.enableColumnLayout = data.enableColumnLayout;
 
             switch (data.images.particles) {
                 case 'none':
@@ -195,29 +209,39 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 });
             }
 
-
             this._csrfToken = data._csrfToken;
 
-            var hasSsoError = false;
-            if (data.hasOwnProperty('errorMessages')) {
-                for (var index in data.errorMessages) {
+            let hasSsoError = false;
+            if (data.hasOwnProperty('errorMessages') && data.errorMessages.length > 0) {
+                for (let index in data.errorMessages) {
                     hasSsoError = true;
                     this.NotyService.genericError(data.errorMessages[index]);
                 }
-            }
+            } else if (data.hasOwnProperty('successMessages') && data.successMessages.length > 0) {
+                for (let index in data.successMessages) {
+                    // User got redirected back from oAuth servers login screen to openITCOCKPIT
 
-            if (data.isLoggedIn) {
-                //User maybe logged in via oAuth?
-                this.isOAuthResponse(hasSsoError);
-            }
+                    this.NotyService.genericSuccess('Login successful');
 
-            if (!data.isLoggedIn && !hasSsoError) {
+                    setTimeout(() => {
+                        this.router.navigate([this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/dashboards/index')]);
+                    }, 1000);
+                }
+            } else if (!data.isLoggedIn && !hasSsoError) {
                 if (data.isSsoEnabled && data.forceRedirectSsousersToLoginScreen) {
                     setTimeout(function () {
                         window.location.href = '/users/login?redirect_sso=true';
                     }, 10);
                 }
             }
+
+            // Set hardcoded demo credentials if system is running in demo mode
+            if (data.demoMode) {
+                this.post.email = 'demo@openitcockpit.io';
+                this.post.password = 'demo123';
+            }
+
+            this.cdr.markForCheck();
         }));
     }
 
@@ -237,7 +261,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
             if (data.success) {
                 this.disableLogin = false;
-                this.NotyService.genericSuccess('Login successful', 'success');
+                this.NotyService.genericSuccess('Login successful');
 
                 // Load user permissions
                 this.PermissionsService.loadPermissions();
@@ -251,6 +275,8 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
             // still required?  this.loadCsrf();
             this.disableLogin = false;
+            this.hasValidSslCertificate = false;
+            this.cdr.markForCheck();
 
             if (data.hasOwnProperty('errors')) {
                 let errors: { [key: string]: string[] } = data.errors as unknown as { [key: string]: string[] };
@@ -265,37 +291,12 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 }
             }
 
-            this.disableLogin = false;
-            this.hasValidSslCertificate = false;
         }));
 
     }
 
-    protected isOAuthResponse = (hasSsoError: boolean) => {
-        if (hasSsoError === true) {
-            return;
-        }
-
-        //    var sourceUrl = parseUri(decodeURIComponent(window.location.href)).source;
-        var sourceUrl = '';
-        if (sourceUrl.includes('/#!/')) {
-            sourceUrl = sourceUrl.replace('/#!', '');
-        }
-
-        //    var query = parseUri(sourceUrl).queryKey;
-        let query = {};
-        if (query.hasOwnProperty('code') && query.hasOwnProperty('state')) {
-            // User got redirected back from oAuth servers login screen to openITCOCKPIT
-
-            this.NotyService.genericSuccess('Login successful');
-
-            window.location.href = this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/');
-        }
-
-    };
-
     private getLocalStorageItemWithDefaultAndRemoveItem = function (key: string, defaultValue: any) {
-        var val = window.localStorage.getItem(key);
+        let val = window.localStorage.getItem(key);
         if (val === null) {
             return defaultValue;
         }

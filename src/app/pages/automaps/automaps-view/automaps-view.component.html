@@ -8,7 +8,7 @@
                 </a></li>
             <li class="breadcrumb-item">
                 <a *oitcPermission="['automaps', 'index']" [routerLink]="['/', 'automaps', 'index']">
-                    <fa-icon [icon]="['fas', 'globe-europe']"></fa-icon>
+                    <fa-icon [icon]="['fas', 'magic-wand-sparkles']"></fa-icon>
                     {{ t('Auto Maps') }}
                 </a>
             </li>
@@ -21,7 +21,7 @@
 
     <oitc-query-handler-checker></oitc-query-handler-checker>
 
-    <oitc-block-loader *ngIf="!result"></oitc-block-loader>
+    <oitc-block-loader *ngIf="!result" height="25rem"></oitc-block-loader>
     <c-card class="mb-3" *ngIf="result">
         <c-card-header>
             <h5 cCardTitle>{{ t('View auto map: ') }}

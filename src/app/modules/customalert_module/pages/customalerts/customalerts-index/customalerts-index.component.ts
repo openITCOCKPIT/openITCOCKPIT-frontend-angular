@@ -13,26 +13,26 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective,
-  TextColorDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective,
+    TextColorDirective
 } from '@coreui/angular';
 import { IndexPage } from '../../../../../pages.interface';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
@@ -88,53 +88,53 @@ import { IntervalPickerComponent } from '../../../../../components/interval-pick
 @Component({
     selector: 'oitc-customalerts-index',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    CardHeaderComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardTitleDirective,
-    RowComponent,
-    ColComponent,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    ItemSelectComponent,
-    MatSort,
-    MatSortHeader,
-    NgForOf,
-    NgIf,
-    TableDirective,
-    TableLoaderComponent,
-    TextColorDirective,
-    ContainerComponent,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    SelectAllComponent,
-    FilterBookmarkComponent,
-    DebounceDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    PaginatorModule,
-    TranslocoPipe,
-    XsButtonDirective,
-    MultiSelectComponent,
-    FormCheckInputDirective,
-    NavComponent,
-    NavItemComponent,
-    FormCheckComponent,
-    FormCheckLabelDirective,
-    CustomalertsAnnotateModalComponent,
-    CustomalertsCloseModalComponent,
-    BadgeOutlineComponent,
-    NgClass,
-    CardFooterComponent,
-    IntervalPickerComponent
-],
+        TranslocoDirective,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        CardHeaderComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardTitleDirective,
+        RowComponent,
+        ColComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NgForOf,
+        NgIf,
+        TableDirective,
+        TableLoaderComponent,
+        TextColorDirective,
+        ContainerComponent,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        SelectAllComponent,
+        FilterBookmarkComponent,
+        DebounceDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        PaginatorModule,
+        TranslocoPipe,
+        XsButtonDirective,
+        MultiSelectComponent,
+        FormCheckInputDirective,
+        NavComponent,
+        NavItemComponent,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        CustomalertsAnnotateModalComponent,
+        CustomalertsCloseModalComponent,
+        BadgeOutlineComponent,
+        NgClass,
+        CardFooterComponent,
+        IntervalPickerComponent
+    ],
     templateUrl: './customalerts-index.component.html',
     styleUrl: './customalerts-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -147,7 +147,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
-    private refreshTimer: number = 0;
+    private refreshInterval: any = null;
 
     protected readonly keepOrder = keepOrder;
     protected filter: CustomAlertsIndexFilter = getDefaultCustomAlertsIndexFilter();
@@ -160,6 +160,17 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     protected groupViewByHost: boolean = false;
     protected groupedList: { [key: number]: Customalert[] } = {};
     protected selectedAutoRefresh: SelectKeyValue = {key: 0, value: 'Disabled'};
+
+    public ngOnInit(): void {
+        this.loadContainers();
+        //this.refresh();
+        // setFilterAndLoad will do the refresh for us
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+        this.stopRefreshInterval();
+    }
 
     private getSelectedItems(customAlert?: Customalert): Customalert[] {
         if (customAlert) {
@@ -212,15 +223,27 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
         if (value) {
             this.selectedAutoRefresh = value;
         }
-        if (this.selectedAutoRefresh.key === 0) {
-            window.clearTimeout(this.refreshTimer);
-            return;
+
+        this.stopRefreshInterval();
+
+        if (this.selectedAutoRefresh.key > 0) {
+            this.startRefreshInterval(this.selectedAutoRefresh.key);
         }
-        if (this.refreshTimer > 0) {
-            window.clearTimeout(this.refreshTimer);
+
+    }
+
+    private stopRefreshInterval() {
+        if (this.refreshInterval) {
+            clearInterval(this.refreshInterval);
         }
-        this.refresh();
-        this.refreshTimer = window.setTimeout(this.onRefreshChange, this.selectedAutoRefresh.key * 1000);
+        this.refreshInterval = null;
+    }
+
+    private startRefreshInterval(interval: number) {
+        this.stopRefreshInterval();
+        this.refreshInterval = setInterval(() => {
+            this.refresh();
+        }, interval * 1000);
     }
 
     public onSelectedBookmark(filterstring: string) {
@@ -236,6 +259,8 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
             filter.Customalerts.message = bookmarkfilter.Customalerts.message || '';
             filter.Customalerts.state = bookmarkfilter.Customalerts.state || [true, true, false, false];
             filter.Hosts.container_id = bookmarkfilter.Hosts.container_id || [];
+            filter.Hosts.name = bookmarkfilter.Hosts.name || '';
+            filter.servicename = bookmarkfilter.servicename || '';
             filter.recursive = bookmarkfilter.recursive || false;
             this.setFilterAndLoad(filter);
         }
@@ -250,10 +275,6 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
         this.onFilterChange(true);
     }
 
-    public ngOnInit(): void {
-        this.loadContainers();
-        this.refresh();
-    }
 
     private loadContainers(): void {
         this.subscriptions.add(this.CustomAlertsService.loadContainers()
@@ -261,10 +282,6 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
                 this.containers = result.containers;
                 this.cdr.markForCheck();
             }))
-    }
-
-    public ngOnDestroy(): void {
-        this.subscriptions.unsubscribe();
     }
 
     // Show or hide the filter
@@ -307,6 +324,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     }
 
     protected hostIdsInOrder: number[] = [];
+
     protected refresh(): void {
         this.SelectionServiceService.deselectAll();
         this.subscriptions.add(this.CustomAlertsService.getIndex(this.params, this.filter)
@@ -337,6 +355,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
 
     protected readonly CustomAlertsState = CustomAlertsState;
 }
+
 const keepOrder = (a: any, b: any) => a;
 
 // This pipe uses the angular keyvalue pipe. but doesn't change order.

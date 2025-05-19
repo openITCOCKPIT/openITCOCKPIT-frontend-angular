@@ -13,29 +13,29 @@ import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownDividerDirective,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownDividerDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -54,52 +54,54 @@ import {
 import { NotyService } from "../../../layouts/coreui/noty.service";
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { IndexPage } from '../../../pages.interface';
+import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-servicetemplategroups-index',
     imports: [
-    TranslocoDirective,
-    DeleteAllModalComponent,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    DropdownDividerDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ItemSelectComponent,
-    MatSort,
-    MatSortHeader,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    ReactiveFormsModule,
-    RowComponent,
-    SelectAllComponent,
-    TableDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    TableLoaderComponent
-],
+        TranslocoDirective,
+        DeleteAllModalComponent,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        DropdownDividerDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        ReactiveFormsModule,
+        RowComponent,
+        SelectAllComponent,
+        TableDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        TableLoaderComponent,
+        AsyncPipe
+    ],
     templateUrl: './servicetemplategroups-index.component.html',
     styleUrl: './servicetemplategroups-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: ServicetemplategroupsService } // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ServicetemplategroupsService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -111,16 +113,14 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
+    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly cdr = inject(ChangeDetectorRef);
 
     protected params: ServiceTemplateGroupsIndexParams = {} as ServiceTemplateGroupsIndexParams;
     protected selectedItems: DeleteAllItem[] = [];
     protected readonly router: Router = inject(Router);
     protected hideFilter: boolean = true;
-    protected servicetemplategroups: ServiceTemplateGroupsIndexRoot = {
-        all_servicetemplategroups: [],
-        _csrfToken: ''
-    }
+    protected servicetemplategroups?: ServiceTemplateGroupsIndexRoot;
 
     // Show or hide the filter
     public toggleFilter() {
@@ -222,6 +222,12 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
 
@@ -238,6 +244,10 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
         }).join(',');
         if (ids) {
             this.router.navigate(['/', 'servicetemplategroups', 'copy', ids]);
+        } else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 }

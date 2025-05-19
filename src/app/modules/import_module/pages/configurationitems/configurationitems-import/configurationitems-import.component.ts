@@ -1,17 +1,17 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import {
-  AlertComponent,
-  CalloutComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    AlertComponent,
+    CalloutComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -49,31 +49,31 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
     selector: 'oitc-configurationitems-import',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PermissionDirective,
-    TranslocoDirective,
-    NgClass,
-    RouterLink,
-    RowComponent,
-    ColComponent,
-    AsyncPipe,
-    TableDirective,
-    ProgressBarModule,
-    CalloutComponent,
-    LabelLinkComponent,
-    AlertComponent,
-    NgForOf,
-    KeyValuePipe
-],
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        PermissionDirective,
+        TranslocoDirective,
+        NgClass,
+        RouterLink,
+        RowComponent,
+        ColComponent,
+        AsyncPipe,
+        TableDirective,
+        ProgressBarModule,
+        CalloutComponent,
+        LabelLinkComponent,
+        AlertComponent,
+        NgForOf,
+        KeyValuePipe
+    ],
     templateUrl: './configurationitems-import.component.html',
     styleUrl: './configurationitems-import.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -192,6 +192,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                 },
                 error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
                     this.cdr.markForCheck();
+                    this.importSuccessful = false;
 
                     let message = '';
                     if (typeof error === 'string') {

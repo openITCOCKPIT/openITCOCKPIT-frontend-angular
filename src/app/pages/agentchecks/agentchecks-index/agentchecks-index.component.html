@@ -153,9 +153,9 @@
                 <tr *ngFor="let agentcheck of agentchecks.all_agentchecks">
                     <td class="text-center">
                         <oitc-item-select
-                            *oitcPermission="['agentchecks', 'delete']"
-                            [disabled]="!agentcheck.allow_edit"
-                            [item]="agentcheck"></oitc-item-select>
+                                *oitcPermission="['agentchecks', 'delete']"
+                                [disabled]="!agentcheck.allow_edit"
+                                [item]="agentcheck"></oitc-item-select>
                     </td>
 
                     <td>{{ agentcheck.name }}</td>
@@ -164,9 +164,9 @@
 
                     <td>
                         <oitc-label-link
-                            [objectId]="agentcheck.servicetemplate.id"
-                            [route]="'/servicetemplates/edit'"
-                            [permissions]="'servicetemplates.edit'"
+                                [objectId]="agentcheck.servicetemplate.id"
+                                [route]="'/servicetemplates/edit'"
+                                [permissions]="'servicetemplates.edit'"
                         >
                             {{ agentcheck.servicetemplate.template_name }}
                         </oitc-label-link>
@@ -198,18 +198,19 @@
 
 
             <oitc-no-records
-                *ngIf="agentchecks && agentchecks.all_agentchecks.length === 0"></oitc-no-records>
+                    *ngIf="agentchecks && agentchecks.all_agentchecks.length === 0"></oitc-no-records>
             <ng-container *ngIf="agentchecks && agentchecks.all_agentchecks">
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                [itemsCount]="agentchecks.all_agentchecks.length"></oitc-select-all>
+                                    [itemsCount]="agentchecks.all_agentchecks.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['agentchecks', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -221,13 +222,13 @@
                 </c-container>
 
                 <c-container
-                    [fluid]="true">
+                        [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="agentchecks"
-                                [paginateOrScroll]="agentchecks"></oitc-paginate-or-scroll>
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    *ngIf="agentchecks"
+                                    [paginateOrScroll]="agentchecks"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>

@@ -3,13 +3,16 @@ import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-a
 import { VmwareEsxDirectlyWizardGet, VmwareEsxDirectlyWizardPost } from './vmware-esx-directly-wizard.interface';
 import { VmwareEsxDirectlyWizardService } from './vmware-esx-directly-wizard.service';
 import {
-    AccordionButtonDirective, AccordionComponent, AccordionItemComponent,
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     FormControlDirective,
-    FormLabelDirective, TemplateIdDirective
+    FormLabelDirective,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -22,6 +25,7 @@ import {
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-vmware-esx-directly',
@@ -45,7 +49,8 @@ import { FormsModule } from '@angular/forms';
         AccordionButtonDirective,
         AccordionComponent,
         AccordionItemComponent,
-        TemplateIdDirective
+        TemplateIdDirective,
+        BackButtonDirective
     ],
     templateUrl: './vmware-esx-directly.component.html',
     styleUrl: './vmware-esx-directly.component.css',

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
@@ -49,6 +49,7 @@ import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 
 @Component({
@@ -103,6 +104,8 @@ export class AutoreportIndexComponent implements OnInit, OnDestroy, IndexPage {
     private cdr = inject(ChangeDetectorRef);
     private subscriptions: Subscription = new Subscription();
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private readonly notyService: NotyService = inject(NotyService);
     private readonly modalService = inject(ModalService);
     private readonly AutoreportsService: AutoreportsService = inject(AutoreportsService);
     public hideFilter: boolean = true;
@@ -171,6 +174,13 @@ export class AutoreportIndexComponent implements OnInit, OnDestroy, IndexPage {
                 };
             });
         }
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         this.selectedItems = items;
 
         // open modal

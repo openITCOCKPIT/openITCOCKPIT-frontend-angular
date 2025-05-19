@@ -366,6 +366,12 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
             let servicestate = params['servicestate'] || undefined;
             if (servicestate) {
+                //first reset all states
+                this.filter.Servicestatus.current_state.ok = false;
+                this.filter.Servicestatus.current_state.warning = false;
+                this.filter.Servicestatus.current_state.critical = false;
+                this.filter.Servicestatus.current_state.unknown = false;
+
                 servicestate = [].concat(servicestate); // make sure we always get an array
                 servicestate.forEach((state: any) => {
                     switch (parseInt(state, 10)) {
@@ -386,9 +392,10 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
                     }
                 });
             }
+            this.setFilterAndLoad(this.filter);
+            this.cdr.markForCheck();
         });
-        this.setFilterAndLoad(this.filter);
-        this.cdr.markForCheck();
+
     }
 
     public ngOnDestroy() {
@@ -745,6 +752,12 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             });
         }
 
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
 
@@ -759,6 +772,10 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Service.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'services', 'copy', ids]);
+        } else{
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 

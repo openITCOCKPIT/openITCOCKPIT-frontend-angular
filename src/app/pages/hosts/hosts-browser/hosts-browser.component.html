@@ -12,7 +12,7 @@
     <oitc-browser-loader *ngIf="!result"></oitc-browser-loader>
     <c-card class="mb-3 mt-3" *ngIf="result">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Host') }}:
+            <h5 cCardTitle class="word-break">{{ t('Host') }}:
                 <small class="fw-300">
                     {{ result.mergedHost.name }}
                 </small>
@@ -511,19 +511,21 @@
                                     </thead>
                                     <tbody>
                                     <tr *ngFor="let parenthost of result.parenthosts">
-                                        <td class="text-center">
-                                            <oitc-hoststatus-simple-icon
-                                                [hoststatus]="Number(result.parentHostStatus[String(parenthost.uuid)].currentState)"
-                                                [hardstate]="Boolean(result.parentHostStatus[String(parenthost.uuid)].isHardstate)"></oitc-hoststatus-simple-icon>
-                                        </td>
-                                        <td>
-                                            <a [routerLink]="['/', 'hosts', 'browser', parenthost.id]">
-                                                {{ parenthost.name }}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            {{ result.parentHostStatus[String(parenthost.uuid)].last_state_change }}
-                                        </td>
+                                        @if (result.parentHostStatus.hasOwnProperty(String(parenthost.uuid))) {
+                                            <td class="text-center">
+                                                <oitc-hoststatus-simple-icon
+                                                    [hoststatus]="Number(result.parentHostStatus[String(parenthost.uuid)].currentState)"
+                                                    [hardstate]="Boolean(result.parentHostStatus[String(parenthost.uuid)].isHardstate)"></oitc-hoststatus-simple-icon>
+                                            </td>
+                                            <td>
+                                                <a [routerLink]="['/', 'hosts', 'browser', parenthost.id]">
+                                                    {{ parenthost.name }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {{ result.parentHostStatus[String(parenthost.uuid)].last_state_change }}
+                                            </td>
+                                        }
                                     </tr>
                                     </tbody>
                                 </table>

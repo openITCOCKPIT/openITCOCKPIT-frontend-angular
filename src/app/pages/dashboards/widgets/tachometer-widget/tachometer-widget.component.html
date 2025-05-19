@@ -41,37 +41,37 @@
                             <label cLabel [for]="'tachometer_service_id_'+widget.id">
                                 {{ t('Service') }}
                             </label>
-                            <c-input-group>
-                                <oitc-select-optgroup
-                                    [attr.id]="'tachometer_service_id_'+widget.id"
-                                    [name]="'tachometer_service_id_'+widget.id"
-                                    optionValue="value"
-                                    optionLabel="label"
-                                    [options]="services"
-                                    [(ngModel)]="service_id"
-                                    [searchCallback]="loadServicesByString"
-                                    (onChange)="loadMetricsByServiceId()"
-                                    [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
-                                    class="flex-1">
-                                </oitc-select-optgroup>
-                            </c-input-group>
+
+                            <oitc-select-optgroup
+                                [attr.id]="'tachometer_service_id_'+widget.id"
+                                [name]="'tachometer_service_id_'+widget.id"
+                                optionValue="value"
+                                optionLabel="label"
+                                [options]="services"
+                                [(ngModel)]="service_id"
+                                [searchCallback]="loadServicesByString"
+                                (onChange)="loadMetricsByServiceId()"
+                                [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
+                                class="flex-1">
+                            </oitc-select-optgroup>
+
                         </div>
 
                         <div class="mb-3">
                             <label cLabel [for]="'tachometer_metric_'+widget.id">
                                 {{ t('Metric') }}
                             </label>
-                            <c-input-group>
-                                <oitc-select
-                                    [attr.id]="'tachometer_metric_'+widget.id"
-                                    [name]="'tachometer_metric_'+widget.id"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [options]="metrics"
-                                    [(ngModel)]="metric"
-                                    class="flex-1">
-                                </oitc-select>
-                            </c-input-group>
+
+                            <oitc-select
+                                [attr.id]="'tachometer_metric_'+widget.id"
+                                [name]="'tachometer_metric_'+widget.id"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="metrics"
+                                [(ngModel)]="metric"
+                                class="flex-1">
+                            </oitc-select>
+
                         </div>
 
                         <div class="mb-3">

@@ -1,6 +1,5 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { Importer } from '../importers/importers.interface';
-import { User } from '../../../../pages/users/users.interface';
 import { HosttemplatePost } from '../../../../pages/hosttemplates/hosttemplates.interface';
 import { SatelliteEntity } from '../../../distribute_module/pages/satellites/satellites.interface';
 import { HostEntity } from '../../../../pages/hosts/hosts.interface';
@@ -16,7 +15,6 @@ export interface ImportedhostsIndexRoot extends PaginateOrScroll {
     importers: Importer[]
     _csrfToken: string
 }
-
 
 export interface Importedhost {
     id: number
@@ -40,7 +38,9 @@ export interface Importedhost {
     imported_hosts_to_servicetemplategroups: ImportedHostsToServicetemplategroup[]
     imported_hosts_to_servicetemplates: ImportedHostsToServicetemplate[]
     imported_hosts_to_containers_sharing: ImportedHostsToContainersSharing[]
-    user: User | null
+    user: {
+        id: number
+    } | null
     imported_file: any
     importer: Importer
     hosttemplate: HosttemplatePost
@@ -326,4 +326,21 @@ export interface ImportedHostElements {
     satellites: SelectKeyValue[]
     agentchecks: SelectKeyValue[]
 
+}
+
+export interface ImportDataResponse {
+    rawData: any[]
+    errors: ImportDataErrors
+    success: boolean
+    message: string
+}
+
+export interface ImportDataErrors {
+    notValidRawData: NotValidRawData
+}
+
+export interface NotValidRawData {
+    error: string
+    description: string
+    invalidData: any[]
 }

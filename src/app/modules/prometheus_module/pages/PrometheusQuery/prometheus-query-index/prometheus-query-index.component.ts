@@ -185,7 +185,5 @@ export class PrometheusQueryIndexComponent implements OnInit, OnDestroy {
                 'metrics[]': items
             }
         });
-
-        console.error(items);
     }
 }

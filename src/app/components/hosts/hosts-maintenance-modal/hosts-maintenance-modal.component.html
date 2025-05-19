@@ -50,7 +50,7 @@
                     <label>{{ t('From') }}:</label>
                     <input id="downtimeModal.from_date" [(ngModel)]="downtimeModal.from_date" type="date"
                            class="form-control">
-                    <input id="downtimeModal.from_time" class="form-control"
+                    <input id="downtimeModal.from_time" class="form-control mt-1"
                            [(ngModel)]="downtimeModal.from_time"
                            type="time">
                     <div *ngIf="errors && errors.from_date" cFormText>
@@ -68,7 +68,7 @@
                     <label>{{ t('To') }}:</label>
                     <input id="downtimeModal.to_date" [(ngModel)]="downtimeModal.to_date" type="date"
                            class="form-control">
-                    <input id="downtimeModal.to_time" class="form-control"
+                    <input id="downtimeModal.to_time" class="form-control mt-1"
                            [(ngModel)]="downtimeModal.to_time"
                            type="time">
                     <div *ngIf="errors && errors.to_date" cFormText>

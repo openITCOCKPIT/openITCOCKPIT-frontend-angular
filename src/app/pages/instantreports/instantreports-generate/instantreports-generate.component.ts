@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  FormControlDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  NavComponent,
-  NavItemComponent,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FormControlDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -44,44 +44,44 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { PieChartMetric } from '../../../components/charts/charts.interface';
 
 
-
 import { InstantreportViewerComponent } from './instantreport-viewer/instantreport-viewer.component';
 
 @Component({
     selector: 'oitc-instantreports-generate',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PermissionDirective,
-    TranslocoDirective,
-    XsButtonDirective,
-    CardFooterComponent,
-    RouterLink,
-    NgClass,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    InputGroupComponent,
-    RequiredIconComponent,
-    SelectComponent,
-    RowComponent,
-    ColComponent,
-    InstantreportViewerComponent
-],
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        PermissionDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        CardFooterComponent,
+        RouterLink,
+        NgClass,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        InputGroupComponent,
+        RequiredIconComponent,
+        SelectComponent,
+        RowComponent,
+        ColComponent,
+        InstantreportViewerComponent
+    ],
     templateUrl: './instantreports-generate.component.html',
     styleUrl: './instantreports-generate.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
     public isGeneratingReport: boolean = false;
+    public isReportGenerated: boolean = false;
     public selectedTab: 'generate' | 'report' = 'generate';
     public errors: GenericValidationError | null = null;
 
@@ -164,6 +164,8 @@ export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
                                 this.isGeneratingReport = false;
                                 const blob = new Blob([data], {type: 'application/pdf'});
 
+                                this.cdr.markForCheck();
+
                                 // Open save as dialog in all browsers
                                 saveAs(blob, filename);
                             },
@@ -171,6 +173,7 @@ export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
                                 this.notyService.genericError(
                                     this.TranslocoService.translate('An error occured while generating the report')
                                 );
+                                this.cdr.markForCheck();
                             }
                         }));
                     } else {
@@ -192,10 +195,12 @@ export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
             }
 
             this.isGeneratingReport = true;
+            this.isReportGenerated = false;
             this.subscriptions.add(this.InstantreportsService.generateReportHtml(params)
                 .subscribe((result) => {
                     this.cdr.markForCheck();
                     this.isGeneratingReport = false;
+                    this.isReportGenerated = true;
                     if (result.success) {
                         // Success - Form data is valid - now we can generate the report
                         this.report = result.data as InstantreportGenerateResponse;

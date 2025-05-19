@@ -24,7 +24,7 @@
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
 
     <form cForm (ngSubmit)="updateMap()" *ngIf="post">
         <c-card class="mb-3">
@@ -63,17 +63,40 @@
                         id="container"
                         optionValue="key"
                         optionLabel="value"
-                        [(ngModel)]="post.Map.containers._ids"
+                        [disabled]="!areContainersChangeable"
+                        [(ngModel)]="containersSelection"
                         [options]="containers"
                         [debounce]="true"
                         (onChange)="onContainerChange()"
                         oitcFormError [errors]="errors" errorField="containers">
                     </oitc-multi-select>
 
-                    <div *ngIf="post.Map.containers._ids.length === 0" class="text-warning-glow pt-1">
+                    <div *ngIf="containersSelection.length === 0 && requiredContainers.length === 0"
+                         class="text-warning-glow pt-1">
                         {{ t('Please select a container.') }}
                     </div>
                     <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3" *ngIf="requiredContainers.length > 0">
+                    <label cLabel for="requiredContainers">
+                        {{ t('Required containers') }}
+                    </label>
+
+                    <oitc-multi-select
+                        name="requiredContainers"
+                        id="requiredContainers"
+                        [(ngModel)]="requiredContainers"
+                        optionValue="key"
+                        optionLabel="value"
+                        [labelSuffix]="'🔐'"
+                        [disabled]="true"
+                        [options]="this.requiredContainersList">
+                    </oitc-multi-select>
+                    <div class="col-12 help-block text-info">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('The required containers are needed to display the map in the rotations. If you want to edit them, remove the map from the respective rotations that are assigned to these containers. When saving, the required containers are saved together with the containers entered above.') }}
+                    </div>
                 </div>
 
                 @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {

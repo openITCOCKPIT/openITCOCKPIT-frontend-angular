@@ -24,10 +24,13 @@ export interface LogentryIndexParams {
     direction: 'asc' | 'desc' | '', // asc or desc
     'filter[Logentries.logentry_data]': '',
     'filter[Logentries.logentry_type]': string [],
-    'filter[Host.id][]': number[]
+    'filter[Host.id][]': number[],
+    'filter[from]': Date | string,
+    'filter[to]': Date | string,
 }
 
 export function getDefaultLogentriesParams(): LogentryIndexParams {
+    let now = new Date();
     return {
         angular: true,
         scroll: true,
@@ -36,6 +39,8 @@ export function getDefaultLogentriesParams(): LogentryIndexParams {
         direction: 'desc',
         'filter[Logentries.logentry_data]': '',
         'filter[Logentries.logentry_type]': [],
-        'filter[Host.id][]': []
+        'filter[Host.id][]': [],
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 1000 * 30)),
+        'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
     }
 }

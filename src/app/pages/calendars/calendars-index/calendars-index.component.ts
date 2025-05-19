@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
@@ -53,6 +53,7 @@ import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-a
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { IndexPage } from '../../../pages.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-calendars-index',
@@ -113,6 +114,8 @@ export class CalendarsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private subscriptions: Subscription = new Subscription();
     private CalendarsService = inject(CalendarsService)
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
     private cdr = inject(ChangeDetectorRef);
 
     constructor(private _liveAnnouncer: LiveAnnouncer) {
@@ -182,6 +185,12 @@ export class CalendarsIndexComponent implements OnInit, OnDestroy, IndexPage {
                     displayName: item.name
                 };
             });
+        }
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
 
         // Pass selection to the modal

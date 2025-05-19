@@ -375,6 +375,10 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
             let hoststate = params['hoststate'] || undefined;
             if (hoststate) {
+                //first reset all states
+                this.currentStateFilter.up = false;
+                this.currentStateFilter.down = false;
+                this.currentStateFilter.unreachable = false
                 hoststate = [].concat(hoststate); // make sure we always get an array
                 hoststate.forEach((state: any) => {
                     switch (parseInt(state, 10)) {
@@ -392,7 +396,6 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
                     }
                 });
             }
-
             // Process all query params first and then trigger the load function
             this.loadHosts();
         });
@@ -593,6 +596,10 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Host.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'hosts', 'copy', ids]);
+        }else {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 

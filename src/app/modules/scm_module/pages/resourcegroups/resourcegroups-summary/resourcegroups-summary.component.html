@@ -364,11 +364,9 @@
                     </c-row>
                 </c-col>
             </c-row>
-            <c-row *ngIf="resourcegroups && resourcegroups.length === 0">
-                <c-col class="text-center text-danger fst-italic">
-                    {{ t('No entries match the selection') }}
-                </c-col>
-            </c-row>
+
+            <oitc-no-records *ngIf="resourcegroups && resourcegroups.length === 0"></oitc-no-records>
+
         </c-card-body>
     </c-card>
 </ng-container>

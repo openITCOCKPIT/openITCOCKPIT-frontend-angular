@@ -43,6 +43,7 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
 
     // These fields are implemented in the child classes
     protected WizardService: WizardsService = {} as WizardsService;
+    protected WizardGet: WizardGet = {} as WizardGet;
     protected post: WizardPost = {
         host_id: 0
     } as WizardPost;
@@ -56,6 +57,7 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
         // Fetch wizard settings and service templates. This method must be implemented in the child class
         this.subscriptions.add(this.WizardService.fetch(this.post.host_id)
             .subscribe((result: WizardGet) => {
+                this.WizardGet = result;
                 // Create services from service the templates.
                 for (let key in result.servicetemplates) {
                     this.post.services.push(
@@ -78,17 +80,24 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
         this.subscriptions.unsubscribe();
     }
 
-    private isServiceAlreadyPresent(objectOfCurrentServices: { [key: string]: string }, serviceName: string): boolean {
+    protected isServiceAlreadyPresent(objectOfCurrentServices: {
+        [key: string]: string
+    }, serviceName: string): boolean {
         return Object.values(objectOfCurrentServices).includes(serviceName);
     }
 
     public submit(): void {
-        // Remove all services from this.post where createService is false.
-        this.post.services = this.post.services.filter((service: Service) => {
+        // Create a deep copy of this.post
+        const updatedPost = JSON.parse(JSON.stringify(this.post));
+
+        // Remove all services from the copied object where createService is false
+        updatedPost.services = updatedPost.services.filter((service: Service) => {
             return service.createService;
         });
-        this.subscriptions.add(this.WizardService.submit(this.post)
+
+        this.subscriptions.add(this.WizardService.submit(updatedPost)
             .subscribe((result: GenericResponseWrapper) => {
+                this.errors = {} as GenericValidationError;
                 if (result.success) {
                     const title: string = this.TranslocoService.translate('Success');
                     const msg: string = this.TranslocoService.translate('Data saved successfully');

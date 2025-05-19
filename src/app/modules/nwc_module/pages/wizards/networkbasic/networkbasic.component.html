@@ -46,7 +46,9 @@
                     <div class="btn-group btn-group-xs w-100 h-100">
                         <button type="button" class="btn btn-primary"
                                 [title]="'Back' | transloco"
-                                style="border-radius: 0;">
+                                style="border-radius: 0;"
+                                [fallbackUrl]="['wizards', 'index']"
+                                oitcBackButton>
                             <i class="fa fa-arrow-left"></i>
                         </button>
 
@@ -198,8 +200,9 @@
             </fieldset>
 
             <oitc-wizards-dynamicfields
-                    [post]="post.services"
-                    [title]="'Printer services'|transloco"
+                    [(post)]="post.services"
+                    [errors]="errors"
+                    [title]="'SNMP services'|transloco"
             />
 
 
@@ -231,11 +234,80 @@
             </div>
             <oitc-form-feedback [errors]="snmpErrors" errorField="snmpcommand"></oitc-form-feedback>
 
-            <oitc-wizards-dynamicfields
-                    [post]="post.interfaces"
-                    [title]="'SNMP Interfaces'|transloco"
-            />
 
+            <fieldset>
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4>
+                        {{ t('SNMP Interfaces') }}
+                    </h4>
+                    <span class="help-block italic text-primary">
+                        {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
+                    </span>
+
+                    <div ng-repeat="error in errors.services">
+                        <h5 class="text-danger"></h5>
+                    </div>
+
+                </legend>
+
+                <c-row class="mb-3">
+                    <c-col md="6">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            </span>
+                            <ng-select
+                                    id="tags"
+                                    name="tags"
+                                    [items]="[]"
+                                    [(ngModel)]="searchedTags"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [isOpen]="false"
+                                    [placeholder]="'Filter by interface name'|transloco">
+                            </ng-select>
+                            <span cInputGroupText (click)="toggleCheck(undefined)" class="cursor-pointer">
+                                <i class="fas fa-lg fa-check-square alert-icon"></i> {{ t('Toggle checkboxes') }}
+                            </span>
+                        </c-input-group>
+                    </c-col>
+                </c-row>
+
+
+                <ul style="margin:0;padding:0">
+                    <ol style="margin:0;padding:0" *ngFor="let interface of post.interfaces">
+                        <ng-container *ngIf="hasName(interface.name)">
+
+                            <div class="mb-3 form-group">
+                                <div>
+                                    <input cFormCheckInput
+                                           type="checkbox"
+                                           [id]="interface.name"
+                                           class="alert-icon"
+                                           name="checkbox"
+                                           [(ngModel)]="interface.createService"/>
+                                    <label class="custom-control-label custom-control-label-ok"
+                                           [for]="interface.name">
+                                        {{ interface.name }}
+                                        <span class="help-block italic">
+                                            {{ interface.description }}
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}"
+                                 *ngFor="let commandArgument of interface.servicecommandargumentvalues">
+                                {{ commandArgument.commandargument.human_name }}
+                                <input class="form-control"
+                                       type="text"
+                                       [disabled]="!interface.createService"
+                                       [(ngModel)]="commandArgument.value">
+                            </div>
+                        </ng-container>
+                    </ol>
+                </ul>
+            </fieldset>
 
 
         </c-card-body>

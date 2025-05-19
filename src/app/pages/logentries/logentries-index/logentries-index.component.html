@@ -53,8 +53,42 @@
                     </c-col>
                 </c-row>
                 <form cForm>
-                    <c-row>
-                        <c-col md="6" class="mb-2">
+                    <c-row class="mb-2">
+                        <c-col xs="12" md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{ t('From') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="from"
+                                       [placeholder]="'From date' | transloco"
+                                       aria-label="from"
+                                       name="from"
+                                       cFormControl
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col xs="12" md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{ t('To') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="to"
+                                       [placeholder]="'From date' | transloco"
+                                       aria-label="to"
+                                       name="to"
+                                       cFormControl
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col xs="12" md="6">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -70,7 +104,7 @@
                                 />
                             </c-input-group>
                         </c-col>
-                        <c-col md="6" class="mb-2">
+                        <c-col xs="12" md="6">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
@@ -89,7 +123,9 @@
                                 </oitc-multi-select>
                             </c-input-group>
                         </c-col>
-                        <c-col md="12" class="mb-2">
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col xs="12" md="12">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'file-alt']"></fa-icon>
@@ -170,4 +206,3 @@
         </c-card-footer>
     </c-card>
 </ng-container>
-

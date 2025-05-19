@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
 import { TimeperiodsService } from '../timeperiods.service';
-import { User, UsercontainerrolesLdap, ViewDetailsTimeperiod } from '../timeperiods.interface';
+import { ViewDetailsTimeperiod } from '../timeperiods.interface';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { CalendarOptions, EventInput } from '@fullcalendar/core';
 import {
@@ -18,11 +18,12 @@ import {
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
+import { ProfileService } from '../../profile/profile.service';
+import { ProfileApiRoot, ProfileUser } from '../../profile/profile.interface';
 
 @Component({
     selector: 'oitc-timeperiods-view-details',
@@ -63,29 +64,6 @@ export class TimeperiodsViewDetailsComponent implements OnInit, OnDestroy {
         timeperiod_timeranges: [],
         events: []
     };
-    public user: User = {
-        id: 0,
-        usergroup_id: 0,
-        email: '',
-        firstname: '',
-        lastname: '',
-        position: null,
-        company: null,
-        phone: null,
-        timezone: '',
-        i18n: '',
-        dateformat: '',
-        samaccountname: null,
-        ldap_dn: null,
-        showstatsinmenu: 0,
-        is_active: 0,
-        dashboard_tab_rotation: 0,
-        paginatorlength: 0,
-        recursive_browser: 0,
-        image: '',
-        is_oauth: false,
-        usercontainerroles_ldap: {} as UsercontainerrolesLdap
-    };
     public i18n: string[] = [];
     public languageCode: string = 'en';
     public calendarOptions: CalendarOptions = {
@@ -123,6 +101,9 @@ export class TimeperiodsViewDetailsComponent implements OnInit, OnDestroy {
     private route = inject(ActivatedRoute);
 
     private TimeperiodsService = inject(TimeperiodsService);
+    private ProfileService = inject(ProfileService);
+    public user: ProfileApiRoot | null = null;
+
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
 
@@ -130,7 +111,7 @@ export class TimeperiodsViewDetailsComponent implements OnInit, OnDestroy {
         this.id = Number(this.route.snapshot.paramMap.get('id'));
         let request = {
             timeperiod: this.TimeperiodsService.getViewDetailsTimeperiod(this.id),
-            user: this.TimeperiodsService.getUser()
+            user: this.ProfileService.getProfile()
         };
 
         this.subscriptions.add(forkJoin(request).subscribe(
@@ -139,7 +120,7 @@ export class TimeperiodsViewDetailsComponent implements OnInit, OnDestroy {
                 this.timeperiod = result.timeperiod;
                 this.user = result.user;
 
-                this.i18n = this.user.i18n.split('_');
+                this.i18n = this.languageCode.split('_');
                 if (this.i18n.length > 0) {
                     this.languageCode = this.i18n[0];
                 }

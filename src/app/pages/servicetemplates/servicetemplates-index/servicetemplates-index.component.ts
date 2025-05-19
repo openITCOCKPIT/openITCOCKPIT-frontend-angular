@@ -11,7 +11,11 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownComponent,
     DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -53,6 +57,9 @@ import { ServicetemplatesService } from '../servicetemplates.service';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { IndexPage } from '../../../pages.interface';
+import {
+    AddServicetemplatesToServicetemplategroupModalComponent
+} from '../../../components/add-servicetemplates-to-servicetemplategroup-modal/add-servicetemplates-to-servicetemplategroup-modal.component';
 
 @Component({
     selector: 'oitc-servicetemplates-index',
@@ -94,12 +101,17 @@ import { IndexPage } from '../../../pages.interface';
         XsButtonDirective,
         NgClass,
         RouterLink,
-        TableLoaderComponent
+        TableLoaderComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        AddServicetemplatesToServicetemplategroupModalComponent
     ],
     templateUrl: './servicetemplates-index.component.html',
     styleUrl: './servicetemplates-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: ServicetemplatesService } // Inject the ServicetemplatesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ServicetemplatesService} // Inject the ServicetemplatesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -225,6 +237,27 @@ export class ServicetemplatesIndexComponent implements OnInit, OnDestroy, IndexP
         this.modalService.toggle({
             show: true,
             id: 'deleteAllModal',
+        });
+    }
+
+    // Open the Add Servicetemplates To Servicetemplategroup Modal
+    public toggleAddServicetemplatesToServicetemplategroupModal() {
+        let items: DeleteAllItem[] = [];
+
+        items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+            return {
+                id: item.Servicetemplate.id,
+                displayName: item.Servicetemplate.template_name
+            };
+        });
+
+        // Pass selection to the modal
+        this.selectedItems = items;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'addServicetemplatesToServicetemplategroups',
         });
     }
 

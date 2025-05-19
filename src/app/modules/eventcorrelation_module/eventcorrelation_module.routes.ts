@@ -22,6 +22,14 @@ export const eventcorrelationModuleRoutes: Routes = [
         loadComponent: () => import('./pages/eventcorrelations/eventcorrelations-used-by/eventcorrelations-used-by.component').then(m => m.EventcorrelationsUsedByComponent)
     },
     {
+        path: 'eventcorrelation_module/eventcorrelations/hostUsedBy/:id',
+        loadComponent: () => import('./pages/eventcorrelations/eventcorrelations-host-used-by/eventcorrelations-host-used-by.component').then(m => m.EventcorrelationsHostUsedByComponent)
+    },
+    {
+        path: 'eventcorrelation_module/eventcorrelations/serviceUsedBy/:id',
+        loadComponent: () => import('./pages/eventcorrelations/eventcorrelations-service-used-by/eventcorrelations-service-used-by.component').then(m => m.EventcorrelationsServiceUsedByComponent)
+    },
+    {
         path: 'eventcorrelation_module/eventcorrelations/editCorrelation/:id',
         loadComponent: () => import('./pages/eventcorrelations/eventcorrelations-edit-correlation/eventcorrelations-edit-correlation.component').then(m => m.EventcorrelationsEditCorrelationComponent)
     },

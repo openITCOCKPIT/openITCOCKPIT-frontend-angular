@@ -7,11 +7,11 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['nagios_module', 'cmd', 'index']"
+                <a *oitcPermission="['NagiosModule', 'cmd', 'index']"
                    [routerLink]="['/', 'nagios_module', 'cmd', 'index']">
-                    <fa-icon [icon]="['fas', 'engine']"></fa-icon>
+                    <fa-icon [icon]="['fas', 'code']"></fa-icon>
                     {{ t('Monitoring Engine') }}
-                </a>
+               </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'code']"></fa-icon>

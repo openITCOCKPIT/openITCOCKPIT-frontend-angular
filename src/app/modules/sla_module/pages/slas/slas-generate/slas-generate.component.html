@@ -230,11 +230,11 @@
                                         </c-col>
                                     </c-row>
                                     <c-row *ngFor="let timerange of report.timeperiod.timeperiod_timeranges">
-                                        <c-col xs="12" md="6" lg="2">
-                                            {{ weekdayNames[timerange.day] }}
+                                        <c-col xs="12" md="6" lg="4">
+                                            {{ weekdayNames[timerange.day]}}
 
                                         </c-col>
-                                        <c-col xs="12" md="6" lg="10">
+                                        <c-col xs="12" md="6" lg="8">
                                             {{ timerange.start }}
                                             -
                                             {{ timerange.end }}
@@ -245,7 +245,7 @@
                         </c-col>
 
                         <c-col xs="12" md="6" lg="6" class="text-right">
-                            <img alt="logo" src="{{logoUrl}}" width="200">
+                            <img alt="logo" [src]="logoUrl" width="200">
                         </c-col>
                     </c-row>
 

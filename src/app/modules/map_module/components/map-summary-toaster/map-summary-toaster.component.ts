@@ -23,6 +23,7 @@ import { MapSummaryRoot, Summary } from '../../pages/mapeditors/mapeditors.inter
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
+import { PermissionDirective } from '../../../../permissions/permission.directive';
 
 @Component({
     selector: 'oitc-map-summary-toaster',
@@ -42,7 +43,8 @@ import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
         ColComponent,
         RouterLink,
         TrustAsHtmlPipe,
-        ToastHeaderComponent
+        ToastHeaderComponent,
+        PermissionDirective
     ],
     templateUrl: './map-summary-toaster.component.html',
     styleUrl: './map-summary-toaster.component.css',

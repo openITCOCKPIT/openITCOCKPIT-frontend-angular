@@ -29,7 +29,7 @@
             </h5>
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
-                    <button (click)="reload()" cButton class="ripple" color="default"
+                    <button (click)="load()" cButton class="ripple" color="default"
                             size="xs">
                         <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                         {{ t('Refresh') }}
@@ -38,86 +38,88 @@
             </c-nav>
         </c-card-header>
         <c-card-body>
-
+            <oitc-block-loader *ngIf="!history"></oitc-block-loader>
             <c-container
-                    [fluid]="true" *ngIf="history && history.history">
+                [fluid]="true" *ngIf="history && history.history">
                 <ul class="cbp_tmtimeline">
-                    <li *ngFor="let historyItem of history.history">
-                        <time class="cbp_tmtime" [dateTime]="historyItem.state_time">
-                            <span>{{ historyItem.state_time }}</span>
-                            <span>{{ historyItem.timeAgoInWords }}</span>
-                        </time>
-                        <div class="cbp_tmicon txt-color-white"
-                             [ngClass]="{'new-flame-bg': historyItem.state===0, 'bg-secondary': historyItem.state===1, 'bg-success': historyItem.state===2, 'bg-primary': historyItem.state===3}">
-                            <i class="fa-solid fa-fire-flame-curved" [hidden]="historyItem.state!==0"></i>
-                            <i class="fa-solid fa-person-digging" [hidden]="historyItem.state!==1"></i>
-                            <i class="fa-solid fa-clipboard-check" [hidden]="historyItem.state!==2"></i>
-                            <i class="fa-solid fa-folder-closed" [hidden]="historyItem.state!==3"></i>
-                        </div>
-                        <div class="cbp_tmlabel p-3" *ngIf="historyItem.customalert_comment.id">
-                            <h5 class="font-md">
-                                <span class="font-xs" *ngIf="historyItem.user">
-
-                                    {{ t('Commented by ') }}
-                                    <span *oitcPermission="['users', 'edit']">
-                                        <a [routerLink]="['/', 'users', 'edit',historyItem.customalert_comment.user.id]">
-                                            {{ historyItem.customalert_comment.user.firstname }}
-                                            {{ historyItem.customalert_comment.user.lastname }}
-                                        </a>
-                                    </span>
-                                    <span *oitcPermission="['users', 'edit']; negate: true">
-                                        {{ historyItem.customalert_comment.user.firstname }}
-                                        {{ historyItem.customalert_comment.user.lastname }}
-                                    </span>
-                                </span>
-                            </h5>
-                            <blockquote
-                                    [ngClass]="{ 'changelog-blockquote-secondary': historyItem.state==1, 'changelog-blockquote-success': historyItem.state==2}"
-
-                                    class="blockquote">
-                                <div class="margin-left-10 italic font-sm">
-                                    {{ historyItem.customalert_comment.comment }}
+                    @for (historyItem of history.history; track $index) {
+                        @if (( !historyItem.user && historyItem.state === 0 ) || historyItem.customalert_comment.id) {
+                            <li>
+                                <time class="cbp_tmtime" [dateTime]="historyItem.state_time">
+                                    <span>{{ historyItem.state_time }}</span>
+                                    <span>{{ historyItem.timeAgoInWords }}</span>
+                                </time>
+                                <div class="cbp_tmicon text-white"
+                                     [ngClass]="{'new-flame-bg': historyItem.state===0, 'bg-secondary': historyItem.state===1, 'bg-success': historyItem.state===2, 'bg-primary': historyItem.state===3}">
+                                    <i class="fa-solid fa-fire-flame-curved" [hidden]="historyItem.state!==0"></i>
+                                    <i class="fa-solid fa-person-digging" [hidden]="historyItem.state!==1"></i>
+                                    <i class="fa-solid fa-clipboard-check" [hidden]="historyItem.state!==2"></i>
+                                    <i class="fa-solid fa-folder-closed" [hidden]="historyItem.state!==3"></i>
                                 </div>
-                            </blockquote>
-                        </div>
-                        <div class="cbp_tmlabel" *ngIf="historyItem.user === false && historyItem.state === 0">
-                            <h5 class="font-md">
-                                {{ t('Service:') }}
+                                <div class="cbp_tmlabel" *ngIf="historyItem.customalert_comment.id">
+                                    <h5 class="font-md">
+                                        <span class="font-xs" *ngIf="historyItem.user">
 
-                                <span *oitcPermission="['hosts', 'browser']">
-                                    <a [routerLink]="['/', 'hosts', 'browser',history.customalert.service.host.id]">
-                                        {{ history.customalert.service.host.name }}
-                                    </a>
-                                </span>
-                                <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                    {{ history.customalert.service.host.name }}
-                                </span>
+                                            {{ t('Commented by ') }}
+                                            <span *oitcPermission="['users', 'edit']">
+                                                <a [routerLink]="['/', 'users', 'edit',historyItem.customalert_comment.user.id]">
+                                                    {{ historyItem.customalert_comment.user.firstname }}
+                                                    {{ historyItem.customalert_comment.user.lastname }}
+                                                </a>
+                                            </span>
+                                            <span *oitcPermission="['users', 'edit']; negate: true">
+                                                {{ historyItem.customalert_comment.user.firstname }}
+                                                {{ historyItem.customalert_comment.user.lastname }}
+                                            </span>
+                                        </span>
+                                    </h5>
+                                    <blockquote
+                                        [ngClass]="{ 'changelog-blockquote-secondary': historyItem.state==1, 'changelog-blockquote-success': historyItem.state==2}"
+                                        class="blockquote">
+                                        <div class="italic font-sm ps-2">
+                                            {{ historyItem.customalert_comment.comment }}
+                                        </div>
+                                    </blockquote>
+                                </div>
+                                <div class="cbp_tmlabel" *ngIf="!historyItem.user && historyItem.state === 0">
+                                    <h5 class="font-md">
+                                        {{ t('Service:') }}
 
-                                /
+                                        <span *oitcPermission="['hosts', 'browser']">
+                                            <a [routerLink]="['/', 'hosts', 'browser',history.customalert.service.host.id]">
+                                                {{ history.customalert.service.host.name }}
+                                            </a>
+                                        </span>
+                                        <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                            {{ history.customalert.service.host.name }}
+                                        </span>
 
-                                <span *oitcPermission="['services', 'browser']">
-                                    <a [routerLink]="['/', 'services', 'browser',history.customalert.service.id]">
-                                        {{ history.customalert.servicename }}
-                                    </a>
-                                </span>
-                                <span *oitcPermission="['services', 'browser']; negate: true">
-                                    {{ history.customalert.servicename }}
-                                </span>
+                                        /
 
-                                <span class="text-info helptext font-xs">
-                                    <i class="fa-solid fa-circle-info"></i>
-                                    {{ t('This alert was automatically generated by the alerting daemon') }}
-                                </span>
-                            </h5>
+                                        <span *oitcPermission="['services', 'browser']">
+                                            <a [routerLink]="['/', 'services', 'browser',history.customalert.service.id]">
+                                                {{ history.customalert.servicename }}
+                                            </a>
+                                        </span>
+                                        <span *oitcPermission="['services', 'browser']; negate: true">
+                                            {{ history.customalert.servicename }}
+                                        </span>
 
-                            <blockquote class="blockquote changelog-blockquote-danger">
-                                <code>
-                                    {{ history.customalert.message }}
-                                </code>
-                            </blockquote>
-                        </div>
+                                        <span class="text-info helptext font-xs">
+                                            <i class="fa-solid fa-circle-info"></i>
+                                            {{ t('This alert was automatically generated by the alerting daemon') }}
+                                        </span>
+                                    </h5>
 
-                    </li>
+                                    <blockquote class="blockquote changelog-blockquote-danger">
+                                        <code class="ps-2">
+                                            {{ history.customalert.message }}
+                                        </code>
+                                    </blockquote>
+                                </div>
+                            </li>
+                        }
+                    }
                 </ul>
             </c-container>
             <oitc-no-records *ngIf="history && history.history.length === 0"></oitc-no-records>

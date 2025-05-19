@@ -115,13 +115,17 @@ export class BbCodeEditorComponent {
     private selectionStart: number = 0;
     private selectionEnd: number = 0;
     public selectedText: string = '';
-    public link: DocumentationLink = {
-        url: '',
-        targetBlank: true
-    };
+    public link: DocumentationLink = this.getDefaultLink();
     public isLinkAreaOpen: boolean = false; //needed to show the link area if isDisplayedAsModal is false
 
     private cdr = inject(ChangeDetectorRef);
+
+    private getDefaultLink(): DocumentationLink {
+        return {
+            url: '',
+            targetBlank: true
+        };
+    }
 
     public updateBbcode(newBbcode: string) {
         this.bbcode = newBbcode;
@@ -133,6 +137,12 @@ export class BbCodeEditorComponent {
         this.selectionStart = ev.target.selectionStart;
         this.selectionEnd = ev.target.selectionEnd;
         this.selectedText = ev.target.value.substring(this.selectionStart, this.selectionEnd);
+    }
+
+    protected openLinkArea(): void {
+        this.isLinkAreaOpen = true;
+        this.link = this.getDefaultLink();
+        this.cdr.markForCheck();
     }
 
     public surroundSelectedText(task: string) {
@@ -183,6 +193,7 @@ export class BbCodeEditorComponent {
             targetBlank: true
         }
         this.isLinkAreaOpen = false;
+        this.cdr.markForCheck();
     };
 
     public surroundSelectedTextWithFontSize(size: string) {
@@ -196,7 +207,7 @@ export class BbCodeEditorComponent {
     }
 
     protected onLinkUrlInputChange(newUrl: string) {
-        if (this.selectionStart === 0 && this.selectionEnd === 0) {
+        if (this.selectionStart === this.selectionEnd) {
             this.selectedText = newUrl;
         }
         this.cdr.markForCheck();

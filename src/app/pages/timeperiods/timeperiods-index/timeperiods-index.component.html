@@ -128,11 +128,11 @@
                 <tbody>
                 <tr *ngFor="let timeperiod of timeperiods.all_timeperiods">
                     <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['timeperiods', 'delete']"
-                            [disabled]="false"
-                            [item]="timeperiod"></oitc-item-select>
-
+                        @if (( PermissionService.hasPermissionObservable(['timeperiods', 'delete'])|async ) || ( PermissionService.hasPermissionObservable(['timeperiods', 'copy'])|async )) {
+                            <oitc-item-select
+                                [disabled]="!timeperiod.Timeperiod.allow_edit"
+                                [item]="timeperiod"></oitc-item-select>
+                        }
                     </td>
                     <td *oitcPermission="['timeperiods', 'viewdetails']" class="word-break">
                         <a [routerLink]="['/', 'timeperiods', 'viewDetails', timeperiod.Timeperiod.id]">
@@ -232,11 +232,13 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        *oitcPermission="['timeperiods', 'copy']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['timeperiods', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>

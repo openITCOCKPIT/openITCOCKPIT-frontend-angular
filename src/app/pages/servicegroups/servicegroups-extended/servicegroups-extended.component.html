@@ -73,7 +73,7 @@
                         </span>
 
                         <oitc-select
-                            class="col-9"
+                            class="flex-fill"
                             name="servicegroupId"
                             id="servicegroupId"
                             [(ngModel)]="servicegroupId"
@@ -314,7 +314,7 @@
                             </span>
 
                         </td>
-                        <td>
+                        <td class="word-break">
                             <span *oitcPermission="['services', 'browser']">
                                 <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
                                     {{ service.Service.servicename }}

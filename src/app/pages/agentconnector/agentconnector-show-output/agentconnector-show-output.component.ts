@@ -15,20 +15,19 @@ import { AgentconnectorPullService } from '../agentconnector-pull.service';
 
 
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  NavComponent,
-  NavItemComponent,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 
 
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
@@ -46,6 +45,7 @@ import {
     BooleanToggle,
     createJSONEditor,
     isBoolean,
+    JsonEditor,
     Mode,
     ReadonlyValue,
     RenderValueComponentDescription,
@@ -55,27 +55,27 @@ import {
 @Component({
     selector: 'oitc-agentconnector-show-output',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FaIconComponent,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    BackButtonDirective,
-    BlockLoaderComponent,
-    AsyncPipe,
-    NgClass
-],
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        FaIconComponent,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        BackButtonDirective,
+        BlockLoaderComponent,
+        AsyncPipe,
+        NgClass
+    ],
     templateUrl: './agentconnector-show-output.component.html',
     styleUrl: './agentconnector-show-output.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -98,6 +98,8 @@ export class AgentconnectorShowOutputComponent implements OnInit, OnDestroy {
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
+
+    private editor?: JsonEditor;
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -143,7 +145,12 @@ export class AgentconnectorShowOutputComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const editor = createJSONEditor({
+        if (this.editor) {
+            this.editor.destroy();
+            this.editor = undefined;
+        }
+
+        this.editor = createJSONEditor({
             target: this.jsoneditor.nativeElement,
             props: {
                 mode: Mode.tree,

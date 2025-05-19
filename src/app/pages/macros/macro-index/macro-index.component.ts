@@ -56,6 +56,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 
 @Component({
     selector: 'oitc-macro-index',
@@ -106,7 +107,8 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         FormErrorDirective,
         FormFeedbackComponent,
         NgOptionHighlightModule,
-        TableLoaderComponent
+        TableLoaderComponent,
+        CopyToClipboardComponent
     ],
     templateUrl: './macro-index.component.html',
     styleUrl: './macro-index.component.css',

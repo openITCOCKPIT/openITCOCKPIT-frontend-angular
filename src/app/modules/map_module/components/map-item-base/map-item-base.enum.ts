@@ -12,11 +12,13 @@ export enum MapItemType {
     GADGET = 'gadget',
     SUMMARYITEM = 'summaryItem',
     ICON = 'icon',
+    BACKGROUND = 'background',
 }
 
 export enum ContextActionType {
     LABEL_POSITION = 'labelPosition',
     DELETE = 'delete',
     EDIT = 'edit',
-    LAYER = 'layer'
+    LAYER = 'layer',
+    COPY = 'copy',
 }

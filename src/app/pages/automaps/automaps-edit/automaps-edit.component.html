@@ -8,7 +8,7 @@
                 </a></li>
             <li class="breadcrumb-item">
                 <a *oitcPermission="['automaps', 'index']" [routerLink]="['/', 'automaps', 'index']">
-                    <fa-icon [icon]="['fas', 'globe-europe']"></fa-icon>
+                    <fa-icon [icon]="['fas', 'magic-wand-sparkles']"></fa-icon>
                     {{ t('Auto Maps') }}
                 </a>
             </li>
@@ -19,7 +19,7 @@
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
     <form cForm (ngSubmit)="submit()">
         <c-card class="mb-3" *ngIf="post">
             <c-card-header>

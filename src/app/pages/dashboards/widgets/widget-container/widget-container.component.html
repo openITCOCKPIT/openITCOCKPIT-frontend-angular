@@ -195,6 +195,12 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-my-resources-summary-widget>
         }
+        @case (WidgetTypes.ResourcegroupsCronjobStatusWidget) {
+            <oitc-resourcegroups-cronjob-status-widget
+                [widgetInput]="widget">
+                [isReadonly]="isReadonly()">
+            </oitc-resourcegroups-cronjob-status-widget>
+        }
 
         <!-- Fallback Widget -->
         @default {

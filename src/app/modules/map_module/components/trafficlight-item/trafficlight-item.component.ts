@@ -19,7 +19,7 @@ import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { DOCUMENT, NgIf } from '@angular/common';
+import { DOCUMENT, NgClass, NgIf } from '@angular/common';
 import {
     HostForMapItem,
     MapItemRoot,
@@ -30,7 +30,7 @@ import {
 @Component({
     selector: 'oitc-trafficlight-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf, NgClass],
     templateUrl: './trafficlight-item.component.html',
     styleUrl: './trafficlight-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,11 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { RouterLink } from '@angular/router';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 import {
-    AlertComponent,
-    AlertHeadingDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -18,158 +15,424 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
+    FormSelectDirective,
     InputGroupComponent,
     NavComponent,
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
-    AddFromLdapRoot,
-    LdapUser,
-    LdapUserDetails,
-    LoadContainerPermissionsRequest,
-    LoadContainerPermissionsRoot,
-    LoadContainerRolesRequest,
-    LoadContainerRolesRoot,
-    LoadLdapUserByStringRoot,
-    LoadLdapUserDetailsRoot,
-    LoadUsergroupsRoot,
-    UserDateformatsRoot,
+    UserAddContainerRolePermission,
+    UserContainerPermission,
     UserLocaleOption,
+    UserPost,
+    UsersLdapUserDetails,
     UserTimezonesSelect
 } from '../users.interface';
-import { UsersService } from '../users.service';
-import { Subscription } from 'rxjs';
-import { ContainersService } from '../../containers/containers.service';
-import { ContainersLoadContainersByStringParams } from '../../containers/containers.interface';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
-import { HistoryService } from '../../../history.service';
+import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { RouterLink } from '@angular/router';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
+import { PermissionsService } from '../../../permissions/permissions.service';
+import { UsersService } from '../users.service';
 import { ProfileService } from '../../profile/profile.service';
+import { HistoryService } from '../../../history.service';
+import { PermissionLevel } from '../permission-level';
+import { ROOT_CONTAINER } from '../../changelogs/object-types.enum';
 import { ContactsService } from '../../contacts/contacts.service';
 import { LdapConfig } from '../../contacts/contacts.interface';
-import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
-import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
-import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
+import { OitcAlertComponent } from '../../../components/alert/alert.component';
+import _ from 'lodash';
+import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
 
 @Component({
     selector: 'oitc-users-ldap',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        CardComponent,
-        CardHeaderComponent,
         BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
         CardTitleDirective,
+        FaIconComponent,
+        FormCheckInputDirective,
+        FormDirective,
+        FormsModule,
         NavComponent,
         NavItemComponent,
+        PermissionDirective,
+        TranslocoDirective,
         XsButtonDirective,
-        CardBodyComponent,
-        CardFooterComponent,
-        FormCheckInputDirective,
-        ReactiveFormsModule,
-        FormsModule,
+        RouterLink,
+        MultiSelectComponent,
+        FormLabelDirective,
         FormErrorDirective,
         FormFeedbackComponent,
-        FormLabelDirective,
-        MultiSelectComponent,
         RequiredIconComponent,
         SelectComponent,
         FormCheckComponent,
         FormCheckLabelDirective,
         TrueFalseDirective,
         FormControlDirective,
-        RowComponent,
-        ColComponent,
-        NgIf,
-        NgForOf,
-        KeyValuePipe,
-        FormDirective,
-        InputGroupComponent,
-        AlertComponent,
-        AlertHeadingDirective,
+        SliderTimeComponent,
         NgOptionTemplateDirective,
         NgSelectComponent,
         NgOptionHighlightDirective,
-        SliderTimeComponent
+        RowComponent,
+        ColComponent,
+        NgIf,
+        InputGroupComponent,
+        NgClass,
+        BadgeOutlineComponent,
+        AsyncPipe,
+        FormSelectDirective,
+        OitcAlertComponent,
+        UiBlockerComponent,
+        TranslocoPipe
     ],
     templateUrl: './users-ldap.component.html',
     styleUrl: './users-ldap.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UsersLdapComponent implements OnDestroy, OnInit {
-    private readonly subscriptions: Subscription = new Subscription();
+export class UsersLdapComponent implements OnInit, OnDestroy {
+    public createAnother: boolean = false;
+    public post: UserPost = this.getDefaultPost();
+    public errors: GenericValidationError | null = null;
+
+    public ldapUsers: SelectKeyValueString[] = [];
+    public ldapUserDetails?: UsersLdapUserDetails;
+    public ldapConfig?: LdapConfig;
+    public usercontainerroles: SelectKeyValue[] = [];
+    public usergroups: SelectKeyValue[] = [];
+    public containers: SelectKeyValue[] = [];
+    public localeOptions: UserLocaleOption[] = [];
+    public dateformats: SelectKeyValueString[] = [];
+    public timezones: UserTimezonesSelect[] = [];
+    public serverTime: string = '';
+    public serverTimeZone: string = '';
+
+    public selectedUserContainerRolesLdapReadOnly: number[] = [];
+    public userContainerRoleContainerPermissionsLdap: UserAddContainerRolePermission[] = [];
+
+    public selectedUserContainerRolesContainerIds: number[] = [];
+    public selectedUserRoleThroughLdap: number = 0;
+
+    public selectedUserContainers: number[] = [];
+    public selectedUserContainerWithPermission: UserContainerPermission[] = [];
+    public userContainerRoleContainerPermissions: UserAddContainerRolePermission[] = [];
+
+    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
+
+    private subscriptions: Subscription = new Subscription();
     private readonly UsersService: UsersService = inject(UsersService);
-    private readonly ContainersService: ContainersService = inject(ContainersService);
+    private readonly ProfileService: ProfileService = inject(ProfileService);
+    private readonly ContactsService: ContactsService = inject(ContactsService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
-    private readonly notyService: NotyService = inject(NotyService);
-    private readonly profileService: ProfileService = inject(ProfileService);
-    private readonly ContactService: ContactsService = inject(ContactsService);
-    private readonly cdr = inject(ChangeDetectorRef);
+    private cdr = inject(ChangeDetectorRef);
 
-    protected createAnother: boolean = false;
-    protected post: AddFromLdapRoot = this.getDefaultPost();
-    protected containerRoles: LoadContainerRolesRoot = {} as LoadContainerRolesRoot;
-    protected selectedContainerIds: number[] = [];
-    protected containers: SelectKeyValue[] = [];
-    protected dateformats: SelectKeyValueString[] = [];
-    protected timezones: UserTimezonesSelect[] = [];
-    protected localeOptions: UserLocaleOption[] = [];
-    protected usergroups: SelectKeyValue[] = [];
-    protected errors: GenericValidationError = {} as GenericValidationError;
-    protected containerPermissions: LoadContainerPermissionsRoot = {} as LoadContainerPermissionsRoot;
-    protected containerRoleContainerIds: number[] = [];
-    protected samaccountnames: LdapUser[] = [];
-    protected ldapConfig: LdapConfig = {} as LdapConfig;
-    protected serverTime: string = '';
-    protected serverTimeZone: string = '';
-    protected usedContainerIdsBySource: { [key: string]: number[] } = {};
-    protected ldapUserDetails: LdapUserDetails = {
-        usergroupLdap: {
-            id: 0
-        }
-    } as LdapUserDetails;
+    public ngOnInit(): void {
+        this.loadLdapConfig();
+        this.loadLdapUsersByString('');
+        this.loadContainerRoles('');
+        this.loadContainer();
+        this.loadUsergroups();
+        this.loadDateformats();
+        this.loadLocaleOptions();
+    }
 
-    public onSelectedContainerIdsChange() {
-        // Traverse all containerids and set the value to 1.
-        this.selectedContainerIds.map((id) => {
-            if (id === 1) {
-                this.post.User.ContainersUsersMemberships[id] = 2;
-                return;
-            }
-            // Only if not already set to 1 or 2.
-            if (this.post.User.ContainersUsersMemberships[id] !== 2) {
-                this.post.User.ContainersUsersMemberships[id] = 1;
-            }
-        });
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
+    private getDefaultPost(): UserPost {
+        this.ldapUserDetails = undefined;
+        this.selectedUserContainerRolesLdapReadOnly = [];
+        this.userContainerRoleContainerPermissionsLdap = [];
+        this.selectedUserRoleThroughLdap = 0;
+
+        this.selectedUserContainers = [];
+        this.selectedUserContainerWithPermission = [];
+        this.userContainerRoleContainerPermissions = [];
+
+        return {
+            firstname: '',
+            lastname: '',
+            email: '',
+            phone: '',
+            is_active: 1,
+            showstatsinmenu: 0,
+            paginatorlength: 25,
+            dashboard_tab_rotation: 0,
+            recursive_browser: 0,
+            dateformat: 'H:i:s - d.m.Y',
+            timezone: 'Europe/Berlin',
+            i18n: 'en_US',
+            password: '',
+            confirm_password: '',
+            is_oauth: false,
+            samaccountname: '',
+            ldap_dn: '',
+            usergroup_id: 0,
+            usercontainerroles: {
+                _ids: []
+            },
+            usercontainerroles_ldap: {
+                _ids: []
+            },
+            ContainersUsersMemberships: {},
+            apikeys: []
+        };
+    }
+
+    public loadLdapConfig() {
+        this.subscriptions.add(this.ContactsService.ldapConfiguration().subscribe((result) => {
+            this.ldapConfig = result.ldapConfig;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public loadLdapUsersByString = (searchString: string) => {
+        this.subscriptions.add(this.UsersService.loadLdapUserByString(searchString)
+            .subscribe((result) => {
+                this.ldapUsers = [];
+
+                result.forEach((user) => {
+                    this.ldapUsers.push({
+                        key: user.samaccountname,
+                        value: user.display_name,
+                    });
+                });
+
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    public loadContainerRoles = (searchString: string): void => {
+        let selected = this.post.usercontainerroles._ids;
+
+        this.subscriptions.add(this.UsersService.loadUserContainerRoles(searchString, selected)
+            .subscribe((result) => {
+                this.usercontainerroles = result;
+                this.cdr.markForCheck();
+            }));
+    }
+
+    public loadContainer() {
+        this.subscriptions.add(this.UsersService.loadContainersForAngular().subscribe((result) => {
+            this.containers = result.containers;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public loadUsergroups() {
+        this.subscriptions.add(this.UsersService.loadUsergroups().subscribe((result) => {
+            this.usergroups = result;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public loadDateformats() {
+        this.subscriptions.add(this.UsersService.getDateformats().subscribe((result) => {
+            this.dateformats = result.dateformats;
+            this.post.dateformat = result.defaultDateFormat;
+            this.timezones = result.timezones;
+            this.serverTimeZone = result.serverTimeZone;
+            this.serverTime = result.serverTime;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public loadLocaleOptions() {
+        this.subscriptions.add(this.UsersService.getLocaleOptions().subscribe((result) => {
+            this.localeOptions = result;
+            this.cdr.markForCheck();
+        }));
+    }
+
+
+    public addApikey(): void {
+        this.subscriptions.add(this.ProfileService.generateNewApiKey()
+            .subscribe((result) => {
+                this.post.apikeys = [...this.post.apikeys, result];
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    public removeApikey(index: number): void {
+        this.post.apikeys.splice(index, 1);
         this.cdr.markForCheck();
     }
 
-    public addUser(): void {
-        this.subscriptions.add(this.UsersService.addFromLdap(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
+    public refreshApiKey(index: number): void {
+        this.subscriptions.add(this.ProfileService.generateNewApiKey()
+            .subscribe((result) => {
+                this.post.apikeys[index].apikey = result.apikey;
+
+                // Get a new reference to trigger the change detection
+                this.post.apikeys = [...this.post.apikeys];
+
                 this.cdr.markForCheck();
+            })
+        );
+    }
 
+    public onLdapUserChange(event: any) {
+        // Called when an LDAP user is selected
+        this.post.ldap_dn = '';
+        this.post.firstname = '';
+        this.post.lastname = '';
+        this.post.email = '';
+        this.ldapUserDetails = undefined;
+        this.selectedUserContainerRolesLdapReadOnly = [];
+        this.userContainerRoleContainerPermissionsLdap = [];
+        this.selectedUserRoleThroughLdap = 0;
+        this.cdr.markForCheck();
+
+        if (this.post.samaccountname) {
+            this.subscriptions.add(this.UsersService.loadLdapUserDetails(this.post.samaccountname).subscribe((result) => {
+                this.post.ldap_dn = result.dn;
+                this.post.firstname = result.givenname;
+                this.post.lastname = result.sn;
+                this.post.email = result.email;
+
+                this.ldapUserDetails = result;
+
+                this.selectedUserRoleThroughLdap = result.usergroupLdap.id || 0;
+
+                // Make sure the array is defined
+                if (!this.post.usercontainerroles_ldap) {
+                    this.post.usercontainerroles_ldap = {
+                        _ids: []
+                    };
+                }
+
+                const idsString = Object.keys(result.userContainerRoleContainerPermissionsLdap);
+                this.post.usercontainerroles_ldap._ids = idsString.map(Number);
+
+                // Mark container roles mapped through LDAP as selected
+                for (let i in result.userContainerRoleContainerPermissionsLdap) {
+                    this.selectedUserContainerRolesLdapReadOnly.push(
+                        result.userContainerRoleContainerPermissionsLdap[i]._joinData.usercontainerrole_id
+                    );
+                }
+
+                // Remove duplicates otherwise the PrimeNG will select the same item multiple times
+                this.selectedUserContainerRolesLdapReadOnly = _.uniq(this.selectedUserContainerRolesLdapReadOnly);
+
+                // Store permissions for the read / write radio buttons
+                this.userContainerRoleContainerPermissionsLdap = result.userContainerRoleContainerPermissionsLdapArray || [];
+
+                this.cdr.markForCheck();
+            }));
+        }
+    }
+
+    public onUsercontainerrolesSelectChange(event: any) {
+        // Called when an usercontainerrole is selected or unselected
+
+        if (this.post.usercontainerroles._ids.length === 0) {
+            this.userContainerRoleContainerPermissions = [];
+            this.selectedUserContainerRolesContainerIds = [];
+            this.cdr.markForCheck();
+            return;
+        }
+
+        this.subscriptions.add(this.UsersService.loadContainerPermissions(this.post.usercontainerroles._ids).subscribe((result) => {
+            this.userContainerRoleContainerPermissions = result;
+            this.selectedUserContainerRolesContainerIds = result.map((item) => item.id);
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public onSelectedContainerIdsChange(event: any) {
+        // Called when a container is selected or unselected
+        if (this.selectedUserContainers.length === 0) {
+            // No user containers selected
+            this.selectedUserContainerWithPermission = [];
+            this.cdr.markForCheck();
+            return;
+        }
+
+        // Add new selected containers to the list
+        this.selectedUserContainers.forEach(selectedContainerId => {
+            const containerWithPermission = this.selectedUserContainerWithPermission.find(container => container.container_id === selectedContainerId);
+            if (!containerWithPermission) {
+                let permission_level: PermissionLevel = PermissionLevel.READ_RIGHT;
+                if (selectedContainerId === ROOT_CONTAINER) {
+                    // ROOT_CONTAINER is always read/write !
+                    permission_level = PermissionLevel.WRITE_RIGHT;
+                }
+
+                this.selectedUserContainerWithPermission.push({
+                    container_id: selectedContainerId,
+                    container_name: this.getContainerName(selectedContainerId),
+                    permission_level: permission_level
+                });
+            }
+        });
+
+        //Remove "unselected" containers
+        const selectedUserContainerWithPermission: UserContainerPermission[] = [];
+
+        this.selectedUserContainerWithPermission.forEach((container, index) => {
+            if (this.selectedUserContainers.indexOf(container.container_id) !== -1) {
+                // Container is still selected
+                selectedUserContainerWithPermission.push(container);
+            }
+        });
+
+        this.selectedUserContainerWithPermission = selectedUserContainerWithPermission;
+
+        this.cdr.markForCheck();
+    }
+
+    private getContainerName(containerId: number): string {
+        const container = this.containers.find(container => container.key === containerId);
+        if (container) {
+            return container.value;
+        }
+        return 'ERROR UNKNOWN CONTAINER';
+    }
+
+    public submit() {
+
+        let ContainersUsersMemberships: { [key: number]: PermissionLevel } = {};
+        this.selectedUserContainerWithPermission.forEach(container => {
+            ContainersUsersMemberships[container.container_id] = container.permission_level;
+        });
+        this.post.ContainersUsersMemberships = ContainersUsersMemberships;
+
+        //LDAP users don't have a password
+        this.post.password = '';
+        this.post.confirm_password = '';
+
+        this.subscriptions.add(this.UsersService.addLdap(this.post)
+            .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
-                    const response: GenericIdResponse = result.data as GenericIdResponse;
-
-                    const title: string = this.TranslocoService.translate('User');
-                    const msg: string = this.TranslocoService.translate('added successfully');
-                    const url: (string | number)[] = ['users', 'edit', response.id];
+                    const response = result.data as GenericIdResponse;
+                    const title = this.TranslocoService.translate('User');
+                    const msg = this.TranslocoService.translate('created successfully');
+                    const url = ['users', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
@@ -178,252 +441,20 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
                         return;
                     }
                     this.post = this.getDefaultPost();
-                    this.errors = {} as GenericValidationError;
-
-                    this.ldapUserDetails = {
-                        usergroupLdap: {
-                            id: 0
-                        }
-                    } as LdapUserDetails;
-                    this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
-
+                    this.errors = null;
                     return;
                 }
 
                 // Error
+                const errorResponse = result.data as GenericValidationError;
                 this.notyService.genericError();
-                const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
-
-                    console.warn(this.errors);
                 }
-            })
-        );
-    }
-
-    private getDefaultPost(): AddFromLdapRoot {
-        // Build a blank instance of AddFromLdapRoot including all nested objects.
-        return {
-            User: {
-// USER FIELDS
-                apikeys: [],
-                company: '',
-                confirm_password: '',
-                ContainersUsersMemberships: {},
-                dashboard_tab_rotation: 0,
-                dateformat: 'H:i:s - d.m.Y',
-                email: '',
-                firstname: '',
-                i18n: 'en_US',
-                is_active: 1,
-                is_oauth: 0,
-                lastname: '',
-                paginatorlength: 25,
-                password: '',
-                phone: '',
-                position: '',
-                recursive_browser: 0,
-                showstatsinmenu: 0,
-                timezone: 'Europe/Berlin',
-                usercontainerroles: {
-                    _ids: []
-                },
-                usergroup_id: 0,
-//  ADDITIONAL LDAP FIELDS
-                ldap_dn: '',
-                samaccountname: '',
-                usercontainerroles_ldap: {
-                    _ids: []
-                }
-            }
-        }
-    }
-
-    public ngOnInit() {
-        this.selectedContainerIds = [];
-        this.containerPermissions = {} as LoadContainerPermissionsRoot;
-        this.containerRoles = {} as LoadContainerRolesRoot;
-
-        this.loadContainers();
-        this.loadDateformats();
-        this.loadLocaleOptions();
-        this.loadContainerRoles('');
-        this.loadUsergroups();
-        this.loadLdapUsers('')
-        this.loadLdapConfig();
-    }
-
-    public ngOnDestroy() {
-        this.subscriptions.unsubscribe();
-    }
-
-    public loadContainerRoles = (query: string): void => {
-        let params: LoadContainerRolesRequest = {
-            'filter[Usercontainerroles.name]': query,
-            selected: this.post.User.usercontainerroles._ids,
-            angular: true
-        }
-        this.subscriptions.add(this.UsersService.loadContainerRoles(params)
-            .subscribe((result: LoadContainerRolesRoot) => {
-                this.containerRoles = result;
-                this.cdr.markForCheck();
             }));
     }
 
-    protected onContainerRolesChange = (event: any): void => {
-        this.loadContainerRolesPermissions();
-    }
-
-    protected loadContainerRolesPermissions = (): void => {
-        // For each containerPermissions object attach the containerId to this.containerRoleContainerIds.
-        this.containerRoleContainerIds = [];
-        this.containerPermissions = {} as LoadContainerPermissionsRoot;
-
-        if (this.post.User.usercontainerroles._ids.length === 0) {
-            this.cdr.markForCheck();
-            return;
-        }
-
-        let params: LoadContainerPermissionsRequest = {
-            'usercontainerRoleIds[]': this.post.User.usercontainerroles._ids,
-            angular: true
-        }
-        this.subscriptions.add(this.UsersService.loadContainerPermissions(params)
-            .subscribe((result: LoadContainerPermissionsRoot) => {
-                this.cdr.markForCheck();
-                this.containerPermissions = result;
-
-                // Traverse this.containerPermissions.userContainerRoleContainerPermissions and append the containerPermission.container_id to this.containerRoleContainerIds.
-                Object.keys(this.containerPermissions.userContainerRoleContainerPermissions).forEach((key) => {
-                    this.containerRoleContainerIds.push(this.containerPermissions.userContainerRoleContainerPermissions[key].id);
-                });
-            }));
-    }
-
-    public loadContainers = (): void => {
-        this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
-            .subscribe((result: SelectKeyValue[]) => {
-                this.containers = result;
-                this.cdr.markForCheck();
-            }));
-    }
-
-    public loadDateformats = (): void => {
-        this.subscriptions.add(this.UsersService.getDateformats()
-            .subscribe((result: UserDateformatsRoot) => {
-                this.dateformats = result.dateformats;
-                this.timezones = result.timezones;
-
-                this.serverTimeZone = result.serverTimeZone;
-                this.serverTime = result.serverTime;
-                this.cdr.markForCheck();
-            }));
-    }
-
-    public loadLocaleOptions = (): void => {
-        this.subscriptions.add(this.UsersService.getLocaleOptions()
-            .subscribe((result: UserLocaleOption[]) => {
-                this.localeOptions = result;
-                this.cdr.markForCheck();
-            }));
-    }
-
-    private loadUsergroups(): void {
-        this.subscriptions.add(this.UsersService.getUsergroups()
-            .subscribe((result: LoadUsergroupsRoot) => {
-                this.usergroups = result.usergroups;
-                this.cdr.markForCheck();
-            }))
-    }
-
-    protected loadLdapUsers = (search: string): void => {
-        this.subscriptions.add(this.UsersService.loadLdapUserByString(search)
-            .subscribe((result: LoadLdapUserByStringRoot) => {
-                this.samaccountnames = result.ldapUsers;
-                this.cdr.markForCheck();
-            }))
-    }
-
-    private loadLdapUserDetails(): void {
-        this.subscriptions.add(this.UsersService.loadLdapUserDetails(this.post.User.samaccountname)
-            .subscribe((result: LoadLdapUserDetailsRoot) => {
-                this.cdr.markForCheck();
-
-                this.ldapUserDetails = result.ldapUser;
-
-                this.ldapUserDetails.ldapgroupIds = this.ldapUserDetails.ldapgroups.map((entry) => {
-                    return entry.id;
-                });
-
-                // SET NAME AND EMAIL
-                this.post.User.firstname = this.ldapUserDetails.givenname;
-                this.post.User.lastname = this.ldapUserDetails.sn;
-                this.post.User.email = this.ldapUserDetails.email;
-
-                // From every object of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap, take every key of object user_roles and attach it to this.post.User.usercontainerroles_ldap._ids.
-                this.post.User.usercontainerroles_ldap._ids = [];
-                Object.keys(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap).forEach(key => {
-                    const userRoles = this.ldapUserDetails.userContainerRoleContainerPermissionsLdap[key].user_roles;
-                    const roleIds = Object.keys(userRoles).map(Number);
-
-                    // Only add the roleIds if they are not already in the array.
-                    roleIds.forEach((roleId) => {
-                        if (this.post.User.usercontainerroles_ldap._ids.indexOf(roleId) === -1) {
-                            this.post.User.usercontainerroles_ldap._ids.push(roleId);
-                        }
-                    });
-                });
-            }))
-    }
-
-    protected onLdapUserChange(event: any): void {
-        // Fetch the entries from this.ldapUsers that matches this.samaccountname.
-        let ldapUser = this.samaccountnames.find((entry) => {
-            return entry.samaccountname === this.post.User.samaccountname;
-        });
-        // Earlyreturn if ldapUser is undefined.
-        if (ldapUser === undefined) {
-            return;
-        }
-        this.post.User.ldap_dn = ldapUser.dn;
-        this.loadLdapUserDetails();
-        this.cdr.markForCheck();
-    }
-
-    protected createApiKey(): void {
-        this.subscriptions.add(this.profileService.generateNewApiKey()
-            .subscribe((result) => {
-                this.post.User.apikeys.push(result);
-                this.cdr.markForCheck();
-            })
-        );
-    }
-
-    private loadLdapConfig(): void {
-        this.subscriptions.add(this.ContactService.ldapConfiguration()
-            .subscribe((result) => {
-                this.ldapConfig = result.ldapConfig;
-                this.cdr.markForCheck();
-            }))
-    }
-
-    protected deleteApiKey(index: number): void {
-        this.post.User.apikeys.splice(index, 1);
-        this.cdr.markForCheck();
-    }
-
-    protected refreshApiKey(index: number): void {
-        this.subscriptions.add(this.profileService.generateNewApiKey()
-            .subscribe((result) => {
-                this.post.User.apikeys[index].apikey = result.apikey;
-                this.cdr.markForCheck();
-            })
-        );
-    }
-
-    protected trackByIndex(index: number, item: any): number {
-        return index;
-    }
+    protected readonly PermissionLevel = PermissionLevel;
+    protected readonly ROOT_CONTAINER = ROOT_CONTAINER;
 }

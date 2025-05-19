@@ -132,7 +132,7 @@
                                 </label>
                             </h5>
 
-                            <div *ngFor="let serviceToDeploy of hostWithServicesToDeploy.services">
+                            <div class="mb-1" *ngFor="let serviceToDeploy of hostWithServicesToDeploy.services">
                                 <label
                                     for="{{hostWithServicesToDeploy.host.id}}_{{serviceToDeploy.servicetemplate.id}}">
                                     <input type="checkbox" cFormCheckInput
@@ -186,7 +186,7 @@
 
                 <div class="row padding-top-15"><!-- spacer--></div>
 
-                <c-progress-bar [value]="percentage"></c-progress-bar>
+                <c-progress *ngIf="isProcessing" [value]="percentage" class="m-3"></c-progress>
 
             </c-card-body>
             <c-card-footer class="text-end">

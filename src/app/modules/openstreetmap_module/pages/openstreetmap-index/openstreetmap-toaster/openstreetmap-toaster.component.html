@@ -1,22 +1,29 @@
 <ng-container *transloco="let t">
-    <c-toaster [placement]="'top-end'" class="p-3 toaster-min-width" position="fixed">
+    <c-toaster [placement]="'top-end'" class="p-3 toaster-min-width toaster-max-width" position="fixed">
         <c-toast #toast="cToast"
                  (timer)="onToastTimerChange($event)"
                  (visibleChange)="onToastVisibleChange($event)"
                  [visible]="toastVisible"
                  [delay]="5000"
                  class="align-items-center w-100">
-            <div class="w-100" style="width:100%;">
-                <c-toast-header>
-                    <span>
-                        <h4>
+            <div class="d-flex">
+               <c-toast-header>
+                       <!-- <h6>
                             <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
                             {{ t('Locations') }}
-                        </h4>
-                    </span>
+                        </h6>-->
 
                 </c-toast-header>
                 <c-toast-body class="w-100">
+                    <header class="mb-2">
+                        <span>
+                            <h4>
+                                <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                                {{ t('Locations') }}
+                            </h4>
+                        </span>
+                    </header>
+
                     <div *ngFor="let summaryState of summary;">
                         <c-row class="pb-2">
                             <c-col>
@@ -29,39 +36,39 @@
                                 </oitc-label-link>
                             </c-col>
                         </c-row>
-                        <div *ngIf="!summaryState.Location.noObjectsInMonitoring">
+                        <div *ngIf="!summaryState.Location.noObjectsInMonitoring" class="font-xs">
                             <c-row class="pb-2">
-                                <c-col class="col-4 fs-6">
+                                <c-col class="col-4">
                                     {{ t('Summary State') }}
                                 </c-col>
                                 <c-col class="co-6"
                                        *ngIf="summaryState.HostSummary.total > 0 || summaryState.ServiceSummary.total > 0">
                                     <div
-                                        class="btn state-button-small w-100 text-center text-light text-capitalize fs-6 bg-{{ summaryState.CumulatedHumanState}}">
+                                        class="btn state-button-small w-100 text-center text-light text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
                                         {{ summaryState.CumulatedHumanState }}
                                     </div>
                                 </c-col>
                                 <c-col class="col-6"
                                        *ngIf="summaryState.HostSummary.total == 0 && summaryState.ServiceSummary.total == 0">
                                     <div
-                                        class="btn state-button-small w-100 text-center txt-light text-capitalize fs-6 bg-primary">
+                                        class="btn state-button-small w-100 text-center txt-light text-capitalize bg-primary">
                                         {{ summaryState.CumulatedHumanState }}
                                     </div>
                                 </c-col>
                             </c-row>
                             <c-row class="pb-2">
-                                <div class="col-4 fs-6">
+                                <div class="col-4">
                                     {{ t('Summary output') }}
                                 </div>
-                                <div class="col-4 fs-6">
+                                <div class="col-4">
                                     {{ t('Hosts: ') }}{{ summaryState.HostSummary.total }}
                                 </div>
-                                <div class="col-4 fs-6">
+                                <div class="col-4">
                                     {{ t('Services: ') }}{{ summaryState.ServiceSummary.total }}
                                 </div>
                             </c-row>
                             <c-row class="pb-2">
-                                <div class="col-4 fs-6">
+                                <div class="col-4">
                                     {{ t('Hosts overview') }}
                                 </div>
                                 <div class="col-8">
@@ -111,7 +118,7 @@
                                 </div>
                             </c-row>
                             <c-row class="pb-2">
-                                <div class="col-4 fs-6">
+                                <div class="col-4">
                                     {{ t('Services overview') }}
                                 </div>
                                 <div class="col-8 no-padding">
@@ -175,17 +182,19 @@
                             </c-row>
 
                         </div>
-                        <c-row *ngIf="summaryState.Location.noObjectsInMonitoring">
-                            <c-col class="col-4 fs-6">
-                                {{ t('Summary State') }}
-                            </c-col>
-                            <c-col class="col-8">
-                                <div class="btn state-button-small w-100 text-center text-white bg-primary fs-6">
-                                    <fa-icon class="text-light" [icon]="['fas', 'eye-slash']"></fa-icon>
-                                    {{ t('Not in monitoring') }}
-                                </div>
-                            </c-col>
-                        </c-row>
+                        <div *ngIf="summaryState.Location.noObjectsInMonitoring" class="font-xs">
+                            <c-row>
+                                <c-col class="col-4">
+                                    {{ t('Summary State') }}
+                                </c-col>
+                                <c-col class="col-8">
+                                    <div class="btn state-button-small w-100 text-center text-white bg-primary">
+                                        <fa-icon class="text-light" [icon]="['fas', 'eye-slash']"></fa-icon>
+                                        {{ t('Not in monitoring') }}
+                                    </div>
+                                </c-col>
+                            </c-row>
+                        </div>
 
                     </div>
                     <div class="pt-2">

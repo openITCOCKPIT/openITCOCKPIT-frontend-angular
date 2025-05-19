@@ -1,5 +1,11 @@
 import { SelectKeyValue, SelectKeyValueString } from '../../layouts/primeng/select.interface';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { PermissionLevel } from './permission-level';
+import { GenericIdAndName } from '../../generic.interfaces';
+
+/****************************
+ *    Generic interfaces    *
+ ****************************/
 
 export interface UserLocaleOption {
     i18n: string
@@ -34,286 +40,15 @@ export interface UserTimezonesSelect {
     name: string // Abidjan
 }
 
-export interface LoadUsersByContainerIdPost {
-    containerIds: number[]
-}
-
-
-// INDEX
-export interface UsersIndexRoot extends PaginateOrScroll {
-    all_users: User[]
-    isLdapAuth: boolean
-    myUserId: number
-}
-
-export interface User {
-    id: number
-    email: string
-    company: any
-    phone?: string
-    is_active: boolean
-    samaccountname: any
-    is_oauth: boolean
-    last_login?: string
-    full_name: string
-    usercontainerroles: any[]
-    containers: {
-        id: number
-        containertype_id: number
-        name: string
-        parent_id?: number
-        lft: number
-        rght: number
-        _joinData: {
-            id: number
-            user_id: number
-            container_id: number
-            permission_level: number
-        }
-    }[]
-    usergroup: {
-        id: number
-        name: string
-    }
-    allow_edit: boolean
-    UserTypes: UserType[]
-}
-
-export interface UsersIndexParams {
-    angular: boolean
-    direction: 'asc' | 'desc' | '', // asc or desc
-    page: number
-    scroll: boolean
-    sort: string
-    'filter[Users.company]': string
-    'filter[Users.email]': string
-    'filter[Users.phone]': string
-    'filter[full_name]': string
-    'filter[Users.usergroup_id][]': number[]
-}
-
-export function getDefaultUsersIndexParams(): UsersIndexParams {
-    return {
-        angular: true,
-        direction: 'asc',
-        page: 1,
-        scroll: true,
-        sort: 'full_name',
-        'filter[Users.company]': '',
-        'filter[Users.email]': '',
-        'filter[Users.phone]': '',
-        'filter[full_name]': '',
-        'filter[Users.usergroup_id][]': []
-    }
-}
-
-// ADD
-export interface UsersAddRoot {
-    User: CreateUser
-}
-
-export interface CreateUser {
-    apikeys: Apikey[]
-    company: string
-    confirm_password: string | undefined
-    ContainersUsersMemberships: {
-        [key: string]: number;
-    }
-    dashboard_tab_rotation: number
-    dateformat: string
-    email: string
-    firstname: string
-    i18n: string
-    is_active: number
-    is_oauth: number
-    lastname: string
-    paginatorlength: number
-    password: string | undefined
-    phone: string
-    position: string
-    recursive_browser: number
-    showstatsinmenu: number
-    timezone: string
-    usercontainerroles: {
-        _ids: number[]
-    }
-    usergroup_id: number
-}
-
-export interface CreateLdapUser extends CreateUser {
-    ldap_dn: string
-    samaccountname: string
-    usercontainerroles_ldap: {
-        _ids: number[]
-    }
-}
-
-export interface EditUser extends CreateUser {
-    id: number
-    containers: {
-        _ids: number[]
-    }
-    usercontainerroles_containerids: {
-        _ids: number[]
-    }
-    ldap_dn: string
-    samaccountname: string
-    usercontainerroles_ldap: {
-        _ids: number[]
-    }
-}
-
 export interface UserType {
     title: string
     color: ('primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark')
     class: string
 }
 
-export interface EditUserGet {
-    user: EditUser,
-    isLdapUser: boolean,
-    UserTypes: UserType[],
-    notPermittedContainerIds: number[]
-}
-
-export interface UpdateUser {
-    User: EditUser
-}
-
-export interface AddFromLdapRoot {
-    User: CreateLdapUser
-}
-
-
-export interface Apikey {
-    apikey: string
-    description: string
-    last_use: string | null
-}
-
-// LoadContainerRoles
-export interface LoadContainerRolesRequest {
-    angular: boolean
-    'filter[Usercontainerroles.name]': string
-    selected: number[]
-}
-
-export interface LoadContainerRolesRoot {
-    usercontainerroles: SelectKeyValue[]
-    _csrfToken: string
-}
-
-// LoadUsergroups
-export interface LoadUsergroupsRoot {
-    usergroups: SelectKeyValue[]
-    _csrfToken: string
-}
-
-// LoadContainerPermissions
-export interface LoadContainerPermissionsRequest {
-    angular: boolean
-    'usercontainerRoleIds[]': number[]
-}
-
-export interface LoadContainerPermissionsRoot {
-    userContainerRoleContainerPermissions: UserContainerRoleContainerPermissions
-    _csrfToken: string
-}
-
-export interface UserContainerRoleContainerPermissions {
-    [key: string]: {
-        id: number
-        containertype_id: number
-        name: string
-        parent_id: number
-        lft: number
-        rght: number
-        _joinData: {
-            id: number
-            usercontainerrole_id: number
-            container_id: number
-            permission_level: number
-        }
-        path: string
-        user_roles: {
-            [key: string]: {
-                id: number
-                name: string
-            }
-        }
-    }
-}
-
-// LoadLdapUserByString
-export interface LoadLdapUserByStringRoot {
-    ldapUsers: LdapUser[]
-    _csrfToken: string
-}
-
-export interface LdapUser {
-    givenname: string
-    sn: string
-    samaccountname: string
-    email: string
-    dn: string
-    memberof: any[]
-    display_name: string
-}
-
-// LoadLdapUserDetails
-export interface LoadLdapUserDetailsRoot {
-    ldapUser: LdapUserDetails
-    _csrfToken: string
-}
-
-export interface LdapUserDetails {
-    givenname: string
-    sn: string
-    samaccountname: string
-    email: string
-    dn: string
-    memberof: string[]
-    display_name: string
-    ldapgroups: {
-        id: number
-        cn: string
-        dn: string
-        description: string
-    }[]
-    userContainerRoleContainerPermissionsLdap: {
-        [key: string]: {
-            id: number
-            containertype_id: number
-            name: string
-            parent_id: number
-            lft: number
-            rght: number
-            _joinData: {
-                id: number
-                usercontainerrole_id: number
-                container_id: number
-                permission_level: number
-            }
-            path: string
-            user_roles: {
-                [key: string]: {
-                    id: number
-                    name: string
-                }
-            }
-        }
-    }
-    usergroupLdap: {
-        id: number
-        name: string
-        description: string
-        created: string
-        modified: string
-    },
-    ldapgroupIds: number[]
-}
-
-// LOGIN
+/**********************
+ *    Login action    *
+ **********************/
 export interface LoginGetRoot {
     _csrfToken: string
     images: {
@@ -327,9 +62,13 @@ export interface LoginGetRoot {
     isSsoEnabled: boolean
     forceRedirectSsousersToLoginScreen: boolean
     errorMessages: any[]
+    successMessages: any[]
     customLoginBackgroundHtml: string
     isCustomLoginBackground: boolean,
-    disableAnimation: boolean
+    disableAnimation: boolean,
+    disableSocialButtons: boolean,
+    enableColumnLayout: boolean
+    demoMode?: boolean
 }
 
 export interface LoginImage {
@@ -345,4 +84,240 @@ export interface LoadContainersResponse {
 export interface UserIdAndUsername {
     id: number;
     username: string;
+}
+
+/**********************
+ *    Index action    *
+ **********************/
+
+export interface UsersIndexParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[full_name]': string,
+    'filter[Users.email]': string,
+    'filter[Users.phone]': string,
+    'filter[Users.usergroup_id][]': number[],
+    'filter[Users.company]': string,
+}
+
+export function getDefaultUsersIndexParams(): UsersIndexParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'full_name',
+        page: 1,
+        direction: 'asc',
+        'filter[full_name]': '',
+        'filter[Users.email]': '',
+        'filter[Users.phone]': '',
+        'filter[Users.usergroup_id][]': [],
+        'filter[Users.company]': '',
+    }
+}
+
+export interface UsersIndexRoot extends PaginateOrScroll {
+    all_users: AllUser[]
+    myUserId: number
+    isLdapAuth: boolean
+    _csrfToken: string
+}
+
+export interface AllUser {
+    id: number
+    email: string
+    company?: string
+    phone?: string
+    is_active: boolean
+    samaccountname?: string
+    is_oauth: boolean
+    last_login?: string
+    full_name: string
+    usercontainerroles: UsersIndexUsercontainerrole[]
+    containers: UsersIndexUserContainer
+    usergroup: {
+        id: number
+        name: string
+    }
+    allow_edit: boolean
+    UserTypes: UserType[]
+}
+
+export interface UsersIndexUsercontainerrole {
+    id: number
+    name: string
+    _joinData: {
+        id: number
+        user_id: number
+        usercontainerrole_id: number
+        through_ldap: boolean
+    }
+    containers: UsersIndexContainer[]
+}
+
+export interface UsersIndexContainer {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id: number
+    lft: number
+    rght: number
+    _joinData: {
+        id: number
+        usercontainerrole_id: number
+        container_id: number
+        permission_level: number
+    }
+}
+
+export interface UsersIndexUserContainer {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id?: number
+    lft: number
+    rght: number
+    _joinData: {
+        id: number
+        user_id: number
+        container_id: number
+        permission_level: number
+    }
+}
+
+/**********************
+ *    Add action    *
+ **********************/
+export interface UserPost {
+    id?: number
+    firstname: string
+    lastname: string
+    email: string
+    phone: string
+    is_active: 0 | 1
+    showstatsinmenu: 0 | 1
+    paginatorlength: number
+    dashboard_tab_rotation: number
+    company?: string | null
+    position?: string | null
+    recursive_browser: 0 | 1
+    dateformat: string
+    timezone: string
+    i18n: string
+    password?: string
+    confirm_password?: string
+    is_oauth: boolean  // (number for add but boolean for edit)
+
+    image?: null | string
+
+    samaccountname?: string
+    ldap_dn?: string
+
+    containers?: { // Edit only
+        _ids: number[]
+    }
+
+    usergroup_id: number
+    usercontainerroles: {
+        _ids: number[]
+    },
+    usercontainerroles_ldap?: {
+        _ids: number[]
+    },
+    ContainersUsersMemberships: {
+        [key: number]: PermissionLevel
+    }
+    apikeys: UserAddEditApiKey[]
+}
+
+export interface UserAddEditApiKey {
+    id?: number // edit only
+    user_id?: number // edit only
+    //index?: number // edit only
+    last_use?: string | null // edit only
+    apikey: string
+    description: string
+}
+
+// The server response is a list of containers with their permissions,
+// but we have to convert this into an array to make Angular for happy
+export interface UserAddUserContainerRoleContainerPermissionsResponse {
+    [key: string]: UserAddContainerRolePermission
+}
+
+export interface UserAddContainerRolePermission {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id: number
+    lft: number
+    rght: number
+    _joinData: {
+        id: number
+        usercontainerrole_id: number
+        container_id: number
+        permission_level: PermissionLevel
+    }
+    path: string,
+
+    // Server response this as hahmap
+    user_roles: {
+        [key: string]: GenericIdAndName
+    }
+
+    // we use the array version in the Frontend to make Angular happy
+    user_roles_array?: GenericIdAndName[]
+}
+
+export interface UserContainerPermission {
+    container_id: number,
+    container_name: string,
+    permission_level: PermissionLevel
+}
+
+export interface UsersLdapUser {
+    givenname: string
+    sn: string
+    samaccountname: string
+    email: string
+    dn: string
+    memberof: string[]
+    display_name: string
+}
+
+export interface UsersLdapUserDetails {
+    givenname: string
+    sn: string
+    samaccountname: string
+    email: string
+    dn: string
+    memberof: string[]
+    display_name: string
+    ldapgroups: UsersLdapGroup[]
+    userContainerRoleContainerPermissionsLdap: UserAddUserContainerRoleContainerPermissionsResponse // Response
+    userContainerRoleContainerPermissionsLdapArray?: UserAddContainerRolePermission[] // For Angular
+    usergroupLdap: {
+        id: number
+        name: string
+        description: string
+        created: string
+        modified: string
+    }
+}
+
+export interface UsersLdapGroup {
+    id: number
+    cn: string
+    dn: string
+    description: string
+}
+
+export interface UsersEditResponse {
+    user: UserPost
+    isLdapUser: boolean
+    UserTypes: UserType[]
+    notPermittedContainerIds: number[]
+    userContainerRolesReadonly: boolean
 }

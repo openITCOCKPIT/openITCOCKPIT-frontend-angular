@@ -64,10 +64,16 @@
                             {{ t('Last scheduled') }}
                         </th>
                         <th scope="col">
+                            {{ t('Last execution time') }}
+                        </th>
+                        <th scope="col">
                             {{ t('Is currently running') }}
                         </th>
                         <th scope="col">
                             {{ t('Enabled') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Priority') }}
                         </th>
                         <th class="text-center width-50" scope="col">
                             <fa-icon [icon]="['fas', 'gear']"></fa-icon>
@@ -81,6 +87,7 @@
                         <td>{{ cronjob.Cronjob.plugin }}</td>
                         <td>{{ cronjob.Cronjob.interval }}</td>
                         <td>{{ cronjob.Cronschedule.last_scheduled_usertime }}</td>
+                        <td>{{ cronjob.Cronschedule.last_execution_time_human }}</td>
                         <td class="text-center">
                             <span class="text-success"
                                   *ngIf="!cronjob.Cronschedule.is_running">{{ t('No') }}</span>
@@ -95,6 +102,17 @@
                                 [icon]="['fas', 'times']" class="text-danger"></fa-icon>
                         </td>
 
+                        <td class="text-center">
+                            <oitc-badge-outline *ngIf="cronjob.Cronjob.priority === CronjobPriorities.Low"
+                                                color="success">
+                                {{ t('Low') }}
+                            </oitc-badge-outline>
+
+                            <oitc-badge-outline *ngIf="cronjob.Cronjob.priority === CronjobPriorities.High"
+                                                color="danger">
+                                {{ t('High') }}
+                            </oitc-badge-outline>
+                        </td>
 
                         <td class="width-50">
                             <div *oitcPermission="['cronjobs', 'edit']">
@@ -121,7 +139,7 @@
 
             </c-card-body>
             <c-card-footer class="text-end">
-
+                &nbsp;
             </c-card-footer>
         </c-card>
     </form>
@@ -190,6 +208,31 @@
                     <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
                     <div class="help-block">
                         {{ t(' Cronjob schedule interval in minutes') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="addPriority">
+                        {{ t('Priority') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <ng-select id="addPriority"
+                               name="addPriority"
+                               [items]="priorities"
+                               [clearable]="false"
+                               [(ngModel)]="CronjobPost.priority"
+                               oitcFormError [errors]="errors" errorField="priority">
+                        <ng-template ng-option-tmp let-priority="item" let-search="searchTerm">
+                            <div [ngOptionHighlight]="search">{{ priority }}</div>
+                        </ng-template>
+                    </ng-select>
+                    <oitc-form-feedback [errors]="errors" errorField="priority"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('"low" is the default priority and recommended for all cronjobs especially for long running
+                        tasks like generating reports.') }}
+                        <br>
+                        {{ t('"high" is recommended for cronjobs that should be executed as soon as possible. For
+                        example, sending emails.') }}
                     </div>
                 </div>
 
@@ -285,6 +328,31 @@
                     <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
                     <div class="help-block">
                         {{ t(' Cronjob schedule interval in minutes') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="editPriority">
+                        {{ t('Priority') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <ng-select id="editPriority"
+                               name="editPriority"
+                               [items]="priorities"
+                               [clearable]="false"
+                               [(ngModel)]="CronjobPost.priority"
+                               oitcFormError [errors]="errors" errorField="priority">
+                        <ng-template ng-option-tmp let-priority="item" let-search="searchTerm">
+                            <div [ngOptionHighlight]="search">{{ priority }}</div>
+                        </ng-template>
+                    </ng-select>
+                    <oitc-form-feedback [errors]="errors" errorField="priority"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('"low" is the default priority and recommended for all cronjobs especially for long running
+                        tasks like generating reports.') }}
+                        <br>
+                        {{ t('"high" is recommended for cronjobs that should be executed as soon as possible. For
+                        example, sending emails.') }}
                     </div>
                 </div>
 

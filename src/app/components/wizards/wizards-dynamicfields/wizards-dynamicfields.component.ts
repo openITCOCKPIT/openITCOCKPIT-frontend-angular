@@ -3,9 +3,12 @@ import {
     ChangeDetectorRef,
     Component,
     effect,
+    EventEmitter,
     inject,
+    Input,
     input,
     OnChanges,
+    Output,
     SimpleChanges,
 } from '@angular/core';
 import {
@@ -20,7 +23,9 @@ import { FormsModule } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { Service, WizardPost } from '../../../pages/wizards/wizards.interface';
+import { Service } from '../../../pages/wizards/wizards.interface';
+import { GenericValidationError } from '../../../generic-responses';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 
 @Component({
     selector: 'oitc-wizards-dynamicfields',
@@ -36,7 +41,8 @@ import { Service, WizardPost } from '../../../pages/wizards/wizards.interface';
         NgSelectComponent,
         RowComponent,
         TranslocoPipe,
-        TranslocoDirective
+        TranslocoDirective,
+        FormFeedbackComponent
     ],
     templateUrl: './wizards-dynamicfields.component.html',
     styleUrl: './wizards-dynamicfields.component.css',
@@ -46,8 +52,11 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
     public cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     protected searchedTags: string[] = [];
 
-    public post = input.required<Service[]>();
     public title = input.required<string>();
+
+    @Input() post: Service[] = [];
+    @Input() errors: GenericValidationError = {} as GenericValidationError;
+    @Output() postChange = new EventEmitter<Service[]>();
 
     constructor() {
         effect(() => {
@@ -66,7 +75,7 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
 
     protected toggleCheck(theService: Service | undefined): void {
         if (theService) {
-            this.post().forEach((service: Service) => {
+            this.post.forEach((service: Service) => {
                 if (service.servicetemplate_id === theService.servicetemplate_id) {
                     service.createService = !service.createService;
                 }
@@ -74,7 +83,7 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
             this.cdr.markForCheck();
             return;
         }
-        this.post().forEach((service: Service) => {
+        this.post.forEach((service: Service) => {
             if (!this.hasName(service.name)) {
                 return;
             }

@@ -167,6 +167,7 @@ export class GrafanaPanelOptionsModalComponent implements OnDestroy {
                 // All done send panel back tp the panel component
                 if (this.currentEvent) {
                     this.GrafanaPanelOptionsService.sendUpdatedPanelToPanelComponent({
+                        panel_id: this.currentEvent.panel.id,
                         panel: this.currentEvent.panel,
                         panelIndex: this.currentEvent.panelIndex
                     });

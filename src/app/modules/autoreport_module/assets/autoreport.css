@@ -94,3 +94,8 @@ i[class*='all_select_'] {
 .html-report-host-row {
     background-color: rgba(80, 80, 80, 0.2)!important;
 }
+
+.badge {
+    display: inline;
+    margin-top: 0px!important;
+}

@@ -34,11 +34,12 @@ import { MapItemBaseService } from './map-item-base.service';
 export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewInit {
     @ViewChild('container', {static: false}) containerRef!: ElementRef<HTMLDivElement>;
 
-    public item: InputSignal<T | undefined> = input<T | undefined>();
+    public item: InputSignal<T | undefined> = input.required<T | undefined>();
     public layers: InputSignal<{ key: string, value: string }[]> = input<{ key: string, value: string }[]>([]); // Layer options for context menu
     public gridSize: InputSignal<{ x: number, y: number }> = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
     public gridEnabled: InputSignal<boolean> = input<boolean>(true);
     public isViewMode: InputSignal<boolean> = input<boolean>(false); // View mode for disabling drag and drop and context menu
+    public enablePointerCursor: InputSignal<boolean> = input<boolean>(false); // Enable pointer cursor for drag and drop
 
     @Output() resizedEvent = new EventEmitter<ResizedEvent>();
     @Output() dropItemEvent = new EventEmitter<MapitemBaseActionObject>();
@@ -62,7 +63,10 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
     // will be overridden by child components
     // this is for the drop event to know which type of item is dropped
-    protected type = MapItemType.ITEM;
+    protected type: MapItemType = MapItemType.ITEM;
+
+    // can be overridden by child components
+    protected isCopyable: boolean = true; // if item is copyable
 
     protected readonly TranslocoService = inject(TranslocoService);
 
@@ -98,7 +102,8 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
     public setLayer(layer: string): void {
         if (this.containerRef !== undefined && this.containerRef.nativeElement !== undefined) {
-            this.containerRef.nativeElement.style.zIndex = layer;
+            //z-index has to be one higher than the map canvas helper lines (1) and background (0)
+            this.containerRef.nativeElement.style.zIndex = (Number(layer) + 1).toString();
         }
         this.cdr.markForCheck();
     }
@@ -186,11 +191,12 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
             let distanceY = this.oldStartY! - posY;
             distanceY = distanceY * -1;
 
-            this.endX = this.oldEndX! + distanceX;
-            this.endY = this.oldEndY! + distanceY;
+            //parseInt to prevent save bug with decimal numbers
+            this.endX = parseInt((this.oldEndX! + distanceX).toString(), 10);
+            this.endY = parseInt((this.oldEndY! + distanceY).toString(), 10);
 
-            this.startX = posX;
-            this.startY = posY;
+            this.startX = parseInt((posX).toString(), 10);
+            this.startY = parseInt((posY).toString(), 10);
 
             this.oldStartX = this.startX;
             this.oldStartY = this.startY;
@@ -198,8 +204,8 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
             this.oldEndY = this.endY;
 
         } else {
-            this.x = posX;
-            this.y = posY;
+            this.x = parseInt((posX).toString(), 10);
+            this.y = parseInt((posY).toString(), 10);
         }
 
         this.setPosition();
@@ -275,16 +281,38 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                 }
             },
             {
-                separator: true
+                label: this.TranslocoService.translate('Copy'),
+                icon: 'fa fa-copy',
+                visible: this.isCopyable,
+                command: () => {
+                    this.contextActionEvent.emit({
+                        type: ContextActionType.COPY,
+                        data: {
+                            id: this.id,
+                            x: this.x,
+                            y: this.y,
+                            map_id: this.mapId,
+                        },
+                        itemType: this.type,
+                        item: this.item()
+                    });
+                    this.cdr.markForCheck();
+                }
+            },
+            {
+                separator: true,
+                visible: (layerOptions.length > 0 || extraItems.length > 0) ? true : false
             },
             {
                 label: this.TranslocoService.translate('Layers'),
                 icon: 'fa fa-layer-group',
-                items: layerOptions
+                items: layerOptions,
+                visible: (layerOptions.length > 0) ? true : false
             },
             ...extraItems,
             {
-                separator: true
+                separator: true,
+                visible: (layerOptions.length > 0 || extraItems.length > 0) ? true : false
             },
             {
                 label: this.TranslocoService.translate('Delete'),

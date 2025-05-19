@@ -126,7 +126,6 @@
                 <tr *ngFor="let userdashboard of grafanaUserdhasobards.all_userdashboards">
                     <td class="text-center">
                         <oitc-item-select
-                            *oitcPermission="['hosts', 'delete']"
                             [disabled]="!userdashboard.allowEdit"
                             [item]="userdashboard"></oitc-item-select>
                     </td>
@@ -225,6 +224,7 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        *oitcPermission="'GrafanaModule.GrafanaUserdashboards.copy'"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
@@ -235,6 +235,7 @@
                                     {{ t('Synchronize') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="'GrafanaModule.GrafanaUserdashboards.delete'"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>

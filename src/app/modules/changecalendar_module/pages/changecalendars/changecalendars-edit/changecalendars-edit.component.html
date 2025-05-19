@@ -7,6 +7,10 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Changecalendar Module') }}
+            </li>
+            <li class="breadcrumb-item">
                 <a *oitcPermission="['ChangecalendarModule', 'Changecalendars', 'index']"
                    [routerLink]="['/', 'changecalendar_module', 'changecalendars', 'index']">
                     <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
@@ -14,13 +18,13 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
                 {{ t('Edit') }}
             </li>
         </ol>
     </nav>
 
-    <oitc-form-loader *ngIf="! post.changeCalendar.id"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="! post.changeCalendar.id"/>
 
     <form cForm *ngIf="post.changeCalendar.id" (ngSubmit)="updateChangecalendar()">
         <c-card class="mb-3">
@@ -48,10 +52,10 @@
 
             <c-card-body>
                 <oitc-changecalendars-event-editor
-                        [event]="event"
-                        (onDeleteClick)="deleteEvent($event);"
-                        (onEventChange)="updateEvent($event)"
-                        (onEventCreate)="addEvent()"
+                    [event]="event"
+                    (onDeleteClick)="deleteEvent($event);"
+                    (onEventChange)="updateEvent($event)"
+                    (onEventCreate)="addEvent()"
                 ></oitc-changecalendars-event-editor>
                 <div class="mb-3">
                     <label cLabel for="post.changeCalendar.container_id">
@@ -59,13 +63,13 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                            name="post.changeCalendar.container_id"
-                            id="post.changeCalendar.container_id"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.changeCalendar.container_id"
-                            [options]="containers"
-                            oitcFormError [errors]="errors" errorField="container_id">
+                        name="post.changeCalendar.container_id"
+                        id="post.changeCalendar.container_id"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.changeCalendar.container_id"
+                        [options]="containers"
+                        oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
 
@@ -112,12 +116,12 @@
                     </label>
                     <br/>
                     <p-color-picker
-                            required
-                            id="post.changeCalendar.colour"
-                            type="text"
-                            name="post.changeCalendar.colour"
-                            [(ngModel)]="post.changeCalendar.colour"
-                            oitcFormError [errors]="errors" errorField="colour">
+                        required
+                        id="post.changeCalendar.colour"
+                        type="text"
+                        name="post.changeCalendar.colour"
+                        [(ngModel)]="post.changeCalendar.colour"
+                        oitcFormError [errors]="errors" errorField="colour">
                     </p-color-picker>
                     <oitc-form-feedback [errors]="errors" errorField="colour"></oitc-form-feedback>
                 </div>
@@ -127,10 +131,12 @@
                         {{ t('Change calendar events') }}
                     </label>
                     <br/>
-                    <oitc-changecalendars-calendar
-                            [(events)]="events"
-                            (eventClick)="editEvent($event);"
-                            (onCreateClick)="createEvent($event)"/>
+                    <oitc-changecalendars-calendar-editor
+                        [(events)]="events"
+                        [colour]="post.changeCalendar.colour"
+                        (eventClick)="editEvent($event);"
+                        (onCreateClick)="createEvent($event)"
+                        (onEventMove)="eventMove($event)"/>
                 </div>
             </c-card-body>
             <c-card-footer class="text-end">
