@@ -130,6 +130,7 @@
                         [options]="externalsystems"
                         [(ngModel)]="post.external_system_id"
                         [debounce]="true"
+                        [showClear]="true"
                         oitcFormError [errors]="errors" errorField="external_system_id">
                     </oitc-select>
                     <div class="help-block small">
