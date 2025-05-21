@@ -51,7 +51,7 @@ import * as L from 'leaflet';
 import './Hexbinlayer.interface';
 import { chain } from 'lodash';
 // @ts-ignore
-import{ leafletFullscreen } from './js/Leaflet.fullscreen.js';
+import { leafletFullscreen } from './js/Leaflet.fullscreen.js';
 // @ts-ignore
 import { hexbinLayer } from './js/HexbinLayer.js';
 import { AsyncPipe, NgFor, NgIf, NgStyle } from '@angular/common';
@@ -155,7 +155,8 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
             lng: 0
         },
     };
-  //  public layers: L.Layer[] = [];
+
+    //  public layers: L.Layer[] = [];
 
     public ngOnInit(): void {
 
@@ -221,7 +222,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
                 this.initLocations = true
                 this.buildLayers();
                 this.cdr.markForCheck();
-                if(this.intervalId === null && this.intervalSecs >= 15) {
+                if (this.intervalId === null && this.intervalSecs >= 15) {
                     this.intervalId = setInterval(() => {
                         this.loadMapData();
                     }, this.intervalSecs * 1000);
@@ -234,19 +235,19 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         if (!this.server_url) {
             return;
         }
-        if(!this.hasChanges(this.leafletOptions) && this.mapData.locationPoints.length > 0){
+        if (!this.hasChanges(this.leafletOptions) && this.mapData.locationPoints.length > 0) {
             this.leafletOptions.zoom = this.map.getZoom();
-           this.leafletOptions.center = this.map.getCenter();
-           if(this.mapData.locationPoints.length > 0) {
+            this.leafletOptions.center = this.map.getCenter();
+            if (this.mapData.locationPoints.length > 0) {
 
-               this.map.fitBounds(new L.LatLngBounds(this.mapData.locationPoints));
-           }
+                this.map.fitBounds(new L.LatLngBounds(this.mapData.locationPoints));
+            }
         }
 
         L.tileLayer(this.settings.server_url, {
             maxNativeZoom: 18,
             maxZoom: 18,
-            attribution: "&copy; <a target='_blank' href='http://openstreetmap.org/copyright'>OpenStreetMap</a> contributors | <a target='_blank' href='https://it-novum.com'>it-novum.com</a>",
+            attribution: "&copy; <a target='_blank' href='http://openstreetmap.org/copyright'>OpenStreetMap</a> contributors | <a target='_blank' href='https://openitcockpit.io/'>openITCOCKPIT</a>",
             noWrap: false
         }).addTo(this.map);
 
@@ -277,7 +278,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     }
 
     public resetMap(): void {
-        if(this.mapData.locationPoints.length > 0) {
+        if (this.mapData.locationPoints.length > 0) {
             this.map.fitBounds(new L.LatLngBounds(this.mapData.locationPoints));
         }
     }
@@ -286,15 +287,15 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         this.loadMapData();
     }
 
-    private hasChanges(mapOptions:L.MapOptions) {
-        if(mapOptions.zoom === 0){
+    private hasChanges(mapOptions: L.MapOptions) {
+        if (mapOptions.zoom === 0) {
             return false;
         }
-        if(mapOptions.zoom !== this.map.getZoom()){
+        if (mapOptions.zoom !== this.map.getZoom()) {
             return true;
         }
         // @ts-ignore
-        if(mapOptions.center.lat !== this.map.getCenter()['lat'] && mapOptions.center.lng !== this.map.getCenter()['lng']){
+        if (mapOptions.center.lat !== this.map.getCenter()['lat'] && mapOptions.center.lng !== this.map.getCenter()['lng']) {
             return true;
         }
         return false;
@@ -308,7 +309,9 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
             this.settingsFilter.filter.down_critical |
             this.settingsFilter.filter.unreachable_unknown;
         this.loadMapData();
-        setTimeout(() => {this.resetMap()}, 700);
+        setTimeout(() => {
+            this.resetMap()
+        }, 700);
 
     }
 
@@ -351,7 +354,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     }
 
     protected clearRequestloop() {
-        if(this.intervalId !== null) {
+        if (this.intervalId !== null) {
             clearInterval(this.intervalId);
             this.intervalId = null;
         }
