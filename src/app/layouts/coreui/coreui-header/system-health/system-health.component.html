@@ -172,18 +172,20 @@
                                     </span>
                                 </li>
                                 <ng-container *ngFor="let satellite of systemHealth.satellites">
-                                    <li *ngIf="satellite.satellite_status.status !== 1">
-                                        <span>
-                                            <div class="pt-2">
-                                                <p class="mb-2">
-                                                    <i>{{ t('Sync status') }} {{ t('failed') }}</i>
-                                                    <br/>
-                                                    <i>{{ satellite.name }}
-                                                        , {{ t('last seen') }} {{ satellite.satellite_status.last_seen }}</i>
-                                                </p>
-                                            </div>
-                                        </span>
-                                    </li>
+                                    <ng-container *ngIf="satellite.satellite_status">
+                                        <li *ngIf="satellite.satellite_status.status !== 1">
+                                            <span>
+                                                <div class="pt-2">
+                                                    <p class="mb-2">
+                                                        <i>{{ t('Sync status') }} {{ t('failed') }}</i>
+                                                        <br/>
+                                                        <i>{{ satellite.name }}
+                                                            , {{ t('last seen') }} {{ satellite.satellite_status.last_seen }}</i>
+                                                    </p>
+                                                </div>
+                                            </span>
+                                        </li>
+                                    </ng-container>
                                 </ng-container>
                                 <li *ngIf="systemHealth.memory_usage && systemHealth.memory_usage.memory.state !== 'ok'">
                                     <span>
