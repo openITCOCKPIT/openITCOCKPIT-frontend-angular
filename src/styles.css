@@ -41,6 +41,8 @@
 
 @import "leaflet/dist/leaflet.css";
 @import "assets/leafletextensions/leaflet.custom.controls.css";
+/* this has to be imported globally, to render the timeline correctly after the build */
+@import "vis-timeline/styles/vis-timeline-graph2d.css";
 
 /*
  * Importing FontAwesome globally that we can Web Fonts which support gradients
