@@ -34,34 +34,36 @@
                     <small class="fw-300">
                         {{ post.name }}
                     </small>
-
-                    @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                        <a [routerLink]="['/', 'hosts', 'browser', post.host.id]"
-                           *ngIf="post.host.disabled == 1">
-                            <c-badge color="warning"
-                                     class="ms-2">
+                    @if (post.host) {
+                        @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                            <a [routerLink]="['/', 'hosts', 'browser', post.host.id]"
+                               *ngIf="post.host.disabled == 1">
+                                <c-badge color="warning"
+                                         class="ms-2">
+                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                    {{ t('In monitoring (disabled)') }}
+                                </c-badge>
+                            </a>
+                        } @else {
+                            <c-badge
+                                *ngIf="post.host.disabled == 1"
+                                color="warning"
+                                class="ms-2">
                                 <fa-icon [icon]="['fas', 'plug']"></fa-icon>
                                 {{ t('In monitoring (disabled)') }}
                             </c-badge>
-                        </a>
-                    } @else {
+                        }
+
                         <c-badge
-                            *ngIf="post.host.disabled == 1"
-                            color="warning"
-                            class="ms-2">
-                            <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                            {{ t('In monitoring (disabled)') }}
+                            *ngIf="post.host.disabled == 0 && hasFlag(post.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)"
+                            color="danger"
+                            class="ms-2"
+                            [cTooltip]="'Marked for disable' | transloco"
+                            cTooltipPlacement="top">
+                            <fa-icon [icon]="['fas', 'box-archive']"></fa-icon>
                         </c-badge>
                     }
 
-                    <c-badge
-                        *ngIf="post.host.disabled == 0 && hasFlag(post.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)"
-                        color="danger"
-                        class="ms-2"
-                        [cTooltip]="'Marked for disable' | transloco"
-                        cTooltipPlacement="top">
-                        <fa-icon [icon]="['fas', 'box-archive']"></fa-icon>
-                    </c-badge>
                 </h5>
 
                 <c-nav class="card-toolbar card-header-pills">
