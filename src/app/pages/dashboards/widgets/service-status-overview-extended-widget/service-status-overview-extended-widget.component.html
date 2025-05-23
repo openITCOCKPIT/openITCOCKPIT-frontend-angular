@@ -254,6 +254,26 @@
                             <c-col [xs]="12" [lg]="12">
                                 <fieldset class="mt-2">
                                     <legend class="fs-5">
+                                        {{ t('Containers') }}
+                                    </legend>
+                                    <c-input-group>
+                                        <oitc-multi-select
+                                            [id]="'Containers-'+widget.id"
+                                            [name]="'Containers-'+widget.id"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [options]="containers"
+                                            [(ngModel)]="containerIds"
+                                            [searchCallback]="loadContainers"
+                                            [appendTo]="'body'"
+                                            class="flex-1">
+                                        </oitc-multi-select>
+                                    </c-input-group>
+                                </fieldset>
+                            </c-col>
+                            <c-col [xs]="12" [lg]="12">
+                                <fieldset class="mt-2">
+                                    <legend class="fs-5">
                                         {{ t('Service groups') }}
                                     </legend>
                                     <c-input-group>

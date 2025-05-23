@@ -46,6 +46,8 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import {
     RegexHelperTooltipComponent
 } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { ContainersService } from '../../../containers/containers.service';
+import { ContainersLoadContainersByStringParams } from '../../../containers/containers.interface';
 
 @Component({
     selector: 'oitc-host-status-overview-extended-widget',
@@ -83,8 +85,8 @@ import {
 })
 export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implements OnDestroy, AfterViewInit {
     protected flipped = signal<boolean>(false);
+    public readonly ContainersService: ContainersService = inject(ContainersService);
     public readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
-
     public config?: HostStatusOverviewExtendedWidgetConfig;
     private readonly HostStatusOverviewExtendedWidgetService = inject(HostStatusOverviewExtendedWidgetService);
     public statusCount: number | null = null;
@@ -94,6 +96,8 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
     public fontSize: number = 0;
     public fontSizeIcon: number = 0;
     public iconTopPosition: number = 0;
+    public containers: SelectKeyValue[] = [];
+    protected containerIds: number[] = [];
     protected hostgroups: SelectKeyValue[] = [];
     protected hostgroupsIds: number[] = [];
     public keywords: string[] = [];
@@ -107,6 +111,7 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
         super();
         effect(() => {
             if (this.flipped()) {
+                this.loadContainers('');
                 this.loadHostgroups('');
             }
             this.cdr.markForCheck();
@@ -122,6 +127,7 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
                     this.statusCount = parseInt(result.statusCount, 10);
                     this.keywords = this.config.Host.keywords.split(',').filter(Boolean);
                     this.notKeywords = this.config.Host.not_keywords.split(',').filter(Boolean);
+                    this.containerIds = this.config.Container._ids.split(',').map(Number).filter(Boolean);
                     this.hostgroupsIds = this.config.Hostgroup._ids.split(',').map(Number).filter(Boolean);
                     this.hostIds = result.hostIds;
                     this.cdr.markForCheck();
@@ -157,6 +163,20 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
     public override layoutUpdate(event: KtdGridLayout) {
     }
 
+    public loadContainers = (searchString: string) => {
+        let params: ContainersLoadContainersByStringParams = {
+            angular: true,
+            'filter[Containers.name]': searchString
+        }
+
+        this.subscriptions.add(this.ContainersService.loadContainersByString(params)
+            .subscribe((result) => {
+                this.containers = result;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
     protected loadHostgroups = (search: string) => {
         let hostgroupIds: number[] = [];
         if (this.config?.Hostgroup._ids) {
@@ -178,8 +198,8 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
 
         this.config.Host.keywords = this.keywords.join(',');
         this.config.Host.not_keywords = this.notKeywords.join(',');
+        this.config.Container._ids = this.containerIds.join(',');
         this.config.Hostgroup._ids = this.hostgroupsIds.join(',');
-
 
         this.subscriptions.add(this.HostStatusOverviewExtendedWidgetService.saveWidgetConfig(this.widget.id, this.config)
             .subscribe({

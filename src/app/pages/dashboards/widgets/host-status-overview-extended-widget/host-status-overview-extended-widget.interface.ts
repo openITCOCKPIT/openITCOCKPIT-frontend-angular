@@ -18,6 +18,9 @@ export interface HostStatusOverviewExtendedWidgetConfig {
     Hostgroup: {
         _ids: string
     }
+    Container: {
+        _ids: string
+    }
 }
 
 export interface HoststatusExtendedWidgetConfig {
