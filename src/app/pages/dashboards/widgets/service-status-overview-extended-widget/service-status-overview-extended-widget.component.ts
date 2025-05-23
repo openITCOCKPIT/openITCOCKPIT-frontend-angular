@@ -46,6 +46,8 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import {
     RegexHelperTooltipComponent
 } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { ContainersService } from '../../../containers/containers.service';
+import { ContainersLoadContainersByStringParams } from '../../../containers/containers.interface';
 
 @Component({
     selector: 'oitc-service-status-overview-extended-widget',
@@ -83,6 +85,7 @@ import {
 })
 export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent implements OnDestroy, AfterViewInit {
     protected flipped = signal<boolean>(false);
+    public readonly ContainersService: ContainersService = inject(ContainersService);
     public readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
 
     public config?: ServiceStatusOverviewExtendedWidgetConfig;
@@ -94,8 +97,11 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
     public fontSize: number = 0;
     public fontSizeIcon: number = 0;
     public iconTopPosition: number = 0;
+    public containers: SelectKeyValue[] = [];
+    protected containerIds: number[] = [];
     protected servicegroups: SelectKeyValue[] = [];
     protected servicegroupsIds: number[] = [];
+
     public keywordsHost: string[] = [];
     public keywords: string[] = [];
     public notKeywordsHost: string[] = [];
@@ -109,6 +115,7 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
         super();
         effect(() => {
             if (this.flipped()) {
+                this.loadContainers('');
                 this.loadServicegroups('');
             }
             this.cdr.markForCheck();
@@ -126,6 +133,7 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
                     this.keywords = this.config.Service.keywords.split(',').filter(Boolean);
                     this.notKeywordsHost = this.config.Host.not_keywords.split(',').filter(Boolean);
                     this.notKeywords = this.config.Service.not_keywords.split(',').filter(Boolean);
+                    this.containerIds = this.config.Container._ids.split(',').map(Number).filter(Boolean);
                     this.servicegroupsIds = this.config.Servicegroup._ids.split(',').map(Number).filter(Boolean);
                     this.serviceIds = result.serviceIds;
                     this.cdr.markForCheck();
@@ -161,6 +169,20 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
     public override layoutUpdate(event: KtdGridLayout) {
     }
 
+    public loadContainers = (searchString: string) => {
+        let params: ContainersLoadContainersByStringParams = {
+            angular: true,
+            'filter[Containers.name]': searchString
+        }
+
+        this.subscriptions.add(this.ContainersService.loadContainersByString(params)
+            .subscribe((result) => {
+                this.containers = result;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
     protected loadServicegroups = (search: string) => {
         let servicegroupIds: number[] = [];
         if (this.config?.Servicegroup._ids) {
@@ -184,8 +206,8 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
         this.config.Host.not_keywords = this.notKeywordsHost.join(',');
         this.config.Service.keywords = this.keywords.join(',');
         this.config.Service.not_keywords = this.notKeywords.join(',');
+        this.config.Container._ids = this.containerIds.join(',');
         this.config.Servicegroup._ids = this.servicegroupsIds.join(',');
-
 
         this.subscriptions.add(this.ServiceStatusOverviewExtendedWidgetService.saveWidgetConfig(this.widget.id, this.config)
             .subscribe({
