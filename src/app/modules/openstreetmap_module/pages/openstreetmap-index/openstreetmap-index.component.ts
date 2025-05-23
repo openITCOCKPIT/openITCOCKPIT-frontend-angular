@@ -6,7 +6,8 @@ import {
     ElementRef,
     inject,
     OnDestroy,
-    OnInit,
+    OnInit, Signal,
+    viewChild,
     ViewChild,
 } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -98,7 +99,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     constructor() {
     }
 
-    @ViewChild('map') lmap!: ElementRef<HTMLElement>
+    //@ViewChild('map') lmap!: ElementRef<HTMLElement>
 
     private cdr = inject(ChangeDetectorRef);
     private readonly OpenstreetmapService = inject(OpenstreetmapService);
@@ -108,6 +109,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     public hideFilter: boolean = true;
     public stateFilter: number = 0;
     private includedLocations: number[] = [];
+    public lmap: Signal<ElementRef<any>| undefined> = viewChild<ElementRef>("map");
     public map!: L.Map;
     public hexlayer!: L.HexbinLayer;
     private intervalId: any = null;
@@ -169,7 +171,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
 
     public ngAfterViewInit(): void {
 
-        this.map = L.map(this.lmap.nativeElement, this.leafletOptions);
+        this.map = L.map(this.lmap()?.nativeElement, this.leafletOptions);
         let self = this;
         const fullscreenControl = leafletFullscreen();
         const newCustomControl = L.Control.extend({

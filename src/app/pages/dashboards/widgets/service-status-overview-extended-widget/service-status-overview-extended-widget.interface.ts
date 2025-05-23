@@ -21,6 +21,9 @@ export interface ServiceStatusOverviewExtendedWidgetConfig {
         keywords: string
         not_keywords: string
     }
+    Container: {
+        _ids: string
+    }
     Servicegroup: {
         _ids: string
     }
