@@ -192,14 +192,18 @@ export class SparklineStatsComponent implements OnChanges {
             try {
                 let elm = <HTMLElement>document.getElementById('sparklineGraphUPlot-' + this.uuid);
 
+                // Cleanup a previous created tooltip
+                const oldTooltip = document.getElementById('sparkline-tooltip-' + this.uuid);
+                if (oldTooltip) {
+                    oldTooltip.remove();
+                }
+
                 // Create tooltip element
                 let tooltip = document.createElement('div');
+                tooltip.id = 'sparkline-tooltip-' + this.uuid;
+                tooltip.classList.add('uplot-sparkline-tooltip');
                 tooltip.style.position = 'absolute';
                 tooltip.style.pointerEvents = 'none';
-                tooltip.style.background = '#fff';
-                tooltip.style.border = '1px solid #ccc';
-                tooltip.style.padding = '2px 6px';
-                tooltip.style.fontSize = '12px';
                 tooltip.style.display = 'none';
                 document.body.appendChild(tooltip);
 
@@ -208,7 +212,6 @@ export class SparklineStatsComponent implements OnChanges {
 
                 // Event-Handler for Cursor
                 plot.root.addEventListener('mousemove', (e: MouseEvent) => {
-
                     const rect = plot.root.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const index = plot.posToIdx(x); // get array index of the x position
