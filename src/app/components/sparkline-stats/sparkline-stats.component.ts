@@ -144,7 +144,18 @@ export class SparklineStatsComponent implements OnChanges {
             cursor: {
                 show: true,
                 x: true,
-                y: false
+                y: false,
+                drag: {
+                    setScale: false // disable zooming
+                }
+            },
+            select: {
+                show: false, // do not show selected area
+                over: false,
+                height: 0,
+                width: 0,
+                left: 0,
+                top: 0
             },
             legend: {
                 show: false,
@@ -181,8 +192,40 @@ export class SparklineStatsComponent implements OnChanges {
             try {
                 let elm = <HTMLElement>document.getElementById('sparklineGraphUPlot-' + this.uuid);
 
+                // Create tooltip element
+                let tooltip = document.createElement('div');
+                tooltip.style.position = 'absolute';
+                tooltip.style.pointerEvents = 'none';
+                tooltip.style.background = '#fff';
+                tooltip.style.border = '1px solid #ccc';
+                tooltip.style.padding = '2px 6px';
+                tooltip.style.fontSize = '12px';
+                tooltip.style.display = 'none';
+                document.body.appendChild(tooltip);
+
                 elm.innerHTML = '';
                 let plot = new uPlot(options, [xData, yData], elm);
+
+                // Event-Handler for Cursor
+                plot.root.addEventListener('mousemove', (e: MouseEvent) => {
+
+                    const rect = plot.root.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const index = plot.posToIdx(x); // get array index of the x position
+                    if (index >= 0 && index < yData.length) {
+                        tooltip.style.display = 'block';
+                        tooltip.style.left = `${e.pageX + 10}px`;
+                        tooltip.style.top = `${e.pageY - 20}px`;
+                        tooltip.textContent = String(yData[index]);
+
+                    } else {
+                        tooltip.style.display = 'none';
+                    }
+                });
+
+                plot.root.addEventListener('mouseleave', () => {
+                    tooltip.style.display = 'none';
+                });
 
             } catch (e) {
                 console.error(e);
