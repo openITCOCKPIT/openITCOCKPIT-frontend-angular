@@ -293,6 +293,8 @@ export interface UsersLdapUserDetails {
     sn: string
     samaccountname: string
     email: string
+    company: string
+    department: string
     dn: string
     memberof: string[]
     display_name: string

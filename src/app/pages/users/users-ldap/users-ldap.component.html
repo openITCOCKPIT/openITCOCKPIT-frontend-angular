@@ -487,8 +487,12 @@
                            type="text"
                            name="post.company"
                            [(ngModel)]="post.company"
+                           disabled
                            oitcFormError [errors]="errors" errorField="company"/>
                     <oitc-form-feedback [errors]="errors" errorField="company"></oitc-form-feedback>
+                    <div class="help-block text-info">
+                        {{ t('Value imported from LDAP Server') }}
+                    </div>
                 </div>
 
                 <div class="mb-3">

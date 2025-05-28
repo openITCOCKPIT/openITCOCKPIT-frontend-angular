@@ -519,8 +519,12 @@
                            type="text"
                            name="post.company"
                            [(ngModel)]="post.company"
+                           [disabled]="isLdapUser"
                            oitcFormError [errors]="errors" errorField="company"/>
                     <oitc-form-feedback [errors]="errors" errorField="company"></oitc-form-feedback>
+                    <div class="help-block text-info" *ngIf="isLdapUser">
+                        {{ t('Value imported from LDAP Server') }}
+                    </div>
                 </div>
 
                 <div class="mb-3">
