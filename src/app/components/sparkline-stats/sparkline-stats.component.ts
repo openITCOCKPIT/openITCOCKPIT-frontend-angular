@@ -133,7 +133,7 @@ export class SparklineStatsComponent implements OnChanges {
 
         let elm = <HTMLElement>document.getElementById('sparklineGraphUPlot-' + this.uuid);
         if (!elm) {
-            console.log('Could not find element for graph');
+            //console.log('Could not find element for graph');
             return;
         }
 
