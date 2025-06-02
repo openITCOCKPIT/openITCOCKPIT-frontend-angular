@@ -255,7 +255,6 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
             //cnditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
             let filter: CustomAlertsIndexFilter = getDefaultCustomAlertsIndexFilter();
-            console.warn('bookmarkfilter', bookmarkfilter);
             filter.Customalerts.message = bookmarkfilter.Customalerts.message || '';
             filter.Customalerts.state = bookmarkfilter.Customalerts.state || [true, true, false, false];
             filter.Hosts.container_id = bookmarkfilter.Hosts.container_id || [];
