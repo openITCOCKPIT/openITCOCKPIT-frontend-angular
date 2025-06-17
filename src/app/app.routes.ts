@@ -718,6 +718,9 @@ const coreRoutes: Routes = [{
     path: 'administrators/debug',
     loadComponent: () => import('./pages/administrators/administrators-debug/administrators-debug.component').then(m => m.AdministratorsDebugComponent)
 }, {
+    path: 'organizationalcharts/index',
+    loadComponent: () => import('./pages/organizationalcharts/organizational-charts-index/organizational-charts-index.component').then(m => m.OrganizationalChartsIndexComponent)
+}, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)
 }, {
