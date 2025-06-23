@@ -83,6 +83,7 @@ export interface MapgeneratorsEditRoot {
 
 export interface LoadContainersForMapgeneratorParams {
     'selectedContainers[]': number[],
+    loadStartContainers?: boolean
 }
 
 

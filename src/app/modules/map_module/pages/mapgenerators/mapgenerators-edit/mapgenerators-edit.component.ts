@@ -181,7 +181,8 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
     public loadStartContainers(): void {
 
         const params: LoadContainersForMapgeneratorParams = {
-            'selectedContainers[]': this.post.Mapgenerator.containers._ids
+            'selectedContainers[]': this.post.Mapgenerator.containers._ids,
+            loadStartContainers: true
         }
 
         this.subscriptions.add(this.MapgeneratorsService.loadContainers(params)
