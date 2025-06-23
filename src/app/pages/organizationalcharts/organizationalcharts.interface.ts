@@ -26,11 +26,11 @@ export function getDefaultOrganizationalChartsIndexParams(): OrganizationalChart
     return {
         angular: true,
         scroll: true,
-        sort: 'Organizationalcharts.name',
+        sort: 'OrganizationalCharts.name',
         page: 1,
         direction: 'asc',
-        'filter[Organizationalcharts.name]': '',
-        'filter[Organizationalcharts.description]': ''
+        'filter[OrganizationalCharts.name]': '',
+        'filter[OrganizationalCharts.description]': ''
     }
 }
 
@@ -41,6 +41,6 @@ export interface OrganizationalChartsIndexParams {
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
-    'filter[Organizationalcharts.name]': string
-    'filter[Organizationalcharts.description]': string
+    'filter[OrganizationalCharts.name]': string
+    'filter[OrganizationalCharts.description]': string
 }

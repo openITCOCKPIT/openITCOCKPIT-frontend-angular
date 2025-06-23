@@ -56,10 +56,28 @@ export class OrganizationalChartsIndexComponent implements OnInit, OnDestroy, In
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            //console.log(params);
+
+            this.loadOrganizationalCharts();
+        }));
     }
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    public loadOrganizationalCharts(): void {
+        this.SelectionServiceService.deselectAll();
+
+        this.subscriptions.add(
+            this.OrganizationalChartsService.getIndex(this.params).subscribe((organizationalcharts) => {
+                this.organizationalcharts = organizationalcharts;
+                this.cdr.markForCheck();
+            })
+        );
     }
 
     public onFilterChange(event: Event): void {
