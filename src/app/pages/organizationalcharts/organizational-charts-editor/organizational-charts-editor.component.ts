@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, model, OnInit, ViewChild } from '@angular/core';
 import { NodesPaletteComponent } from './nodes-palette/nodes-palette.component';
 import {
     EFMarkerType,
@@ -11,16 +11,19 @@ import {
     FZoomDirective
 } from '@foblex/flow';
 import { IPoint, Point } from '@foblex/2d';
+import { OrganizationalChartsTreeNode } from '../organizationalcharts.interface';
+import { UUID } from '../../../classes/UUID';
+import { TenantNodeComponent } from './tenant-node/tenant-node.component';
+import { OcTreeNode } from './organizational-charts-editor.interface';
 
-class IFlowViewModel {
-}
 
 @Component({
     selector: 'oitc-organizational-charts-editor',
     imports: [
         NodesPaletteComponent,
         FFlowComponent,
-        FFlowModule
+        FFlowModule,
+        TenantNodeComponent
     ],
     templateUrl: './organizational-charts-editor.component.html',
     styleUrl: './organizational-charts-editor.component.css',
@@ -28,10 +31,11 @@ class IFlowViewModel {
 })
 export class OrganizationalChartsEditorComponent implements OnInit {
 
-    protected viewModel: IFlowViewModel = {
-        nodes: [],
-        connections: []
-    };
+    // Two-way binding for the organizational charts tree from the add or edit component
+    public nodeTree = model<OrganizationalChartsTreeNode[]>([]);
+
+    public nodes: OcTreeNode[] = [];
+    public connections: any[] = [];
 
     @ViewChild(FCanvasComponent, {static: true})
     public fCanvasComponent!: FCanvasComponent;
@@ -42,7 +46,7 @@ export class OrganizationalChartsEditorComponent implements OnInit {
     protected readonly eMarkerType = EFMarkerType;
 
     constructor(
-        private changeDetectorRef: ChangeDetectorRef
+        private cdr: ChangeDetectorRef
     ) {
     }
 
@@ -56,12 +60,48 @@ export class OrganizationalChartsEditorComponent implements OnInit {
 
     private getData(): void {
         // this.viewModel = this.apiService.getFlow();
-        this.changeDetectorRef.markForCheck();
+        this.cdr.markForCheck();
     }
 
     public onNodeAdded(event: FCreateNodeEvent): void {
         //this.apiService.addNode(event.data as ENodeType, event.rect);
-        console.log(event);
+
+        const x = Math.floor(event.rect.x);
+        const y = Math.floor(event.rect.y);
+
+
+        // Create a new node for the database / two-way binding
+        const uuid = new UUID();
+
+        const newNode: OrganizationalChartsTreeNode = {
+            id: uuid.v4(),
+            parent_id: null,
+            container_id: 0,
+            users_to_organizational_chart_structures: [],
+            organizational_chart_id: 0,
+            x_position: x,
+            y_position: y
+        };
+
+        // Add new node to the f-flow canvas
+        this.nodes.push({
+            fNodeId: '1',
+            fNodeParentId: '2',
+            position: {
+                x: x,
+                y: y
+            },
+            node: newNode
+        });
+
+        // Update two-way binding
+        this.nodeTree.update((nodes) => {
+            return [...nodes, newNode];
+        });
+
+        this.cdr.markForCheck();
+
+
         //this.getData();
     }
 
