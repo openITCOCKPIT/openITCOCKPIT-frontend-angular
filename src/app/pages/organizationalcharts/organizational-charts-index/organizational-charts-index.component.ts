@@ -1,8 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    OrganizationalChartsEditorComponent
-} from '../organizational-charts-editor/organizational-charts-editor.component';
-import {
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -28,7 +25,6 @@ import {
 @Component({
     selector: 'oitc-organizational-charts-index',
     imports: [
-        OrganizationalChartsEditorComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
