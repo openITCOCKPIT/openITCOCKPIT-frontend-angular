@@ -32,7 +32,7 @@
     "@coreui/icons": "^3.0.1",
     "@coreui/icons-angular": "^5.3.5",
     "@dagrejs/dagre": "^1.1.4",
-    "@foblex/flow": "^17.5.1",
+    "@foblex/flow": "^17.5.2",
     "@fontsource/roboto": "^5.1.1",
     "@fortawesome/angular-fontawesome": "^1.0.0",
     "@fortawesome/fontawesome-free": "^6.7.2",
