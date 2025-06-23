@@ -29,7 +29,11 @@ import { LoadContainersRoot } from '../../../../pages/containers/containers.inte
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
-import { LoadContainersForMapgeneratorParams, MapgeneratorPost } from './mapgenerators.interface';
+import {
+    LoadContainersForMapgeneratorParams,
+    MapgeneratorPost,
+    MapgeneratorsEditRoot
+} from './mapgenerators.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -52,6 +56,36 @@ export class MapgeneratorsService {
     public add(post: MapgeneratorPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/map_module/mapgenerators/add.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<MapgeneratorsEditRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/map_module/mapgenerators/edit/${id}.json?angular=true`, {}).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public updateMapgenerator(post: MapgeneratorPost, id: number): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/mapgenerators/edit/${id}.json?angular=true`, post)
             .pipe(
                 map(data => {
                     // Return true on 200 Ok

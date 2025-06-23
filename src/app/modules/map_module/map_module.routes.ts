@@ -53,4 +53,8 @@ export const mapModuleRoutes: Routes = [
         path: 'map_module/mapgenerators/add',
         loadComponent: () => import('./pages/mapgenerators/mapgenerators-add/mapgenerators-add.component').then(m => m.MapgeneratorsAddComponent)
     },
+    {
+        path: 'map_module/mapgenerators/edit/:id',
+        loadComponent: () => import('./pages/mapgenerators/mapgenerators-edit/mapgenerators-edit.component').then(m => m.MapgeneratorsEditComponent)
+    }
 ];

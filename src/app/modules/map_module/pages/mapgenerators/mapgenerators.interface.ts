@@ -18,7 +18,8 @@ export interface Mapgenerator {
     created: string
     modified: string
     containers: MapgeneratorContainer[]
-    maps: Map[]
+    start_containers: MapgeneratorContainer[]
+    maps?: Map[]
     allowEdit?: boolean
 }
 
