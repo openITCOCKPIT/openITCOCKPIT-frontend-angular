@@ -21,7 +21,7 @@
     <c-card class="mb-3">
         <c-card-header>
             <h5 cCardTitle>{{ t('Status page') }}
-                <small class="fw-300">
+                <small class="fw-300" *ngIf="statuspage">
                     {{ statuspage.Statuspage.statuspage.name }}
                 </small>
             </h5>
