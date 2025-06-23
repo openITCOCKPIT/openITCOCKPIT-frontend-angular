@@ -1,42 +1,27 @@
 <ng-container *transloco="let t">
     <div class="oc-palette">
-        <div class="oc-item oc-item-tenant" fExternalItem [fData]="ContainerTypesEnum.CT_TENANT"
-             [fPreview]="previewTemplate" [fPlaceholder]="placeholderTemplate">
+        <div class="oc-item oc-item-tenant" fExternalItem [fData]="ContainerTypesEnum.CT_TENANT">
             <div class="oc-icon">
                 <fa-icon [icon]="['fas', 'home']"></fa-icon>
                 {{ t('Tenant') }}
             </div>
         </div>
 
-        <div class="oc-item oc-item-location" fExternalItem [fData]="ContainerTypesEnum.CT_LOCATION"
-             [fPreview]="previewTemplate" [fPlaceholder]="placeholderTemplate">
+        <div class="oc-item oc-item-location" fExternalItem [fData]="ContainerTypesEnum.CT_LOCATION">
             <div class="oc-icon">
                 <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
                 {{ t('Location') }}
             </div>
         </div>
 
-        <div class="oc-item oc-item-node" fExternalItem [fData]="ContainerTypesEnum.CT_NODE"
-             [fPreview]="previewTemplate" [fPlaceholder]="placeholderTemplate">
+        <div class="oc-item oc-item-node" fExternalItem [fData]="ContainerTypesEnum.CT_NODE">
             <div class="oc-icon">
-                <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                <fa-icon [icon]="['fas', 'chain']"></fa-icon>
                 {{ t('Node') }}
             </div>
         </div>
 
     </div>
-
-
-    <ng-template #placeholderTemplate>
-        <div class="external-item-placeholder">
-            Placeholder 2
-        </div>
-    </ng-template>
-    <ng-template #previewTemplate>
-        <div class="external-item-preview">
-            Preview 2
-        </div>
-    </ng-template>
 
 </ng-container>
 
