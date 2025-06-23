@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { OrganizationalchartsService } from './organizationalcharts.service';
+import { OrganizationalChartsService } from './organizationalcharts.service';
 
-describe('OrganizationalchartsService', () => {
-  let service: OrganizationalchartsService;
+describe('OrganizationalChartsService', () => {
+    let service: OrganizationalChartsService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(OrganizationalchartsService);
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(OrganizationalChartsService);
+    });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 });
