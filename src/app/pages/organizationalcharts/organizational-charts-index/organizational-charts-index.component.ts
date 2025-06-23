@@ -1,42 +1,102 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    OrganizationalChartsEditorComponent
-} from '../organizational-charts-editor/organizational-charts-editor.component';
-import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    ModalService
+    ColComponent,
+    ContainerComponent,
+    DropdownDividerDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { IndexPage } from '../../../pages.interface';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { Sort } from '@angular/material/sort';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { OrganizationalChartsService } from '../organizationalcharts.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import {
     getDefaultOrganizationalChartsIndexParams,
+    OrganizationalChart,
     OrganizationalChartsIndexParams,
     OrganizationalChartsIndexRoot
 } from '../organizationalcharts.interface';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { FormsModule } from '@angular/forms';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { NgForOf, NgIf } from '@angular/common';
+import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 
 @Component({
     selector: 'oitc-organizational-charts-index',
     imports: [
-        OrganizationalChartsEditorComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
         CardBodyComponent,
-        TranslocoDirective
+        TranslocoDirective,
+        RouterLink,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        PermissionDirective,
+        ContainerComponent,
+        RowComponent,
+        ColComponent,
+        InputGroupComponent,
+        DebounceDirective,
+        FormsModule,
+        TranslocoPipe,
+        InputGroupTextDirective,
+        FormControlDirective,
+        TableLoaderComponent,
+        NgIf,
+        TableDirective,
+        MatSort,
+        MatSortHeader,
+        ItemSelectComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        DropdownDividerDirective,
+        NoRecordsComponent,
+        SelectAllComponent,
+        PaginateOrScrollComponent,
+        CardFooterComponent,
+        DeleteAllModalComponent,
+        NgForOf
     ],
     templateUrl: './organizational-charts-index.component.html',
     styleUrl: './organizational-charts-index.component.css',
+    providers: [
+        {provide: DELETE_SERVICE_TOKEN, useClass: OrganizationalChartsService} // Inject the ServicesService into the DeleteAllModalComponent
+    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrganizationalChartsIndexComponent implements OnInit, OnDestroy, IndexPage {
@@ -80,22 +140,81 @@ export class OrganizationalChartsIndexComponent implements OnInit, OnDestroy, In
         );
     }
 
-    public onFilterChange(event: Event): void {
+    // Show or hide the filter
+    public toggleFilter() {
+        this.hideFilter = !this.hideFilter;
     }
 
-    public onMassActionComplete(success: boolean): void {
+    // Callback when a filter has changed
+    public onFilterChange(event: any) {
+        this.params.page = 1;
+        this.loadOrganizationalCharts();
     }
 
+    // Callback when sort has changed
+    public onSortChange(sort: Sort) {
+        if (sort.direction) {
+            this.params.sort = sort.active;
+            this.params.direction = sort.direction;
+            this.loadOrganizationalCharts();
+        }
+    }
+
+    // Callback for Paginator or Scroll Index Component
     public onPaginatorChange(change: PaginatorChangeEvent): void {
+        this.params.page = change.page;
+        this.params.scroll = change.scroll;
+        this.loadOrganizationalCharts();
     }
 
-    public onSortChange(sort: Sort): void {
+
+    // Generic callback whenever a mass action (like delete all) has been finished
+    public onMassActionComplete(success: boolean) {
+        if (success) {
+            this.loadOrganizationalCharts();
+        }
     }
 
-    public resetFilter(): void {
+    public resetFilter() {
+        this.params = getDefaultOrganizationalChartsIndexParams();
+        this.loadOrganizationalCharts();
     }
 
-    public toggleFilter(): void {
+    // Open the Delete All Modal
+    public toggleDeleteAllModal(organizationalchart?: OrganizationalChart) {
+        let items: DeleteAllItem[] = [];
+
+        if (organizationalchart) {
+            // User just want to delete a single organizational chart
+            items = [{
+                id: Number(organizationalchart.OrganizationalChart.id),
+                displayName: String(organizationalchart.OrganizationalChart.name)
+            }];
+        } else {
+            // User clicked on delete selected button
+            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+                return {
+                    id: item.OrganizationalChart.id,
+                    displayName: item.OrganizationalChart.name
+                };
+            });
+        }
+
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
+        // Pass selection to the modal
+        this.selectedItems = items;
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'deleteAllModal',
+        });
     }
 
+    protected readonly Boolean = Boolean;
 }
