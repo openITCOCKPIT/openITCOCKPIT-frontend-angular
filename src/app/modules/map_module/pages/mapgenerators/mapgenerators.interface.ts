@@ -15,10 +15,12 @@ export interface Mapgenerator {
     id: number
     name: string
     interval: number
+    type: number
+    maps_generated?: number
     created: string
     modified: string
     containers: MapgeneratorContainer[]
-    start_containers: MapgeneratorContainer[]
+    start_containers?: MapgeneratorContainer[]
     maps?: Map[]
     allowEdit?: boolean
 }
@@ -41,7 +43,7 @@ export interface MapgeneratorsIndexParams {
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
     'filter[Mapgenerators.name]': string,
-    'filter[Mapgenerators.interval]': string,
+    'filter[maps_generated]': string
 }
 
 export function getDefaultMapgeneratorsIndexParams(): MapgeneratorsIndexParams {
@@ -52,7 +54,7 @@ export function getDefaultMapgeneratorsIndexParams(): MapgeneratorsIndexParams {
         page: 1,
         direction: 'asc',
         'filter[Mapgenerators.name]': "",
-        'filter[Mapgenerators.interval]': "",
+        'filter[maps_generated]': ""
     }
 }
 

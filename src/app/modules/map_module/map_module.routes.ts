@@ -50,6 +50,10 @@ export const mapModuleRoutes: Routes = [
         loadComponent: () => import('./pages/rotations/rotations-edit/rotations-edit.component').then(m => m.RotationsEditComponent)
     },
     {
+        path: 'map_module/mapgenerators/index',
+        loadComponent: () => import('./pages/mapgenerators/mapgenerators-index/mapgenerators-index.component').then(m => m.MapgeneratorsIndexComponent)
+    },
+    {
         path: 'map_module/mapgenerators/add',
         loadComponent: () => import('./pages/mapgenerators/mapgenerators-add/mapgenerators-add.component').then(m => m.MapgeneratorsAddComponent)
     },

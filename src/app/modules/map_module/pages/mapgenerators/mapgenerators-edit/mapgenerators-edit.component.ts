@@ -128,12 +128,12 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
                     selectedContainer.push(parseInt(String(mapgenerator.containers[key].id), 10));
                 }
 
-                for (let key in mapgenerator.start_containers) {
+                for (let key in mapgenerator.start_containers!) {
                     selectedStartContainer.push(parseInt(String(mapgenerator.start_containers[key].id), 10));
                 }
 
                 this.post.Mapgenerator.containers._ids = mapgenerator.containers.map(container => container.id);
-                this.post.Mapgenerator.start_containers._ids = mapgenerator.start_containers.map(container => container.id);
+                this.post.Mapgenerator.start_containers._ids = mapgenerator.start_containers!.map(container => container.id);
                 this.post.Mapgenerator.name = mapgenerator.name;
                 this.post.Mapgenerator.interval = parseInt(String(mapgenerator.interval), 10);
                 this.loadStartContainers();

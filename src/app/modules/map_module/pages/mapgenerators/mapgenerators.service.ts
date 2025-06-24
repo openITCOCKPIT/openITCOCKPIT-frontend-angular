@@ -32,7 +32,9 @@ import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } fro
 import {
     LoadContainersForMapgeneratorParams,
     MapgeneratorPost,
-    MapgeneratorsEditRoot
+    MapgeneratorsEditRoot,
+    MapgeneratorsIndexParams,
+    MapgeneratorsIndexRoot
 } from './mapgenerators.interface';
 
 @Injectable({
@@ -41,6 +43,17 @@ import {
 export class MapgeneratorsService {
     private readonly http: HttpClient = inject(HttpClient);
     private readonly proxyPath: string = inject(PROXY_PATH);
+
+    public getIndex(params: MapgeneratorsIndexParams): Observable<MapgeneratorsIndexRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<MapgeneratorsIndexRoot>(`${proxyPath}/map_module/mapgenerators/index.json`, {
+            params: params as {} // cast ContactsIndexParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
 
     public loadContainers(params: LoadContainersForMapgeneratorParams): Observable<LoadContainersRoot> {
         const proxyPath: string = this.proxyPath;
