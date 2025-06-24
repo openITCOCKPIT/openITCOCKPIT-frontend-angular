@@ -98,3 +98,9 @@ export interface OrganizationalChartsTreeNodeUser {
         is_active: boolean
     }
 }
+
+export interface OrganizationalChartsTreeConnection {
+    uuid: string
+    fInputId: string
+    fOutputId: string
+}

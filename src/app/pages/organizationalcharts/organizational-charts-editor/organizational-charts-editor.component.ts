@@ -11,7 +11,7 @@ import {
     FZoomDirective
 } from '@foblex/flow';
 import { IPoint, Point } from '@foblex/2d';
-import { OrganizationalChartsTreeNode } from '../organizationalcharts.interface';
+import { OrganizationalChartsTreeConnection, OrganizationalChartsTreeNode } from '../organizationalcharts.interface';
 import { UUID } from '../../../classes/UUID';
 import { TenantNodeComponent } from './tenant-node/tenant-node.component';
 import { OcTreeNode } from './organizational-charts-editor.interface';
@@ -26,7 +26,7 @@ import { OcTreeNode } from './organizational-charts-editor.interface';
         TenantNodeComponent
     ],
     templateUrl: './organizational-charts-editor.component.html',
-    styleUrl: './organizational-charts-editor.component.css',
+    styleUrl: './organizational-charts-editor.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrganizationalChartsEditorComponent implements OnInit {
@@ -35,7 +35,7 @@ export class OrganizationalChartsEditorComponent implements OnInit {
     public nodeTree = model<OrganizationalChartsTreeNode[]>([]);
 
     public nodes: OcTreeNode[] = [];
-    public connections: any[] = [];
+    public connections: OrganizationalChartsTreeConnection[] = [];
 
     @ViewChild(FCanvasComponent, {static: true})
     public fCanvasComponent!: FCanvasComponent;
@@ -106,6 +106,8 @@ export class OrganizationalChartsEditorComponent implements OnInit {
     }
 
     public onReassignConnection(event: FReassignConnectionEvent): void {
+        console.log('onReassignConnection');
+        console.log(event);
         //    this.apiService.reassignConnection(event.fOutputId, event.oldFInputId, event.newFInputId);
         this.getData();
     }
@@ -114,12 +116,27 @@ export class OrganizationalChartsEditorComponent implements OnInit {
         if (!event.fInputId) {
             return;
         }
-        //  this.apiService.addConnection(event.fOutputId, event.fInputId);
-        this.getData();
+
+        // So we can track connections in @for loop
+        const uuid = new UUID();
+
+        const newConnection: OrganizationalChartsTreeConnection = {
+            uuid: uuid.v4(),
+            fInputId: event.fInputId,
+            fOutputId: event.fOutputId
+        };
+
+        this.connections = [...this.connections, newConnection];
+        this.cdr.markForCheck();
     }
 
     public onNodePositionChanged(point: IPoint, node: any): void {
         node.position = point;
+
+        console.log('onNodePositionChanged');
+        console.log(point);
+        console.log(node);
+
         //this.apiService.moveNode(node.id, point);
     }
 
