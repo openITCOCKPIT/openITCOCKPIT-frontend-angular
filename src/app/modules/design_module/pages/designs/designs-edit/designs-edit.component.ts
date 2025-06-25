@@ -13,13 +13,16 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
 import {
-    ButtonCloseDirective, ButtonGroupComponent,
+    ButtonCloseDirective,
+    ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
     FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     ModalBodyComponent,
     ModalComponent,
     ModalFooterComponent,
@@ -36,6 +39,9 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import {
     ReloadInterfaceModalComponent
 } from '../../../../../layouts/coreui/reload-interface-modal/reload-interface-modal.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ColorPicker } from 'primeng/colorpicker';
+import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 
 @Component({
     selector: 'oitc-designs-edit',
@@ -62,7 +68,13 @@ import {
         ButtonCloseDirective,
         ReloadInterfaceModalComponent,
         FormLabelDirective,
-        ButtonGroupComponent
+        ButtonGroupComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ReactiveFormsModule,
+        FormsModule,
+        ColorPicker,
+        FormErrorDirective
     ],
     templateUrl: './designs-edit.component.html',
     styleUrl: './designs-edit.component.css',
@@ -100,6 +112,9 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
         {key: '3', value: this.TranslocoService.translate('Header logo')},
         {key: '4', value: this.TranslocoService.translate('Login background image')}
     ];
+    protected colours: { [key: string]: string } = {
+        'bodyBackground': '#00FF00'
+    };
 
     public ngOnInit(): void {
         this.load();
