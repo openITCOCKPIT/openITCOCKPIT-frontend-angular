@@ -68,8 +68,6 @@ export class OrganizationalChartsEditorComponent implements OnInit {
     }
 
     public onNodeAdded(event: FCreateNodeEvent): void {
-        //this.apiService.addNode(event.data as ENodeType, event.rect);
-
         const x = Math.floor(event.rect.x);
         const y = Math.floor(event.rect.y);
 
@@ -136,6 +134,9 @@ export class OrganizationalChartsEditorComponent implements OnInit {
 
     public onNodePositionChanged(point: IPoint, node: any): void {
         node.position = point;
+
+        const x = Math.floor(node.position.x);
+        const y = Math.floor(node.position.y);
 
         console.log('onNodePositionChanged');
         console.log(point);
