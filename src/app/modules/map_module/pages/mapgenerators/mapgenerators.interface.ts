@@ -14,6 +14,7 @@ export interface MapgeneratorsIndexRoot extends PaginateOrScroll {
 export interface Mapgenerator {
     id: number
     name: string
+    description: string
     interval: number
     type: number
     items_per_line: number
@@ -45,7 +46,7 @@ export interface MapgeneratorsIndexParams {
     direction: 'asc' | 'desc' | '', // asc or desc
     'filter[Mapgenerators.name]': string,
     'filter[Mapgenerators.has_generated_maps]': string
-    'filter[Mapgenerators.items_per_line]': string,
+    'filter[Mapgenerators.description]': string,
 }
 
 export function getDefaultMapgeneratorsIndexParams(): MapgeneratorsIndexParams {
@@ -57,7 +58,7 @@ export function getDefaultMapgeneratorsIndexParams(): MapgeneratorsIndexParams {
         direction: 'asc',
         'filter[Mapgenerators.name]': "",
         'filter[Mapgenerators.has_generated_maps]': "",
-        'filter[Mapgenerators.items_per_line]': ""
+        'filter[Mapgenerators.description]': ""
     }
 }
 
@@ -71,6 +72,7 @@ export interface MapgeneratorPost {
 
 export interface MapgeneratorEdit {
     name: string
+    description: string
     interval: number
     items_per_line: number
     has_generated_maps: number // Optional, default is 0

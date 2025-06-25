@@ -90,6 +90,7 @@ export class MapgeneratorsAddComponent implements OnInit, OnDestroy {
         return {
             Mapgenerator: {
                 name: '',
+                description: '',
                 interval: 90,
                 type: 1,
                 items_per_line: 10,

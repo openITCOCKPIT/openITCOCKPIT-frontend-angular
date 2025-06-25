@@ -79,7 +79,7 @@
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Mapgenerators.name]']"
                                        [placeholder]="'Filter by Map generator name' | transloco"
-                                       aria-label="Mapgenerator Name"
+                                       aria-label="Map generator Name"
                                        cFormControl
                                        name="mapgenerators.name"
                                        oitcDebounce
@@ -93,11 +93,11 @@
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Mapgenerators.items_per_line]']"
-                                       [placeholder]="'Filter by Mapgenerator items per line' | transloco"
-                                       aria-label="Mapgenerator items per line"
+                                       [(ngModel)]="params['filter[Mapgenerators.description]']"
+                                       [placeholder]="'Filter by Map generator description' | transloco"
+                                       aria-label="Map generator description"
                                        cFormControl
-                                       name="mapgenerators.items_per_line"
+                                       name="mapgenerators.description"
                                        oitcDebounce
                                        type="text"
                                 />
@@ -115,8 +115,8 @@
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
                                         class="checkbox-lg checkbox-primary"
-                                        name="Mapgenerators.maps_generated"
-                                        id="Mapgenerators.maps_generated"
+                                        name="mapgenerators.maps_generated"
+                                        id="mapgenerators.maps_generated"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
@@ -130,8 +130,8 @@
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
                                         class="checkbox-lg checkbox-primary"
-                                        name="Mapgenerators.maps_not_generated"
-                                        id="Mapgenerators.maps_not_generated"
+                                        name="mapgenerators.maps_not_generated"
+                                        id="mapgenerators.maps_not_generated"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
@@ -165,8 +165,8 @@
                     <th scope="col" mat-sort-header="Mapgenerators.name">
                         {{ t('Mapgenerator name') }}
                     </th>
-                    <th scope="col" mat-sort-header="items_per_line">
-                        {{ t('Mapgenerator items per line') }}
+                    <th scope="col" mat-sort-header="description">
+                        {{ t('Mapgenerator description') }}
                     </th>
                     <th class="text-center col-1 width-50" scope="col">
                         <fa-icon [icon]="['fas', 'gear']"></fa-icon>
@@ -197,7 +197,7 @@
                         }
                     </td>
                     <td>
-                        {{ mapgenerator.items_per_line }}
+                        {{ mapgenerator.description }}
                     </td>
 
                     <td class="width-50">

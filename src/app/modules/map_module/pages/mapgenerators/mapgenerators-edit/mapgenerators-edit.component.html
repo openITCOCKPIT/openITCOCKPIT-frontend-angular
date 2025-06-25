@@ -91,6 +91,19 @@
                     <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                 </div>
 
+                <div class="mb-3">
+                    <label cLabel for="description">
+                        {{ t('Description') }}
+                    </label>
+                    <input cFormControl
+                           id="mapgenerator_description"
+                           type="text"
+                           name="mapgenerator_description"
+                           oitcFormError [errors]="errors" errorField="description"
+                           [(ngModel)]="post.Mapgenerator.description">
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                </div>
+
                 <div class="mt-4">
                     <h5>
                         {{ t('Generator Configuration:') }}
