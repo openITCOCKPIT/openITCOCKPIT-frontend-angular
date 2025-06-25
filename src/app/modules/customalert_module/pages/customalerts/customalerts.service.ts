@@ -29,6 +29,7 @@ export class CustomAlertsService {
 
     public getIndex(params: CustomAlertsIndexParams, filter: CustomAlertsIndexFilter): Observable<CustomAlertsIndex> {
         // Inject data from bookmarkable filter object:
+        params['recursive'] = filter.recursive;
         params['filter[Hosts.container_id][]'] = filter.Hosts.container_id;
         params['filter[Customalerts.message]'] = filter.Customalerts.message;
         params['filter[from]'] = filter.from;
