@@ -23,7 +23,10 @@
             </f-connection-for-create>
 
             @for (connection of connections; track connection.uuid) {
-                <f-connection [fOutputId]="connection.fOutputId" [fInputId]="connection.fInputId">
+                <f-connection
+                    [fBehavior]="EFConnectionBehavior.FIXED"
+                    [fType]="EFConnectionType.SEGMENT"
+                    [fOutputId]="connection.fOutputId" [fInputId]="connection.fInputId">
 
                     <svg id="normal_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.END" [height]="5" [width]="5"
                          [refX]="4" [refY]="2.5">
@@ -41,13 +44,10 @@
 
             @for (node of nodes; track node.fNodeId) {
                 <oitc-tenant-node [node]="node"
+                                  [ngClass]="'oc-tenant-node'"
                                   fNode
-                                  fDragHandle
-                                  fNodeOutput
                                   fNodeInput
                                   [fInputId]="'input_'+node.node.id"
-                                  [fOutputId]="'output_'+node.node.id"
-                                  [isSelfConnectable]="false"
                                   [fNodePosition]="node.position"
                                   (fNodePositionChange)="onNodePositionChanged($event, node)">
                 </oitc-tenant-node>

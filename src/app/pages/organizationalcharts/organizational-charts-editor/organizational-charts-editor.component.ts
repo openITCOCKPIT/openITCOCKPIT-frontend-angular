@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, model, OnInit, ViewChild } from '@angular/core';
 import { NodesPaletteComponent } from './nodes-palette/nodes-palette.component';
 import {
+    EFConnectionBehavior,
+    EFConnectionType,
     EFMarkerType,
     FCanvasComponent,
     FCreateConnectionEvent,
@@ -15,6 +17,7 @@ import { OrganizationalChartsTreeConnection, OrganizationalChartsTreeNode } from
 import { UUID } from '../../../classes/UUID';
 import { TenantNodeComponent } from './tenant-node/tenant-node.component';
 import { OcTreeNode } from './organizational-charts-editor.interface';
+import { NgClass } from '@angular/common';
 
 
 @Component({
@@ -23,7 +26,8 @@ import { OcTreeNode } from './organizational-charts-editor.interface';
         NodesPaletteComponent,
         FFlowComponent,
         FFlowModule,
-        TenantNodeComponent
+        TenantNodeComponent,
+        NgClass
     ],
     templateUrl: './organizational-charts-editor.component.html',
     styleUrl: './organizational-charts-editor.component.scss',
@@ -140,4 +144,6 @@ export class OrganizationalChartsEditorComponent implements OnInit {
         //this.apiService.moveNode(node.id, point);
     }
 
+    protected readonly EFConnectionBehavior = EFConnectionBehavior;
+    protected readonly EFConnectionType = EFConnectionType;
 }

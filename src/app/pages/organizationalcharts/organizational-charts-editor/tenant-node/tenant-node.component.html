@@ -1,1 +1,22 @@
-<p>tenant-node works!</p>
+<div class="oc-node-body" fDragHandle>
+
+    <div class="node-info">
+        <span class="node-title"> model.name </span>
+        <div class="node-description"> model.description</div>
+    </div>
+
+
+</div>
+
+
+<div class="output-item text-center">
+    @if (node) {
+        <span> output.name </span>
+        <div fNodeOutput
+             class="oc-node-output"
+             [fOutputId]="'output_'+node.node.id"
+             [isSelfConnectable]="false">
+            <fa-icon [icon]="['far', 'square']"></fa-icon>
+        </div>
+    }
+</div>
