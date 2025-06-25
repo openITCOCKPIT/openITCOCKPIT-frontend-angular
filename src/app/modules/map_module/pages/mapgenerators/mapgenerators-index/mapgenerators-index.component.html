@@ -74,7 +74,7 @@
                         <c-col md="6">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Mapgenerators.name]']"
@@ -82,6 +82,22 @@
                                        aria-label="Mapgenerator Name"
                                        cFormControl
                                        name="mapgenerators.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Mapgenerators.items_per_line]']"
+                                       [placeholder]="'Filter by Mapgenerator items per line' | transloco"
+                                       aria-label="Mapgenerator items per line"
+                                       cFormControl
+                                       name="mapgenerators.items_per_line"
                                        oitcDebounce
                                        type="text"
                                 />
@@ -149,8 +165,8 @@
                     <th scope="col" mat-sort-header="Mapgenerators.name">
                         {{ t('Mapgenerator name') }}
                     </th>
-                    <th scope="col" mat-sort-header="maps_generated">
-                        {{ t('Maps generated') }}
+                    <th scope="col" mat-sort-header="items_per_line">
+                        {{ t('Mapgenerator items per line') }}
                     </th>
                     <th class="text-center col-1 width-50" scope="col">
                         <fa-icon [icon]="['fas', 'gear']"></fa-icon>
@@ -174,14 +190,14 @@
                         <span *oitcPermission="['mapmodule','mapgenerators', 'generate']; negate: true">
                             {{ mapgenerator.name }}
                         </span>
+                        @if (mapgenerator.has_generated_maps) {
+                            <c-badge class="ms-2"
+                                     [title]="'Maps' | transloco" textColor="info">Maps
+                            </c-badge>
+                        }
                     </td>
                     <td>
-                        <c-badge *ngIf="mapgenerator.maps_generated"
-                                 [title]="'Generated' | transloco" color="success">Generated
-                        </c-badge>
-                        <c-badge *ngIf="!mapgenerator.maps_generated"
-                                 [title]="'Not Generated' | transloco" color="danger">Not Generated
-                        </c-badge>
+                        {{ mapgenerator.items_per_line }}
                     </td>
 
                     <td class="width-50">

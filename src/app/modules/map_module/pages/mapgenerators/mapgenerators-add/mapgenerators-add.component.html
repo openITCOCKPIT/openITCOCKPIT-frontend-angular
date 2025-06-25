@@ -107,6 +107,21 @@
                 </div>
 
                 <div class="mb-3">
+                    <label cLabel for="mapgenerator_items_per_line">
+                        {{ t('Items per line') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           id="mapgenerator_items_per_line"
+                           type="number"
+                           name="mapgenerator_items_per_line"
+                           min="5"
+                           [(ngModel)]="post.Mapgenerator.items_per_line"
+                           oitcFormError [errors]="errors" errorField="items_per_line">
+                    <oitc-form-feedback [errors]="errors" errorField="items_per_line"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
                     <label cLabel for="mapgenerator_start_containers">
                         {{ t('Start Containers') }}
                     </label>

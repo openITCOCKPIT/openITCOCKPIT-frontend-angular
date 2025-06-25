@@ -16,7 +16,8 @@ export interface Mapgenerator {
     name: string
     interval: number
     type: number
-    maps_generated?: number
+    items_per_line: number
+    has_generated_maps: number
     created: string
     modified: string
     containers: MapgeneratorContainer[]
@@ -43,7 +44,8 @@ export interface MapgeneratorsIndexParams {
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
     'filter[Mapgenerators.name]': string,
-    'filter[maps_generated]': string
+    'filter[Mapgenerators.has_generated_maps]': string
+    'filter[Mapgenerators.items_per_line]': string,
 }
 
 export function getDefaultMapgeneratorsIndexParams(): MapgeneratorsIndexParams {
@@ -54,7 +56,8 @@ export function getDefaultMapgeneratorsIndexParams(): MapgeneratorsIndexParams {
         page: 1,
         direction: 'asc',
         'filter[Mapgenerators.name]': "",
-        'filter[maps_generated]': ""
+        'filter[Mapgenerators.has_generated_maps]': "",
+        'filter[Mapgenerators.items_per_line]': ""
     }
 }
 
@@ -69,6 +72,8 @@ export interface MapgeneratorPost {
 export interface MapgeneratorEdit {
     name: string
     interval: number
+    items_per_line: number
+    has_generated_maps: number // Optional, default is 0
     type: number
     containers: {
         _ids: number[]
