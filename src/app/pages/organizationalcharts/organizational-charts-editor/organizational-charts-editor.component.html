@@ -12,18 +12,19 @@
 
         <f-line-alignment></f-line-alignment>
         <f-canvas fZoom>
-            <f-connection-for-create fBehavior="floating" fType="straight">
-                <svg viewBox="0 0 10 10" fMarker [type]="eMarkerType.START" [height]="10" [width]="10" [refX]="5"
-                     [refY]="5">
-                    <circle cx="5" cy="5" r="2" stroke="none" fill="var(--cui-primary)"></circle>
-                </svg>
-                <svg viewBox="0 0 6 6" fMarker [type]="eMarkerType.END" [height]="6" [width]="6" [refX]="6" [refY]="3">
-                    <path d="M0,0 L6,3 0,6Z" stroke="none" fill="var(--cui-primary)"></path>
+
+
+            <f-connection-for-create [fType]="EFConnectionType.SEGMENT">
+                <svg id="normal_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.END" [height]="5" [width]="5"
+                     [refX]="4"
+                     [refY]="2.5">
+                    <path d="M0,0L700,350L0,700L150,350z"/>
                 </svg>
             </f-connection-for-create>
 
             @for (connection of connections; track connection.uuid) {
                 <f-connection
+                    [fOffset]="20"
                     [fBehavior]="EFConnectionBehavior.FIXED"
                     [fType]="EFConnectionType.SEGMENT"
                     [fOutputId]="connection.fOutputId" [fInputId]="connection.fInputId">
@@ -48,6 +49,7 @@
                                   fNode
                                   fNodeInput
                                   [fInputId]="'input_'+node.node.id"
+                                  [fInputMultiple]="false"
                                   [fNodePosition]="node.position"
                                   (fNodePositionChange)="onNodePositionChanged($event, node)">
                 </oitc-tenant-node>
