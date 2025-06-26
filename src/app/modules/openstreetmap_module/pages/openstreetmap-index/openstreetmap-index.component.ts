@@ -221,7 +221,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
             this.OpenstreetmapService.getIndex(this.indexParams).subscribe((mapData) => {
                 this.mapData = mapData;
                 this.initLocations = true;
-                if(this.mapData.locations.length === 0 && this.mapData.emptyLocations.length === 0  && this.mapData.locations.length === 0){
+                if(this.mapData.locations.length === 0  && this.mapData.locationPoints.length === 0){
                     this.hideMap = true;
                 } else {
                     this.hideMap = false;
