@@ -108,7 +108,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     public hideMap: boolean = false;
     public stateFilter: number = 0;
     private includedLocations: number[] = [];
-    public lmap: Signal<ElementRef<any>| undefined> = viewChild<ElementRef>("map");
+    public lmap: Signal<ElementRef<any> | undefined> = viewChild<ElementRef>("map");
     public map!: L.Map;
     public hexlayer!: L.HexbinLayer;
     private intervalId: any = null;
@@ -221,7 +221,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
             this.OpenstreetmapService.getIndex(this.indexParams).subscribe((mapData) => {
                 this.mapData = mapData;
                 this.initLocations = true;
-                if(this.mapData.locations.length === 0  && this.mapData.locationPoints.length === 0){
+                if (this.mapData.locations.length === 0 && this.mapData.locationPoints.length === 0) {
                     this.hideMap = true;
                 } else {
                     this.hideMap = false;

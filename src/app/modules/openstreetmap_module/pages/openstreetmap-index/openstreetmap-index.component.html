@@ -175,32 +175,32 @@
                             </fieldset>
                         </c-col>
                     </c-row>
-                    @if(mapData && mapData.emptyLocations.length > 0 && settingsFilter.hide_empty_locations) {
-                    <c-row class="mt-2">
-                        <c-col [lg]="2">
-                            <fa-icon [icon]="['fas', 'building']"></fa-icon>
-                            {{ t('Empty Locations') }}
-                        </c-col>
-                        <c-col>
-                            @for( location of mapData.emptyLocations; track location.id; let isLast = $last) {
-                            <span>
-                                @if (this.PermissionsService.hasPermissionObservable(['locations', 'edit'])) {
-                                    <a [routerLink]="['/', 'locations', 'edit', location.id]">
-                                        {{ location.container.name }}
-                                    </a>
-                                    @if(!isLast) {
-                                    <span>, </span>
-                                    }
-                                } @else {
-                                    {{ location.container.name }}
-                                    @if(!isLast) {
-                                    <span>, </span>
-                                    }
+                    @if (mapData && mapData.emptyLocations.length > 0 && settingsFilter.hide_empty_locations) {
+                        <c-row class="mt-2">
+                            <c-col [lg]="2">
+                                <fa-icon [icon]="['fas', 'building']"></fa-icon>
+                                {{ t('Empty Locations') }}
+                            </c-col>
+                            <c-col>
+                                @for (location of mapData.emptyLocations; track location.id; let isLast = $last) {
+                                    <span>
+                                        @if (this.PermissionsService.hasPermissionObservable(['locations', 'edit'])) {
+                                            <a [routerLink]="['/', 'locations', 'edit', location.id]">
+                                                {{ location.container.name }}
+                                            </a>
+                                            @if (!isLast) {
+                                                <span>, </span>
+                                            }
+                                        } @else {
+                                            {{ location.container.name }}
+                                            @if (!isLast) {
+                                                <span>, </span>
+                                            }
+                                        }
+                                    </span>
                                 }
-                            </span>
-                            }
-                        </c-col>
-                    </c-row>
+                            </c-col>
+                        </c-row>
                     }
                     <c-row class="mt-2">
                         <c-col class="text-end">
@@ -212,7 +212,7 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            @if(initSettings && !server_url) {
+            @if (initSettings && !server_url) {
                 <div class="text-danger no-padding pb-2 fs-5">
                     <fa-icon class="danger" [icon]="['fas', 'exclamation-triangle']"></fa-icon>
                     {{ t('Missing configuration or location settings') }}
@@ -228,11 +228,11 @@
                     } @else {
                         <span class="text-white">{{ t('No OpenStreetMap Settings defined') }}</span>
                     }
-                    {{t('Save  - or edit - the default settings')}}
+                    {{ t('Save  - or edit - the default settings') }}
                 </c-alert>
             }
-            @if(hideMap) {
-                <c-alert color="info" >
+            @if (hideMap) {
+                <c-alert color="info">
                     @if (PermissionsService.hasPermissionObservable(['locations', 'index'])|async) {
                         <a [routerLink]="['/', 'locations', 'index']">
                             <span>
@@ -247,34 +247,33 @@
                 </c-alert>
             }
 
-
             <c-container [hidden]="hideMap" [fluid]="true">
-            <div #map id="map" class="d-flex" [ngStyle]="{'height': hideFilter ? '78vh' : '55vh'}"></div>
+                <div #map id="map" class="d-flex" [ngStyle]="{'height': hideFilter ? '82vh' : '60vh'}"></div>
 
-            <div id="legend">
-                <div id="legend-inner">
-                    <div class="gradient">
-                        <div class="limit"></div>
-                    </div>
-                    <div class="labels">
-                        <div class="label" style="bottom: 99%;">
-                            Unreachable | Unknown'
+                <div id="legend">
+                    <div id="legend-inner">
+                        <div class="gradient">
+                            <div class="limit"></div>
                         </div>
-                        <div class="label" style="bottom: 75%;">
-                            Down | Critical
-                        </div>
-                        <div class="label" style="bottom: 50%;">
-                            Warning
-                        </div>
-                        <div class="label" style="bottom: 25%;">
-                            Up | Ok
-                        </div>
-                        <div class="label" style="bottom: 0%;">
-                            Not monitored
+                        <div class="labels">
+                            <div class="label" style="bottom: 99%;">
+                                Unreachable | Unknown'
+                            </div>
+                            <div class="label" style="bottom: 75%;">
+                                Down | Critical
+                            </div>
+                            <div class="label" style="bottom: 50%;">
+                                Warning
+                            </div>
+                            <div class="label" style="bottom: 25%;">
+                                Up | Ok
+                            </div>
+                            <div class="label" style="bottom: 0%;">
+                                Not monitored
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </c-container>
 
         </c-card-body>
