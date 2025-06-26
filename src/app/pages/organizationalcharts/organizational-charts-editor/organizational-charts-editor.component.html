@@ -27,6 +27,7 @@
                     [fOffset]="20"
                     [fBehavior]="EFConnectionBehavior.FIXED"
                     [fType]="EFConnectionType.SEGMENT"
+                    [fConnectionId]="connection.uuid"
                     [fOutputId]="connection.fOutputId" [fInputId]="connection.fInputId">
 
                     <svg id="normal_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.END" [height]="5" [width]="5"
@@ -46,12 +47,15 @@
             @for (node of nodes; track node.fNodeId) {
                 <oitc-tenant-node [node]="node"
                                   [ngClass]="'oc-tenant-node'"
+                                  [fNodeId]="String(node.node.id)"
                                   fNode
                                   fNodeInput
-                                  [fInputId]="'input_'+node.node.id"
+                                  [fInputId]="node.node.id"
                                   [fInputMultiple]="false"
                                   [fNodePosition]="node.position"
-                                  (fNodePositionChange)="onNodePositionChanged($event, node)">
+                                  (fNodePositionChange)="onNodePositionChanged($event, node)"
+                                  [connectionsInput]="connections"
+                                  (deleteConnection)="onRemoveConnection($event)">
                 </oitc-tenant-node>
             }
         </f-canvas>

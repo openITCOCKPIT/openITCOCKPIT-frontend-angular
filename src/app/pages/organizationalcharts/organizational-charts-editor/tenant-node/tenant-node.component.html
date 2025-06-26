@@ -11,12 +11,17 @@
 
 <div class="output-item text-center">
     @if (node) {
+        {{ node|json }}
         <div fNodeOutput
              class="oc-node-output"
-             [fOutputId]="'output_'+node.node.id"
+             [fOutputId]="String(node.node.id)"
              [isSelfConnectable]="false">
-            <fa-icon [icon]="['far', 'square']"></fa-icon>
-            <fa-icon [icon]="['fas', 'square-xmark']" class="text-danger"></fa-icon>
+            @if (hasConnection) {
+                <fa-icon [icon]="['fas', 'square-xmark']" class="text-danger"
+                         (click)="onDeleteConnection()"></fa-icon>
+            } @else {
+                <fa-icon [icon]="['far', 'square']"></fa-icon>
+            }
         </div>
     }
 </div>
