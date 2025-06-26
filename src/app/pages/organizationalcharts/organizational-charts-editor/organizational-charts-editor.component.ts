@@ -60,19 +60,17 @@ export class OrganizationalChartsEditorComponent implements OnInit {
 
     @HostListener('window:keydown', ['$event'])
     onKeydown(event: KeyboardEvent): void {
-        console.log('Keydown event:', event);
         if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
             return;
         }
 
-        console.log('Key pressed:', event.key, 'KeyCode:', event.keyCode);
 
         switch (event.key) {
             case 'Backspace':
             case 'Delete':
-                console.log('Backspace pressed');
 
                 const selection = this.fFlowComponent.getSelection();
+                console.log(selection);
 
                 // Are there any connections selected? If so, remove them
                 selection.fConnectionIds.forEach((connectionId) => {
@@ -110,9 +108,10 @@ export class OrganizationalChartsEditorComponent implements OnInit {
 
         // Create a new node for the database / two-way binding
         const uuid = new UUID();
+        const newNodeUuid: string = uuid.v4();
 
         const newNode: OrganizationalChartsTreeNode = {
-            id: uuid.v4(),
+            id: newNodeUuid,
             parent_id: null,
             container_id: 0,
             users_to_organizational_chart_structures: [],
@@ -123,8 +122,8 @@ export class OrganizationalChartsEditorComponent implements OnInit {
 
         // Add new node to the f-flow canvas
         this.nodes.push({
-            fNodeId: '1',
-            fNodeParentId: '2',
+            fNodeId: newNodeUuid,
+            fNodeParentId: undefined,
             position: {
                 x: x,
                 y: y
@@ -134,9 +133,20 @@ export class OrganizationalChartsEditorComponent implements OnInit {
 
         // Update two-way binding
         this.addNodeToTree(newNode);
+    }
+
+    public onNodeRemoved(nodeId: string): void {
+        // Find the node to remove
+        const node = this.nodes.find((n) => n.node.id === nodeId);
+
+        // Remove the node from the f-flow canvas
+        this.nodes = this.nodes.filter((n) => n.node.id !== nodeId);
 
 
-        //this.getData();
+        // Remove the node from the two-way binding
+        if (node?.node) {
+            this.removeNodeFromTree(node.node);
+        }
     }
 
     public onConnectionAdded(event: FCreateConnectionEvent): void {
@@ -254,6 +264,10 @@ export class OrganizationalChartsEditorComponent implements OnInit {
         });
 
         this.cdr.markForCheck();
+    }
+
+    private removeNodeInTree(node: OrganizationalChartsTreeNode): void {
+        // Remove any connections that reference this node
     }
 
     private removeNodeFromTree(node: OrganizationalChartsTreeNode): void {
