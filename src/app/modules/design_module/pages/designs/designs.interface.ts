@@ -40,6 +40,13 @@ export interface Design {
     cardHeaderFont: string
     logoInHeader: number
     customcsstext: string
+
+    // NEW FIELDZ
+    rightBackground: string
+    leftBackground: string
+    topBackground: string
+    mapBackground: string
+    mapText: string
 }
 
 export interface MaxUploadLimit {

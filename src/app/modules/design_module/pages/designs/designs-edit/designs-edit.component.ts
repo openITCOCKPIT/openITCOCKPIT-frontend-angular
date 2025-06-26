@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { GenericValidationError } from '../../../../../generic-responses';
+import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { DesignsService } from '../designs.service';
 import { Design, DesignsEditRoot, MaxUploadLimit } from '../designs.interface';
 import Dropzone from 'dropzone';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, NgIf } from '@angular/common';
 import { AuthService } from '../../../../../auth/auth.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -17,9 +17,11 @@ import {
     ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    FormControlDirective,
     FormLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
@@ -41,7 +43,6 @@ import {
 } from '../../../../../layouts/coreui/reload-interface-modal/reload-interface-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ColorPicker } from 'primeng/colorpicker';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 
 @Component({
     selector: 'oitc-designs-edit',
@@ -74,7 +75,9 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
         ReactiveFormsModule,
         FormsModule,
         ColorPicker,
-        FormErrorDirective
+        NgIf,
+        CardFooterComponent,
+        FormControlDirective
     ],
     templateUrl: './designs-edit.component.html',
     styleUrl: './designs-edit.component.css',
@@ -94,7 +97,7 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
 
     public errors: GenericValidationError | null = null;
     private cdr = inject(ChangeDetectorRef);
-    private post!: Design;
+    protected post!: Design;
     private showExportButton: boolean = true;
     protected maxUploadLimit: MaxUploadLimit | null = null;
     private init: boolean = true;
@@ -112,9 +115,13 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
         {key: '3', value: this.TranslocoService.translate('Header logo')},
         {key: '4', value: this.TranslocoService.translate('Login background image')}
     ];
-    protected colours: { [key: string]: string } = {
-        'bodyBackground': '#00FF00'
-    };
+    protected colours: Design = {
+        rightBackground: '',
+        leftBackground: '',
+        topBackground: '',
+        mapBackground: '',
+        mapText: '',
+    } as Design;
 
     public ngOnInit(): void {
         this.load();
@@ -296,4 +303,26 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
         }
     };
 
+    public saveDesign() {
+        this.subscriptions.add(this.DesignsService.saveDesign(this.post)
+            .subscribe((result) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
+                    const title = this.TranslocoService.translate('User');
+                    const msg = this.TranslocoService.translate('updated successfully');
+                    const url = ['users', 'edit', response.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            }));
+    }
 }
