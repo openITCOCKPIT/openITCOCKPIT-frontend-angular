@@ -54,7 +54,6 @@
                 </c-nav-item>
             </c-nav>
         </c-card-header>
-
         <c-card-body>
 
             <!-- Filter -->
@@ -122,12 +121,16 @@
                     <th class="width-50 text-center" scope="col">
                         <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                     </th>
+                    <th class="width-50 text-center">
+                        <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                    </th>
                     <th scope="col" mat-sort-header="OrganizationalCharts.name">
                         {{ t('Name') }}
                     </th>
                     <th scope="col" mat-sort-header="OrganizationalCharts.description">
                         {{ t('Description') }}
                     </th>
+
                     <th class="text-center width-50" scope="col">
                         <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                     </th>
@@ -138,37 +141,49 @@
                     <td class="text-center">
                         <oitc-item-select
                             *oitcPermission="['organizationalcharts', 'delete']"
-                            [disabled]="!Boolean(organizationalchart.OrganizationalChart.allowEdit)"
+                            [disabled]="!Boolean(organizationalchart.allowEdit)"
                             [item]="organizationalchart"></oitc-item-select>
                     </td>
-
-                    <td>{{ organizationalchart.OrganizationalChart.name }}</td>
-
-                    <td>{{ organizationalchart.OrganizationalChart.description }}</td>
-
+                    <td class="text-center">
+                        @if (organizationalchart.allowView) {
+                            <a [routerLink]="['/', 'organizationalcharts', 'view', organizationalchart.id]"
+                               [title]="t('View organizational chart')">
+                                <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                            </a>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'low-vision']"
+                                     [cTooltip]="'Restricted view' | transloco" cTooltipPlacement="right"></fa-icon>
+                        }
+                    </td>
+                    <td>{{ organizationalchart.name }}</td>
+                    <td>{{ organizationalchart.description }}</td>
                     <td class="width-50">
                         <oitc-actions-button [permission]="'organizationalcharts.edit'"
-                                             [url]="'/organizationalcharts/edit/' + organizationalchart.OrganizationalChart.id"
-                                             [allowEdit]="organizationalchart.OrganizationalChart.allowEdit">
+                                             [url]="'/organizationalcharts/edit/' + organizationalchart.id"
+                                             [allowEdit]="organizationalchart.allowEdit">
                             <oitc-actions-button-element [permission]="'organizationalcharts.edit'"
-                                                         [url]="'/organizationalcharts/edit/' + organizationalchart.OrganizationalChart.id">
+                                                         [allow]="organizationalchart.allowEdit"
+                                                         [url]="'/organizationalcharts/edit/' + organizationalchart.id">
                                 <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                 {{ t('Edit') }}
                             </oitc-actions-button-element>
                             <oitc-actions-button-element [permission]="'organizationalcharts.view'"
-                                                         [url]="'/organizationalcharts/view/' + organizationalchart.OrganizationalChart.id">
+                                                         [url]="'/organizationalcharts/view/' + organizationalchart.id"
+                                                         [allow]="organizationalchart.allowView">
                                 <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
                                 {{ t('View') }}
                             </oitc-actions-button-element>
-                            <li cDropdownDivider *ngIf="organizationalchart.OrganizationalChart.allowEdit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(organizationalchart)"
-                                                         [permission]="'organizationalcharts.delete'"
-                                                         *ngIf="organizationalchart.OrganizationalChart.allowEdit">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
+                            @if (organizationalchart.allowEdit) {
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(organizationalchart)"
+                                                             [permission]="'organizationalcharts.delete'"
+                                                             [allow]="organizationalchart.allowEdit">
+                                    <span class="text-danger">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </oitc-actions-button-element>
+                            }
                         </oitc-actions-button>
                     </td>
                 </tr>
@@ -211,13 +226,10 @@
                     </c-row>
                 </c-container>
             </ng-container>
-
         </c-card-body>
-
         <c-card-footer>
             &nbsp;
         </c-card-footer>
-
     </c-card>
 </ng-container>
 

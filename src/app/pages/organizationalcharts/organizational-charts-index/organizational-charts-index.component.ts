@@ -15,7 +15,8 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { IndexPage } from '../../../pages.interface';
@@ -90,7 +91,8 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         PaginateOrScrollComponent,
         CardFooterComponent,
         DeleteAllModalComponent,
-        NgForOf
+        NgForOf,
+        TooltipDirective
     ],
     templateUrl: './organizational-charts-index.component.html',
     styleUrl: './organizational-charts-index.component.css',
@@ -187,15 +189,15 @@ export class OrganizationalChartsIndexComponent implements OnInit, OnDestroy, In
         if (organizationalchart) {
             // User just want to delete a single organizational chart
             items = [{
-                id: Number(organizationalchart.OrganizationalChart.id),
-                displayName: String(organizationalchart.OrganizationalChart.name)
+                id: Number(organizationalchart.id),
+                displayName: String(organizationalchart.name)
             }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
-                    id: item.OrganizationalChart.id,
-                    displayName: item.OrganizationalChart.name
+                    id: item.id,
+                    displayName: item.name
                 };
             });
         }

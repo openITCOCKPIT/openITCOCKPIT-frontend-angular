@@ -11,16 +11,13 @@ export interface OrganizationalChartsIndexRoot extends PaginateOrScroll {
 }
 
 export interface OrganizationalChart {
-    OrganizationalChart: OrganizationalChartEntity
-}
-
-export interface OrganizationalChartEntity {
     id?: number
     name: number
     description: string
     created: string
     modified: string
     allowEdit?: boolean
+    allowView?: boolean
 }
 
 
