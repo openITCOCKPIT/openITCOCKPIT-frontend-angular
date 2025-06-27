@@ -25,7 +25,7 @@ import { OrganizationalChartsTreeConnection, OrganizationalChartsTreeNode } from
 import { UUID } from '../../../classes/UUID';
 import { TenantNodeComponent } from './tenant-node/tenant-node.component';
 import { OcTreeNode } from './organizational-charts-editor.interface';
-import { NgClass } from '@angular/common';
+import { JsonPipe, NgClass } from '@angular/common';
 
 
 @Component({
@@ -35,7 +35,8 @@ import { NgClass } from '@angular/common';
         FFlowComponent,
         FFlowModule,
         TenantNodeComponent,
-        NgClass
+        NgClass,
+        JsonPipe
     ],
     templateUrl: './organizational-charts-editor.component.html',
     styleUrl: './organizational-charts-editor.component.scss',
@@ -77,6 +78,11 @@ export class OrganizationalChartsEditorComponent implements OnInit {
                     this.onRemoveConnection(connectionId);
                 });
 
+                // Are any nodes selected? If so, remove them
+                selection.fNodeIds.forEach((nodeId) => {
+                    this.onNodeRemoved(nodeId);
+                });
+
                 break;
         }
     }
@@ -89,17 +95,12 @@ export class OrganizationalChartsEditorComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.getData();
     }
 
     public onInitialized(): void {
         this.fCanvasComponent.fitToScreen(new Point(40, 40), false);
     }
 
-    private getData(): void {
-        // this.viewModel = this.apiService.getFlow();
-        this.cdr.markForCheck();
-    }
 
     public onNodeAdded(event: FCreateNodeEvent): void {
         const x = Math.floor(event.rect.x);
@@ -139,13 +140,9 @@ export class OrganizationalChartsEditorComponent implements OnInit {
         // Find the node to remove
         const node = this.nodes.find((n) => n.node.id === nodeId);
 
-        // Remove the node from the f-flow canvas
-        this.nodes = this.nodes.filter((n) => n.node.id !== nodeId);
-
-
         // Remove the node from the two-way binding
         if (node?.node) {
-            this.removeNodeFromTree(node.node);
+            this.removeNodeInTree(node.node);
         }
     }
 
@@ -268,9 +265,24 @@ export class OrganizationalChartsEditorComponent implements OnInit {
 
     private removeNodeInTree(node: OrganizationalChartsTreeNode): void {
         // Remove any connections that reference this node
-    }
+        this.connections.forEach((c) => {
+            // Remove connections above (the node is the child of the connection)
+            if (c.fInputId === node.id) {
+                this.onRemoveConnection(c.uuid);
+            }
 
-    private removeNodeFromTree(node: OrganizationalChartsTreeNode): void {
+            // Remove connections below (the node is the parent of the connection)
+            // in this case we need to set the parent_id of the child node to null
+            // the onRemoveConnection method will handle this
+            if (c.fOutputId === node.id) {
+                this.onRemoveConnection(c.uuid);
+            }
+        });
+
+        // Remove the node from the f-flow canvas
+        this.nodes = this.nodes.filter((n) => n.node.id !== node.id);
+
+        // Remove the node from the two-way binding
         this.nodeTree.update((nodes) => {
             return nodes.filter((n) => n.id !== node.id);
         });
