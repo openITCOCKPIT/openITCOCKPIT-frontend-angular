@@ -5,6 +5,7 @@
 :host {
     --background-element-color: rgba(0, 0, 0, 0.1);
     --selection-area-color: rgba(100, 108, 255, 0.14);
+    --selection-area-border-color: #248EFF;
     --disabled-color: #e2e2e2;
     --node-background-color: #ffffff;
     --node-border-radius: 4px;
@@ -34,6 +35,7 @@
 body.dark-theme :host {
     --background-element-color: rgba(255, 255, 255, 0.1);
     --selection-area-color: rgba(100, 108, 255, 0.16);
+    --selection-area-border-color: #248EFF;
     --disabled-color: #2c2c2e;
     --node-background-color: #000000;
     --node-border-radius: 4px;
@@ -61,6 +63,12 @@ body.dark-theme :host {
     /*.f-flow {
         height: 100vh !important;
     }*/
+
+    .f-selection-area {
+        background-color: var(--selection-area-color);
+        border: 1px dashed var(--selection-area-border-color);
+    }
+
 
     .f-connection-center {
         background-color: var(--node-background-color);
