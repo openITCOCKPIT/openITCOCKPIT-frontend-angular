@@ -59,13 +59,12 @@ export interface OrganizationalChartsPost {
 
 export interface OrganizationalChartsTreeNode {
     id?: number | string // numeric id in edit - UUIDv4 in add
-    parent_id: null | number | string  // numeric id in edit - UUIDv4 in add
-    lft?: number
-    rgt?: number
     organizational_chart_id?: number // empty in add
     container_id: number
     x_position: number
     y_position: number
+    created?: string
+    modified?: string
     users_to_organizational_chart_structures: OrganizationalChartsTreeNodeUser[]
     container?: Container
 }

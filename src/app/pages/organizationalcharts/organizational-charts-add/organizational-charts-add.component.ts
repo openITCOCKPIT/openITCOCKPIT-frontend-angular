@@ -20,7 +20,11 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { GenericValidationError } from '../../../generic-responses';
-import { OrganizationalChartsPost, OrganizationalChartsTreeNode } from '../organizationalcharts.interface';
+import {
+    OrganizationalChartsPost,
+    OrganizationalChartsTreeConnection,
+    OrganizationalChartsTreeNode
+} from '../organizationalcharts.interface';
 import { JsonPipe } from '@angular/common';
 
 @Component({
@@ -54,7 +58,8 @@ export class OrganizationalChartsAddComponent {
     public post: OrganizationalChartsPost = this.getDefaultPost();
     public errors: GenericValidationError | null = null;
 
-    public tree: OrganizationalChartsTreeNode[] = [];
+    public nodes: OrganizationalChartsTreeNode[] = [];
+    public connections: OrganizationalChartsTreeConnection[] = [];
 
     private getDefaultPost(): OrganizationalChartsPost {
         return {

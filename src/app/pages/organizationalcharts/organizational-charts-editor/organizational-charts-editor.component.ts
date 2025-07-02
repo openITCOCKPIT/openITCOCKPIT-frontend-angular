@@ -47,8 +47,10 @@ export class OrganizationalChartsEditorComponent implements OnInit {
     // Two-way binding for the organizational charts tree from the add or edit component
     public nodeTree = model<OrganizationalChartsTreeNode[]>([]);
 
+    // Two-way binding for the organizational chart connections from add or edit component
+    public connections = model<OrganizationalChartsTreeConnection[]>([]);
+
     public nodes: OcTreeNode[] = [];
-    public connections: OrganizationalChartsTreeConnection[] = [];
 
     @ViewChild(FFlowComponent, {static: false})
     public fFlowComponent!: FFlowComponent;
@@ -113,7 +115,6 @@ export class OrganizationalChartsEditorComponent implements OnInit {
 
         const newNode: OrganizationalChartsTreeNode = {
             id: newNodeUuid,
-            parent_id: null,
             container_id: 0,
             users_to_organizational_chart_structures: [],
             organizational_chart_id: 0,
@@ -160,17 +161,10 @@ export class OrganizationalChartsEditorComponent implements OnInit {
             fOutputId: event.fOutputId
         };
 
-        this.connections = [...this.connections, newConnection];
-
         // Update the two-way binding
-        const node = this.nodeTree().find((n) => n.id === event.fInputId);
-        if (!node) {
-            console.log('Node not found for connection input:', event.fInputId);
-            return;
-        }
-
-        node.parent_id = event.fOutputId;
-        this.updateNodeInTree(node);
+        this.connections.update((connections) => {
+            return [...connections, newConnection];
+        });
 
         this.cdr.markForCheck();
     }
@@ -183,7 +177,7 @@ export class OrganizationalChartsEditorComponent implements OnInit {
         }
 
         // Delete old connection from f-flow canvas and add new one
-        this.connections = this.connections.filter((c) => c.uuid !== event.fConnectionId);
+        const connections = this.connections().filter((c) => c.uuid !== event.fConnectionId);
 
         // So we can track connections in @for loop
         const uuid = new UUID();
@@ -193,45 +187,31 @@ export class OrganizationalChartsEditorComponent implements OnInit {
             fOutputId: event.fOutputId
         };
 
-        this.connections = [...this.connections, newConnection];
 
-        // Remove the parent_id from the old node
-        const oldNode = this.nodeTree().find((n) => n.id === event.oldFInputId);
-        if (!oldNode) {
-            console.log('Old node not found for connection reassignment:', event.oldFInputId);
-            return;
-        }
-
-        oldNode.parent_id = null;
-        this.updateNodeInTree(oldNode);
-
-        // Update the parent_id of the new node
-        const newNode = this.nodeTree().find((n) => n.id === event.newFInputId);
-        if (!newNode) {
-            console.log('New node not found for connection reassignment:', event.newFInputId);
-            return;
-        }
-
-        newNode.parent_id = event.fOutputId;
-        this.updateNodeInTree(newNode);
+        // Update the two-way binding
+        this.connections.update((oldConnections) => {
+            return connections
+        });
     }
 
     public onRemoveConnection(connectionId: string) {
-        const connection = this.connections.find((c) => c.uuid === connectionId);
+        let connections = this.connections();
+
+        const connection = connections.find((c) => c.uuid === connectionId);
         if (!connection) {
             console.log('Connection not found:', connectionId);
             return;
         }
 
         // Remove the connection from the f-flow canvas
-        this.connections = this.connections.filter((c) => c.uuid !== connectionId);
+        connections = connections.filter((c) => c.uuid !== connectionId);
 
-        // Find the node that had this connection as input and remove the parent_id
-        const node = this.nodeTree().find((n) => n.id === connection.fInputId);
-        if (node) {
-            node.parent_id = null;
-            this.updateNodeInTree(node);
-        }
+        // Update the two-way binding
+        this.connections.update((oldConnections) => {
+            return connections;
+        });
+
+        this.cdr.markForCheck();
     }
 
     public onNodePositionChanged(point: IPoint, node: OcTreeNode): void {
@@ -265,7 +245,7 @@ export class OrganizationalChartsEditorComponent implements OnInit {
 
     private removeNodeInTree(node: OrganizationalChartsTreeNode): void {
         // Remove any connections that reference this node
-        this.connections.forEach((c) => {
+        this.connections().forEach((c) => {
             // Remove connections above (the node is the child of the connection)
             if (c.fInputId === node.id) {
                 this.onRemoveConnection(c.uuid);

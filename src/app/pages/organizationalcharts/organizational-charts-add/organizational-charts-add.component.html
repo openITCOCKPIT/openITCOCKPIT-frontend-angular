@@ -60,10 +60,12 @@
                         </h4>
                     </legend>
 
-                    {{ tree | json }}
+                    <div>{{ nodes | json }}</div>
+                    <div>{{ connections | json }}</div>
 
                     <oitc-organizational-charts-editor
-                        [(nodeTree)]="tree"></oitc-organizational-charts-editor>
+                        [(nodeTree)]="nodes"
+                        [(connections)]="connections"></oitc-organizational-charts-editor>
                 </fieldset>
             </c-card-body>
         </c-card>

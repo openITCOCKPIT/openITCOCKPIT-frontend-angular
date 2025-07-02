@@ -26,7 +26,7 @@
                 </svg>
             </f-connection-for-create>
 
-            @for (connection of connections; track connection.uuid) {
+            @for (connection of connections(); track connection.uuid) {
                 <f-connection
                     [fOffset]="20"
                     [fBehavior]="EFConnectionBehavior.FIXED"
@@ -55,10 +55,10 @@
                                   fNode
                                   fNodeInput
                                   [fInputId]="node.node.id"
-                                  [fInputMultiple]="false"
+                                  [fInputMultiple]="true"
                                   [fNodePosition]="node.position"
                                   (fNodePositionChange)="onNodePositionChanged($event, node)"
-                                  [connectionsInput]="connections"
+                                  [connectionsInput]="connections()"
                                   (deleteConnection)="onRemoveConnection($event)">
                 </oitc-tenant-node>
             }
