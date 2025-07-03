@@ -12,6 +12,15 @@ export class DesignsService {
     private readonly http: HttpClient = inject(HttpClient);
     private readonly proxyPath: string = inject(PROXY_PATH);
 
+    public getMode(): Observable<DesignsEditRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<DesignsEditRoot>(`${proxyPath}/design_module/designs/edit.json?angular=true`).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
     public getEdit(): Observable<DesignsEditRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<DesignsEditRoot>(`${proxyPath}/design_module/designs/edit.json?angular=true`).pipe(
@@ -42,6 +51,19 @@ export class DesignsService {
                     });
                 })
             );
+    }
+
+    public resetColours(): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/design_module/designs/reset.json`, {
+            params: {
+                angular: 'true',
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 
     public resetLogo(type: number): Observable<ResetLogoResponse> {
