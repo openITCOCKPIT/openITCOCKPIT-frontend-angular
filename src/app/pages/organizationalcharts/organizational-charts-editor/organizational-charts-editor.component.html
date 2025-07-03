@@ -49,9 +49,10 @@
             }
 
 
-            @for (node of nodes; track node.fNodeId) {
+            @for (node of nodes; track node.fNodeId; ) {
                 <oitc-tenant-node [node]="node"
-                                  [ngClass]="'oc-tenant-node'"
+                                  class="oc-tenant-node"
+                                  [ngClass]="{'oc-node-error': (nodeValidationErrors[$index] || false)}"
                                   [fNodeId]="String(node.node.id)"
                                   fNode
                                   fNodeInput
@@ -60,7 +61,8 @@
                                   [fNodePosition]="node.position"
                                   (fNodePositionChange)="onNodePositionChanged($event, node)"
                                   [connectionsInput]="connections()"
-                                  (deleteConnection)="onRemoveConnection($event)">
+                                  (deleteConnection)="onRemoveConnection($event)"
+                >
                 </oitc-tenant-node>
             }
         </f-canvas>

@@ -68,6 +68,8 @@ export class OrganizationalChartsAddComponent implements OnDestroy {
     public post: OrganizationalChartsPost = this.getDefaultPost();
     public errors: GenericValidationError | null = null;
 
+    public nodeErrors: { [key: number]: GenericValidationError } = {};
+
     public hasUnsavedChanges: boolean = false;
 
     private readonly OrganizationalChartsService: OrganizationalChartsService = inject(OrganizationalChartsService);
@@ -117,6 +119,14 @@ export class OrganizationalChartsAddComponent implements OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
+
+                    this.nodeErrors = {};
+                    if (errorResponse.hasOwnProperty('organizational_chart_nodes')) {
+                        for (let i in errorResponse['organizational_chart_nodes']) {
+                            const k = Number(i);
+                            this.nodeErrors[k] = (errorResponse['organizational_chart_nodes'][i] as any as GenericValidationError);
+                        }
+                    }
                 }
             }));
     }

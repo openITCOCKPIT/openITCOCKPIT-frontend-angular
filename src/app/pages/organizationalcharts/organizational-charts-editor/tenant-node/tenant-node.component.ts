@@ -4,6 +4,7 @@ import { EFConnectableSide, FFlowModule } from '@foblex/flow';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { JsonPipe } from '@angular/common';
 import { OcConnection } from '../../organizationalcharts.interface';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -11,7 +12,8 @@ import { OcConnection } from '../../organizationalcharts.interface';
     imports: [
         FFlowModule,
         FaIconComponent,
-        JsonPipe
+        JsonPipe,
+        FormsModule
     ],
     templateUrl: './tenant-node.component.html',
     styleUrl: './tenant-node.component.scss',

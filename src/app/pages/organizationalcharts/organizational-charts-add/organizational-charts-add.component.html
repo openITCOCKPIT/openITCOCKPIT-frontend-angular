@@ -91,7 +91,8 @@
 
                     <oitc-organizational-charts-editor
                         [(nodeTree)]="post.organizational_chart_nodes"
-                        [(connections)]="post.organizational_chart_connections"></oitc-organizational-charts-editor>
+                        [(connections)]="post.organizational_chart_connections"
+                        [nodeValidationErrorsInput]="nodeErrors"></oitc-organizational-charts-editor>
                 </fieldset>
             </c-card-body>
         </c-card>

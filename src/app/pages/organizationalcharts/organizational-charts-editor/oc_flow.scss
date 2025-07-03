@@ -200,7 +200,11 @@ body.dark-theme :host {
     .oc-tenant-node {
         border-top-color: rgb(255, 133, 155);
         //padding: 16px;
+    }
 
+    .oc-node-error {
+        border-color: var(--cui-form-invalid-border-color);
+        box-shadow: 0 0 20px var(--cui-form-invalid-border-color);
     }
 
     .oc-node-output {

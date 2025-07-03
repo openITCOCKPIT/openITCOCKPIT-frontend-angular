@@ -2,7 +2,9 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    effect,
     HostListener,
+    input,
     model,
     OnInit,
     ViewChild
@@ -26,6 +28,7 @@ import { UUID } from '../../../classes/UUID';
 import { TenantNodeComponent } from './tenant-node/tenant-node.component';
 import { OcTreeNode } from './organizational-charts-editor.interface';
 import { JsonPipe, NgClass } from '@angular/common';
+import { GenericValidationError } from '../../../generic-responses';
 
 
 @Component({
@@ -50,6 +53,9 @@ export class OrganizationalChartsEditorComponent implements OnInit {
     // Two-way binding for the organizational chart connections from add or edit component
     public connections = model<OcConnection[]>([]);
 
+    public nodeValidationErrorsInput = input<{ [key: number]: GenericValidationError }>({});
+    public nodeValidationErrors: { [key: number]: GenericValidationError } = {};
+
     public nodes: OcTreeNode[] = [];
 
     @ViewChild(FFlowComponent, {static: false})
@@ -73,7 +79,7 @@ export class OrganizationalChartsEditorComponent implements OnInit {
             case 'Delete':
 
                 const selection = this.fFlowComponent.getSelection();
-                console.log(selection);
+                //console.log(selection);
 
                 // Are there any connections selected? If so, remove them
                 selection.fConnectionIds.forEach((connectionId) => {
@@ -94,6 +100,9 @@ export class OrganizationalChartsEditorComponent implements OnInit {
     constructor(
         private cdr: ChangeDetectorRef
     ) {
+        effect(() => {
+            this.nodeValidationErrors = this.nodeValidationErrorsInput();
+        });
     }
 
     public ngOnInit(): void {
@@ -116,7 +125,7 @@ export class OrganizationalChartsEditorComponent implements OnInit {
         const newNode: OrganizationalChartsTreeNode = {
             id: newNodeUuid,
             uuid: newNodeUuid,
-            container_id: 1, // todo set back to 0
+            container_id: 0, // todo set back to 0
             users_to_organizational_chart_nodes: [],
             organizational_chart_id: 0,
             x_position: x,
@@ -237,7 +246,6 @@ export class OrganizationalChartsEditorComponent implements OnInit {
 
     private updateNodeInTree(node: OrganizationalChartsTreeNode): void {
         this.nodeTree.update((nodes) => {
-            console.log(nodes.map((n) => n.id === node.id ? node : n));
             return nodes.map((n) => n.id === node.id ? node : n);
         });
 

@@ -3,6 +3,11 @@
     <div class="node-info">
         <span class="node-title"> model.name </span>
         <div class="node-description"> model.description</div>
+
+        @if (node) {
+            <input type="number" [(ngModel)]="node.node.container_id"/>
+        }
+
     </div>
 
 
