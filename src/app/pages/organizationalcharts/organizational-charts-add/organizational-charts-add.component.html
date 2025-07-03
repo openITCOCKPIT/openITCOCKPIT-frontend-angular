@@ -25,7 +25,33 @@
             <c-card-header>
                 <h5 cCardTitle>
                     {{ t('Create new Organizational chart') }}
+
+                    @if (hasUnsavedChanges) {
+                        <c-badge color="danger" class="ms-3">
+                            {{ t('Unsaved changes') }}
+                        </c-badge>
+                    }
+
                 </h5>
+
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="submit()" cButton class="ripple" color="success" size="xs">
+                            <fa-icon [icon]="['fas', 'floppy-disk']"></fa-icon>
+                            {{ t('Create Organizational chart') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['organizationalcharts', 'index']" cButton
+                                class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+
             </c-card-header>
             <c-card-body>
 
@@ -60,12 +86,12 @@
                         </h4>
                     </legend>
 
-                    <div>{{ nodes | json }}</div>
-                    <div>{{ connections | json }}</div>
+                    <div>{{ post.organizational_chart_nodes | json }}</div>
+                    <div>{{ post.organizational_chart_connections | json }}</div>
 
                     <oitc-organizational-charts-editor
-                        [(nodeTree)]="nodes"
-                        [(connections)]="connections"></oitc-organizational-charts-editor>
+                        [(nodeTree)]="post.organizational_chart_nodes"
+                        [(connections)]="post.organizational_chart_connections"></oitc-organizational-charts-editor>
                 </fieldset>
             </c-card-body>
         </c-card>

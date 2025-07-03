@@ -7,3 +7,10 @@ export interface OcTreeNode {
     position: IPoint,
     node: OrganizationalChartsTreeNode
 }
+
+export interface OrganizationalChartsTreeConnection {
+    uuid: string
+    fInputId: string
+    fOutputId: string
+}
+

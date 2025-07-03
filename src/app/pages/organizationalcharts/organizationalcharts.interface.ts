@@ -54,18 +54,29 @@ export interface OrganizationalChartsPost {
     name: string
     description: string
     created?: string
-    modified?: string
+    modified?: string,
+    organizational_chart_connections: OcConnection[]
+    organizational_chart_nodes: OrganizationalChartsTreeNode[]
+}
+
+export interface OcConnection {
+    id: number | string // numeric id in edit - UUIDv4 in add
+    organizational_chart_input_node_id: number | string // numeric id in edit - UUIDv4 in add
+    organizational_chart_output_node_id: number | string // numeric id in edit - UUIDv4 in add
+    created?: string
+    modified?: string,
 }
 
 export interface OrganizationalChartsTreeNode {
     id?: number | string // numeric id in edit - UUIDv4 in add
+    uuid: string
     organizational_chart_id?: number // empty in add
     container_id: number
     x_position: number
     y_position: number
     created?: string
     modified?: string
-    users_to_organizational_chart_structures: OrganizationalChartsTreeNodeUser[]
+    users_to_organizational_chart_nodes: OrganizationalChartsTreeNodeUser[]
     container?: Container
 }
 
@@ -93,10 +104,4 @@ export interface OrganizationalChartsTreeNodeUser {
         dateformat: string
         is_active: boolean
     }
-}
-
-export interface OrganizationalChartsTreeConnection {
-    uuid: string
-    fInputId: string
-    fOutputId: string
 }

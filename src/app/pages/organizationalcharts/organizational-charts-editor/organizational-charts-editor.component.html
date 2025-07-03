@@ -26,13 +26,14 @@
                 </svg>
             </f-connection-for-create>
 
-            @for (connection of connections(); track connection.uuid) {
+            @for (connection of connections(); track connection.id) {
                 <f-connection
                     [fOffset]="20"
                     [fBehavior]="EFConnectionBehavior.FIXED"
                     [fType]="EFConnectionType.SEGMENT"
-                    [fConnectionId]="connection.uuid"
-                    [fOutputId]="connection.fOutputId" [fInputId]="connection.fInputId">
+                    [fConnectionId]="String(connection.id)"
+                    [fOutputId]="connection.organizational_chart_output_node_id"
+                    [fInputId]="connection.organizational_chart_input_node_id">
 
                     <svg id="normal_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.END" [height]="5" [width]="5"
                          [refX]="4" [refY]="2.5">
