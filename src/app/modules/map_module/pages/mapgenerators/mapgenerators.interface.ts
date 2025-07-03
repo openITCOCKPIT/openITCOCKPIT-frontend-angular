@@ -95,5 +95,18 @@ export interface LoadContainersForMapgeneratorParams {
     loadStartContainers?: boolean
 }
 
+export interface MapgeneratorGenerateRoot {
+    generatedMapsAndItems: GeneratedMapsAndItems
+    _csrfToken: string
+}
+
+export interface GeneratedMapsAndItems {
+    amountOfTotalMaps: number
+    amountOfNewGeneratedMaps: number
+    amountOfNewGeneratedItems: number
+    maps: number[]
+    newMaps: number[]
+}
+
 
 

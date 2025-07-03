@@ -36,6 +36,7 @@ import {
     MapgeneratorsIndexParams,
     MapgeneratorsIndexRoot
 } from './mapgenerators.interface';
+import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -115,6 +116,41 @@ export class MapgeneratorsService {
                     });
                 })
             );
+    }
+
+    public getGenerator(id: number): Observable<MapgeneratorsEditRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/map_module/mapgenerators/generate/${id}.json?angular=true`, {}).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public generate(id: number): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/mapgenerators/generate/${id}.json?angular=true`, {})
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/map_module/mapgenerators/delete/${item.id}.json?angular=true`, {});
     }
 
 }

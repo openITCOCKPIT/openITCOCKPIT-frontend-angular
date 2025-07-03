@@ -161,8 +161,8 @@ export class MapgeneratorsIndexComponent implements OnInit, OnDestroy, IndexPage
         this.params = getDefaultMapgeneratorsIndexParams();
 
         this.mapsFilter = {
-            maps_generated: true,
-            maps_not_generated: true,
+            maps_generated: false,
+            maps_not_generated: false,
         }
 
         this.loadMapgenerators();
