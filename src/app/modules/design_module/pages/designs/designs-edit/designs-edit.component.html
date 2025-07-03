@@ -194,92 +194,174 @@
             <hr/>
 
             <c-row *ngIf="post">
-                <c-card class="mb-2">
-                    <c-card-header>
-                        <h6 cCardTitle>{{ t('Colours') }}</h6>
-                    </c-card-header>
-                    <c-card-body>
-                        <c-row>
+                <c-col md="12">
+                    <c-card class="mb-2">
+                        <c-card-header>
+                            <h6 cCardTitle>{{ t('Look & Feel') }}</h6>
+                        </c-card-header>
+                        <c-card-body>
+                            <c-row>
 
-                            <c-col md="6">
+                                <c-col md="6">
 
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <p-color-picker
-                                                id="post.topBackground"
-                                                name="post.topBackground"
-                                                [(ngModel)]="post.topBackground">
-                                        </p-color-picker>
-                                    </span>
-                                    <span cInputGroupText>
-                                        {{ t('topBackground') }}
-                                    </span>
-                                </c-input-group>
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <p-color-picker
-                                                id="post.leftBackground"
-                                                name="post.leftBackground"
-                                                [(ngModel)]="post.leftBackground">
-                                        </p-color-picker>
-                                    </span>
-                                    <span cInputGroupText>
-                                        {{ t('leftBackground') }}
-                                    </span>
-                                </c-input-group>
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <p-color-picker
-                                                id="post.rightBackground"
-                                                name="post.rightBackground"
-                                                [(ngModel)]="post.rightBackground">
-                                        </p-color-picker>
-                                    </span>
-                                    <span cInputGroupText>
-                                        {{ t('rightBackground') }}
-                                    </span>
-                                </c-input-group>
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <p-color-picker
-                                                id="post.mapBackground"
-                                                name="post.mapBackground"
-                                                [(ngModel)]="post.mapBackground">
-                                        </p-color-picker>
-                                    </span>
-                                    <span cInputGroupText>
-                                        {{ t('mapBackground') }}
-                                    </span>
-                                </c-input-group>
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <p-color-picker
-                                                id="post.mapText"
-                                                name="post.mapText"
-                                                [(ngModel)]="post.mapText">
-                                        </p-color-picker>
-                                    </span>
-                                    <span cInputGroupText>
-                                        {{ t('mapText') }}
-                                    </span>
-                                </c-input-group>
-                            </c-col>
-                            <c-col md="6">
-                            <textarea cFormControl
-                                      [(ngModel)]="post.customcsstext"
-                                      id="post.customcsstext"></textarea>
-                            </c-col>
-                        </c-row>
-                    </c-card-body>
-                    <c-card-footer>
-                        <button cButton (click)="saveDesign()" color="success" type="submit" class="ripple">
-                            {{ t('Save') }}
-                        </button>
-                        <button cButton color="success" type="submit" class="ripple">
-                            {{ t('Reset Colours') }}
-                        </button>
-                    </c-card-footer>
-                </c-card>
+                                    <div class="mb-3">
+                                        <label cLabel for="post.mode">
+                                            {{ t('Colour Mode') }}
+                                        </label>
+
+                                        <c-input-group>
+                                            <c-dropdown variant="btn-group">
+                                                <button *ngIf="post.mode === 'light'"
+                                                        cButton cDropdownToggle color="primary">
+                                                    <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
+                                                    {{ t('Light') }}
+                                                </button>
+                                                <button *ngIf="post.mode === 'dark'"
+                                                        cButton cDropdownToggle color="primary">
+                                                    <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
+                                                    {{ t('Dark') }}
+                                                </button>
+                                                <button *ngIf="post.mode === 'auto'"
+                                                        cButton cDropdownToggle color="primary">
+                                                    <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
+                                                    {{ t('Auto') }}
+                                                </button>
+                                                <ul cDropdownMenu>
+                                                    <li cDropdownItem (click)="setMode('light')">
+                                                        <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
+                                                        {{ t('Light') }}
+                                                    </li>
+                                                    <li cDropdownItem (click)="setMode('dark')">
+                                                        <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
+                                                        {{ t('Dark') }}
+                                                    </li>
+                                                    <li cDropdownItem (click)="setMode('auto')">
+                                                        <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
+                                                        {{ t('Auto') }}
+                                                    </li>
+                                                </ul>
+                                            </c-dropdown>
+                                        </c-input-group>
+                                    </div>
+                                    <div class="mb-3">
+
+                                        <c-form-check>
+                                            <input
+                                                    cFormCheckInput
+                                                    class="checkbox-lg checkbox-primary"
+                                                    name="post.modeLocked"
+                                                    id="post.modeLocked"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    [trueValue]="1"
+                                                    [falseValue]="0"
+                                                    [(ngModel)]="post.modeLocked"/>
+                                            <oitc-form-feedback [errors]="errors"
+                                                                errorField="is_active"></oitc-form-feedback>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   for="post.modeLocked">
+                                                {{ t('Lock Colour Mode') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <p-color-picker
+                                                        id="post.topBackground"
+                                                        name="post.topBackground"
+                                                        [(ngModel)]="post.topBackground">
+                                                </p-color-picker>
+                                            </span>
+                                            <span cInputGroupText>
+                                                {{ t('Top bar header') }}
+                                            </span>
+                                        </c-input-group>
+                                    </div>
+                                    <div class="mb-3">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <p-color-picker
+                                                        id="post.leftBackground"
+                                                        name="post.leftBackground"
+                                                        [(ngModel)]="post.leftBackground">
+                                                </p-color-picker>
+                                            </span>
+                                            <span cInputGroupText>
+                                                {{ t('Left bar navigation') }}
+                                            </span>
+                                        </c-input-group>
+                                    </div>
+                                    <div class="mb-3">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <p-color-picker
+                                                        id="post.rightBackground"
+                                                        name="post.rightBackground"
+                                                        [(ngModel)]="post.rightBackground">
+                                                </p-color-picker>
+                                            </span>
+                                            <span cInputGroupText>
+                                                {{ t('Content background') }}
+                                            </span>
+                                        </c-input-group>
+                                    </div>
+                                    <div class="mb-3">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <p-color-picker
+                                                        id="post.mapBackground"
+                                                        name="post.mapBackground"
+                                                        [(ngModel)]="post.mapBackground">
+                                                </p-color-picker>
+                                            </span>
+                                            <span cInputGroupText>
+                                                {{ t('Map canvas') }}
+                                            </span>
+                                        </c-input-group>
+                                    </div>
+                                    <div class="mb-3">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <p-color-picker
+                                                        id="post.mapText"
+                                                        name="post.mapText"
+                                                        [(ngModel)]="post.mapText">
+                                                </p-color-picker>
+                                            </span>
+                                            <span cInputGroupText>
+                                                {{ t('Map texts') }}
+                                            </span>
+                                        </c-input-group>
+                                    </div>
+                                </c-col>
+                                <c-col md="6">
+                                    <div class="mb-3">
+                                        <label cLabel for="post.customcsstext">
+                                            {{ t('Custom CSS') }}
+                                        </label>
+                                        <textarea cFormControl
+                                                  cols="60"
+                                                  class="code-font"
+                                                  rows="15"
+                                                  [(ngModel)]="post.customcsstext"
+                                                  id="post.customcsstext"></textarea>
+                                    </div>
+                                </c-col>
+                            </c-row>
+                        </c-card-body>
+                        <c-card-footer class="text-end">
+                            <button cButton color="primary" class="ripple" (click)="saveDesign()">
+                                {{ t('Save') }}
+                            </button>
+                            <button cButton color="warning" type="submit" class="ripple" (click)="resetColours()">
+                                {{ t('Reset Colours') }}
+                            </button>
+
+                        </c-card-footer>
+                    </c-card>
+                </c-col>
             </c-row>
 
         </c-card-body>

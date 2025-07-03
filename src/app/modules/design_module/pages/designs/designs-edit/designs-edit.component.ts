@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
+import { GenericValidationError } from '../../../../../generic-responses';
 import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
@@ -21,6 +21,13 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
     InputGroupComponent,
@@ -43,6 +50,10 @@ import {
 } from '../../../../../layouts/coreui/reload-interface-modal/reload-interface-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ColorPicker } from 'primeng/colorpicker';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import { IconDirective } from '@coreui/icons-angular';
+import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
+import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 
 @Component({
     selector: 'oitc-designs-edit',
@@ -77,7 +88,18 @@ import { ColorPicker } from 'primeng/colorpicker';
         ColorPicker,
         NgIf,
         CardFooterComponent,
-        FormControlDirective
+        FormControlDirective,
+        BackButtonDirective,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        IconDirective,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        FormCheckComponent,
+        FormFeedbackComponent
     ],
     templateUrl: './designs-edit.component.html',
     styleUrl: './designs-edit.component.css',
@@ -249,6 +271,25 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    protected resetColours(): void {
+        this.subscriptions.add(this.DesignsService.resetColours()
+            .subscribe((result) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+                    this.notyService.genericSuccess();
+                    // open modal page reload modal
+                    this.modalService.toggle({
+                        show: true,
+                        id: 'reloadInterfaceModal',
+                    });
+                    return;
+                }
+
+                // Error
+                this.notyService.genericError();
+            }))
+    }
+
     protected resetLogo(type: number) {
         this.subscriptions.add(this.DesignsService.resetLogo(type)
             .subscribe((result) => {
@@ -266,6 +307,11 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
                 // Error
                 this.notyService.genericError(result.message);
             }))
+    }
+
+    protected setMode(mode: string): void {
+        this.post.mode = mode;
+        this.cdr.markForCheck();
     }
 
     private hideUploadModals() {
@@ -308,12 +354,14 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
-                    const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('User');
+                    const title = this.TranslocoService.translate('Colours');
                     const msg = this.TranslocoService.translate('updated successfully');
-                    const url = ['users', 'edit', response.id];
 
-                    this.notyService.genericSuccess(msg, title, url);
+                    // open modal page reload modal
+                    this.modalService.toggle({
+                        show: true,
+                        id: 'reloadInterfaceModal',
+                    });
                     return;
                 }
 
