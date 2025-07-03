@@ -50,7 +50,6 @@ import {
 } from '../../../../../layouts/coreui/reload-interface-modal/reload-interface-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ColorPicker } from 'primeng/colorpicker';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { IconDirective } from '@coreui/icons-angular';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -89,7 +88,6 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
         NgIf,
         CardFooterComponent,
         FormControlDirective,
-        BackButtonDirective,
         DropdownComponent,
         DropdownItemDirective,
         DropdownMenuDirective,
@@ -170,6 +168,93 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
                 this.init = false;
                 this.cdr.markForCheck();
             }));
+    };
+
+    private createDesignDropzone() {
+        let designDropzone = this.document.getElementById('designDropzone');
+        if (designDropzone) {
+            const dropzone = new Dropzone(designDropzone, {
+                method: "post",
+                maxFilesize: this.maxUploadLimit?.value, //MB
+                acceptedFiles: 'application/json', //mimetypes
+                paramName: 'design',
+                clickable: true,
+                headers: {
+                    'X-CSRF-TOKEN': this.authService.csrfToken || ''
+                },
+                url: '/design_module/designs/import.json?angular=true',
+                removedfile: (file: Dropzone.DropzoneFile) => {
+                    this.cdr.markForCheck();
+                },
+                sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                    this.cdr.markForCheck();
+                },
+                success: (file: Dropzone.DropzoneFile) => {
+                    this.cdr.markForCheck();
+
+                    const response = file.xhr;
+
+                    let errorMessage: undefined | string = undefined;
+                    if (response) {
+                        const serverResponse = JSON.parse(response.response);
+
+                        if (serverResponse.success) {
+                            // Update the preview element to show check mark icon
+                            this.updatePreviewElement(file, 'success');
+
+                            this.notyService.genericSuccess(
+                                serverResponse.message
+                            );
+                            this.hideUploadModals();
+                            // open modal page reload modal
+                            this.modalService.toggle({
+                                show: true,
+                                id: 'reloadInterfaceModal',
+                            });
+                            return;
+                        }
+
+                        if (serverResponse.message) {
+                            errorMessage = serverResponse.message;
+                        }
+                    }
+
+                    // Update the preview element to show the error message and the X icon
+                    this.updatePreviewElement(file, 'error', errorMessage);
+                    this.notyService.genericError(errorMessage);
+
+                },
+                error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
+                    this.cdr.markForCheck();
+
+                    let message = '';
+                    if (typeof error === 'string') {
+                        message = error;
+                    } else {
+                        // Error is an object
+                        // "error" contains now the server response
+                        // This happens if you upload a wrong file type like ".exe" or ".pdf"
+                        message = "Unknown server error";
+                        if (error.hasOwnProperty('error')) {
+                            message = error.error;
+                        }
+                    }
+
+                    // Update the preview element to show the error message and the X icon
+                    this.updatePreviewElement(file, 'error', message);
+
+                    if (typeof xhr === 'undefined') {
+                        // User tried to upload illegal file types such as .pdf or so
+                        this.notyService.genericError(message);
+                    } else {
+                        // File got uploaded to the server, but server returned an error
+                        let response = message as unknown as Error;
+                        this.notyService.genericError(response.message);
+                    }
+                }
+            });
+        }
+        this.cdr.markForCheck();
     };
 
     private createDropzone() {
@@ -331,6 +416,28 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
             show: true,
             id: 'UploadLogoModal',
         });
+    }
+
+    protected triggerUploadDesignModal() {
+        this.onDesignDropzone();
+        this.modalService.toggle({
+            show: true,
+            id: 'UploadDesignModal',
+        });
+    }
+
+    private onDesignDropzone(): void {
+        this.showUpload = true;
+
+        //destroy previous dropzone instances
+        let designDropzone = this.document.getElementById('designDropzone');
+        if (designDropzone && designDropzone.dropzone) {
+            designDropzone.dropzone.destroy();
+        }
+
+        if (this.maxUploadLimit != null) {
+            this.createDesignDropzone();
+        }
     }
 
     public onLogoTypeChange() {
