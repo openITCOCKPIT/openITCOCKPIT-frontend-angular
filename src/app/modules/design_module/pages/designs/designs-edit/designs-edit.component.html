@@ -365,6 +365,20 @@
             </c-row>
 
         </c-card-body>
+        <c-card-footer>
+
+            <c-button-group>
+                <button cButton color="primary" class="ripple"
+                        (click)="triggerUploadDesignModal()">
+                    <fa-icon [icon]="['fas', 'file-upload']"></fa-icon>
+                    {{ t('Import ') }}
+                </button>
+                <a type="button" color="light" cButton class="ripple" href="/design_module/designs/export/">
+                    <fa-icon [icon]="['fas', 'file-download']"></fa-icon>
+                    {{ t('Export current saved design') }}
+                </a>
+            </c-button-group>
+        </c-card-footer>
     </c-card>
 
     <!-- Upload logo modal -->
@@ -404,7 +418,7 @@
                             <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                             {{ t('Max allowed file size: ') }}
                             {{ maxUploadLimit?.string }}.
-                            {{ t('Supported iamge types: .jpg, .png and .gif.') }}
+                            {{ t('Supported image types: .jpg, .png and .gif.') }}
                         </c-col>
                         <c-col lg="12" class="pt-2">
                             <div id="logoDropzone"
@@ -423,6 +437,46 @@
         </c-modal-body>
         <c-modal-footer>
             <button [cModalToggle]="UploadLogoModal.id" cButton color="default" class="ripple">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+
+    <!-- Upload design modal -->
+    <c-modal #UploadDesignModal fullscreen="md" size="lg" id="UploadDesignModal">
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'file-upload']"></fa-icon>
+                {{ t('Upload your Design') }}
+            </h5>
+            <button [cModalToggle]="UploadDesignModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col lg="12">
+                    <div class="form-group">
+                        <c-col lg="12" class="text-info pt-2">
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('Max allowed file size: ') }}
+                            {{ maxUploadLimit?.string }}.
+                        </c-col>
+                        <c-col lg="12" class="pt-2">
+                            <div id="designDropzone"
+                                 class="design-dropzone dropzone dropzoneStyle">
+                                <div class="dz-message">
+                                    <fa-icon [icon]="['fas', 'file-upload']" size="5x"
+                                             class="mb-3 text-muted"></fa-icon>
+                                    <br>
+                                    <span class="text-uppercase"> {{ t('Drop files here or click to upload.') }} </span>
+                                </div>
+                            </div>
+                        </c-col>
+                    </div>
+                </c-col>
+            </c-row>
+        </c-modal-body>
+        <c-modal-footer>
+            <button [cModalToggle]="UploadDesignModal.id" cButton color="default" class="ripple">
                 {{ t('Close') }}
             </button>
         </c-modal-footer>
