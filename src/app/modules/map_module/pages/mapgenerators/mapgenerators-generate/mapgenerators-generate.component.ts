@@ -29,11 +29,12 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { AsyncPipe, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import { ProgressBar } from 'primeng/progressbar';
 
 @Component({
     selector: 'oitc-mapgenerators-generate',
@@ -45,7 +46,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         CardTitleDirective,
         FaIconComponent,
         FormsModule,
-        NgIf,
         PermissionDirective,
         TranslocoDirective,
         XsButtonDirective,
@@ -53,15 +53,14 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         AlertComponent,
         ColComponent,
         FormLoaderComponent,
-        NgForOf,
         RowComponent,
         BorderDirective,
         AsyncPipe,
         TableDirective,
-        KeyValuePipe,
         BackButtonDirective,
         NavComponent,
-        NavItemComponent
+        NavItemComponent,
+        ProgressBar
     ],
     templateUrl: './mapgenerators-generate.component.html',
     styleUrl: './mapgenerators-generate.component.css',
@@ -79,7 +78,13 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
     public readonly route = inject(ActivatedRoute);
-    public errors: GenericValidationError | null = null;
+    public errors: {
+        field: string;
+        errors: {
+            errorKey: string;
+            errorMessage: string;
+        }[];
+    }[] | null = null;
 
     private cdr = inject(ChangeDetectorRef);
 
@@ -113,8 +118,8 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
                 this.mapgenerator = result.mapgenerator;
                 if (result.mapgenerator.maps?.length) {
                     this.mapCount = result.mapgenerator.maps?.length;
+                    this.allGeneratedMaps = this.mapgenerator.maps!.map(map => map.id);
                 }
-                this.allGeneratedMaps = this.mapgenerator.maps!.map(map => map.id);
                 this.init = false;
                 this.cdr.markForCheck();
             }))
@@ -130,11 +135,14 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
                 this.isGeneratorFinished = true;
                 if (result.success) {
                     const response = result.data as MapgeneratorGenerateRoot;
+                    const title = this.TranslocoService.translate('Data');
+                    const msg = this.TranslocoService.translate('created successfully');
+
                     this.generatedMapsAndItems = response.generatedMapsAndItems;
                     this.allGeneratedMaps = this.generatedMapsAndItems.maps;
                     this.newGeneratedMaps = this.generatedMapsAndItems.newMaps;
-                    const title = this.TranslocoService.translate('Data');
-                    const msg = this.TranslocoService.translate('created successfully');
+
+                    this.mapCount = this.allGeneratedMaps.length;
 
                     this.generationSuccessfully = true;
 
@@ -147,10 +155,22 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
                 this.generationSuccessfully = false;
                 this.notyService.genericError();
                 if (result) {
-                    this.errors = errorResponse;
+                    this.errors = this.genericValidationErrorObjectToArray(errorResponse);
 
                 }
             }))
+    }
+
+    private genericValidationErrorObjectToArray(errorObject: GenericValidationError) {
+        return Object.entries(errorObject).map(([field, errors]) => {
+            return {
+                field,
+                errors: Object.entries(errors).map(([errorKey, errorMessage]) => ({
+                    errorKey,
+                    errorMessage
+                }))
+            };
+        });
     }
 
     protected readonly String = String;

@@ -168,6 +168,10 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public loadMaps() {
         this.SelectionServiceService.deselectAll();
 
+        if (this.route.snapshot.queryParams.hasOwnProperty('filter.Maps.id')) {
+            this.params['filter[Maps.id][]'] = this.route.snapshot.queryParams['filter.Maps.id'];
+        }
+
         this.subscriptions.add(this.MapsService.getIndex(this.params)
             .subscribe((result: MapsIndexRoot) => {
                 this.maps = result;

@@ -28,7 +28,6 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -52,7 +51,6 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         RequiredIconComponent,
         TranslocoDirective,
