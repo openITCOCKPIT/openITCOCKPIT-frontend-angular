@@ -80,17 +80,15 @@ export class ColourLocatorPickerComponent implements OnChanges, OnInit {
 
     protected highlightElement(event: any): void {
         let targetElements = this.getTargetElements();
-        console.error(targetElements);
         if (!targetElements) {
             return;
         }
         targetElements.forEach(targetElement => {
-            // Always remove highlight, if mouseover add highlight back.
             targetElement.style.removeProperty(this.attribute);
+            // Always remove highlight, if mouseover add highlight back.
             if (event.type === 'mouseover') {
                 targetElement.style.setProperty(this.attribute, this.getHighlightColour(), "important");
             }
-
         });
         this.cdr.markForCheck();
     }
