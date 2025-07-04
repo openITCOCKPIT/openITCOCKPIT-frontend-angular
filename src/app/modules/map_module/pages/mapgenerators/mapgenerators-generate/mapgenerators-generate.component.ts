@@ -35,6 +35,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { ProgressBar } from 'primeng/progressbar';
+import { Map } from '../../maps/maps.interface';
 
 @Component({
     selector: 'oitc-mapgenerators-generate',
@@ -118,7 +119,7 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
                 this.mapgenerator = result.mapgenerator;
                 if (result.mapgenerator.maps?.length) {
                     this.mapCount = result.mapgenerator.maps?.length;
-                    this.allGeneratedMaps = this.mapgenerator.maps!.map(map => map.id);
+                    this.allGeneratedMaps = this.mapgenerator.maps!.map(map => (map as Map).id);
                 }
                 this.init = false;
                 this.cdr.markForCheck();

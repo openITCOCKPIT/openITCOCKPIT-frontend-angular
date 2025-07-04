@@ -23,7 +23,7 @@ export interface Mapgenerator {
     modified: string
     containers: MapgeneratorContainer[]
     start_containers?: MapgeneratorContainer[]
-    maps?: Map[]
+    maps?: Map[] | number[]
     allowEdit?: boolean
 }
 

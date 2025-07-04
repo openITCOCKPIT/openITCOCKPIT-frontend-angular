@@ -195,9 +195,19 @@
                                         {{ mapgenerator.name }}
                                     </span>
                                     @if (mapgenerator.has_generated_maps) {
-                                        <c-badge class="ms-2"
-                                                 [title]="'Maps' | transloco" textColor="info">Maps
-                                        </c-badge>
+                                        <a *oitcPermission="['mapmodule','maps', 'index']"
+                                           [routerLink]="['/', 'map_module', 'maps', 'index']"
+                                           [queryParams]="{'filter.Maps.id': mapgenerator.maps}">
+                                            <c-badge class="ms-2"
+                                                     [title]="'Maps' | transloco" color="info">Maps
+                                            </c-badge>
+                                        </a>
+                                        <span
+                                            *oitcPermission="['mapmodule','maps', 'index']; negate: true">
+                                            <c-badge class="ms-2"
+                                                     [title]="'Maps' | transloco" color="info">Maps
+                                            </c-badge>
+                                        </span>
                                     }
                                 </td>
                                 <td>
