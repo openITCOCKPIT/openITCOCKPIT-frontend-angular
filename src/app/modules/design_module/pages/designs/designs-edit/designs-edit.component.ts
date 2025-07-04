@@ -1,13 +1,21 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+    ViewChild
+} from '@angular/core';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { Subscription } from 'rxjs';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { DesignsService } from '../designs.service';
-import { Design, DesignsEditRoot, MaxUploadLimit } from '../designs.interface';
+import { Design, DesignsEditRoot, Manipulation, MaxUploadLimit } from '../designs.interface';
 import Dropzone from 'dropzone';
-import { DOCUMENT, NgIf } from '@angular/common';
+import { DOCUMENT, NgForOf, NgIf } from '@angular/common';
 import { AuthService } from '../../../../../auth/auth.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -25,13 +33,9 @@ import {
     DropdownItemDirective,
     DropdownMenuDirective,
     DropdownToggleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
     InputGroupComponent,
-    InputGroupTextDirective,
     ModalBodyComponent,
     ModalComponent,
     ModalFooterComponent,
@@ -49,10 +53,10 @@ import {
     ReloadInterfaceModalComponent
 } from '../../../../../layouts/coreui/reload-interface-modal/reload-interface-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ColorPicker } from 'primeng/colorpicker';
 import { IconDirective } from '@coreui/icons-angular';
-import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import {
+    ColourLocatorPickerComponent
+} from '../../../components/colour-locator-picker/colour-locator-picker.component';
 
 @Component({
     selector: 'oitc-designs-edit',
@@ -81,10 +85,8 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
         FormLabelDirective,
         ButtonGroupComponent,
         InputGroupComponent,
-        InputGroupTextDirective,
         ReactiveFormsModule,
         FormsModule,
-        ColorPicker,
         NgIf,
         CardFooterComponent,
         FormControlDirective,
@@ -93,11 +95,9 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
         DropdownMenuDirective,
         DropdownToggleDirective,
         IconDirective,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        FormCheckComponent,
-        FormFeedbackComponent
+        ColourLocatorPickerComponent,
+        TranslocoPipe,
+        NgForOf
     ],
     templateUrl: './designs-edit.component.html',
     styleUrl: './designs-edit.component.css',
@@ -118,6 +118,7 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError | null = null;
     private cdr = inject(ChangeDetectorRef);
     protected post!: Design;
+    protected manipulations!: Manipulation[];
     private showExportButton: boolean = true;
     protected maxUploadLimit: MaxUploadLimit | null = null;
     private init: boolean = true;
@@ -143,6 +144,20 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
         mapText: '',
     } as Design;
 
+
+    @ViewChild(ColourLocatorPickerComponent) childComponent!: ColourLocatorPickerComponent;
+
+    protected getManipulatorValue(name: string): string {
+        if (!this.post) {
+            return '';
+        }
+        return this.post[name] || '';
+    }
+
+    protected setManipulatorValue(name: string, value: string): void {
+        this.post[name] = value;
+    }
+
     public ngOnInit(): void {
         this.load();
     }
@@ -155,6 +170,7 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.DesignsService.getEdit()
             .subscribe((result: DesignsEditRoot) => {
                 this.post = result.design;
+                this.manipulations = result.manipulations;
                 if (result.new === true) {
                     this.showExportButton = false;
                 }
@@ -480,4 +496,24 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
                 }
             }));
     }
+
+    protected highlightElement(event: any): void {
+        if (!event.target.dataset.target) {
+            return;
+        }
+        let eventType = 'mouseout';
+        if (event.type === 'mouseover') {
+            eventType = 'mouseover';
+        }
+        const targetElement = this.document.querySelector(event.target.dataset.target);
+        if (targetElement) {
+            targetElement.classList.add('designModuleHighlight');
+            if (eventType === 'mouseover') {
+                targetElement.style.setProperty("background-color", "#FF00FF", "important");
+            } else {
+                targetElement.style.removeProperty("background-color");
+            }
+        }
+    }
+
 }

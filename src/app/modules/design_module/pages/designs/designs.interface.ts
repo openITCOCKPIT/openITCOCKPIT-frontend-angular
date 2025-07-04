@@ -1,5 +1,6 @@
 export interface DesignsEditRoot {
     design: Design
+    manipulations: Manipulation[]
     maxUploadLimit: MaxUploadLimit
     new: boolean
     logoPdfForHtml: string,
@@ -10,18 +11,37 @@ export interface DesignsEditRoot {
     _csrfToken: string
 }
 
+export interface Manipulation {
+    selector: string   // The CSS selector
+    attribute: string   // The CSS property
+    name: string // The db field
+    title: string  // Human readable
+}
+
 export interface Design {
+    [key: string]: any;
+
     logoInHeader: number
     customcsstext: string
 
-    // NEW FIELDZ
+    // Main Areas
     rightBackground: string
     leftBackground: string
     topBackground: string
+
+    // Map
     mapBackground: string
     mapText: string
+
+    // Mode
     mode: string
     modeLocked: number
+
+    // Navigation Colours
+    navigationCategoryColour: string
+    groupTextColour: string
+    navigationItemColour: string
+    navigationIconColour: string
 }
 
 export interface MaxUploadLimit {

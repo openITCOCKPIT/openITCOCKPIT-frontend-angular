@@ -243,97 +243,15 @@
                                             </c-dropdown>
                                         </c-input-group>
                                     </div>
-                                    <div class="mb-3">
 
-                                        <c-form-check>
-                                            <input
-                                                    cFormCheckInput
-                                                    class="checkbox-lg checkbox-primary"
-                                                    name="post.modeLocked"
-                                                    id="post.modeLocked"
-                                                    type="checkbox"
-                                                    trueFalseValue
-                                                    [trueValue]="1"
-                                                    [falseValue]="0"
-                                                    [(ngModel)]="post.modeLocked"/>
-                                            <oitc-form-feedback [errors]="errors"
-                                                                errorField="is_active"></oitc-form-feedback>
-                                            <label cFormCheckLabel class="ms-1 mt-1"
-                                                   for="post.modeLocked">
-                                                {{ t('Lock Colour Mode') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
+                                    <div class="mb-3" *ngFor="let manipulator of manipulations">
+                                        <oitc-colour-locator-picker
+                                                [selector]="manipulator.selector"
+                                                [attribute]="manipulator.attribute"
+                                                [value]="getManipulatorValue(manipulator.name)"
+                                                (valueChange)="setManipulatorValue(manipulator.name, $event)"
+                                                [title]="manipulator.title | transloco"/>
 
-                                    <div class="mb-3">
-                                        <c-input-group>
-                                            <span cInputGroupText>
-                                                <p-color-picker
-                                                        id="post.topBackground"
-                                                        name="post.topBackground"
-                                                        [(ngModel)]="post.topBackground">
-                                                </p-color-picker>
-                                            </span>
-                                            <span cInputGroupText>
-                                                {{ t('Top bar header') }}
-                                            </span>
-                                        </c-input-group>
-                                    </div>
-                                    <div class="mb-3">
-                                        <c-input-group>
-                                            <span cInputGroupText>
-                                                <p-color-picker
-                                                        id="post.leftBackground"
-                                                        name="post.leftBackground"
-                                                        [(ngModel)]="post.leftBackground">
-                                                </p-color-picker>
-                                            </span>
-                                            <span cInputGroupText>
-                                                {{ t('Left bar navigation') }}
-                                            </span>
-                                        </c-input-group>
-                                    </div>
-                                    <div class="mb-3">
-                                        <c-input-group>
-                                            <span cInputGroupText>
-                                                <p-color-picker
-                                                        id="post.rightBackground"
-                                                        name="post.rightBackground"
-                                                        [(ngModel)]="post.rightBackground">
-                                                </p-color-picker>
-                                            </span>
-                                            <span cInputGroupText>
-                                                {{ t('Content background') }}
-                                            </span>
-                                        </c-input-group>
-                                    </div>
-                                    <div class="mb-3">
-                                        <c-input-group>
-                                            <span cInputGroupText>
-                                                <p-color-picker
-                                                        id="post.mapBackground"
-                                                        name="post.mapBackground"
-                                                        [(ngModel)]="post.mapBackground">
-                                                </p-color-picker>
-                                            </span>
-                                            <span cInputGroupText>
-                                                {{ t('Map canvas') }}
-                                            </span>
-                                        </c-input-group>
-                                    </div>
-                                    <div class="mb-3">
-                                        <c-input-group>
-                                            <span cInputGroupText>
-                                                <p-color-picker
-                                                        id="post.mapText"
-                                                        name="post.mapText"
-                                                        [(ngModel)]="post.mapText">
-                                                </p-color-picker>
-                                            </span>
-                                            <span cInputGroupText>
-                                                {{ t('Map texts') }}
-                                            </span>
-                                        </c-input-group>
                                     </div>
                                 </c-col>
                                 <c-col md="6">
@@ -373,7 +291,7 @@
                     <fa-icon [icon]="['fas', 'file-upload']"></fa-icon>
                     {{ t('Import ') }}
                 </button>
-                <a type="button" color="light" cButton class="ripple" href="/design_module/designs/export/">
+                <a type="button" color="default" cButton class="ripple" href="/design_module/designs/export/">
                     <fa-icon [icon]="['fas', 'file-download']"></fa-icon>
                     {{ t('Export current saved design') }}
                 </a>
