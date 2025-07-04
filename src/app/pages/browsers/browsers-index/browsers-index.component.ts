@@ -247,6 +247,7 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public containerId: number = 0;
     public containers?: BrowsersIndexResponse;
+    public organizationalCharts?: SelectKeyValue[];
     public statusCounts?: StatuscountResponse;
     public containerFilter: string = '';
     public hosts?: HostsIndexRoot;
@@ -300,7 +301,8 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     public ngOnInit(): void {
         this.loadColumns();
         this.route.queryParams.subscribe(params => {
-            let containerId = params['containerId'] || ROOT_CONTAINER
+            let containerId = params['containerId'] || ROOT_CONTAINER;
+            this.organizationalCharts = [];
             if (containerId) {
                 this.params.BrowserContainerId = parseInt(containerId, 10);
                 this.containerId = parseInt(containerId, 10);
@@ -311,6 +313,7 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.subscriptions.add(this.BrowsersService.getIndex(this.containerId)
                 .subscribe((result) => {
                     this.containers = result;
+                    this.organizationalCharts = result.organizationalCharts
                     this.cdr.markForCheck();
 
                     // Update the title.
@@ -332,10 +335,6 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
-    }
-
-    public loadContainers() {
-
     }
 
     private loadStatusCounts(containerId: number) {
@@ -861,4 +860,5 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     protected readonly HostBrowserTabs = HostBrowserTabs;
 
     protected readonly ContainerTypesEnum = ContainerTypesEnum;
+    protected readonly ROOT_CONTAINER = ROOT_CONTAINER;
 }

@@ -61,13 +61,16 @@
                                 {{ t('Container overview') }}
                             </a>
                         </c-nav-item>
-                        <c-nav-item>
-                            <a [routerLink]="['/', 'organizationalcharts', 'view']"
-                               *oitcPermission="['organizationalcharts', 'view']" class="nav-link">
-                                <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
-                                {{ t('Organizational charts') }}
-                            </a>
-                        </c-nav-item>
+                        @if (organizationalCharts) {
+                            <c-nav-item>
+                                <a [routerLink]="['/', 'organizationalcharts', 'view', containerId]"
+                                   [ngClass]="{'disabled muted': organizationalCharts.length === 0}"
+                                   *oitcPermission="['organizationalcharts', 'view']" class="nav-link">
+                                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                    {{ t('Organizational charts') }}
+                                </a>
+                            </c-nav-item>
+                        }
                     </c-nav>
                 </c-card-header>
                 <c-card-body>
