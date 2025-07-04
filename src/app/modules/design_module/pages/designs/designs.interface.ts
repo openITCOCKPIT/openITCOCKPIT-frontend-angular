@@ -1,6 +1,6 @@
 export interface DesignsEditRoot {
     design: Design
-    manipulations: Manipulation[]
+    manipulations: Manipulations
     maxUploadLimit: MaxUploadLimit
     new: boolean
     logoPdfForHtml: string,
@@ -9,6 +9,10 @@ export interface DesignsEditRoot {
     headerLogoForHtml: string,
     customLoginBackgroundHtml: string,
     _csrfToken: string
+}
+
+export interface Manipulations {
+    [key: string]: Manipulation[]
 }
 
 export interface Manipulation {

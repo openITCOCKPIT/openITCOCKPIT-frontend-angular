@@ -33,6 +33,89 @@
             </h5>
         </c-card-header>
         <c-card-body>
+
+            <c-row *ngIf="post">
+                <c-col md="12">
+                    <c-card class="mb-2">
+                        <c-card-header>
+                            <h6 cCardTitle>{{ t('Colours') }}</h6>
+                        </c-card-header>
+                        <c-card-body>
+                            <c-row>
+
+                                <c-col md="6">
+
+                                    <div class="mb-3">
+                                        <label cLabel for="post.mode">
+                                            {{ t('Colour Mode') }}
+                                        </label>
+
+                                        <c-input-group>
+                                            <c-dropdown variant="btn-group">
+                                                <button *ngIf="post.mode === 'light'"
+                                                        cButton cDropdownToggle color="primary">
+                                                    <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
+                                                    {{ t('Light') }}
+                                                </button>
+                                                <button *ngIf="post.mode === 'dark'"
+                                                        cButton cDropdownToggle color="primary">
+                                                    <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
+                                                    {{ t('Dark') }}
+                                                </button>
+                                                <button *ngIf="post.mode === 'auto'"
+                                                        cButton cDropdownToggle color="primary">
+                                                    <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
+                                                    {{ t('Auto') }}
+                                                </button>
+                                                <ul cDropdownMenu>
+                                                    <li cDropdownItem (click)="setMode('light')">
+                                                        <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
+                                                        {{ t('Light') }}
+                                                    </li>
+                                                    <li cDropdownItem (click)="setMode('dark')">
+                                                        <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
+                                                        {{ t('Dark') }}
+                                                    </li>
+                                                    <li cDropdownItem (click)="setMode('auto')">
+                                                        <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
+                                                        {{ t('Auto') }}
+                                                    </li>
+                                                </ul>
+                                            </c-dropdown>
+                                        </c-input-group>
+                                    </div>
+                                </c-col>
+                            </c-row>
+                            <c-row>
+                                <c-col class="mb-3" md="3"
+                                       *ngFor="let manipulation of manipulations | keyvalue: keepOrder">
+                                    <h5>{{ manipulation.key | transloco }}</h5>
+                                    <div class="mb-3 pr-1" *ngFor="let manipulator of manipulation.value">
+                                        <oitc-colour-locator-picker
+                                                [selector]="manipulator.selector"
+                                                [attribute]="manipulator.attribute"
+                                                [value]="getManipulatorValue(manipulator.name)"
+                                                (valueChange)="setManipulatorValue(manipulator.name, $event)"
+                                                [title]="manipulator.title | transloco"/>
+                                    </div>
+                                </c-col>
+                            </c-row>
+                        </c-card-body>
+                        <c-card-footer class="text-end">
+                            <button cButton color="danger" type="submit" class="ripple" (click)="resetColours()">
+                                {{ t('Reset to default') }}
+                            </button>
+                            <button cButton color="primary" class="ripple" (click)="saveDesign()">
+                                {{ t('Update style') }}
+                            </button>
+
+                        </c-card-footer>
+                    </c-card>
+                </c-col>
+            </c-row>
+
+            <hr/>
+
             <c-row>
                 <c-col md="3">
                     <c-card class="mb-2">
@@ -195,88 +278,25 @@
 
             <c-row *ngIf="post">
                 <c-col md="12">
-                    <c-card class="mb-2">
+                    <c-card>
                         <c-card-header>
-                            <h6 cCardTitle>{{ t('Look & Feel') }}</h6>
+                            <h6 cCardTitle>{{ t('Custom CSS') }}</h6>
                         </c-card-header>
                         <c-card-body>
-                            <c-row>
-
-                                <c-col md="6">
-
-                                    <div class="mb-3">
-                                        <label cLabel for="post.mode">
-                                            {{ t('Colour Mode') }}
-                                        </label>
-
-                                        <c-input-group>
-                                            <c-dropdown variant="btn-group">
-                                                <button *ngIf="post.mode === 'light'"
-                                                        cButton cDropdownToggle color="primary">
-                                                    <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
-                                                    {{ t('Light') }}
-                                                </button>
-                                                <button *ngIf="post.mode === 'dark'"
-                                                        cButton cDropdownToggle color="primary">
-                                                    <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
-                                                    {{ t('Dark') }}
-                                                </button>
-                                                <button *ngIf="post.mode === 'auto'"
-                                                        cButton cDropdownToggle color="primary">
-                                                    <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
-                                                    {{ t('Auto') }}
-                                                </button>
-                                                <ul cDropdownMenu>
-                                                    <li cDropdownItem (click)="setMode('light')">
-                                                        <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
-                                                        {{ t('Light') }}
-                                                    </li>
-                                                    <li cDropdownItem (click)="setMode('dark')">
-                                                        <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
-                                                        {{ t('Dark') }}
-                                                    </li>
-                                                    <li cDropdownItem (click)="setMode('auto')">
-                                                        <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
-                                                        {{ t('Auto') }}
-                                                    </li>
-                                                </ul>
-                                            </c-dropdown>
-                                        </c-input-group>
-                                    </div>
-
-                                    <div class="mb-3" *ngFor="let manipulator of manipulations">
-                                        <oitc-colour-locator-picker
-                                                [selector]="manipulator.selector"
-                                                [attribute]="manipulator.attribute"
-                                                [value]="getManipulatorValue(manipulator.name)"
-                                                (valueChange)="setManipulatorValue(manipulator.name, $event)"
-                                                [title]="manipulator.title | transloco"/>
-
-                                    </div>
-                                </c-col>
-                                <c-col md="6">
-                                    <div class="mb-3">
-                                        <label cLabel for="post.customcsstext">
-                                            {{ t('Custom CSS') }}
-                                        </label>
-                                        <textarea cFormControl
-                                                  cols="60"
-                                                  class="code-font"
-                                                  rows="15"
-                                                  [(ngModel)]="post.customcsstext"
-                                                  id="post.customcsstext"></textarea>
-                                    </div>
-                                </c-col>
-                            </c-row>
+                            <div class="mb-3">
+                                <textarea cFormControl
+                                          cols="120"
+                                          class="code-font"
+                                          rows="15"
+                                          [(ngModel)]="post.customcsstext"
+                                          id="post.customcsstext"></textarea>
+                            </div>
                         </c-card-body>
                         <c-card-footer class="text-end">
                             <button cButton color="primary" class="ripple" (click)="saveDesign()">
-                                {{ t('Save') }}
+                                <fa-icon [icon]="['fab', 'css3']"></fa-icon>
+                                {{ t('Save custom CSS') }}
                             </button>
-                            <button cButton color="warning" type="submit" class="ripple" (click)="resetColours()">
-                                {{ t('Reset Colours') }}
-                            </button>
-
                         </c-card-footer>
                     </c-card>
                 </c-col>

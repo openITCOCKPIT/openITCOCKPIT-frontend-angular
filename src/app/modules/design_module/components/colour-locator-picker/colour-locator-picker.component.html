@@ -1,16 +1,16 @@
 <ng-container *transloco="let t">
-    <c-input-group>
-        <span cInputGroupText>
+    <c-row class="ml-1">
+        <c-col md="8">
             <p-color-picker
                     id="post.leftBackground"
                     name="post.leftBackground"
-                    [(ngModel)]="value">
-            </p-color-picker>
-        </span>
-        <span cInputGroupText
-              (mouseover)="highlightElement($event)"
-              (mouseout)="highlightElement($event)">
-            {{ t(title) }}
-        </span>
-    </c-input-group>
+                    [(ngModel)]="value"/>
+            <span
+                    class="cursor-question ml-1"
+                    (mouseover)="highlightElement($event)"
+                    (mouseout)="highlightElement($event)">
+                {{ t(title) }}
+            </span>
+        </c-col>
+    </c-row>
 </ng-container>

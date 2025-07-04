@@ -5,6 +5,8 @@ import {
     inject,
     OnDestroy,
     OnInit,
+    Pipe,
+    PipeTransform,
     ViewChild
 } from '@angular/core';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -13,9 +15,9 @@ import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { DesignsService } from '../designs.service';
-import { Design, DesignsEditRoot, Manipulation, MaxUploadLimit } from '../designs.interface';
+import { Design, DesignsEditRoot, Manipulations, MaxUploadLimit } from '../designs.interface';
 import Dropzone from 'dropzone';
-import { DOCUMENT, NgForOf, NgIf } from '@angular/common';
+import { DOCUMENT, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { AuthService } from '../../../../../auth/auth.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -97,7 +99,8 @@ import {
         IconDirective,
         ColourLocatorPickerComponent,
         TranslocoPipe,
-        NgForOf
+        NgForOf,
+        KeyValuePipe
     ],
     templateUrl: './designs-edit.component.html',
     styleUrl: './designs-edit.component.css',
@@ -105,6 +108,7 @@ import {
 })
 export class DesignsEditComponent implements OnInit, OnDestroy {
 
+    protected readonly keepOrder = keepOrder;
     private readonly DesignsService: DesignsService = inject(DesignsService);
     private readonly TranslocoService = inject(TranslocoService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
@@ -118,7 +122,7 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError | null = null;
     private cdr = inject(ChangeDetectorRef);
     protected post!: Design;
-    protected manipulations!: Manipulation[];
+    protected manipulations!: Manipulations;
     private showExportButton: boolean = true;
     protected maxUploadLimit: MaxUploadLimit | null = null;
     private init: boolean = true;
@@ -514,6 +518,22 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
                 targetElement.style.removeProperty("background-color");
             }
         }
+    }
+
+}
+
+
+const keepOrder = (a: any, b: any) => a;
+
+// This pipe uses the angular keyvalue pipe. but doesn't change order.
+@Pipe({
+    standalone: true,
+    name: 'defaultOrderKeyvalue'
+})
+export class DefaultOrderKeyValuePipe extends KeyValuePipe implements PipeTransform {
+
+    override transform(value: any, ...args: any[]): any {
+        return super.transform(value, keepOrder);
     }
 
 }

@@ -11,7 +11,7 @@ import {
     SimpleChanges
 } from '@angular/core';
 import { ColorPicker } from 'primeng/colorpicker';
-import { InputGroupComponent, InputGroupTextDirective } from '@coreui/angular';
+import { ColComponent, InputGroupComponent, InputGroupTextDirective, RowComponent } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { DOCUMENT } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -23,7 +23,9 @@ import { TranslocoDirective } from '@jsverse/transloco';
         InputGroupComponent,
         InputGroupTextDirective,
         FormsModule,
-        TranslocoDirective
+        TranslocoDirective,
+        RowComponent,
+        ColComponent
     ],
     templateUrl: './colour-locator-picker.component.html',
     styleUrl: './colour-locator-picker.component.css',
