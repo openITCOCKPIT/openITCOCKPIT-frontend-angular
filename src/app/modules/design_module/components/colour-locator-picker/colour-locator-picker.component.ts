@@ -11,19 +11,30 @@ import {
     SimpleChanges
 } from '@angular/core';
 import { ColorPicker } from 'primeng/colorpicker';
-import { ColComponent, InputGroupComponent, InputGroupTextDirective, RowComponent } from '@coreui/angular';
+import {
+    ButtonDirective,
+    ColComponent,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    RowComponent
+} from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { DOCUMENT } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-colour-locator-picker',
     imports: [
         ColorPicker,
-        InputGroupComponent,
-        InputGroupTextDirective,
         FormsModule,
         TranslocoDirective,
+        FaIconComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ButtonDirective,
+        FormLabelDirective,
         RowComponent,
         ColComponent
     ],
@@ -92,6 +103,17 @@ export class ColourLocatorPickerComponent implements OnChanges, OnInit {
                 targetElement.style.setProperty(this.attribute, this.getHighlightColour(), "important");
             }
         });
+        this.cdr.markForCheck();
+    }
+
+    protected open(): void {
+        this.value = '#FF00FF';
+        this.cdr.markForCheck();
+    }
+
+    protected clear(): void {
+        this.value = '';
+        this.changed = false;
         this.cdr.markForCheck();
     }
 
