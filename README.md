@@ -16,7 +16,7 @@ openITCOCKPIT is an Open Source system monitoring tool built for different monit
 
 This is the repository for the official [openITCOCKPIT](https://openitcockpit.io/) frontend.
 
-The backend server code that is providing the API can be found [here](https://github.com/it-novum/openITCOCKPIT).
+The backend server code that is providing the API can be found [here](https://github.com/openITCOCKPIT/openITCOCKPIT).
 
 # Demo
 
@@ -46,7 +46,7 @@ Please refer to the [official documentation](https://openitcockpit.io/download_s
 
 ## Setup for Developers
 
-The openITCOCKPIT frontend is a standalone Angular application that communicates with the [openITCOCKPIT backend](https://github.com/it-novum/openITCOCKPIT)
+The openITCOCKPIT frontend is a standalone Angular application that communicates with the [openITCOCKPIT backend](https://github.com/openITCOCKPIT/openITCOCKPIT)
 via the [HTTP API](https://docs.openitcockpit.io/en/development/api/).
 
 If you want to contribute to the openITCOCKPIT frontend, you can follow the instructions below to set up a development environment.
@@ -111,7 +111,7 @@ systemctl restart nginx
 
 ```
 cd /opt/openitc/
-git clone https://github.com/it-novum/openITCOCKPIT-frontend-angular.git frontend-angular
+git clone https://github.com/openITCOCKPIT/openITCOCKPIT-frontend-angular.git frontend-angular
 ```
 
 You can now start the Angular development server.
