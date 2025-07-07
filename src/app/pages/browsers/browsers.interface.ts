@@ -1,7 +1,10 @@
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+
 export interface BrowsersIndexResponse {
     containers: BrowsersContainer[]
     recursiveBrowser: boolean
     breadcrumbs: BrowsersBreadcrumb[]
+    organizationalCharts: SelectKeyValue[]
 }
 
 export interface BrowsersContainer {
