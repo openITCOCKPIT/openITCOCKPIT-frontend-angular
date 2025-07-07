@@ -35,6 +35,9 @@ import {
     DropdownItemDirective,
     DropdownMenuDirective,
     DropdownToggleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
     InputGroupComponent,
@@ -59,6 +62,7 @@ import { IconDirective } from '@coreui/icons-angular';
 import {
     ColourLocatorPickerComponent
 } from '../../../components/colour-locator-picker/colour-locator-picker.component';
+import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-designs-edit',
@@ -100,7 +104,11 @@ import {
         ColourLocatorPickerComponent,
         TranslocoPipe,
         NgForOf,
-        KeyValuePipe
+        KeyValuePipe,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective
     ],
     templateUrl: './designs-edit.component.html',
     styleUrl: './designs-edit.component.css',
@@ -376,7 +384,7 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    protected resetColours(): void {
+    protected resetColors(): void {
         this.subscriptions.add(this.DesignsService.resetColours()
             .subscribe((result) => {
                 this.cdr.markForCheck();
