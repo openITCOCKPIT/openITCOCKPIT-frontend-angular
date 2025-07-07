@@ -147,7 +147,9 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
 
                     this.generationSuccessfully = true;
 
-                    this.notyService.genericSuccess(msg, title);
+                    if (this.newGeneratedMaps.length || this.generatedMapsAndItems.amountOfNewGeneratedItems) {
+                        this.notyService.genericSuccess(msg, title);
+                    }
                     return;
                 }
 
