@@ -61,9 +61,20 @@ export class DesignsService {
             }
         }).pipe(
             map(data => {
-                return data;
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data.user as GenericIdResponse
+                };
+            }),
+            catchError((error: any) => {
+                const err = error.error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
             })
-        )
+        );
     }
 
     public resetLogo(type: number): Observable<ResetLogoResponse> {

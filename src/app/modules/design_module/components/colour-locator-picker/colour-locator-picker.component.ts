@@ -11,14 +11,7 @@ import {
     SimpleChanges
 } from '@angular/core';
 import { ColorPicker } from 'primeng/colorpicker';
-import {
-    ButtonDirective,
-    ColComponent,
-    FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    RowComponent
-} from '@coreui/angular';
+import { ButtonDirective, InputGroupComponent, InputGroupTextDirective } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { DOCUMENT } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -34,9 +27,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
         InputGroupComponent,
         InputGroupTextDirective,
         ButtonDirective,
-        FormLabelDirective,
-        RowComponent,
-        ColComponent
     ],
     templateUrl: './colour-locator-picker.component.html',
     styleUrl: './colour-locator-picker.component.css',
