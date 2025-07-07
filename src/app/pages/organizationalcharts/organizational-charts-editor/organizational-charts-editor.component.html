@@ -62,7 +62,7 @@
                                   (fNodePositionChange)="onNodePositionChanged($event, node)"
                                   [connectionsInput]="connections()"
                                   (deleteConnection)="onRemoveConnection($event)"
-                >
+                                  (editNode)="onEditNode($event)">
                 </oitc-tenant-node>
             }
         </f-canvas>
@@ -74,3 +74,31 @@
 
     </f-flow>
 </div>
+
+
+<!-- Edit Node Modal -->
+<c-modal #ocNodeEditModal
+         [keyboard]="true"
+         [id]="'ocNodeEditModal'"
+         [size]="'lg'">
+    <c-modal-header>
+        <h5 cModalTitle>Modal title</h5>
+        <button [cModalToggle]="ocNodeEditModal.id" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
+
+        @if (currentNodeForModal) {
+
+            <input type="number" [(ngModel)]="currentNodeForModal.node.container_id"/>
+
+            <button type="button" (click)="onUpdateNodeModal()">Save</button>
+        }
+
+    </c-modal-body>
+    <c-modal-footer>
+        <button [cModalToggle]="ocNodeEditModal.id" cButton color="secondary">
+            Close
+        </button>
+        <button cButton color="primary">Understood</button>
+    </c-modal-footer>
+</c-modal>

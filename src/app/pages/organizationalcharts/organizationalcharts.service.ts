@@ -5,6 +5,7 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
+    LoadContainersRoot,
     OrganizationalChartsIndexParams,
     OrganizationalChartsIndexRoot,
     OrganizationalChartsPost
@@ -37,6 +38,15 @@ export class OrganizationalChartsService {
         const proxyPath = this.proxyPath;
 
         return this.http.post(`${proxyPath}/organizationalCharts/delete/${item.id}.json`, {});
+    }
+
+    public loadContainers(): Observable<LoadContainersRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<LoadContainersRoot>(`${proxyPath}/organizationalCharts/loadContainers.json`).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 
     public add(body: OrganizationalChartsPost): Observable<GenericResponseWrapper> {

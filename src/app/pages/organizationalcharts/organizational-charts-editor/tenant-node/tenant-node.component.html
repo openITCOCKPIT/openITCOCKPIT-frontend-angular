@@ -4,9 +4,17 @@
         <span class="node-title"> model.name </span>
         <div class="node-description"> model.description</div>
 
-        @if (node) {
-            <input type="number" [(ngModel)]="node.node.container_id"/>
+
+
+        @if (nodeFooter) {
+
+            <b>{{ nodeFooter.node.container_id }}</b>
+
+            <button cButton class="right" (click)="editNode.emit(nodeFooter.fNodeId)">
+                Edit
+            </button>
         }
+
 
     </div>
 
@@ -15,11 +23,11 @@
 
 
 <div class="output-item text-center">
-    @if (node) {
-        {{ node|json }}
+    @if (nodeFooter) {
+        {{ nodeFooter|json }}
         <div fNodeOutput
              class="oc-node-output"
-             [fOutputId]="String(node.node.id)"
+             [fOutputId]="String(nodeFooter.node.id)"
              [isSelfConnectable]="false">
             @if (hasConnection) {
                 <fa-icon [icon]="['fas', 'square-xmark']" class="text-danger"
@@ -30,3 +38,4 @@
         </div>
     }
 </div>
+

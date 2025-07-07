@@ -4,6 +4,7 @@ import {
     Component,
     effect,
     HostListener,
+    inject,
     input,
     model,
     OnInit,
@@ -29,6 +30,18 @@ import { TenantNodeComponent } from './tenant-node/tenant-node.component';
 import { OcTreeNode } from './organizational-charts-editor.interface';
 import { JsonPipe, NgClass } from '@angular/common';
 import { GenericValidationError } from '../../../generic-responses';
+import {
+    ButtonCloseDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    ModalToggleDirective
+} from '@coreui/angular';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -39,7 +52,16 @@ import { GenericValidationError } from '../../../generic-responses';
         FFlowModule,
         TenantNodeComponent,
         NgClass,
-        JsonPipe
+        JsonPipe,
+        ModalComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ModalToggleDirective,
+        ButtonCloseDirective,
+        XsButtonDirective,
+        ModalBodyComponent,
+        ModalFooterComponent,
+        FormsModule
     ],
     templateUrl: './organizational-charts-editor.component.html',
     styleUrl: './organizational-charts-editor.component.scss',
@@ -96,6 +118,11 @@ export class OrganizationalChartsEditorComponent implements OnInit {
     }
 
     protected readonly eMarkerType = EFMarkerType;
+
+    @ViewChild('ocNodeEditModal', {static: false}) ocNodeEditModal: ModalComponent | undefined;
+    private readonly modalService = inject(ModalService);
+
+    public currentNodeForModal: OcTreeNode | undefined;
 
     constructor(
         private cdr: ChangeDetectorRef
@@ -275,6 +302,39 @@ export class OrganizationalChartsEditorComponent implements OnInit {
         this.nodeTree.update((nodes) => {
             return nodes.filter((n) => n.id !== node.id);
         });
+
+        this.cdr.markForCheck();
+    }
+
+    public onEditNode(nodeId: string | number | undefined): void {
+        if (!nodeId) {
+            return;
+        }
+
+        if (!this.ocNodeEditModal) {
+            return;
+        }
+
+        this.currentNodeForModal = this.nodes.find((n) => n.node.id === nodeId);
+        this.modalService.toggle({
+            show: true,
+            id: this.ocNodeEditModal.id
+        });
+        this.cdr.markForCheck();
+    }
+
+    public onUpdateNodeModal() {
+        if (!this.currentNodeForModal) {
+            return;
+        }
+
+        // Update two-way binding
+        this.updateNodeInTree(this.currentNodeForModal.node);
+
+        // Update the node in the f-flow canvas
+        const currentNode = this.currentNodeForModal; // this is only required to make TypeScript happy - otherwise it will complain that currentNode is possibly undefined
+        this.nodes = this.nodes.map((n) => n.node.id === currentNode?.node.id ? currentNode : n);
+
 
         this.cdr.markForCheck();
     }
