@@ -267,7 +267,7 @@ export interface AgentconnectorCreateServiceRoot {
 
 
 export interface AgentServicesForCreate {
-    // Keep the same order as in https://github.com/it-novum/openITCOCKPIT/blob/development/src/itnovum/openITCOCKPIT/Agent/AgentResponseToServices.php#L101
+    // Keep the same order as in https://github.com/openITCOCKPIT/openITCOCKPIT/blob/development/src/itnovum/openITCOCKPIT/Agent/AgentResponseToServices.php#L101
     // Single services (AgentServiceForCreate) will become checkboxes and arrays (AgentServiceForCreate[]) will become a multi select
     system_uptime: AgentServiceForCreate
     memory: AgentServiceForCreate
