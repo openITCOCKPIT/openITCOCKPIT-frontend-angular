@@ -14,7 +14,7 @@ export class DesignsService {
 
     public getMode(): Observable<DesignsEditRoot> {
         const proxyPath = this.proxyPath;
-        return this.http.get<DesignsEditRoot>(`${proxyPath}/design_module/designs/index.json?angular=true`).pipe(
+        return this.http.get<DesignsEditRoot>(`${proxyPath}/design_module/designs/view.json?angular=true`).pipe(
             map(data => {
                 return data;
             })

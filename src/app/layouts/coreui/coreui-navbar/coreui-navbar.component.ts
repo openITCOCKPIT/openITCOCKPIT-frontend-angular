@@ -19,16 +19,11 @@ import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NavbarGroupComponent } from './navbar-group/navbar-group.component';
 import { SidebarAction } from './sidebar.interface';
-
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-
 import { NavbarSearchComponent } from './navbar-search/navbar-search.component';
 import { SystemnameService } from '../../../services/systemname.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { Skeleton } from 'primeng/skeleton';
-import { PermissionsService } from '../../../permissions/permissions.service';
-import { DesignsEditRoot } from '../../../modules/design_module/pages/designs/designs.interface';
-import { DesignsService } from '../../../modules/design_module/pages/designs/designs.service';
 
 @Component({
     selector: 'oitc-coreui-navbar',
@@ -65,8 +60,6 @@ export class CoreuiNavbarComponent implements OnInit, OnDestroy {
     @Input({transform: booleanAttribute}) compact?: boolean;
     private cdr = inject(ChangeDetectorRef);
     private readonly TranslocoService = inject(TranslocoService);
-    private readonly DesignsService: DesignsService = inject(DesignsService);
-    private readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly mobileBreakpoint = 767.98; // do not move this line or it is undefined
 
     public visible: boolean = true; // show or hide the complete menu
@@ -77,7 +70,6 @@ export class CoreuiNavbarComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     public readonly SystemnameService = inject(SystemnameService);
 
-    public logoInHeader: number = 0;
     public menu: MenuHeadline[] = [];
     public headerLogoForHtml: string = '';
 
@@ -87,28 +79,12 @@ export class CoreuiNavbarComponent implements OnInit, OnDestroy {
         return window.innerWidth < this.mobileBreakpoint;
     }
 
-    private switchLogoVisibility(): void {
-        this.PermissionsService.hasModuleObservable('DesignModule').subscribe(hasModule => {
-            if (!hasModule) {
-                return;
-            }
-            this.subscriptions.add(this.DesignsService.getMode().subscribe((data: DesignsEditRoot) => {
-                if (data.design && data.design.logoInHeader) {
-                    this.logoInHeader = data.design.logoInHeader;
-                }
-                this.cdr.markForCheck();
-            }));
-        });
-    }
-
     public ngOnInit() {
         if (this.isMobile()) {
             // Hide menu on mobile devices by default
             this.visible = false;
             this.isUnfoldable = false;
         }
-
-        this.switchLogoVisibility();
 
         // The TranslocoService will trigger the load as soon as the language is set in change-language.component.ts
         //this.loadMenu();

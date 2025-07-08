@@ -168,7 +168,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             if (!hasModule) {
                 return;
             }
-            const link = this.renderer.createElement('link');
+            let link = this.renderer.createElement('link');
             link.rel = 'stylesheet';
             link.type = 'text/css';
             link.href = `https://master/design_module/css/customStyle.css?v=${new Date().getTime()}`;
