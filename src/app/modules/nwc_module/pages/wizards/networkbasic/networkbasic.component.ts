@@ -211,6 +211,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         this.post.interfaces = [];
         this.cdr.markForCheck();
         this.WizardService.executeSNMPDiscovery(this.post).subscribe((data: any) => {
+            this.snmpErrors = {} as GenericValidationError;
             this.cdr.markForCheck();
             // Error
             if (!data.error) {

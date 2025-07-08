@@ -232,8 +232,6 @@
                         [buttonTemplate]="buttonTemplate"></oitc-alert>
 
             </div>
-            <oitc-form-feedback [errors]="snmpErrors" errorField="snmpcommand"></oitc-form-feedback>
-
 
             <fieldset>
                 <legend class="fs-md fieldset-legend-border-bottom">
@@ -252,6 +250,7 @@
 
                 <c-row class="mb-3">
                     <c-col md="6">
+                        <oitc-form-feedback [errors]="snmpErrors" errorField="snmpcommand"></oitc-form-feedback>
                         <c-input-group>
                             <span cInputGroupText>
                                 <fa-icon [icon]="['fas', 'filter']"></fa-icon>
