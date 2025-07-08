@@ -214,7 +214,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
             this.snmpErrors = {} as GenericValidationError;
             this.cdr.markForCheck();
             // Error
-            if (!data.error) {
+            if (data.interfaces) {
                 for (let key in data.interfaces) {
                     let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.interfaceServicetemplate.servicetemplatecommandargumentvalues));
                     servicetemplatecommandargumentvalues[0].value = data.interfaces[key].value.name;
@@ -237,6 +237,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
             if (data.data) {
                 this.snmpErrors = errorResponse;
             }
+            this.cdr.markForCheck();
         });
     }
 }
