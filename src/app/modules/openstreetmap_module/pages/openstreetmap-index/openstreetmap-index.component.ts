@@ -169,7 +169,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     }
 
     public ngAfterViewInit(): void {
-
+        setTimeout(() =>{
         this.map = L.map(this.lmap()?.nativeElement, this.leafletOptions);
         let self = this;
         const fullscreenControl = leafletFullscreen();
@@ -190,6 +190,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         this.map.addControl(new newCustomControl());
 
         this.loadAclsAndSettings();
+        }, 300);
     }
 
     public loadAclsAndSettings(): void {
@@ -315,6 +316,10 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
             this.settingsFilter.filter.warning |
             this.settingsFilter.filter.down_critical |
             this.settingsFilter.filter.unreachable_unknown;
+       // console.log(this.settingsFilter.state_filter);
+        if(this.settingsFilter.state_filter === 0){
+            this.settingsFilter.state_filter = 15;
+        }
         this.loadMapData();
         setTimeout(() => {
             this.resetMap()
