@@ -80,7 +80,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 export class NetworkbasicComponent extends WizardsAbstractComponent {
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
     protected override WizardService: NetworkbasicWizardService = inject(NetworkbasicWizardService);
-    protected snmpErrors: GenericValidationError = {} as GenericValidationError;
 
     protected override post: NetworkbasicWizardPost = {
 // Default fields from the base wizard
@@ -211,7 +210,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         this.post.interfaces = [];
         this.cdr.markForCheck();
         this.WizardService.executeSNMPDiscovery(this.post).subscribe((data: any) => {
-            this.snmpErrors = {} as GenericValidationError;
+            this.errors = {} as GenericValidationError;
             this.cdr.markForCheck();
             // Error
             if (data.interfaces) {
@@ -235,7 +234,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
             this.notyService.genericError();
             const errorResponse: GenericValidationError = data.data as GenericValidationError;
             if (data.data) {
-                this.snmpErrors = errorResponse;
+                this.errors = errorResponse;
             }
             this.cdr.markForCheck();
         });
