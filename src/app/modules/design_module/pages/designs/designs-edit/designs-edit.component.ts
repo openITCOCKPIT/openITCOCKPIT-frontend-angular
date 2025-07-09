@@ -17,7 +17,7 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 import { DesignsService } from '../designs.service';
 import { Design, DesignsEditRoot, Manipulations, MaxUploadLimit } from '../designs.interface';
 import Dropzone from 'dropzone';
-import { DOCUMENT, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { DOCUMENT, KeyValuePipe, NgForOf } from '@angular/common';
 import { AuthService } from '../../../../../auth/auth.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -93,7 +93,6 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
         InputGroupComponent,
         ReactiveFormsModule,
         FormsModule,
-        NgIf,
         CardFooterComponent,
         FormControlDirective,
         DropdownComponent,
