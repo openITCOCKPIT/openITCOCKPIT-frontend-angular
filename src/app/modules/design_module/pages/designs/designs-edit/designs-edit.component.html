@@ -49,21 +49,22 @@
 
                                     <c-input-group>
                                         <c-dropdown variant="btn-group">
-                                            <button *ngIf="post.mode === 'light'"
-                                                    cButton cDropdownToggle color="primary">
-                                                <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
-                                                {{ t('Light') }}
-                                            </button>
-                                            <button *ngIf="post.mode === 'dark'"
-                                                    cButton cDropdownToggle color="primary">
-                                                <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
-                                                {{ t('Dark') }}
-                                            </button>
-                                            <button *ngIf="post.mode === 'auto'"
-                                                    cButton cDropdownToggle color="primary">
-                                                <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
-                                                {{ t('Auto') }}
-                                            </button>
+                                            @if (post.mode === 'light') {
+                                                <button cButton cDropdownToggle color="primary">
+                                                    <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
+                                                    {{ t('Light') }}
+                                                </button>
+                                            } @else if (post.mode === 'dark') {
+                                                <button cButton cDropdownToggle color="primary">
+                                                    <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
+                                                    {{ t('Dark') }}
+                                                </button>
+                                            } @else {
+                                                <button cButton cDropdownToggle color="primary">
+                                                    <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
+                                                    {{ t('Auto') }}
+                                                </button>
+                                            }
                                             <ul cDropdownMenu>
                                                 <li cDropdownItem (click)="setMode('light')">
                                                     <svg cIcon class="me-2" name="cilSun" size="lg"></svg>

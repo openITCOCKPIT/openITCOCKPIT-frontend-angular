@@ -1,12 +1,12 @@
 <ng-container *transloco="let t">
     <c-input-group class="mb-3  ml-1">
         @if (value === '') {
-            <button cButton (click)="open()" color="default">
+            <button cInputGroupText (click)="open()" color="default">
                 <fa-icon [icon]="['fas', 'edit']"/>
             </button>
         } @else {
-            <button cInputGroupText (click)="clear()">
-                <fa-icon [icon]="['fas', 'trash']" color="danger"/>
+            <button cInputGroupText (click)="clear()" color="default">
+                <fa-icon [icon]="['fas', 'trash']"/>
             </button>
             <p-color-picker
                     cInputGroupText
