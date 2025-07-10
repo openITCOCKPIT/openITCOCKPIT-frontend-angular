@@ -29,7 +29,7 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
@@ -71,7 +71,8 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         BackButtonDirective,
         FormFeedbackComponent,
         FormErrorDirective,
-        FormsModule
+        FormsModule,
+        NgClass
     ],
     templateUrl: './networkbasic.component.html',
     styleUrl: './networkbasic.component.css',
