@@ -96,7 +96,6 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
                 interval: 90,
                 type: 1,
                 items_per_line: 10,
-                has_generated_maps: 0,
                 containers: {
                     _ids: []
                 }
@@ -131,7 +130,6 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
                 this.post.Mapgenerator.interval = parseInt(String(mapgenerator.interval), 10);
                 this.post.Mapgenerator.type = mapgenerator.type;
                 this.post.Mapgenerator.items_per_line = mapgenerator.items_per_line;
-                this.post.Mapgenerator.has_generated_maps = mapgenerator.has_generated_maps;
             }));
     }
 

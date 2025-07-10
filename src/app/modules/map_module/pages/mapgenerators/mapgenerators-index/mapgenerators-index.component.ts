@@ -198,7 +198,7 @@ export class MapgeneratorsIndexComponent implements OnInit, OnDestroy, IndexPage
             maps_generated = String(this.mapsFilter.maps_generated === true);
         }
 
-        this.params['filter[Mapgenerators.has_generated_maps]'] = maps_generated;
+        this.params['filter[has_generated_maps]'] = maps_generated;
 
         this.subscriptions.add(this.MapgeneratorsService.getIndex(this.params)
             .subscribe((result: MapgeneratorsIndexRoot) => {

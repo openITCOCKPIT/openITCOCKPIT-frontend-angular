@@ -92,7 +92,6 @@ export class MapgeneratorsAddComponent implements OnInit, OnDestroy {
                 interval: 90,
                 type: 1,
                 items_per_line: 10,
-                has_generated_maps: 0,
                 containers: {
                     _ids: []
                 }

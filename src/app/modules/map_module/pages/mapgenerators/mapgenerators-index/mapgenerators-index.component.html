@@ -194,7 +194,7 @@
                                     <span *oitcPermission="['mapmodule','mapgenerators', 'generate']; negate: true">
                                         {{ mapgenerator.name }}
                                     </span>
-                                    @if (mapgenerator.has_generated_maps) {
+                                    @if (mapgenerator.maps && mapgenerator.maps.length > 0) {
                                         <a *oitcPermission="['mapmodule','maps', 'index']"
                                            [routerLink]="['/', 'map_module', 'maps', 'index']"
                                            [queryParams]="{'filter.Maps.id': mapgenerator.maps}">
