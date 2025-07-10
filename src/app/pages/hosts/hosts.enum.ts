@@ -1,5 +1,5 @@
 // Keep in Sync with backend API
-// https://github.com/it-novum/openITCOCKPIT/blob/development/src/Lib/Constants.php#L167-L173
+// https://github.com/openITCOCKPIT/openITCOCKPIT/blob/development/src/Lib/Constants.php#L167-L173
 export enum HostTypesEnum {
     GENERIC_HOST = 1 << 0, // 1
     EVK_HOST = 1 << 1,     // 2

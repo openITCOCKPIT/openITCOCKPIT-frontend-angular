@@ -1,5 +1,5 @@
 // Keep in Sync with backend API
-// https://github.com/it-novum/openITCOCKPIT/blob/development/src/Lib/Constants.php#L188-L196
+// https://github.com/openITCOCKPIT/openITCOCKPIT/blob/development/src/Lib/Constants.php#L188-L196
 export enum ServiceTypesEnum {
     GENERIC_SERVICE = 1 << 0,       // 1
     EVK_SERVICE = 1 << 1,           // 2
