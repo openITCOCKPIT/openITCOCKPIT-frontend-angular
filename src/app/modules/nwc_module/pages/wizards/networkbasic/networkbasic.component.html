@@ -291,14 +291,16 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}"
-                                 *ngFor="let commandArgument of interface.servicecommandargumentvalues">
-                                {{ commandArgument.commandargument.human_name }}
-                                <input class="form-control"
-                                       type="text"
-                                       [disabled]="!interface.createService"
-                                       [(ngModel)]="commandArgument.value">
-                            </div>
+
+                            @for (commandArgument of interface.servicecommandargumentvalues; track $index) {
+                                <div class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
+                                    {{ commandArgument.commandargument.human_name }}
+                                    <input class="form-control"
+                                           type="text"
+                                           [disabled]="!interface.createService || $index === 0"
+                                           [(ngModel)]="commandArgument.value">
+                                </div>
+                            }
                         </ng-container>
                     </ol>
                 </ul>
