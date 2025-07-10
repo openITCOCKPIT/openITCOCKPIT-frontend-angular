@@ -22,7 +22,6 @@ export interface Mapgenerator {
     created: string
     modified: string
     containers: MapgeneratorContainer[]
-    start_containers?: MapgeneratorContainer[]
     maps?: Map[] | number[]
     allowEdit?: boolean
 }
@@ -52,7 +51,7 @@ export interface MapgeneratorsIndexParams {
 export function getDefaultMapgeneratorsIndexParams(): MapgeneratorsIndexParams {
     return {
         angular: true,
-        scroll: false,
+        scroll: true,
         sort: 'Mapgenerators.name',
         page: 1,
         direction: 'asc',
@@ -80,19 +79,11 @@ export interface MapgeneratorEdit {
     containers: {
         _ids: number[]
     }
-    start_containers: {
-        _ids: number[]
-    }
 }
 
 export interface MapgeneratorsEditRoot {
     mapgenerator: Mapgenerator
     _csrfToken: string
-}
-
-export interface LoadContainersForMapgeneratorParams {
-    'selectedContainers[]': number[],
-    loadStartContainers?: boolean
 }
 
 export interface MapgeneratorGenerateRoot {

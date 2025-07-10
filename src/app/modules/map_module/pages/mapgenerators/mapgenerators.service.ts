@@ -30,7 +30,6 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import {
-    LoadContainersForMapgeneratorParams,
     MapgeneratorPost,
     MapgeneratorsEditRoot,
     MapgeneratorsIndexParams,
@@ -56,11 +55,9 @@ export class MapgeneratorsService {
         )
     }
 
-    public loadContainers(params: LoadContainersForMapgeneratorParams): Observable<LoadContainersRoot> {
+    public loadContainers(): Observable<LoadContainersRoot> {
         const proxyPath: string = this.proxyPath;
-        return this.http.get<LoadContainersRoot>(`${proxyPath}/map_module/mapgenerators/loadContainers.json?angular=true`, {
-            params: params as {}
-        }).pipe(
+        return this.http.get<LoadContainersRoot>(`${proxyPath}/map_module/mapgenerators/loadContainers.json?angular=true`, {}).pipe(
             map((data: LoadContainersRoot) => {
                 return data;
             })

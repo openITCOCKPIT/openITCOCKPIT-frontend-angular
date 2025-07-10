@@ -18,7 +18,13 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                <fa-stack style="min-width: 1rem">
+                    <fa-icon [icon]="['fas', 'layer-group']"
+                             stackItemSize="1x"></fa-icon>
+                    <fa-icon [icon]="['fas', 'plus']" class="text-success"
+                             stackItemSize="1x"
+                             transform="shrink-8 right-3 down-7"></fa-icon>
+                </fa-stack>
                 {{ t('Generate') }}
             </li>
         </ol>

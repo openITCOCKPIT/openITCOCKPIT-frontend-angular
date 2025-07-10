@@ -4,7 +4,7 @@ import { SelectionServiceService } from '../../../../../layouts/coreui/select-al
 import { Subscription } from 'rxjs';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -102,7 +102,9 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
-        BadgeComponent
+        BadgeComponent,
+        FaStackComponent,
+        FaStackItemSizeDirective
     ],
     templateUrl: './mapgenerators-index.component.html',
     styleUrl: './mapgenerators-index.component.css',

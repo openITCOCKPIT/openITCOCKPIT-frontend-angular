@@ -8,7 +8,7 @@ import { HistoryService } from '../../../../../history.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import { LoadContainersForMapgeneratorParams, MapgeneratorPost } from '../mapgenerators.interface';
+import { MapgeneratorPost } from '../mapgenerators.interface';
 import { LoadContainersRoot } from '../../../../../pages/containers/containers.interface';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
@@ -95,10 +95,7 @@ export class MapgeneratorsAddComponent implements OnInit, OnDestroy {
                 has_generated_maps: 0,
                 containers: {
                     _ids: []
-                },
-                start_containers: {
-                    _ids: []
-                },
+                }
             }
         };
     }
@@ -138,27 +135,9 @@ export class MapgeneratorsAddComponent implements OnInit, OnDestroy {
 
     private loadContainers(): void {
 
-        const params: LoadContainersForMapgeneratorParams = {
-            'selectedContainers[]': []
-        }
-
-        this.subscriptions.add(this.MapgeneratorsService.loadContainers(params)
+        this.subscriptions.add(this.MapgeneratorsService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
-                this.cdr.markForCheck();
-            }))
-    }
-
-    public loadStartContainers(): void {
-
-        const params: LoadContainersForMapgeneratorParams = {
-            'selectedContainers[]': this.post.Mapgenerator.containers._ids,
-            loadStartContainers: true
-        }
-
-        this.subscriptions.add(this.MapgeneratorsService.loadContainers(params)
-            .subscribe((result: LoadContainersRoot) => {
-                this.startContainers = result.containers;
                 this.cdr.markForCheck();
             }))
     }

@@ -81,7 +81,7 @@
                                        [placeholder]="'Filter by Map generator name' | transloco"
                                        aria-label="Map generator Name"
                                        cFormControl
-                                       name="mapgenerators.name"
+                                       name="Mapgenerators.name"
                                        oitcDebounce
                                        type="text"
                                 />
@@ -97,7 +97,7 @@
                                        [placeholder]="'Filter by Map generator description' | transloco"
                                        aria-label="Map generator description"
                                        cFormControl
-                                       name="mapgenerators.description"
+                                       name="Mapgenerators.description"
                                        oitcDebounce
                                        type="text"
                                 />
@@ -115,8 +115,8 @@
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
                                         class="checkbox-lg checkbox-primary"
-                                        name="mapgenerators.maps_generated"
-                                        id="mapgenerators.maps_generated"
+                                        name="Mapgenerators.maps_generated"
+                                        id="Mapgenerators.maps_generated"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
@@ -130,8 +130,8 @@
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
                                         class="checkbox-lg checkbox-primary"
-                                        name="mapgenerators.maps_not_generated"
-                                        id="mapgenerators.maps_not_generated"
+                                        name="Mapgenerators.maps_not_generated"
+                                        id="Mapgenerators.maps_not_generated"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
@@ -202,12 +202,6 @@
                                                      [title]="'Maps' | transloco" color="info">Maps
                                             </c-badge>
                                         </a>
-                                        <span
-                                            *oitcPermission="['mapmodule','maps', 'index']; negate: true">
-                                            <c-badge class="ms-2"
-                                                     [title]="'Maps' | transloco" color="info">Maps
-                                            </c-badge>
-                                        </span>
                                     }
                                 </td>
                                 <td>
@@ -229,7 +223,13 @@
                                             *oitcPermission="['MapModule', 'mapgenerators', 'generate']"></li>
                                         <oitc-actions-button-element [permission]="'mapmodule.mapgenerators.generate'"
                                                                      [url]="'/map_module/mapgenerators/generate/' + mapgenerator.id">
-                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                            <fa-stack>
+                                                <fa-icon [icon]="['fas', 'layer-group']"
+                                                         stackItemSize="1x"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'plus']" class="text-success"
+                                                         stackItemSize="1x"
+                                                         transform="shrink-8 right-3 down-7"></fa-icon>
+                                            </fa-stack>
                                             {{ t('Generate') }}
                                         </oitc-actions-button-element>
                                         <li cDropdownDivider

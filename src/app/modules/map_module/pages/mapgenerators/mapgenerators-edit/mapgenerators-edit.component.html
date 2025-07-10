@@ -66,7 +66,6 @@
                             optionLabel="value"
                             [(ngModel)]="post.Mapgenerator.containers._ids"
                             [options]="containers"
-                            (onChange)="loadStartContainers()"
                             [debounce]="true"
                             oitcFormError [errors]="errors" errorField="containers">
                         </oitc-multi-select>
@@ -77,6 +76,10 @@
                             </div>
                         }
                         <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
+                        <div class="col-12 help-block text-info">
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('The specified containers must appear in the container hierarchy of the host and is also the starting point so that the host is taken into account during generation.') }}
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -143,28 +146,6 @@
                                [(ngModel)]="post.Mapgenerator.items_per_line"
                                oitcFormError [errors]="errors" errorField="items_per_line">
                         <oitc-form-feedback [errors]="errors" errorField="items_per_line"></oitc-form-feedback>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="mapgenerator_start_containers">
-                            {{ t('Start Containers') }}
-                        </label>
-
-                        <oitc-multi-select
-                            name="mapgenerator_start_containers"
-                            id="mapgenerator_start_containers"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.Mapgenerator.start_containers._ids"
-                            [options]="startContainers"
-                            [debounce]="true"
-                            oitcFormError [errors]="errors" errorField="start_containers">
-                        </oitc-multi-select>
-                        <oitc-form-feedback [errors]="errors" errorField="start_containers"></oitc-form-feedback>
-                        <div class="col-12 help-block text-info">
-                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                            {{ t('The specified containers must appear in the container hierarchy of the host and is also the starting point so that the host is taken into account during generation.') }}
-                        </div>
                     </div>
 
                 </c-card-body>

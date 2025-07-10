@@ -64,7 +64,7 @@ export interface MapsIndexParams {
 export function getDefaultMapsIndexParams(): MapsIndexParams {
     return {
         angular: true,
-        scroll: false,
+        scroll: true,
         sort: 'Maps.name',
         page: 1,
         direction: 'asc',

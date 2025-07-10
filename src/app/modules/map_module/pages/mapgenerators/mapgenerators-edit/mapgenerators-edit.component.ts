@@ -8,7 +8,7 @@ import { HistoryService } from '../../../../../history.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import { LoadContainersForMapgeneratorParams, Mapgenerator, MapgeneratorPost } from '../mapgenerators.interface';
+import { Mapgenerator, MapgeneratorPost } from '../mapgenerators.interface';
 import { LoadContainersRoot } from '../../../../../pages/containers/containers.interface';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
@@ -99,10 +99,7 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
                 has_generated_maps: 0,
                 containers: {
                     _ids: []
-                },
-                start_containers: {
-                    _ids: []
-                },
+                }
             }
         };
     }
@@ -123,25 +120,18 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
                 const mapgenerator: Mapgenerator = result.mapgenerator;
                 let selectedContainer = [];
-                let selectedStartContainer = [];
 
                 for (let key in mapgenerator.containers) {
                     selectedContainer.push(parseInt(String(mapgenerator.containers[key].id), 10));
                 }
 
-                for (let key in mapgenerator.start_containers!) {
-                    selectedStartContainer.push(parseInt(String(mapgenerator.start_containers[key].id), 10));
-                }
-
                 this.post.Mapgenerator.containers._ids = mapgenerator.containers.map(container => container.id);
-                this.post.Mapgenerator.start_containers._ids = mapgenerator.start_containers!.map(container => container.id);
                 this.post.Mapgenerator.name = mapgenerator.name;
                 this.post.Mapgenerator.description = mapgenerator.description;
                 this.post.Mapgenerator.interval = parseInt(String(mapgenerator.interval), 10);
                 this.post.Mapgenerator.type = mapgenerator.type;
                 this.post.Mapgenerator.items_per_line = mapgenerator.items_per_line;
                 this.post.Mapgenerator.has_generated_maps = mapgenerator.has_generated_maps;
-                this.loadStartContainers();
             }));
     }
 
@@ -172,27 +162,9 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
 
     private loadContainers(): void {
 
-        const params: LoadContainersForMapgeneratorParams = {
-            'selectedContainers[]': []
-        }
-
-        this.subscriptions.add(this.MapgeneratorsService.loadContainers(params)
+        this.subscriptions.add(this.MapgeneratorsService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
-                this.cdr.markForCheck();
-            }))
-    }
-
-    public loadStartContainers(): void {
-
-        const params: LoadContainersForMapgeneratorParams = {
-            'selectedContainers[]': this.post.Mapgenerator.containers._ids,
-            loadStartContainers: true
-        }
-
-        this.subscriptions.add(this.MapgeneratorsService.loadContainers(params)
-            .subscribe((result: LoadContainersRoot) => {
-                this.startContainers = result.containers;
                 this.cdr.markForCheck();
             }))
     }

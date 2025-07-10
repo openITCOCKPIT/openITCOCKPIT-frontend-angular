@@ -27,7 +27,7 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -61,7 +61,9 @@ import { Map } from '../../maps/maps.interface';
         BackButtonDirective,
         NavComponent,
         NavItemComponent,
-        ProgressBar
+        ProgressBar,
+        FaStackComponent,
+        FaStackItemSizeDirective
     ],
     templateUrl: './mapgenerators-generate.component.html',
     styleUrl: './mapgenerators-generate.component.css',
