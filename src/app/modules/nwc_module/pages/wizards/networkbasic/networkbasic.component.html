@@ -202,51 +202,47 @@
             <oitc-wizards-dynamicfields
                     [(post)]="post.services"
                     [errors]="errors"
+                    [titleErrorField]="'services'"
                     [title]="'SNMP services'|transloco"
             />
 
-
-            <div>
-                <ng-template #contentTemplate let-data>
-                    <span class="h5 text-info" *ngIf="data">
-                        {{ t('Discovering Interfaces for SNMP Services') }}
-                    </span>
-                    <br>
-                    {{ t('Scan this device and locate all of the interfaces that reside on the device. Only possible with valid SNMP configuration') }}
-                </ng-template>
-
-                <ng-template #buttonTemplate let-data>
-                    <div class="ms-2">
-                        <button class="ripple" (click)="runSnmpDiscovery()" cButton color="info">
-                            {{ t('Start SNMP interface discovery') }}
-                        </button>
-                    </div>
-
-                </ng-template>
-
-                <oitc-alert
-                        baseIcon="circle"
-                        color="info"
-                        [icon]="['fas', 'info']"
-                        [contentTemplate]="contentTemplate"
-                        [buttonTemplate]="buttonTemplate"></oitc-alert>
-
-            </div>
-
             <fieldset>
                 <legend class="fs-md fieldset-legend-border-bottom">
-                    <h4>
+                    <h4 [ngClass]="{'text-danger': errors.hasOwnProperty('interfaces') }">
                         {{ t('SNMP Interfaces') }}
                     </h4>
                     <span class="help-block italic text-primary">
                         {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
                     </span>
-
-                    <div ng-repeat="error in errors.services">
-                        <h5 class="text-danger"></h5>
-                    </div>
-
+                    <oitc-form-feedback [errors]="errors" errorField="interfaces"></oitc-form-feedback>
                 </legend>
+
+                <div>
+                    <ng-template #contentTemplate let-data>
+                        <span class="h5 text-info" *ngIf="data">
+                            {{ t('Discovering Interfaces for SNMP Services') }}
+                        </span>
+                        <br>
+                        {{ t('Scan this device and locate all of the interfaces that reside on the device. Only possible with valid SNMP configuration') }}
+                    </ng-template>
+
+                    <ng-template #buttonTemplate let-data>
+                        <div class="ms-2">
+                            <button class="ripple" (click)="runSnmpDiscovery()" cButton color="info">
+                                {{ t('Start SNMP interface discovery') }}
+                            </button>
+                        </div>
+
+                    </ng-template>
+
+                    <oitc-alert
+                            baseIcon="circle"
+                            color="info"
+                            [icon]="['fas', 'info']"
+                            [contentTemplate]="contentTemplate"
+                            [buttonTemplate]="buttonTemplate"></oitc-alert>
+
+                </div>
 
                 <c-row class="mb-3">
                     <c-col md="6">
