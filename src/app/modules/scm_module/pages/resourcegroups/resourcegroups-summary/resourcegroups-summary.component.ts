@@ -1,12 +1,13 @@
 import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    inject,
-    OnDestroy,
-    OnInit,
-    ViewChild
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  DOCUMENT
 } from '@angular/core';
 import {
     ButtonGroupComponent,
@@ -33,7 +34,7 @@ import {
     ResourcegroupsSummaryMap,
     ResourceMap
 } from './resourcegroups-summary.interface';
-import { AsyncPipe, DOCUMENT, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import Sunburst from 'sunburst-chart';

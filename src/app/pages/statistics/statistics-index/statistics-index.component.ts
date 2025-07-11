@@ -1,12 +1,13 @@
 import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    inject,
-    OnDestroy,
-    ViewChild
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  ViewChild,
+  DOCUMENT
 } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -25,7 +26,7 @@ import {
   ColComponent,
   RowComponent
 } from '@coreui/angular';
-import { AsyncPipe, DOCUMENT, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { StatisticsService } from '../statistics.service';
 import { StatisticsIndex } from '../statistics.interface';

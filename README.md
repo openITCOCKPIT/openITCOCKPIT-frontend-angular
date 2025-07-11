@@ -12,7 +12,8 @@ Next generation open source monitoring.
 
 # What is openITCOCKPIT?
 
-openITCOCKPIT is an Open Source system monitoring tool built for different monitoring engines like Nagios, Naemon and Prometheus.
+openITCOCKPIT is an Open Source system monitoring tool built for different monitoring engines like Nagios, Naemon and
+Prometheus.
 
 This is the repository for the official [openITCOCKPIT](https://openitcockpit.io/) frontend.
 
@@ -20,7 +21,8 @@ The backend server code that is providing the API can be found [here](https://gi
 
 # Demo
 
-Play around with our [Demo](https://demo.openitcockpit.io/) system. Its equipped with the majority of modules that you will get with the community license
+Play around with our [Demo](https://demo.openitcockpit.io/) system. Its equipped with the majority of modules that you
+will get with the community license
 
 Credentials:
 
@@ -42,14 +44,17 @@ Password: demo123
 If you are only interested in using openITCOCKPIT, but do not plan to do any development, the openITCOCKPIT frontend
 is provided by the `openitcockpit-frontend-angular` package.
 
-Please refer to the [official documentation](https://openitcockpit.io/download_server/) for more information about how to install openITCOCKPIT.
+Please refer to the [official documentation](https://openitcockpit.io/download_server/) for more information about how
+to install openITCOCKPIT.
 
 ## Setup for Developers
 
-The openITCOCKPIT frontend is a standalone Angular application that communicates with the [openITCOCKPIT backend](https://github.com/openITCOCKPIT/openITCOCKPIT)
+The openITCOCKPIT frontend is a standalone Angular application that communicates with
+the [openITCOCKPIT backend](https://github.com/openITCOCKPIT/openITCOCKPIT)
 via the [HTTP API](https://docs.openitcockpit.io/en/development/api/).
 
-If you want to contribute to the openITCOCKPIT frontend, you can follow the instructions below to set up a development environment.
+If you want to contribute to the openITCOCKPIT frontend, you can follow the instructions below to set up a development
+environment.
 
 ### Prerequisites
 
@@ -61,16 +66,19 @@ If you want to contribute to the openITCOCKPIT frontend, you can follow the inst
 
 ### System requirements
 
-The openITCOCKPIT Angular application is a relatively large application and requires a lot of resources to build and run.
+The openITCOCKPIT Angular application is a relatively large application and requires a lot of resources to build and
+run.
 We recommend at least 8 GB of RAM and 4 CPU cores.
 
 ### Nginx Configuration
 
-To avoid any CORS issues, the frontend should be installed on an openITCOCKPIT server. The location does not matter however
+To avoid any CORS issues, the frontend should be installed on an openITCOCKPIT server. The location does not matter
+however
 `/opt/openitc/frontend-angular` is the recommended location.
 
 To route all traffic through the Nginx web server, edit the config file `/etc/nginx/openitc/master.conf`
-and commend out the `Proxy for the Angular Frontend (production)` section and uncomment the `Proxy for the Angular Frontend (development)` section.
+and commend out the `Proxy for the Angular Frontend (production)` section and uncomment the
+`Proxy for the Angular Frontend (development)` section.
 
 ```nginx
 # Proxy for the Angular Frontend (production)
@@ -163,7 +171,8 @@ openITCOCKPIT is a multi-language frontend.
 If you found errors in the translations, we are more than happy to receive pull requests.
 
 There are different levels how you can help us to improve our translations.
-All Translations are located at `src/assets/i18n/` in "JSON" files (e.g. `src/assets/i18n/de_DE.json` for German translations).
+All Translations are located at `src/assets/i18n/` in "JSON" files (e.g. `src/assets/i18n/de_DE.json` for German
+translations).
 The `key` is the original English text and the `value` is the translated text. Please do **never change the key**.
 
 ```json
@@ -182,12 +191,14 @@ It is important to use `{0}` in the key, and `{{0}}` in the value.
 }
 ```
 
-openITCOCKPIT use [Transloco](https://jsverse.gitbook.io/transloco) for translations. Please refer to the official documentation for more information.
+openITCOCKPIT use [Transloco](https://jsverse.gitbook.io/transloco) for translations. Please refer to the official
+documentation for more information.
 
 ### 1. Fix typos
 
 Found a typo, some grammar issues or a bad wording?
-The easiest way to help us is to fix it directly in the JSON file. Open the corresponding JSON file (e.g. `src/assets/i18n/es_ES.json`) and search for the text you want to change.
+The easiest way to help us is to fix it directly in the JSON file. Open the corresponding JSON file (e.g.
+`src/assets/i18n/es_ES.json`) and search for the text you want to change.
 
 After you have fixed the issue, please send us a pull request.
 
@@ -263,7 +274,13 @@ This document describes how to upgrade the underlying Angular version.
     ng update @angular/core@19 @angular/cli@19 @angular/material@19 @coreui/angular@~5.3 @coreui/icons-angular@~5.3 primeng@19.0.2 @primeng/themes@19.0.2
     ```
 
-   Check the terminal for any errors.
+   Update from 19 to 20:
+
+```
+> ng update @angular/core@20 @angular/cli@20
+```
+
+Check the terminal for any errors.
 
 2. Follow the Update Guide from https://angular.dev/update-guide and check for any breaking changes
 3. Update other dependencies
@@ -296,9 +313,11 @@ npm install --save typescript@~5.5.3
 
 # Security
 
-Please send security vulnerabilities found in openITCOCKPIT or software that is used by openITCOCKPIT to: `security@openitcockpit.io`.
+Please send security vulnerabilities found in openITCOCKPIT or software that is used by openITCOCKPIT to:
+`security@openitcockpit.io`.
 
-All disclosed vulnerabilities are available here: [https://openitcockpit.io/security/](https://openitcockpit.io/security/)
+All disclosed vulnerabilities are available
+here: [https://openitcockpit.io/security/](https://openitcockpit.io/security/)
 
 # License
 
