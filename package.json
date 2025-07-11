@@ -54,6 +54,7 @@
         "@ng-select/ng-select": "^14.1.0",
         "@primeng/themes": "^19.0.10",
         "@prometheus-io/codemirror-promql": "^0.301.0",
+        "@popperjs/core": "^2.11.8",
         "@tsparticles/angular": "^3.0.0",
         "@tsparticles/engine": "^3.7.1",
         "@tsparticles/slim": "^3.7.1",
