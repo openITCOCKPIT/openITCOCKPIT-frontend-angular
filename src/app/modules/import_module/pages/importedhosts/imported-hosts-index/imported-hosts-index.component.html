@@ -501,12 +501,13 @@
                                 {{ t('NEW') }}
                             </c-badge>
                             @if (importedhost.imported === 1 && ( importedhost.host && importedhost.host.disabled === 0 )) {
-                                <c-badge color="info" *oitcPermission="['hosts', 'browser']"
-                                         [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]"
-                                         class="cursor-pointer">
-                                    <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
-                                    {{ t('In monitoring') }}
-                                </c-badge>
+                                <a [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]"
+                                   *oitcPermission="['hosts', 'browser']">
+                                    <c-badge color="info">
+                                        <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
+                                        {{ t('In monitoring') }}
+                                    </c-badge>
+                                </a>
                                 <span *oitcPermission="['hosts', 'browser']; negate: true">
                                     <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
                                     {{ t('In monitoring') }}
@@ -524,12 +525,14 @@
                                 </c-badge>
                             }
                             @if (importedhost.host && importedhost.host.disabled === 1) {
-                                <c-badge color="warning" *oitcPermission="['hosts', 'browser']"
-                                         [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]"
-                                         class="cursor-pointer text-white">
-                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                    {{ t('In monitoring (disabled)') }}
-                                </c-badge>
+                                <a *oitcPermission="['hosts', 'browser']"
+                                   [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]">
+                                    <c-badge color="warning"
+                                             class="text-white">
+                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                        {{ t('In monitoring (disabled)') }}
+                                    </c-badge>
+                                </a>
                                 <span *oitcPermission="['hosts', 'browser']; negate: true">
                                     <fa-icon [icon]="['fas', 'plug']"></fa-icon>
                                     {{ t('In monitoring (disabled)') }}
@@ -784,7 +787,8 @@
                                         </c-badge>
                                     </li>
                                 }
-                                @for (service of importedhost.oitc_agent_services_overview.not_deletable; track $index) {
+                                @for (
+                                    service of importedhost.oitc_agent_services_overview.not_deletable; track $index) {
                                     <li class="ms-3"
                                         [title]="' Service used by other objects.'|transloco">
                                         <a *oitcPermission="['services', 'browser']"
