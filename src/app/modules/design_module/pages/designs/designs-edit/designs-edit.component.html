@@ -56,7 +56,7 @@
                                 </c-button-group>
                                 <div class="pt-2">
                                     <div
-                                            class="helptext">{{ t('The logo is used by the interface and PDF files.') }}
+                                        class="helptext">{{ t('The logo is used by the interface and PDF files.') }}
                                     </div>
                                     <div class="helptext">{{ t('Resolution: 2600x800') }}</div>
                                 </div>
@@ -87,7 +87,7 @@
                                 </c-button-group>
                                 <div class="pt-2">
                                     <div
-                                            class="helptext">{{ t('The small logo is used by notifications.') }}
+                                        class="helptext">{{ t('The small logo is used by notifications.') }}
                                     </div>
                                     <div class="helptext">{{ t('Resolution: 250x77') }}</div>
                                 </div>
@@ -117,7 +117,7 @@
                                 </c-button-group>
                                 <div class="pt-2">
                                     <div
-                                            class="helptext">{{ t('The logo is used by the interface and login screen.') }}
+                                        class="helptext">{{ t('The logo is used by the interface and login screen.') }}
                                     </div>
                                     <div class="helptext">{{ t('Resolution: 1920x1080') }}</div>
                                 </div>
@@ -161,7 +161,7 @@
             <c-row>
                 <!-- custom login background  -->
                 <c-col md="6">
-                    <c-card class="mb-2">
+                    <c-card class="mb-2 h-100 flex-1">
                         <c-card-header>
                             <h6 cCardTitle>{{ t('Login background image') }}</h6>
                         </c-card-header>
@@ -183,7 +183,7 @@
                                 </c-button-group>
                                 <div class="pt-2">
                                     <div
-                                            class="helptext">{{ t('The image is used as background image for the login screen.') }}
+                                        class="helptext">{{ t('The image is used as background image for the login screen.') }}
                                     </div>
                                     <div class="helptext">{{ t('Resolution: 2560x1440') }}</div>
                                 </div>
@@ -195,7 +195,7 @@
                 <!-- custom status page header  -->
                 <c-col md="6">
 
-                    <c-card class="mb-2">
+                    <c-card class="mb-2 h-100 flex-1">
                         <c-card-header>
                             <h6 cCardTitle>{{ t('Status Page Header') }}</h6>
                         </c-card-header>
@@ -226,7 +226,7 @@
                                 </c-button-group>
                                 <div class="pt-2">
                                     <div
-                                            class="helptext">{{ t('This image is used on the public status pages.') }}
+                                        class="helptext">{{ t('This image is used on the public status pages.') }}
                                     </div>
                                     <div class="helptext">{{ t('Resolution: 1337x420') }}</div>
                                 </div>
@@ -257,14 +257,14 @@
                             <oitc-required-icon></oitc-required-icon>
                         </label>
                         <oitc-select
-                                name="logoType"
-                                id="logoType"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="logoType"
-                                [options]="logTypeOptions"
-                                (onChange)="onLogoTypeChange()"
-                                [appendTo]="''">
+                            name="logoType"
+                            id="logoType"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="logoType"
+                            [options]="logTypeOptions"
+                            (onChange)="onLogoTypeChange()"
+                            [appendTo]="''">
                         </oitc-select>
                     </div>
                 </c-col>
