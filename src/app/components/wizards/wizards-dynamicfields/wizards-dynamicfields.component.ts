@@ -13,7 +13,9 @@ import {
 } from '@angular/core';
 import {
     ColComponent,
+    FormCheckComponent,
     FormCheckInputDirective,
+    FormCheckLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
     RowComponent
@@ -43,7 +45,9 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
         TranslocoPipe,
         TranslocoDirective,
         FormFeedbackComponent,
-        NgClass
+        NgClass,
+        FormCheckLabelDirective,
+        FormCheckComponent
     ],
     templateUrl: './wizards-dynamicfields.component.html',
     styleUrl: './wizards-dynamicfields.component.css',
@@ -55,6 +59,7 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
 
     public title = input.required<string>();
     public titleErrorField = input<string>('');
+    public checked: boolean = false;
 
     @Input() post: Service[] = [];
     @Input() errors: GenericValidationError = {} as GenericValidationError;
@@ -75,21 +80,13 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
         });
     }
 
-    protected toggleCheck(theService: Service | undefined): void {
-        if (theService) {
-            this.post.forEach((service: Service) => {
-                if (service.servicetemplate_id === theService.servicetemplate_id) {
-                    service.createService = !service.createService;
-                }
-            });
-            this.cdr.markForCheck();
-            return;
-        }
+    protected toggleCheck(checked: boolean): void {
+        this.checked = checked;
         this.post.forEach((service: Service) => {
             if (!this.hasName(service.name)) {
                 return;
             }
-            service.createService = !service.createService
+            service.createService = this.checked;
         });
         this.cdr.markForCheck();
     }

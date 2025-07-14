@@ -28,13 +28,15 @@
         <c-card-body class="p-0">
 
             <div class="row m-0 text-center mb-3" style="min-height: 22px;">
-                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('Host Information') }}
                     </span>
                 </div>
-                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('Configure SNMP for Network Monitoring') }}
@@ -79,13 +81,13 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                            name="post.snmpVersion"
-                            id="post.snmpVersion"
-                            [(ngModel)]="post.snmpVersion"
-                            [options]="snmpVersions"
-                            optionValue="value"
-                            optionLabel="key"
-                            oitcFormError [errors]="errors" errorField="securityLevel">
+                        name="post.snmpVersion"
+                        id="post.snmpVersion"
+                        [(ngModel)]="post.snmpVersion"
+                        [options]="snmpVersions"
+                        optionValue="value"
+                        optionLabel="key"
+                        oitcFormError [errors]="errors" errorField="securityLevel">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="snmpVersion"></oitc-form-feedback>
                 </div>
@@ -95,19 +97,22 @@
                         {{ t('Security level') }}
                     </label>
                     <oitc-select
-                            name="post.securityLevel"
-                            id="post.securityLevel"
-                            [(ngModel)]="post.securityLevel"
-                            [options]="securityLevels"
-                            optionValue="value"
-                            optionLabel="key"
-                            oitcFormError [errors]="errors" errorField="securityLevel">
+                        name="post.securityLevel"
+                        id="post.securityLevel"
+                        [(ngModel)]="post.securityLevel"
+                        [options]="securityLevels"
+                        optionValue="value"
+                        optionLabel="key"
+                        oitcFormError [errors]="errors" errorField="securityLevel">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="securityLevel"></oitc-form-feedback>
                     <div class="help-block text-primary-light">
-                        <span *ngIf="post.securityLevel === '1'">{{ t('Communication with authentication and privacy. The protocols used for Authentication are MD5 and SHA and for Privacy, DES (Data Encryption Standard) and AES (Advanced Encryption Standard).') }}</span>
-                        <span *ngIf="post.securityLevel === '2'">{{ t('Communication with authentication and without privacy. The protocols used for Authentication are MD5 and SHA (Secure Hash Algorithm).') }}</span>
-                        <span *ngIf="post.securityLevel === '3'">{{ t('Communication without authentication and privacy.') }}</span>
+                        <span
+                            *ngIf="post.securityLevel === '1'">{{ t('Communication with authentication and privacy. The protocols used for Authentication are MD5 and SHA and for Privacy, DES (Data Encryption Standard) and AES (Advanced Encryption Standard).') }}</span>
+                        <span
+                            *ngIf="post.securityLevel === '2'">{{ t('Communication with authentication and without privacy. The protocols used for Authentication are MD5 and SHA (Secure Hash Algorithm).') }}</span>
+                        <span
+                            *ngIf="post.securityLevel === '3'">{{ t('Communication without authentication and privacy.') }}</span>
                     </div>
                 </div>
 
@@ -117,13 +122,13 @@
                         {{ t('Auth Protocol') }}
                     </label>
                     <oitc-select
-                            name="post.authProtocol"
-                            id="post.authProtocol"
-                            [(ngModel)]="post.authProtocol"
-                            [options]="authProtocols"
-                            optionValue="value"
-                            optionLabel="key"
-                            oitcFormError [errors]="errors" errorField="authProtocol">
+                        name="post.authProtocol"
+                        id="post.authProtocol"
+                        [(ngModel)]="post.authProtocol"
+                        [options]="authProtocols"
+                        optionValue="value"
+                        optionLabel="key"
+                        oitcFormError [errors]="errors" errorField="authProtocol">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="authProtocol"></oitc-form-feedback>
                 </div>
@@ -159,13 +164,13 @@
                         {{ t('Privacy Protocol') }}
                     </label>
                     <oitc-select
-                            name="post.privacyProtocol"
-                            id="post.privacyProtocol"
-                            [(ngModel)]="post.privacyProtocol"
-                            [options]="privacyProtocols"
-                            optionValue="value"
-                            optionLabel="key"
-                            oitcFormError [errors]="errors" errorField="privacyProtocol">
+                        name="post.privacyProtocol"
+                        id="post.privacyProtocol"
+                        [(ngModel)]="post.privacyProtocol"
+                        [options]="privacyProtocols"
+                        optionValue="value"
+                        optionLabel="key"
+                        oitcFormError [errors]="errors" errorField="privacyProtocol">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="privacyProtocol"></oitc-form-feedback>
                 </div>
@@ -200,10 +205,10 @@
             </fieldset>
 
             <oitc-wizards-dynamicfields
-                    [(post)]="post.services"
-                    [errors]="errors"
-                    [titleErrorField]="'services'"
-                    [title]="'SNMP services'|transloco"
+                [(post)]="post.services"
+                [errors]="errors"
+                [titleErrorField]="'services'"
+                [title]="'SNMP services'|transloco"
             />
 
             <fieldset>
@@ -211,7 +216,7 @@
                     <h4 [ngClass]="{'text-danger': errors.hasOwnProperty('interfaces') }">
                         {{ t('SNMP Interfaces') }}
                     </h4>
-                    <span class="help-block italic text-primary">
+                    <span class="help-block italic text-primary small">
                         {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
                     </span>
                     <oitc-form-feedback [errors]="errors" errorField="interfaces"></oitc-form-feedback>
@@ -236,11 +241,11 @@
                     </ng-template>
 
                     <oitc-alert
-                            baseIcon="circle"
-                            color="info"
-                            [icon]="['fas', 'info']"
-                            [contentTemplate]="contentTemplate"
-                            [buttonTemplate]="buttonTemplate"></oitc-alert>
+                        baseIcon="circle"
+                        color="info"
+                        [icon]="['fas', 'info']"
+                        [contentTemplate]="contentTemplate"
+                        [buttonTemplate]="buttonTemplate"></oitc-alert>
 
                 </div>
 
@@ -252,26 +257,39 @@
                                 <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                             </span>
                             <ng-select
-                                    id="tags"
-                                    name="tags"
-                                    [items]="[]"
-                                    [(ngModel)]="searchedTags"
-                                    [addTag]="true"
-                                    [multiple]="true"
-                                    [selectOnTab]="true"
-                                    [isOpen]="false"
-                                    [placeholder]="'Filter by interface name'|transloco">
+                                id="tags"
+                                name="tags"
+                                [items]="[]"
+                                [(ngModel)]="searchedTags"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                [isOpen]="false"
+                                [placeholder]="'Filter by interface name'|transloco">
                             </ng-select>
-                            <span cInputGroupText (click)="toggleCheck(undefined)" class="cursor-pointer">
-                                <i class="fas fa-lg fa-check-square alert-icon"></i> {{ t('Toggle checkboxes') }}
+                            <span cInputGroupText>
+                                <c-form-check>
+                                    <input
+                                        cFormCheckInput
+                                        name="toggleNetworkCheckboxes"
+                                        id="toggleNetworkCheckboxes"
+                                        type="checkbox"
+                                        (ngModelChange)="toggleCheck($event)"
+                                        [(ngModel)]="checked"/>
+                                    <label cFormCheckLabel for="toggleNetworkCheckboxes">
+                                        {{ t('Toggle checkboxes') }}
+                                    </label>
+                                </c-form-check>
                             </span>
+
+
                         </c-input-group>
                     </c-col>
                 </c-row>
 
 
-                <ul style="margin:0;padding:0">
-                    <ol style="margin:0;padding:0" *ngFor="let interface of post.interfaces">
+                <ul class="m-0 p-0">
+                    <ol class="m-0 p-0" *ngFor="let interface of post.interfaces">
                         <ng-container *ngIf="hasName(interface.name)">
 
                             <div class="mb-3 form-group">
@@ -293,7 +311,8 @@
                             </div>
 
                             @for (commandArgument of interface.servicecommandargumentvalues; track $index) {
-                                <div class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
+                                <div
+                                    class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
                                     {{ commandArgument.commandargument.human_name }}
                                     <input class="form-control"
                                            type="text"

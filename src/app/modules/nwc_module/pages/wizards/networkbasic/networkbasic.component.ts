@@ -16,7 +16,9 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    FormCheckComponent,
     FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
     InputGroupComponent,
@@ -72,7 +74,9 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         FormFeedbackComponent,
         FormErrorDirective,
         FormsModule,
-        NgClass
+        NgClass,
+        FormCheckComponent,
+        FormCheckLabelDirective
     ],
     templateUrl: './networkbasic.component.html',
     styleUrl: './networkbasic.component.css',
@@ -81,6 +85,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 export class NetworkbasicComponent extends WizardsAbstractComponent {
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
     protected override WizardService: NetworkbasicWizardService = inject(NetworkbasicWizardService);
+    public checked: boolean = false;
 
     protected override post: NetworkbasicWizardPost = {
 // Default fields from the base wizard
@@ -157,31 +162,24 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
                 }
                 // Error
                 this.notyService.genericError();
+                this.notyService.scrollContentDivToTop();
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
+
                 }
                 this.cdr.markForCheck();
             })
         );
     }
 
-    protected toggleCheck(theService: Service | undefined): void {
-        if (theService) {
-            this.post.interfaces.forEach((service: N0) => {
-                if (service.name !== theService.name) {
-                    return;
-                }
-                service.createService = !service.createService
-            });
-            this.cdr.markForCheck();
-            return;
-        }
+    protected toggleCheck(checked: boolean): void {
+        this.checked = checked;
         this.post.interfaces.forEach((service: N0) => {
             if (!this.hasName(service.name)) {
                 return;
             }
-            service.createService = !service.createService
+            service.createService = this.checked;
         });
         this.cdr.markForCheck();
     }
@@ -233,9 +231,13 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
                 return;
             }
             this.notyService.genericError();
+
             const errorResponse: GenericValidationError = data.data as GenericValidationError;
             if (data.data) {
                 this.errors = errorResponse;
+                if (this.errors.hasOwnProperty('snmpCommunity')) {
+                    this.notyService.scrollContentDivToTop();
+                }
             }
             this.cdr.markForCheck();
         });
