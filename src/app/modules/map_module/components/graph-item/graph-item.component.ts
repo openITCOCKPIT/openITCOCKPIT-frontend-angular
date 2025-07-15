@@ -20,7 +20,7 @@ import { GraphItemService } from './graph-item.service';
 import { GraphItemParams, GraphItemRoot, PerfdataParams } from './graph-item.interface';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { NgClass, NgIf } from '@angular/common';
-import { EChartsOption, VisualMapComponentOption } from 'echarts';
+import { VisualMapComponentOption } from 'echarts';
 import { DateTime } from 'luxon';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import { PopoverGraphService } from '../../../../components/popover-graph/popover-graph.service';
@@ -28,6 +28,7 @@ import { LayoutService } from '../../../../layouts/coreui/layout.service';
 import { HtmlspecialcharsPipe } from '../../../../pipes/htmlspecialchars.pipe';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 import * as echarts from 'echarts/core';
+import { EChartsCoreOption } from 'echarts/core';
 import 'echarts/theme/dark.js';
 import {
     GridComponent,
@@ -112,8 +113,8 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     private graphStart = 0;
     private graphEnd = 0;
     protected hasEnoughData = false;
-    public chartOption: EChartsOption = {};
-    public theme: null | 'dark' = null;
+    public chartOption: EChartsCoreOption = {};
+    public theme: string = '';
     protected notEnoughDataString = this.TranslocoService.translate('Not enough data to display chart.');
 
     // any :(
@@ -122,7 +123,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     constructor(parent: MapCanvasComponent) {
         super(parent);
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
-            this.theme = null;
+            this.theme = '';
             if (theme === 'dark') {
                 this.theme = 'dark';
             }
@@ -808,7 +809,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     }
                 },
             ],
-        } as EChartsOption;
+        } as EChartsCoreOption;
 
         let thresholds = this.getThresholds(performance_data);
         if (thresholds) {

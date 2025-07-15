@@ -440,7 +440,7 @@
                                [(ngModel)]="post.Satellite.timezone"
                                oitcFormError [errors]="errors" errorField="timezone">
                         <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
+                            <div ngOptionHighlight>{{ timezone.name }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>

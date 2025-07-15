@@ -29,7 +29,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { FormWarningComponent } from '../../../layouts/coreui/form-warning/form-warning.component';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -37,6 +36,7 @@ import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { HistoryService } from '../../../history.service';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 
 @Component({
     selector: 'oitc-timeperiods-add',
@@ -70,8 +70,8 @@ import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/s
         InputGroupTextDirective,
         InputGroupComponent,
         NgSelectModule,
-        NgOptionHighlightModule,
-        DebounceDirective
+        DebounceDirective,
+        NgOptionHighlightDirective
     ],
     templateUrl: './timeperiods-add.component.html',
     styleUrl: './timeperiods-add.component.css',

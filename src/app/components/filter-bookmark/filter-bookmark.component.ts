@@ -66,8 +66,8 @@ import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { CustomAlertsIndexFilter } from '../../modules/customalert_module/pages/customalerts/customalerts.interface';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 
 
 @Component({
@@ -86,8 +86,8 @@ import { CustomAlertsIndexFilter } from '../../modules/customalert_module/pages/
         FilterBookmarkExportModalComponent,
         NgSelectModule,
         FormsModule,
-        NgOptionHighlightModule,
-        ContainerComponent
+        ContainerComponent,
+        NgOptionHighlightDirective
     ],
     templateUrl: './filter-bookmark.component.html',
     styleUrl: './filter-bookmark.component.css',

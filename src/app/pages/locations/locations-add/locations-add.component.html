@@ -44,13 +44,13 @@
                     </label>
 
                     <oitc-select
-                        name="container"
-                        id="post.container.parent_id"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.container.parent_id"
-                        [options]="containers"
-                        oitcFormError [errors]="errors" errorField="container.parent_id">
+                            name="container"
+                            id="post.container.parent_id"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.container.parent_id"
+                            [options]="containers"
+                            oitcFormError [errors]="errors" errorField="container.parent_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="container.parent_id"></oitc-form-feedback>
                 </div>
@@ -126,7 +126,7 @@
                                [(ngModel)]="post.timezone"
                                oitcFormError [errors]="errors" errorField="timezone">
                         <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
+                            <div ngOptionHighlight>{{ timezone.name }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>

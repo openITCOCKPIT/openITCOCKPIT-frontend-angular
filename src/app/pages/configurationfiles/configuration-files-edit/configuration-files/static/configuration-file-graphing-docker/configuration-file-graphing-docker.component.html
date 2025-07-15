@@ -240,7 +240,7 @@
                            [(ngModel)]="config.string.timezone"
                            oitcFormError [errors]="errors" errorField="Configfile.timezone">
                     <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
-                        <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
+                        <div ngOptionHighlight>{{ timezone.name }}</div>
                     </ng-template>
                 </ng-select>
                 <oitc-form-feedback [errors]="errors" errorField="Configfile.timezone"></oitc-form-feedback>
@@ -288,11 +288,11 @@
                     <oitc-required-icon/>
                 </label>
                 <select
-                    cSelect
-                    [attr.id]="fieldInfo['USE_AUTO_NETWORKING'].field"
-                    [name]="fieldInfo['USE_AUTO_NETWORKING'].field"
-                    oitcFormError [errors]="errors" errorField="Configfile.USE_AUTO_NETWORKING"
-                    [(ngModel)]="config.string.USE_AUTO_NETWORKING"
+                        cSelect
+                        [attr.id]="fieldInfo['USE_AUTO_NETWORKING'].field"
+                        [name]="fieldInfo['USE_AUTO_NETWORKING'].field"
+                        oitcFormError [errors]="errors" errorField="Configfile.USE_AUTO_NETWORKING"
+                        [(ngModel)]="config.string.USE_AUTO_NETWORKING"
                 >
                     <option [ngValue]="'1'">{{ t('Automatically') }}</option>
                     <option [ngValue]="'0'">{{ t('Manually') }}</option>

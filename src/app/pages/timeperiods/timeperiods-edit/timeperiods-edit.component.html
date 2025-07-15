@@ -74,11 +74,11 @@
                                (ngModelChange)="onContainerIdChange()"
                                oitcFormError [errors]="errors" errorField="containers">
                         <ng-template ng-option-tmp let-container="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ container.value }}</div>
+                            <div ngOptionHighlight>{{ container.value }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-warning
-                        *ngIf="!post.container_id">{{ t('Please select a container.') }}
+                            *ngIf="!post.container_id">{{ t('Please select a container.') }}
                     </oitc-form-warning>
                     <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
                 </div>
@@ -131,7 +131,7 @@
                                [(ngModel)]="post.calendar_id"
                                oitcFormError [errors]="errors" errorField="containers">
                         <ng-template ng-option-tmp let-calendar="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ calendar.value }}</div>
+                            <div ngOptionHighlight>{{ calendar.value }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
@@ -168,7 +168,7 @@
                                        [(ngModel)]="timeperiod.ranges[i]['day']"
                                        [required]="true">
                                 <ng-template ng-option-tmp let-weekday="item" let-search="searchTerm">
-                                    <div [ngOptionHighlight]="search">{{ weekday.value }}</div>
+                                    <div ngOptionHighlight>{{ weekday.value }}</div>
                                 </ng-template>
                             </ng-select>
                         </c-input-group>
@@ -188,7 +188,7 @@
                                    [(ngModel)]="range.start">
                         </c-input-group>
                         <div
-                            *ngFor="let error of getTimeperiodTimeranges(range.index, 'start')">
+                                *ngFor="let error of getTimeperiodTimeranges(range.index, 'start')">
                             <div class="help-block text-danger font-xs">{{ error }}</div>
                         </div>
                     </div>
@@ -207,7 +207,7 @@
                                    [(ngModel)]="range.end">
                         </c-input-group>
                         <div
-                            *ngFor="let error of getTimeperiodTimeranges(range.index, 'end')">
+                                *ngFor="let error of getTimeperiodTimeranges(range.index, 'end')">
                             <div class="help-block text-danger font-xs">{{ error }}</div>
                         </div>
                     </div>

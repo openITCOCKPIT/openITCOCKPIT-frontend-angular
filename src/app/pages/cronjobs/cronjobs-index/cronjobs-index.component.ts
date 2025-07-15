@@ -42,12 +42,12 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { CronjobPriorities } from '../cronjob.enum';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 
 @Component({
     selector: 'oitc-cronjobs-index',
@@ -86,9 +86,9 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
         ModalTitleDirective,
         NgSelectModule,
         ModalToggleDirective,
-        NgOptionHighlightModule,
         TableLoaderComponent,
-        BadgeOutlineComponent
+        BadgeOutlineComponent,
+        NgOptionHighlightDirective
     ],
     templateUrl: './cronjobs-index.component.html',
     styleUrl: './cronjobs-index.component.css',

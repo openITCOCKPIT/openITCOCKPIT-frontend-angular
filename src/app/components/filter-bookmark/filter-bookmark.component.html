@@ -48,7 +48,7 @@
                             <b>{{ item.name }}</b>
                         </ng-template>
                         <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                            <b [ngOptionHighlight]="search">{{ item.name }}</b>
+                            <b ngOptionHighlight>{{ item.name }}</b>
                         </ng-template>
                     </ng-select>
 

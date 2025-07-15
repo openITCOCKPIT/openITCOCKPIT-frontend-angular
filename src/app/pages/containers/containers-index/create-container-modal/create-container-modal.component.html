@@ -27,7 +27,7 @@
                            [clearable]="false"
                            [(ngModel)]="currentContainerTypeId">
                     <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-                        <div [ngOptionHighlight]="search">{{ item.value }}</div>
+                        <div ngOptionHighlight>{{ item.value }}</div>
                     </ng-template>
                 </ng-select>
             </div>
@@ -256,7 +256,7 @@
                                [(ngModel)]="locationPost.timezone"
                                oitcFormError [errors]="errors" errorField="timezone">
                         <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
+                            <div ngOptionHighlight>{{ timezone.name }}</div>
                         </ng-template>
                     </ng-select>
                 </c-input-group>

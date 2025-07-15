@@ -111,14 +111,14 @@
                 <div class="mb-3">
                     <c-form-check>
                         <input
-                            cFormCheckInput
-                            id="showstatsinmenu"
-                            name="showstatsinmenu"
-                            type="checkbox"
-                            trueFalseValue
-                            [trueValue]="1"
-                            [falseValue]="0"
-                            [(ngModel)]="UserPost.showstatsinmenu"/>
+                                cFormCheckInput
+                                id="showstatsinmenu"
+                                name="showstatsinmenu"
+                                type="checkbox"
+                                trueFalseValue
+                                [trueValue]="1"
+                                [falseValue]="0"
+                                [(ngModel)]="UserPost.showstatsinmenu"/>
                         <label cFormCheckLabel
                                for="showstatsinmenu">{{ t('Show status badges in menu') }}</label>
                     </c-form-check>
@@ -127,14 +127,14 @@
                 <div class="mb-3">
                     <c-form-check>
                         <input
-                            cFormCheckInput
-                            id="RecursiveBrowser"
-                            name="RecursiveBrowser"
-                            type="checkbox"
-                            trueFalseValue
-                            [trueValue]="1"
-                            [falseValue]="0"
-                            [(ngModel)]="UserPost.recursive_browser"/>
+                                cFormCheckInput
+                                id="RecursiveBrowser"
+                                name="RecursiveBrowser"
+                                type="checkbox"
+                                trueFalseValue
+                                [trueValue]="1"
+                                [falseValue]="0"
+                                [(ngModel)]="UserPost.recursive_browser"/>
                         <label cFormCheckLabel
                                for="RecursiveBrowser">{{ t('Recursive Browser') }}</label>
                     </c-form-check>
@@ -173,7 +173,7 @@
                                [(ngModel)]="UserPost.i18n"
                                oitcFormError [errors]="UserErrors" errorField="i18n">
                         <ng-template ng-option-tmp let-locale="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ locale.name }}</div>
+                            <div ngOptionHighlight>{{ locale.name }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="UserErrors" errorField="i18n"></oitc-form-feedback>
@@ -196,7 +196,7 @@
                                [(ngModel)]="UserPost.dateformat"
                                oitcFormError [errors]="UserErrors" errorField="dateformat">
                         <ng-template ng-option-tmp let-dateformat="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ dateformat.value }}</div>
+                            <div ngOptionHighlight>{{ dateformat.value }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="UserErrors" errorField="dateformat"></oitc-form-feedback>
@@ -217,7 +217,7 @@
                                [(ngModel)]="UserPost.timezone"
                                oitcFormError [errors]="UserErrors" errorField="timezone">
                         <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
+                            <div ngOptionHighlight>{{ timezone.name }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="UserErrors" errorField="timezone"></oitc-form-feedback>

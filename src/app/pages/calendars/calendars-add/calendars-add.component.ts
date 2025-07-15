@@ -1,21 +1,20 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckInputDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
@@ -27,7 +26,6 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { CalendarContainer, CalendarEvent, CalendarPost, Countries } from '../calendars.interface';
 import { NgSelectModule } from '@ng-select/ng-select';
 
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { forkJoin, Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -36,37 +34,38 @@ import { GenericIdResponse, GenericValidationError } from '../../../generic-resp
 
 import { CalendarComponent } from '../calendar/calendar.component';
 import { HistoryService } from '../../../history.service';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 
 @Component({
     selector: 'oitc-calendars-add',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormDirective,
-    FormsModule,
-    ReactiveFormsModule,
-    BackButtonDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    CardFooterComponent,
-    NgSelectModule,
-    NgOptionHighlightModule,
-    FullCalendarModule,
-    FormCheckInputDirective,
-    CalendarComponent
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FormDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        BackButtonDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        CardFooterComponent,
+        NgSelectModule,
+        FullCalendarModule,
+        FormCheckInputDirective,
+        CalendarComponent,
+        NgOptionHighlightDirective
+    ],
     templateUrl: './calendars-add.component.html',
     styleUrl: './calendars-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

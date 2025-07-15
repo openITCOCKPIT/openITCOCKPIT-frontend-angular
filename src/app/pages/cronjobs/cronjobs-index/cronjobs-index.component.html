@@ -170,7 +170,7 @@
                                (change)="loadTasks($event)"
                                oitcFormError [errors]="errors" errorField="plugin">
                         <ng-template ng-option-tmp let-plugin="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ plugin }}</div>
+                            <div ngOptionHighlight>{{ plugin }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="errors" errorField="plugin"></oitc-form-feedback>
@@ -188,7 +188,7 @@
                                [(ngModel)]="CronjobPost.task"
                                oitcFormError [errors]="errors" errorField="task">
                         <ng-template ng-option-tmp let-task="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ task }}</div>
+                            <div ngOptionHighlight>{{ task }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="errors" errorField="task"></oitc-form-feedback>
@@ -223,7 +223,7 @@
                                [(ngModel)]="CronjobPost.priority"
                                oitcFormError [errors]="errors" errorField="priority">
                         <ng-template ng-option-tmp let-priority="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ priority }}</div>
+                            <div ngOptionHighlight>{{ priority }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="errors" errorField="priority"></oitc-form-feedback>
@@ -290,7 +290,7 @@
                                (change)="loadTasks($event)"
                                oitcFormError [errors]="errors" errorField="plugin">
                         <ng-template ng-option-tmp let-plugin="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ plugin }}</div>
+                            <div ngOptionHighlight>{{ plugin }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="errors" errorField="plugin"></oitc-form-feedback>
@@ -308,7 +308,7 @@
                                [(ngModel)]="CronjobPost.task"
                                oitcFormError [errors]="errors" errorField="task">
                         <ng-template ng-option-tmp let-task="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ task }}</div>
+                            <div ngOptionHighlight>{{ task }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="errors" errorField="task"></oitc-form-feedback>
@@ -343,7 +343,7 @@
                                [(ngModel)]="CronjobPost.priority"
                                oitcFormError [errors]="errors" errorField="priority">
                         <ng-template ng-option-tmp let-priority="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ priority }}</div>
+                            <div ngOptionHighlight>{{ priority }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="errors" errorField="priority"></oitc-form-feedback>

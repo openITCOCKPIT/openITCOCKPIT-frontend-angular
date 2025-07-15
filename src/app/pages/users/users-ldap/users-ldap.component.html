@@ -48,15 +48,15 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
-                        name="samaccountname"
-                        id="samaccountname"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="this.post.samaccountname"
-                        [searchCallback]="loadLdapUsersByString"
-                        (onChange)="onLdapUserChange($event)"
-                        [options]="ldapUsers"
-                        oitcFormError [errors]="errors" errorField="samaccountname">
+                            name="samaccountname"
+                            id="samaccountname"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="this.post.samaccountname"
+                            [searchCallback]="loadLdapUsersByString"
+                            (onChange)="onLdapUserChange($event)"
+                            [options]="ldapUsers"
+                            oitcFormError [errors]="errors" errorField="samaccountname">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="samaccountname"></oitc-form-feedback>
                 </div>
@@ -120,14 +120,14 @@
                     </label>
                     <oitc-ui-blocker [blocked]="true">
                         <oitc-multi-select
-                            [placeholder]="'No matches' | transloco"
-                            name="UserContainerrolesLdap"
-                            id="UserContainerrolesLdap"
-                            optionValue="key"
-                            optionLabel="value"
-                            [options]="usercontainerroles"
-                            [(ngModel)]="selectedUserContainerRolesLdapReadOnly"
-                            oitcFormError [errors]="errors" errorField="usercontainerroles">
+                                [placeholder]="'No matches' | transloco"
+                                name="UserContainerrolesLdap"
+                                id="UserContainerrolesLdap"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="usercontainerroles"
+                                [(ngModel)]="selectedUserContainerRolesLdapReadOnly"
+                                oitcFormError [errors]="errors" errorField="usercontainerroles">
                         </oitc-multi-select>
                     </oitc-ui-blocker>
                     <!-- ngModel is just for Angular. The UsersController will pull the data from the LDAP server on save -->
@@ -203,15 +203,15 @@
                         {{ t('Container Roles') }}
                     </label>
                     <oitc-multi-select
-                        name="post.usercontainerroles._ids"
-                        id="post.usercontainerroles._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.usercontainerroles._ids"
-                        [searchCallback]="loadContainerRoles"
-                        (onChange)="onUsercontainerrolesSelectChange($event)"
-                        [options]="usercontainerroles"
-                        oitcFormError [errors]="errors" errorField="usercontainerroles">
+                            name="post.usercontainerroles._ids"
+                            id="post.usercontainerroles._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.usercontainerroles._ids"
+                            [searchCallback]="loadContainerRoles"
+                            (onChange)="onUsercontainerrolesSelectChange($event)"
+                            [options]="usercontainerroles"
+                            oitcFormError [errors]="errors" errorField="usercontainerroles">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="usercontainerroles"></oitc-form-feedback>
                     <div class="help-block text-info">
@@ -284,14 +284,14 @@
                         {{ t('Container') }}
                     </label>
                     <oitc-multi-select
-                        name="selectedContainerIds"
-                        id="selectedContainerIds"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="selectedUserContainers"
-                        [options]="containers"
-                        (onChange)="onSelectedContainerIdsChange($event)"
-                        oitcFormError [errors]="errors" errorField="containers">
+                            name="selectedContainerIds"
+                            id="selectedContainerIds"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="selectedUserContainers"
+                            [options]="containers"
+                            (onChange)="onSelectedContainerIdsChange($event)"
+                            oitcFormError [errors]="errors" errorField="containers">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
                     <div class="help-block text-info">
@@ -345,15 +345,15 @@
                     </label>
                     <oitc-ui-blocker [blocked]="true">
                         <oitc-select
-                            name="ldapUserDetails.usergroupLdap.id"
-                            id="ldapUserDetails.usergroupLdap.id"
-                            optionValue="key"
-                            optionLabel="value"
-                            [placeholder]="'No matches' | transloco"
-                            [disabled]="true"
-                            [(ngModel)]="selectedUserRoleThroughLdap"
-                            [options]="usergroups"
-                            oitcFormError [errors]="errors" errorField="usergroup_id">
+                                name="ldapUserDetails.usergroupLdap.id"
+                                id="ldapUserDetails.usergroupLdap.id"
+                                optionValue="key"
+                                optionLabel="value"
+                                [placeholder]="'No matches' | transloco"
+                                [disabled]="true"
+                                [(ngModel)]="selectedUserRoleThroughLdap"
+                                [options]="usergroups"
+                                oitcFormError [errors]="errors" errorField="usergroup_id">
                             <!-- ngModel is just for Angular. The data gets pull from the LDAP server on login -->
                         </oitc-select>
                     </oitc-ui-blocker>
@@ -366,13 +366,13 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
-                        name="post.usergroup_id"
-                        id="post.usergroup_id"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.usergroup_id"
-                        [options]="usergroups"
-                        oitcFormError [errors]="errors" errorField="usergroup_id">
+                            name="post.usergroup_id"
+                            id="post.usergroup_id"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.usergroup_id"
+                            [options]="usergroups"
+                            oitcFormError [errors]="errors" errorField="usergroup_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="usergroup_id"></oitc-form-feedback>
                     <div class="help-block text-info">
@@ -384,16 +384,16 @@
                 <div class="mb-3">
                     <c-form-check>
                         <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-primary"
-                            name="post.is_active"
-                            id="post.is_active"
-                            type="checkbox"
-                            trueFalseValue
-                            [trueValue]="1"
-                            [falseValue]="0"
-                            [(ngModel)]="post.is_active"
-                            oitcFormError [errors]="errors" errorField="is_active"/>
+                                cFormCheckInput
+                                class="checkbox-lg checkbox-primary"
+                                name="post.is_active"
+                                id="post.is_active"
+                                type="checkbox"
+                                trueFalseValue
+                                [trueValue]="1"
+                                [falseValue]="0"
+                                [(ngModel)]="post.is_active"
+                                oitcFormError [errors]="errors" errorField="is_active"/>
                         <oitc-form-feedback [errors]="errors" errorField="is_active"></oitc-form-feedback>
                         <label cFormCheckLabel class="ms-1 mt-1"
                                for="post.is_active">
@@ -424,13 +424,13 @@
                 <div class="mb-3">
                     <c-form-check>
                         <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-primary"
-                            name="post.is_oauth"
-                            id="post.is_oauth"
-                            type="checkbox"
-                            [(ngModel)]="post.is_oauth"
-                            oitcFormError [errors]="errors" errorField="is_oauth"/>
+                                cFormCheckInput
+                                class="checkbox-lg checkbox-primary"
+                                name="post.is_oauth"
+                                id="post.is_oauth"
+                                type="checkbox"
+                                [(ngModel)]="post.is_oauth"
+                                oitcFormError [errors]="errors" errorField="is_oauth"/>
                         <oitc-form-feedback [errors]="errors" errorField="is_oauth"></oitc-form-feedback>
                         <label cFormCheckLabel class="ms-1 mt-1"
                                for="post.is_oauth">
@@ -558,16 +558,16 @@
                 <div class="mb-3">
                     <c-form-check>
                         <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-primary"
-                            name="post.showstatsinmenu"
-                            id="post.showstatsinmenu"
-                            type="checkbox"
-                            trueFalseValue
-                            [trueValue]="1"
-                            [falseValue]="0"
-                            [(ngModel)]="post.showstatsinmenu"
-                            oitcFormError [errors]="errors" errorField="showstatsinmenu"/>
+                                cFormCheckInput
+                                class="checkbox-lg checkbox-primary"
+                                name="post.showstatsinmenu"
+                                id="post.showstatsinmenu"
+                                type="checkbox"
+                                trueFalseValue
+                                [trueValue]="1"
+                                [falseValue]="0"
+                                [(ngModel)]="post.showstatsinmenu"
+                                oitcFormError [errors]="errors" errorField="showstatsinmenu"/>
                         <oitc-form-feedback [errors]="errors" errorField="showstatsinmenu"></oitc-form-feedback>
                         <label cFormCheckLabel class="ms-1 mt-1"
                                for="post.showstatsinmenu">
@@ -579,16 +579,16 @@
                 <div class="mb-3">
                     <c-form-check>
                         <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-primary"
-                            name="post.recursive_browser"
-                            id="post.recursive_browser"
-                            type="checkbox"
-                            trueFalseValue
-                            [trueValue]="1"
-                            [falseValue]="0"
-                            [(ngModel)]="post.recursive_browser"
-                            oitcFormError [errors]="errors" errorField="recursive_browser"/>
+                                cFormCheckInput
+                                class="checkbox-lg checkbox-primary"
+                                name="post.recursive_browser"
+                                id="post.recursive_browser"
+                                type="checkbox"
+                                trueFalseValue
+                                [trueValue]="1"
+                                [falseValue]="0"
+                                [(ngModel)]="post.recursive_browser"
+                                oitcFormError [errors]="errors" errorField="recursive_browser"/>
                         <oitc-form-feedback [errors]="errors" errorField="recursive_browser"></oitc-form-feedback>
                         <label cFormCheckLabel class="ms-1 mt-1"
                                for="post.recursive_browser">
@@ -602,9 +602,9 @@
                         {{ t('Tab rotation interval') }}
                     </label>
                     <oitc-slider-time
-                        id="post.dashboard_tab_rotation"
-                        name="post.dashboard_tab_rotation"
-                        [(ngModel)]="post.dashboard_tab_rotation"></oitc-slider-time>
+                            id="post.dashboard_tab_rotation"
+                            name="post.dashboard_tab_rotation"
+                            [(ngModel)]="post.dashboard_tab_rotation"></oitc-slider-time>
                     <oitc-form-feedback [errors]="errors" errorField="dashboard_tab_rotation"></oitc-form-feedback>
                 </div>
 
@@ -614,13 +614,13 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                        name="post.dateformat"
-                        id="post.dateformat"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.dateformat"
-                        [options]="dateformats"
-                        oitcFormError [errors]="errors" errorField="dateformat">
+                            name="post.dateformat"
+                            id="post.dateformat"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.dateformat"
+                            [options]="dateformats"
+                            oitcFormError [errors]="errors" errorField="dateformat">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="dateformat"></oitc-form-feedback>
                 </div>
@@ -640,7 +640,7 @@
                                [(ngModel)]="post.timezone"
                                oitcFormError [errors]="errors" errorField="timezone">
                         <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
+                            <div ngOptionHighlight>{{ timezone.name }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>
@@ -662,13 +662,13 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                        name="post.i18n"
-                        id="post.i18n"
-                        optionValue="i18n"
-                        optionLabel="name"
-                        [(ngModel)]="post.i18n"
-                        [options]="localeOptions"
-                        oitcFormError [errors]="errors" errorField="i18n">
+                            name="post.i18n"
+                            id="post.i18n"
+                            optionValue="i18n"
+                            optionLabel="name"
+                            [(ngModel)]="post.i18n"
+                            [options]="localeOptions"
+                            oitcFormError [errors]="errors" errorField="i18n">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="i18n"></oitc-form-feedback>
                     <div class="help-block">

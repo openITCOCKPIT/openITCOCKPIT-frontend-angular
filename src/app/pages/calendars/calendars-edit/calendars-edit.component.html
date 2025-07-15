@@ -52,7 +52,7 @@
                                [virtualScroll]="true"
                                [(ngModel)]="post.container_id">
                         <ng-template ng-option-tmp let-container="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">
+                            <div ngOptionHighlight>
                                 {{ container.value }}
                             </div>
                         </ng-template>

@@ -121,7 +121,7 @@
             <oitc-no-records *ngIf="macros && macros.length === 0"></oitc-no-records>
 
             <c-container
-                [fluid]="true">
+                    [fluid]="true">
                 <c-row>
                     <c-col class="text-info pt-3 pb-2">
                         <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
@@ -158,7 +158,7 @@
                                [(ngModel)]="currentMacro.Macro.name"
                                oitcFormError [errors]="errors" errorField="name">
                         <ng-template ng-option-tmp let-macro="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ macro }}</div>
+                            <div ngOptionHighlight>{{ macro }}</div>
                         </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>

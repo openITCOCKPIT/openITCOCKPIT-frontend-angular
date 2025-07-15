@@ -34,7 +34,6 @@ import {
 } from '../hosttemplates.interface';
 
 import { NgSelectModule } from '@ng-select/ng-select';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { HosttemplateTypesEnum } from '../hosttemplate-types.enum';
 import { HosttemplatesService } from '../hosttemplates.service';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
@@ -84,7 +83,6 @@ import { IndexPage } from '../../../pages.interface';
         RowComponent,
         TranslocoPipe,
         NgSelectModule,
-        NgOptionHighlightModule,
         CardFooterComponent,
         ActionsButtonComponent,
         ActionsButtonElementComponent,

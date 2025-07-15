@@ -54,9 +54,9 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 
 @Component({
     selector: 'oitc-macro-index',
@@ -106,9 +106,9 @@ import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipbo
         FormFeedbackComponent,
         FormErrorDirective,
         FormFeedbackComponent,
-        NgOptionHighlightModule,
         TableLoaderComponent,
-        CopyToClipboardComponent
+        CopyToClipboardComponent,
+        NgOptionHighlightDirective
     ],
     templateUrl: './macro-index.component.html',
     styleUrl: './macro-index.component.css',
