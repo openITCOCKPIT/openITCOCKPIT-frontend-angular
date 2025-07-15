@@ -139,14 +139,13 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         let request: NetworkbasicWizardPost = JSON.parse(JSON.stringify(this.post));
 
         // Remove all services from request where createService is false.
-        request.services = this.post.services.filter((service: Service) => {
-            return service.createService === true;
+        request.services = request.services.filter((service: Service) => {
+            return service.createService;
         });
         // Remove all interfaces from request where createService is false.
-        request.interfaces = this.post.interfaces.filter((service: N0) => {
-            return service.createService === true;
-        });
-
+        request.interfaces = request.interfaces.filter(
+            (networkInterface: N0) => networkInterface.createService && this.hasName(networkInterface.name)
+        );
 
         this.subscriptions.add(this.WizardService.submit(request)
             .subscribe((result: GenericResponseWrapper) => {
