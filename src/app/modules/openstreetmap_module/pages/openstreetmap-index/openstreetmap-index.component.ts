@@ -55,7 +55,7 @@ import { chain } from 'lodash';
 import { leafletFullscreen } from './js/Leaflet.fullscreen.js';
 // @ts-ignore
 import { hexbinLayer } from './js/HexbinLayer.js';
-import { AsyncPipe, NgFor, NgIf, NgStyle } from '@angular/common';
+import { AsyncPipe, NgStyle } from '@angular/common';
 
 
 @Component({
@@ -156,8 +156,6 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
             lng: 0
         },
     };
-
-    //  public layers: L.Layer[] = [];
 
     public ngOnInit(): void {
 
@@ -272,7 +270,6 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         }).value();
         if (this.hexlayer) {
             this.hexlayer.removeFrom(this.map);
-            //this.hexlayer.remove();
         }
         this.hexlayer = hexbinLayer({click: (pointData: any) => this.hexClick(pointData)}).addTo(this.map).data(cells);
     }
@@ -316,7 +313,6 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
             this.settingsFilter.filter.warning |
             this.settingsFilter.filter.down_critical |
             this.settingsFilter.filter.unreachable_unknown;
-       // console.log(this.settingsFilter.state_filter);
         if(this.settingsFilter.state_filter === 0){
             this.settingsFilter.state_filter = 15;
         }
