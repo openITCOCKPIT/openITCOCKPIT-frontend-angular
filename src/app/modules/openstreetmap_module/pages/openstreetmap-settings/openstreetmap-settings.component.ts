@@ -128,8 +128,6 @@ export class OpenstreetmapSettingsComponent implements OnInit, OnDestroy  {
             this.post.filter.unreachable_unknown;
         this.subscriptions.add(
             this.OpenstreetmapService.setOpenstreetmapSettings(this.post).subscribe((result: GenericResponseWrapper): void => {
-
-
                     if (result.success) {
                         this.errors = null;
                         this.notyService.genericSuccess();

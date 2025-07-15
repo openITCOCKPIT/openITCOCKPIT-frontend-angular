@@ -8,6 +8,8 @@ export interface DesignsEditRoot {
     logoForHtml: string,
     headerLogoForHtml: string,
     customLoginBackgroundHtml: string,
+    customStatusPageHeaderHtml: string,
+    isCustomStatusPageHeader: boolean,
     _csrfToken: string
 }
 

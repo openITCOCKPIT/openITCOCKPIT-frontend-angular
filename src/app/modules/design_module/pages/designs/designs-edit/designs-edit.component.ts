@@ -140,12 +140,15 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
     protected logoForHtml: string = '';
     protected headerLogoForHtml: string = '';
     protected customLoginBackgroundHtml: string = '';
+    protected customStatusPageHeaderHtml: string = '';
+    protected isCustomStatusPageHeader: boolean = false;
     protected logTypeOptions: SelectKeyValueString[] = [
         {key: '0', value: this.TranslocoService.translate('Interface and PDFs')},
         {key: '1', value: this.TranslocoService.translate('Notifications')},
         {key: '2', value: this.TranslocoService.translate('Interface and Login')},
         {key: '3', value: this.TranslocoService.translate('Header logo')},
-        {key: '4', value: this.TranslocoService.translate('Login background image')}
+        {key: '4', value: this.TranslocoService.translate('Login background image')},
+        {key: '5', value: this.TranslocoService.translate('Status Page Header')},
     ];
     protected colours: Design = {
         rightBackground: '',
@@ -187,11 +190,14 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
                 }
                 this.maxUploadLimit = result.maxUploadLimit;
                 // append timestamp to force reload of images (url changes on every request = reload image)
-                this.logoPdfForHtml = result.logoPdfForHtml + "?" + new Date().getTime();
-                this.smallLogoPdfForHtml = result.smallLogoPdfForHtml + "?" + new Date().getTime();
-                this.logoForHtml = result.logoForHtml + "?" + new Date().getTime();
-                this.headerLogoForHtml = result.headerLogoForHtml + "?" + new Date().getTime();
-                this.customLoginBackgroundHtml = result.customLoginBackgroundHtml + "?" + new Date().getTime();
+                let timestamp: string = "?" + new Date().getTime();
+                this.logoPdfForHtml = result.logoPdfForHtml + timestamp;
+                this.smallLogoPdfForHtml = result.smallLogoPdfForHtml + timestamp;
+                this.logoForHtml = result.logoForHtml + timestamp;
+                this.headerLogoForHtml = result.headerLogoForHtml + timestamp;
+                this.customLoginBackgroundHtml = result.customLoginBackgroundHtml + timestamp;
+                this.customStatusPageHeaderHtml = result.customStatusPageHeaderHtml + timestamp;
+                this.isCustomStatusPageHeader = result.isCustomStatusPageHeader;
                 this.init = false;
                 this.cdr.markForCheck();
             }));

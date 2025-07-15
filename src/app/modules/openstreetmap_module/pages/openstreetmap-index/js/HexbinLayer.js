@@ -1,7 +1,5 @@
 import * as d3 from 'd3';
 import * as d3Hexbin from 'd3-hexbin';
-//import 'leaflet';
-//import * as L from 'leaflet';
 
 /**
  * This is a convoluted way of getting ahold of the hexbin function.
@@ -241,7 +239,7 @@ L.HexbinLayer = L.SVG.extend({
         // Generate the map bounds (to be used to filter the hexes to what is visible)
         var bounds = that._map.getBounds();
         var size = that._map.getSize();
-        if (size !== undefined) {
+        if (size !== undefined && size.x && size.y) {
             bounds = bounds.pad(that.options.radius * 2 / Math.max(size.x, size.y));
         }
 
