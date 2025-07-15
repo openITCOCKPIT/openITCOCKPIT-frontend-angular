@@ -584,7 +584,8 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
             'filter[Hosts.address]': this.filter['Hosts.address'],
             'filter[Hosts.satellite_id][]': this.filter['Hosts.satellite_id'],
             'filter[Hosts.host_type][]': this.filter['Hosts.host_type'],
-            'filter[hostpriority][]': priorityFilter
+            'filter[hostpriority][]': priorityFilter,
+            'BrowserContainerId': this.containerId
         };
 
         let stringParams: HttpParams = new HttpParams();
