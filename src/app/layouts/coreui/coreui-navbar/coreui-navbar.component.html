@@ -4,9 +4,9 @@
          [ngClass]="{'hide':!visible, 'show':visible, 'sidebar-narrow-unfoldable sidebar-fixed sidebar-static': unfoldable}">
 
         <div class="top-left">
-            <div class="logoInHeader sidebar-header border-bottom">
+            <div class="sidebar-header border-bottom">
                 <div class="sidebar-brand d-flex flex-align-items-center cursor-pointer" [routerLink]="['/']">
-                    <img [src]="headerLogoForHtml" width="32"/>
+                    <img class="logoInHeader" [src]="headerLogoForHtml" width="32"/>
                     <span class="sidebar-brand-full page-logo-text">
                         {{ SystemnameService.systemName$ | async }}
                     </span>
