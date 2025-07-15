@@ -94,10 +94,15 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
         updatedPost.services = updatedPost.services.filter((service: Service) => {
             return service.createService;
         });
+        // Remove all services that have been filtered out
+        updatedPost.services = updatedPost.services.filter((service: Service) => {
+            return this.childComponent.hasName(service.name);
+        });
 
         this.subscriptions.add(this.WizardService.submit(updatedPost)
             .subscribe((result: GenericResponseWrapper) => {
                 this.errors = {} as GenericValidationError;
+                this.cdr.markForCheck();
                 if (result.success) {
                     const title: string = this.TranslocoService.translate('Success');
                     const msg: string = this.TranslocoService.translate('Data saved successfully');
