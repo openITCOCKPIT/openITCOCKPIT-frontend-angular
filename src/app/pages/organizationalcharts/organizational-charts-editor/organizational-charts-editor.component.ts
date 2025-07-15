@@ -7,6 +7,7 @@ import {
     inject,
     input,
     model,
+    OnDestroy,
     OnInit,
     ViewChild
 } from '@angular/core';
@@ -32,6 +33,7 @@ import { JsonPipe, NgClass } from '@angular/common';
 import { GenericValidationError } from '../../../generic-responses';
 import {
     ButtonCloseDirective,
+    FormLabelDirective,
     ModalBodyComponent,
     ModalComponent,
     ModalFooterComponent,
@@ -42,6 +44,14 @@ import {
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { OrganizationalChartsService } from '../organizationalcharts.service';
+import { SelectKeyValuePathWithDisabled, SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 
 @Component({
@@ -61,13 +71,19 @@ import { FormsModule } from '@angular/forms';
         XsButtonDirective,
         ModalBodyComponent,
         ModalFooterComponent,
-        FormsModule
+        FormsModule,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        TranslocoDirective
     ],
     templateUrl: './organizational-charts-editor.component.html',
     styleUrl: './organizational-charts-editor.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OrganizationalChartsEditorComponent implements OnInit {
+export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
 
     // Two-way binding for the organizational charts tree from the add or edit component
     public nodeTree = model<OrganizationalChartsTreeNode[]>([]);
@@ -124,6 +140,18 @@ export class OrganizationalChartsEditorComponent implements OnInit {
 
     public currentNodeForModal: OcTreeNode | undefined;
 
+    public errors: GenericValidationError | null = null;
+    // A list of all tenants, locations and nodes to be used in the modal
+    public modalTenants: SelectKeyValuePathWithDisabled[] = [];
+    public modalLocations: SelectKeyValuePathWithDisabled[] = [];
+    public modalNodes: SelectKeyValuePathWithDisabled[] = [];
+
+    // A list of tenants, that can be currently selected in the modal for the given organizational chart node
+    public currentModalTenant: SelectKeyValueWithDisabled[] = [];
+
+    private readonly OrganizationalChartsService: OrganizationalChartsService = inject(OrganizationalChartsService);
+    private readonly subscriptions: Subscription = new Subscription();
+
     constructor(
         private cdr: ChangeDetectorRef
     ) {
@@ -133,6 +161,17 @@ export class OrganizationalChartsEditorComponent implements OnInit {
     }
 
     public ngOnInit(): void {
+        this.subscriptions.add(this.OrganizationalChartsService.loadContainers().subscribe((response) => {
+            this.modalTenants = response.tenants;
+            this.modalLocations = response.locations;
+            this.modalNodes = response.nodes;
+
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 
     public onInitialized(): void {
@@ -320,6 +359,19 @@ export class OrganizationalChartsEditorComponent implements OnInit {
             show: true,
             id: this.ocNodeEditModal.id
         });
+
+        // Disable tenants that are already used by other organizational chart nodes
+        const usedContainerIds = this.nodeTree().map(n => n.container_id);
+        this.modalTenants.forEach((tenant) => {
+            tenant.disabled = usedContainerIds.includes(tenant.key);
+
+            // Do not disable our own/current tenant
+            if (tenant.key === this.currentNodeForModal?.node.container_id) {
+                tenant.disabled = false;
+            }
+        });
+
+
         this.cdr.markForCheck();
     }
 
@@ -335,6 +387,7 @@ export class OrganizationalChartsEditorComponent implements OnInit {
         const currentNode = this.currentNodeForModal; // this is only required to make TypeScript happy - otherwise it will complain that currentNode is possibly undefined
         this.nodes = this.nodes.map((n) => n.node.id === currentNode?.node.id ? currentNode : n);
 
+        this.nodes = structuredClone(this.nodes); // Force change detection to update the nodes in the f-flow canvas
 
         this.cdr.markForCheck();
     }

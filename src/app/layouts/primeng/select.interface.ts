@@ -34,3 +34,10 @@ export interface SelectKeyValuePath {
     value: string
     path: string
 }
+
+export interface SelectKeyValuePathWithDisabled {
+    key: number,
+    value: string
+    path: string
+    disabled?: boolean
+}

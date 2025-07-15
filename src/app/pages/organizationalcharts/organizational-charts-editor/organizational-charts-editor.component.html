@@ -35,12 +35,14 @@
                     [fOutputId]="connection.organizational_chart_output_node_id"
                     [fInputId]="connection.organizational_chart_input_node_id">
 
-                    <svg id="normal_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.END" [height]="5" [width]="5"
+                    <svg id="normal_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.END" [height]="5"
+                         [width]="5"
                          [refX]="4" [refY]="2.5">
                         <path d="M0,0L700,350L0,700L150,350z"/>
                     </svg>
 
-                    <svg id="selected_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.SELECTED_END" [height]="5"
+                    <svg id="selected_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.SELECTED_END"
+                         [height]="5"
                          [width]="5" [refX]="4" [refY]="2.5">
                         <path d="M0,0L700,350L0,700L150,350z"/>
                     </svg>
@@ -75,30 +77,56 @@
     </f-flow>
 </div>
 
+<ng-container *transloco="let t">
 
-<!-- Edit Node Modal -->
-<c-modal #ocNodeEditModal
-         [keyboard]="true"
-         [id]="'ocNodeEditModal'"
-         [size]="'lg'">
-    <c-modal-header>
-        <h5 cModalTitle>Modal title</h5>
-        <button [cModalToggle]="ocNodeEditModal.id" cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body>
+    <!-- Edit Node Modal -->
+    <c-modal #ocNodeEditModal
+             [keyboard]="true"
+             [id]="'ocNodeEditModal'"
+             [size]="'lg'">
+        <c-modal-header>
+            <h5 cModalTitle>Modal title</h5>
+            <button [cModalToggle]="ocNodeEditModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
 
-        @if (currentNodeForModal) {
 
-            <input type="number" [(ngModel)]="currentNodeForModal.node.container_id"/>
+            @if (currentNodeForModal) {
 
-            <button type="button" (click)="onUpdateNodeModal()">Save</button>
-        }
 
-    </c-modal-body>
-    <c-modal-footer>
-        <button [cModalToggle]="ocNodeEditModal.id" cButton color="secondary">
-            Close
-        </button>
-        <button cButton color="primary">Understood</button>
-    </c-modal-footer>
-</c-modal>
+                <div class="mb-3">
+                    <label cLabel for="container">
+                        {{ t('Tenant') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+
+                    <oitc-select
+                        name="modalTenantSelect"
+                        id="modalTenantSelect"
+                        optionValue="key"
+                        optionLabel="path"
+                        [(ngModel)]="currentNodeForModal.node.container_id"
+                        [options]="modalTenants"
+                        [appendTo]="''"
+                        oitcFormError [errors]="errors" errorField="container_id">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                </div>
+
+
+                <input type="number" [(ngModel)]="currentNodeForModal.node.container_id"/>
+
+                <button type="button" (click)="onUpdateNodeModal()">Save</button>
+            }
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button [cModalToggle]="ocNodeEditModal.id" cButton color="secondary" class="ripple">
+                Close
+            </button>
+            <button cButton color="primary" class="ripple" (click)="onUpdateNodeModal()">
+                {{ t('Save') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>

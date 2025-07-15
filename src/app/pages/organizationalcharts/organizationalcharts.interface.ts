@@ -1,7 +1,7 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { Container } from '../containers/containers.interface';
 import { OrganizationalchartUserRoles } from './organizationalcharts.enum';
-import { SelectKeyValuePath } from '../../layouts/primeng/select.interface';
+import { SelectKeyValuePathWithDisabled } from '../../layouts/primeng/select.interface';
 
 /**********************
  *    Index action    *
@@ -51,9 +51,9 @@ export interface OrganizationalChartsIndexParams {
  **********************/
 
 export interface LoadContainersRoot {
-    tenants: SelectKeyValuePath[]
-    locations: SelectKeyValuePath[]
-    nodes: SelectKeyValuePath[]
+    tenants: SelectKeyValuePathWithDisabled[]
+    locations: SelectKeyValuePathWithDisabled[]
+    nodes: SelectKeyValuePathWithDisabled[]
 }
 
 export interface OrganizationalChartsPost {
