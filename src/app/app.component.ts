@@ -16,8 +16,6 @@ import { ColorModeService, ContainerComponent, ModalService, ShadowOnScrollDirec
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
 import { HistoryService } from './history.service';
-//import { TranslocoService } from '@jsverse/transloco';
-//import { NgSelectConfig } from '@ng-select/ng-select';
 import { CoreuiHeaderComponent } from './layouts/coreui/coreui-header/coreui-header.component';
 import { CoreuiNavbarComponent } from './layouts/coreui/coreui-navbar/coreui-navbar.component';
 import { GlobalLoaderComponent } from './layouts/coreui/global-loader/global-loader.component';
