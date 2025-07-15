@@ -140,7 +140,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
 
         // Remove all services from request where createService is false.
         request.services = request.services.filter((service: Service) => {
-            return service.createService;
+            return service.createService && this.childComponent.hasName(service.name);
         });
         // Remove all interfaces from request where createService is false.
         request.interfaces = request.interfaces.filter(
