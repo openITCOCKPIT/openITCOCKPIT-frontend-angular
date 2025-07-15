@@ -71,7 +71,7 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
         });
     }
 
-    protected hasName = (name: string): boolean => {
+    public hasName = (name: string): boolean => {
         if (this.searchedTags.length === 0) {
             return true;
         }
