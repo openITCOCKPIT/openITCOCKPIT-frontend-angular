@@ -6,7 +6,7 @@
             </button>
         } @else {
             <button cInputGroupText (click)="clear()" [title]="t('Remove this custom color.')">
-                <fa-icon [icon]="['fas', 'trash']"/>
+                <fa-icon class="text-danger" [icon]="['fas', 'trash']"/>
             </button>
             <p-color-picker
                     cInputGroupText
