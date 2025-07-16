@@ -63,6 +63,7 @@ import {
     ColourLocatorPickerComponent
 } from '../../../components/colour-locator-picker/colour-locator-picker.component';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
+import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-designs-edit',
@@ -107,7 +108,8 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        TrueFalseDirective
+        TrueFalseDirective,
+        FormLoaderComponent
     ],
     templateUrl: './designs-edit.component.html',
     styleUrl: './designs-edit.component.css',
