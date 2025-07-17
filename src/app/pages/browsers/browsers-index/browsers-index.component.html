@@ -63,7 +63,8 @@
                         </c-nav-item>
                         @if (organizationalCharts) {
                             <c-nav-item>
-                                <a [routerLink]="['/', 'organizationalcharts', 'view', containerId]"
+                                <a [routerLink]="['/', 'organizationalcharts', 'view']"
+                                   [queryParams]="{containerId: containerId}"
                                    [ngClass]="{'disabled muted': organizationalCharts.length === 0}"
                                    *oitcPermission="['organizationalcharts', 'view']" class="nav-link">
                                     <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>

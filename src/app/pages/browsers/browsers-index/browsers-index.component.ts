@@ -313,7 +313,7 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.subscriptions.add(this.BrowsersService.getIndex(this.containerId)
                 .subscribe((result) => {
                     this.containers = result;
-                    this.organizationalCharts = result.organizationalCharts
+                    this.organizationalCharts = result.organizationalCharts;
                     this.cdr.markForCheck();
 
                     // Update the title.

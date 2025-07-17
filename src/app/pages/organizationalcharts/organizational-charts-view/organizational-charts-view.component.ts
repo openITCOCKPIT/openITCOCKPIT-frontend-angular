@@ -9,9 +9,11 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, ColComponent,
+    CardTitleDirective,
+    ColComponent,
     NavComponent,
-    NavItemComponent, RowComponent
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import {
     QueryHandlerCheckerComponent
@@ -29,7 +31,9 @@ import { TitleService } from '../../../services/title.service';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { GenericMessageResponse, GenericValidationError } from '../../../generic-responses';
 import { OrganizationalChart } from '../organizationalcharts.interface';
-import { Container } from '../../containers/containers.interface';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
+import { BrowsersContainer } from '../../browsers/browsers.interface';
 
 @Component({
     selector: 'oitc-organizational-charts-view',
@@ -50,7 +54,8 @@ import { Container } from '../../containers/containers.interface';
         CardFooterComponent,
         SelectComponent,
         RowComponent,
-        ColComponent
+        ColComponent,
+        NoRecordsComponent
     ],
     templateUrl: './organizational-charts-view.component.html',
     styleUrl: './organizational-charts-view.component.css',
@@ -67,49 +72,50 @@ export class OrganizationalChartsViewComponent implements OnInit, OnDestroy, Ind
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly TitleService: TitleService = inject(TitleService);
     public containerId: number = 0;
-    public containers: Container[] = [];
+    public containers: BrowsersContainer[] = [];
     public organizationalCharts: SelectKeyValue[] = [];
     public organizationalchartId: number = 0;
     public organizationalChart?: OrganizationalChart;
+    public title: string = '';
 
     public ngOnInit(): void {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
         this.route.queryParams.subscribe(params => {
+            let id: number = params['containerId'] || 0;
             this.organizationalCharts = [];
             if (id) {
+                this.containerId = id;
                 // Process all query params first and then trigger the load function
                 this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartsByContainerId(id)
                     .subscribe((result) => {
                         this.organizationalCharts = result;
                         if (this.organizationalCharts[0]) {
                             this.organizationalchartId = this.organizationalCharts[0].key; // Default to the first organizational chart
+                            this.title = this.organizationalCharts[0].value;
                         }
                         this.cdr.markForCheck();
 
                         // Update the title.
-                        //let newTitle: string = this.containers.breadcrumbs[this.containers.breadcrumbs.length - 1].value;
-                        //this.TitleService.setTitle(`${newTitle} | ` + this.TranslocoService.translate('Organizational charts'));
+                        this.TitleService.setTitle(`${this.title} | ` + this.TranslocoService.translate('Organizational charts'));
                     })
                 );
 
-
                 this.cdr.markForCheck();
             }
-
-
         });
 
     }
 
     public onOrganizationalchartsChange() {
-        console.log('LOAD TREE FOR ORGANIZATIONAL CHARTS ID: ' + this.organizationalchartId);
         if (this.organizationalchartId) {
+            console.log('LOAD TREE FOR ORGANIZATIONAL CHARTS ID: ' + this.organizationalchartId);
             this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartById(this.organizationalchartId)
                 .subscribe((result) => {
-
                     if (result.success) {
                         const response = result.data as GenericMessageResponse;
                         this.organizationalChart = result.data.organizationalChart;
+                        this.title = this.organizationalChart?.name || '';
+                        this.TitleService.setTitle(`${this.title} | ` + this.TranslocoService.translate('Organizational charts'));
+
                         this.containers = result.data.containers;
                         this.cdr.markForCheck();
                         return;
@@ -153,4 +159,6 @@ export class OrganizationalChartsViewComponent implements OnInit, OnDestroy, Ind
     onMassActionComplete(success: boolean): void {
         throw new Error('Method not implemented.');
     }
+
+    protected readonly ContainerTypesEnum = ContainerTypesEnum;
 }

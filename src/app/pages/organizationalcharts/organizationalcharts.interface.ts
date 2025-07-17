@@ -13,7 +13,7 @@ export interface OrganizationalChartsIndexRoot extends PaginateOrScroll {
 
 export interface OrganizationalChart {
     id?: number
-    name: number
+    name: string
     description: string
     created: string
     modified: string

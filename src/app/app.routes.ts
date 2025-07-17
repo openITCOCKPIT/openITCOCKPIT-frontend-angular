@@ -724,7 +724,7 @@ const coreRoutes: Routes = [{
     path: 'organizationalcharts/add',
     loadComponent: () => import('./pages/organizationalcharts/organizational-charts-add/organizational-charts-add.component').then(m => m.OrganizationalChartsAddComponent)
 }, {
-    path: 'organizationalcharts/view/:id',
+    path: 'organizationalcharts/view',
     loadComponent: () => import('./pages/organizationalcharts/organizational-charts-view/organizational-charts-view.component').then(m => m.OrganizationalChartsViewComponent)
 },{
     path: 'error/403',
