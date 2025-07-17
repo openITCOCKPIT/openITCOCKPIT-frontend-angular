@@ -1,1 +1,71 @@
-<p>organizational-charts-view works!</p>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['browsers', 'index']" [routerLink]="['/', 'browsers', 'index']">
+                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                    {{ t('Browser') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+    @if (!organizationalCharts) {
+        <ng-container>
+            <oitc-block-loader height="25rem"></oitc-block-loader>
+        </ng-container>
+    }
+    @if (organizationalCharts) {
+        <ng-container>
+            <oitc-query-handler-checker></oitc-query-handler-checker>
+            <c-card>
+                <c-card-header class="my-0 py-0">
+                    <h6 cCardTitle class="my-0">
+                        <nav aria-label="breadcrumb" class="my-2">
+                            <ol class="breadcrumb my-0">
+                                <li aria-current="page" class="breadcrumb-item text-muted">
+                                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                    {{ t('Organizational charts') }}
+                                </li>
+                            </ol>
+                        </nav>
+                    </h6>
+                    <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                        <c-nav-item>
+                            <a [routerLink]="['/', 'browsers', 'index']"
+                               *oitcPermission="['browsers', 'index']" class="nav-link">
+                                <fa-icon [icon]="['far', 'rectangle-list']"></fa-icon>
+                                {{ t('Container overview') }}
+                            </a>
+                        </c-nav-item>
+                        @if (organizationalCharts) {
+                            <c-nav-item>
+                                <a [routerLink]="['/', 'organizationalcharts', 'view', containerId]"
+                                   [ngClass]="{'disabled muted': !organizationalCharts}"
+                                   *oitcPermission="['organizationalcharts', 'view']" class="nav-link active">
+                                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                    {{ t('Organizational charts') }}
+                                </a>
+                            </c-nav-item>
+                        }
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
+
+                </c-card-body>
+                <c-card-footer>
+
+                </c-card-footer>
+            </c-card>
+        </ng-container>
+    }
+</ng-container>
