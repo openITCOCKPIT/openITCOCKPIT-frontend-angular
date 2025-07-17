@@ -60,6 +60,49 @@
                     </c-nav>
                 </c-card-header>
                 <c-card-body>
+                    <c-card class="mb-3 mt-3">
+                        <c-card-header>
+                            <div cCardTitle>
+                                <oitc-select
+                                        name="organizationalcharts"
+                                        id="organizationalcharts"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="organizationalchartId"
+                                        [options]="organizationalCharts"
+                                        (ngModelChange)="onOrganizationalchartsChange()">
+                                </oitc-select>
+                            </div>
+                        </c-card-header>
+                        <c-card-body>
+                            @if(!organizationalchartId){
+                                <ng-container>
+                                    <oitc-block-loader height="15rem"></oitc-block-loader>
+                                </ng-container>
+                            }
+                            @if(organizationalchartId){
+                               <c-row>
+                                   <c-col [xs]="12" [sm]="4" [md]="2" [lg]="2">
+                                       <c-card class="h-100">
+                                           <c-card-header>
+                                               <h6 cCardTitle>
+                                                   <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                                                   {{ t('Containers') }}
+                                               </h6>
+                                           </c-card-header>
+                                           <c-card-body>
+                                           </c-card-body>
+                                       </c-card>
+                                   </c-col>
+                                   <c-col [xs]="12" [sm]="8" [md]="10" [lg]="10">
+
+                                   </c-col>
+                               </c-row>
+                            }
+
+                        </c-card-body>
+                    </c-card>
+
 
                 </c-card-body>
                 <c-card-footer>

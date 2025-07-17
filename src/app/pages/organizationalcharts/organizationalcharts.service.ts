@@ -5,14 +5,12 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
-    LoadContainersRoot, OrganizationalChart,
+    LoadContainersRoot,
     OrganizationalChartsIndexParams,
     OrganizationalChartsIndexRoot,
     OrganizationalChartsPost
 } from './organizationalcharts.interface';
 import { GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
-import { ContainersIndexNested } from '../containers/containers.interface';
-import { ImportedFilesViewRoot } from '../../modules/import_module/pages/importedfiles/imported-files.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 @Injectable({
@@ -38,17 +36,43 @@ export class OrganizationalChartsService {
     }
 
 
-
     public getOrganizationalChartsByContainerId(id: number): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
-        return this.http.get<SelectKeyValue[]>(`${proxyPath}/organizationalCharts/loadOrganizationalChartsByContainerId/${id}.json`, {
+        return this.http.get<{
+            organizationalCharts: SelectKeyValue[]
+        }>(`${proxyPath}/organizationalCharts/loadOrganizationalChartsByContainerId/${id}.json`, {
             params: {
                 angular: true,
             }
         }).pipe(
             map(data => {
                 // Return true on 200 Ok
-                return data;
+                return data.organizationalCharts;
+            })
+        );
+    }
+
+    public getOrganizationalChartById(id: number): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/organizationalCharts/loadOrganizationalChartById/${id}.json`, {
+            params: {
+                angular: true
+            }
+
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                const err = error.error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
             })
         );
     }
