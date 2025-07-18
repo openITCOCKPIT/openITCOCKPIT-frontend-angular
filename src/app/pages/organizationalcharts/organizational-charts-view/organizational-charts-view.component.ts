@@ -29,7 +29,7 @@ import { OrganizationalChartsService } from '../organizationalcharts.service';
 import { HistoryService } from '../../../history.service';
 import { TitleService } from '../../../services/title.service';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { GenericMessageResponse, GenericValidationError } from '../../../generic-responses';
+import { GenericValidationError } from '../../../generic-responses';
 import { OrganizationalChart } from '../organizationalcharts.interface';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
@@ -88,10 +88,17 @@ export class OrganizationalChartsViewComponent implements OnInit, OnDestroy, Ind
                 this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartsByContainerId(id)
                     .subscribe((result) => {
                         this.organizationalCharts = result;
-                        if (this.organizationalCharts[0]) {
+                        const found = this.organizationalCharts.find((chart => {
+                            return chart.key === this.organizationalchartId
+                        }));
+                        if (!found) {
+                            this.organizationalchartId = 0; // Reset to 0 if not found
+                        }
+                        if (this.organizationalchartId === 0 && this.organizationalCharts[0]) {
                             this.organizationalchartId = this.organizationalCharts[0].key; // Default to the first organizational chart
                             this.title = this.organizationalCharts[0].value;
                         }
+                        this.onOrganizationalchartsChange();
                         this.cdr.markForCheck();
 
                         // Update the title.
@@ -111,7 +118,6 @@ export class OrganizationalChartsViewComponent implements OnInit, OnDestroy, Ind
             this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartById(this.organizationalchartId)
                 .subscribe((result) => {
                     if (result.success) {
-                        const response = result.data as GenericMessageResponse;
                         this.organizationalChart = result.data.organizationalChart;
                         this.title = this.organizationalChart?.name || '';
                         this.TitleService.setTitle(`${this.title} | ` + this.TranslocoService.translate('Organizational charts'));
@@ -124,8 +130,6 @@ export class OrganizationalChartsViewComponent implements OnInit, OnDestroy, Ind
                     // Error
                     const errorResponse = result.data as GenericValidationError;
                     this.notyService.genericError();
-
-
                     this.cdr.markForCheck();
                 })
             );

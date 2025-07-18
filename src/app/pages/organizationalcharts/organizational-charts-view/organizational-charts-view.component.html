@@ -66,13 +66,14 @@
                         <c-card-header>
                             <div cCardTitle>
                                 <oitc-select
-                                        name="organizationalcharts"
-                                        id="organizationalcharts"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        [(ngModel)]="organizationalchartId"
-                                        [options]="organizationalCharts"
-                                        (ngModelChange)="onOrganizationalchartsChange()">
+                                    name="organizationalcharts"
+                                    id="organizationalcharts"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="organizationalchartId"
+                                    [options]="organizationalCharts"
+                                    [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
+                                    (ngModelChange)="onOrganizationalchartsChange()">
                                 </oitc-select>
                             </div>
                         </c-card-header>
@@ -84,7 +85,7 @@
                             }
                             @if (organizationalchartId) {
                                 <c-row>
-                                    <c-col [xs]="12" [sm]="4" [md]="2" [lg]="2">
+                                    <c-col [xs]="12" [sm]="12" [md]="4" [lg]="2">
                                         <c-card class="h-100">
                                             <c-card-header>
                                                 <h6 cCardTitle>
@@ -105,7 +106,7 @@
                                                                 }
                                                                 @if (container.value.containertype_id == ContainerTypesEnum.CT_LOCATION) {
                                                                     <fa-icon
-                                                                            [icon]="['fas', 'location-arrow']"></fa-icon>
+                                                                        [icon]="['fas', 'location-arrow']"></fa-icon>
                                                                 }
                                                                 @if (container.value.containertype_id == ContainerTypesEnum.CT_LOCATION) {
                                                                     <fa-icon [icon]="['fas', 'link']"></fa-icon>
@@ -127,8 +128,8 @@
                                             </c-card-body>
                                         </c-card>
                                     </c-col>
-                                    <c-col [xs]="12" [sm]="8" [md]="10" [lg]="10">
-                                        <c-card class="h-100">
+                                    <c-col [xs]="12" [sm]="12" [md]="8" [lg]="10">
+                                        <c-card class="min-vh-50">
                                             <c-card-header>
                                                 @if (organizationalChart) {
                                                     <h6 cCardTitle>
