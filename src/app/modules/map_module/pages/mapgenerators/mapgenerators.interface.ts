@@ -27,7 +27,7 @@ export interface Mapgenerator {
 }
 
 export interface MapgeneratorLevel {
-    id?: number
+    id?: number | null
     mapgenerator_id?: number
     name: string
     divider: string
