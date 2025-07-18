@@ -119,18 +119,18 @@
 
                     <div class="mb-3">
                         <label cLabel for="mapgenerator_interval">
-                            {{ t('Map interval') }}
+                            {{ t('Map refresh interval') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
                         <input cFormControl
                                id="mapgenerator_interval"
                                type="number"
                                name="mapgenerator_interval"
-                               min="10"
-                               step="5"
-                               [(ngModel)]="post.Mapgenerator.interval"
-                               oitcFormError [errors]="errors" errorField="interval">
-                        <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
+                               min="5"
+                               max="180"
+                               [(ngModel)]="post.Mapgenerator.map_refresh_interval"
+                               oitcFormError [errors]="errors" errorField="map_refresh_interval">
+                        <oitc-form-feedback [errors]="errors" errorField="map_refresh_interval"></oitc-form-feedback>
                     </div>
 
                     <div class="mb-3">

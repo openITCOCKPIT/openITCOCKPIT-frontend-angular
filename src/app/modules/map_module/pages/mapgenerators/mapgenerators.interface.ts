@@ -15,7 +15,7 @@ export interface Mapgenerator {
     id: number
     name: string
     description: string
-    interval: number
+    map_refresh_interval: number
     type: number
     items_per_line: number
     created: string
@@ -23,6 +23,23 @@ export interface Mapgenerator {
     containers: MapgeneratorContainer[]
     maps?: Map[] | number[]
     allowEdit?: boolean
+    mapgenerator_levels: MapgeneratorLevel[]
+}
+
+export interface MapgeneratorLevel {
+    id?: number
+    mapgenerator_id?: number
+    name: string
+    divider: string
+    is_container: boolean
+}
+
+export interface InternalLevel {
+    id: number | null,
+    name: string,
+    divider: string,
+    is_container: boolean,
+    index: number
 }
 
 export interface MapgeneratorContainer extends Container {
@@ -71,12 +88,13 @@ export interface MapgeneratorPost {
 export interface MapgeneratorEdit {
     name: string
     description: string
-    interval: number
+    map_refresh_interval: number
     items_per_line: number
     type: number
     containers: {
         _ids: number[]
     }
+    mapgenerator_levels: MapgeneratorLevel[]
 }
 
 export interface MapgeneratorsEditRoot {

@@ -119,6 +119,7 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.MapgeneratorsService.getGenerator(this.mapgeneratorId)
             .subscribe((result: MapgeneratorsEditRoot) => {
                 this.mapgenerator = result.mapgenerator;
+                this.mapgenerator.map_refresh_interval = (parseInt(this.mapgenerator.map_refresh_interval.toString(), 10) / 1000);
                 if (result.mapgenerator.maps?.length) {
                     this.mapCount = result.mapgenerator.maps?.length;
                     this.allGeneratedMaps = this.mapgenerator.maps!.map(map => (map as Map).id);

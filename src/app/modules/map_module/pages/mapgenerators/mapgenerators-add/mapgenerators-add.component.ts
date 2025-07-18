@@ -8,7 +8,7 @@ import { HistoryService } from '../../../../../history.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import { MapgeneratorPost } from '../mapgenerators.interface';
+import { InternalLevel, MapgeneratorPost } from '../mapgenerators.interface';
 import { LoadContainersRoot } from '../../../../../pages/containers/containers.interface';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
@@ -17,9 +17,14 @@ import {
     CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -31,6 +36,9 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
+import { NgClass, NgForOf } from '@angular/common';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-mapgenerators-add',
@@ -55,7 +63,15 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         RequiredIconComponent,
         TranslocoDirective,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        SelectComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NgForOf,
+        NgClass,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective
     ],
     templateUrl: './mapgenerators-add.component.html',
     styleUrl: './mapgenerators-add.component.css',
@@ -76,7 +92,33 @@ export class MapgeneratorsAddComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError | null = null;
     public post: MapgeneratorPost = {} as MapgeneratorPost;
     protected containers: SelectKeyValue[] = [];
-    protected startContainers: SelectKeyValue[] = [];
+    protected types: SelectKeyValue[] = [
+        {key: 1, value: this.TranslocoService.translate('Generate By Container Structure')},
+        {key: 2, value: this.TranslocoService.translate('Generate By Hostname Splitting')}
+    ];
+
+    public mapgenerator: { levels: InternalLevel[] } = {
+        levels: [
+            {
+                id: 1,
+                name: '',
+                divider: '',
+                is_container: true,
+                index: 0
+            },
+            {
+                id: 2,
+                name: '',
+                divider: '',
+                is_container: false,
+                index: 1
+            }
+        ]
+    };
+
+    public namePlaceholder = this.TranslocoService.translate('Name (e.g. Company)');
+    public dividerPlaceholder = this.TranslocoService.translate('Divider (e.g. -)');
+    protected mapgeneratorLevelIsContainerIndex: number | null = 0;
 
     private cdr = inject(ChangeDetectorRef);
 
@@ -89,12 +131,13 @@ export class MapgeneratorsAddComponent implements OnInit, OnDestroy {
             Mapgenerator: {
                 name: '',
                 description: '',
-                interval: 90,
+                map_refresh_interval: 90,
                 type: 1,
                 items_per_line: 10,
                 containers: {
                     _ids: []
-                }
+                },
+                mapgenerator_levels: []
             }
         };
     }
@@ -108,6 +151,27 @@ export class MapgeneratorsAddComponent implements OnInit, OnDestroy {
     }
 
     public submit(): void {
+
+        let index = 0;
+        this.post.Mapgenerator.mapgenerator_levels = [];
+
+        if (this.post.Mapgenerator.type === 2) {
+            for (let i in this.mapgenerator.levels) {
+
+                let is_container = false;
+                if (this.mapgeneratorLevelIsContainerIndex !== null && i === String(this.mapgeneratorLevelIsContainerIndex)) {
+                    is_container = true;
+                }
+
+                this.post.Mapgenerator.mapgenerator_levels[index] = {
+                    'name': this.mapgenerator.levels[i].name,
+                    'divider': this.mapgenerator.levels[i].divider,
+                    'is_container': is_container,
+                };
+                index++;
+            }
+        }
+
         this.subscriptions.add(this.MapgeneratorsService.add(this.post)
             .subscribe((result) => {
                 this.cdr.markForCheck();
@@ -141,4 +205,64 @@ export class MapgeneratorsAddComponent implements OnInit, OnDestroy {
             }))
     }
 
+    public addLevel() {
+        let count = this.mapgenerator.levels.length + 1;
+
+        this.mapgenerator.levels.push({
+            id: count,
+            name: "",
+            divider: "",
+            is_container: false,
+            index: Object.keys(this.mapgenerator.levels).length
+        });
+
+        if (this.errors && (typeof this.errors['validate_levels'] !== 'undefined' ||
+            typeof this.errors['mapgenerator_levels'] !== 'undefined')) {
+            this.mapgenerator.levels = this.mapgenerator.levels;
+        } else {
+            this.mapgenerator.levels = _(this.mapgenerator.levels)
+                .chain()
+                .flatten()
+                .sortBy('id')
+                .value();
+        }
+        this.cdr.markForCheck();
+    }
+
+    public removeLevel(levelIndex: any) {
+        let mapgeneratorLevels = [];
+        for (let i in this.mapgenerator.levels) {
+            if (this.mapgenerator.levels[i]['index'] !== levelIndex) {
+                this.mapgenerator.levels[i]['index'] = mapgeneratorLevels.length;
+                this.mapgenerator.levels[i]['id'] = mapgeneratorLevels.length + 1;
+                mapgeneratorLevels.push(this.mapgenerator.levels[i])
+            }
+        }
+        if (this.errors && (typeof this.errors['validate_levels'] !== 'undefined' ||
+            typeof this.errors['mapgenerator_levels'] !== 'undefined')) {
+            this.mapgenerator.levels = mapgeneratorLevels;
+        } else {
+            this.mapgenerator.levels = _(mapgeneratorLevels)
+                .chain()
+                .flatten()
+                .sortBy('id')
+                .value();
+        }
+
+        this.mapgeneratorLevelIsContainerIndex = null;
+        this.cdr.markForCheck();
+    };
+
+    public getMapgeneratorLevelErrors(index: number, validationKeyName: string, keyName: string): string[] {
+        if (this.errors && this.errors[validationKeyName] && this.errors[validationKeyName][index]) {
+            let levels = <any>this.errors[validationKeyName][index];
+            if (levels && levels[keyName]) {
+                return Object.keys(levels[keyName]).map((key) => levels[keyName][key]);
+            }
+            return [];
+        } else {
+            return [];
+        }
+
+    }
 }

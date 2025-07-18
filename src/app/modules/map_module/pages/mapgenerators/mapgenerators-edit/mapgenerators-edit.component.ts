@@ -93,12 +93,13 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
             Mapgenerator: {
                 name: '',
                 description: '',
-                interval: 90,
+                map_refresh_interval: 90,
                 type: 1,
                 items_per_line: 10,
                 containers: {
                     _ids: []
-                }
+                },
+                mapgenerator_levels: []
             }
         };
     }
@@ -127,7 +128,7 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
                 this.post.Mapgenerator.containers._ids = mapgenerator.containers.map(container => container.id);
                 this.post.Mapgenerator.name = mapgenerator.name;
                 this.post.Mapgenerator.description = mapgenerator.description;
-                this.post.Mapgenerator.interval = parseInt(String(mapgenerator.interval), 10);
+                this.post.Mapgenerator.map_refresh_interval = (parseInt(mapgenerator.map_refresh_interval.toString(), 10) / 1000);
                 this.post.Mapgenerator.type = mapgenerator.type;
                 this.post.Mapgenerator.items_per_line = mapgenerator.items_per_line;
             }));
