@@ -58,7 +58,7 @@ import { BrowsersContainer } from '../../browsers/browsers.interface';
         NoRecordsComponent
     ],
     templateUrl: './organizational-charts-view.component.html',
-    styleUrl: './organizational-charts-view.component.css',
+    styleUrl: './organizational-charts-view.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrganizationalChartsViewComponent implements OnInit, OnDestroy, IndexPage {

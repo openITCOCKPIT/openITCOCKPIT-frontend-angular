@@ -94,22 +94,27 @@
                                                 </h6>
                                             </c-card-header>
                                             <c-card-body>
-                                                <div class="ps-3 nodes-overview">
+                                                <div class="ps-1 nodes-overview">
                                                     @if (containers !== undefined) {
                                                         @for (container of containers; track $index) {
-                                                            <div class="mb-1">
+                                                            <div class="mb-1 py-1"
+                                                                 [ngClass]="{'selected-container-organizational-chart': container.key == containerId}">
                                                                 @if (container.value.containertype_id == ContainerTypesEnum.CT_GLOBAL) {
-                                                                    <fa-icon [icon]="['fas', 'globe']"></fa-icon>
+                                                                    <fa-icon [icon]="['fas', 'globe']"
+                                                                             class="pe-1"></fa-icon>
                                                                 }
                                                                 @if (container.value.containertype_id == ContainerTypesEnum.CT_TENANT) {
-                                                                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                                                                    <fa-icon [icon]="['fas', 'home']"
+                                                                             class="pe-1"></fa-icon>
                                                                 }
                                                                 @if (container.value.containertype_id == ContainerTypesEnum.CT_LOCATION) {
                                                                     <fa-icon
-                                                                        [icon]="['fas', 'location-arrow']"></fa-icon>
+                                                                        [icon]="['fas', 'location-arrow']"
+                                                                        class="pe-1"></fa-icon>
                                                                 }
                                                                 @if (container.value.containertype_id == ContainerTypesEnum.CT_LOCATION) {
-                                                                    <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                                                                    <fa-icon [icon]="['fas', 'link']"
+                                                                             class="pe-1"></fa-icon>
                                                                 }
                                                                 <a [routerLink]="['/', 'organizationalcharts', 'view']"
                                                                    [queryParams]="{containerId: container.key}"
