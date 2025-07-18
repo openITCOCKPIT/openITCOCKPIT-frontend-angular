@@ -79,36 +79,33 @@ export interface OrganizationalChartsTreeNode {
     uuid: string
     organizational_chart_id?: number // empty in add
     container_id: number
+    recursive: boolean
     x_position: number
     y_position: number
     created?: string
     modified?: string
-    users_to_organizational_chart_nodes: OrganizationalChartsTreeNodeUser[]
+    users: OrganizationalChartsTreeNodeUser[]
     container?: Container
 }
 
 export interface OrganizationalChartsTreeNodeUser {
-    id?: number
-    user_id: number
-    organizational_chart_structure_id?: number
-    is_manager: 0 | 1
-    user_role: OrganizationalchartUserRoles
-
-    // only relevant in edit mode
-    user?: {
-        id: number
-        usergroup_id: number
-        email: string
-        password: string
-        firstname: string
-        lastname: string
-        position: null | string
-        company: null | string
-        department: null | string
-        phone: null | number
-        timezone: string
-        i18n: string
-        dateformat: string
-        is_active: boolean
+    id: number
+    usergroup_id?: number
+    email?: string
+    firstname?: string
+    lastname?: string
+    position?: null | string
+    company?: null | string
+    department?: null | string
+    phone?: null | number
+    timezone?: string
+    i18n?: string
+    dateformat?: string
+    is_active?: boolean
+    _joinData: {
+        id?: number
+        user_id?: number
+        organizational_chart_node_id?: number
+        user_role: OrganizationalchartUserRoles
     }
 }

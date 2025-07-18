@@ -33,6 +33,9 @@ import { JsonPipe, NgClass } from '@angular/common';
 import { GenericValidationError } from '../../../generic-responses';
 import {
     ButtonCloseDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormLabelDirective,
     ModalBodyComponent,
     ModalComponent,
@@ -52,6 +55,9 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective } from '@jsverse/transloco';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { OrganizationalChartNodesService } from '../organizationalchartnodes.service';
+import { OrganizationalchartUserRoles } from '../organizationalcharts.enum';
 
 
 @Component({
@@ -77,7 +83,11 @@ import { TranslocoDirective } from '@jsverse/transloco';
         FormLabelDirective,
         RequiredIconComponent,
         SelectComponent,
-        TranslocoDirective
+        TranslocoDirective,
+        MultiSelectComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective
     ],
     templateUrl: './organizational-charts-editor.component.html',
     styleUrl: './organizational-charts-editor.component.scss',
@@ -146,10 +156,16 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
     public modalLocations: SelectKeyValuePathWithDisabled[] = [];
     public modalNodes: SelectKeyValuePathWithDisabled[] = [];
 
-    // A list of tenants, that can be currently selected in the modal for the given organizational chart node
-    public currentModalTenant: SelectKeyValueWithDisabled[] = [];
+    public modalRegionManagers: SelectKeyValueWithDisabled[] = [];
+    public modalManagers: SelectKeyValueWithDisabled[] = [];
+    public modalUsers: SelectKeyValueWithDisabled[] = [];
+
+    public selectedRegionManagers: number[] = [];
+    public selectedManagers: number[] = [];
+    public selectedUsers: number[] = [];
 
     private readonly OrganizationalChartsService: OrganizationalChartsService = inject(OrganizationalChartsService);
+    private readonly OrganizationalChartNodesService: OrganizationalChartNodesService = inject(OrganizationalChartNodesService);
     private readonly subscriptions: Subscription = new Subscription();
 
     constructor(
@@ -192,8 +208,9 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
             id: newNodeUuid,
             uuid: newNodeUuid,
             container_id: 0, // todo set back to 0
-            users_to_organizational_chart_nodes: [],
-            organizational_chart_id: 0,
+            recursive: false,
+            users: [],
+            //organizational_chart_id: 0,
             x_position: x,
             y_position: y
         };
@@ -345,6 +362,11 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     }
 
+    /**
+     * Gets called when the user clicks on the edit button of a node in the f-flow canvas.
+     * Will open the modal to edit the node.
+     * @param nodeId - The ID of the node to edit
+     */
     public onEditNode(nodeId: string | number | undefined): void {
         if (!nodeId) {
             return;
@@ -360,6 +382,10 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
             id: this.ocNodeEditModal.id
         });
 
+        if (this.currentNodeForModal?.node.container_id) {
+            this.loadUsersForModal(this.currentNodeForModal.node.container_id);
+        }
+
         // Disable tenants that are already used by other organizational chart nodes
         const usedContainerIds = this.nodeTree().map(n => n.container_id);
         this.modalTenants.forEach((tenant) => {
@@ -371,6 +397,15 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
             }
         });
 
+        // Reset selected users
+        this.modalRegionManagers = [];
+        this.modalManagers = [];
+        this.modalUsers = [];
+        this.selectedRegionManagers = [];
+        this.selectedManagers = [];
+        this.selectedUsers = [];
+        this.disableUsedUsersModal();
+
 
         this.cdr.markForCheck();
     }
@@ -379,6 +414,47 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
         if (!this.currentNodeForModal) {
             return;
         }
+
+        // Drop old users
+        if (this.currentNodeForModal?.node) {
+            this.currentNodeForModal.node.users = [];
+        }
+
+        this.selectedRegionManagers.forEach((userId) => {
+            if (this.currentNodeForModal?.node) {
+                this.currentNodeForModal.node.users.push({
+                    id: userId,
+                    _joinData: {
+                        user_id: userId,
+                        user_role: OrganizationalchartUserRoles.REGION_MANAGER
+                    }
+                });
+            }
+        });
+
+        this.selectedManagers.forEach((userId) => {
+            if (this.currentNodeForModal?.node) {
+                this.currentNodeForModal.node.users.push({
+                    id: userId,
+                    _joinData: {
+                        user_id: userId,
+                        user_role: OrganizationalchartUserRoles.MANAGER
+                    }
+                });
+            }
+        });
+
+        this.selectedUsers.forEach((userId) => {
+            if (this.currentNodeForModal?.node) {
+                this.currentNodeForModal.node.users.push({
+                    id: userId,
+                    _joinData: {
+                        user_id: userId,
+                        user_role: OrganizationalchartUserRoles.USER
+                    }
+                });
+            }
+        });
 
         // Update two-way binding
         this.updateNodeInTree(this.currentNodeForModal.node);
@@ -391,6 +467,49 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
 
         this.cdr.markForCheck();
     }
+
+    public onModalContainerChange() {
+        if (!this.currentNodeForModal) {
+            return;
+        }
+
+        this.loadUsersForModal(this.currentNodeForModal.node.container_id);
+    }
+
+    private loadUsersForModal(containerId: number): void {
+        this.subscriptions.add(this.OrganizationalChartNodesService.loadUsers(containerId).subscribe((users) => {
+            // we need to clone the array to avoid reference issues
+            // otherwise the disabled property will not work correctly
+            this.modalRegionManagers = structuredClone(users);
+            this.modalManagers = structuredClone(users);
+            this.modalUsers = structuredClone(users);
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public disableUsedUsersModal() {
+        if (!this.currentNodeForModal) {
+            return;
+        }
+
+        console.log('disableUsedUsersModal');
+
+        this.modalRegionManagers.forEach(u => {
+            u.disabled = this.selectedUsers.includes(u.key) || this.selectedManagers.includes(u.key);
+        });
+
+        this.modalManagers.forEach(u => {
+            u.disabled = this.selectedUsers.includes(u.key) || this.selectedRegionManagers.includes(u.key);
+        });
+
+        this.modalUsers.forEach(u => {
+            u.disabled = this.selectedManagers.includes(u.key) || this.selectedRegionManagers.includes(u.key);
+        });
+
+
+        this.cdr.markForCheck();
+    }
+
 
     protected readonly EFConnectionBehavior = EFConnectionBehavior;
     protected readonly EFConnectionType = EFConnectionType;
