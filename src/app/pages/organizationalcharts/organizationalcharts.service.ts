@@ -11,6 +11,7 @@ import {
     OrganizationalChartsPost
 } from './organizationalcharts.interface';
 import { GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -32,6 +33,48 @@ export class OrganizationalChartsService {
                 return data;
             })
         )
+    }
+
+
+    public getOrganizationalChartsByContainerId(id: number): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            organizationalCharts: SelectKeyValue[]
+        }>(`${proxyPath}/organizationalCharts/loadOrganizationalChartsByContainerId/${id}.json`, {
+            params: {
+                angular: true,
+            }
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return data.organizationalCharts;
+            })
+        );
+    }
+
+    public getOrganizationalChartById(id: number): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/organizationalCharts/loadOrganizationalChartById/${id}.json`, {
+            params: {
+                angular: true
+            }
+
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                const err = error.error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
+            })
+        );
     }
 
     public delete(item: DeleteAllItem): Observable<Object> {
