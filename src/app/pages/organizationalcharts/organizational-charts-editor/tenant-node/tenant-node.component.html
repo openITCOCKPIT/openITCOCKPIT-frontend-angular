@@ -1,41 +1,97 @@
-<div class="oc-node-body" fDragHandle>
+<ng-container *transloco="let t">
+    <div class="oc-node-body" fDragHandle>
 
-    <div class="node-info">
-        <span class="node-title"> model.name </span>
-        <div class="node-description"> model.description</div>
+        <div class="d-flex">
+            <div class="flex-1">
+                <h3>
+                    <fa-icon [icon]="['fas', 'home']" class="me-2"></fa-icon>
+                    {{ containerName }}
+                </h3>
+            </div>
+            <div>
+                @if (nodeObj) {
+                    <button cButton class="right" (click)="editNode.emit(nodeObj.fNodeId)">
+                        {{ t('Edit') }}
+                    </button>
+                }
+            </div>
+        </div>
+
+        @if (nodeObj && nodeObj.node) {
+            <div>
+                {{ t('Recursive lookup is') }}
+                <span class="text-decoration-underline">
+                    @if (nodeObj.node.recursive) {
+                        {{ t('enabled') }}
+                    } @else {
+                        {{ t('disabled') }}
+                    }
+                </span>
+            </div>
 
 
+            <div>
+                @if (isLoading && nodeObj.node.container_id > 0) {
+                    <oitc-block-loader [height]="'15rem'"></oitc-block-loader>
+                } @else {
+                    @if (statusCounts) {
+                        <div class="mb-2">
+                            <div>
+                                Hoststatus:
+                            </div>
+                            <div>
+                                <c-progress-stacked>
+                                    <c-progress [value]="statusCounts.hoststatusCountPercentage[0]"
+                                                color="success"/>
+                                    <c-progress [value]="statusCounts.hoststatusCountPercentage[1]"
+                                                color="danger"/>
+                                    <c-progress [value]="statusCounts.hoststatusCountPercentage[2]"
+                                                color="secondary"/>
+                                </c-progress-stacked>
+                            </div>
+                        </div>
 
-        @if (nodeFooter) {
+                        <div class="mb-2">
+                            <div>
+                                Servicestatus:
+                            </div>
+                            <div>
+                                <c-progress-stacked>
+                                    <c-progress [value]="statusCounts.servicestatusCountPercentage[0]"
+                                                color="success"/>
+                                    <c-progress [value]="statusCounts.servicestatusCountPercentage[1]"
+                                                color="warning"/>
+                                    <c-progress [value]="statusCounts.servicestatusCountPercentage[2]"
+                                                color="danger"/>
+                                    <c-progress [value]="statusCounts.servicestatusCountPercentage[3]"
+                                                color="secondary"/>
+                                </c-progress-stacked>
+                            </div>
+                        </div>
+                    }
+                }
 
-            <b>{{ nodeFooter.node.container_id }}</b>
+            </div>
 
-            <button cButton class="right" (click)="editNode.emit(nodeFooter.fNodeId)">
-                Edit
-            </button>
         }
 
 
     </div>
 
 
-</div>
-
-
-<div class="output-item text-center">
-    @if (nodeFooter) {
-        {{ nodeFooter|json }}
-        <div fNodeOutput
-             class="oc-node-output"
-             [fOutputId]="String(nodeFooter.node.id)"
-             [isSelfConnectable]="false">
-            @if (hasConnection) {
-                <fa-icon [icon]="['fas', 'square-xmark']" class="text-danger"
-                         (click)="onDeleteConnection()"></fa-icon>
-            } @else {
-                <fa-icon [icon]="['far', 'square']"></fa-icon>
-            }
-        </div>
-    }
-</div>
-
+    <div class="output-item text-center">
+        @if (nodeObj) {
+            <div fNodeOutput
+                 class="oc-node-output"
+                 [fOutputId]="String(nodeObj.node.id)"
+                 [isSelfConnectable]="false">
+                @if (hasConnection) {
+                    <fa-icon [icon]="['fas', 'square-xmark']" class="text-danger"
+                             (click)="onDeleteConnection()"></fa-icon>
+                } @else {
+                    <fa-icon [icon]="['far', 'square']"></fa-icon>
+                }
+            </div>
+        }
+    </div>
+</ng-container>

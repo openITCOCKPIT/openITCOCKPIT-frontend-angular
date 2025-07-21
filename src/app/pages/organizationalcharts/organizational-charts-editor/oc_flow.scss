@@ -174,7 +174,6 @@ body.dark-theme :host {
 
 
     .f-node {
-        /*width: 150px;*/
         color: var(--node-color);
         /*text-align: center;*/
         background: var(--node-background-color);
@@ -193,6 +192,8 @@ body.dark-theme :host {
     }
 
     .oc-node-body {
+        width: 350px;
+        height: 300px;
         cursor: move;
         margin: 16px;
     }

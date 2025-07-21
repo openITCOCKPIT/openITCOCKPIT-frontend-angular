@@ -64,7 +64,8 @@
                                   (fNodePositionChange)="onNodePositionChanged($event, node)"
                                   [connectionsInput]="connections()"
                                   (deleteConnection)="onRemoveConnection($event)"
-                                  (editNode)="onEditNode($event)">
+                                  (editNode)="onEditNode($event)"
+                                  [tenants]="modalTenants">
                 </oitc-tenant-node>
             }
         </f-canvas>
