@@ -171,12 +171,28 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
     constructor(
         private cdr: ChangeDetectorRef
     ) {
+
+
         effect(() => {
             this.nodeValidationErrors = this.nodeValidationErrorsInput();
         });
     }
 
     public ngOnInit(): void {
+
+        // In edit - copy existing nodes into f-flow
+        this.nodeTree().forEach((node) => {
+            this.nodes.push({
+                fNodeId: String(node.id),
+                position: {
+                    x: node.x_position,
+                    y: node.y_position
+                },
+                node: node
+            });
+        });
+
+
         this.subscriptions.add(this.OrganizationalChartsService.loadContainers().subscribe((response) => {
             this.modalTenants = response.tenants;
             this.modalLocations = response.locations;
@@ -232,7 +248,7 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
 
     public onNodeRemoved(nodeId: string): void {
         // Find the node to remove
-        const node = this.nodes.find((n) => n.node.id === nodeId);
+        const node = this.nodes.find((n) => String(n.node.id) === nodeId);
 
         // Remove the node from the two-way binding
         if (node?.node) {
@@ -270,7 +286,7 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
         }
 
         // Delete old connection from f-flow canvas and add new one
-        const connections = this.connections().filter((c) => c.id !== event.fConnectionId);
+        const connections = this.connections().filter((c) => c.id != event.fConnectionId);
 
         // So we can track connections in @for loop
         const uuid = new UUID();
@@ -290,14 +306,14 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
     public onRemoveConnection(connectionId: string | number) {
         let connections = this.connections();
 
-        const connection = connections.find((c) => c.id === connectionId);
+        const connection = connections.find((c) => c.id == connectionId);
         if (!connection) {
             console.log('Connection not found:', connectionId);
             return;
         }
 
         // Remove the connection from the f-flow canvas
-        connections = connections.filter((c) => c.id !== connectionId);
+        connections = connections.filter((c) => c.id != connectionId);
 
         // Update the two-way binding
         this.connections.update((oldConnections) => {
@@ -329,7 +345,7 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
 
     private updateNodeInTree(node: OrganizationalChartsTreeNode): void {
         this.nodeTree.update((nodes) => {
-            return nodes.map((n) => n.id === node.id ? node : n);
+            return nodes.map((n) => n.id == node.id ? node : n);
         });
 
         this.cdr.markForCheck();
@@ -339,24 +355,24 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
         // Remove any connections that reference this node
         this.connections().forEach((c) => {
             // Remove connections above (the node is the child of the connection)
-            if (c.organizational_chart_input_node_id === node.id) {
+            if (c.organizational_chart_input_node_id == node.id) {
                 this.onRemoveConnection(c.id);
             }
 
             // Remove connections below (the node is the parent of the connection)
             // in this case we need to set the parent_id of the child node to null
             // the onRemoveConnection method will handle this
-            if (c.organizational_chart_output_node_id === node.id) {
+            if (c.organizational_chart_output_node_id == node.id) {
                 this.onRemoveConnection(c.id);
             }
         });
 
         // Remove the node from the f-flow canvas
-        this.nodes = this.nodes.filter((n) => n.node.id !== node.id);
+        this.nodes = this.nodes.filter((n) => n.node.id != node.id);
 
         // Remove the node from the two-way binding
         this.nodeTree.update((nodes) => {
-            return nodes.filter((n) => n.id !== node.id);
+            return nodes.filter((n) => n.id != node.id);
         });
 
         this.cdr.markForCheck();
@@ -376,7 +392,7 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.currentNodeForModal = this.nodes.find((n) => n.node.id === nodeId);
+        this.currentNodeForModal = this.nodes.find((n) => n.node.id == nodeId);
         this.modalService.toggle({
             show: true,
             id: this.ocNodeEditModal.id
@@ -461,7 +477,7 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
 
         // Update the node in the f-flow canvas
         const currentNode = this.currentNodeForModal; // this is only required to make TypeScript happy - otherwise it will complain that currentNode is possibly undefined
-        this.nodes = this.nodes.map((n) => n.node.id === currentNode?.node.id ? currentNode : n);
+        this.nodes = this.nodes.map((n) => n.node.id == currentNode?.node.id ? currentNode : n);
 
         this.nodes = structuredClone(this.nodes); // Force change detection to update the nodes in the f-flow canvas
 

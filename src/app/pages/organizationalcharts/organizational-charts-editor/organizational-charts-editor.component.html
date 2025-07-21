@@ -26,14 +26,32 @@
                 </svg>
             </f-connection-for-create>
 
+            @for (node of nodes; track node.fNodeId; ) {
+                <oitc-tenant-node [node]="node"
+                                  class="oc-tenant-node"
+                                  [ngClass]="{'oc-node-error': (nodeValidationErrors[$index] || false)}"
+                                  [fNodeId]="String(node.node.id)"
+                                  fNode
+                                  fNodeInput
+                                  [fInputId]="String(node.node.id)"
+                                  [fInputMultiple]="true"
+                                  [fNodePosition]="node.position"
+                                  (fNodePositionChange)="onNodePositionChanged($event, node)"
+                                  [connectionsInput]="connections()"
+                                  (deleteConnection)="onRemoveConnection($event)"
+                                  (editNode)="onEditNode($event)"
+                                  [tenants]="modalTenants">
+                </oitc-tenant-node>
+            }
+
             @for (connection of connections(); track connection.id) {
                 <f-connection
                     [fOffset]="20"
                     [fBehavior]="EFConnectionBehavior.FIXED"
                     [fType]="EFConnectionType.SEGMENT"
                     [fConnectionId]="String(connection.id)"
-                    [fOutputId]="connection.organizational_chart_output_node_id"
-                    [fInputId]="connection.organizational_chart_input_node_id">
+                    [fOutputId]="String(connection.organizational_chart_output_node_id)"
+                    [fInputId]="String(connection.organizational_chart_input_node_id)">
 
                     <svg id="normal_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.END" [height]="5"
                          [width]="5"
@@ -48,25 +66,6 @@
                     </svg>
 
                 </f-connection>
-            }
-
-
-            @for (node of nodes; track node.fNodeId; ) {
-                <oitc-tenant-node [node]="node"
-                                  class="oc-tenant-node"
-                                  [ngClass]="{'oc-node-error': (nodeValidationErrors[$index] || false)}"
-                                  [fNodeId]="String(node.node.id)"
-                                  fNode
-                                  fNodeInput
-                                  [fInputId]="node.node.id"
-                                  [fInputMultiple]="true"
-                                  [fNodePosition]="node.position"
-                                  (fNodePositionChange)="onNodePositionChanged($event, node)"
-                                  [connectionsInput]="connections()"
-                                  (deleteConnection)="onRemoveConnection($event)"
-                                  (editNode)="onEditNode($event)"
-                                  [tenants]="modalTenants">
-                </oitc-tenant-node>
             }
         </f-canvas>
 
