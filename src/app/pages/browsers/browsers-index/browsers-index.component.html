@@ -121,6 +121,14 @@
                                                    class="ms-1">
                                                     {{ container.value.name }}
                                                 </a>
+                                                @if (container.value.has_organizational_charts) {
+                                                    <a [routerLink]="['/', 'organizationalcharts', 'view']"
+                                                       [queryParams]="{containerId: container.value.id}"
+                                                       class="ms-1">
+                                                        <fa-icon [icon]="['fas', 'sitemap']"
+                                                                 class="text-info"></fa-icon>
+                                                    </a>
+                                                }
                                             </div>
                                         }
                                         @if (getFilteredContainers().length == 0) {

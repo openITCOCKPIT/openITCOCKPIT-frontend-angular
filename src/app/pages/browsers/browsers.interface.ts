@@ -13,6 +13,7 @@ export interface BrowsersContainer {
         id: number
         name: string
         containertype_id: number
+        has_organizational_charts?: boolean
     }
 }
 
