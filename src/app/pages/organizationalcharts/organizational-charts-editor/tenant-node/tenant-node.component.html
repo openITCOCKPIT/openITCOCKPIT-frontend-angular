@@ -3,10 +3,15 @@
 
         <div class="d-flex">
             <div class="flex-1">
-                <h3>
-                    <fa-icon [icon]="['fas', 'home']" class="me-2"></fa-icon>
-                    {{ containerName }}
-                </h3>
+                <h4 class="d-flex align-items-center">
+                    <div class="me-2 text-white bg-danger p-3 rounded">
+                        <fa-icon [icon]="['fas', 'home']" class="text-white"></fa-icon>
+                    </div>
+                    <div>
+                        {{ containerName }}
+                    </div>
+
+                </h4>
             </div>
             <div>
                 @if (nodeObj) {
@@ -16,6 +21,7 @@
                 }
             </div>
         </div>
+        <hr class="my-1 fieldset-legend-border-bottom-thin">
 
         @if (nodeObj && nodeObj.node) {
             <div>
