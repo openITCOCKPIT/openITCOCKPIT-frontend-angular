@@ -49,6 +49,7 @@ import { MapsService } from '../maps.service';
 import { getDefaultMapsIndexParams, Map, MapsIndexParams, MapsIndexRoot } from '../maps.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
     selector: 'oitc-maps-index',
@@ -90,7 +91,8 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         TranslocoPipe,
         XsButtonDirective,
         TableLoaderComponent,
-        AsyncPipe
+        AsyncPipe,
+        BadgeOutlineComponent
     ],
     templateUrl: './maps-index.component.html',
     styleUrl: './maps-index.component.css',

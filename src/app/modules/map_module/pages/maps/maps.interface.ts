@@ -24,6 +24,7 @@ export interface Map {
     background_size_y?: number | null
     refresh_interval?: number
     json_data?: string
+    auto_generated?: boolean
     created?: string
     modified?: string
     containers?: MapContainer[]

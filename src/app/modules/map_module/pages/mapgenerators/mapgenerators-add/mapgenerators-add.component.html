@@ -46,7 +46,7 @@
 
                 <div class="mb-3">
                     <label cLabel for="mapgenerator_type">
-                        {{ t('Type') }}
+                        {{ t('Generate By') }}
                         <oitc-required-icon></oitc-required-icon>
                     </label>
 
@@ -87,7 +87,13 @@
                     @if (this.post.Mapgenerator.type === 1) {
                         <div class="col-12 help-block text-info">
                             <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                            {{ t('The specified containers must appear in the container hierarchy of the host and is also the starting point so that the host is taken into account during generation.') }}
+                            {{ t('The specified containers must appear in the container hierarchy of the host so that the host is taken into account during generation.') }}
+                        </div>
+                    }
+                    @if (this.post.Mapgenerator.type === 2) {
+                        <div class="col-12 help-block text-info">
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('The specified containers must appear in the container level (specified below) of the host name so that the host is taken into account during generation.') }}
                         </div>
                     }
                 </div>
@@ -163,11 +169,12 @@
                     <div class="mt-4">
                         <h5>
                             {{ t('Levels:') }}
+                            <oitc-required-icon></oitc-required-icon>
                         </h5>
                         <oitc-form-feedback [errors]="errors" errorField="mapgenerator_levels"></oitc-form-feedback>
                         <div class="col-12 help-block text-info">
                             <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                            {{ t('The host name is split with the dividers and a map is created for each part. The name is only used as a description.') }}
+                            {{ t('The host name is split with the dividers and a map is created for each part. The last level specifies the host to be added and must also exist and the number of levels must match the number of parts so that the host can be taken into account during generation. The name is only used as a description in the form.') }}
                         </div>
                     </div>
                     <hr class="border-dashed">
@@ -188,14 +195,18 @@
                                            [ngClass]="{'border-color-error': getMapgeneratorLevelErrors(level.index, 'validate_levels','name').length > 0 || getMapgeneratorLevelErrors(level.index,  'mapgenerator_levels','name').length > 0}"
                                            [(ngModel)]="level.name">
                                 </c-input-group>
-                                <div
-                                    *ngFor="let error of getMapgeneratorLevelErrors(level.index, 'mapgenerator_levels','name')">
-                                    <div class="help-block text-danger font-xs">{{ error }}</div>
-                                </div>
-                                <div
-                                    *ngFor="let error of getMapgeneratorLevelErrors(level.index, 'validate_levels','name')">
-                                    <div class="help-block text-danger font-xs">{{ error }}</div>
-                                </div>
+                                @for (
+                                    error of getMapgeneratorLevelErrors(level.index, 'mapgenerator_levels', 'name'); track error) {
+                                    <div>
+                                        <div class="help-block text-danger font-xs">{{ error }}</div>
+                                    </div>
+                                }
+                                @for (
+                                    error of getMapgeneratorLevelErrors(level.index, 'validate_levels', 'name'); track error) {
+                                    <div>
+                                        <div class="help-block text-danger font-xs">{{ error }}</div>
+                                    </div>
+                                }
                             </div>
 
                             <div class="mb-3 col-lg-3">
@@ -215,14 +226,18 @@
                                            [ngClass]="{'border-color-error': getMapgeneratorLevelErrors(level.index, 'validate_levels','divider').length > 0 || getMapgeneratorLevelErrors(level.index, 'mapgenerator_levels','divider').length > 0}"
                                            [(ngModel)]="level.divider">
                                 </c-input-group>
-                                <div
-                                    *ngFor="let error of getMapgeneratorLevelErrors(level.index, 'mapgenerator_levels','divider')">
-                                    <div class="help-block text-danger font-xs">{{ error }}</div>
-                                </div>
-                                <div
-                                    *ngFor="let error of getMapgeneratorLevelErrors(level.index, 'validate_levels','divider')">
-                                    <div class="help-block text-danger font-xs">{{ error }}</div>
-                                </div>
+                                @for (
+                                    error of getMapgeneratorLevelErrors(level.index, 'mapgenerator_levels', 'divider'); track error) {
+                                    <div>
+                                        <div class="help-block text-danger font-xs">{{ error }}</div>
+                                    </div>
+                                }
+                                @for (
+                                    error of getMapgeneratorLevelErrors(level.index, 'validate_levels', 'divider'); track error) {
+                                    <div>
+                                        <div class="help-block text-danger font-xs">{{ error }}</div>
+                                    </div>
+                                }
                             </div>
 
                             @if (mapgenerator.levels.length > 2) {

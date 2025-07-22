@@ -37,7 +37,7 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import _ from 'lodash';
 
 @Component({
@@ -67,7 +67,6 @@ import _ from 'lodash';
         SelectComponent,
         InputGroupComponent,
         InputGroupTextDirective,
-        NgForOf,
         NgClass,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -93,8 +92,8 @@ export class MapgeneratorsAddComponent implements OnInit, OnDestroy {
     public post: MapgeneratorPost = {} as MapgeneratorPost;
     protected containers: SelectKeyValue[] = [];
     protected types: SelectKeyValue[] = [
-        {key: 1, value: this.TranslocoService.translate('Generate By Container Structure')},
-        {key: 2, value: this.TranslocoService.translate('Generate By Hostname Splitting')}
+        {key: 1, value: this.TranslocoService.translate('Container Structure')},
+        {key: 2, value: this.TranslocoService.translate('Hostname Splitting')}
     ];
 
     public mapgenerator: { levels: InternalLevel[] } = {

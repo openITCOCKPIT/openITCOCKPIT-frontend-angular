@@ -146,6 +146,11 @@
                     </td>
                     <td class="word-break"><a
                         [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.id, false]">{{ map.name }}</a>
+                        @if (map.auto_generated) {
+                            <oitc-badge-outline class="ms-2"
+                                                [title]="'Auto generated' | transloco" color="info">Auto generated
+                            </oitc-badge-outline>
+                        }
                     </td>
                     <td class="word-break">{{ map.title }}</td>
 
