@@ -22,6 +22,7 @@ import { StatuscountResponse } from '../../../browsers/browsers.interface';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { CardTitleDirective, ColComponent, RowComponent } from '@coreui/angular';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
+import { NgClass } from '@angular/common';
 
 
 @Component({
@@ -35,7 +36,8 @@ import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
         BlockLoaderComponent,
         RowComponent,
         CardTitleDirective,
-        ColComponent
+        ColComponent,
+        NgClass
     ],
     templateUrl: './oc-node.component.html',
     styleUrl: './oc-node.component.scss',

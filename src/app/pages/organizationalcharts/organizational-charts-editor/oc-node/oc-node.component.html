@@ -2,7 +2,11 @@
     <div class="oc-node-body" fDragHandle>
         <div>
             <div>
-                <c-row class="mx-0 pt-1">
+                <c-row class="mx-0 pt-1 text-white" [ngClass]="{'bg-primary':statusCounts?.cumulativeHoststatus ===-1,
+                       'bg-success':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus === 0 || statusCounts?.cumulativeServicestatus === -1),
+                       'bg-warning text-dark':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1),
+                       'bg-danger':statusCounts?.cumulativeHoststatus === 1 || (statusCounts?.cumulativeServicestatus === 2),
+                       'bg-secondary':statusCounts?.cumulativeHoststatus === 2 || (statusCounts?.cumulativeServicestatus === 3)}">
                     <c-col [xs]="12" [lg]="10" class="ps-2">
                         <h5 class="p-0 mb-1">
                             <fa-icon [icon]="['fas', 'home']"></fa-icon>
@@ -30,7 +34,7 @@
                 }
 
                 @if (statusCounts?.cumulativeHoststatus === 0 && ( statusCounts?.cumulativeServicestatus === 0 || statusCounts?.cumulativeServicestatus === -1 )) {
-                    <c-row class="m-0 bg-success text-white">
+                    <c-row class="m-0 bg-success text-white bg-gradient">
                         <c-col>
                             <h6 class="pt-3 pb-1">
                                 <fa-icon [icon]="['fas', 'circle-check']" class="font-md"></fa-icon>
@@ -40,7 +44,7 @@
                     </c-row>
                 }
                 @if (statusCounts?.cumulativeHoststatus === 0 && ( statusCounts?.cumulativeServicestatus === 1 )) {
-                    <c-row class="m-0 bg-warning text-white">
+                    <c-row class="m-0 bg-warning bg-gradient">
                         <c-col>
                             <h6 class="pt-3 pb-1">
                                 <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
@@ -51,7 +55,7 @@
                 }
 
                 @if (statusCounts?.cumulativeHoststatus === 1 || ( statusCounts?.cumulativeServicestatus === 2 )) {
-                    <c-row class="m-0 bg-danger text-white">
+                    <c-row class="m-0 bg-danger text-white bg-gradient">
                         <c-col>
                             <h6 class="pt-3 pb-1">
                                 <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
@@ -61,7 +65,7 @@
                     </c-row>
                 }
                 @if (statusCounts?.cumulativeHoststatus === 2 || ( statusCounts?.cumulativeServicestatus === 3 )) {
-                    <c-row class="m-0 bg-secondary text-white">
+                    <c-row class="m-0 bg-secondary text-white bg-gradient">
                         <c-col>
                             <h6 class="pt-3 pb-1">
                                 <fa-icon [icon]="['fas', 'circle-question']" class="font-md"></fa-icon>
