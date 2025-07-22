@@ -2,25 +2,27 @@
     <div class="oc-node-body" fDragHandle>
         <div>
             <div>
-                <c-row class="mx-0 pt-1 text-white" [ngClass]="{'bg-primary':statusCounts?.cumulativeHoststatus ===-1,
-                       'bg-success':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus === 0 || statusCounts?.cumulativeServicestatus === -1),
+                <div class="d-flex mx-0 pt-1" [ngClass]="{'bg-primary text-white':statusCounts?.cumulativeHoststatus ===-1,
+                       'bg-success text-white':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus === 0 || statusCounts?.cumulativeServicestatus === -1),
                        'bg-warning text-dark':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1),
-                       'bg-danger':statusCounts?.cumulativeHoststatus === 1 || (statusCounts?.cumulativeServicestatus === 2),
-                       'bg-secondary':statusCounts?.cumulativeHoststatus === 2 || (statusCounts?.cumulativeServicestatus === 3)}">
-                    <c-col [xs]="12" [lg]="10" class="ps-2">
-                        <h5 class="p-0 mb-1">
+                       'bg-danger text-white':statusCounts?.cumulativeHoststatus === 1 || (statusCounts?.cumulativeServicestatus === 2),
+                       'bg-secondary text-white':statusCounts?.cumulativeHoststatus === 2 || (statusCounts?.cumulativeServicestatus === 3)}">
+                    <div class="ps-2 flex-1">
+                        <h5 class="p-0 mb-1 word-break">
                             <fa-icon [icon]="['fas', 'home']"></fa-icon>
                             {{ containerName }}
                         </h5>
-                    </c-col>
-                    <c-col [xs]="12" [lg]="2" class="pb-1">
+                    </div>
+                    <div class="pb-1 me-1">
                         @if (nodeObj) {
-                            <button cButton class="right me-1" [size]="'xs'" (click)="editNode.emit(nodeObj.fNodeId)">
+                            <button cButton class="ripple" [size]="'xs'" (click)="editNode.emit(nodeObj.fNodeId)"
+                                    [color]="'default'">
+                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
                                 {{ t('Edit') }}
                             </button>
                         }
-                    </c-col>
-                </c-row>
+                    </div>
+                </div>
 
                 @if (statusCounts?.cumulativeHoststatus === -1) {
                     <c-row class="m-0 bg-primary text-white">
