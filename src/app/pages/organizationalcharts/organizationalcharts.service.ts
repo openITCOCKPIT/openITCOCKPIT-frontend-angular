@@ -6,6 +6,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
     LoadContainersRoot,
+    LoadContainersRootWithCsrf,
     OrganizationalChartsIndexParams,
     OrganizationalChartsIndexRoot,
     OrganizationalChartsPost
@@ -85,9 +86,14 @@ export class OrganizationalChartsService {
 
     public loadContainers(): Observable<LoadContainersRoot> {
         const proxyPath = this.proxyPath;
-        return this.http.get<LoadContainersRoot>(`${proxyPath}/organizationalCharts/loadContainers.json`).pipe(
+        return this.http.get<LoadContainersRootWithCsrf>(`${proxyPath}/organizationalCharts/loadContainers.json`).pipe(
             map(data => {
-                return data;
+                // We need to remove the _csrfToken from the response so we can do for loops on the keys
+                return {
+                    tenants: data.tenants,
+                    locations: data.locations,
+                    nodes: data.nodes
+                };
             })
         )
     }

@@ -12,16 +12,16 @@ import {
 import { OcTreeNode } from '../organizational-charts-editor.interface';
 import { EFConnectableSide, FFlowModule } from '@foblex/flow';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { OcConnection } from '../../organizationalcharts.interface';
+import { LoadContainersRoot, OcConnection } from '../../organizationalcharts.interface';
 import { FormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { SelectKeyValuePathWithDisabled } from '../../../../layouts/primeng/select.interface';
 import { BrowsersService } from '../../../browsers/browsers.service';
 import { Subscription } from 'rxjs';
 import { StatuscountResponse } from '../../../browsers/browsers.interface';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { ProgressComponent, ProgressStackedComponent } from '@coreui/angular';
+import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 
 
 @Component({
@@ -42,9 +42,10 @@ import { ProgressComponent, ProgressStackedComponent } from '@coreui/angular';
 })
 export class TenantNodeComponent implements OnDestroy {
 
-    //@Input() public node: OcTreeNode | undefined;
     public node = model<OcTreeNode | undefined>(undefined);
-    public tenants = input<SelectKeyValuePathWithDisabled[]>([]);
+    public containers = input<LoadContainersRoot | undefined>(undefined);
+
+    public containerType = input<ContainerTypesEnum>();
 
     public nodeObj: OcTreeNode | undefined = this.node();
 
@@ -57,6 +58,7 @@ export class TenantNodeComponent implements OnDestroy {
     protected readonly String = String;
 
     public containerName: string = '';
+    public containerPath: string = '';
 
     public connections: OcConnection[] = [];
     public hasConnection: boolean = false;
@@ -82,12 +84,19 @@ export class TenantNodeComponent implements OnDestroy {
 
             if (this.nodeObj && this.nodeObj.node.container_id > 0) {
                 // Find the tenant name based on the container_id
-                const tenant = this.tenants().find((t) => t.key === this.nodeObj?.node.container_id);
-                if (tenant) {
-                    this.loadHostAndServiceStatus();
-                    this.containerName = tenant.value;
-                } else {
-                    this.containerName = this.TranslocoService.translate('Please select');
+                const containers = this.containers();
+                if (containers) {
+                    // Combine all containers into a single array
+                    const allContainers = Object.values(containers).flat();
+                    const found = allContainers.find((c) => c.key === this.nodeObj?.node.container_id);
+                    if (found) {
+                        this.loadHostAndServiceStatus();
+                        this.containerName = found.value;
+                        this.containerPath = found.path;
+                    } else {
+                        this.containerName = this.TranslocoService.translate('Please select');
+                        this.containerPath = '';
+                    }
                 }
             }
 

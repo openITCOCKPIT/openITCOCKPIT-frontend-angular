@@ -200,7 +200,14 @@ body.dark-theme :host {
 
     .oc-tenant-node {
         border-top-color: rgb(255, 133, 155);
-        //padding: 16px;
+    }
+
+    .oc-location-node {
+        border-top-color: rgb(255, 194, 128);
+    }
+
+    .oc-node-node {
+        border-top-color: rgb(67, 186, 171);
     }
 
     .oc-node-error {
