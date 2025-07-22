@@ -35,4 +35,8 @@ export interface StatuscountResponse {
     unhandledHostsSum: number
     unhandledServices: number[]
     unhandledServicesSum: number
+    cumulativeHoststatus: number
+    cumulativeServicestatus: number
+    hoststatusTotal: number
+    servicestatusTotal: number
 }

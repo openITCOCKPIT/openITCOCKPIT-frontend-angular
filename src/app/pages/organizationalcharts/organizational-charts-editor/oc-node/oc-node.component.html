@@ -1,8 +1,8 @@
 <ng-container *transloco="let t">
     <div class="oc-node-body" fDragHandle>
         <div>
-            <div >
-                <c-row class="mx-0 pt-1 border-start border-5 border-danger">
+            <div>
+                <c-row class="mx-0 pt-1">
                     <c-col [xs]="12" [lg]="10" class="ps-2">
                         <h5 class="p-0 mb-1">
                             <fa-icon [icon]="['fas', 'home']"></fa-icon>
@@ -17,38 +17,59 @@
                         }
                     </c-col>
                 </c-row>
-                <c-row class="m-0 bg-danger text-white">
-                    <c-col>
-                        <h6 class="pt-3 pb-1">
-                            <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
-                            {{ t('Problems detected') }}
-                        </h6>
-                    </c-col>
-                </c-row>
-                <c-row class="m-0 bg-warning text-white">
-                    <c-col>
-                        <h6 class="pt-3 pb-1">
-                            <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
-                            {{ t('Warnings detected') }}
-                        </h6>
-                    </c-col>
-                </c-row>
-                <c-row class="m-0 bg-success text-white">
-                    <c-col>
-                        <h6 class="pt-3 pb-1">
-                            <fa-icon [icon]="['fas', 'circle-check']" class="font-md"></fa-icon>
-                            {{ t('No problems detected') }}
-                        </h6>
-                    </c-col>
-                </c-row>
-                <c-row class="m-0 bg-primary text-white">
-                    <c-col>
-                        <h6 class="pt-3 pb-1">
-                            <fa-icon [icon]="['fas', 'circle-info']" class="font-md"></fa-icon>
-                            {{ t('No hosts detected') }}
-                        </h6>
-                    </c-col>
-                </c-row>
+
+                @if (statusCounts?.cumulativeHoststatus === -1) {
+                    <c-row class="m-0 bg-primary text-white">
+                        <c-col>
+                            <h6 class="pt-3 pb-1">
+                                <fa-icon [icon]="['fas', 'circle-info']" class="font-md"></fa-icon>
+                                {{ t('No hosts detected') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                }
+
+                @if (statusCounts?.cumulativeHoststatus === 0 && ( statusCounts?.cumulativeServicestatus === 0 || statusCounts?.cumulativeServicestatus === -1 )) {
+                    <c-row class="m-0 bg-success text-white">
+                        <c-col>
+                            <h6 class="pt-3 pb-1">
+                                <fa-icon [icon]="['fas', 'circle-check']" class="font-md"></fa-icon>
+                                {{ t('No problems detected') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                }
+                @if (statusCounts?.cumulativeHoststatus === 0 && ( statusCounts?.cumulativeServicestatus === 1 )) {
+                    <c-row class="m-0 bg-warning text-white">
+                        <c-col>
+                            <h6 class="pt-3 pb-1">
+                                <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
+                                {{ t('Warnings detected') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                }
+
+                @if (statusCounts?.cumulativeHoststatus === 1 || ( statusCounts?.cumulativeServicestatus === 2 )) {
+                    <c-row class="m-0 bg-danger text-white">
+                        <c-col>
+                            <h6 class="pt-3 pb-1">
+                                <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
+                                {{ t('Problems detected') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                }
+                @if (statusCounts?.cumulativeHoststatus === 2 || ( statusCounts?.cumulativeServicestatus === 3 )) {
+                    <c-row class="m-0 bg-secondary text-white">
+                        <c-col>
+                            <h6 class="pt-3 pb-1">
+                                <fa-icon [icon]="['fas', 'circle-question']" class="font-md"></fa-icon>
+                                {{ t('Undetermined problems') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                }
             </div>
         </div>
 
