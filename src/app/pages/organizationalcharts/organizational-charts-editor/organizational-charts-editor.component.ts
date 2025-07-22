@@ -58,6 +58,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { OrganizationalChartNodesService } from '../organizationalchartnodes.service';
 import { OrganizationalchartUserRoles } from '../organizationalcharts.enum';
+import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
 
 
 @Component({
@@ -224,6 +225,7 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
             id: newNodeUuid,
             uuid: newNodeUuid,
             container_id: 0, // todo set back to 0
+            containertype_id: ContainerTypesEnum.CT_TENANT,
             recursive: false,
             users: [],
             //organizational_chart_id: 0,

@@ -2,6 +2,7 @@ import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.inter
 import { Container } from '../containers/containers.interface';
 import { OrganizationalchartUserRoles } from './organizationalcharts.enum';
 import { SelectKeyValuePathWithDisabled } from '../../layouts/primeng/select.interface';
+import { ContainerTypesEnum } from '../changelogs/object-types.enum';
 
 /**********************
  *    Index action    *
@@ -80,6 +81,7 @@ export interface OrganizationalChartsTreeNode {
     uuid: string
     organizational_chart_id?: number // empty in add
     container_id: number
+    containertype_id: ContainerTypesEnum
     recursive: boolean
     x_position: number
     y_position: number
