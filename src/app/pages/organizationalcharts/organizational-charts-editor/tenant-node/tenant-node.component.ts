@@ -21,7 +21,7 @@ import { BrowsersService } from '../../../browsers/browsers.service';
 import { Subscription } from 'rxjs';
 import { StatuscountResponse } from '../../../browsers/browsers.interface';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { ProgressComponent, ProgressStackedComponent } from '@coreui/angular';
+import { CardTitleDirective, ColComponent, RowComponent } from '@coreui/angular';
 
 
 @Component({
@@ -33,8 +33,9 @@ import { ProgressComponent, ProgressStackedComponent } from '@coreui/angular';
         XsButtonDirective,
         TranslocoDirective,
         BlockLoaderComponent,
-        ProgressStackedComponent,
-        ProgressComponent
+        RowComponent,
+        CardTitleDirective,
+        ColComponent
     ],
     templateUrl: './tenant-node.component.html',
     styleUrl: './tenant-node.component.scss',

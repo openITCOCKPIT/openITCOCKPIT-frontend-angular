@@ -1,30 +1,59 @@
 <ng-container *transloco="let t">
     <div class="oc-node-body" fDragHandle>
-
-        <div class="d-flex">
-            <div class="flex-1">
-                <h4 class="d-flex align-items-center">
-                    <div class="me-2 text-white bg-danger p-3 rounded">
-                        <fa-icon [icon]="['fas', 'home']" class="text-white"></fa-icon>
-                    </div>
-                    <div>
-                        {{ containerName }}
-                    </div>
-
-                </h4>
-            </div>
-            <div>
-                @if (nodeObj) {
-                    <button cButton class="right" (click)="editNode.emit(nodeObj.fNodeId)">
-                        {{ t('Edit') }}
-                    </button>
-                }
+        <div>
+            <div >
+                <c-row class="mx-0 pt-1 border-start border-5 border-danger">
+                    <c-col [xs]="12" [lg]="10" class="ps-2">
+                        <h5 class="p-0 mb-1">
+                            <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                            {{ containerName }}
+                        </h5>
+                    </c-col>
+                    <c-col [xs]="12" [lg]="2" class="pb-1">
+                        @if (nodeObj) {
+                            <button cButton class="right me-1" [size]="'xs'" (click)="editNode.emit(nodeObj.fNodeId)">
+                                {{ t('Edit') }}
+                            </button>
+                        }
+                    </c-col>
+                </c-row>
+                <c-row class="m-0 bg-danger text-white">
+                    <c-col>
+                        <h6 class="pt-3 pb-1">
+                            <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
+                            {{ t('Problems detected') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <c-row class="m-0 bg-warning text-white">
+                    <c-col>
+                        <h6 class="pt-3 pb-1">
+                            <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
+                            {{ t('Warnings detected') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <c-row class="m-0 bg-success text-white">
+                    <c-col>
+                        <h6 class="pt-3 pb-1">
+                            <fa-icon [icon]="['fas', 'circle-check']" class="font-md"></fa-icon>
+                            {{ t('No problems detected') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <c-row class="m-0 bg-primary text-white">
+                    <c-col>
+                        <h6 class="pt-3 pb-1">
+                            <fa-icon [icon]="['fas', 'circle-info']" class="font-md"></fa-icon>
+                            {{ t('No hosts detected') }}
+                        </h6>
+                    </c-col>
+                </c-row>
             </div>
         </div>
-        <hr class="my-1 fieldset-legend-border-bottom-thin">
 
         @if (nodeObj && nodeObj.node) {
-            <div>
+            <div class="font-xs mt-2">
                 {{ t('Recursive lookup is') }}
                 <span class="text-decoration-underline">
                     @if (nodeObj.node.recursive) {
@@ -34,54 +63,113 @@
                     }
                 </span>
             </div>
-
+            <hr class="my-1 fieldset-legend-border-bottom-thin">
 
             <div>
                 @if (isLoading && nodeObj.node.container_id > 0) {
                     <oitc-block-loader [height]="'15rem'"></oitc-block-loader>
                 } @else {
                     @if (statusCounts) {
-                        <div class="mb-2">
-                            <div>
-                                Hoststatus:
-                            </div>
-                            <div>
-                                <c-progress-stacked>
-                                    <c-progress [value]="statusCounts.hoststatusCountPercentage[0]"
-                                                color="success"/>
-                                    <c-progress [value]="statusCounts.hoststatusCountPercentage[1]"
-                                                color="danger"/>
-                                    <c-progress [value]="statusCounts.hoststatusCountPercentage[2]"
-                                                color="secondary"/>
-                                </c-progress-stacked>
-                            </div>
-                        </div>
+                        <c-row class="pt-2">
+                            <c-col [xs]="12">
+                                <h6 cCardTitle class="small">
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    {{ t('Host status overview') }}
+                                </h6>
+                            </c-col>
+                            <c-row>
+                                <c-col [xs]="12" [lg]="3">
+                                    <div
+                                        class="border-start border-start-4 border-start-success py-1 px-1 mb-3 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.hoststatusCount[0] }}
+                                        </div>
+                                        <div>
+                                            {{ statusCounts.hoststatusCountPercentage[0] }}%
+                                        </div>
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12" [lg]="3">
+                                    <div class="border-start border-start-4 border-start-danger py-1 px-1 mb-3 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.hoststatusCount[1] }}
+                                        </div>
+                                        <div>
+                                            {{ statusCounts.hoststatusCountPercentage[1] }}%
+                                        </div>
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12" [lg]="3">
+                                    <div
+                                        class="border-start border-start-4 border-start-secondary py-1 px-1 mb-3 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.hoststatusCount[2] }}
+                                        </div>
+                                        <div>
+                                            {{ statusCounts.hoststatusCountPercentage[2] }}%
+                                        </div>
+                                    </div>
+                                </c-col>
+                            </c-row>
 
-                        <div class="mb-2">
-                            <div>
-                                Servicestatus:
-                            </div>
-                            <div>
-                                <c-progress-stacked>
-                                    <c-progress [value]="statusCounts.servicestatusCountPercentage[0]"
-                                                color="success"/>
-                                    <c-progress [value]="statusCounts.servicestatusCountPercentage[1]"
-                                                color="warning"/>
-                                    <c-progress [value]="statusCounts.servicestatusCountPercentage[2]"
-                                                color="danger"/>
-                                    <c-progress [value]="statusCounts.servicestatusCountPercentage[3]"
-                                                color="secondary"/>
-                                </c-progress-stacked>
-                            </div>
-                        </div>
+                        </c-row>
+                        <c-row>
+                            <c-col [xs]="12">
+                                <h6 cCardTitle class="small">
+                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    {{ t('Service status overview') }}
+                                </h6>
+                            </c-col>
+                            <c-row>
+                                <c-col [xs]="12" [lg]="3">
+                                    <div
+                                        class="border-start border-start-4 border-start-success py-1 px-1 mb-3 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.servicestatusCount[0] }}
+                                        </div>
+                                        <div>
+                                            {{ statusCounts.servicestatusCountPercentage[0] }}%
+                                        </div>
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12" [lg]="3">
+                                    <div
+                                        class="border-start border-start-4 border-start-warning py-1 px-1 mb-3 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.servicestatusCount[1] }}
+                                        </div>
+                                        <div>
+                                            {{ statusCounts.servicestatusCountPercentage[1] }}%
+                                        </div>
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12" [lg]="3">
+                                    <div class="border-start border-start-4 border-start-danger py-1 px-1 mb-3 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.servicestatusCount[2] }}
+                                        </div>
+                                        <div>
+                                            {{ statusCounts.servicestatusCountPercentage[2] }}%
+                                        </div>
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12" [lg]="3">
+                                    <div
+                                        class="border-start border-start-4 border-start-secondary py-1 px-1 mb-3 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.servicestatusCount[3] }}
+                                        </div>
+                                        <div>
+                                            {{ statusCounts.servicestatusCountPercentage[3] }}%
+                                        </div>
+                                    </div>
+                                </c-col>
+                            </c-row>
+                        </c-row>
                     }
                 }
-
             </div>
-
         }
-
-
     </div>
 
 
