@@ -226,7 +226,7 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
         const newNode: OrganizationalChartsTreeNode = {
             id: newNodeUuid,
             uuid: newNodeUuid,
-            container_id: 0, // todo set back to 0
+            container_id: 0,
             containertype_id: containerTypeId,
             recursive: false,
             users: [],

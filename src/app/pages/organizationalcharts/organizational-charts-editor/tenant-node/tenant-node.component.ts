@@ -24,6 +24,10 @@ import { ProgressComponent, ProgressStackedComponent } from '@coreui/angular';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 
 
+/**
+ * @todo rename into some more generic name like container-node
+ * as this component is used for tenants, locations and nodes
+ */
 @Component({
     selector: 'oitc-tenant-node',
     imports: [
