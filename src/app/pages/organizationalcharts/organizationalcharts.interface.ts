@@ -19,6 +19,7 @@ export interface OrganizationalChart {
     modified: string
     allowEdit?: boolean
     allowView?: boolean
+    organizational_chart_nodes?: OrganizationalChartsTreeNode[]
 }
 
 

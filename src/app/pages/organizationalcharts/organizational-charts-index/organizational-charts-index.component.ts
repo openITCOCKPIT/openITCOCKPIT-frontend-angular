@@ -40,7 +40,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
@@ -53,6 +53,9 @@ import {
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
+import { PermissionsService } from '../../../permissions/permissions.service';
+
 
 @Component({
     selector: 'oitc-organizational-charts-index',
@@ -92,7 +95,8 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         CardFooterComponent,
         DeleteAllModalComponent,
         NgForOf,
-        TooltipDirective
+        TooltipDirective,
+        AsyncPipe
     ],
     templateUrl: './organizational-charts-index.component.html',
     styleUrl: './organizational-charts-index.component.css',
@@ -111,6 +115,7 @@ export class OrganizationalChartsIndexComponent implements OnInit, OnDestroy, In
     private readonly OrganizationalChartsService = inject(OrganizationalChartsService);
     private readonly SelectionServiceService = inject(SelectionServiceService);
     private readonly TranslocoService = inject(TranslocoService);
+    public PermissionService: PermissionsService = inject(PermissionsService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly modalService = inject(ModalService);
     private readonly route = inject(ActivatedRoute);
@@ -219,4 +224,5 @@ export class OrganizationalChartsIndexComponent implements OnInit, OnDestroy, In
     }
 
     protected readonly Boolean = Boolean;
+    protected readonly ContainerTypesEnum = ContainerTypesEnum;
 }
