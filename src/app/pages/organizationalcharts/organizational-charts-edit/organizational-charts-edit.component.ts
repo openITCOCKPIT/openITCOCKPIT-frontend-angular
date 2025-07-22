@@ -24,7 +24,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { JsonPipe, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import {
     OrganizationalChartsEditorComponent
 } from '../organizational-charts-editor/organizational-charts-editor.component';
@@ -60,8 +60,7 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         XsButtonDirective,
         FormLoaderComponent,
         RouterLink,
-        NgIf,
-        JsonPipe
+        NgIf
     ],
     templateUrl: './organizational-charts-edit.component.html',
     styleUrl: './organizational-charts-edit.component.css',

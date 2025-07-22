@@ -91,9 +91,6 @@
                         </h4>
                     </legend>
 
-                    <div>{{ post.organizational_chart_nodes | json }}</div>
-                    <div>{{ post.organizational_chart_connections | json }}</div>
-                    
                     <oitc-organizational-charts-editor
                         [(nodeTree)]="post.organizational_chart_nodes"
                         [(connections)]="post.organizational_chart_connections"

@@ -24,7 +24,6 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { GenericValidationError } from '../../../generic-responses';
 import { OrganizationalChartsPost } from '../organizationalcharts.interface';
-import { JsonPipe } from '@angular/common';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { OrganizationalChartsService } from '../organizationalcharts.service';
@@ -51,7 +50,6 @@ import { HistoryService } from '../../../history.service';
         FormFeedbackComponent,
         FormLabelDirective,
         RequiredIconComponent,
-        JsonPipe,
         BadgeComponent,
         BackButtonDirective,
         NavComponent,
