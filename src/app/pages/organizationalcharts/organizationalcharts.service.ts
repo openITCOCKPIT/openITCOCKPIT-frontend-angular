@@ -101,7 +101,7 @@ export class OrganizationalChartsService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data as OrganizationalChartsPost
+                        data: data.oc as OrganizationalChartsPost
                     };
                 }),
                 catchError((error: any) => {
@@ -137,7 +137,7 @@ export class OrganizationalChartsService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data.oc as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
