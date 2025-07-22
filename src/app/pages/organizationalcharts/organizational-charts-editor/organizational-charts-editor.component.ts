@@ -25,11 +25,11 @@ import {
     FZoomDirective
 } from '@foblex/flow';
 import { IPoint, Point } from '@foblex/2d';
-import { OcConnection, OrganizationalChartsTreeNode } from '../organizationalcharts.interface';
+import { LoadContainersRoot, OcConnection, OrganizationalChartsTreeNode } from '../organizationalcharts.interface';
 import { UUID } from '../../../classes/UUID';
 import { TenantNodeComponent } from './tenant-node/tenant-node.component';
 import { OcTreeNode } from './organizational-charts-editor.interface';
-import { JsonPipe, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { GenericValidationError } from '../../../generic-responses';
 import {
     ButtonCloseDirective,
@@ -69,7 +69,6 @@ import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
         FFlowModule,
         TenantNodeComponent,
         NgClass,
-        JsonPipe,
         ModalComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
@@ -153,6 +152,7 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
 
     public errors: GenericValidationError | null = null;
     // A list of all tenants, locations and nodes to be used in the modal
+    public modalContainer?: LoadContainersRoot;
     public modalTenants: SelectKeyValuePathWithDisabled[] = [];
     public modalLocations: SelectKeyValuePathWithDisabled[] = [];
     public modalNodes: SelectKeyValuePathWithDisabled[] = [];
@@ -195,6 +195,7 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
 
 
         this.subscriptions.add(this.OrganizationalChartsService.loadContainers().subscribe((response) => {
+            this.modalContainer = response;
             this.modalTenants = response.tenants;
             this.modalLocations = response.locations;
             this.modalNodes = response.nodes;
@@ -213,9 +214,10 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
 
 
     public onNodeAdded(event: FCreateNodeEvent): void {
+
         const x = Math.floor(event.rect.x);
         const y = Math.floor(event.rect.y);
-
+        const containerTypeId = event.data as ContainerTypesEnum;
 
         // Create a new node for the database / two-way binding
         const uuid = new UUID();
@@ -224,8 +226,8 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
         const newNode: OrganizationalChartsTreeNode = {
             id: newNodeUuid,
             uuid: newNodeUuid,
-            container_id: 0, // todo set back to 0
-            containertype_id: ContainerTypesEnum.CT_TENANT,
+            container_id: 0,
+            containertype_id: containerTypeId,
             recursive: false,
             users: [],
             //organizational_chart_id: 0,
@@ -404,8 +406,9 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
             this.loadUsersForModal(this.currentNodeForModal.node.container_id);
         }
 
-        // Disable tenants that are already used by other organizational chart nodes
+        // Disable containers/tenants that are already used by other organizational chart nodes
         const usedContainerIds = this.nodeTree().map(n => n.container_id);
+
         this.modalTenants.forEach((tenant) => {
             tenant.disabled = usedContainerIds.includes(tenant.key);
 
@@ -414,6 +417,25 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
                 tenant.disabled = false;
             }
         });
+
+        this.modalLocations.forEach((location) => {
+            location.disabled = usedContainerIds.includes(location.key);
+
+            // Do not disable our own/current location
+            if (location.key === this.currentNodeForModal?.node.container_id) {
+                location.disabled = false;
+            }
+        });
+
+        this.modalNodes.forEach((node) => {
+            node.disabled = usedContainerIds.includes(node.key);
+
+            // Do not disable our own/current node
+            if (node.key === this.currentNodeForModal?.node.container_id) {
+                node.disabled = false;
+            }
+        });
+
 
         // Reset selected users
         this.modalRegionManagers = [];
@@ -532,4 +554,5 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
     protected readonly EFConnectionBehavior = EFConnectionBehavior;
     protected readonly EFConnectionType = EFConnectionType;
     protected readonly String = String;
+    protected readonly ContainerTypesEnum = ContainerTypesEnum;
 }

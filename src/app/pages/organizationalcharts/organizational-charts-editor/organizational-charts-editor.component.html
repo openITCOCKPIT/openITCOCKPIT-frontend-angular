@@ -1,7 +1,3 @@
-<div class="code-font">
-    {{ connections | json }}
-</div>
-
 <div class="oc-wrapper">
     <oitc-nodes-palette></oitc-nodes-palette>
     <f-flow fDraggable class="oc-flow"
@@ -28,8 +24,7 @@
 
             @for (node of nodes; track node.fNodeId; ) {
                 <oitc-tenant-node [node]="node"
-                                  class="oc-tenant-node"
-                                  [ngClass]="{'oc-node-error': (nodeValidationErrors[$index] || false)}"
+                                  [ngClass]="{'oc-tenant-node': node.node.containertype_id === ContainerTypesEnum.CT_TENANT,'oc-location-node': node.node.containertype_id === ContainerTypesEnum.CT_LOCATION,'oc-node-node': node.node.containertype_id === ContainerTypesEnum.CT_NODE, 'oc-node-error': (nodeValidationErrors[$index] || false)}"
                                   [fNodeId]="String(node.node.id)"
                                   fNode
                                   fNodeInput
@@ -40,7 +35,8 @@
                                   [connectionsInput]="connections()"
                                   (deleteConnection)="onRemoveConnection($event)"
                                   (editNode)="onEditNode($event)"
-                                  [tenants]="modalTenants">
+                                  [containers]="modalContainer"
+                                  [containerType]="node.node.containertype_id">
                 </oitc-tenant-node>
             }
 
@@ -95,26 +91,71 @@
 
             @if (currentNodeForModal) {
 
+                @if (currentNodeForModal.node.containertype_id === ContainerTypesEnum.CT_TENANT) {
+                    <div class="mb-3">
+                        <label cLabel for="modalTenantSelect">
+                            {{ t('Tenant') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
 
-                <div class="mb-3">
-                    <label cLabel for="container">
-                        {{ t('Tenant') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
+                        <oitc-select
+                            name="modalTenantSelect"
+                            id="modalTenantSelect"
+                            optionValue="key"
+                            optionLabel="path"
+                            [(ngModel)]="currentNodeForModal.node.container_id"
+                            [options]="modalTenants"
+                            [appendTo]="''"
+                            (onChange)="onModalContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container_id">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                    </div>
+                }
 
-                    <oitc-select
-                        name="modalTenantSelect"
-                        id="modalTenantSelect"
-                        optionValue="key"
-                        optionLabel="path"
-                        [(ngModel)]="currentNodeForModal.node.container_id"
-                        [options]="modalTenants"
-                        [appendTo]="''"
-                        (onChange)="onModalContainerChange()"
-                        oitcFormError [errors]="errors" errorField="container_id">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-                </div>
+                @if (currentNodeForModal.node.containertype_id === ContainerTypesEnum.CT_LOCATION) {
+                    <div class="mb-3">
+                        <label cLabel for="modalLocationSelect">
+                            {{ t('Location') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+
+                        <oitc-select
+                            name="modalLocationSelect"
+                            id="modalLocationSelect"
+                            optionValue="key"
+                            optionLabel="path"
+                            [(ngModel)]="currentNodeForModal.node.container_id"
+                            [options]="modalLocations"
+                            [appendTo]="''"
+                            (onChange)="onModalContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container_id">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                    </div>
+                }
+
+                @if (currentNodeForModal.node.containertype_id === ContainerTypesEnum.CT_NODE) {
+                    <div class="mb-3">
+                        <label cLabel for="modalNodeSelect">
+                            {{ t('Node') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+
+                        <oitc-select
+                            name="modalNodeSelect"
+                            id="modalNodeSelect"
+                            optionValue="key"
+                            optionLabel="path"
+                            [(ngModel)]="currentNodeForModal.node.container_id"
+                            [options]="modalNodes"
+                            [appendTo]="''"
+                            (onChange)="onModalContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container_id">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                    </div>
+                }
 
                 <div class="mb-3">
                     <c-form-check>

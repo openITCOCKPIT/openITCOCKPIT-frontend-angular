@@ -52,6 +52,13 @@ export interface OrganizationalChartsIndexParams {
  *  Add / Edit action *
  **********************/
 
+export interface LoadContainersRootWithCsrf {
+    tenants: SelectKeyValuePathWithDisabled[]
+    locations: SelectKeyValuePathWithDisabled[]
+    nodes: SelectKeyValuePathWithDisabled[]
+    _csrfToken: string
+}
+
 export interface LoadContainersRoot {
     tenants: SelectKeyValuePathWithDisabled[]
     locations: SelectKeyValuePathWithDisabled[]
