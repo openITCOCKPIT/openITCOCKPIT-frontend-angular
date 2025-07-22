@@ -23,21 +23,21 @@
             </f-connection-for-create>
 
             @for (node of nodes; track node.fNodeId; ) {
-                <oitc-tenant-node [node]="node"
-                                  [ngClass]="{'oc-tenant-node': node.node.containertype_id === ContainerTypesEnum.CT_TENANT,'oc-location-node': node.node.containertype_id === ContainerTypesEnum.CT_LOCATION,'oc-node-node': node.node.containertype_id === ContainerTypesEnum.CT_NODE, 'oc-node-error': (nodeValidationErrors[$index] || false)}"
-                                  [fNodeId]="String(node.node.id)"
-                                  fNode
-                                  fNodeInput
-                                  [fInputId]="String(node.node.id)"
-                                  [fInputMultiple]="true"
-                                  [fNodePosition]="node.position"
-                                  (fNodePositionChange)="onNodePositionChanged($event, node)"
-                                  [connectionsInput]="connections()"
-                                  (deleteConnection)="onRemoveConnection($event)"
-                                  (editNode)="onEditNode($event)"
-                                  [containers]="modalContainer"
-                                  [containerType]="node.node.containertype_id">
-                </oitc-tenant-node>
+                <oitc-oc-node [node]="node"
+                              [ngClass]="{'oc-tenant-node': node.node.containertype_id === ContainerTypesEnum.CT_TENANT,'oc-location-node': node.node.containertype_id === ContainerTypesEnum.CT_LOCATION,'oc-node-node': node.node.containertype_id === ContainerTypesEnum.CT_NODE, 'oc-node-error': (nodeValidationErrors[$index] || false)}"
+                              [fNodeId]="String(node.node.id)"
+                              fNode
+                              fNodeInput
+                              [fInputId]="String(node.node.id)"
+                              [fInputMultiple]="true"
+                              [fNodePosition]="node.position"
+                              (fNodePositionChange)="onNodePositionChanged($event, node)"
+                              [connectionsInput]="connections()"
+                              (deleteConnection)="onRemoveConnection($event)"
+                              (editNode)="onEditNode($event)"
+                              [containers]="modalContainer"
+                              [containerType]="node.node.containertype_id">
+                </oitc-oc-node>
             }
 
             @for (connection of connections(); track connection.id) {

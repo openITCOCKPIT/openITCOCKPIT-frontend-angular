@@ -24,12 +24,8 @@ import { ProgressComponent, ProgressStackedComponent } from '@coreui/angular';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 
 
-/**
- * @todo rename into some more generic name like container-node
- * as this component is used for tenants, locations and nodes
- */
 @Component({
-    selector: 'oitc-tenant-node',
+    selector: 'oitc-oc-node',
     imports: [
         FFlowModule,
         FaIconComponent,
@@ -40,11 +36,11 @@ import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
         ProgressStackedComponent,
         ProgressComponent
     ],
-    templateUrl: './tenant-node.component.html',
-    styleUrl: './tenant-node.component.scss',
+    templateUrl: './oc-node.component.html',
+    styleUrl: './oc-node.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TenantNodeComponent implements OnDestroy {
+export class OcNodeComponent implements OnDestroy {
 
     public node = model<OcTreeNode | undefined>(undefined);
     public containers = input<LoadContainersRoot | undefined>(undefined);

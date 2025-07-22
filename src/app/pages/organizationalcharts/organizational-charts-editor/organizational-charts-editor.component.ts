@@ -27,7 +27,7 @@ import {
 import { IPoint, Point } from '@foblex/2d';
 import { LoadContainersRoot, OcConnection, OrganizationalChartsTreeNode } from '../organizationalcharts.interface';
 import { UUID } from '../../../classes/UUID';
-import { TenantNodeComponent } from './tenant-node/tenant-node.component';
+import { OcNodeComponent } from './oc-node/oc-node.component';
 import { OcTreeNode } from './organizational-charts-editor.interface';
 import { NgClass } from '@angular/common';
 import { GenericValidationError } from '../../../generic-responses';
@@ -67,7 +67,7 @@ import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
         NodesPaletteComponent,
         FFlowComponent,
         FFlowModule,
-        TenantNodeComponent,
+        OcNodeComponent,
         NgClass,
         ModalComponent,
         ModalHeaderComponent,
