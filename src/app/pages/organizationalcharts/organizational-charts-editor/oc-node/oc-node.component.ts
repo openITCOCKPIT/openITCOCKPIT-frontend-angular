@@ -20,7 +20,7 @@ import { BrowsersService } from '../../../browsers/browsers.service';
 import { Subscription } from 'rxjs';
 import { StatuscountResponse } from '../../../browsers/browsers.interface';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { ProgressComponent, ProgressStackedComponent } from '@coreui/angular';
+import { CardTitleDirective, ColComponent, RowComponent } from '@coreui/angular';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 
 
@@ -33,8 +33,9 @@ import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
         XsButtonDirective,
         TranslocoDirective,
         BlockLoaderComponent,
-        ProgressStackedComponent,
-        ProgressComponent
+        RowComponent,
+        CardTitleDirective,
+        ColComponent
     ],
     templateUrl: './oc-node.component.html',
     styleUrl: './oc-node.component.scss',
