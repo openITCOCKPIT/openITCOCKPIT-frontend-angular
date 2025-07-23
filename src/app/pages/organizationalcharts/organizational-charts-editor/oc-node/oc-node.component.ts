@@ -15,14 +15,15 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { LoadContainersRoot, OcConnection } from '../../organizationalcharts.interface';
 import { FormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { BrowsersService } from '../../../browsers/browsers.service';
 import { Subscription } from 'rxjs';
 import { StatuscountResponse } from '../../../browsers/browsers.interface';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { CardTitleDirective, ColComponent, RowComponent } from '@coreui/angular';
+import { CardTitleDirective, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
-import { NgClass } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
+import { BadgeOutlineComponent } from '../../../../layouts/coreui/badge-outline/badge-outline.component';
 
 
 @Component({
@@ -37,7 +38,10 @@ import { NgClass } from '@angular/common';
         RowComponent,
         CardTitleDirective,
         ColComponent,
-        NgClass
+        NgClass,
+        BadgeOutlineComponent,
+        TranslocoPipe,
+        TooltipDirective
     ],
     templateUrl: './oc-node.component.html',
     styleUrl: './oc-node.component.scss',
