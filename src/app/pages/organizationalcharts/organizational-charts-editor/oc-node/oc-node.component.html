@@ -9,7 +9,7 @@
                        'bg-secondary':statusCounts?.cumulativeHoststatus === 2 || (statusCounts?.cumulativeServicestatus === 3)}">
                     @if (nodeObj && nodeObj.node.container_id > 0) {
                         <div class="ps-2 flex-1 text-white"
-                             [ngClass]="{'text-dark':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1)}">
+                             [ngClass]="{'text-dark-important':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1)}">
                             <div class="p-0 mb-1 word-break" [cTooltip]="containerPath">
                                 @switch (nodeObj.node.containertype_id) {
                                     @case (ContainerTypesEnum.CT_TENANT) {
@@ -68,7 +68,7 @@
                     </c-row>
                 }
                 @if (statusCounts?.cumulativeHoststatus === 0 && ( statusCounts?.cumulativeServicestatus === 1 )) {
-                    <c-row class="m-0 bg-warning bg-gradient">
+                    <c-row class="m-0 bg-warning bg-gradient text-dark-important">
                         <c-col class="ps-2">
                             <div class="py-2">
                                 <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
