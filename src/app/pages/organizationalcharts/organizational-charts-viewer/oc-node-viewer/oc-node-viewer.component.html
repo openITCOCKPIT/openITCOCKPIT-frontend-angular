@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-    <div class="oc-node-body cursor-move" fDragHandle>
+    <div class="oc-node-body">
         <div>
             <div class="font-xs">
                 <div class="d-flex mx-0 pt-1" [ngClass]="{'bg-primary':statusCounts?.cumulativeHoststatus ===-1,
@@ -10,7 +10,7 @@
                     @if (nodeObj && nodeObj.node.container_id > 0) {
                         <div class="ps-2 flex-1 text-white"
                              [ngClass]="{'text-dark-important':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1)}">
-                            <div class="p-0 mb-1 word-break" [cTooltip]="containerPath">
+                            <div class="p-0 mb-1 word-break" [cTooltip]="nodeObj.node.container?.path">
                                 @switch (nodeObj.node.containertype_id) {
                                     @case (ContainerTypesEnum.CT_TENANT) {
                                         <fa-icon [icon]="['fas', 'home']"></fa-icon>
@@ -22,14 +22,14 @@
                                         <fa-icon [icon]="['fas', 'chain']"></fa-icon>
                                     }
                                 }
-                                {{ containerName }}
+                                {{ nodeObj.node.container?.name }}
                             </div>
                         </div>
                     } @else {
                         <div class="ps-2 flex-1">
                             <div class="p-0 mb-1 word-break">
                                 <fa-icon [icon]="['fas', 'ellipsis']"></fa-icon>
-                                {{ containerName }}
+                                {{ t('No Container selected') }}
                             </div>
                         </div>
                     }
@@ -37,10 +37,10 @@
                     <div class="pb-1 me-1">
                         @if (nodeObj) {
                             <button cButton class="ripple px-1 font-xs" [size]="'xs'"
-                                    (click)="editNode.emit(nodeObj.fNodeId)"
+                                    (click)="onViewNodeDetails.emit(nodeObj)"
                                     [color]="'default'">
-                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                                {{ t('Edit') }}
+                                <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                                {{ t('Details') }}
                             </button>
                         }
                     </div>
@@ -236,8 +236,7 @@
                  [fOutputId]="String(nodeObj.node.id)"
                  [isSelfConnectable]="false">
                 @if (hasConnection) {
-                    <fa-icon [icon]="['fas', 'square-xmark']" class="text-danger"
-                             (click)="onDeleteConnection()"></fa-icon>
+                    <fa-icon [icon]="['fas', 'square']" class="text-primary"></fa-icon>
                 } @else {
                     <fa-icon [icon]="['far', 'square']"></fa-icon>
                 }

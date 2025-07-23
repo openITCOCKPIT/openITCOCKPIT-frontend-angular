@@ -144,6 +144,15 @@
                                                 }
                                             </c-card-header>
                                             <c-card-body>
+
+                                                @if (organizationalChart) {
+                                                    <oitc-organizational-charts-viewer
+                                                        [(nodeTree)]="organizationalChart.organizational_chart_nodes"
+                                                        [(connections)]="organizationalChart.organizational_chart_connections">
+                                                        
+                                                    </oitc-organizational-charts-viewer>
+                                                }
+
                                             </c-card-body>
                                         </c-card>
                                     </c-col>

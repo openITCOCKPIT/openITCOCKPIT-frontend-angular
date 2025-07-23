@@ -34,6 +34,9 @@ import { OrganizationalChart } from '../organizationalcharts.interface';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
 import { BrowsersContainer } from '../../browsers/browsers.interface';
+import {
+    OrganizationalChartsViewerComponent
+} from '../organizational-charts-viewer/organizational-charts-viewer.component';
 
 @Component({
     selector: 'oitc-organizational-charts-browser-view',
@@ -55,7 +58,8 @@ import { BrowsersContainer } from '../../browsers/browsers.interface';
         SelectComponent,
         RowComponent,
         ColComponent,
-        NoRecordsComponent
+        NoRecordsComponent,
+        OrganizationalChartsViewerComponent
     ],
     templateUrl: './organizational-charts-browser-view.component.html',
     styleUrl: './organizational-charts-browser-view.component.scss',

@@ -1,5 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import { Container } from '../containers/containers.interface';
+import { ContainerWithPath } from '../containers/containers.interface';
 import { OrganizationalchartUserRoles } from './organizationalcharts.enum';
 import { SelectKeyValuePathWithDisabled } from '../../layouts/primeng/select.interface';
 import { ContainerTypesEnum } from '../changelogs/object-types.enum';
@@ -20,7 +20,8 @@ export interface OrganizationalChart {
     modified: string
     allowEdit?: boolean
     allowView?: boolean
-    organizational_chart_nodes?: OrganizationalChartsTreeNode[]
+    organizational_chart_connections: OcConnection[]
+    organizational_chart_nodes: OrganizationalChartsTreeNode[]
 }
 
 
@@ -95,7 +96,7 @@ export interface OrganizationalChartsTreeNode {
     created?: string
     modified?: string
     users: OrganizationalChartsTreeNodeUser[]
-    container?: Container
+    container?: ContainerWithPath // in view mode
 }
 
 export interface OrganizationalChartsTreeNodeUser {

@@ -15,7 +15,8 @@ import {
     ModalFooterComponent,
     ModalHeaderComponent,
     ModalService,
-    ModalTitleDirective
+    ModalTitleDirective,
+    ModalToggleDirective
 } from '@coreui/angular';
 import {
     EFConnectionBehavior,
@@ -31,8 +32,6 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { NodesPaletteComponent } from './nodes-palette/nodes-palette.component';
-import { OcNodeComponent } from './oc-node/oc-node.component';
 import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
 import { OcConnection, OrganizationalChartsTreeNode } from '../organizationalcharts.interface';
 import { OcTreeNode } from '../organizational-charts-editor/organizational-charts-editor.interface';
@@ -40,6 +39,10 @@ import { Subscription } from 'rxjs';
 import { OrganizationalChartNodesService } from '../organizationalchartnodes.service';
 import { OrganizationalChartsService } from '../organizationalcharts.service';
 import { Point } from '@foblex/2d';
+import { NgClass } from '@angular/common';
+import { OcNodeViewerComponent } from './oc-node-viewer/oc-node-viewer.component';
+import { OrganizationalchartUserRoles } from '../organizationalcharts.enum';
+import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 
 @Component({
     selector: 'oitc-organizational-charts-viewer',
@@ -56,11 +59,13 @@ import { Point } from '@foblex/2d';
         ModalFooterComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
-        NodesPaletteComponent,
-        OcNodeComponent,
         ReactiveFormsModule,
         TranslocoDirective,
-        XsButtonDirective
+        XsButtonDirective,
+        ModalToggleDirective,
+        NgClass,
+        OcNodeViewerComponent,
+        LabelLinkComponent
     ],
     templateUrl: './organizational-charts-viewer.component.html',
     styleUrl: './organizational-charts-viewer.component.scss',
@@ -101,6 +106,19 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+
+        // In view - copy existing nodes into f-flow
+        this.nodeTree().forEach((node) => {
+            this.nodes.push({
+                fNodeId: String(node.id),
+                position: {
+                    x: node.x_position,
+                    y: node.y_position
+                },
+                node: node
+            });
+        });
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy(): void {
@@ -111,10 +129,23 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
         this.fCanvasComponent.fitToScreen(new Point(40, 40), false);
     }
 
+    public onViewNodeDetails(node: OcTreeNode) {
+        this.currentNodeForModal = structuredClone(node);
+
+        this.modalService.toggle({
+            show: true,
+            id: this.ocNodeDetailsModal?.id
+        });
+
+        this.cdr.detectChanges();
+
+    }
+
     protected readonly eMarkerType = EFMarkerType;
     protected readonly EFConnectionBehavior = EFConnectionBehavior;
     protected readonly EFConnectionType = EFConnectionType;
     protected readonly String = String;
     protected readonly ContainerTypesEnum = ContainerTypesEnum;
 
+    protected readonly OrganizationalchartUserRoles = OrganizationalchartUserRoles;
 }
