@@ -247,7 +247,7 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public containerId: number = 0;
     public containers?: BrowsersIndexResponse;
-    public organizationalCharts?: SelectKeyValue[];
+    public organizationalCharts: SelectKeyValue[] = [];
     public statusCounts?: StatuscountResponse;
     public containerFilter: string = '';
     public hosts?: HostsIndexRoot;

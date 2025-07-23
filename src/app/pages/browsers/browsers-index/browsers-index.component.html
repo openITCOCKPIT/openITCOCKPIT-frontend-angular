@@ -61,7 +61,7 @@
                                 {{ t('Container overview') }}
                             </a>
                         </c-nav-item>
-                        @if (organizationalCharts) {
+                        @if (organizationalCharts.length > 0) {
                             <c-nav-item>
                                 <a [routerLink]="['/', 'organizationalcharts', 'browserView']"
                                    [queryParams]="{containerId: containerId}"
