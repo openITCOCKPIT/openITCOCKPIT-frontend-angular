@@ -402,6 +402,15 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
             id: this.ocNodeEditModal.id
         });
 
+        // Reset selected users
+        this.modalRegionManagers = [];
+        this.modalManagers = [];
+        this.modalUsers = [];
+        this.selectedRegionManagers = [];
+        this.selectedManagers = [];
+        this.selectedUsers = [];
+        this.disableUsedUsersModal();
+
         if (this.currentNodeForModal?.node.container_id) {
             this.loadUsersForModal(this.currentNodeForModal.node.container_id);
         }
@@ -435,17 +444,6 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
                 node.disabled = false;
             }
         });
-
-
-        // Reset selected users
-        this.modalRegionManagers = [];
-        this.modalManagers = [];
-        this.modalUsers = [];
-        this.selectedRegionManagers = [];
-        this.selectedManagers = [];
-        this.selectedUsers = [];
-        this.disableUsedUsersModal();
-
 
         this.cdr.markForCheck();
     }
@@ -523,16 +521,40 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
             this.modalRegionManagers = structuredClone(users);
             this.modalManagers = structuredClone(users);
             this.modalUsers = structuredClone(users);
+
+            this.disableUsedUsersModal();
+            this.preselectUsersForModal();
             this.cdr.markForCheck();
         }));
+    }
+
+    private preselectUsersForModal() {
+        if (!this.currentNodeForModal) {
+            return;
+        }
+
+        this.selectedRegionManagers = this.currentNodeForModal.node.users
+            .filter(u => u._joinData.user_role === OrganizationalchartUserRoles.REGION_MANAGER)
+            .map(u => u.id);
+
+        this.selectedManagers = this.currentNodeForModal.node.users
+            .filter(u => u._joinData.user_role === OrganizationalchartUserRoles.MANAGER)
+            .map(u => u.id);
+
+        this.selectedUsers = this.currentNodeForModal.node.users
+            .filter(u => u._joinData.user_role === OrganizationalchartUserRoles.USER)
+            .map(u => u.id);
+
+        this.disableUsedUsersModal();
+
+        console.log(this.selectedRegionManagers, this.selectedManagers, this.selectedUsers);
+
     }
 
     public disableUsedUsersModal() {
         if (!this.currentNodeForModal) {
             return;
         }
-
-        console.log('disableUsedUsersModal');
 
         this.modalRegionManagers.forEach(u => {
             u.disabled = this.selectedUsers.includes(u.key) || this.selectedManagers.includes(u.key);
