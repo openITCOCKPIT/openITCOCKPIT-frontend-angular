@@ -59,7 +59,7 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
 
     public title = input.required<string>();
     public titleErrorField = input<string>('');
-    public checked: boolean = true;
+    public checked: boolean = false;
 
     @Input() post: Service[] = [];
     @Input() errors: GenericValidationError = {} as GenericValidationError;
