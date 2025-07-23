@@ -28,7 +28,7 @@
 
                 @if (statusCounts?.cumulativeHoststatus === -1) {
                     <c-row class="m-0 bg-primary text-white">
-                        <c-col>
+                        <c-col class="ps-2">
                             <div class="py-2">
                                 <fa-icon [icon]="['fas', 'circle-info']" class="font-md"></fa-icon>
                                 {{ t('No hosts detected') }}
@@ -39,7 +39,7 @@
 
                 @if (statusCounts?.cumulativeHoststatus === 0 && ( statusCounts?.cumulativeServicestatus === 0 || statusCounts?.cumulativeServicestatus === -1 )) {
                     <c-row class="m-0 bg-success text-white bg-gradient">
-                        <c-col>
+                        <c-col class="ps-2">
                             <div class="py-2">
                                 <fa-icon [icon]="['fas', 'circle-check']" class="font-md"></fa-icon>
                                 {{ t('No problems detected') }}
@@ -49,7 +49,7 @@
                 }
                 @if (statusCounts?.cumulativeHoststatus === 0 && ( statusCounts?.cumulativeServicestatus === 1 )) {
                     <c-row class="m-0 bg-warning bg-gradient">
-                        <c-col>
+                        <c-col class="ps-2">
                             <div class="py-2">
                                 <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
                                 {{ t('Warnings detected') }}
@@ -60,7 +60,7 @@
 
                 @if (statusCounts?.cumulativeHoststatus === 1 || ( statusCounts?.cumulativeServicestatus === 2 )) {
                     <c-row class="m-0 bg-danger text-white bg-gradient">
-                        <c-col>
+                        <c-col class="ps-2">
                             <div class="py-2">
                                 <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
                                 {{ t('Problems detected') }}
@@ -70,7 +70,7 @@
                 }
                 @if (statusCounts?.cumulativeHoststatus === 2 || ( statusCounts?.cumulativeServicestatus === 3 )) {
                     <c-row class="m-0 bg-secondary text-white bg-gradient">
-                        <c-col>
+                        <c-col class="ps-2">
                             <div class="py-2">
                                 <fa-icon [icon]="['fas', 'circle-question']" class="font-md"></fa-icon>
                                 {{ t('Undetermined problems') }}
@@ -107,7 +107,7 @@
                                     @if (statusCounts.unhandledServicesSum > 0) {
                                         <oitc-badge-outline color="danger" class="me-1"
                                                             [cTooltip]="'Unhandled'|transloco">
-                                            {{ t('Unhandled') }}: {{ statusCounts.unhandledHostsSum }}
+                                            {{ t('Unhandled problems') }}: {{ statusCounts.unhandledHostsSum }}
                                         </oitc-badge-outline>
                                     }
                                 </h6>
