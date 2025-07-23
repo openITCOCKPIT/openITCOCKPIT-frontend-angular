@@ -102,52 +102,55 @@
 
                     <dt class="col-sm-3"> {{ t('Region managers') }}</dt>
                     <dd class="col-sm-9">
-                        @for (user of currentNodeForModal.node.users; track $index) {
-                            @if (user._joinData.user_role === OrganizationalchartUserRoles.REGION_MANAGER) {
-                                <oitc-label-link
-                                    [objectId]="user.id"
-                                    [route]="'/users/edit'"
-                                    [permissions]="'users.edit'">
-                                    {{ user.firstname }} {{ user.lastname }}
-                                </oitc-label-link>
-                                @if (!$last) {
-                                    ,
-                                }
+                        @for (user of modalRegionManagers; track $index) {
+                            <oitc-label-link
+                                [objectId]="user.id"
+                                [route]="'/users/edit'"
+                                [permissions]="'users.edit'">
+                                {{ user.firstname }} {{ user.lastname }}
+                            </oitc-label-link>
+                            @if (!$last) {
+                                ,
                             }
+                        }
+                        @if (modalRegionManagers.length === 0) {
+                            <fa-icon [icon]="['fas', 'minus']"></fa-icon>
                         }
                     </dd>
 
                     <dt class="col-sm-3"> {{ t('Managers') }}</dt>
                     <dd class="col-sm-9">
-                        @for (user of currentNodeForModal.node.users; track $index) {
-                            @if (user._joinData.user_role === OrganizationalchartUserRoles.MANAGER) {
-                                <oitc-label-link
-                                    [objectId]="user.id"
-                                    [route]="'/users/edit'"
-                                    [permissions]="'users.edit'">
-                                    {{ user.firstname }} {{ user.lastname }}
-                                </oitc-label-link>
-                                @if (!$last) {
-                                    ,
-                                }
+                        @for (user of modalManagers; track $index) {
+                            <oitc-label-link
+                                [objectId]="user.id"
+                                [route]="'/users/edit'"
+                                [permissions]="'users.edit'">
+                                {{ user.firstname }} {{ user.lastname }}
+                            </oitc-label-link>
+                            @if (!$last) {
+                                ,
                             }
+                        }
+                        @if (modalManagers.length === 0) {
+                            <fa-icon [icon]="['fas', 'minus']"></fa-icon>
                         }
                     </dd>
 
                     <dt class="col-sm-3"> {{ t('Users') }}</dt>
                     <dd class="col-sm-9">
-                        @for (user of currentNodeForModal.node.users; track $index) {
-                            @if (user._joinData.user_role === OrganizationalchartUserRoles.USER) {
-                                <oitc-label-link
-                                    [objectId]="user.id"
-                                    [route]="'/users/edit'"
-                                    [permissions]="'users.edit'">
-                                    {{ user.firstname }} {{ user.lastname }}
-                                </oitc-label-link>
-                                @if (!$last) {
-                                    ,
-                                }
+                        @for (user of modalUsers; track $index) {
+                            <oitc-label-link
+                                [objectId]="user.id"
+                                [route]="'/users/edit'"
+                                [permissions]="'users.edit'">
+                                {{ user.firstname }} {{ user.lastname }}
+                            </oitc-label-link>
+                            @if (!$last) {
+                                ,
                             }
+                        }
+                        @if (modalUsers.length === 0) {
+                            <fa-icon [icon]="['fas', 'minus']"></fa-icon>
                         }
                     </dd>
 

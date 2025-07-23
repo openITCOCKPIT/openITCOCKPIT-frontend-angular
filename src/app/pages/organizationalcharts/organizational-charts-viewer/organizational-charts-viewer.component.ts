@@ -33,7 +33,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
-import { OcConnection, OrganizationalChartsTreeNode } from '../organizationalcharts.interface';
+import {
+    OcConnection,
+    OrganizationalChartsTreeNode,
+    OrganizationalChartsTreeNodeUser
+} from '../organizationalcharts.interface';
 import { OcTreeNode } from '../organizational-charts-editor/organizational-charts-editor.interface';
 import { Subscription } from 'rxjs';
 import { OrganizationalChartNodesService } from '../organizationalchartnodes.service';
@@ -43,6 +47,7 @@ import { NgClass } from '@angular/common';
 import { OcNodeViewerComponent } from './oc-node-viewer/oc-node-viewer.component';
 import { OrganizationalchartUserRoles } from '../organizationalcharts.enum';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-organizational-charts-viewer',
@@ -65,7 +70,8 @@ import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-lin
         ModalToggleDirective,
         NgClass,
         OcNodeViewerComponent,
-        LabelLinkComponent
+        LabelLinkComponent,
+        FaIconComponent
     ],
     templateUrl: './organizational-charts-viewer.component.html',
     styleUrl: './organizational-charts-viewer.component.scss',
@@ -94,6 +100,10 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
 
     public currentNodeForModal: OcTreeNode | undefined;
+
+    public modalRegionManagers: OrganizationalChartsTreeNodeUser[] = [];
+    public modalManagers: OrganizationalChartsTreeNodeUser[] = [];
+    public modalUsers: OrganizationalChartsTreeNodeUser[] = [];
 
     private readonly OrganizationalChartsService: OrganizationalChartsService = inject(OrganizationalChartsService);
     private readonly OrganizationalChartNodesService: OrganizationalChartNodesService = inject(OrganizationalChartNodesService);
@@ -132,6 +142,20 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
     public onViewNodeDetails(node: OcTreeNode) {
         this.currentNodeForModal = structuredClone(node);
 
+        this.modalRegionManagers = [];
+        this.modalManagers = [];
+        this.modalUsers = [];
+        this.modalRegionManagers = this.currentNodeForModal.node.users.filter(user =>
+            user._joinData.user_role === OrganizationalchartUserRoles.REGION_MANAGER
+        );
+        this.modalManagers = this.currentNodeForModal.node.users.filter(user =>
+            user._joinData.user_role == OrganizationalchartUserRoles.MANAGER
+        );
+        this.modalUsers = this.currentNodeForModal.node.users.filter(user =>
+            user._joinData.user_role == OrganizationalchartUserRoles.USER
+        );
+
+        this.cdr.markForCheck();
         this.modalService.toggle({
             show: true,
             id: this.ocNodeDetailsModal?.id
