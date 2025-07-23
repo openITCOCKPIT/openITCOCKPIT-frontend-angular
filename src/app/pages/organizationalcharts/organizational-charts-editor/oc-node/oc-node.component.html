@@ -10,7 +10,7 @@
                     @if (nodeObj && nodeObj.node.container_id > 0) {
                         <div class="ps-2 flex-1 text-white"
                              [ngClass]="{'text-dark':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1)}">
-                            <div class="p-0 mb-1 word-break">
+                            <div class="p-0 mb-1 word-break" [cTooltip]="containerPath">
                                 @switch (nodeObj.node.containertype_id) {
                                     @case (ContainerTypesEnum.CT_TENANT) {
                                         <fa-icon [icon]="['fas', 'home']"></fa-icon>
@@ -124,10 +124,10 @@
                                 <h6 cCardTitle class="small">
                                     <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                     {{ t('Host status overview') }}
-                                    @if (statusCounts.unhandledServicesSum > 0) {
+                                    @if (statusCounts.unhandledHostsSum > 0) {
                                         <oitc-badge-outline color="danger" class="me-1"
-                                                            [cTooltip]="'Unhandled'|transloco">
-                                            {{ t('Unhandled problems') }}: {{ statusCounts.unhandledHostsSum }}
+                                                            [cTooltip]="'Unhandled problems'|transloco">
+                                            {{ t('Unhandled') }}: {{ statusCounts.unhandledHostsSum }}
                                         </oitc-badge-outline>
                                     }
                                 </h6>
@@ -173,7 +173,7 @@
                                     {{ t('Service status overview') }}
                                     @if (statusCounts.unhandledServicesSum > 0) {
                                         <oitc-badge-outline color="danger" class="me-1"
-                                                            [cTooltip]="'Unhandled'|transloco">
+                                                            [cTooltip]="'Unhandled problems'|transloco">
                                             {{ t('Unhandled') }}: {{ statusCounts.unhandledServicesSum }}
                                         </oitc-badge-outline>
                                     }
