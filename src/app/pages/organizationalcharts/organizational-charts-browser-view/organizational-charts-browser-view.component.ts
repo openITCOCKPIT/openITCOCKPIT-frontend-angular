@@ -20,10 +20,7 @@ import {
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import { NgClass } from '@angular/common';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { IndexPage } from '../../../pages.interface';
 import { Subscription } from 'rxjs';
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { Sort } from '@angular/material/sort';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { OrganizationalChartsService } from '../organizationalcharts.service';
 import { HistoryService } from '../../../history.service';
@@ -65,7 +62,7 @@ import {
     styleUrl: './organizational-charts-browser-view.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestroy, IndexPage {
+export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private subscriptions: Subscription = new Subscription();
@@ -142,30 +139,6 @@ export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestr
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
-    }
-
-    toggleFilter(): void {
-        throw new Error('Method not implemented.');
-    }
-
-    resetFilter(): void {
-        throw new Error('Method not implemented.');
-    }
-
-    onPaginatorChange(change: PaginatorChangeEvent): void {
-        throw new Error('Method not implemented.');
-    }
-
-    onFilterChange(event: Event): void {
-        throw new Error('Method not implemented.');
-    }
-
-    onSortChange(sort: Sort): void {
-        throw new Error('Method not implemented.');
-    }
-
-    onMassActionComplete(success: boolean): void {
-        throw new Error('Method not implemented.');
     }
 
     protected readonly ContainerTypesEnum = ContainerTypesEnum;

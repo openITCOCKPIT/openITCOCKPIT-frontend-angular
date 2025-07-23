@@ -115,7 +115,7 @@ export class OrganizationalChartsIndexComponent implements OnInit, OnDestroy, In
     private readonly OrganizationalChartsService = inject(OrganizationalChartsService);
     private readonly SelectionServiceService = inject(SelectionServiceService);
     private readonly TranslocoService = inject(TranslocoService);
-    public PermissionService: PermissionsService = inject(PermissionsService);
+    public PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly modalService = inject(ModalService);
     private readonly route = inject(ActivatedRoute);

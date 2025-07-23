@@ -146,7 +146,15 @@
                             [disabled]="!Boolean(organizationalchart.allowEdit)"
                             [item]="organizationalchart"></oitc-item-select>
                     </td>
-                    <td>{{ organizationalchart.name }}</td>
+                    <td>
+                        @if (( this.PermissionsService.hasPermissionObservable(['organizationalcharts', 'view'])|async ) && organizationalchart.allowView) {
+                            <a [routerLink]="['/', 'organizationalcharts', 'view', organizationalchart.id]">
+                                {{ organizationalchart.name }}
+                            </a>
+                        } @else {
+                            {{ organizationalchart.name }}
+                        }
+                    </td>
                     <td>{{ organizationalchart.description }}</td>
                     <td class="text-center">
                         @if (organizationalchart.allowView) {
@@ -164,7 +172,7 @@
                             @for (container_node of organizationalchart.organizational_chart_nodes; track $index) {
                                 @if (organizationalchart.allowView && container_node.container) {
                                     <li>
-                                        @if (PermissionService.hasPermissionObservable(['organizationalcharts', 'view'])|async) {
+                                        @if (PermissionsService.hasPermissionObservable(['organizationalcharts', 'view'])|async) {
                                             <a [routerLink]="['/', 'organizationalcharts', 'browserView']"
                                                [queryParams]="{'containerId': container_node.container.id}">
                                                 @if (container_node.container.containertype_id == ContainerTypesEnum.CT_GLOBAL) {
@@ -176,7 +184,7 @@
                                                 @if (container_node.container.containertype_id == ContainerTypesEnum.CT_LOCATION) {
                                                     <fa-icon [icon]="['fas', 'location-arrow']" class="pe-1"></fa-icon>
                                                 }
-                                                @if (container_node.container.containertype_id == ContainerTypesEnum.CT_LOCATION) {
+                                                @if (container_node.container.containertype_id == ContainerTypesEnum.CT_NODE) {
                                                     <fa-icon [icon]="['fas', 'link']" class="pe-1"></fa-icon>
                                                 }
                                                 {{ container_node.container.name }}
@@ -191,7 +199,7 @@
                                             @if (container_node.container.containertype_id == ContainerTypesEnum.CT_LOCATION) {
                                                 <fa-icon [icon]="['fas', 'location-arrow']" class="pe-1"></fa-icon>
                                             }
-                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_LOCATION) {
+                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_NODE) {
                                                 <fa-icon [icon]="['fas', 'link']" class="pe-1"></fa-icon>
                                             }
                                             {{ container_node.container.name }}
@@ -214,12 +222,15 @@
                                 <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                 {{ t('Edit') }}
                             </oitc-actions-button-element>
+
                             <oitc-actions-button-element [permission]="'organizationalcharts.view'"
-                                                         [url]="'/organizationalcharts/browserView/' + organizationalchart.id"
+                                                         [url]="'/organizationalcharts/view/'+organizationalchart.id"
                                                          [allow]="organizationalchart.allowView">
                                 <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
                                 {{ t('View') }}
                             </oitc-actions-button-element>
+
+
                             @if (organizationalchart.allowEdit) {
                                 <li cDropdownDivider></li>
                                 <oitc-actions-button-element (click)="toggleDeleteAllModal(organizationalchart)"
