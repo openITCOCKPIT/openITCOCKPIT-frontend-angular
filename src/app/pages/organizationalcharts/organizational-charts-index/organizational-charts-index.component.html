@@ -165,7 +165,7 @@
                                 @if (organizationalchart.allowView && container_node.container) {
                                     <li>
                                         @if (PermissionService.hasPermissionObservable(['organizationalcharts', 'view'])|async) {
-                                            <a [routerLink]="['/', 'organizationalcharts', 'view']"
+                                            <a [routerLink]="['/', 'organizationalcharts', 'browserView']"
                                                [queryParams]="{'containerId': container_node.container.id}">
                                                 @if (container_node.container.containertype_id == ContainerTypesEnum.CT_GLOBAL) {
                                                     <fa-icon [icon]="['fas', 'globe']" class="pe-1"></fa-icon>
@@ -215,7 +215,7 @@
                                 {{ t('Edit') }}
                             </oitc-actions-button-element>
                             <oitc-actions-button-element [permission]="'organizationalcharts.view'"
-                                                         [url]="'/organizationalcharts/view/' + organizationalchart.id"
+                                                         [url]="'/organizationalcharts/browserView/' + organizationalchart.id"
                                                          [allow]="organizationalchart.allowView">
                                 <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
                                 {{ t('View') }}

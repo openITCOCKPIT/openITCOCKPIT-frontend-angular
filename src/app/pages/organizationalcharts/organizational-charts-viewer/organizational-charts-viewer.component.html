@@ -1,0 +1,90 @@
+<div class="oc-wrapper">
+    <oitc-nodes-palette></oitc-nodes-palette>
+    <f-flow fDraggable class="oc-flow"
+            (fLoaded)="onInitialized()">
+
+        <f-background>
+            <f-circle-pattern></f-circle-pattern>
+        </f-background>
+
+        <f-line-alignment></f-line-alignment>
+        <f-canvas fZoom>
+
+            @for (node of nodes; track node.fNodeId; ) {
+                <oitc-oc-node [node]="node"
+                              [ngClass]="{'oc-tenant-node': node.node.containertype_id === ContainerTypesEnum.CT_TENANT,'oc-location-node': node.node.containertype_id === ContainerTypesEnum.CT_LOCATION,'oc-node-node': node.node.containertype_id === ContainerTypesEnum.CT_NODE, 'oc-node-error': (nodeValidationErrors[$index] || false)}"
+                              [fNodeId]="String(node.node.id)"
+                              fNode
+                              fNodeInput
+                              [fInputId]="String(node.node.id)"
+                              [fInputMultiple]="true"
+                              [fNodePosition]="node.position"
+                              [connectionsInput]="connections()"
+                              [containers]="modalContainer"
+                              [containerType]="node.node.containertype_id">
+                </oitc-oc-node>
+            }
+
+            @for (connection of connections(); track connection.id) {
+                <f-connection
+                    [fOffset]="20"
+                    [fBehavior]="EFConnectionBehavior.FIXED"
+                    [fType]="EFConnectionType.SEGMENT"
+                    [fConnectionId]="String(connection.id)"
+                    [fOutputId]="String(connection.organizational_chart_output_node_id)"
+                    [fInputId]="String(connection.organizational_chart_input_node_id)">
+
+                    <svg id="normal_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.END" [height]="5"
+                         [width]="5"
+                         [refX]="4" [refY]="2.5">
+                        <path d="M0,0L700,350L0,700L150,350z"/>
+                    </svg>
+
+                    <svg id="selected_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.SELECTED_END"
+                         [height]="5"
+                         [width]="5" [refX]="4" [refY]="2.5">
+                        <path d="M0,0L700,350L0,700L150,350z"/>
+                    </svg>
+
+                </f-connection>
+            }
+        </f-canvas>
+
+        <f-selection-area></f-selection-area>
+
+        <!-- Wrap this component in a card to make sure that the CoreUi CSS variables for the minimap are applied -->
+        <f-minimap [fMinSize]="1000"></f-minimap>
+
+    </f-flow>
+</div>
+
+<ng-container *transloco="let t">
+
+    <!-- Edit Node Modal -->
+    <c-modal #ocNodeDetailsModal
+             [keyboard]="true"
+             [id]="'ocNodeDetailsModal'"
+             [size]="'lg'">
+        <c-modal-header>
+            <h5 cModalTitle>
+                {{ t('Node information') }}
+            </h5>
+            <button [cModalToggle]="ocNodeDetailsModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+
+            @if (currentNodeForModal) {
+
+                hier kommt der modal body rein
+
+            }
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button cButton color="default" class="ripple" [cModalToggle]="ocNodeDetailsModal.id">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>

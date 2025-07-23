@@ -36,7 +36,7 @@ import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
 import { BrowsersContainer } from '../../browsers/browsers.interface';
 
 @Component({
-    selector: 'oitc-organizational-charts-view',
+    selector: 'oitc-organizational-charts-browser-view',
     imports: [
         FaIconComponent,
         PermissionDirective,
@@ -57,11 +57,11 @@ import { BrowsersContainer } from '../../browsers/browsers.interface';
         ColComponent,
         NoRecordsComponent
     ],
-    templateUrl: './organizational-charts-view.component.html',
-    styleUrl: './organizational-charts-view.component.scss',
+    templateUrl: './organizational-charts-browser-view.component.html',
+    styleUrl: './organizational-charts-browser-view.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OrganizationalChartsViewComponent implements OnInit, OnDestroy, IndexPage {
+export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private subscriptions: Subscription = new Subscription();
