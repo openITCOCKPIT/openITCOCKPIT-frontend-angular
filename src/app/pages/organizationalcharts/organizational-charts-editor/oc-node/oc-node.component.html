@@ -7,13 +7,33 @@
                        'bg-warning':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1),
                        'bg-danger':statusCounts?.cumulativeHoststatus === 1 || (statusCounts?.cumulativeServicestatus === 2),
                        'bg-secondary':statusCounts?.cumulativeHoststatus === 2 || (statusCounts?.cumulativeServicestatus === 3)}">
-                    <div class="ps-2 flex-1 text-white"
-                         [ngClass]="{'text-dark':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1)}">
-                        <div class="p-0 mb-1 word-break">
-                            <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                            {{ containerName }}
+                    @if (nodeObj && nodeObj.node.container_id > 0) {
+                        <div class="ps-2 flex-1 text-white"
+                             [ngClass]="{'text-dark':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1)}">
+                            <div class="p-0 mb-1 word-break">
+                                @switch (nodeObj.node.containertype_id) {
+                                    @case (ContainerTypesEnum.CT_TENANT) {
+                                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                                    }
+                                    @case (ContainerTypesEnum.CT_LOCATION) {
+                                        <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                                    }
+                                    @case (ContainerTypesEnum.CT_NODE) {
+                                        <fa-icon [icon]="['fas', 'chain']"></fa-icon>
+                                    }
+                                }
+                                {{ containerName }}
+                            </div>
                         </div>
-                    </div>
+                    } @else {
+                        <div class="ps-2 flex-1">
+                            <div class="p-0 mb-1 word-break">
+                                <fa-icon [icon]="['fas', 'ellipsis']"></fa-icon>
+                                {{ containerName }}
+                            </div>
+                        </div>
+                    }
+
                     <div class="pb-1 me-1">
                         @if (nodeObj) {
                             <button cButton class="ripple px-1 font-xs" [size]="'xs'"

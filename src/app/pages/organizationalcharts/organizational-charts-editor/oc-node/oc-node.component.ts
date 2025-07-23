@@ -22,7 +22,7 @@ import { StatuscountResponse } from '../../../browsers/browsers.interface';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { CardTitleDirective, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { BadgeOutlineComponent } from '../../../../layouts/coreui/badge-outline/badge-outline.component';
 
 
@@ -144,4 +144,5 @@ export class OcNodeComponent implements OnDestroy {
         }));
     }
 
+    protected readonly ContainerTypesEnum = ContainerTypesEnum;
 }
