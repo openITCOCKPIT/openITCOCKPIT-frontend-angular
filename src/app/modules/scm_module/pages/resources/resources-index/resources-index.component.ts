@@ -47,7 +47,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -111,7 +111,8 @@ import {
         MultiSelectComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        ResourcesSetStatusModalComponent
+        ResourcesSetStatusModalComponent,
+        AsyncPipe
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ResourcesService} // Inject the ResourcesService into the DeleteAllModalComponent
