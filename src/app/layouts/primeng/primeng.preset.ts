@@ -346,7 +346,7 @@ const OItcPrimeNGPreset = definePreset(Aura, {
                 color: "transparent",
                 offset: "0",
                 shadow: "0 0 0 .25rem #5856d640", // it-novum adjusted
-                borderColor: "#acabeb", // it-novum adjusted
+                // borderColor: "#acabeb", // it-novum adjusted
             },
             transitionDuration: "{transition.duration}"
         },
@@ -441,7 +441,7 @@ const OItcPrimeNGPreset = definePreset(Aura, {
                     color: "{surface.200}"
                 },
                 formField: {
-                    fontSize: "0.5rem", // it-novum added
+                    //fontSize: "0.5rem", // it-novum added
                     background: "{surface.0}",
                     disabledBackground: "rgb(231, 234, 238)", // it-novum adjusted (default surface.200)
                     filledBackground: "rgb(243, 244, 247)", // it-novum adjusted (default surface.50)
@@ -567,7 +567,7 @@ const OItcPrimeNGPreset = definePreset(Aura, {
                     color: "{surface.200}"
                 },
                 formField: {
-                    fontSize: "0.5rem", // it-novum added
+                    //fontSize: "0.5rem", // it-novum added
                     background: "{surface.950}",
                     disabledBackground: "{surface.700}", // it-novum adjusted (default surface.700)
                     filledBackground: "{surface.800}", // it-novum adjusted (default surface.800)

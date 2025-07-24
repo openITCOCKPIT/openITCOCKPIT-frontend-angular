@@ -719,8 +719,8 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 max: new Date(this.graphEnd * 1000).toISOString(),
                 axisLabel: {
                     hideOverlap: true,
-                    formatter: (value) => {
-                        const dateTime = DateTime.fromMillis(value as number).setZone(this.timezone.user_timezone);
+                    formatter: (value: number) => {
+                        const dateTime = DateTime.fromMillis(value).setZone(this.timezone.user_timezone);
                         return dateTime.toFormat('HH:mm:ss');
                     },
                     show: showTicks
@@ -739,7 +739,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
             yAxis: {
                 type: 'value',
                 axisLabel: {
-                    formatter: (value) => {
+                    formatter: (value: number) => {
                         return `${value} ${setup.metric.unit ? setup.metric.unit : ''}`
                     }
                 },
@@ -813,8 +813,8 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
         let thresholds = this.getThresholds(performance_data);
         if (thresholds) {
-            this.chartOption.visualMap = thresholds;
-            this.chartOption.visualMap.show = false;
+            this.chartOption['visualMap'] = thresholds;
+            // this.chartOption['visualMap'].show = false;
         } else {
             // Set default line color to primary
             // @ts-ignore

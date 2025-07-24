@@ -105,7 +105,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
     // Progress is only necessary if physics is enabled
     public showProgressbar: boolean = false;
     public progress: number = 0;
-    public theme: null | 'dark' = null;
+    public theme: string = '';
     private edges: Edge[] = [];
     private nodes: StatusmapExtendedNode[] = [];
 
@@ -120,7 +120,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
 
     constructor() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
-            this.theme = null;
+            this.theme = '';
             if (theme === 'dark') {
                 this.theme = 'dark';
             }
