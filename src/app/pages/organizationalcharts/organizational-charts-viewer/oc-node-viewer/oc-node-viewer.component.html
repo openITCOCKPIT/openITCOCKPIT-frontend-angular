@@ -149,7 +149,7 @@
                                          class="border-start border-start-5 border-start-success py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
                                             @if (statusCounts.hoststatusCount[0] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                                                <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
+                                                <a [routerLink]="['/', 'hosts', 'index']"
                                                    [queryParams]="{id: statusCounts.hoststatusCount.hostIds[0], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
                                                     {{ statusCounts.hoststatusCount[0] }}
                                                     ({{ statusCounts.hoststatusCountPercentage[0] }}%)
@@ -166,7 +166,7 @@
                                          class="border-start border-start-5 border-start-danger py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
                                             @if (statusCounts.hoststatusCount[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                                                <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
+                                                <a [routerLink]="['/', 'hosts', 'index']"
                                                    [queryParams]="{id: statusCounts.hoststatusCount.hostIds[1], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
                                                     {{ statusCounts.hoststatusCount[1] }}
                                                     ({{ statusCounts.hoststatusCountPercentage[1] }}%)
@@ -183,7 +183,7 @@
                                          class="border-start border-start-5 border-start-secondary py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
                                             @if (statusCounts.hoststatusCount[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                                                <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
+                                                <a [routerLink]="['/', 'hosts', 'index']"
                                                    [queryParams]="{id: statusCounts.hoststatusCount.hostIds[2], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
                                                     {{ statusCounts.hoststatusCount[2] }}
                                                     ({{ statusCounts.hoststatusCountPercentage[2] }}%)
@@ -232,7 +232,7 @@
                                          class="border-start border-start-5 border-start-success py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
                                             @if (statusCounts.servicestatusCount[0] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
-                                                <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                                <a [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{id: statusCounts.servicestatusCount.serviceIds[0], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
                                                     {{ statusCounts.servicestatusCount[0] }}
                                                     ({{ statusCounts.servicestatusCountPercentage[0] }}%)
@@ -249,7 +249,7 @@
                                          class="border-start border-start-5 border-start-warning py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
                                             @if (statusCounts.servicestatusCount[1] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
-                                                <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                                <a [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{id: statusCounts.servicestatusCount.serviceIds[1], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
                                                     {{ statusCounts.servicestatusCount[1] }}
                                                     ({{ statusCounts.servicestatusCountPercentage[1] }}%)
@@ -266,7 +266,7 @@
                                          class="border-start border-start-5 border-start-danger py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
                                             @if (statusCounts.servicestatusCount[2] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
-                                                <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                                <a [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{id: statusCounts.servicestatusCount.serviceIds[2], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
                                                     {{ statusCounts.servicestatusCount[2] }}
                                                     ({{ statusCounts.servicestatusCountPercentage[2] }}%)
@@ -283,7 +283,7 @@
                                          class="border-start border-start-5 border-start-secondary py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
                                             @if (statusCounts.servicestatusCount[3] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
-                                                <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                                <a [routerLink]="['/', 'services', 'index']"
                                                    [queryParams]="{id: statusCounts.servicestatusCount.serviceIds[3], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
                                                     {{ statusCounts.servicestatusCount[3] }}
                                                     ({{ statusCounts.servicestatusCountPercentage[3] }}%)
