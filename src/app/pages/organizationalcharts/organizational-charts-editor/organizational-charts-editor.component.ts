@@ -267,9 +267,11 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
 
         // So we can track connections in @for loop
         const uuid = new UUID();
+        const connectionUuid = uuid.v4();
 
         const newConnection: OcConnection = {
-            id: uuid.v4(),
+            id: connectionUuid, // uuidv4 for new connections - number id for existing connections
+            uuid: connectionUuid,
             organizational_chart_input_node_id: event.fInputId,
             organizational_chart_output_node_id: event.fOutputId
         };
@@ -294,8 +296,10 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
 
         // So we can track connections in @for loop
         const uuid = new UUID();
+        const connectionUuid = uuid.v4();
         const newConnection: OcConnection = {
-            id: uuid.v4(),
+            id: connectionUuid,
+            uuid: connectionUuid,
             organizational_chart_input_node_id: event.newFInputId,
             organizational_chart_output_node_id: event.fOutputId
         };
@@ -303,7 +307,7 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
 
         // Update the two-way binding
         this.connections.update((oldConnections) => {
-            return connections
+            return [...connections, newConnection];
         });
     }
 

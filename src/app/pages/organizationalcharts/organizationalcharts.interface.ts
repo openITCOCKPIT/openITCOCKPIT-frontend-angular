@@ -78,6 +78,7 @@ export interface OrganizationalChartsPost {
 
 export interface OcConnection {
     id: number | string // numeric id in edit - UUIDv4 in add
+    uuid: string // UUIDv4
     organizational_chart_input_node_id: number | string // numeric id in edit - UUIDv4 in add
     organizational_chart_output_node_id: number | string // numeric id in edit - UUIDv4 in add
     created?: string
