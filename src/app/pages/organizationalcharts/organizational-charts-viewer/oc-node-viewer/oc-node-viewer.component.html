@@ -5,7 +5,7 @@
                 <div class="d-flex mx-0 pt-1" [ngClass]="{'bg-primary':statusCounts?.cumulativeHoststatus ===-1,
                        'bg-success':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus === 0 || statusCounts?.cumulativeServicestatus === -1),
                        'bg-warning':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1),
-                       'bg-danger':statusCounts?.cumulativeHoststatus === 1 || (statusCounts?.cumulativeServicestatus === 2),
+                       'bg-danger':(statusCounts?.cumulativeHoststatus === 1 && statusCounts?.cumulativeServicestatus !== 3) || (statusCounts?.cumulativeServicestatus === 2),
                        'bg-secondary':statusCounts?.cumulativeHoststatus === 2 || (statusCounts?.cumulativeServicestatus === 3)}">
                     @if (nodeObj && nodeObj.node.container_id > 0) {
                         <div class="ps-2 flex-1 text-white"
@@ -67,7 +67,7 @@
                         </c-col>
                     </c-row>
                 }
-                @if (statusCounts?.cumulativeHoststatus === 0 && ( statusCounts?.cumulativeServicestatus === 1 )) {
+                @if (statusCounts?.cumulativeHoststatus === 0 && statusCounts?.cumulativeServicestatus === 1) {
                     <c-row class="m-0 bg-warning bg-gradient text-dark-important">
                         <c-col class="ps-2">
                             <div class="py-2">
@@ -78,7 +78,7 @@
                     </c-row>
                 }
 
-                @if (statusCounts?.cumulativeHoststatus === 1 || ( statusCounts?.cumulativeServicestatus === 2 )) {
+                @if (( statusCounts?.cumulativeHoststatus === 1 && statusCounts?.cumulativeServicestatus !== 3 ) || statusCounts?.cumulativeServicestatus === 2) {
                     <c-row class="m-0 bg-danger text-white bg-gradient">
                         <c-col class="ps-2">
                             <div class="py-2">
@@ -88,7 +88,7 @@
                         </c-col>
                     </c-row>
                 }
-                @if (statusCounts?.cumulativeHoststatus === 2 || ( statusCounts?.cumulativeServicestatus === 3 )) {
+                @if (statusCounts?.cumulativeHoststatus === 2 || statusCounts?.cumulativeServicestatus === 3) {
                     <c-row class="m-0 bg-secondary text-white bg-gradient">
                         <c-col class="ps-2">
                             <div class="py-2">
