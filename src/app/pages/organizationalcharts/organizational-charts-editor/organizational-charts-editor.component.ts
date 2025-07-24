@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { NodesPaletteComponent } from './nodes-palette/nodes-palette.component';
 import {
+    EFConnectableSide,
     EFConnectionBehavior,
     EFConnectionType,
     EFMarkerType,
@@ -581,4 +582,5 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
     protected readonly EFConnectionType = EFConnectionType;
     protected readonly String = String;
     protected readonly ContainerTypesEnum = ContainerTypesEnum;
+    protected readonly EFConnectableSide = EFConnectableSide;
 }

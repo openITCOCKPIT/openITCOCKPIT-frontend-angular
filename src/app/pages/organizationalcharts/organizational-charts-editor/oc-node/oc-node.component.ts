@@ -73,7 +73,7 @@ export class OcNodeComponent implements OnDestroy {
     public isLoading: boolean = false;
     public statusCounts?: StatuscountResponse;
 
-    private connectionId: number | string = '';
+    private connectionIds: (string | number)[] = [];
 
     private readonly subscriptions: Subscription = new Subscription();
 
@@ -109,10 +109,13 @@ export class OcNodeComponent implements OnDestroy {
 
             // Check if the node has a connection
             this.hasConnection = false;
-            const connection = this.connections.find((c) => c.organizational_chart_output_node_id === this.node()?.node.id);
-            if (connection) {
-                this.hasConnection = true;
-                this.connectionId = connection.id;
+            this.connectionIds = [];
+            const connections = this.connections.filter((c) => c.organizational_chart_output_node_id == this.node()?.node.id);
+            this.hasConnection = connections.length > 0;
+            if (connections) {
+                connections.forEach((c) => {
+                    this.connectionIds.push(c.id);
+                })
             }
         });
     }
@@ -122,8 +125,10 @@ export class OcNodeComponent implements OnDestroy {
     }
 
     public onDeleteConnection(): void {
-        if (this.hasConnection && this.connectionId !== '') {
-            this.deleteConnection.emit(this.connectionId);
+        if (this.hasConnection && this.connectionIds.length > 0) {
+            this.connectionIds.forEach((connectionId) => {
+                this.deleteConnection.emit(connectionId);
+            })
         }
     }
 

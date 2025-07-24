@@ -19,6 +19,7 @@ import {
     ModalToggleDirective
 } from '@coreui/angular';
 import {
+    EFConnectableSide,
     EFConnectionBehavior,
     EFConnectionType,
     EFMarkerType,
@@ -174,4 +175,5 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
     protected readonly ContainerTypesEnum = ContainerTypesEnum;
 
     protected readonly OrganizationalchartUserRoles = OrganizationalchartUserRoles;
+    protected readonly EFConnectableSide = EFConnectableSide;
 }

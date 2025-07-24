@@ -314,6 +314,7 @@
             <div fNodeOutput
                  class="oc-node-output"
                  [fOutputId]="String(nodeObj.node.id)"
+                 [fOutputMultiple]="true"
                  [isSelfConnectable]="false">
                 @if (hasConnection) {
                     <fa-icon [icon]="['fas', 'square']" class="text-primary"></fa-icon>
