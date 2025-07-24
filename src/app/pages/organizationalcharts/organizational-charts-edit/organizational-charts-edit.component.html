@@ -55,6 +55,19 @@
                             {{ t('Back') }}
                         </button>
                     </c-nav-item>
+
+                    <c-nav-item class="px-1" *ngIf="post">
+                        <a *oitcPermission="['organizationalcharts', 'view']"
+                           [routerLink]="['/', 'organizationalcharts', 'view', post.id]"
+                           cButton
+                           class="ripple"
+                           color="primary"
+                           size="xs">
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                            {{ t('View') }}
+                        </a>
+                    </c-nav-item>
+
                 </c-nav>
 
             </c-card-header>

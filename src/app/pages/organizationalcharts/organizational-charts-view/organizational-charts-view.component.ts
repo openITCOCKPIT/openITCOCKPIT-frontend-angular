@@ -25,6 +25,7 @@ import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loa
 import {
     OrganizationalChartsViewerComponent
 } from '../organizational-charts-viewer/organizational-charts-viewer.component';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-organizational-charts-view',
@@ -44,7 +45,8 @@ import {
         XsButtonDirective,
         RouterLink,
         BlockLoaderComponent,
-        OrganizationalChartsViewerComponent
+        OrganizationalChartsViewerComponent,
+        BackButtonDirective
     ],
     templateUrl: './organizational-charts-view.component.html',
     styleUrl: './organizational-charts-view.component.css',
@@ -83,6 +85,9 @@ export class OrganizationalChartsViewComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 if (result.success) {
                     this.organizationalChart = result.data.organizationalChart;
+                    if (this.organizationalChart) {
+                        this.organizationalChart.allowEdit = result.data.allowEdit;
+                    }
                     this.title = this.organizationalChart?.name || '';
                     this.TitleService.setTitle(`${this.title} | ` + this.TranslocoService.translate('Organizational charts'));
 
