@@ -20,8 +20,8 @@
         </ol>
     </nav>
 
-    <form cForm (ngSubmit)="submit()">
-        <c-card class="mb-3">
+    <form cForm (ngSubmit)="submit()" class="d-flex flex-column h-100">
+        <c-card class="mb-3 d-flex h-100">
             <c-card-header>
                 <h5 cCardTitle>
                     {{ t('Create new Organizational chart') }}
@@ -52,7 +52,7 @@
                 </c-nav>
 
             </c-card-header>
-            <c-card-body>
+            <c-card-body class="d-flex flex-column h-100">
 
                 <div class="mb-3">
                     <label cLabel for="name">
@@ -77,7 +77,7 @@
                     <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                 </div>
 
-                <fieldset>
+                <fieldset class="d-flex flex-column h-100">
                     <legend class="fs-md fieldset-legend-border-bottom mt-1">
                         <h4>
                             <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
@@ -86,6 +86,7 @@
                     </legend>
 
                     <oitc-organizational-charts-editor
+                        class="flex-1"
                         [(nodeTree)]="post.organizational_chart_nodes"
                         [(connections)]="post.organizational_chart_connections"
                         [nodeValidationErrorsInput]="nodeErrors"></oitc-organizational-charts-editor>
