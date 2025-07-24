@@ -12,17 +12,20 @@ import {
 import { FFlowModule } from '@foblex/flow';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { NgClass } from '@angular/common';
-import { ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { CardTitleDirective, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { BadgeOutlineComponent } from '../../../../layouts/coreui/badge-outline/badge-outline.component';
 import { OcTreeNode } from '../../organizational-charts-editor/organizational-charts-editor.interface';
 import { OcConnection } from '../../organizationalcharts.interface';
-import { StatuscountResponse } from '../../../browsers/browsers.interface';
+import { StatuscountResponseExtended } from '../../../browsers/browsers.interface';
 import { Subscription } from 'rxjs';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 import { BrowsersService } from '../../../browsers/browsers.service';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { PermissionsService } from '../../../../permissions/permissions.service';
+import { RouterLink } from '@angular/router';
+
 
 @Component({
     selector: 'oitc-oc-node-viewer',
@@ -37,7 +40,10 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
         BlockLoaderComponent,
         BadgeOutlineComponent,
         TranslocoPipe,
-        XsButtonDirective
+        XsButtonDirective,
+        AsyncPipe,
+        RouterLink,
+        CardTitleDirective
     ],
     templateUrl: './oc-node-viewer.component.html',
     styleUrl: './oc-node-viewer.component.css',
@@ -60,13 +66,14 @@ export class OcNodeViewerComponent implements OnDestroy {
     public hasConnection: boolean = false;
 
     public isLoading: boolean = false;
-    public statusCounts?: StatuscountResponse;
+    public statusCounts?: StatuscountResponseExtended;
 
 
     private readonly subscriptions: Subscription = new Subscription();
 
     private readonly TranslocoService = inject(TranslocoService);
     private readonly BrowsersService = inject(BrowsersService);
+    public PermissionsService = inject(PermissionsService);
     private cdr = inject(ChangeDetectorRef);
 
     public constructor() {
@@ -103,7 +110,7 @@ export class OcNodeViewerComponent implements OnDestroy {
 
         const containerId = this.nodeObj.node.container_id;
         const recursive = this.nodeObj.node.recursive;
-        this.subscriptions.add(this.BrowsersService.getStatusCountsByContainer([containerId], recursive).subscribe(response => {
+        this.subscriptions.add(this.BrowsersService.getExtendedStatusCountsByContainer([containerId], recursive).subscribe(response => {
             this.statusCounts = response;
             this.isLoading = false;
             this.cdr.markForCheck();

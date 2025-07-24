@@ -125,10 +125,21 @@
                                     <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                     {{ t('Host status overview') }}
                                     @if (statusCounts.unhandledHostsSum > 0) {
-                                        <oitc-badge-outline color="danger" class="me-1"
-                                                            [cTooltip]="'Unhandled problems'|transloco">
-                                            {{ t('Unhandled') }}: {{ statusCounts.unhandledHostsSum }}
-                                        </oitc-badge-outline>
+                                        @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
+                                            <a [routerLink]="['/', 'hosts', 'index']"
+                                               [queryParams]="{id: statusCounts.unhandledHosts.totalHostIds, sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                                <oitc-badge-outline color="danger" class="mx-1"
+                                                                    [cTooltip]="'Unhandled problems'|transloco">
+
+                                                    {{ t('Unhandled') }}: {{ statusCounts.unhandledHostsSum }}
+                                                </oitc-badge-outline>
+                                            </a>
+                                        } @else {
+                                            <oitc-badge-outline color="danger" class="mx-1"
+                                                                [cTooltip]="'Unhandled problems'|transloco">
+                                                {{ t('Unhandled') }}: {{ statusCounts.unhandledHostsSum }}
+                                            </oitc-badge-outline>
+                                        }
                                     }
                                 </h6>
                             </c-col>
@@ -137,8 +148,16 @@
                                     <div [ngClass]="{'opacity-25':statusCounts.hoststatusCount[0] === 0}"
                                          class="border-start border-start-5 border-start-success py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
-                                            {{ statusCounts.hoststatusCount[0] }}
-                                            ({{ statusCounts.hoststatusCountPercentage[0] }}%)
+                                            @if (statusCounts.hoststatusCount[0] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                                <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
+                                                   [queryParams]="{id: statusCounts.hoststatusCount.hostIds[0], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                                    {{ statusCounts.hoststatusCount[0] }}
+                                                    ({{ statusCounts.hoststatusCountPercentage[0] }}%)
+                                                </a>
+                                            } @else {
+                                                {{ statusCounts.hoststatusCount[0] }}
+                                                ({{ statusCounts.hoststatusCountPercentage[0] }}%)
+                                            }
                                         </div>
                                     </div>
                                 </c-col>
@@ -146,8 +165,16 @@
                                     <div [ngClass]="{'opacity-25':statusCounts.hoststatusCount[1] === 0}"
                                          class="border-start border-start-5 border-start-danger py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
-                                            {{ statusCounts.hoststatusCount[1] }}
-                                            ( {{ statusCounts.hoststatusCountPercentage[1] }}%)
+                                            @if (statusCounts.hoststatusCount[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                                <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
+                                                   [queryParams]="{id: statusCounts.hoststatusCount.hostIds[1], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                                    {{ statusCounts.hoststatusCount[1] }}
+                                                    ({{ statusCounts.hoststatusCountPercentage[1] }}%)
+                                                </a>
+                                            } @else {
+                                                {{ statusCounts.hoststatusCount[1] }}
+                                                ({{ statusCounts.hoststatusCountPercentage[1] }}%)
+                                            }
                                         </div>
                                     </div>
                                 </c-col>
@@ -155,8 +182,16 @@
                                     <div [ngClass]="{'opacity-25':statusCounts.hoststatusCount[2] === 0}"
                                          class="border-start border-start-5 border-start-secondary py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
-                                            {{ statusCounts.hoststatusCount[2] }}
-                                            ({{ statusCounts.hoststatusCountPercentage[2] }}%)
+                                            @if (statusCounts.hoststatusCount[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                                <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
+                                                   [queryParams]="{id: statusCounts.hoststatusCount.hostIds[2], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                                    {{ statusCounts.hoststatusCount[2] }}
+                                                    ({{ statusCounts.hoststatusCountPercentage[2] }}%)
+                                                </a>
+                                            } @else {
+                                                {{ statusCounts.hoststatusCount[2] }}
+                                                ({{ statusCounts.hoststatusCountPercentage[2] }}%)
+                                            }
                                         </div>
                                     </div>
                                 </c-col>
@@ -173,10 +208,21 @@
                                     <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                     {{ t('Service status overview') }}
                                     @if (statusCounts.unhandledServicesSum > 0) {
-                                        <oitc-badge-outline color="danger" class="me-1"
-                                                            [cTooltip]="'Unhandled problems'|transloco">
-                                            {{ t('Unhandled') }}: {{ statusCounts.unhandledServicesSum }}
-                                        </oitc-badge-outline>
+                                        @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
+                                            <a [routerLink]="['/', 'services', 'index']"
+                                               [queryParams]="{id: statusCounts.unhandledServices.totalServiceIds, sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                                <oitc-badge-outline color="danger" class="mx-1"
+                                                                    [cTooltip]="'Unhandled problems'|transloco">
+
+                                                    {{ t('Unhandled') }}: {{ statusCounts.unhandledServicesSum }}
+                                                </oitc-badge-outline>
+                                            </a>
+                                        } @else {
+                                            <oitc-badge-outline color="danger" class="mx-1"
+                                                                [cTooltip]="'Unhandled problems'|transloco">
+                                                {{ t('Unhandled') }}: {{ statusCounts.unhandledServicesSum }}
+                                            </oitc-badge-outline>
+                                        }
                                     }
                                 </h6>
                             </c-col>
@@ -185,17 +231,33 @@
                                     <div [ngClass]="{'opacity-25':statusCounts.servicestatusCount[0] === 0}"
                                          class="border-start border-start-5 border-start-success py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
-                                            {{ statusCounts.servicestatusCount[0] }}
-                                            ({{ statusCounts.servicestatusCountPercentage[0] }}%)
+                                            @if (statusCounts.servicestatusCount[0] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                                <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                                   [queryParams]="{id: statusCounts.servicestatusCount.serviceIds[0], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                                    {{ statusCounts.servicestatusCount[0] }}
+                                                    ({{ statusCounts.servicestatusCountPercentage[0] }}%)
+                                                </a>
+                                            } @else {
+                                                {{ statusCounts.servicestatusCount[0] }}
+                                                ({{ statusCounts.servicestatusCountPercentage[0] }}%)
+                                            }
                                         </div>
                                     </div>
                                 </c-col>
                                 <c-col [xs]="12">
                                     <div [ngClass]="{'opacity-25':statusCounts.servicestatusCount[1] === 0}"
-                                         class="border-start border-start-4 border-start-warning py-0 px-1 font-xs">
+                                         class="border-start border-start-5 border-start-warning py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
-                                            {{ statusCounts.servicestatusCount[1] }}
-                                            ({{ statusCounts.servicestatusCountPercentage[1] }}%)
+                                            @if (statusCounts.servicestatusCount[1] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                                <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                                   [queryParams]="{id: statusCounts.servicestatusCount.serviceIds[1], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                                    {{ statusCounts.servicestatusCount[1] }}
+                                                    ({{ statusCounts.servicestatusCountPercentage[1] }}%)
+                                                </a>
+                                            } @else {
+                                                {{ statusCounts.servicestatusCount[1] }}
+                                                ({{ statusCounts.servicestatusCountPercentage[1] }}%)
+                                            }
                                         </div>
                                     </div>
                                 </c-col>
@@ -203,8 +265,16 @@
                                     <div [ngClass]="{'opacity-25':statusCounts.servicestatusCount[2] === 0}"
                                          class="border-start border-start-5 border-start-danger py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
-                                            {{ statusCounts.servicestatusCount[2] }}
-                                            ( {{ statusCounts.servicestatusCountPercentage[2] }}%)
+                                            @if (statusCounts.servicestatusCount[2] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                                <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                                   [queryParams]="{id: statusCounts.servicestatusCount.serviceIds[2], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                                    {{ statusCounts.servicestatusCount[2] }}
+                                                    ({{ statusCounts.servicestatusCountPercentage[2] }}%)
+                                                </a>
+                                            } @else {
+                                                {{ statusCounts.servicestatusCount[2] }}
+                                                ({{ statusCounts.servicestatusCountPercentage[2] }}%)
+                                            }
                                         </div>
                                     </div>
                                 </c-col>
@@ -212,8 +282,16 @@
                                     <div [ngClass]="{'opacity-25':statusCounts.servicestatusCount[3] === 0}"
                                          class="border-start border-start-5 border-start-secondary py-0 px-1 font-xs">
                                         <div class="text-body-secondary">
-                                            {{ statusCounts.servicestatusCount[3] }}
-                                            ( {{ statusCounts.servicestatusCountPercentage[3] }}%)
+                                            @if (statusCounts.servicestatusCount[3] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                                <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                                   [queryParams]="{id: statusCounts.servicestatusCount.serviceIds[3], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                                    {{ statusCounts.servicestatusCount[3] }}
+                                                    ({{ statusCounts.servicestatusCountPercentage[3] }}%)
+                                                </a>
+                                            } @else {
+                                                {{ statusCounts.servicestatusCount[3] }}
+                                                ({{ statusCounts.servicestatusCountPercentage[3] }}%)
+                                            }
                                         </div>
                                     </div>
                                 </c-col>

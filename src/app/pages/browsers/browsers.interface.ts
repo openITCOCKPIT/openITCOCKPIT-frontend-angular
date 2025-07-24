@@ -1,4 +1,9 @@
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import {
+    ServiceSummaryStatesServices,
+    SummaryStatesHosts, SummaryUnhandledHosts,
+    SummaryUnhandledServices
+} from '../hosts/summary_state.interface';
 
 export interface BrowsersIndexResponse {
     containers: BrowsersContainer[]
@@ -34,6 +39,21 @@ export interface StatuscountResponse {
     unhandledHosts: number[]
     unhandledHostsSum: number
     unhandledServices: number[]
+    unhandledServicesSum: number
+    cumulativeHoststatus: number
+    cumulativeServicestatus: number
+}
+
+export interface StatuscountResponseExtended {
+    hoststatusCount: SummaryStatesHosts
+    servicestatusCount: ServiceSummaryStatesServices
+    hoststatusSum: number
+    servicestatusSum: number
+    hoststatusCountPercentage: number[]
+    servicestatusCountPercentage: number[]
+    unhandledHosts: SummaryUnhandledHosts
+    unhandledHostsSum: number
+    unhandledServices: SummaryUnhandledServices
     unhandledServicesSum: number
     cumulativeHoststatus: number
     cumulativeServicestatus: number
