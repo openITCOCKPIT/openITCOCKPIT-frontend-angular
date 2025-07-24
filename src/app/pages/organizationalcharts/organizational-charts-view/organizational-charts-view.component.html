@@ -20,7 +20,7 @@
         </ol>
     </nav>
 
-    <c-card class="mb-3">
+    <c-card class="mb-3 d-flex h-100">
         <c-card-header>
             <h5 cCardTitle>{{ t('Organizational chart') }}:
                 <small class="fw-300">
@@ -37,12 +37,12 @@
                 </c-nav-item>
             </c-nav>
         </c-card-header>
-        <c-card-body>
-
+        <c-card-body class="d-flex h-100">
 
             <oitc-block-loader *ngIf="!organizationalChart" [height]="'25rem'"></oitc-block-loader>
             @if (organizationalChart) {
                 <oitc-organizational-charts-viewer
+                    class="flex-1"
                     [(nodeTree)]="organizationalChart.organizational_chart_nodes"
                     [(connections)]="organizationalChart.organizational_chart_connections">
 

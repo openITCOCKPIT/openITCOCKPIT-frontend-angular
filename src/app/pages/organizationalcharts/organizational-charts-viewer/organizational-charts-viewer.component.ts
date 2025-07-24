@@ -42,7 +42,7 @@ import { OcTreeNode } from '../organizational-charts-editor/organizational-chart
 import { Subscription } from 'rxjs';
 import { OrganizationalChartNodesService } from '../organizationalchartnodes.service';
 import { OrganizationalChartsService } from '../organizationalcharts.service';
-import { Point } from '@foblex/2d';
+import { PointExtensions } from '@foblex/2d';
 import { NgClass } from '@angular/common';
 import { OcNodeViewerComponent } from './oc-node-viewer/oc-node-viewer.component';
 import { OrganizationalchartUserRoles } from '../organizationalcharts.enum';
@@ -136,7 +136,9 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
     }
 
     public onInitialized(): void {
-        this.fCanvasComponent.fitToScreen(new Point(40, 40), false);
+        //this.fCanvasComponent.fitToScreen(new Point(40, 40), false);
+        //this.fCanvasComponent.resetScaleAndCenter(false);
+        this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 250), false);
     }
 
     public onViewNodeDetails(node: OcTreeNode) {
