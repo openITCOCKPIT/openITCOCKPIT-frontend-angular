@@ -138,7 +138,7 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
     public onInitialized(): void {
         //this.fCanvasComponent.fitToScreen(new Point(40, 40), false);
         //this.fCanvasComponent.resetScaleAndCenter(false);
-        this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 250), false);
+        this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 100), false);
     }
 
     public onViewNodeDetails(node: OcTreeNode) {
