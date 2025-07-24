@@ -27,7 +27,7 @@
     @if (organizationalCharts) {
         <ng-container>
             <oitc-query-handler-checker></oitc-query-handler-checker>
-            <c-card>
+            <c-card class="d-flex h-100">
                 <c-card-header class="my-0 py-0">
                     <h6 cCardTitle class="my-0">
                         <nav aria-label="breadcrumb" class="my-2">
@@ -61,8 +61,8 @@
                         }
                     </c-nav>
                 </c-card-header>
-                <c-card-body>
-                    <c-card class="mb-3 mt-3">
+                <c-card-body class="d-flex flex-column h-100">
+                    <c-card class="mb-3 mt-3 d-flex flex-column h-100">
                         <c-card-header>
                             <div cCardTitle>
                                 <oitc-select
@@ -77,16 +77,16 @@
                                 </oitc-select>
                             </div>
                         </c-card-header>
-                        <c-card-body>
+                        <c-card-body class="d-flex flex-column h-100">
                             @if (!organizationalchartId) {
                                 <ng-container>
                                     <oitc-block-loader height="15rem"></oitc-block-loader>
                                 </ng-container>
                             }
                             @if (organizationalchartId) {
-                                <c-row>
+                                <c-row class="h-100">
                                     <c-col [xs]="12" [sm]="12" [md]="4" [lg]="2">
-                                        <c-card class="h-100">
+                                        <c-card class="d-flex h-100">
                                             <c-card-header>
                                                 <h6 cCardTitle>
                                                     <fa-icon [icon]="['fas', 'link']"></fa-icon>
@@ -134,7 +134,7 @@
                                         </c-card>
                                     </c-col>
                                     <c-col [xs]="12" [sm]="12" [md]="8" [lg]="10">
-                                        <c-card class="min-vh-50">
+                                        <c-card class="d-flex h-100">
                                             <c-card-header>
                                                 @if (organizationalChart) {
                                                     <h6 cCardTitle>
@@ -147,9 +147,10 @@
 
                                                 @if (organizationalChart) {
                                                     <oitc-organizational-charts-viewer
+                                                        class="flex-1"
                                                         [(nodeTree)]="organizationalChart.organizational_chart_nodes"
                                                         [(connections)]="organizationalChart.organizational_chart_connections">
-                                                        
+
                                                     </oitc-organizational-charts-viewer>
                                                 }
 
