@@ -24,7 +24,7 @@ import {
     FReassignConnectionEvent,
     FZoomDirective
 } from '@foblex/flow';
-import { IPoint, Point } from '@foblex/2d';
+import { IPoint, PointExtensions } from '@foblex/2d';
 import { LoadContainersRoot, OcConnection, OrganizationalChartsTreeNode } from '../organizationalcharts.interface';
 import { UUID } from '../../../classes/UUID';
 import { OcNodeComponent } from './oc-node/oc-node.component';
@@ -209,7 +209,7 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
     }
 
     public onInitialized(): void {
-        this.fCanvasComponent.fitToScreen(new Point(40, 40), false);
+        this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 100), false);
     }
 
 
