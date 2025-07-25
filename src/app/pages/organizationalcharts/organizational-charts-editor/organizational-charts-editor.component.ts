@@ -60,6 +60,7 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { OrganizationalChartNodesService } from '../organizationalchartnodes.service';
 import { OrganizationalchartUserRoles } from '../organizationalcharts.enum';
 import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
+import { Point } from 'leaflet';
 
 
 @Component({
@@ -210,7 +211,9 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
     }
 
     public onInitialized(): void {
-        this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 100), false);
+        this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 200), false);
+        //this.fCanvasComponent.resetScaleAndCenter(false);
+        //this.fCanvasComponent.fitToScreen(new Point(0, 0), false);
     }
 
 

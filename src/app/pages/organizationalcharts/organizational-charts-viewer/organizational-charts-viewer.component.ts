@@ -49,6 +49,7 @@ import { OcNodeViewerComponent } from './oc-node-viewer/oc-node-viewer.component
 import { OrganizationalchartUserRoles } from '../organizationalcharts.enum';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { Point } from 'leaflet';
 
 @Component({
     selector: 'oitc-organizational-charts-viewer',
@@ -137,9 +138,9 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
     }
 
     public onInitialized(): void {
-        //this.fCanvasComponent.fitToScreen(new Point(40, 40), false);
+        this.fCanvasComponent.fitToScreen(new Point(0, 0), false);
         //this.fCanvasComponent.resetScaleAndCenter(false);
-        this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 100), false);
+        //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 200), false);
     }
 
     public onViewNodeDetails(node: OcTreeNode) {
