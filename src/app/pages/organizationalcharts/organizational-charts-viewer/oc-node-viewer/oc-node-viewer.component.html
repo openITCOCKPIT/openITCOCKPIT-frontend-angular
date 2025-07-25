@@ -310,7 +310,7 @@
 
 
     <div class="output-item text-center">
-        @if (nodeObj) {
+        @if (nodeObj && hasConnection) {
             <div fNodeOutput
                  class="oc-node-output"
                  [fOutputId]="String(nodeObj.node.id)"

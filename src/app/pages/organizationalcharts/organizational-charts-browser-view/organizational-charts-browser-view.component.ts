@@ -26,11 +26,9 @@ import { OrganizationalChartsService } from '../organizationalcharts.service';
 import { HistoryService } from '../../../history.service';
 import { TitleService } from '../../../services/title.service';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { GenericValidationError } from '../../../generic-responses';
-import { OrganizationalChart } from '../organizationalcharts.interface';
+import { CrganizationalChartsContainer, OrganizationalChartsPost } from '../organizationalcharts.interface';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
-import { BrowsersContainer } from '../../browsers/browsers.interface';
 import {
     OrganizationalChartsViewerComponent
 } from '../organizational-charts-viewer/organizational-charts-viewer.component';
@@ -73,10 +71,10 @@ export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestr
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly TitleService: TitleService = inject(TitleService);
     public containerId: number = 0;
-    public containers: BrowsersContainer[] = [];
+    public containers: CrganizationalChartsContainer[] = [];
     public organizationalCharts: SelectKeyValue[] = [];
     public organizationalchartId: number = 0;
-    public organizationalChart?: OrganizationalChart;
+    public organizationalChart?: OrganizationalChartsPost;
     public title: string = '';
 
     public ngOnInit(): void {
@@ -115,23 +113,18 @@ export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestr
 
     public onOrganizationalchartsChange() {
         if (this.organizationalchartId) {
-            console.log('LOAD TREE FOR ORGANIZATIONAL CHARTS ID: ' + this.organizationalchartId);
+            this.organizationalChart = undefined;
+            this.cdr.markForCheck();
+
             this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartById(this.organizationalchartId)
                 .subscribe((result) => {
-                    if (result.success) {
-                        this.organizationalChart = result.data.organizationalChart;
-                        this.title = this.organizationalChart?.name || '';
-                        this.TitleService.setTitle(`${this.title} | ` + this.TranslocoService.translate('Organizational charts'));
+                    this.organizationalChart = result.organizationalChart;
+                    this.title = this.organizationalChart.name || '';
+                    this.TitleService.setTitle(`${this.title} | ` + this.TranslocoService.translate('Organizational charts'));
 
-                        this.containers = result.data.containers;
-                        this.cdr.markForCheck();
-                        return;
-                    }
-
-                    // Error
-                    const errorResponse = result.data as GenericValidationError;
-                    this.notyService.genericError();
+                    this.containers = result.containers;
                     this.cdr.markForCheck();
+                    return;
                 })
             );
         }

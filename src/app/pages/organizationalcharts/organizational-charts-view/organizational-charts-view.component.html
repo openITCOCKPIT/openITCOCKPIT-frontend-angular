@@ -46,7 +46,7 @@
                     </button>
                 </c-nav-item>
 
-                <c-nav-item class="px-1" *ngIf="organizationalChart && organizationalChart.allowEdit">
+                <c-nav-item class="px-1" *ngIf="organizationalChart && allowEdit">
                     <a *oitcPermission="['organizationalcharts', 'edit']"
                        [routerLink]="['/', 'organizationalcharts', 'edit', organizationalChart.id]"
                        cButton

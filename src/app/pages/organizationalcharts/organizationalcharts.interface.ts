@@ -121,3 +121,25 @@ export interface OrganizationalChartsTreeNodeUser {
         user_role: OrganizationalchartUserRoles
     }
 }
+
+
+/***************
+ *     View    *
+ ***************/
+
+export interface LoadOrganizationalChartByIdRootResponse {
+    organizationalChart: OrganizationalChartsPost
+    containers: CrganizationalChartsContainer[]
+    allowEdit: boolean
+    _csrfToken: string
+}
+
+export interface CrganizationalChartsContainer {
+    key: number
+    value: {
+        id: number
+        name: string
+        containertype_id: ContainerTypesEnum
+        path: string
+    }
+}

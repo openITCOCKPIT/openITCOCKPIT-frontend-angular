@@ -7,6 +7,7 @@ import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.
 import {
     LoadContainersRoot,
     LoadContainersRootWithCsrf,
+    LoadOrganizationalChartByIdRootResponse,
     OrganizationalChartsIndexParams,
     OrganizationalChartsIndexRoot,
     OrganizationalChartsPost
@@ -53,27 +54,16 @@ export class OrganizationalChartsService {
         );
     }
 
-    public getOrganizationalChartById(id: number): Observable<GenericResponseWrapper> {
+    public getOrganizationalChartById(id: number): Observable<LoadOrganizationalChartByIdRootResponse> {
         const proxyPath = this.proxyPath;
-        return this.http.get<any>(`${proxyPath}/organizationalCharts/loadOrganizationalChartById/${id}.json`, {
+        return this.http.get<LoadOrganizationalChartByIdRootResponse>(`${proxyPath}${proxyPath}/organizationalCharts/loadOrganizationalChartById/${id}.json`, {
             params: {
-                angular: true
+                angular: true,
             }
-
         }).pipe(
             map(data => {
                 // Return true on 200 Ok
-                return {
-                    success: true,
-                    data: data
-                };
-            }),
-            catchError((error: any) => {
-                const err = error.error.error as GenericValidationError;
-                return of({
-                    success: false,
-                    data: err
-                });
+                return data;
             })
         );
     }

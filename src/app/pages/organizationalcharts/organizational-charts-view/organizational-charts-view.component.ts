@@ -2,8 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { OrganizationalChart } from '../organizationalcharts.interface';
-import { GenericValidationError } from '../../../generic-responses';
+import { OrganizationalChartsPost } from '../organizationalcharts.interface';
 import { OrganizationalChartsService } from '../organizationalcharts.service';
 import { TitleService } from '../../../services/title.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -54,8 +53,9 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 })
 export class OrganizationalChartsViewComponent implements OnInit, OnDestroy {
 
-    public organizationalChart?: OrganizationalChart;
+    public organizationalChart?: OrganizationalChartsPost;
     public title: string = '';
+    public allowEdit: boolean = false;
 
     private organizationalChartId: number = 0;
 
@@ -83,22 +83,14 @@ export class OrganizationalChartsViewComponent implements OnInit, OnDestroy {
     public loadOrganizationalChart() {
         this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartById(this.organizationalChartId)
             .subscribe((result) => {
-                if (result.success) {
-                    this.organizationalChart = result.data.organizationalChart;
-                    if (this.organizationalChart) {
-                        this.organizationalChart.allowEdit = result.data.allowEdit;
-                    }
-                    this.title = this.organizationalChart?.name || '';
-                    this.TitleService.setTitle(`${this.title} | ` + this.TranslocoService.translate('Organizational charts'));
+                this.organizationalChart = result.organizationalChart;
+                this.allowEdit = result.allowEdit;
 
-                    this.cdr.markForCheck();
-                    return;
-                }
+                this.title = this.organizationalChart.name || '';
+                this.TitleService.setTitle(`${this.title} | ` + this.TranslocoService.translate('Organizational charts'));
 
-                // Error
-                const errorResponse = result.data as GenericValidationError;
-                this.notyService.genericError();
                 this.cdr.markForCheck();
+                return;
             }));
     }
 
