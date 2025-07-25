@@ -25,7 +25,7 @@ import {
     FReassignConnectionEvent,
     FZoomDirective
 } from '@foblex/flow';
-import { IPoint, PointExtensions } from '@foblex/2d';
+import { IPoint, Point } from '@foblex/2d';
 import { LoadContainersRoot, OcConnection, OrganizationalChartsTreeNode } from '../organizationalcharts.interface';
 import { UUID } from '../../../classes/UUID';
 import { OcNodeComponent } from './oc-node/oc-node.component';
@@ -60,8 +60,6 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { OrganizationalChartNodesService } from '../organizationalchartnodes.service';
 import { OrganizationalchartUserRoles } from '../organizationalcharts.enum';
 import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
-import { Point } from 'leaflet';
-
 
 @Component({
     selector: 'oitc-organizational-charts-editor',
@@ -211,9 +209,9 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
     }
 
     public onInitialized(): void {
-        this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 200), false);
+        //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 200), false);
         //this.fCanvasComponent.resetScaleAndCenter(false);
-        //this.fCanvasComponent.fitToScreen(new Point(0, 0), false);
+        this.fCanvasComponent.fitToScreen(new Point(0, 0), false);
     }
 
 
@@ -554,9 +552,6 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
             .map(u => u.id);
 
         this.disableUsedUsersModal();
-
-        console.log(this.selectedRegionManagers, this.selectedManagers, this.selectedUsers);
-
     }
 
     public disableUsedUsersModal() {

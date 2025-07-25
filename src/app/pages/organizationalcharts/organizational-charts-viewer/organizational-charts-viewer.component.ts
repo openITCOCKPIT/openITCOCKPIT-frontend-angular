@@ -43,13 +43,13 @@ import { OcTreeNode } from '../organizational-charts-editor/organizational-chart
 import { Subscription } from 'rxjs';
 import { OrganizationalChartNodesService } from '../organizationalchartnodes.service';
 import { OrganizationalChartsService } from '../organizationalcharts.service';
-import { PointExtensions } from '@foblex/2d';
+import { Point } from '@foblex/2d';
 import { NgClass } from '@angular/common';
 import { OcNodeViewerComponent } from './oc-node-viewer/oc-node-viewer.component';
 import { OrganizationalchartUserRoles } from '../organizationalcharts.enum';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { Point } from 'leaflet';
+
 
 @Component({
     selector: 'oitc-organizational-charts-viewer',
