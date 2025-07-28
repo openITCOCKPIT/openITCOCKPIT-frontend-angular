@@ -2,10 +2,10 @@
 
     <fieldset>
         <legend class="fs-md fieldset-legend-border-bottom">
-            <h4>
+            <h4 [ngClass]="{'text-danger': titleErrorField() && errors.hasOwnProperty(titleErrorField())}">
                 {{ title() }}
             </h4>
-            <span class="help-block italic text-primary">
+            <span class="help-block italic text-primary small">
                 {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
             </span>
             <oitc-form-feedback [errors]="errors" errorField="services"></oitc-form-feedback>
@@ -19,28 +19,39 @@
                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                     </span>
                     <ng-select
-                            id="tags"
-                            name="tags"
-                            [items]="[]"
-                            [(ngModel)]="searchedTags"
-                            [addTag]="true"
-                            [multiple]="true"
-                            [selectOnTab]="true"
-                            [isOpen]="false"
-                            [placeholder]="'Filter by service name'|transloco">
+                        id="tags"
+                        name="tags"
+                        [items]="[]"
+                        [(ngModel)]="searchedTags"
+                        [addTag]="true"
+                        [multiple]="true"
+                        [selectOnTab]="true"
+                        [isOpen]="false"
+                        [placeholder]="'Filter by service name'|transloco">
                     </ng-select>
-                    <span cInputGroupText (click)="toggleCheck(undefined)" class="cursor-pointer">
-                        <i class="fas fa-lg fa-check-square alert-icon"></i> {{ t('Toggle checkboxes') }}
+                    <span cInputGroupText>
+                        <c-form-check>
+                            <input
+                                cFormCheckInput
+                                name="toggleCheckboxes"
+                                id="toggleCheckboxes"
+                                type="checkbox"
+
+                                (ngModelChange)="toggleCheck($event)"
+                                [(ngModel)]="checked"/>
+                            <label cFormCheckLabel for="toggleCheckboxes">
+                                {{ t('Toggle checkboxes') }}
+                            </label>
+                        </c-form-check>
                     </span>
                 </c-input-group>
             </c-col>
         </c-row>
 
 
-        <ul style="margin:0;padding:0">
-            <ol style="margin:0;padding:0" *ngFor="let service of post">
+        <ul class="m-0 p-0">
+            <ol class="m-0 p-0" *ngFor="let service of post">
                 <ng-container *ngIf="hasName(service.name)">
-
                     <div class="mb-3 form-group">
                         <div>
                             <input cFormCheckInput
