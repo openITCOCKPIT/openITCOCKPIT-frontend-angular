@@ -8,12 +8,11 @@
             <button cInputGroupText (click)="clear()" [title]="t('Remove this custom color.')">
                 <fa-icon class="text-danger" [icon]="['fas', 'trash']"/>
             </button>
-            <p-color-picker
-                    cInputGroupText
-                    id="post.leftBackground"
-                    color="default"
-                    name="post.leftBackground"
-                    [(ngModel)]="value"/>
+        <span
+            cInputGroupText
+            [(colorPicker)]="value"
+            [style.background]="value"
+        ></span>
         }
         <label cInputGroupText for="ldap_dn"
                style="flex: 1 1 0; min-width: 0;"
