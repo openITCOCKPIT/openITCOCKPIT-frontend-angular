@@ -25,6 +25,7 @@ import { BrowsersService } from '../../../browsers/browsers.service';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PermissionsService } from '../../../../permissions/permissions.service';
 import { RouterLink } from '@angular/router';
+import { OitcAlertComponent } from '../../../../components/alert/alert.component';
 
 
 @Component({
@@ -43,7 +44,8 @@ import { RouterLink } from '@angular/router';
         XsButtonDirective,
         AsyncPipe,
         RouterLink,
-        CardTitleDirective
+        CardTitleDirective,
+        OitcAlertComponent
     ],
     templateUrl: './oc-node-viewer.component.html',
     styleUrl: './oc-node-viewer.component.css',
