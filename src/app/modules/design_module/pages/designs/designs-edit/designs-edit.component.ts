@@ -91,7 +91,6 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         ReloadInterfaceModalComponent,
         FormLabelDirective,
         ButtonGroupComponent,
-        InputGroupComponent,
         ReactiveFormsModule,
         FormsModule,
         CardFooterComponent,

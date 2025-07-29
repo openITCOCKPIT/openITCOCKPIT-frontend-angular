@@ -8,20 +8,21 @@
             <button cInputGroupText (click)="clear()" [title]="t('Remove this custom color.')">
                 <fa-icon class="text-danger" [icon]="['fas', 'trash']"/>
             </button>
-            <p-color-picker
-                    cInputGroupText
-                    id="post.leftBackground"
-                    color="default"
-                    name="post.leftBackground"
-                    [(ngModel)]="value"/>
-        }
-        <label cInputGroupText for="ldap_dn"
-               style="flex: 1 1 0; min-width: 0;"
+            <button cInputGroupText class="p-0">
+                <span cInputGroupText class="input-group-text pt-3 pb-2 rounded-0"
+                      [(colorPicker)]="value"
+                      [style.background]="value"
+                ></span>
+            </button>
 
-               class="cursor-question ml-1"
-               (mouseover)="highlightElement($event)"
-               (mouseout)="highlightElement($event)">
+        }
+        <label cInputGroupText class="flex-1">
             {{ t(title) }}
         </label>
+        <span class="input-group-text">
+            <fa-icon [icon]="['far', 'question-circle']" class="cursor-question ml-1"
+                     (mouseover)="highlightElement($event)"
+                     (mouseout)="highlightElement($event)"/>
+        </span>
     </c-input-group>
 </ng-container>

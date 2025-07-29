@@ -48,55 +48,54 @@
                                     <label cLabel for="post.mode">
                                         {{ t('Color Mode') }}
                                     </label>
-
-                                    <c-input-group>
-                                        <c-dropdown variant="btn-group">
-                                            @if (post.mode === 'light') {
-                                                <button cButton cDropdownToggle color="primary">
-                                                    <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
-                                                    {{ t('Light') }}
-                                                </button>
-                                            } @else if (post.mode === 'dark') {
-                                                <button cButton cDropdownToggle color="primary">
-                                                    <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
-                                                    {{ t('Dark') }}
-                                                </button>
-                                            } @else {
-                                                <button cButton cDropdownToggle color="primary">
-                                                    <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
-                                                    {{ t('Auto') }}
-                                                </button>
-                                            }
-                                            <ul cDropdownMenu>
-                                                <li cDropdownItem (click)="setMode('light')">
-                                                    <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
-                                                    {{ t('Light') }}
-                                                </li>
-                                                <li cDropdownItem (click)="setMode('dark')">
-                                                    <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
-                                                    {{ t('Dark') }}
-                                                </li>
-                                                <li cDropdownItem (click)="setMode('auto')">
-                                                    <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
-                                                    {{ t('Auto') }}
-                                                </li>
-                                            </ul>
-                                        </c-dropdown>
-                                    </c-input-group>
+                                </div>
+                                <div class="mb-3">
+                                    <c-dropdown variant="btn-group">
+                                        @if (post.mode === 'light') {
+                                            <button cButton cDropdownToggle color="primary">
+                                                <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
+                                                {{ t('Light') }}
+                                            </button>
+                                        } @else if (post.mode === 'dark') {
+                                            <button cButton cDropdownToggle color="primary">
+                                                <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
+                                                {{ t('Dark') }}
+                                            </button>
+                                        } @else {
+                                            <button cButton cDropdownToggle color="primary">
+                                                <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
+                                                {{ t('Auto') }}
+                                            </button>
+                                        }
+                                        <ul cDropdownMenu>
+                                            <li cDropdownItem (click)="setMode('light')">
+                                                <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
+                                                {{ t('Light') }}
+                                            </li>
+                                            <li cDropdownItem (click)="setMode('dark')">
+                                                <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
+                                                {{ t('Dark') }}
+                                            </li>
+                                            <li cDropdownItem (click)="setMode('auto')">
+                                                <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
+                                                {{ t('Auto') }}
+                                            </li>
+                                        </ul>
+                                    </c-dropdown>
                                 </div>
 
                                 <div class="mb-3">
                                     <c-form-check>
                                         <input
-                                                cFormCheckInput
-                                                class="checkbox-lg checkbox-primary"
-                                                name="post.logoInHeader"
-                                                id="post.logoInHeader"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                [trueValue]="1"
-                                                [falseValue]="0"
-                                                [(ngModel)]="post.logoInHeader"/>
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="post.logoInHeader"
+                                            id="post.logoInHeader"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [trueValue]="1"
+                                            [falseValue]="0"
+                                            [(ngModel)]="post.logoInHeader"/>
                                         <label cFormCheckLabel class="ms-1 mt-1"
                                                for="post.logoInHeader">
                                             {{ t('Logo in header') }}
@@ -110,11 +109,11 @@
                                         <h5>{{ manipulation.key | transloco }}</h5>
                                         <div class="mb-3 pr-1" *ngFor="let manipulator of manipulation.value">
                                             <oitc-colour-locator-picker
-                                                    [selector]="manipulator.selector"
-                                                    [attribute]="manipulator.attribute"
-                                                    [value]="getManipulatorValue(manipulator.name)"
-                                                    (valueChange)="setManipulatorValue(manipulator.name, $event)"
-                                                    [title]="manipulator.title | transloco"/>
+                                                [selector]="manipulator.selector"
+                                                [attribute]="manipulator.attribute"
+                                                [value]="getManipulatorValue(manipulator.name)"
+                                                (valueChange)="setManipulatorValue(manipulator.name, $event)"
+                                                [title]="manipulator.title | transloco"/>
                                         </div>
                                     </c-col>
                                 </c-row>
@@ -158,7 +157,7 @@
                                     </c-button-group>
                                     <div class="pt-2">
                                         <div
-                                                class="helptext">{{ t('The logo is used by the interface and PDF files.') }}
+                                            class="helptext">{{ t('The logo is used by the interface and PDF files.') }}
                                         </div>
                                         <div class="helptext">{{ t('Resolution: 2600x800') }}</div>
                                     </div>
@@ -189,7 +188,7 @@
                                     </c-button-group>
                                     <div class="pt-2">
                                         <div
-                                                class="helptext">{{ t('The small logo is used by notifications.') }}
+                                            class="helptext">{{ t('The small logo is used by notifications.') }}
                                         </div>
                                         <div class="helptext">{{ t('Resolution: 250x77') }}</div>
                                     </div>
@@ -219,7 +218,7 @@
                                     </c-button-group>
                                     <div class="pt-2">
                                         <div
-                                                class="helptext">{{ t('The logo is used by the interface and login screen.') }}
+                                            class="helptext">{{ t('The logo is used by the interface and login screen.') }}
                                         </div>
                                         <div class="helptext">{{ t('Resolution: 1920x1080') }}</div>
                                     </div>
@@ -285,7 +284,7 @@
                                     </c-button-group>
                                     <div class="pt-2">
                                         <div
-                                                class="helptext">{{ t('The image is used as background image for the login screen.') }}
+                                            class="helptext">{{ t('The image is used as background image for the login screen.') }}
                                         </div>
                                         <div class="helptext">{{ t('Resolution: 2560x1440') }}</div>
                                     </div>
@@ -328,7 +327,7 @@
                                     </c-button-group>
                                     <div class="pt-2">
                                         <div
-                                                class="helptext">{{ t('This image is used on the public status pages.') }}
+                                            class="helptext">{{ t('This image is used on the public status pages.') }}
                                         </div>
                                         <div class="helptext">{{ t('Resolution: 1337x420') }}</div>
                                     </div>
@@ -402,14 +401,14 @@
                             <oitc-required-icon></oitc-required-icon>
                         </label>
                         <oitc-select
-                                name="logoType"
-                                id="logoType"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="logoType"
-                                [options]="logTypeOptions"
-                                (onChange)="onLogoTypeChange()"
-                                [appendTo]="''">
+                            name="logoType"
+                            id="logoType"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="logoType"
+                            [options]="logTypeOptions"
+                            (onChange)="onLogoTypeChange()"
+                            [appendTo]="''">
                         </oitc-select>
                     </div>
                 </c-col>
