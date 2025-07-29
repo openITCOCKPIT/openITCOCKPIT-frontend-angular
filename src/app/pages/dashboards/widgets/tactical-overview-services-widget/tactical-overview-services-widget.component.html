@@ -36,7 +36,7 @@
                                     {{ servicestatusSummary.state[0] }}
                                 }
                             </div>
-                            <div class="bg-warning text-white tactical-overview-flex-item py-5 display-6"
+                            <div class="bg-color-warning text-white tactical-overview-flex-item py-5 display-6"
                                  [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+servicestatusCountPercentage[1]+'%, transparent '+servicestatusCountPercentage[1]+'%)'"
                                  [title]="servicestatusCountPercentage[1]+'%'">
                                 @if (servicestatusSummary.state[1] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {

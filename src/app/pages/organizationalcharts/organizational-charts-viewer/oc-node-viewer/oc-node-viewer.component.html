@@ -131,7 +131,7 @@
                                     class="p1 bg-dark text-white tactical-overview-first-flex-item">
                                     <fa-icon [icon]="['fas', 'desktop']" class="px-1"></fa-icon>
                                 </div>
-                                <div class="p1 bg-success text-white tactical-overview-flex-item py-2 display-6"
+                                <div class="p1 bg-success text-white tactical-overview-flex-item py-2"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.hoststatusCountPercentage[0]+'%, transparent '+statusCounts.hoststatusCountPercentage[0]+'%)'"
                                      [title]="statusCounts.hoststatusCountPercentage[0]+'%'">
                                     @if (statusCounts.hoststatusCount[0] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
@@ -143,7 +143,7 @@
                                         {{ statusCounts.hoststatusCount[0] }}
                                     }
                                 </div>
-                                <div class="bg-danger text-white tactical-overview-flex-item py-2 display-6"
+                                <div class="bg-danger text-white tactical-overview-flex-item py-2"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.hoststatusCountPercentage[1]+'%, transparent '+statusCounts.hoststatusCountPercentage[1]+'%)'"
                                      [title]="statusCounts.hoststatusCountPercentage[1]+'%'">
                                     @if (statusCounts.hoststatusCount[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
@@ -155,7 +155,7 @@
                                         {{ statusCounts.hoststatusCount[1] }}
                                     }
                                 </div>
-                                <div class="bg-secondary text-white tactical-overview-flex-item py-2 display-6"
+                                <div class="bg-secondary text-white tactical-overview-flex-item py-2"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.hoststatusCountPercentage[2]+'%, transparent '+statusCounts.hoststatusCountPercentage[2]+'%)'"
                                      [title]="statusCounts.hoststatusCountPercentage[2]+'%'">
                                     @if (statusCounts.hoststatusCount[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
@@ -170,10 +170,11 @@
                             </div>
                             <div
                                 class="d-flex border border-secondary border-opacity-25 border-start border-top-0 small-text">
-                                <div class="p-1 bg-dark text-white tactical-overview-first-flex-item ">
+                                <div class="p-1 bg-dark text-white tactical-overview-first-flex-item text-center">
                                     <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-warning"></fa-icon>
                                 </div>
                                 <div class="bg-dark tactical-overview-flex-item text-white">
+                                    &nbsp;
                                     {{ t('Unhandled') }}
                                 </div>
                                 <div class="bg-down-soft tactical-overview-flex-item text-white text-center">
