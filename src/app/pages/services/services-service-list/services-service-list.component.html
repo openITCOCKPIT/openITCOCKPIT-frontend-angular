@@ -23,7 +23,7 @@
 
     <c-row>
         <c-col xs="12" lg="8" class="mb-3 mt-1">
-            <c-input-group>
+            <c-input-group class="h-100">
                 <span cInputGroupText class="bg-primary text-white">
                     <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                     &nbsp;
@@ -35,14 +35,14 @@
                     id="host"
                     optionValue="key"
                     optionLabel="value"
-                    class="flex-fill"
+                    class="flex-1 word-break"
                     [(ngModel)]="hostId"
                     [options]="hosts"
                     (onChange)="onHostChange()"
                     [searchCallback]="loadHosts">
                 </oitc-select>
-                <c-dropdown>
-                    <button cButton cDropdownToggle color="default">
+                <c-dropdown class="h-100">
+                    <button cButton cDropdownToggle color="default" class="h-100">
                         {{ t('Actions') }}
                     </button>
                     <ul cDropdownMenu>
@@ -126,7 +126,7 @@
     <c-card class="mb-3">
         <c-card-header>
             <h5 cCardTitle>{{ t('Services of Host') }}:
-                <small class="fw-300">
+                <small class="fw-300 flex-status-header flex-1 word-break pe-2">
                     {{ host?.name }}
                     (
                     <oitc-copy-to-clipboard [data]="host?.address">
