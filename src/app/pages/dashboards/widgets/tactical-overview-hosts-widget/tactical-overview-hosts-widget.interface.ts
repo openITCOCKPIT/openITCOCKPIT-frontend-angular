@@ -4,6 +4,8 @@ export interface TacticalOverviewHostsResponse {
     config: TacticalOverviewHostsConfig
     hoststatusSummary: SummaryStateHosts
     servicestatusSummary: any[]
+    hoststatusCountPercentage: number[]
+    servicestatusCountPercentage: number[]
     _csrfToken: string
 }
 

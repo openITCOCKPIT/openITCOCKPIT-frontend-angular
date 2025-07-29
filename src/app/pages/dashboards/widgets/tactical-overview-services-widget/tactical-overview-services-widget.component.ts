@@ -61,6 +61,7 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
     protected flipped = signal<boolean>(false);
     public readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
     public servicestatusSummary?: SummaryStateServices;
+    public servicestatusCountPercentage: number[] = [];
     public config?: TacticalOverviewServicesConfig;
     protected servicegroups: SelectKeyValue[] = [];
     public keywords: string[] = [];
@@ -86,6 +87,7 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
                     this.keywords = this.config.Service.keywords.split(',').filter(Boolean);
                     this.notKeywords = this.config.Service.not_keywords.split(',').filter(Boolean);
                     this.servicestatusSummary = result.servicestatusSummary;
+                    this.servicestatusCountPercentage = result.servicestatusCountPercentage;
                     this.cdr.markForCheck();
                 }));
         }

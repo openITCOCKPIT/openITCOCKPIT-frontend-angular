@@ -3,6 +3,7 @@ import { SummaryStateServices } from '../../../hosts/summary_state.interface';
 export interface TacticalOverviewServicesResponse {
     config: TacticalOverviewServicesConfig
     servicestatusSummary: SummaryStateServices
+    servicestatusCountPercentage: number[]
     _csrfToken: string
 }
 
