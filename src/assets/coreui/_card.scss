@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "variables" as coreui;
 
 /* Add support for card-toolbar */
 
@@ -8,7 +9,7 @@
 
 .card-header {
     display: flex;
-    background: color.adjust($white, $alpha: -0.97);
+    background: color.adjust(coreui.$white, $alpha: -0.97);
 }
 
 .card-title {

@@ -1,10 +1,28 @@
-@import "variables";
+// Override some stuph, since the CoreUI Seems to have changed in the latest version
+$h5-font-size: 1rem !default;
+
+
+
+@use "sass:meta";
+@use "variables";
+@use "@fortawesome/fontawesome-free/scss/functions";
+@use "@fortawesome/fontawesome-free/scss/mixins";
+@use "@fortawesome/fontawesome-free/scss/variables" as variables2;
+body {
+    --cui-nav-link-font-size: 12.8px;
+    --cui-breadcrumb-font-size: 12.8px;
+}
+
+h5, .h5 {
+    font-size: 1rem;
+}
+
 @import '../../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 @import '@angular/cdk/overlay-prebuilt.css';
 
-@import "@coreui/coreui/scss/coreui";
+@include meta.load-css("@coreui/coreui/scss/coreui");
 @import "@ng-select/ng-select/themes/default.theme.css";
-@import "ng-select-dark";
+@include meta.load-css("ng-select-dark");
 @import "dropzone/dist/dropzone.css";
 
 @import "animate.css";
@@ -12,8 +30,8 @@
 @import "uplot/dist/uPlot.min.css";
 
 // regular style toast
-@import 'ngx-toastr/toastr';
-@import "toast";
+@include meta.load-css('ngx-toastr/toastr');
+@include meta.load-css("toast");
 
 // Import vis-network css required for the tooltip
 // https://github.com/almende/vis/issues/3192#issuecomment-309995797
@@ -30,22 +48,19 @@
  * https://docs.fontawesome.com/web/dig-deeper/webfont-vs-svg
  * https://github.com/FortAwesome/angular-fontawesome/issues/173#issuecomment-2321811742
  */
-@import "@fortawesome/fontawesome-free/scss/functions";
-@import "@fortawesome/fontawesome-free/scss/variables";
-@import "@fortawesome/fontawesome-free/scss/mixins";
-@import "@fortawesome/fontawesome-free/scss/core";
-@import "@fortawesome/fontawesome-free/scss/sizing";
-@import "@fortawesome/fontawesome-free/scss/fixed-width";
-@import "@fortawesome/fontawesome-free/scss/list";
-@import "@fortawesome/fontawesome-free/scss/bordered-pulled";
-@import "@fortawesome/fontawesome-free/scss/animated";
-@import "@fortawesome/fontawesome-free/scss/rotated-flipped";
+@include meta.load-css("@fortawesome/fontawesome-free/scss/core");
+@include meta.load-css("@fortawesome/fontawesome-free/scss/sizing");
+// @include meta.load-css("@fortawesome/fontawesome-free/scss/fixed-width");
+@include meta.load-css("@fortawesome/fontawesome-free/scss/list");
+// @include meta.load-css("@fortawesome/fontawesome-free/scss/bordered-pulled");
+@include meta.load-css("@fortawesome/fontawesome-free/scss/animated");
+@include meta.load-css("@fortawesome/fontawesome-free/scss/rotated-flipped");
 /* Stacked icons breaks angular-fontawesome  */
 /*@import "@fortawesome/fontawesome-free/scss/stacked";*/
-@import "@fortawesome/fontawesome-free/scss/icons";
-@import "@fortawesome/fontawesome-free/scss/screen-reader";
-@import "@fortawesome/fontawesome-free/scss/solid";
-@import "@fortawesome/fontawesome-free/scss/regular";
+@include meta.load-css("@fortawesome/fontawesome-free/scss/icons");
+// @include meta.load-css("@fortawesome/fontawesome-free/scss/screen-reader");
+@include meta.load-css("@fortawesome/fontawesome-free/scss/solid");
+@include meta.load-css("@fortawesome/fontawesome-free/scss/regular");
 
 // Add 'Font Awesome 6 Free Solid' for vis-network
 @font-face {
@@ -53,58 +68,58 @@
     font-style: normal;
     font-weight: 900;
     font-display: block;
-    src: url("../../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2") format("woff2"), url("../../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf") format("truetype");
+    src: url("../../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2") format("woff2");
 }
 
 @import "flag-icons/css/flag-icons.min.css";
 
-@import "theme";
-@import "card";
-@import "fonts";
-@import "forms";
-@import "layout";
-@import "cursor";
-@import "colors";
+@include meta.load-css("theme");
+@include meta.load-css("card");
+@include meta.load-css("fonts");
+@include meta.load-css("forms");
+@include meta.load-css("layout");
+@include meta.load-css("cursor");
+@include meta.load-css("colors");
 
-@import "scrollbar";
+@include meta.load-css("scrollbar");
 
-@import "buttons";
-@import "checkboxes";
-@import "ripple";
-@import "selectall";
-@import "highlighting";
-@import "icon-colors";
-@import "status-colors";
-@import "popover";
+@include meta.load-css("buttons");
+@include meta.load-css("checkboxes");
+@include meta.load-css("ripple");
+@include meta.load-css("selectall");
+@include meta.load-css("highlighting");
+@include meta.load-css("icon-colors");
+@include meta.load-css("status-colors");
+@include meta.load-css("popover");
 
-@import "object_types";
+@include meta.load-css("object_types");
 
-@import "fullcalendar_hollidays";
-@import "primeng";
-@import "fontawesome";
-@import "flex";
+@include meta.load-css("fullcalendar_hollidays");
+@include meta.load-css("primeng");
+@include meta.load-css("fontawesome");
+@include meta.load-css("flex");
 
-@import "chart-loader";
+@include meta.load-css("chart-loader");
 
-@import "browser";
-@import "vis";
-@import "badge";
-@import "opacity";
-@import "alert";
-@import "nestable";
-@import "timeline";
+@include meta.load-css("browser");
+@include meta.load-css("vis");
+@include meta.load-css("badge");
+@include meta.load-css("opacity");
+@include meta.load-css("alert");
+@include meta.load-css("nestable");
+@include meta.load-css("timeline");
 
-@import "apexcharts";
-@import "wizard";
-@import "statuspages";
-@import "flow";
+@include meta.load-css("apexcharts");
+@include meta.load-css("wizard");
+@include meta.load-css("statuspages");
+@include meta.load-css("flow");
 
-@import "widget";
-@import "sunburst";
+@include meta.load-css("widget");
+@include meta.load-css("sunburst");
 
-@import "uplot";
+@include meta.load-css("uplot");
 
 //  Modules
-@import "../../app/modules/import_module/assets/import_module";
-@import "../../app/modules/eventcorrelation_module/assets/eventcorrelation_module";
-@import "../../app/modules/map_module/assets/map_module";
+@include meta.load-css("../../app/modules/import_module/assets/import_module");
+@include meta.load-css("../../app/modules/eventcorrelation_module/assets/eventcorrelation_module");
+@include meta.load-css("../../app/modules/map_module/assets/map_module");

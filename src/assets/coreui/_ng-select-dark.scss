@@ -1,4 +1,6 @@
 @use "sass:color";
+@use "variables" as coreui;
+
 
 /*!
  * Copyright (C) <2015>  <it-novum GmbH>
@@ -73,11 +75,11 @@
   //box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
   //0 0 0 3px rgba(0, 126, 255, 0.1);
   //box-shadow: inset 0 1px 1px transparentize($primary, 0.5), 0 0 0 3px transparentize($primary, 0.5);
-  box-shadow: 0 0 0 0.25rem color.adjust($primary, $alpha: -0.75);
+  box-shadow: 0 0 0 0.25rem color.adjust(coreui.$primary, $alpha: -0.75);
 }
 
 .ng-select.ng-select-disabled > .ng-select-container {
-  background-color: $input-disabled-bg;
+  background-color: coreui.$gray-200;
 }
 
 .ng-select .ng-has-value .ng-placeholder {
@@ -196,17 +198,17 @@
 }
 
 [dir='rtl'] .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left {
-  border-left: 1px solid $primary;
+  border-left: 1px solid coreui.$primary;
   border-right: none;
 }
 
 .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.right {
-  border-left: 1px solid $primary;
+  border-left: 1px solid coreui.$primary;
 }
 
 [dir='rtl'] .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.right {
   border-left: 0;
-  border-right: 1px solid $primary;
+  border-right: 1px solid coreui.$primary;
 }
 
 .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-input {
@@ -394,8 +396,8 @@
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-disabled {
   //color: $input-disabled-bg;
-  color: $input-disabled-color;
-  background-color: $input-disabled-bg;
+  color: coreui.$gray-200;
+  background-color: coreui.$gray-200;
 }
 
 .dark-theme .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-disabled {

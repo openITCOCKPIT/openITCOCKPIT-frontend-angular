@@ -52,7 +52,7 @@ import { SystemnameService } from './services/systemname.service';
         MessageOfTheDayModalComponent
     ],
     templateUrl: './app.component.html',
-    styleUrl: './app.component.css',
+        styleUrl: './app.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnDestroy, AfterViewInit {

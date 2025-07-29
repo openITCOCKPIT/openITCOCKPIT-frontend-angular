@@ -1,19 +1,21 @@
+@use "variables" as coreui;
+
 .toast-error {
-    background-color: $danger !important;
-    box-shadow: 0 0 12px $danger !important;
+    background-color: coreui.$danger !important;
+    box-shadow: 0 0 12px coreui.$danger !important;
 }
 
 .toast-success {
-    background-color: $success !important;
-    box-shadow: 0 0 12px $success !important;
+    background-color: coreui.$success !important;
+    box-shadow: 0 0 12px coreui.$success !important;
 }
 
 .toast-warning {
-    background-color: $warning !important;
-    box-shadow: 0 0 12px $warning !important;
+    background-color: coreui.$warning !important;
+    box-shadow: 0 0 12px coreui.$warning !important;
 }
 
 .toast-info {
-    background-color: $info !important;
-    box-shadow: 0 0 12px $info !important;
+    background-color: coreui.$info !important;
+    box-shadow: 0 0 12px coreui.$info !important;
 }

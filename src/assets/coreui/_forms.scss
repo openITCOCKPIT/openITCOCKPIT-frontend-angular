@@ -1,3 +1,5 @@
+@use "variables" as coreui;
+
 /* Form classes. */
 
 /************
@@ -61,7 +63,7 @@
 
 /** Make range sliders use the primary color **/
 input[type="range"] {
-    accent-color: $primary;
+    accent-color: coreui.$primary;
 }
 
 

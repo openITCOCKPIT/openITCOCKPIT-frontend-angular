@@ -1,3 +1,5 @@
+@use "@coreui/coreui/scss/variables" as coreui;
+
 /*!
  * Copyright (C) <2015>  <it-novum GmbH>
  *
@@ -132,8 +134,8 @@
 // A class to simulate striped tables or an hover effect
 // Useful for bootstrap grid for example
 .odd {
-    color: $table-striped-color;
-    background-color: $table-striped-bg;
+    color: coreui.$table-striped-color;
+    background-color: coreui.$table-striped-bg;
 }
 
 
