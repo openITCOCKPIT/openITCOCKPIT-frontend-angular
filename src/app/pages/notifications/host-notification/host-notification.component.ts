@@ -19,7 +19,6 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -44,7 +43,6 @@ import { formatDate, NgForOf, NgIf } from '@angular/common';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 
-
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -55,48 +53,50 @@ import {
     HostBrowserMenuConfig,
     HostsBrowserMenuComponent
 } from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
+import { NotificationReasonTypeComponent } from '../notification-reason-type/notification-reason-type.component';
 
 @Component({
     selector: 'oitc-host-notification',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    ColComponent,
-    DebounceDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    PaginatorModule,
-    RowComponent,
-    TranslocoPipe,
-    TrueFalseDirective,
-    MatSort,
-    MatSortHeader,
-    NgIf,
-    TableDirective,
-    NgForOf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    HoststatusSimpleIconComponent,
-    ContainerComponent,
-    TableLoaderComponent,
-    HostsBrowserMenuComponent,
-    CardFooterComponent
-],
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        ColComponent,
+        DebounceDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        PaginatorModule,
+        RowComponent,
+        TranslocoPipe,
+        TrueFalseDirective,
+        MatSort,
+        MatSortHeader,
+        NgIf,
+        TableDirective,
+        NgForOf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        HoststatusSimpleIconComponent,
+        ContainerComponent,
+        TableLoaderComponent,
+        HostsBrowserMenuComponent,
+        CardFooterComponent,
+        NotificationReasonTypeComponent
+    ],
     templateUrl: './host-notification.component.html',
     styleUrl: './host-notification.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
