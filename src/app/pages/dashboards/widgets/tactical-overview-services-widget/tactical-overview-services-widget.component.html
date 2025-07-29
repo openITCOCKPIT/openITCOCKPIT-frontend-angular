@@ -73,15 +73,15 @@
                                 }
                             </div>
                         </div>
-                        <div
-                            class="d-flex fs-5 border border-secondary border-opacity-25 border-start border-top-0">
-                            <div class="p-1 bg-dark text-white tactical-overview-first-flex-item ">
-                                <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-warning"></fa-icon>
+                        <div class="d-flex border border-secondary border-opacity-25 border-start border-top-0">
+                            <div
+                                class="p1 ps-1 bg-dark text-white tactical-overview-first-flex-item">
+                                ⚠️
                             </div>
-                            <div class="bg-dark tactical-overview-flex-item text-white">
+                            <div class="bg-dark tactical-overview-flex-item text-white fs-5">
                                 {{ t('Unhandled Services') }}
                             </div>
-                            <div class="bg-warning-soft tactical-overview-flex-item text-white text-center">
+                            <div class="bg-warning-soft tactical-overview-flex-item text-white text-center fs-5">
                                 @if (servicestatusSummary.not_handled[1] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
                                     <a [routerLink]="['/', 'services', 'index']" class="text-white"
                                        [queryParams]="{id: servicestatusSummary.not_handled.serviceIds[1], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
@@ -91,7 +91,7 @@
                                     {{ servicestatusSummary.not_handled[1] }}
                                 }
                             </div>
-                            <div class="bg-critical-soft tactical-overview-flex-item text-white text-center">
+                            <div class="bg-critical-soft tactical-overview-flex-item text-white text-center fs-5">
                                 @if (servicestatusSummary.not_handled[2] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
                                     <a [routerLink]="['/', 'services', 'index']" class="text-white"
                                        [queryParams]="{id: servicestatusSummary.not_handled.serviceIds[2], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
@@ -101,7 +101,7 @@
                                     {{ servicestatusSummary.not_handled[2] }}
                                 }
                             </div>
-                            <div class="bg-unknown-soft tactical-overview-flex-item text-white text-center">
+                            <div class="bg-unknown-soft tactical-overview-flex-item text-white text-center fs-5">
                                 @if (servicestatusSummary.not_handled[3] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
                                     <a [routerLink]="['/', 'services', 'index']" class="text-white"
                                        [queryParams]="{id: servicestatusSummary.not_handled.serviceIds[3], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
