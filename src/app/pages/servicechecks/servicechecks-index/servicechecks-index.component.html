@@ -215,6 +215,13 @@
                     <th scope="col" mat-sort-header="Servicechecks.start_time">
                         {{ t('Date') }}
                     </th>
+                    <th scope="col" mat-sort-header="Servicechecks.execution_time">
+                        {{ t('Execution time') }}
+                        &nbsp;
+                        <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
+                                 [cTooltip]="'Time in seconds required by the plugin to collect the status information' | transloco"
+                                 cTooltipPlacement="bottom"></fa-icon>
+                    </th>
                     <th scope="col" mat-sort-header="Servicechecks.current_check_attempt">
                         {{ t('Check attempt') }}
                     </th>
@@ -239,6 +246,9 @@
                     </td>
                     <td>
                         {{ servicecheck.Servicecheck.start_time }}
+                    </td>
+                    <td>
+                        {{ servicecheck.Servicecheck.execution_time|localNumber }}s
                     </td>
                     <td class="text-center">
                         {{ servicecheck.Servicecheck.current_check_attempt }}/
