@@ -5,7 +5,14 @@
 @use "@fortawesome/fontawesome-free/scss/variables";
 @use "@coreui/coreui/scss/coreui" with (
     $font-size-base: $font-size-base,
+    $primary: $primary,
     $warning: $warning,
+    $secondary : $secondary,
+    $success : $success,
+    $danger : $danger,
+    $info : $info,
+    $light : $light,
+    $dark : $dark,
 );
 @import '../../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 @import '@angular/cdk/overlay-prebuilt.css';
