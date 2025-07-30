@@ -20,7 +20,7 @@ import {
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import { NgClass } from '@angular/common';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { BehaviorSubject, distinctUntilChanged, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { OrganizationalChartsService } from '../organizationalcharts.service';
 import { HistoryService } from '../../../history.service';
@@ -73,24 +73,25 @@ export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestr
     public containerId: number = 0;
     public containers: CrganizationalChartsContainer[] = [];
     public organizationalCharts: SelectKeyValue[] = [];
-    public organizationalchartId: number = 0;
 
-    private organizationalchartId$$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-    // Subscribe to organizationalchartId$ for organizational id changes
-    public organizationalchartId$: Observable<number> = this.organizationalchartId$$.asObservable();
+    public organizationalchartId: number = 0;
+    private organizationalchartId$$: BehaviorSubject<number> = new BehaviorSubject<number>(this.organizationalchartId);
 
 
     public organizationalChart?: OrganizationalChartsPost;
     public title: string = '';
 
     public ngOnInit(): void {
+        this.subscribeToChanges();
+
+
         this.route.queryParams.subscribe(params => {
-            let id: number = params['containerId'] || 0;
+            let containerId: number = params['containerId'] || 0;
             this.organizationalCharts = [];
-            if (id) {
-                this.containerId = id;
+            if (containerId) {
+                this.containerId = containerId;
                 // Process all query params first and then trigger the load function
-                this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartsByContainerId(id)
+                this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartsByContainerId(containerId)
                     .subscribe((result) => {
                         this.organizationalCharts = result;
                         const found = this.organizationalCharts.find((chart => {
@@ -101,11 +102,10 @@ export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestr
                             this.organizationalchartId = 0; // Reset to 0 if not found
                         }
                         if (this.organizationalchartId === 0 && this.organizationalCharts[0]) {
-                            this.organizationalchartId = this.organizationalCharts[0].key; // Default to the first organizational chart
                             this.title = this.organizationalCharts[0].value;
+                            this.organizationalchartId = this.organizationalCharts[0].key; // Default to the first organizational chart
                             this.organizationalChartChange(this.organizationalCharts[0].key);
                         }
-                        this.subscribeToChanges();
                         this.cdr.markForCheck();
 
                         // Update the title.
@@ -124,28 +124,44 @@ export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestr
         this.subscriptions.unsubscribe();
     }
 
-    public organizationalChartChange(id: number): void {
-        this.organizationalchartId$$.next(id);
+
+    public navigateToContainerId(containerId: number) {
+        // If we would use [routerLink], angular would initialize the component again, which we don't want.
+
+        this.router.navigate([], {
+            queryParams: {
+                containerId: containerId
+            },
+            //queryParamsHandling: "merge",
+        })
     }
 
-    public subscribeToChanges(){
-        this.organizationalchartId$.pipe(distinctUntilChanged()).subscribe((organizationalchartId) => {
-            if(organizationalchartId > 0){
-                this.organizationalChart = undefined;
-                this.cdr.markForCheck();
-                this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartById(organizationalchartId)
-                    .subscribe((result) => {
-                        this.organizationalChart = result.organizationalChart;
-                        this.title = this.organizationalChart.name || '';
-                        this.TitleService.setTitle(`${this.title} | ` + this.TranslocoService.translate('Organizational charts'));
+    public organizationalChartChange(organizationalchartId: number): void {
+        this.organizationalchartId$$.next(organizationalchartId);
+    }
 
-                        this.containers = result.containers;
+    public subscribeToChanges() {
+        this.subscriptions.add(
+            this.organizationalchartId$$
+                .pipe(distinctUntilChanged())
+                .subscribe((organizationalchartId) => {
+                    if (organizationalchartId > 0) {
+                        this.organizationalChart = undefined;
                         this.cdr.markForCheck();
-                        return;
-                    })
-                );
-            }
-        });
+                        this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartById(organizationalchartId)
+                            .subscribe((result) => {
+                                this.organizationalChart = result.organizationalChart;
+                                this.title = this.organizationalChart.name || '';
+                                this.TitleService.setTitle(`${this.title} | ` + this.TranslocoService.translate('Organizational charts'));
+
+                                this.containers = result.containers;
+                                this.cdr.markForCheck();
+                                return;
+                            })
+                        );
+                    }
+                })
+        );
     }
 
     protected readonly ContainerTypesEnum = ContainerTypesEnum;

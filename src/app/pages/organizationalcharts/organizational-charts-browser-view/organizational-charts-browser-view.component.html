@@ -116,8 +116,7 @@
                                                                     <fa-icon [icon]="['fas', 'link']"
                                                                              class="pe-1"></fa-icon>
                                                                 }
-                                                                <a [routerLink]="['/', 'organizationalcharts', 'browserView']"
-                                                                   [queryParams]="{containerId: container.key}"
+                                                                <a (click)="navigateToContainerId(container.key)"
                                                                    class="ms-1">
                                                                     {{ container.value.name }}
                                                                 </a>
