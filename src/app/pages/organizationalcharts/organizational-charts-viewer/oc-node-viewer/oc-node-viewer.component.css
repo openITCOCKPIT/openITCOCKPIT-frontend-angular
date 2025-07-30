@@ -6,13 +6,17 @@
     font-size: xx-small !important;
 }
 
+.font-50-percent {
+    font-size: 50%;
+}
+
 .text-dark-important {
     color: #2a2f34 !important;
 }
 
 
 .tactical-overview-first-flex-item {
-    flex: 0 0 25px;
+    flex: 0 0 15px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;

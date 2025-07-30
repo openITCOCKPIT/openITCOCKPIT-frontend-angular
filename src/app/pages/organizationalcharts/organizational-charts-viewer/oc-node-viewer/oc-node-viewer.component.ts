@@ -11,11 +11,10 @@ import {
 } from '@angular/core';
 import { FFlowModule } from '@foblex/flow';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { AsyncPipe, NgClass } from '@angular/common';
-import { CardTitleDirective, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
+import { TooltipDirective } from '@coreui/angular';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { BadgeOutlineComponent } from '../../../../layouts/coreui/badge-outline/badge-outline.component';
 import { OcTreeNode } from '../../organizational-charts-editor/organizational-charts-editor.interface';
 import { OcConnection } from '../../organizationalcharts.interface';
 import { StatuscountResponseExtended } from '../../../browsers/browsers.interface';
@@ -25,7 +24,6 @@ import { BrowsersService } from '../../../browsers/browsers.service';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PermissionsService } from '../../../../permissions/permissions.service';
 import { RouterLink } from '@angular/router';
-import { OitcAlertComponent } from '../../../../components/alert/alert.component';
 
 
 @Component({
@@ -36,16 +34,10 @@ import { OitcAlertComponent } from '../../../../components/alert/alert.component
         TranslocoDirective,
         NgClass,
         TooltipDirective,
-        RowComponent,
-        ColComponent,
         BlockLoaderComponent,
-        BadgeOutlineComponent,
-        TranslocoPipe,
         XsButtonDirective,
         AsyncPipe,
-        RouterLink,
-        CardTitleDirective,
-        OitcAlertComponent
+        RouterLink
     ],
     templateUrl: './oc-node-viewer.component.html',
     styleUrl: './oc-node-viewer.component.css',
