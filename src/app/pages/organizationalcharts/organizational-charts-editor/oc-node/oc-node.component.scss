@@ -2,14 +2,32 @@
     border-top-color: #0fa80f;
 }
 
-.small-text {
-    font-size: 0.7em !important;
+.font-xx-small {
+    font-size: xx-small !important;
+}
+
+.font-50-percent {
+    font-size: 50%;
 }
 
 .text-dark-important {
     color: #2a2f34 !important;
 }
 
-.font-xx-small {
-    font-size: xx-small !important;
+
+.tactical-overview-first-flex-item {
+    flex: 0 0 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.tactical-overview-flex-item {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }

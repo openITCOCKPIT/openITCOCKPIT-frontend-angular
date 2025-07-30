@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { OcTreeNode } from '../organizational-charts-editor.interface';
 import { EFConnectableSide, FFlowModule } from '@foblex/flow';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { LoadContainersRoot, OcConnection } from '../../organizationalcharts.interface';
 import { FormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -20,10 +20,9 @@ import { BrowsersService } from '../../../browsers/browsers.service';
 import { Subscription } from 'rxjs';
 import { StatuscountResponse } from '../../../browsers/browsers.interface';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { CardTitleDirective, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
+import { TextColorDirective, TooltipDirective } from '@coreui/angular';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 import { NgClass } from '@angular/common';
-import { BadgeOutlineComponent } from '../../../../layouts/coreui/badge-outline/badge-outline.component';
 
 
 @Component({
@@ -35,13 +34,11 @@ import { BadgeOutlineComponent } from '../../../../layouts/coreui/badge-outline/
         XsButtonDirective,
         TranslocoDirective,
         BlockLoaderComponent,
-        RowComponent,
-        CardTitleDirective,
-        ColComponent,
         NgClass,
-        BadgeOutlineComponent,
         TranslocoPipe,
-        TooltipDirective
+        TooltipDirective,
+        FaStackItemSizeDirective,
+        TextColorDirective
     ],
     templateUrl: './oc-node.component.html',
     styleUrl: './oc-node.component.scss',
