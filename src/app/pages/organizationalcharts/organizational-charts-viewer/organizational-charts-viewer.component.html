@@ -101,6 +101,18 @@
                     <dt class="col-sm-3"> {{ t('Path') }}</dt>
                     <dd class="col-sm-9">{{ currentNodeForModal.node.container?.path }}</dd>
 
+                    <dt class="col-sm-3"> {{ t('Recursive') }}</dt>
+                    <dd class="col-sm-9">
+                        {{ t('Recursive lookup is') }}
+                        <span class="text-decoration-underline">
+                            @if (currentNodeForModal.node.recursive) {
+                                {{ t('enabled') }}
+                            } @else {
+                                {{ t('disabled') }}
+                            }
+                        </span>
+                    </dd>
+
                     <dt class="col-sm-3"> {{ t('Region managers') }}</dt>
                     <dd class="col-sm-9">
                         @for (user of modalRegionManagers; track $index) {

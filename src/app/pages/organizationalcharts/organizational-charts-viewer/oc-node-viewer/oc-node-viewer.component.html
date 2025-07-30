@@ -4,25 +4,39 @@
             <div class="font-xx-small">
                 <div class="d-flex mx-0 pt-1">
                     @if (nodeObj && nodeObj.node.container_id > 0) {
-                        <div class="ps-2 flex-1" [title]="nodeObj.node.container?.name"
+                        <div class="flex-1" [title]="nodeObj.node.container?.name"
                              [ngClass]="{'text-dark-important':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1)}">
-                            <div class="p-0 mb-1 word-break" [cTooltip]="nodeObj.node.container?.path">
-                                @switch (nodeObj.node.containertype_id) {
-                                    @case (ContainerTypesEnum.CT_TENANT) {
-                                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                            <div class="p-0 mb-1 word-break">
+                                <span class="icon-stack">
+                                    @switch (nodeObj.node.containertype_id) {
+                                        @case (ContainerTypesEnum.CT_TENANT) {
+                                            <fa-icon [icon]="['fas', 'home']" [stackItemSize]="'1x'"></fa-icon>
+                                        }
+                                        @case (ContainerTypesEnum.CT_LOCATION) {
+                                            <fa-icon [icon]="['fas', 'location-arrow']"
+                                                     [stackItemSize]="'1x'"></fa-icon>
+                                        }
+                                        @case (ContainerTypesEnum.CT_NODE) {
+                                            <fa-icon [icon]="['fas', 'chain']" [stackItemSize]="'1x'"></fa-icon>
+                                        }
                                     }
-                                    @case (ContainerTypesEnum.CT_LOCATION) {
-                                        <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                                    @if (nodeObj.node.recursive) {
+                                        <fa-icon [icon]="['fas', 'arrows-spin']" [stackItemSize]="'1x'"
+                                                 [cTextColor]="'info'"
+                                                 [transform]="'shrink-6 right-4'"
+                                                 [style.top.px]="8" [style.position]="'absolute'"
+                                                 [cTooltip]="'Recursive lookup is enabled'|transloco"
+                                                 [cTooltipPlacement]="'bottom'"></fa-icon>
                                     }
-                                    @case (ContainerTypesEnum.CT_NODE) {
-                                        <fa-icon [icon]="['fas', 'chain']"></fa-icon>
-                                    }
-                                }
-                                {{ nodeObj.node.container?.name }}
+                                </span>
+                                <span class="ps-2" [cTooltip]="nodeObj.node.container?.path">
+                                    {{ nodeObj.node.container?.name }}
+                                </span>
+
                             </div>
                         </div>
                     } @else {
-                        <div class="ps-2 flex-1">
+                        <div class="flex-1">
                             <div class="p-0 mb-1 word-break">
                                 <fa-icon [icon]="['fas', 'ellipsis']"></fa-icon>
                                 {{ t('No Container selected') }}
@@ -113,7 +127,7 @@
                     </div>
                 }
                 @if (statusCounts?.cumulativeHoststatus === 2 || statusCounts?.cumulativeServicestatus === 3) {
-                    <div class="alert border-faded border-secondary bg-transparent text-secondary p-2">
+                    <div class="alert border-faded border-secondary bg-transparent text-secondary p-2 mb-0">
                         <div class="d-flex align-items-center">
                             <div class="alert-icon me-2">
                                 <span class="icon-stack fs-5">
@@ -133,26 +147,16 @@
         </div>
 
         @if (nodeObj && nodeObj.node) {
-            <div class="font-xs mt-1 small-text">
-                {{ t('Recursive lookup is') }}
-                <span class="text-decoration-underline">
-                    @if (nodeObj.node.recursive) {
-                        {{ t('enabled') }}
-                    } @else {
-                        {{ t('disabled') }}
-                    }
-                </span>
-            </div>
-            <hr class="my-1 fieldset-legend-border-bottom-thin">
 
             <div>
                 @if (isLoading && nodeObj.node.container_id > 0) {
-                    <oitc-block-loader [height]="'191px'"></oitc-block-loader>
+                    <!-- oc-node-body height - 24px -->
+                    <oitc-block-loader [height]="'162px'"></oitc-block-loader>
                 } @else {
                     @if (statusCounts) {
                         <!-- Host status -->
                         <div>
-                            <div class="d-flex flex-row small-text">
+                            <div class="d-flex flex-row small-text mt-1">
                                 <div class="d-flex flex-1">{{ t('Host status overview') }}</div>
                                 <div class="d-flex">{{ t('Total') }}: {{ statusCounts.hoststatusSum }}</div>
                             </div>

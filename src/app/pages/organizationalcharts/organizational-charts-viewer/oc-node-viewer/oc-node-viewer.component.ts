@@ -10,10 +10,10 @@ import {
     output
 } from '@angular/core';
 import { FFlowModule } from '@foblex/flow';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { FaIconComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AsyncPipe, NgClass } from '@angular/common';
-import { TooltipDirective } from '@coreui/angular';
+import { TextColorDirective, TooltipDirective } from '@coreui/angular';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { OcTreeNode } from '../../organizational-charts-editor/organizational-charts-editor.interface';
 import { OcConnection } from '../../organizationalcharts.interface';
@@ -37,7 +37,10 @@ import { RouterLink } from '@angular/router';
         BlockLoaderComponent,
         XsButtonDirective,
         AsyncPipe,
-        RouterLink
+        RouterLink,
+        FaStackItemSizeDirective,
+        TextColorDirective,
+        TranslocoPipe
     ],
     templateUrl: './oc-node-viewer.component.html',
     styleUrl: './oc-node-viewer.component.css',

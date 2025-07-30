@@ -138,6 +138,8 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
     }
 
     public onInitialized(): void {
+        // Comment this out to get the exact height of a node
+        //return;
         this.fCanvasComponent.fitToScreen(new Point(0, 0), false);
         //this.fCanvasComponent.resetScaleAndCenter(false);
         //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 200), false);
