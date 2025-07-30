@@ -20,7 +20,7 @@ import {
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import { NgClass } from '@angular/common';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, Observable, Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { OrganizationalChartsService } from '../organizationalcharts.service';
 import { HistoryService } from '../../../history.service';
@@ -74,6 +74,12 @@ export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestr
     public containers: CrganizationalChartsContainer[] = [];
     public organizationalCharts: SelectKeyValue[] = [];
     public organizationalchartId: number = 0;
+
+    private organizationalchartId$$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    // Subscribe to organizationalchartId$ for organizational id changes
+    public organizationalchartId$: Observable<number> = this.organizationalchartId$$.asObservable();
+
+
     public organizationalChart?: OrganizationalChartsPost;
     public title: string = '';
 
@@ -91,13 +97,15 @@ export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestr
                             return chart.key === this.organizationalchartId
                         }));
                         if (!found) {
+                            this.organizationalChartChange(0); // Reset to 0 if not found
                             this.organizationalchartId = 0; // Reset to 0 if not found
                         }
                         if (this.organizationalchartId === 0 && this.organizationalCharts[0]) {
                             this.organizationalchartId = this.organizationalCharts[0].key; // Default to the first organizational chart
                             this.title = this.organizationalCharts[0].value;
+                            this.organizationalChartChange(this.organizationalCharts[0].key);
                         }
-                        this.onOrganizationalchartsChange();
+                        this.subscribeToChanges();
                         this.cdr.markForCheck();
 
                         // Update the title.
@@ -111,27 +119,33 @@ export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestr
 
     }
 
-    public onOrganizationalchartsChange() {
-        if (this.organizationalchartId) {
-            this.organizationalChart = undefined;
-            this.cdr.markForCheck();
-
-            this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartById(this.organizationalchartId)
-                .subscribe((result) => {
-                    this.organizationalChart = result.organizationalChart;
-                    this.title = this.organizationalChart.name || '';
-                    this.TitleService.setTitle(`${this.title} | ` + this.TranslocoService.translate('Organizational charts'));
-
-                    this.containers = result.containers;
-                    this.cdr.markForCheck();
-                    return;
-                })
-            );
-        }
-    }
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    public organizationalChartChange(id: number): void {
+        this.organizationalchartId$$.next(id);
+    }
+
+    public subscribeToChanges(){
+        this.organizationalchartId$.pipe(distinctUntilChanged()).subscribe((organizationalchartId) => {
+            if(organizationalchartId > 0){
+                this.organizationalChart = undefined;
+                this.cdr.markForCheck();
+                this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartById(organizationalchartId)
+                    .subscribe((result) => {
+                        this.organizationalChart = result.organizationalChart;
+                        this.title = this.organizationalChart.name || '';
+                        this.TitleService.setTitle(`${this.title} | ` + this.TranslocoService.translate('Organizational charts'));
+
+                        this.containers = result.containers;
+                        this.cdr.markForCheck();
+                        return;
+                    })
+                );
+            }
+        });
     }
 
     protected readonly ContainerTypesEnum = ContainerTypesEnum;

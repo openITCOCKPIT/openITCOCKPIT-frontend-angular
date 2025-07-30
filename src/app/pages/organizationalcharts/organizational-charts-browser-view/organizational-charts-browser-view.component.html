@@ -73,7 +73,7 @@
                                     [(ngModel)]="organizationalchartId"
                                     [options]="organizationalCharts"
                                     [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
-                                    (ngModelChange)="onOrganizationalchartsChange()">
+                                    (ngModelChange)="organizationalChartChange($event)">
                                 </oitc-select>
                             </div>
                         </c-card-header>
