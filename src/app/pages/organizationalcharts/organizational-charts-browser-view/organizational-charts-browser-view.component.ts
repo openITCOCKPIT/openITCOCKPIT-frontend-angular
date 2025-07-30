@@ -32,6 +32,7 @@ import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
 import {
     OrganizationalChartsViewerComponent
 } from '../organizational-charts-viewer/organizational-charts-viewer.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-organizational-charts-browser-view',
@@ -54,7 +55,8 @@ import {
         RowComponent,
         ColComponent,
         NoRecordsComponent,
-        OrganizationalChartsViewerComponent
+        OrganizationalChartsViewerComponent,
+        XsButtonDirective
     ],
     templateUrl: './organizational-charts-browser-view.component.html',
     styleUrl: './organizational-charts-browser-view.component.scss',
@@ -80,13 +82,14 @@ export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestr
 
     public organizationalChart?: OrganizationalChartsPost;
     public title: string = '';
+    public allowEdit: boolean = false;
 
     public ngOnInit(): void {
         this.subscribeToChanges();
 
 
         this.route.queryParams.subscribe(params => {
-            let containerId: number = params['containerId'] || 0;
+            let containerId: number = Number(params['containerId'] || 0);
             this.organizationalCharts = [];
             if (containerId) {
                 this.containerId = containerId;
@@ -151,6 +154,7 @@ export class OrganizationalChartsBrowserViewComponent implements OnInit, OnDestr
                         this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartById(organizationalchartId)
                             .subscribe((result) => {
                                 this.organizationalChart = result.organizationalChart;
+                                this.allowEdit = result.allowEdit;
                                 this.title = this.organizationalChart.name || '';
                                 this.TitleService.setTitle(`${this.title} | ` + this.TranslocoService.translate('Organizational charts'));
 

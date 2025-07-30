@@ -12,6 +12,7 @@
 
             @for (node of nodes; track node.fNodeId; ) {
                 <oitc-oc-node-viewer [node]="node"
+                                     class="oc-viewer-node"
                                      [ngClass]="{'oc-tenant-node': node.node.containertype_id === ContainerTypesEnum.CT_TENANT,'oc-location-node': node.node.containertype_id === ContainerTypesEnum.CT_LOCATION,'oc-node-node': node.node.containertype_id === ContainerTypesEnum.CT_NODE}"
                                      [fNodeId]="String(node.node.id)"
                                      fNode

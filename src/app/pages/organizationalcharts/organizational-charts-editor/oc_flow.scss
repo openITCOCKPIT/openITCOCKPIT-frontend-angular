@@ -189,6 +189,12 @@ body.dark-theme :host {
         &.f-selected {
             box-shadow: 0 0 20px var(--node-shadow-color);
         }
+
+        &.f-selected.oc-viewer-node {
+            // Overwrite in viewer mode
+            box-shadow: 0 0 20px var(--cui-primary);
+        }
+
     }
 
     .oc-node-body {

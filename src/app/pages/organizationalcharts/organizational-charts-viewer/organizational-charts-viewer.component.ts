@@ -2,7 +2,9 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    effect,
     inject,
+    input,
     model,
     OnDestroy,
     OnInit,
@@ -87,6 +89,8 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
     // Two-way binding for the organizational chart connections from add or edit component
     public connections = model<OcConnection[]>([]);
 
+    public selectedContainerId = input<number>(0);
+
     public nodes: OcTreeNode[] = [];
 
     @ViewChild(FFlowComponent, {static: false})
@@ -114,6 +118,12 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
     constructor(
         private cdr: ChangeDetectorRef
     ) {
+
+        effect(() => {
+            if (this.selectedContainerId() > 0) {
+                this.selectNodeByContainerId(this.selectedContainerId());
+            }
+        });
 
     }
 
@@ -143,6 +153,18 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
         this.fCanvasComponent.fitToScreen(new Point(0, 0), false);
         //this.fCanvasComponent.resetScaleAndCenter(false);
         //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 200), false);
+    }
+
+    public selectNodeByContainerId(containerId: number) {
+        if (!this.fFlowComponent || !this.fCanvasComponent) {
+            return;
+        }
+
+        const node = this.nodes.find(node => node.node.container_id === containerId);
+        if (node) {
+            this.fFlowComponent.select([node.fNodeId], []);
+            this.fCanvasComponent.centerGroupOrNode(node.fNodeId, true);
+        }
     }
 
     public onViewNodeDetails(node: OcTreeNode) {

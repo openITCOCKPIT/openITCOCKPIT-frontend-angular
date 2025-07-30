@@ -140,6 +140,21 @@
                                                         <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
                                                         {{ organizationalChart.name }}
                                                     </h6>
+                                                    <c-nav class="card-toolbar card-header-pills">
+                                                        @if (organizationalChart && allowEdit) {
+                                                            <c-nav-item class="px-1">
+                                                                <a *oitcPermission="['organizationalcharts', 'edit']"
+                                                                   [routerLink]="['/', 'organizationalcharts', 'edit', organizationalChart.id]"
+                                                                   cButton
+                                                                   class="ripple"
+                                                                   color="primary"
+                                                                   size="xs">
+                                                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                                    {{ t('Edit Organizational Chart') }}
+                                                                </a>
+                                                            </c-nav-item>
+                                                        }
+                                                    </c-nav>
                                                 }
                                             </c-card-header>
                                             <c-card-body>
@@ -148,7 +163,8 @@
                                                     <oitc-organizational-charts-viewer
                                                         class="flex-1"
                                                         [(nodeTree)]="organizationalChart.organizational_chart_nodes"
-                                                        [(connections)]="organizationalChart.organizational_chart_connections">
+                                                        [(connections)]="organizationalChart.organizational_chart_connections"
+                                                        [selectedContainerId]="containerId">
 
                                                     </oitc-organizational-charts-viewer>
                                                 }
