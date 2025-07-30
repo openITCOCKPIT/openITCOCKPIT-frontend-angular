@@ -2,16 +2,7 @@
 @use "variables";
 @use "@fortawesome/fontawesome-free/scss/functions";
 @use "@fortawesome/fontawesome-free/scss/mixins";
-@use "@fortawesome/fontawesome-free/scss/variables" as variables2;
-body {
-    --cui-nav-link-font-size: 12.8px;
-    --cui-breadcrumb-font-size: 12.8px;
-}
-
-h5, .h5 {
-    font-size: 1rem;
-}
-
+@use "@fortawesome/fontawesome-free/scss/variables";
 @import '../../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 @import '@angular/cdk/overlay-prebuilt.css';
 
