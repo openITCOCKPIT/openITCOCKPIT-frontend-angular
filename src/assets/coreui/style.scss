@@ -3,10 +3,13 @@
 @use "@fortawesome/fontawesome-free/scss/functions";
 @use "@fortawesome/fontawesome-free/scss/mixins";
 @use "@fortawesome/fontawesome-free/scss/variables";
+@use "@coreui/coreui/scss/coreui" with (
+    $font-size-base: $font-size-base,
+    $warning: $warning,
+);
 @import '../../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 @import '@angular/cdk/overlay-prebuilt.css';
 
-@include meta.load-css("@coreui/coreui/scss/coreui");
 @import "@ng-select/ng-select/themes/default.theme.css";
 @include meta.load-css("ng-select-dark");
 @import "dropzone/dist/dropzone.css";
