@@ -1,5 +1,5 @@
 @use "sass:meta";
-@use "variables";
+@use "variables" as *;
 @use "@fortawesome/fontawesome-free/scss/functions";
 @use "@fortawesome/fontawesome-free/scss/mixins";
 @use "@fortawesome/fontawesome-free/scss/variables";
