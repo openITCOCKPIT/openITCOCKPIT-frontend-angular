@@ -2,13 +2,9 @@
     <div class="oc-node-body">
         <div>
             <div class="font-xx-small">
-                <div class="d-flex mx-0 pt-1" [ngClass]="{'bg-primary':statusCounts?.cumulativeHoststatus ===-1,
-                       'bg-success':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus === 0 || statusCounts?.cumulativeServicestatus === -1),
-                       'bg-warning':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1),
-                       'bg-danger':(statusCounts?.cumulativeHoststatus === 1 && statusCounts?.cumulativeServicestatus !== 3) || (statusCounts?.cumulativeServicestatus === 2),
-                       'bg-secondary':statusCounts?.cumulativeHoststatus === 2 || (statusCounts?.cumulativeServicestatus === 3)}">
+                <div class="d-flex mx-0 pt-1">
                     @if (nodeObj && nodeObj.node.container_id > 0) {
-                        <div class="ps-2 flex-1 text-white" [title]="nodeObj.node.container?.name"
+                        <div class="ps-2 flex-1" [title]="nodeObj.node.container?.name"
                              [ngClass]="{'text-dark-important':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1)}">
                             <div class="p-0 mb-1 word-break" [cTooltip]="nodeObj.node.container?.path">
                                 @switch (nodeObj.node.containertype_id) {
@@ -47,62 +43,97 @@
                 </div>
 
                 @if (statusCounts?.cumulativeHoststatus === -1) {
-                    <c-row class="m-0 bg-primary text-white">
-                        <c-col class="ps-2">
-                            <div class="py-1">
-                                <fa-icon [icon]="['fas', 'circle-info']" class="font-md"></fa-icon>
-                                {{ t('No hosts detected') }}
+                    <div class="alert border-faded border-primary bg-transparent text-secondary p-2 mb-0">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack fs-5">
+                                    <i class="icon-stack-3x base-circle text-primary"></i>
+                                    <i class="icon-stack-1x text-white fas fa-info"></i>
+                                </span>
                             </div>
-                        </c-col>
-                    </c-row>
+                            <div class="flex-1">
+                                <span class="text-primary">
+                                    {{ t('No hosts detected') }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 }
 
                 @if (statusCounts?.cumulativeHoststatus === 0 && ( statusCounts?.cumulativeServicestatus === 0 || statusCounts?.cumulativeServicestatus === -1 )) {
-                    <c-row class="m-0 bg-success text-white bg-gradient">
-                        <c-col class="ps-2">
-                            <div class="py-1">
-                                <fa-icon [icon]="['fas', 'circle-check']" class="font-md"></fa-icon>
-                                {{ t('No problems detected') }}
+                    <div class="alert border-faded border-success bg-transparent text-secondary p-2 mb-0">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack fs-5">
+                                    <i class="icon-stack-3x base-circle text-success"></i>
+                                    <i class="icon-stack-1x text-white fas fa-check"></i>
+                                </span>
                             </div>
-                        </c-col>
-                    </c-row>
+                            <div class="flex-1">
+                                <span class="text-success">
+                                    {{ t('No problems detected') }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 }
                 @if (statusCounts?.cumulativeHoststatus === 0 && statusCounts?.cumulativeServicestatus === 1) {
-                    <c-row class="m-0 bg-warning bg-gradient text-dark-important">
-                        <c-col class="ps-2">
-                            <div class="py-1">
-                                <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
-                                {{ t('Warnings detected') }}
+                    <div class="alert border-faded border-warning bg-transparent text-secondary p-2 mb-0">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack fs-5">
+                                    <i class="icon-stack-3x base-circle text-warning"></i>
+                                    <i class="icon-stack-1x text-white fas fa-triangle-exclamation"></i>
+                                </span>
                             </div>
-                        </c-col>
-                    </c-row>
+                            <div class="flex-1">
+                                <span class="text-warning">
+                                    {{ t('Warnings detected') }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 }
 
                 @if (( statusCounts?.cumulativeHoststatus === 1 && statusCounts?.cumulativeServicestatus !== 3 ) || statusCounts?.cumulativeServicestatus === 2) {
-                    <c-row class="m-0 bg-danger text-white bg-gradient">
-                        <c-col class="ps-2">
-                            <div class="py-1">
-                                <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
-                                {{ t('Problems detected') }}
+                    <div class="alert border-faded border-danger bg-transparent text-secondary p-2 mb-0">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack fs-5">
+                                    <i class="icon-stack-3x base-circle text-danger"></i>
+                                    <i class="icon-stack-1x text-white fas fa-exclamation"></i>
+                                </span>
                             </div>
-                        </c-col>
-                    </c-row>
+                            <div class="flex-1">
+                                <span class="text-danger">
+                                    {{ t('Problems detected') }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 }
                 @if (statusCounts?.cumulativeHoststatus === 2 || statusCounts?.cumulativeServicestatus === 3) {
-                    <c-row class="m-0 bg-secondary text-white bg-gradient">
-                        <c-col class="ps-2">
-                            <div class="py-1">
-                                <fa-icon [icon]="['fas', 'circle-question']" class="font-md"></fa-icon>
-                                {{ t('Undetermined problems') }}
+                    <div class="alert border-faded border-secondary bg-transparent text-secondary p-2">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack fs-5">
+                                    <i class="icon-stack-3x base-circle text-secondary"></i>
+                                    <i class="icon-stack-1x text-white fas fa-question"></i>
+                                </span>
                             </div>
-                        </c-col>
-                    </c-row>
+                            <div class="flex-1">
+                                <span class="text-secondary">
+                                    {{ t('Undetermined problems') }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 }
             </div>
         </div>
 
         @if (nodeObj && nodeObj.node) {
-            <div class="font-xs mt-2 small-text">
+            <div class="font-xs mt-1 small-text">
                 {{ t('Recursive lookup is') }}
                 <span class="text-decoration-underline">
                     @if (nodeObj.node.recursive) {
