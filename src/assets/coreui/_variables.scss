@@ -1,5 +1,5 @@
 // If you want to override variables do it here
-@import "../../../node_modules/@coreui/coreui/scss/_functions.scss";
+@use "@coreui/coreui/scss/functions/color" as *;
 
 // scss-docs-start gray-color-variables
 $white: #fff !default;

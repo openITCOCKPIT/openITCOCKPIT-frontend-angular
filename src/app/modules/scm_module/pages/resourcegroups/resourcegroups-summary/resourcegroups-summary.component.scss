@@ -1,17 +1,17 @@
-@import "../../../../../../assets/coreui/variables";
+@use "@coreui/coreui/scss/variables" as coreui;
 
 .border-unconfirmed {
-    border-left: 5px solid $primary;
+    border-left: 5px solid coreui.$primary;
 }
 
 .border-ok {
-    border-left: 5px solid $success;
+    border-left: 5px solid coreui.$success;
 }
 
 .border-warning {
-    border-left: 5px solid $warning;
+    border-left: 5px solid coreui.$warning;
 }
 
 .border-danger {
-    border-left: 5px solid $danger;
+    border-left: 5px solid coreui.$danger;
 }
