@@ -12,13 +12,17 @@ import {
     SimpleChanges,
 } from '@angular/core';
 import {
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
-    RowComponent
+    RowComponent,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
@@ -47,7 +51,11 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
         FormFeedbackComponent,
         NgClass,
         FormCheckLabelDirective,
-        FormCheckComponent
+        FormCheckComponent,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective,
+        AccordionButtonDirective
     ],
     templateUrl: './wizards-dynamicfields.component.html',
     styleUrl: './wizards-dynamicfields.component.css',
