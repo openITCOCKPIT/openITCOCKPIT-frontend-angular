@@ -288,6 +288,21 @@ This document describes how to upgrade the underlying Angular version.
 npm install --save typescript@~5.5.3
 ```
 
+## Known Migration Issue
+### 2025-07-31: Migrating `Fontawesome 6` to `Fontawesome 7`:
+Whereever we combine `Fontawesome` with `vis-network`, to actually work, we reference the specific webfont to use for the `icon`s in the `options` object.
+```typescript
+/// blah blah
+        icon: {
+            face: '"Font Awesome 7 Free"',   // Here we changed the string from "Font Awesome 6 Free" to "Font Awesome 7 Free"
+                code: '\uf0ac',
+                color: colorGroup, //color for icon,
+                weight: "900", // Font Awesome 5 doesn't work properly unless bold. // Font Awesome 6 fix https://github.com/visjs/vis-network/issues/139#issuecomment-536114158
+        
+        }
+/// blah blah
+```
+
 # Need help or support?
 
 * Official [Discord Server](https://discord.gg/G8KhxKuQ9G)
