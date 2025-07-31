@@ -36,8 +36,7 @@ appendPreviouslySelected is provided by our custom patched multi select componen
     optionGroupLabel="label"
     [appendTo]="appendTo"
     [autofocusFilter]="true"
-    (onPanelShow)="onShow($event)"
-    [appendPreviouslySelected]="true">
+    (onPanelShow)="onShow($event)">
     <ng-template let-item pTemplate="item">
         <div [innerHTML]="item | highlightSearch : this.searchText:this.optionLabel"></div>
     </ng-template>

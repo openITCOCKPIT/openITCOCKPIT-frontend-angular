@@ -24,10 +24,10 @@
             "dom"
         ],
         "paths": {
-            "primeng/multiselect": [
-                "./src/app/custom-primeng/multiselect/multiselect.interface.ts",
-                "./src/app/custom-primeng/multiselect/multiselect.ts"
-            ]
+            //"primeng/multiselect": [
+            //    "./src/app/custom-primeng/multiselect/multiselect.interface.ts",
+            //    "./src/app/custom-primeng/multiselect/multiselect.ts"
+            //]
         }
     },
     "angularCompilerOptions": {
