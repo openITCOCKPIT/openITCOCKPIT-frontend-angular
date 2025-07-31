@@ -10,7 +10,7 @@ import { VmwareEsxWizardGet, VmwareEsxWizardPost } from './vmware-esx-wizard.int
 export class VmwareEsxWizardService extends WizardsService {
 
     public fetch(hostId: number): Observable<VmwareEsxWizardGet> {
-        return this.http.get<VmwareEsxWizardGet>(`${this.proxyPath}/linux_module/wizards/vmwareesx/${hostId}.json?angular=true&typeId=vmware-esx`).pipe(
+        return this.http.get<VmwareEsxWizardGet>(`${this.proxyPath}/vmwarev2_module/wizards/vmware/${hostId}.json?angular=true&typeId=vmware-esx`).pipe(
             map((data: VmwareEsxWizardGet): VmwareEsxWizardGet => {
                 return data;
             })
@@ -18,7 +18,7 @@ export class VmwareEsxWizardService extends WizardsService {
     }
 
     public submit(post: VmwareEsxWizardPost): Observable<GenericResponseWrapper> {
-        return this.http.post<any>(`${this.proxyPath}/linux_module/wizards/vmwareesx.json?angular=true`, post)
+        return this.http.post<any>(`${this.proxyPath}/vmwarev2_module/wizards/vmware.json?angular=true`, post)
             .pipe(
                 map(data => {
                     return {
