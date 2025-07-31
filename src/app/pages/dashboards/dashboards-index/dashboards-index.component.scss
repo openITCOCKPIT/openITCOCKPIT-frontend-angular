@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@use "../../../../assets/coreui/openitcockpit" as oitc;
+@use "../../../../assets/coreui/variables" as oitc;
 @use "sass:color";
 
 @include mat.core();

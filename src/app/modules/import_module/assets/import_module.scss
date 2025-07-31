@@ -1,6 +1,5 @@
 @use "sass:color";
-@use "../../../../assets/coreui/openitcockpit" as oitc;
-@use "@coreui/coreui/scss/coreui" as cui;
+@use "../../../../assets/coreui/variables" as oitc;
 
 .business-criticity-low {
     background-image: linear-gradient(180deg, rgba(114, 123, 132, 0.2) 70%, rgba(0, 200, 81, 0.7) 70%, rgba(0, 200, 81, 1.0));

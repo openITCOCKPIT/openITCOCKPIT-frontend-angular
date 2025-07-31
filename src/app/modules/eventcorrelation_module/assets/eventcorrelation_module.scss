@@ -1,6 +1,5 @@
 @use "sass:color";
-@use "../../../../assets/coreui/openitcockpit" as oitc;
-@use "@coreui/coreui/scss/coreui" as cui;
+@use "../../../../assets/coreui/variables" as oitc;
 
 .evc-service-container {
     border: 2px solid var(--cui-primary);
