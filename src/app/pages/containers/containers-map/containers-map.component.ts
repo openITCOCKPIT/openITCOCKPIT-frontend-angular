@@ -192,7 +192,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         face: '"Font Awesome 7 Free"',
                         code: '\uf0ac',
                         color: colorGroup, //color for icon,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold. // Font Awesome 6 fix https://github.com/visjs/vis-network/issues/139#issuecomment-536114158
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold. // Font Awesome 7 fix https://github.com/visjs/vis-network/issues/139#issuecomment-536114158
 
                     },
                     margin: {
@@ -260,7 +260,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#00e676',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf233',
                         color: '#ffffff',
                         size: 5,
@@ -272,7 +272,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#007bff',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf108',
                         color: '#ffffff',
                         size: 5,
@@ -296,7 +296,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#304ffe',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf1e2',
                         color: '#ffffff',
                         size: 5,
@@ -308,7 +308,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#66bb6a',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf0e8',
                         color: '#ffffff',
                         size: 5,
@@ -320,7 +320,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#f4511e',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf085',
                         color: '#ffffff',
                         size: 5,
@@ -356,7 +356,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#45526e',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf1e2',
                         color: '#ffffff',
                         size: 5,
@@ -368,7 +368,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#0091ea',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf0e8',
                         color: '#ffffff',
                         size: 5,
@@ -392,7 +392,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#b388ff',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf0c0',
                         color: '#ffffff',
                         size: 5,
@@ -416,7 +416,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#800080',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf0c0',
                         color: '#ffffff',
                         size: 5,
@@ -440,7 +440,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#f50057',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf041',
                         color: '#ffffff',
                         size: 5,
@@ -476,7 +476,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#01579b',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf7bf',
                         color: '#ffffff',
                         size: 5,
@@ -488,7 +488,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#f05a28',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf1fe',
                         color: '#ffffff',
                         size: 5,
@@ -558,7 +558,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
         // 'normal normal 900 24px/1 "Font Awesome 5 Free"'
         // 'normal 400 1em/1 "Font Awesome 7 Free"'
         //this.document.fonts.load('normal 400 1em/1 "Font Awesome 7 Free"').then(() => {
-        //console.log('Font Awesome 6 Free is available');
+        //console.log('Font Awesome 7 Free is available');
 
         const network = new Network(elem, {nodes: nodes, edges: edges}, options);
         network.fit({
