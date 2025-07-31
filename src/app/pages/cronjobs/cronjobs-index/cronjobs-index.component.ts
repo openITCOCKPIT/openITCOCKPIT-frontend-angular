@@ -42,7 +42,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -86,7 +86,7 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
         ModalTitleDirective,
         NgSelectModule,
         ModalToggleDirective,
-        NgOptionHighlightModule,
+        NgOptionHighlightDirective,
         TableLoaderComponent,
         BadgeOutlineComponent
     ],

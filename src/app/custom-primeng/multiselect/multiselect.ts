@@ -86,6 +86,7 @@ import {
     MultiSelectSelectAllChangeEvent
 } from './multiselect.interface';
 import { MultiSelectStyle } from './style/multiselectstyle';
+import {StyleClass} from "primeng/styleclass";
 
 export const MULTISELECT_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -194,7 +195,7 @@ export class MultiSelectItem extends BaseComponent {
 @Component({
     selector: 'p-multiSelect, p-multiselect, p-multi-select',
     standalone: true,
-    imports: [CommonModule, MultiSelectItem, Overlay, SharedModule, Tooltip, Scroller, AutoFocus, CheckIcon, SearchIcon, TimesIcon, ChevronDownIcon, IconField, InputIcon, InputText, Chip, Checkbox, FormsModule],
+    imports: [CheckIcon, SearchIcon, TimesIcon, ChevronDownIcon, IconField, InputIcon, CommonModule, MultiSelectItem, Overlay, SharedModule, Tooltip, Scroller, AutoFocus, InputText, Chip, Checkbox, FormsModule, StyleClass],
     template: `
         <div class="p-hidden-accessible" [attr.data-p-hidden-accessible]="true">
             <input
@@ -272,8 +273,6 @@ export class MultiSelectItem extends BaseComponent {
             </div>
         </div>
         <ng-container *ngIf="isVisibleClearIcon">
-            <TimesIcon *ngIf="!clearIconTemplate && !_clearIconTemplate" class="p-multiselect-clear-icon"
-                       (click)="clear($event)" [attr.data-pc-section]="'clearicon'" [attr.aria-hidden]="true"/>
             <span *ngIf="clearIconTemplate || _clearIconTemplate" class="p-multiselect-clear-icon"
                   (click)="clear($event)" [attr.data-pc-section]="'clearicon'" [attr.aria-hidden]="true">
                 <ng-template *ngTemplateOutlet="$any(clearIconTemplate || _clearIconTemplate)"></ng-template>
@@ -295,7 +294,7 @@ export class MultiSelectItem extends BaseComponent {
                 <ng-container *ngIf="!dropdownIconTemplate && !_dropdownIconTemplate">
                     <span *ngIf="dropdownIcon" class="p-multiselect-dropdown-icon" [ngClass]="dropdownIcon"
                           [attr.data-pc-section]="'triggericon'" [attr.aria-hidden]="true"></span>
-                    <ChevronDownIcon *ngIf="!dropdownIcon" [styleClass]="'p-multiselect-dropdown-icon'"
+                    <ChevronDownIcon *ngIf="!dropdownIcon" [pStyleClass]="'p-multiselect-dropdown-icon'"
                                      [attr.data-pc-section]="'triggericon'" [attr.aria-hidden]="true"/>
                 </ng-container>
                 <span *ngIf="dropdownIconTemplate || _dropdownIconTemplate" class="p-multiselect-dropdown-icon"
@@ -344,7 +343,7 @@ export class MultiSelectItem extends BaseComponent {
                                 <ng-template #checkboxicon let-klass="class">
                                     <CheckIcon
                                         *ngIf="!headerCheckboxIconTemplate && !_headerCheckboxIconTemplate && allSelected()"
-                                        [styleClass]="klass" [attr.data-pc-section]="'icon'"/>
+                                        [pStyleClass]="klass" [attr.data-pc-section]="'icon'"/>
                                     <ng-template
                                         *ngTemplateOutlet="
                                             $any(headerCheckboxIconTemplate || _headerCheckboxIconTemplate);
@@ -380,7 +379,7 @@ export class MultiSelectItem extends BaseComponent {
                                         [attr.aria-label]="ariaFilterLabel"
                                     />
                                     <p-inputicon>
-                                        <SearchIcon [styleClass]="'p-multiselect-filter-icon'"
+                                        <SearchIcon [pStyleClass]="'p-multiselect-filter-icon'"
                                                     *ngIf="!filterIconTemplate && !_filterIconTemplate"/>
                                         <span *ngIf="filterIconTemplate || _filterIconTemplate"
                                               class="p-multiselect-filter-icon">

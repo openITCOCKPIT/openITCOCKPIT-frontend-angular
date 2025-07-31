@@ -126,7 +126,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
     public selectedDatasource: string = '';
 
-    public theme: null | 'dark' = null;
+    public theme: string = '';
 
     public availableTimeranges: SelectKeyValue[] = [
         {key: 1, value: this.TranslocoService.translate('1 hour')},
@@ -182,7 +182,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
     public constructor() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
-            this.theme = null;
+            this.theme = '';
             if (theme === 'dark') {
                 this.theme = 'dark';
             }

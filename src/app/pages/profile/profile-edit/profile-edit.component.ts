@@ -34,7 +34,7 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { UsersService } from '../../users/users.service';
 import { UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { TimezoneConfiguration, TimezoneService } from '../../../services/timezone.service';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
@@ -70,7 +70,7 @@ import { SelectKeyValueString } from '../../../layouts/primeng/select.interface'
         FormCheckLabelDirective,
         TrueFalseDirective,
         NgSelectModule,
-        NgOptionHighlightModule,
+        NgOptionHighlightDirective,
         FormDirective,
         XsButtonDirective,
         BackButtonDirective,

@@ -119,7 +119,7 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
     private isFirstLoad: boolean = true;
     public chartOption: EChartsOption = {};
     public echartsInstance: any;
-    public theme: null | 'dark' = null;
+    public theme: string = '';
     private load1: [string, number][] = [];
     private load5: [string, number][] = [];
     private load15: [string, number][] = [];
@@ -138,7 +138,7 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
 
     public constructor() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
-            this.theme = null;
+            this.theme = '';
             if (theme === 'dark') {
                 this.theme = 'dark';
             }
