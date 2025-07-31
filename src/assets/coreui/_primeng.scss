@@ -1,4 +1,6 @@
 @use "sass:color";
+@use "variables" as oitc;
+@use "@coreui/coreui/scss/coreui" as cui;
 
 // things that are not possible to override using the PrimeNG theme
 
@@ -73,7 +75,7 @@
 
 // Highlight search results in the overlay panel
 .mark-highlight {
-    background-color: color.adjust($primary, $alpha: -0.85);
+    background-color: color.adjust(oitc.$primary, $alpha: -0.85);
     text-decoration: underline;
     font-weight: bold;
 }

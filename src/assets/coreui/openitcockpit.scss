@@ -1,0 +1,65 @@
+@use "variables" as oitc;
+
+@forward "@coreui/coreui/scss/coreui" with (
+  $min-contrast-ratio: oitc.$min-contrast-ratio,
+//$body-font-family: oitc.$body-font-family,
+  $font-size-base: oitc.$font-size-base,
+  $primary: oitc.$primary,
+  $secondary: oitc.$secondary,
+  $success: oitc.$success,
+  $warning: oitc.$warning,
+  $danger: oitc.$danger,
+  $info: oitc.$info,
+  $light: oitc.$gray-100,
+  $dark: oitc.$gray-900
+);
+
+@forward "ng-select-dark";
+@forward "toast";
+
+@forward "theme";
+@forward "card";
+@forward "fonts";
+@forward "forms";
+@forward "layout";
+@forward "cursor";
+@forward "colors";
+
+@forward "scrollbar";
+
+@forward "buttons";
+@forward "checkboxes";
+@forward "ripple";
+@forward "selectall";
+@forward "highlighting";
+@forward "icon-colors";
+@forward "status-colors";
+@forward "popover";
+
+@forward "object_types";
+
+@forward "fullcalendar_hollidays";
+@forward "primeng";
+@forward "fontawesome";
+@forward "flex";
+
+@forward "chart-loader";
+
+@forward "browser";
+@forward "vis";
+@forward "badge";
+@forward "opacity";
+@forward "alert";
+@forward "nestable";
+@forward "timeline";
+
+@forward "apexcharts";
+@forward "wizard";
+@forward "statuspages";
+@forward "flow";
+
+@forward "widget";
+@forward "sunburst";
+
+@forward "uplot";
+

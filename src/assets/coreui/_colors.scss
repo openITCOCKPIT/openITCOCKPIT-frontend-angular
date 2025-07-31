@@ -1,3 +1,6 @@
+@use "variables" as oitc;
+@use "@coreui/coreui/scss/coreui" as cui;
+
 // Mixin to generate text color classes
 @mixin generate-color-classes($colors) {
     @each $name, $color in $colors {
@@ -17,32 +20,32 @@
 // https://coreui.io/bootstrap/docs/customize/color/#all-colors
 
 // Generate the classes
-@include generate-color-classes($blues);
-@include generate-color-classes($indigos);
-@include generate-color-classes($purples);
-@include generate-color-classes($pinks);
-@include generate-color-classes($reds);
-@include generate-color-classes($oranges);
-@include generate-color-classes($yellows);
-@include generate-color-classes($greens);
-@include generate-color-classes($teals);
-@include generate-color-classes($cyans);
-@include generate-color-classes($blues);
+@include generate-color-classes(cui.$blues);
+@include generate-color-classes(cui.$indigos);
+@include generate-color-classes(cui.$purples);
+@include generate-color-classes(cui.$pinks);
+@include generate-color-classes(cui.$reds);
+@include generate-color-classes(cui.$oranges);
+@include generate-color-classes(cui.$yellows);
+@include generate-color-classes(cui.$greens);
+@include generate-color-classes(cui.$teals);
+@include generate-color-classes(cui.$cyans);
+@include generate-color-classes(cui.$blues);
 
 $oitcgrays: (
-    "gray-100": $gray-100,
-    "gray-200": $gray-200,
-    "gray-300": $gray-300,
-    "gray-400": $gray-400,
-    "gray-500": $gray-500,
-    "gray-600": $gray-600,
-    "gray-700": $gray-700,
-    "gray-800": $gray-800,
-    "gray-900": $gray-900
+    "gray-100": oitc.$gray-100,
+    "gray-200": oitc.$gray-200,
+    "gray-300": oitc.$gray-300,
+    "gray-400": oitc.$gray-400,
+    "gray-500": oitc.$gray-500,
+    "gray-600": oitc.$gray-600,
+    "gray-700": oitc.$gray-700,
+    "gray-800": oitc.$gray-800,
+    "gray-900": oitc.$gray-900
 ) !default;
 @include generate-color-classes($oitcgrays);
-@include generate-color-classes($primaries);
-@include generate-color-classes($warnings);
+@include generate-color-classes(oitc.$primaries);
+@include generate-color-classes(oitc.$warnings);
 
 
 .text-community {
