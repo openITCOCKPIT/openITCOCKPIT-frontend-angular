@@ -37,6 +37,7 @@ import { ValidateInputFromAngularPost, WizardElement, WizardsIndex } from '../wi
 import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
 import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
     selector: 'oitc-wizards-wizard-host-configuration',
@@ -66,7 +67,8 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
         InputGroupComponent,
         InputGroupTextDirective,
         TemplateDiffComponent,
-        BackButtonDirective
+        BackButtonDirective,
+        BadgeOutlineComponent
     ],
     templateUrl: './wizards-wizard-host-configuration.component.html',
     styleUrl: './wizards-wizard-host-configuration.component.css',
@@ -124,6 +126,7 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
 
         isHostnameInUse: false
     };
+    protected isDeprecated: boolean = false;
 
     public submit() {
         if (this.useExistingHost) {
@@ -292,6 +295,10 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
         // /:typeId/:title/:hostId/:state/:selectedOs
         this.typeId = String(this.route.snapshot.paramMap.get('typeId'));
         this.title = String(this.route.snapshot.paramMap.get('title'));
+        if (this.title.includes('- deprecated')) {
+            this.isDeprecated = true;
+            this.title = this.title.replace(' - deprecated', '');
+        }
         if (Number(this.route.snapshot.paramMap.get('hostId'))) {
             this.hostId = Number(this.route.snapshot.paramMap.get('hostId'));
         }
