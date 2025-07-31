@@ -231,7 +231,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorNotMonitored,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf070',
                         color: '#ffffff',
                         size: 5,
@@ -243,7 +243,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorNotMonitored,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf1e6',
                         color: '#ffffff',
                         size: 5,
@@ -255,7 +255,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorUp,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf058',
                         color: '#ffffff',
                         size: 5,
@@ -267,7 +267,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorDown,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf06a',
                         color: '#ffffff',
                         size: 5,
@@ -279,7 +279,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorDown,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf059',
                         color: '#ffffff',
                         size: 5,
@@ -291,7 +291,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorUp,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf011',
                         color: '#ffffff',
                         size: 5,
@@ -303,7 +303,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorDown,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf011',
                         color: '#ffffff',
                         size: 5,
@@ -315,7 +315,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorUnreachable,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf011',
                         color: '#ffffff',
                         size: 5,
@@ -327,7 +327,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorUp,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf007',
                         color: '#ffffff',
                         size: 5,
@@ -339,7 +339,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorDown,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf007',
                         color: '#ffffff',
                         size: 5,
@@ -351,7 +351,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorUnreachable,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf007',
                         color: '#ffffff',
                         size: 5,
@@ -363,7 +363,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorUp,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf0f0',
                         color: '#ffffff',
                         size: 5,
@@ -375,7 +375,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorDown,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf0f0',
                         color: '#ffffff',
                         size: 5,
@@ -387,7 +387,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
                     color: colorUnreachable,
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf0f0',
                         color: '#ffffff',
                         size: 5,
