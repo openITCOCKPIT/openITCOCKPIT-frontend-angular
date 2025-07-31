@@ -1,7 +1,5 @@
 import * as d3 from 'd3';
 import * as d3Hexbin from 'd3-hexbin';
-//import 'leaflet';
-//import * as L from 'leaflet';
 
 /**
  * This is a convoluted way of getting ahold of the hexbin function.

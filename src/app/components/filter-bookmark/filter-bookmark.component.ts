@@ -129,7 +129,6 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
 
     constructor(private router: Router, private activatedRoute: ActivatedRoute) {
         // subscribe to router event
-        // console.log(activatedRoute)
         this.activatedRoute.queryParams.subscribe((params: Params) => {
             if (params['filter'] && params['filter'] !== '') {
                 this.filterUuid = params['filter'];

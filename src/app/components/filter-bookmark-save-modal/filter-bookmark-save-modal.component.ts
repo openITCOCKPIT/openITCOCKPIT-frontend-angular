@@ -108,7 +108,6 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
     @ViewChild('modal') private modal!: ModalComponent;
-    // private _actionType: string = '';
     private BookmarksService: BookmarksService = inject(BookmarksService);
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);

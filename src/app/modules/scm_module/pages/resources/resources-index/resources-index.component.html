@@ -292,10 +292,13 @@
                     @for (resource of resources.all_resources; track $index) {
                         <tr>
                             <td class="text-center">
-                                <oitc-item-select
-                                    *oitcPermission="['scmmodule','resources', 'delete']"
-                                    [disabled]="!resource.allow_edit"
-                                    [item]="resource"></oitc-item-select>
+                                @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) &&
+                                ( ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'setStatus']) | async ) ||
+                                    ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async ) )) {
+                                    <oitc-item-select
+                                        [disabled]="!resource.allow_edit"
+                                        [item]="resource"></oitc-item-select>
+                                }
                             </td>
                             <td>
                                 @switch (resource.status) {
@@ -408,15 +411,17 @@
                                         <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
                                         {{ t('Changelog') }}
                                     </oitc-actions-button-element>
-                                    <li cDropdownDivider></li>
-                                    <oitc-actions-button-element (click)="toggleDeleteAllModal(resource)"
-                                                                 *ngIf="resource.allow_edit"
-                                                                 [permission]="'ScmModule.resources.delete'">
-                                        <span class="text-danger">
-                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                            {{ t('Delete') }}
-                                        </span>
-                                    </oitc-actions-button-element>
+                                    @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) && ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async )) {
+                                        <li cDropdownDivider></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(resource)"
+                                                                     *ngIf="resource.allow_edit"
+                                                                     [permission]="'ScmModule.resources.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    }
                                 </oitc-actions-button>
                             </td>
                         </tr>
@@ -436,18 +441,22 @@
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
-                                <button (click)="toggleSetStatusModal()"
-                                        class="btn btn-outline-info col-3 border-0"
-                                        type="button">
-                                    <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
-                                    {{ t('Set status for selected') }}
-                                </button>
-                                <button (click)="toggleDeleteAllModal()"
-                                        class="btn btn-outline-danger col-3 border-0"
-                                        type="button">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete selected') }}
-                                </button>
+                                @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) && ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'setStatus']) | async )) {
+                                    <button (click)="toggleSetStatusModal()"
+                                            class="btn btn-outline-info col-3 border-0"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
+                                        {{ t('Set status for selected') }}
+                                    </button>
+                                }
+                                @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) && ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async )) {
+                                    <button (click)="toggleDeleteAllModal()"
+                                            class="btn btn-outline-danger col-3 border-0"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete selected') }}
+                                    </button>
+                                }
                             </div>
                         </c-col>
                     </c-row>
