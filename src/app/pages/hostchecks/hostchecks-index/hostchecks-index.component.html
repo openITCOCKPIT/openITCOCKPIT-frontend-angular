@@ -201,6 +201,13 @@
                     <th scope="col" mat-sort-header="Hostchecks.start_time">
                         {{ t('Date') }}
                     </th>
+                    <th scope="col" mat-sort-header="Hostchecks.execution_time">
+                        {{ t('Execution time') }}
+                        &nbsp;
+                        <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
+                                 [cTooltip]="'Time in seconds required by the plugin to collect the status information' | transloco"
+                                 cTooltipPlacement="bottom"></fa-icon>
+                    </th>
                     <th scope="col" mat-sort-header="Hostchecks.current_check_attempt">
                         {{ t('Check attempt') }}
                     </th>
@@ -221,6 +228,9 @@
                     </td>
                     <td>
                         {{ hostcheck.Hostcheck.start_time }}
+                    </td>
+                    <td>
+                        {{ hostcheck.Hostcheck.execution_time|localNumber }}s
                     </td>
                     <td class="text-center">
                         {{ hostcheck.Hostcheck.current_check_attempt }}/

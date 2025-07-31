@@ -1,4 +1,6 @@
 @use "sass:color";
+@use "../../../../assets/coreui/openitcockpit" as oitc;
+@use "@coreui/coreui/scss/coreui" as cui;
 
 .business-criticity-low {
     background-image: linear-gradient(180deg, rgba(114, 123, 132, 0.2) 70%, rgba(0, 200, 81, 0.7) 70%, rgba(0, 200, 81, 1.0));
@@ -51,7 +53,7 @@
 }
 
 .text-primary-light {
-    color: color.adjust($primary, $lightness: 10%, $space: hsl);
+    color: color.adjust(oitc.$primary, $lightness: 10%, $space: hsl);
 }
 
 .white-glow {
@@ -62,7 +64,7 @@
 }
 
 .is-valid {
-    background: color.adjust($success, $alpha: -0.8);
+    background: color.adjust(oitc.$success, $alpha: -0.8);
 }
 
 .regex-tester-bg {

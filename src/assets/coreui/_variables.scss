@@ -1,5 +1,6 @@
 // If you want to override variables do it here
-@import "../../../node_modules/@coreui/coreui/scss/_functions.scss";
+@use "sass:color";
+@use "@coreui/coreui/scss/functions" as cui-func;
 
 // scss-docs-start gray-color-variables
 $white: #fff !default;
@@ -38,15 +39,15 @@ $info: #33b5e5;
 $light: $gray-100 !default;
 $dark: $gray-900 !default;
 
-$cui-primary-100: tint-color($primary, 80%);
-$cui-primary-200: tint-color($primary, 60%);
-$cui-primary-300: tint-color($primary, 40%);
-$cui-primary-400: tint-color($primary, 20%);
+$cui-primary-100: cui-func.tint-color($primary, 80%);
+$cui-primary-200: cui-func.tint-color($primary, 60%);
+$cui-primary-300: cui-func.tint-color($primary, 40%);
+$cui-primary-400: cui-func.tint-color($primary, 20%);
 $cui-primary-500: $primary;
-$cui-primary-600: shade-color($primary, 20%);
-$cui-primary-700: shade-color($primary, 40%);
-$cui-primary-800: shade-color($primary, 60%);
-$cui-primary-900: shade-color($primary, 80%);
+$cui-primary-600: cui-func.shade-color($primary, 20%);
+$cui-primary-700: cui-func.shade-color($primary, 40%);
+$cui-primary-800: cui-func.shade-color($primary, 60%);
+$cui-primary-900: cui-func.shade-color($primary, 80%);
 
 $primaries: (
     "primary-100": $cui-primary-100,
@@ -60,15 +61,15 @@ $primaries: (
     "primary-900": $cui-primary-900,
 ) !default;
 
-$cui-warning-100: tint-color($warning, 80%);
-$cui-warning-200: tint-color($warning, 60%);
-$cui-warning-300: tint-color($warning, 40%);
-$cui-warning-400: tint-color($warning, 20%);
+$cui-warning-100: cui-func.tint-color($warning, 80%);
+$cui-warning-200: cui-func.tint-color($warning, 60%);
+$cui-warning-300: cui-func.tint-color($warning, 40%);
+$cui-warning-400: cui-func.tint-color($warning, 20%);
 $cui-warning-500: $warning;
-$cui-warning-600: shade-color($warning, 20%);
-$cui-warning-700: shade-color($warning, 40%);
-$cui-warning-800: shade-color($warning, 60%);
-$cui-warning-900: shade-color($warning, 80%);
+$cui-warning-600: cui-func.shade-color($warning, 20%);
+$cui-warning-700: cui-func.shade-color($warning, 40%);
+$cui-warning-800: cui-func.shade-color($warning, 60%);
+$cui-warning-900: cui-func.shade-color($warning, 80%);
 
 $warnings: (
     "warning-100": $cui-warning-100,
@@ -119,7 +120,7 @@ $success-bg-subtle: rgb(236, 250, 228) !default;
 $info-bg-subtle: rgb(225, 239, 250) !default;
 $warning-bg-subtle: rgb(255, 226, 187) !default;
 $danger-bg-subtle: rgb(254, 190, 205) !default;
-$light-bg-subtle: mix($gray-100, $white) !default;
+$light-bg-subtle: color.mix($gray-100, $white) !default;
 $dark-bg-subtle: $gray-400 !default;
 // scss-docs-end theme-bg-subtle-variables
 
@@ -131,7 +132,7 @@ $info-bg-subtle-dark: rgba(33, 152, 243, 0.2) !default;
 $warning-bg-subtle-dark: rgba(255, 154, 19, 0.2) !default;
 $danger-bg-subtle-dark: rgba(252, 19, 73, 0.2) !default;
 $light-bg-subtle-dark: $gray-800-dark !default;
-$dark-bg-subtle-dark: mix($gray-800-dark, $black) !default;
+$dark-bg-subtle-dark: color.mix($gray-800-dark, $black) !default;
 // scss-docs-end theme-bg-subtle-dark-variables
 
 // scss-docs-start theme-border-subtle-variables
