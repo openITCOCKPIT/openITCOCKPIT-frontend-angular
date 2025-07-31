@@ -32,22 +32,26 @@
  *
  * todo: Update to @use when FontAwesome supports it (probably in v7.0.0)
  */
-@import "@fortawesome/fontawesome-free/scss/functions";
-@import "@fortawesome/fontawesome-free/scss/variables";
-@import "@fortawesome/fontawesome-free/scss/mixins";
-@import "@fortawesome/fontawesome-free/scss/core";
-@import "@fortawesome/fontawesome-free/scss/sizing";
-// @import "@fortawesome/fontawesome-free/scss/fixed-width";
-@import "@fortawesome/fontawesome-free/scss/list";
-// @import "@fortawesome/fontawesome-free/scss/bordered-pulled";
-@import "@fortawesome/fontawesome-free/scss/animated";
-@import "@fortawesome/fontawesome-free/scss/rotated-flipped";
+
+
+
+@use "@fortawesome/fontawesome-free/scss/functions";
+@use "@fortawesome/fontawesome-free/scss/variables";
+@use "@fortawesome/fontawesome-free/scss/mixins";
+@use "@fortawesome/fontawesome-free/scss/core";
+@use "@fortawesome/fontawesome-free/scss/sizing";
+// @use "@fortawesome/fontawesome-free/scss/fixed-width";
+@use "@fortawesome/fontawesome-free/scss/list";
+// @use "@fortawesome/fontawesome-free/scss/bordered-pulled";
+@use "@fortawesome/fontawesome-free/scss/animated";
+@use "@fortawesome/fontawesome-free/scss/rotated-flipped";
+
 /* Stacked icons breaks angular-fontawesome  */
-/*@import "@fortawesome/fontawesome-free/scss/stacked";*/
-@import "@fortawesome/fontawesome-free/scss/icons";
-// @import "@fortawesome/fontawesome-free/scss/screen-reader";
-@import "@fortawesome/fontawesome-free/scss/solid";
-@import "@fortawesome/fontawesome-free/scss/regular";
+/*@use "@fortawesome/fontawesome-free/scss/stacked";*/
+@use "@fortawesome/fontawesome-free/scss/icons";
+// @use "@fortawesome/fontawesome-free/scss/screen-reader";
+@use "@fortawesome/fontawesome-free/scss/solid";
+@use "@fortawesome/fontawesome-free/scss/regular";
 
 // Add 'Font Awesome 7 Free Solid' for vis-network
 @font-face {
