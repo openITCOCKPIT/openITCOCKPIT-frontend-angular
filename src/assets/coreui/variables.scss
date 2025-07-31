@@ -189,4 +189,9 @@ $table-striped-bg-factor: .015;
 
 $min-contrast-ratio: 2.0;
 $body-font-family: Roboto, sans-serif;
+
+// New coreui uses - $body-font-family may not used anymore
+$font-family-sans-serif: Roboto, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+//$font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
+
 $font-size-base: 0.8rem;
