@@ -1,14 +1,15 @@
 import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    EventEmitter,
-    inject,
-    Input,
-    OnDestroy,
-    OnInit,
-    Output
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  DOCUMENT
 } from '@angular/core';
 import { HostsService } from '../../../pages/hosts/hosts.service';
 import { ServicesService } from '../../../pages/services/services.service';
@@ -17,7 +18,7 @@ import { BrowserTimelineApiResult, VisTimelineRangechangedProperties } from './b
 import { DataSet } from "vis-data/peer";
 import { DataItem, Timeline, TimelineGroup, TimelineItem, TimelineOptions } from "vis-timeline/peer";
 
-import { DOCUMENT, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 
 import "vis-timeline/styles/vis-timeline-graph2d.css";
 import { TranslocoDirective } from '@jsverse/transloco';

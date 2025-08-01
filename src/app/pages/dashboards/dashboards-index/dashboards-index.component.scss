@@ -2,7 +2,8 @@
 @use "../../../../assets/coreui/variables" as oitc;
 @use "sass:color";
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 :host {
 

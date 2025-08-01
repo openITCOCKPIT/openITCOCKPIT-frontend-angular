@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, DOCUMENT } from '@angular/core';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -7,7 +7,7 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 import { DesignsService } from '../designs.service';
 import { Design, DesignsEditRoot, MaxUploadLimit } from '../designs.interface';
 import Dropzone from 'dropzone';
-import { DOCUMENT, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { AuthService } from '../../../../../auth/auth.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';

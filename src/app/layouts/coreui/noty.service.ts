@@ -1,7 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, DOCUMENT } from '@angular/core';
 import { ActiveToast, ToastrService } from 'ngx-toastr';
 import { TranslocoService } from '@jsverse/transloco';
-import { DOCUMENT, LocationStrategy } from '@angular/common';
+import { LocationStrategy } from '@angular/common';
 import { Router } from '@angular/router';
 import { take } from 'rxjs';
 
