@@ -53,7 +53,7 @@
             <ol class="m-0 p-0" *ngFor="let service of post">
                 @if (!service.servicecommandargumentvalues.length) {
                     <ng-container *ngIf="hasName(service.name)">
-                        <div class="mb-3 form-group accordion-button-padding-left">
+                        <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
                             <div>
                                 <input cFormCheckInput
                                        type="checkbox"
@@ -84,7 +84,8 @@
                         <c-accordion class="mb-3">
                             <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
                                 <ng-template cTemplateId="accordionHeaderTemplate">
-                                    <div class="form-group" (click)="accordionItem.toggleItem()"
+                                    <div class="form-group bg-primary-100"
+                                         (click)="accordionItem.toggleItem()"
                                          [collapsed]="!accordionItem.visible" cAccordionButton>
                                         <div>
                                             <input cFormCheckInput
@@ -92,8 +93,10 @@
                                                    [id]="service.name"
                                                    class="alert-icon"
                                                    name="checkbox"
+                                                   (click)="$event.stopPropagation()"
                                                    [(ngModel)]="service.createService"/>
                                             <label class="custom-control-label custom-control-label-ok"
+                                                   (click)="$event.stopPropagation()"
                                                    [for]="service.name">
                                                 {{ service.name }}
                                                 <span class="help-block italic">

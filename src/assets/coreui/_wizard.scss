@@ -17,3 +17,8 @@ body.dark-theme .wizard-bg-inactive {
     background: $success !important;
     color: $white;
 }
+
+.accordion-button:not(.collapsed) {
+    background-color: $cui-primary-100;
+    color: rgba(var(--cui-primary-rgb)) !important;
+}
