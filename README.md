@@ -260,14 +260,8 @@ This document describes how to upgrade the underlying Angular version.
    `ng-option-highlight` to this list as well. We can test this with the next Angular upgrade.
 
     ```
-    ng update @angular/core@19 @angular/cli@19 @angular/material@19 @coreui/angular@~5.3 @coreui/icons-angular@~5.3 primeng@19.0.2 @primeng/themes@19.0.2
+    ng update @angular/core@20 @angular/cli@20 @angular/cdk@20 @coreui/angular@~5.5 @coreui/icons-angular@~5.5 primeng@20.0.1 @primeng/themes@20.0.1
     ```
-
-   Update from 19 to 20:
-
-```
-> ng update @angular/core@20 @angular/cli@20
-```
 
 Check the terminal for any errors.
 
