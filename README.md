@@ -254,7 +254,7 @@ This document describes how to upgrade the underlying Angular version.
 1. Update CoreUI
    Please see the official CoreUI documentation on how to update the Angular
    version: https://coreui.io/angular/docs/migration/angular-version/ first.
-   Copy and modify the shown upgrade command. This example upgrades from Angular 18 to Angular 20.
+   Copy and modify the shown upgrade command. This example upgrades from Angular 19 to Angular 20.
 
    Probably it's a good idea to also add `angular-fontawesome`, `@fullcalendar/angular`, `ng-select` and
    `ng-option-highlight` to this list as well. We can test this with the next Angular upgrade.
@@ -288,19 +288,26 @@ This document describes how to upgrade the underlying Angular version.
 npm install --save typescript@~5.5.3
 ```
 
-## Known Migration Issue
-### 2025-07-31: Migrating `Fontawesome 6` to `Fontawesome 7`:
-Whereever we combine `Fontawesome` with `vis-network`, to actually work, we reference the specific webfont to use for the `icon`s in the `options` object.
+### How to Upgrade Font Awesome
+
+Wherever we combine `Font Awesome` with `vis-network`, to actually work, we reference the specific webfont to use for the `icon`s in the `options` object.
+
 ```typescript
-/// blah blah
-        icon: {
-            face: '"Font Awesome 7 Free"',   // Here we changed the string from "Font Awesome 6 Free" to "Font Awesome 7 Free"
-                code: '\uf0ac',
-                color: colorGroup, //color for icon,
-                weight: "900", // Font Awesome 5 doesn't work properly unless bold. // Font Awesome 6 fix https://github.com/visjs/vis-network/issues/139#issuecomment-536114158
-        
-        }
-/// blah blah
+// [...]
+icon: {
+    face: '"Font Awesome 7 Free"',   // Here we changed the string from "Font Awesome 6 Free" to "Font Awesome 7 Free"
+        code
+:
+    '\uf0ac',
+        color
+:
+    colorGroup, //color for icon,
+        weight
+:
+    "900", // Font Awesome 5 doesn't work properly unless bold. // Font Awesome 6 fix https://github.com/visjs/vis-network/issues/139#issuecomment-536114158
+
+}
+// [...]
 ```
 
 # Need help or support?
