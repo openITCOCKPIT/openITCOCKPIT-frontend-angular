@@ -122,6 +122,26 @@
     color: color.adjust(oitc.$secondary, $lightness: 40%, $space: hsl) !important;
 }
 
+.ok-glow, .up-glow {
+    text-shadow: 0 0 9px oitc.$success;
+    color: oitc.$success !important;
+}
+
+.warning-glow {
+    text-shadow: 0 0 9px oitc.$warning;
+    color: oitc.$warning !important;
+}
+
+.critical-glow, .down-glow {
+    text-shadow: 0 0 9px oitc.$danger;
+    color: oitc.$danger !important;
+}
+
+.unknown-glow, .unknown-glow {
+    text-shadow: 0 0 9px oitc.$secondary;
+    color: oitc.$secondary !important;
+}
+
 .txt-ack {
     color: #774DFF !important;
 }
