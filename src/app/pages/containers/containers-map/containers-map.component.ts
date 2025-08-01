@@ -1,30 +1,29 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  inject,
-  OnDestroy,
-  OnInit,
-  DOCUMENT
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    DOCUMENT,
+    HostListener,
+    inject,
+    OnDestroy,
+    OnInit
 } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  ProgressComponent,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    ProgressComponent,
+    RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DecimalPipe, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -38,36 +37,35 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { ContainersService } from '../containers.service';
 import { ROOT_CONTAINER } from '../../changelogs/object-types.enum';
-import { Edge, Network, Node, Options } from 'vis-network';
+import { ClusterOptions, Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data/peer';
-import { ClusterOptions } from 'vis-network/declarations/network/Network';
 
 @Component({
     selector: 'oitc-containers-map',
     imports: [
-    BackButtonDirective,
-    BlockLoaderComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FaIconComponent,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PermissionDirective,
-    RowComponent,
-    SelectComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    DecimalPipe,
-    ProgressComponent,
-    TranslocoPipe
-],
+        BackButtonDirective,
+        BlockLoaderComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        FaIconComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        PermissionDirective,
+        RowComponent,
+        SelectComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        DecimalPipe,
+        ProgressComponent,
+        TranslocoPipe
+    ],
     templateUrl: './containers-map.component.html',
     styleUrl: './containers-map.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
