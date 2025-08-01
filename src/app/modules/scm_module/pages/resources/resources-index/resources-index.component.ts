@@ -269,7 +269,7 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
             }];
         } else {
             // User clicked on delete selected button
-            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+            items = this.SelectionServiceService.getSelectedItems().filter((item) => item.allow_edit).map((item): DeleteAllItem => {
                 return {
                     id: item.id,
                     displayName: item.name
@@ -296,7 +296,7 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
             items = [resource];
         } else {
             // User clicked on delete selected button
-            items = this.SelectionServiceService.getSelectedItems().map((item): ResourceEntity => {
+            items = this.SelectionServiceService.getSelectedItems().filter((item) => item.allow_set_status).map((item): ResourceEntity => {
                 return item;
             });
         }
