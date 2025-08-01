@@ -263,7 +263,13 @@ This document describes how to upgrade the underlying Angular version.
     ng update @angular/core@19 @angular/cli@19 @angular/material@19 @coreui/angular@~5.3 @coreui/icons-angular@~5.3 primeng@19.0.2 @primeng/themes@19.0.2
     ```
 
-   Check the terminal for any errors.
+   Update from 19 to 20:
+
+```
+> ng update @angular/core@20 @angular/cli@20
+```
+
+Check the terminal for any errors.
 
 2. Follow the Update Guide from https://angular.dev/update-guide and check for any breaking changes
 3. Update other dependencies
