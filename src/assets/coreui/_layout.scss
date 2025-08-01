@@ -148,4 +148,15 @@
     max-width: 600px;
 }
 
+body.dark-theme .color-picker input {
+    color: #ffffff;
+}
 
+body.dark-theme .color-picker.open {
+    background: var(--cui-body-bg);
+    color: var(--cui-card-color);
+}
+
+body.dark-theme .color-picker .hex-text .box div {
+    color: var(--cui-card-color) !important;
+}
