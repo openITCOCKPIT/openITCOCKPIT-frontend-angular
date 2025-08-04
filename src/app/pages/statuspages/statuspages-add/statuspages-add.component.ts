@@ -31,15 +31,20 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { Router, RouterLink } from '@angular/router';
 import {
     CardBodyComponent,
-    CardComponent, CardFooterComponent,
+    CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, ColComponent,
+    CardTitleDirective,
+    ColComponent,
     FormCheckInputDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective, InputGroupComponent, InputGroupTextDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
-    NavItemComponent, RowComponent
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -50,10 +55,7 @@ import { StatuspagesService } from '../statuspages.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import {
-    StatuspagePost, SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit
-}
-    from '../statuspage.interface';
+import { SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit } from '../statuspage.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
@@ -117,6 +119,8 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     public post: StatuspagePostEdit = {} as StatuspagePostEdit;
     public errors: GenericValidationError | null = null;
     public noItemsSelected: boolean = false;
+
+    public readonly hostname = window.location.hostname;
 
     constructor(private _router: Router) {
     }
@@ -263,6 +267,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
             name: '',
             description: '',
             public_title: '',
+            public_identifier: null,
             public: false,
             show_downtimes: false,
             show_downtime_comments: false,
@@ -290,6 +295,10 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     public submit = () => {
         this.cleanUpForSubmit();
         this.filterForSubmit();
+
+        if (!this.post.public || this.post.public_identifier === '') {
+            this.post.public_identifier = null;
+        }
 
         this.subscriptions.add(this.StatuspagesService.addStatuspage(this.post)
             .subscribe((result) => {
@@ -381,6 +390,16 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
             this.services.map(service => service.key),
             this.post.selected_services._ids
         );
+    }
+
+    public onPublicIdentifierInputChange(event: Event) {
+        if (this.post.public_identifier) {
+            // Replace all values we do not want to have in a URL
+            const input = event.target as HTMLInputElement;
+            const filtered = input.value.replace(/[^a-zA-Z0-9\-]/g, '');
+            input.value = filtered;
+            this.post.public_identifier = filtered;
+        }
     }
 
     protected readonly String = String;

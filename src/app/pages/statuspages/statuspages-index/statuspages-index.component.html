@@ -239,11 +239,17 @@
                             <oitc-actions-button-element *ngIf="statuspage.public"
                                                          [permission]="'statuspages.view'"
                             >
-                                <a [href]="'/statuspages/publicView/'+statuspage.id" target="_blank">
-                                    <fa-icon [icon]="['fas', 'users-rectangle']"></fa-icon>
-                                    {{ t('Public view') }}
-                                </a>
-
+                                @if (statuspage.public_identifier) {
+                                    <a [href]="'/statuspages/publicView/'+statuspage.public_identifier" target="_blank">
+                                        <fa-icon [icon]="['fas', 'users-rectangle']"></fa-icon>
+                                        {{ t('Public view') }}
+                                    </a>
+                                } @else {
+                                    <a [href]="'/statuspages/publicView/'+statuspage.uuid" target="_blank">
+                                        <fa-icon [icon]="['fas', 'users-rectangle']"></fa-icon>
+                                        {{ t('Public view') }}
+                                    </a>
+                                }
                             </oitc-actions-button-element>
 
                             <li cDropdownDivider *ngIf="statuspage.allow_edit"></li>
