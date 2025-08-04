@@ -158,13 +158,20 @@
                     </td>
                     <td>{{ mkcheck.name }}</td>
                     <td>
-                        <oitc-label-link
-                            [objectId]="mkcheck.servicetemplate.id"
-                            [route]="'/servicetemplates/edit'"
-                            [permissions]="'servicetemplates.edit'"
-                        >
-                            {{ mkcheck.servicetemplate.template_name }}
-                        </oitc-label-link>
+                        @if (mkcheck.servicetemplate) {
+                            <oitc-label-link
+                                [objectId]="mkcheck.servicetemplate.id"
+                                [route]="'/servicetemplates/edit'"
+                                [permissions]="'servicetemplates.edit'"
+                            >
+                                {{ mkcheck.servicetemplate.template_name }}
+                            </oitc-label-link>
+                        } @else {
+                            <span class="italic text-secondary">
+                                <!-- this was a bug until ITC-3533 -->
+                                {{ t('No service template assignment defined') }}
+                            </span>
+                        }
                     </td>
 
                     <td class="width-50">
