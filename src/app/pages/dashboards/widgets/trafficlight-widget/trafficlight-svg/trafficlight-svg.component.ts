@@ -1,16 +1,17 @@
 import {
-    afterRenderEffect,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    inject,
-    input,
-    OnDestroy,
-    Renderer2,
-    ViewChild
+  afterRenderEffect,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  OnDestroy,
+  Renderer2,
+  ViewChild,
+  DOCUMENT
 } from '@angular/core';
-import { DOCUMENT, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-trafficlight-svg',

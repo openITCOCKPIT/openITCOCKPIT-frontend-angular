@@ -172,29 +172,14 @@ export class AgentconnectorShowOutputComponent implements OnInit, OnDestroy {
                     if (!isEditing && isBoolean(props.value)) {
                         renderers.push({
                             component: BooleanToggle,
-                            props: {
-                                path: props.path,
-                                value: props.value,
-                                readOnly: props.readOnly,
-                                onPatch: props.onPatch,
-                                focus: props.focus
-                            }
+                            props
                         });
                     }
 
                     if (!isEditing) {
                         renderers.push({
                             component: ReadonlyValue,
-                            props: {
-                                path: props.path,
-                                value: props.value,
-                                mode: props.mode,
-                                readOnly: props.readOnly,
-                                parser: props.parser,
-                                normalization: props.normalization,
-                                searchResultItems: props.searchResultItems,
-                                onSelect: props.onSelect
-                            }
+                            props
                         });
                     }
 

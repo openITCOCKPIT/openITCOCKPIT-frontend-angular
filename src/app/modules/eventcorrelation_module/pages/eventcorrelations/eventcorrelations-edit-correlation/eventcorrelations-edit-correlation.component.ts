@@ -47,6 +47,7 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { EvcTreeEditComponent } from './evc-tree-edit/evc-tree-edit.component';
 import {
+    SelectItem,
     SelectItemOptionGroup,
     SelectKeyValue,
     SelectKeyValueString
@@ -64,7 +65,6 @@ import {
     MultiSelectOptgroupComponent
 } from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import _ from 'lodash';
-import { SelectItem } from 'primeng/api/selectitem';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EvcTreeValidationErrors } from '../eventcorrelations-view/evc-tree/evc-tree.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
