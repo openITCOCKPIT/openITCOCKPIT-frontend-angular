@@ -1,14 +1,15 @@
 import {
-    ChangeDetectionStrategy,
-    Component,
-    effect,
-    inject,
-    input,
-    InputSignal,
-    OnDestroy,
-    OnInit,
-    Renderer2,
-    ViewChild
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  input,
+  InputSignal,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewChild,
+  DOCUMENT
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
@@ -18,7 +19,7 @@ import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { DOCUMENT, NgClass, NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { RadialGauge } from 'canvas-gauges';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 import {

@@ -2,6 +2,7 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    DOCUMENT,
     inject,
     OnDestroy,
     OnInit,
@@ -17,7 +18,7 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 import { DesignsService } from '../designs.service';
 import { Design, DesignsEditRoot, Manipulations, MaxUploadLimit } from '../designs.interface';
 import Dropzone from 'dropzone';
-import {DOCUMENT, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
+import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { AuthService } from '../../../../../auth/auth.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -40,7 +41,6 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
-    InputGroupComponent,
     ModalBodyComponent,
     ModalComponent,
     ModalFooterComponent,
@@ -64,6 +64,7 @@ import {
 } from '../../../components/colour-locator-picker/colour-locator-picker.component';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+
 
 @Component({
     selector: 'oitc-designs-edit',

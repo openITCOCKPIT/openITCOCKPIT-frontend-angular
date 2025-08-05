@@ -1,16 +1,17 @@
 import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    HostListener,
-    inject,
-    Inject,
-    OnDestroy,
-    OnInit,
-    ViewChild
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  DOCUMENT
 } from '@angular/core';
-import { DOCUMENT, NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 
 import {
     KtdDragEnd,

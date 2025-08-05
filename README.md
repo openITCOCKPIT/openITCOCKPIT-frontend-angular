@@ -254,16 +254,16 @@ This document describes how to upgrade the underlying Angular version.
 1. Update CoreUI
    Please see the official CoreUI documentation on how to update the Angular
    version: https://coreui.io/angular/docs/migration/angular-version/ first.
-   Copy and modify the shown upgrade command. This example upgrades from Angular 18 to Angular 20.
+   Copy and modify the shown upgrade command. This example upgrades from Angular 19 to Angular 20.
 
    Probably it's a good idea to also add `angular-fontawesome`, `@fullcalendar/angular`, `ng-select` and
    `ng-option-highlight` to this list as well. We can test this with the next Angular upgrade.
 
     ```
-    ng update @angular/core@19 @angular/cli@19 @angular/material@19 @coreui/angular@~5.3 @coreui/icons-angular@~5.3 primeng@19.0.2 @primeng/themes@19.0.2
+    ng update @angular/core@20 @angular/cli@20 @angular/cdk@20 @coreui/angular@~5.5 @coreui/icons-angular@~5.5 primeng@20.0.1 @primeng/themes@20.0.1
     ```
 
-   Check the terminal for any errors.
+Check the terminal for any errors.
 
 2. Follow the Update Guide from https://angular.dev/update-guide and check for any breaking changes
 3. Update other dependencies
@@ -286,6 +286,28 @@ This document describes how to upgrade the underlying Angular version.
 
 ```
 npm install --save typescript@~5.5.3
+```
+
+### How to Upgrade Font Awesome
+
+Wherever we combine `Font Awesome` with `vis-network`, to actually work, we reference the specific webfont to use for the `icon`s in the `options` object.
+
+```typescript
+// [...]
+icon: {
+    face: '"Font Awesome 7 Free"',   // Here we changed the string from "Font Awesome 6 Free" to "Font Awesome 7 Free"
+        code
+:
+    '\uf0ac',
+        color
+:
+    colorGroup, //color for icon,
+        weight
+:
+    "900", // Font Awesome 5 doesn't work properly unless bold. // Font Awesome 6 fix https://github.com/visjs/vis-network/issues/139#issuecomment-536114158
+
+}
+// [...]
 ```
 
 # Need help or support?

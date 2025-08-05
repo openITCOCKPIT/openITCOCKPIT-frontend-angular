@@ -34,7 +34,7 @@ export class SparklineBarEchartsComponent implements OnDestroy {
     // Count this up, to trigger a resize / chart update
     public triggerResize = input<number>(0);
 
-    public theme: null | 'dark' = null;
+    public theme: string = '';
     public chartOption: EChartsCoreOption = {};
 
     private cdr = inject(ChangeDetectorRef);
