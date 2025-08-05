@@ -1,6 +1,5 @@
 @use "sass:color";
-@use "variables" as oitc;
-@use "@coreui/coreui/scss/coreui" as cui;
+@use "../../assets/coreui/variables" as oitc;
 
 .bg-up,
 .bg-ok {
@@ -13,6 +12,10 @@
 
 .bg-warning {
     background: oitc.$warning !important;
+}
+
+.bg-color-warning {
+    background-color: oitc.$warning !important;
 }
 
 .bg-warning-soft {
