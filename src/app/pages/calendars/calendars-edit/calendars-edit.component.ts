@@ -24,7 +24,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { CalendarContainer, CalendarEvent, CalendarPost, Countries } from '../calendars.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -58,7 +58,7 @@ import { HistoryService } from '../../../history.service';
     TranslocoDirective,
     XsButtonDirective,
     RouterLink,
-    NgOptionHighlightModule
+        NgOptionHighlightDirective
 ],
     templateUrl: './calendars-edit.component.html',
     styleUrl: './calendars-edit.component.css',

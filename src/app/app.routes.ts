@@ -1,5 +1,5 @@
-import { Component, inject } from "@angular/core";
-import { DOCUMENT } from "@angular/common";
+import { Component, inject, DOCUMENT } from "@angular/core";
+
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
 import { snmpTrapModuleRoutes } from './modules/snmp_trap_module/snmp_trap_module.routes';

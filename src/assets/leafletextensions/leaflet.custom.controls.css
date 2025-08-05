@@ -5,7 +5,7 @@
 }
 
 .leaflet-control-custom:after {
-    font-family: "Font Awesome 6 Free Solid";
+    font-family: "Font Awesome 7 Free Solid";
     content: "\f112";
     color: #4285F4;
     padding-left: 6px;

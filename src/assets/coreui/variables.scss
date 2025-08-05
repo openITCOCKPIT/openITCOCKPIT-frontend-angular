@@ -1,5 +1,31 @@
 // If you want to override variables do it here
-@import "../../../node_modules/@coreui/coreui/scss/_functions.scss";
+@use "sass:color";
+
+// MIT License
+// Copyright 2025 creativeLabs Łukasz Holeczek.
+// Source: https://github.com/coreui/coreui/blob/5e5a103031286317a1e5eb8d7bf592e8121f36f7/scss/functions/_color.scss
+//
+// We had to copy the code so we can use the functions before we import coreui
+// otherwise we could not overwrite variables using @forward "@coreui/coreui/scss/coreui" with ()
+// or at least my SCSS knowledge is not enough to do this.
+//
+// scss-docs-start color-functions
+// Tint a color: mix a color with white
+@function tint-color($color, $weight) {
+    @return color.mix(white, $color, $weight);
+}
+
+// Shade a color: mix a color with black
+@function shade-color($color, $weight) {
+    @return color.mix(black, $color, $weight);
+}
+
+// Shade the color if the weight is positive, else tint it
+@function shift-color($color, $weight) {
+    @return if($weight > 0, shade-color($color, $weight), tint-color($color, -$weight));
+}
+
+// scss-docs-end color-functions
 
 // scss-docs-start gray-color-variables
 $white: #fff !default;
@@ -119,7 +145,7 @@ $success-bg-subtle: rgb(236, 250, 228) !default;
 $info-bg-subtle: rgb(225, 239, 250) !default;
 $warning-bg-subtle: rgb(255, 226, 187) !default;
 $danger-bg-subtle: rgb(254, 190, 205) !default;
-$light-bg-subtle: mix($gray-100, $white) !default;
+$light-bg-subtle: color.mix($gray-100, $white) !default;
 $dark-bg-subtle: $gray-400 !default;
 // scss-docs-end theme-bg-subtle-variables
 
@@ -131,7 +157,7 @@ $info-bg-subtle-dark: rgba(33, 152, 243, 0.2) !default;
 $warning-bg-subtle-dark: rgba(255, 154, 19, 0.2) !default;
 $danger-bg-subtle-dark: rgba(252, 19, 73, 0.2) !default;
 $light-bg-subtle-dark: $gray-800-dark !default;
-$dark-bg-subtle-dark: mix($gray-800-dark, $black) !default;
+$dark-bg-subtle-dark: color.mix($gray-800-dark, $black) !default;
 // scss-docs-end theme-bg-subtle-dark-variables
 
 // scss-docs-start theme-border-subtle-variables
@@ -155,8 +181,16 @@ $light-border-subtle-dark: $gray-700-dark !default;
 $dark-border-subtle-dark: $gray-800-dark !default;
 // scss-docs-end theme-border-subtle-dark-variables
 
+$body-text-align: null !default;
+$body-color: rgba(shift-color($gray-base, +26%), .95) !default;
+$body-bg: $white !default;
+
 $table-striped-bg-factor: .015;
 
 $min-contrast-ratio: 2.0;
-$body-font-family: Roboto, sans-serif;
+//$body-font-family: Roboto, sans-serif;
+// New coreui uses - $body-font-family may not used anymore
+$font-family-sans-serif: Roboto, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+//$font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
+
 $font-size-base: 0.8rem;

@@ -176,6 +176,7 @@ $light-theme: mat.m2-define-light-theme((
 }
 
 // Add .light-theme to <body> to apply the dark theme.
-.light-theme {
-    @include mat.all-component-themes($light-theme);
-}
+//.light-theme {
+//    @include mat.all-component-themes($light-theme);
+//}
+

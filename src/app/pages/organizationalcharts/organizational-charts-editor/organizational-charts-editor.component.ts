@@ -287,14 +287,14 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
     }
 
     public onReassignConnection(event: FReassignConnectionEvent): void {
-        if (!event.newFInputId) {
-            // newFInputId undefined means that the connection has been reassigned to the same input/node
+        if (!event.newTargetId) {
+            // newTargetId undefined means that the connection has been reassigned to the same input/node
             // nothing to do in this case
             return;
         }
 
         // Delete old connection from f-flow canvas and add new one
-        const connections = this.connections().filter((c) => c.id != event.fConnectionId);
+        const connections = this.connections().filter((c) => c.id != event.connectionId);
 
         // So we can track connections in @for loop
         const uuid = new UUID();
@@ -302,8 +302,8 @@ export class OrganizationalChartsEditorComponent implements OnInit, OnDestroy {
         const newConnection: OcConnection = {
             id: connectionUuid,
             uuid: connectionUuid,
-            organizational_chart_input_node_id: event.newFInputId,
-            organizational_chart_output_node_id: event.fOutputId
+            organizational_chart_input_node_id: event.newTargetId,
+            organizational_chart_output_node_id: event.oldSourceId
         };
 
 

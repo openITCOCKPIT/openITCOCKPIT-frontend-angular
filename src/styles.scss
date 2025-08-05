@@ -23,26 +23,29 @@
  *     confirmation.
  */
 
-@import "assets/coreui/style.scss";
-@import "@fontsource/roboto/index.css";
-@import "@fontsource/roboto/100.css";
-@import "@fontsource/roboto/100-italic.css";
-@import "@fontsource/roboto/300.css";
-@import "@fontsource/roboto/300-italic.css";
-@import "@fontsource/roboto/400.css";
-@import "@fontsource/roboto/400-italic.css";
-@import "@fontsource/roboto/500.css";
-@import "@fontsource/roboto/500-italic.css";
-@import "@fontsource/roboto/700.css";
-@import "@fontsource/roboto/700-italic.css";
-@import "@fontsource/roboto/900.css";
-@import "@fontsource/roboto/900-italic.css";
-@import "vanilla-jsoneditor/themes/jse-theme-dark.css";
+// loads the main openITCOCKPIT styles
+@use "assets/coreui/style.scss";
 
-@import "leaflet/dist/leaflet.css";
-@import "assets/leafletextensions/leaflet.custom.controls.css";
+// load roboto font
+@use "@fontsource/roboto/index.css" as roboto;
+@use "@fontsource/roboto/100.css" as roboto100;
+@use "@fontsource/roboto/100-italic.css" as roboto100italic;
+@use "@fontsource/roboto/300.css"  as roboto300;
+@use "@fontsource/roboto/300-italic.css" as roboto300italic;
+@use "@fontsource/roboto/400.css" as roboto400;
+@use "@fontsource/roboto/400-italic.css" as roboto400italic;
+@use "@fontsource/roboto/500.css" as roboto500;
+@use "@fontsource/roboto/500-italic.css" as roboto500italic;
+@use "@fontsource/roboto/700.css" as roboto700;
+@use "@fontsource/roboto/700-italic.css" as roboto700italic;
+@use "@fontsource/roboto/900.css" as roboto900;
+@use "@fontsource/roboto/900-italic.css" as roboto900italic;
+@use "vanilla-jsoneditor/themes/jse-theme-dark.css" as jseThemeDark;
+
+@use "leaflet/dist/leaflet.css" as leaflet-main;
+@use "assets/leafletextensions/leaflet.custom.controls.css";
 /* this has to be imported globally, to render the timeline correctly after the build */
-@import "vis-timeline/styles/vis-timeline-graph2d.css";
+@use "vis-timeline/styles/vis-timeline-graph2d.css";
 
 /*
  * Importing FontAwesome globally that we can Web Fonts which support gradients
