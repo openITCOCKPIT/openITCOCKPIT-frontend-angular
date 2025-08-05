@@ -1,13 +1,13 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  inject,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  DOCUMENT
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    DOCUMENT,
+    ElementRef,
+    inject,
+    OnDestroy,
+    OnInit,
+    ViewChild
 } from '@angular/core';
 import {
     ButtonGroupComponent,
@@ -20,7 +20,7 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -67,9 +67,8 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
         NgClass,
         LabelLinkComponent,
         TranslocoPipe,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        NoRecordsComponent
+        NoRecordsComponent,
+        FaLayersComponent
     ],
     templateUrl: './resourcegroups-summary.component.html',
     styleUrl: './resourcegroups-summary.component.scss',

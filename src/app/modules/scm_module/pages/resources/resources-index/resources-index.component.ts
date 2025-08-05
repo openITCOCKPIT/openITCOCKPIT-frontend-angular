@@ -44,7 +44,7 @@ import {
 } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { AsyncPipe, NgIf } from '@angular/common';
@@ -103,8 +103,6 @@ import {
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        FaStackComponent,
-        FaStackItemSizeDirective,
         BadgeComponent,
         LabelLinkComponent,
         FormCheckComponent,
@@ -112,7 +110,8 @@ import {
         FormCheckInputDirective,
         FormCheckLabelDirective,
         ResourcesSetStatusModalComponent,
-        AsyncPipe
+        AsyncPipe,
+        FaLayersComponent
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ResourcesService} // Inject the ResourcesService into the DeleteAllModalComponent
