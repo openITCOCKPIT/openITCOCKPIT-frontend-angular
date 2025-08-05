@@ -1,6 +1,6 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, DOCUMENT } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DOCUMENT } from '@angular/common';
+
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import { LocationPost, LocationsIndexParams, LocationsIndexRoot } from './locations.interface';

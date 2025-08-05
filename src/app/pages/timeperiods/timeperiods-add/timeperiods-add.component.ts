@@ -29,7 +29,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { FormWarningComponent } from '../../../layouts/coreui/form-warning/form-warning.component';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -70,7 +70,7 @@ import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/s
         InputGroupTextDirective,
         InputGroupComponent,
         NgSelectModule,
-        NgOptionHighlightModule,
+        NgOptionHighlightDirective,
         DebounceDirective
     ],
     templateUrl: './timeperiods-add.component.html',

@@ -24,7 +24,9 @@
                                 class="p1 bg-dark text-white tactical-overview-first-flex-item">
                                 <fa-icon [icon]="['fas', 'cog']" class="px-1"></fa-icon>
                             </div>
-                            <div class="p1 bg-success text-white tactical-overview-flex-item py-5 display-6">
+                            <div class="p1 bg-success text-white tactical-overview-flex-item py-5 display-6"
+                                 [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+servicestatusCountPercentage[0]+'%, transparent '+servicestatusCountPercentage[0]+'%)'"
+                                 [title]="servicestatusCountPercentage[0]+'%'">
                                 @if (servicestatusSummary.state[0] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
                                     <a [routerLink]="['/', 'services', 'index']" class="text-white"
                                        [queryParams]="{id: servicestatusSummary.state.serviceIds[0], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
@@ -34,7 +36,9 @@
                                     {{ servicestatusSummary.state[0] }}
                                 }
                             </div>
-                            <div class="bg-warning text-white tactical-overview-flex-item py-5 display-6">
+                            <div class="bg-color-warning text-white tactical-overview-flex-item py-5 display-6"
+                                 [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+servicestatusCountPercentage[1]+'%, transparent '+servicestatusCountPercentage[1]+'%)'"
+                                 [title]="servicestatusCountPercentage[1]+'%'">
                                 @if (servicestatusSummary.state[1] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
                                     <a [routerLink]="['/', 'services', 'index']" class="text-white"
                                        [queryParams]="{id: servicestatusSummary.state.serviceIds[1], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
@@ -44,7 +48,9 @@
                                     {{ servicestatusSummary.state[1] }}
                                 }
                             </div>
-                            <div class="bg-danger text-white tactical-overview-flex-item py-5 display-6">
+                            <div class="bg-danger text-white tactical-overview-flex-item py-5 display-6"
+                                 [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+servicestatusCountPercentage[2]+'%, transparent '+servicestatusCountPercentage[2]+'%)'"
+                                 [title]="servicestatusCountPercentage[2]+'%'">
                                 @if (servicestatusSummary.state[2] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
                                     <a [routerLink]="['/', 'services', 'index']" class="text-white"
                                        [queryParams]="{id: servicestatusSummary.state.serviceIds[2], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
@@ -54,7 +60,9 @@
                                     {{ servicestatusSummary.state[2] }}
                                 }
                             </div>
-                            <div class="bg-secondary text-white tactical-overview-flex-item py-5 display-6">
+                            <div class="bg-secondary text-white tactical-overview-flex-item py-5 display-6"
+                                 [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+servicestatusCountPercentage[3]+'%, transparent '+servicestatusCountPercentage[3]+'%)'"
+                                 [title]="servicestatusCountPercentage[3]+'%'">
                                 @if (servicestatusSummary.state[3] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
                                     <a [routerLink]="['/', 'services', 'index']" class="text-white"
                                        [queryParams]="{id: servicestatusSummary.state.serviceIds[3], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">

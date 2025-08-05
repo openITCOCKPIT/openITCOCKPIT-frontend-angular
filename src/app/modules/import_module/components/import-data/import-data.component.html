@@ -9,45 +9,45 @@
                 @switch (importer.data_source) {
                     @case ('idoit') {
                         <!-- Import i-doit data -->
-                        <fa-stack class="me-1">
+                        <fa-stack [size]="'2xl'" class="me-2">
                             <fa-icon [icon]="['fas', 'database']"
-                                     stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                                     stackItemSize="1x" class="text-info"></fa-icon>
                             <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                                     stackItemSize="1x" pull="right" transform="right-12 down-15"
-                            ></fa-icon>
+                                     stackItemSize="1x"
+                                     transform="shrink-8 right-10 down-7"></fa-icon>
                         </fa-stack>
                         {{ t('Import data from i-doit system') }}
                     }
                     @case ('openitcockpit_agent') {
                         <!-- Import openITCOCKPIT Agent data -->
-                        <fa-stack class="me-1">
+                        <fa-stack [size]="'2xl'" class="me-2">
                             <fa-icon [icon]="['fas', 'user-secret']"
-                                     stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                                     stackItemSize="1x" class="text-info"></fa-icon>
                             <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                                     stackItemSize="1x" pull="right" transform="right-12 down-15"
-                            ></fa-icon>
+                                     stackItemSize="1x"
+                                     transform="shrink-8 right-10 down-7"></fa-icon>
                         </fa-stack>
                         {{ t('Import data from openITCOCKPIT Agent') }}
                     }
                     @case ('itop') {
                         <!-- Import iTop data -->
-                        <fa-stack class="me-1">
-                            <fa-icon [icon]="['fas', 'user-secret']"
-                                     stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                        <fa-stack [size]="'2xl'" class="me-2">
+                            <fa-icon [icon]="['fas', 'database']"
+                                     stackItemSize="1x" class="text-info"></fa-icon>
                             <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                                     stackItemSize="1x" pull="right" transform="right-12 down-15"
-                            ></fa-icon>
+                                     stackItemSize="1x"
+                                     transform="shrink-8 right-10 down-7"></fa-icon>
                         </fa-stack>
                         {{ t('Import data from openITCOCKPIT Agent') }}
                     }
                     @case ('external_monitoring') {
                         <!-- Import ExternalMonitoringSystem data -->
-                        <fa-stack class="me-1">
+                        <fa-stack [size]="'2xl'" class="me-2">
                             <fa-icon [icon]="['fas', 'tower-observation']"
-                                     stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                                     stackItemSize="1x" class="text-info"></fa-icon>
                             <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                                     stackItemSize="1x" pull="right" transform="right-12 down-15"
-                            ></fa-icon>
+                                     stackItemSize="1x"
+                                     transform="shrink-8 right-10 down-7"></fa-icon>
                         </fa-stack>
                         {{ t('Import data from External Monitoring System system') }}
                     }
