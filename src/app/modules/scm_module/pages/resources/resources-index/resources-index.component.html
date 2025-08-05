@@ -296,7 +296,7 @@
                                 ( ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'setStatus']) | async ) ||
                                     ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async ) )) {
                                     <oitc-item-select
-                                        [disabled]="!resource.allow_edit"
+                                        [disabled]="!(resource.allow_edit || resource.allow_set_status)"
                                         [item]="resource"></oitc-item-select>
                                 }
                             </td>
