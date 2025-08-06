@@ -5,13 +5,17 @@ import { VmwareEsxWizardService } from './vmware-esx-wizard.service';
 import { PaginatorModule } from 'primeng/paginator';
 import { FormsModule } from '@angular/forms';
 import {
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     FormControlDirective,
-    FormLabelDirective
+    FormLabelDirective,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -44,7 +48,11 @@ import {
         WizardsDynamicfieldsComponent,
         TranslocoDirective,
         FormLabelDirective,
-        AlertComponent
+        AlertComponent,
+        AccordionButtonDirective,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective
     ],
     templateUrl: './vmware-esx.component.html',
     styleUrl: './vmware-esx.component.css',

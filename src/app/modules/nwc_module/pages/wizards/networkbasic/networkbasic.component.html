@@ -290,37 +290,73 @@
 
                 <ul class="m-0 p-0">
                     <ol class="m-0 p-0" *ngFor="let interface of post.interfaces">
-                        <ng-container *ngIf="hasName(interface.name)">
+                        @if (!interface.servicecommandargumentvalues.length) {
+                            <ng-container *ngIf="hasName(interface.name)">
 
-                            <div class="mb-3 form-group">
-                                <div>
-                                    <input cFormCheckInput
-                                           type="checkbox"
-                                           [id]="interface.name"
-                                           class="alert-icon"
-                                           name="checkbox"
-                                           [(ngModel)]="interface.createService"/>
-                                    <label class="custom-control-label custom-control-label-ok"
-                                           [for]="interface.name">
-                                        {{ interface.name }}
-                                        <span class="help-block italic">
-                                            {{ interface.description }}
-                                        </span>
-                                    </label>
+                                <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
+                                    <div class="d-flex align-items-center">
+                                        <input cFormCheckInput
+                                               type="checkbox"
+                                               [id]="interface.name"
+                                               class="alert-icon lg-checkbox"
+                                               name="checkbox"
+                                               [(ngModel)]="interface.createService"/>
+                                        <label class="custom-control-label custom-control-label-ok"
+                                               [for]="interface.name">
+                                            {{ interface.name }}
+                                            <span class="help-block italic">
+                                                {{ interface.description }}
+                                            </span>
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
-
-                            @for (commandArgument of interface.servicecommandargumentvalues; track $index) {
-                                <div
-                                    class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
-                                    {{ commandArgument.commandargument.human_name }}
-                                    <input class="form-control"
-                                           type="text"
-                                           [disabled]="!interface.createService || $index === 0"
-                                           [(ngModel)]="commandArgument.value">
-                                </div>
-                            }
-                        </ng-container>
+                            </ng-container>
+                        } @else {
+                            <ng-container *ngIf="hasName(interface.name)">
+                                <c-accordion class="mb-3">
+                                    <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
+                                        <ng-template cTemplateId="accordionHeaderTemplate">
+                                            <div class="form-group bg-primary-100"
+                                                 (click)="accordionItem.toggleItem()"
+                                                 [collapsed]="!accordionItem.visible" cAccordionButton>
+                                                <div class="d-flex align-items-center">
+                                                    <input cFormCheckInput
+                                                           type="checkbox"
+                                                           [id]="interface.name"
+                                                           class="alert-icon lg-checkbox"
+                                                           name="checkbox"
+                                                           (click)="$event.stopPropagation()"
+                                                           [(ngModel)]="interface.createService"/>
+                                                    <label class="custom-control-label custom-control-label-ok"
+                                                           (click)="$event.stopPropagation()"
+                                                           [for]="interface.name">
+                                                        {{ interface.name }}
+                                                        <span class="help-block italic">
+                                                            {{ interface.description }}
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template cTemplateId="accordionBodyTemplate">
+                                            <div class="accordion-body">
+                                                @for (
+                                                    commandArgument of interface.servicecommandargumentvalues; track $index) {
+                                                    <div
+                                                        class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
+                                                        {{ commandArgument.commandargument.human_name }}
+                                                        <input class="form-control"
+                                                               type="text"
+                                                               [disabled]="!interface.createService || $index === 0"
+                                                               [(ngModel)]="commandArgument.value">
+                                                    </div>
+                                                }
+                                            </div>
+                                        </ng-template>
+                                    </c-accordion-item>
+                                </c-accordion>
+                            </ng-container>
+                        }
                     </ol>
                 </ul>
             </fieldset>

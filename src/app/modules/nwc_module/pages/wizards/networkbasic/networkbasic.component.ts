@@ -11,6 +11,9 @@ import {
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -23,7 +26,8 @@ import {
     FormLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
-    RowComponent
+    RowComponent,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -76,7 +80,11 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         FormsModule,
         NgClass,
         FormCheckComponent,
-        FormCheckLabelDirective
+        FormCheckLabelDirective,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective,
+        AccordionButtonDirective
     ],
     templateUrl: './networkbasic.component.html',
     styleUrl: './networkbasic.component.css',

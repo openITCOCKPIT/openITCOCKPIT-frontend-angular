@@ -54,11 +54,11 @@
                 @if (!service.servicecommandargumentvalues.length) {
                     <ng-container *ngIf="hasName(service.name)">
                         <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
-                            <div>
+                            <div class="d-flex align-items-center">
                                 <input cFormCheckInput
                                        type="checkbox"
                                        [id]="service.name"
-                                       class="alert-icon"
+                                       class="alert-icon lg-checkbox"
                                        name="checkbox"
                                        [(ngModel)]="service.createService"/>
                                 <label class="custom-control-label custom-control-label-ok"
@@ -70,14 +70,6 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}"
-                             *ngFor="let commandArgument of service.servicecommandargumentvalues">
-                            {{ commandArgument.commandargument.human_name }}
-                            <input class="form-control"
-                                   type="text"
-                                   [disabled]="!service.createService"
-                                   [(ngModel)]="commandArgument.value">
-                        </div>
                     </ng-container>
                 } @else {
                     <ng-container *ngIf="hasName(service.name)">
@@ -87,11 +79,11 @@
                                     <div class="form-group bg-primary-100"
                                          (click)="accordionItem.toggleItem()"
                                          [collapsed]="!accordionItem.visible" cAccordionButton>
-                                        <div>
+                                        <div class="d-flex align-items-center">
                                             <input cFormCheckInput
                                                    type="checkbox"
                                                    [id]="service.name"
-                                                   class="alert-icon"
+                                                   class="alert-icon lg-checkbox"
                                                    name="checkbox"
                                                    (click)="$event.stopPropagation()"
                                                    [(ngModel)]="service.createService"/>
@@ -107,14 +99,16 @@
                                     </div>
                                 </ng-template>
                                 <ng-template cTemplateId="accordionBodyTemplate">
-                                    <div
-                                        class="mb-3 form-group accordion-body {{detectColor(commandArgument.commandargument.human_name)}}"
-                                        *ngFor="let commandArgument of service.servicecommandargumentvalues">
-                                        {{ commandArgument.commandargument.human_name }}
-                                        <input class="form-control"
-                                               type="text"
-                                               [disabled]="!service.createService"
-                                               [(ngModel)]="commandArgument.value">
+                                    <div class="accordion-body">
+                                        <div
+                                            class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}"
+                                            *ngFor="let commandArgument of service.servicecommandargumentvalues">
+                                            {{ commandArgument.commandargument.human_name }}
+                                            <input class="form-control"
+                                                   type="text"
+                                                   [disabled]="!service.createService"
+                                                   [(ngModel)]="commandArgument.value">
+                                        </div>
                                     </div>
                                 </ng-template>
                             </c-accordion-item>
