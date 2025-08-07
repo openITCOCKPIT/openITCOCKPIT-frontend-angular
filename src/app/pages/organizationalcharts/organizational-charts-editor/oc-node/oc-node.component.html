@@ -56,92 +56,95 @@
                     </div>
                 </div>
 
-                @if (statusCounts?.cumulativeHoststatus === -1) {
-                    <div class="alert border-faded border-primary bg-transparent text-secondary p-2 mb-0">
-                        <div class="d-flex align-items-center">
-                            <div class="alert-icon me-2">
-                                <span class="icon-stack fs-5">
-                                    <i class="icon-stack-3x base-circle text-primary"></i>
-                                    <i class="icon-stack-1x text-white fas fa-info"></i>
-                                </span>
-                            </div>
-                            <div class="flex-1">
-                                <span class="text-primary">
-                                    {{ t('No hosts detected') }}
-                                </span>
+                @if (statusCounts && statusCounts.cumulativeHoststatus !== undefined && statusCounts.cumulativeServicestatus !== undefined) {
+                    @if (statusCounts.cumulativeHoststatus === -1) {
+                        <div class="alert border-faded border-primary bg-transparent text-secondary p-2 mb-0">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon me-2">
+                                    <span class="icon-stack fs-5">
+                                        <i class="icon-stack-3x base-circle text-primary"></i>
+                                        <i class="icon-stack-1x text-white fas fa-info"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-primary">
+                                        {{ t('No hosts detected') }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
 
-                @if (statusCounts?.cumulativeHoststatus === 0 && ( statusCounts?.cumulativeServicestatus === 0 || statusCounts?.cumulativeServicestatus === -1 )) {
-                    <div class="alert border-faded border-success bg-transparent text-secondary p-2 mb-0">
-                        <div class="d-flex align-items-center">
-                            <div class="alert-icon me-2">
-                                <span class="icon-stack fs-5">
-                                    <i class="icon-stack-3x base-circle text-success"></i>
-                                    <i class="icon-stack-1x text-white fas fa-check"></i>
-                                </span>
-                            </div>
-                            <div class="flex-1">
-                                <span class="text-success">
-                                    {{ t('No problems detected') }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                }
-                @if (statusCounts?.cumulativeHoststatus === 0 && statusCounts?.cumulativeServicestatus === 1) {
-                    <div class="alert border-faded border-warning bg-transparent text-secondary p-2 mb-0">
-                        <div class="d-flex align-items-center">
-                            <div class="alert-icon me-2">
-                                <span class="icon-stack fs-5">
-                                    <i class="icon-stack-3x base-circle text-warning"></i>
-                                    <i class="icon-stack-1x text-white fas fa-triangle-exclamation"></i>
-                                </span>
-                            </div>
-                            <div class="flex-1">
-                                <span class="text-warning">
-                                    {{ t('Warnings detected') }}
-                                </span>
+                    @if (statusCounts.cumulativeHoststatus === 0 && ( statusCounts.cumulativeServicestatus === 0 || statusCounts.cumulativeServicestatus === -1 )) {
+                        <div class="alert border-faded border-success bg-transparent text-secondary p-2 mb-0">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon me-2">
+                                    <span class="icon-stack fs-5">
+                                        <i class="icon-stack-3x base-circle text-success"></i>
+                                        <i class="icon-stack-1x text-white fas fa-check"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-success">
+                                        {{ t('No problems detected') }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
 
-                @if (( statusCounts?.cumulativeHoststatus === 1 && statusCounts?.cumulativeServicestatus !== 3 ) || statusCounts?.cumulativeServicestatus === 2) {
-                    <div class="alert border-faded border-danger bg-transparent text-secondary p-2 mb-0">
-                        <div class="d-flex align-items-center">
-                            <div class="alert-icon me-2">
-                                <span class="icon-stack fs-5">
-                                    <i class="icon-stack-3x base-circle text-danger"></i>
-                                    <i class="icon-stack-1x text-white fas fa-exclamation"></i>
-                                </span>
-                            </div>
-                            <div class="flex-1">
-                                <span class="text-danger">
-                                    {{ t('Problems detected') }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                }
-                @if (statusCounts?.cumulativeHoststatus === 2 || statusCounts?.cumulativeServicestatus === 3) {
-                    <div class="alert border-faded border-secondary bg-transparent text-secondary p-2 mb-0">
-                        <div class="d-flex align-items-center">
-                            <div class="alert-icon me-2">
-                                <span class="icon-stack fs-5">
-                                    <i class="icon-stack-3x base-circle text-secondary"></i>
-                                    <i class="icon-stack-1x text-white fas fa-question"></i>
-                                </span>
-                            </div>
-                            <div class="flex-1">
-                                <span class="text-secondary">
-                                    {{ t('Undetermined problems') }}
-                                </span>
+                    @if (statusCounts.cumulativeHoststatus === 0 && statusCounts.cumulativeServicestatus === 1) {
+                        <div class="alert border-faded border-warning bg-transparent text-secondary p-2 mb-0">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon me-2">
+                                    <span class="icon-stack fs-5">
+                                        <i class="icon-stack-3x base-circle text-warning"></i>
+                                        <i class="icon-stack-1x text-white fas fa-triangle-exclamation"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-warning">
+                                        {{ t('Warnings detected') }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
+
+                    @if (( statusCounts.cumulativeHoststatus === 1 && statusCounts.cumulativeServicestatus !== 3 ) || ( statusCounts.cumulativeHoststatus < 2 && statusCounts.cumulativeServicestatus === 2 )) {
+                        <div class="alert border-faded border-danger bg-transparent text-secondary p-2 mb-0">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon me-2">
+                                    <span class="icon-stack fs-5">
+                                        <i class="icon-stack-3x base-circle text-danger"></i>
+                                        <i class="icon-stack-1x text-white fas fa-exclamation"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-danger">
+                                        {{ t('Problems detected') }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if (statusCounts.cumulativeHoststatus === 2 || statusCounts.cumulativeServicestatus === 3) {
+                        <div class="alert border-faded border-secondary bg-transparent text-secondary p-2 mb-0">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon me-2">
+                                    <span class="icon-stack fs-5">
+                                        <i class="icon-stack-3x base-circle text-secondary"></i>
+                                        <i class="icon-stack-1x text-white fas fa-question"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-secondary">
+                                        {{ t('Undetermined problems') }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 }
             </div>
         </div>
@@ -187,7 +190,7 @@
                                 <div class="bg-dark text-white tactical-overview-first-flex-item text-center">
                                     <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-warning"></fa-icon>
                                 </div>
-                                <div class="bg-dark tactical-overview-flex-item text-white">
+                                <div class="bg-dark tactical-overview-flex-item text-white font-xx-small">
                                     {{ t('Unhandled') }}
                                 </div>
                                 <div class="bg-down-soft tactical-overview-flex-item text-white text-center">
@@ -237,7 +240,7 @@
                                 <div class="bg-dark text-white tactical-overview-first-flex-item text-center">
                                     <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-warning"></fa-icon>
                                 </div>
-                                <div class="bg-dark tactical-overview-flex-item text-white">
+                                <div class="bg-dark tactical-overview-flex-item text-white font-xx-small">
                                     {{ t('Unhandled') }}
                                 </div>
                                 <div class="bg-warning-soft tactical-overview-flex-item text-white text-center">
