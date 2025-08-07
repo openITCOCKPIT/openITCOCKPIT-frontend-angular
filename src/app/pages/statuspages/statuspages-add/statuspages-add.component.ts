@@ -56,7 +56,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit } from '../statuspage.interface';
-import { GenericValidationError } from '../../../generic-responses';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { AsyncPipe, NgIf } from '@angular/common';
@@ -305,11 +305,15 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
 
                 this.cdr.markForCheck();
                 if (result.success) {
-
                     this.errors = null;
-                    const title: string = this.TranslocoService.translate('Statuspage');
-                    const msg: string = this.TranslocoService.translate('added successfully');
-                    this.notyService.genericSuccess(msg, title);
+
+                    const response = result.data as GenericIdResponse;
+
+                    const title = this.TranslocoService.translate('Statuspage');
+                    const msg = this.TranslocoService.translate('created successfully');
+                    const url = ['statuspages', 'edit', response.id];
+                    this.notyService.genericSuccess(msg, title, url);
+
                     this._router.navigate(['statuspages', 'index']);
                     this.notyService.scrollContentDivToTop();
                     return;
