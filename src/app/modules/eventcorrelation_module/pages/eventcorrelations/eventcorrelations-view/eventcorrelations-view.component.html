@@ -25,7 +25,7 @@
     </nav>
 
     <oitc-block-loader [height]="'25rem'" *ngIf="!evcTree || !rootElement"></oitc-block-loader>
-    <c-card class="mb-3 d-flex flex-column h-100" *ngIf="evcTree && rootElement">
+    <c-card class="mb-3 d-flex flex-column" *ngIf="evcTree && rootElement">
         <c-card-header>
             <h5 cCardTitle>{{ t('Event Correlation:') }}
                 <small class="fw-300">
