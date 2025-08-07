@@ -156,14 +156,11 @@
                                            type="checkbox"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="ResourceStatusUnconfirmed">
-                                        <fa-stack class="me-1">
-                                            <fa-icon [icon]="['fas', 'square']"
-                                                     stackItemSize="2x"
-                                                     class="text-primary"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'question']" [inverse]="true"
-                                                     stackItemSize="1x"
-                                            ></fa-icon>
-                                        </fa-stack>
+                                        <fa-layers [size]="'xl'">
+                                            <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
+                                            <fa-icon [inverse]="true" [icon]="['fas', 'question']"
+                                                     transform="shrink-8"/>
+                                        </fa-layers>
                                         <span class="pt-1">
                                             {{ t('Unconfirmed') }}
                                         </span>
@@ -176,19 +173,16 @@
                                            cFormCheckInput
                                            id="ResourceStatusOk"
                                            name="ResourceStatusOk"
-                                           class="checkbox-lg checkbox-primary"
+                                           class="checkbox-lg checkbox-success"
                                            oitcDebounce
                                            type="checkbox"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="ResourceStatusOk">
-                                        <fa-stack class="me-1">
-                                            <fa-icon [icon]="['fas', 'square']"
-                                                     stackItemSize="2x"
-                                                     class="text-success"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'check']" [inverse]="true"
-                                                     stackItemSize="1x"
-                                            ></fa-icon>
-                                        </fa-stack>
+                                        <fa-layers [size]="'xl'">
+                                            <fa-icon [icon]="['fas', 'square']" class="text-success"/>
+                                            <fa-icon [inverse]="true" [icon]="['fas', 'check']"
+                                                     transform="shrink-8"/>
+                                        </fa-layers>
                                         {{ t('Ok') }}
                                     </label>
                                 </c-form-check>
@@ -198,19 +192,16 @@
                                            cFormCheckInput
                                            id="ResourceStatusWarning"
                                            name="ResourceStatusWarning"
-                                           class="checkbox-lg checkbox-primary"
+                                           class="checkbox-lg checkbox-warning"
                                            oitcDebounce
                                            type="checkbox"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="ResourceStatusWarning">
-                                        <fa-stack class="me-1">
-                                            <fa-icon [icon]="['fas', 'square']"
-                                                     stackItemSize="2x"
-                                                     class="text-warning"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'bell']" [inverse]="true"
-                                                     stackItemSize="1x"
-                                            ></fa-icon>
-                                        </fa-stack>
+                                        <fa-layers [size]="'xl'">
+                                            <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
+                                            <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
+                                                     transform="shrink-8"/>
+                                        </fa-layers>
                                         {{ t('Warning') }}
                                     </label>
                                 </c-form-check>
@@ -220,19 +211,16 @@
                                            cFormCheckInput
                                            id="ResourceStatusCritical"
                                            name="ResourceStatusCritical"
-                                           class="checkbox-lg checkbox-primary"
+                                           class="checkbox-lg checkbox-danger"
                                            oitcDebounce
                                            type="checkbox"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="ResourceStatusCritical">
-                                        <fa-stack class="me-1">
-                                            <fa-icon [icon]="['fas', 'square']"
-                                                     stackItemSize="2x"
-                                                     class="text-danger"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'exclamation']" [inverse]="true"
-                                                     stackItemSize="1x"
-                                            ></fa-icon>
-                                        </fa-stack>
+                                        <fa-layers [size]="'xl'">
+                                            <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
+                                            <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
+                                                     transform="shrink-8"/>
+                                        </fa-layers>
                                         {{ t('Critical') }}
                                     </label>
                                 </c-form-check>
@@ -259,10 +247,10 @@
                     <th class="width-50 text-center" scope="col">
                         <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                     </th>
-                    <th>
+                    <th scope="col" mat-sort-header="Resources.status">
                         {{ t('Status') }}
                     </th>
-                    <th>
+                    <th scope="col" mat-sort-header="is_expired">
                         {{ t('Status expired') }}
                     </th>
                     <th scope="col" mat-sort-header="Containers.name">
@@ -296,51 +284,39 @@
                                 ( ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'setStatus']) | async ) ||
                                     ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async ) )) {
                                     <oitc-item-select
-                                        [disabled]="!resource.allow_edit"
+                                        [disabled]="!(resource.allow_edit || resource.allow_set_status)"
                                         [item]="resource"></oitc-item-select>
                                 }
                             </td>
-                            <td>
+                            <td class="text-center">
                                 @switch (resource.status) {
                                     @case (1) {
-                                        <fa-stack class="me-1" [size]="'sm'">
-                                            <fa-icon [icon]="['fas', 'square']"
-                                                     stackItemSize="2x"
-                                                     class="text-success"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'check']" [inverse]="true"
-                                                     stackItemSize="1x"
-                                            ></fa-icon>
-                                        </fa-stack>
+                                        <fa-layers [size]="'xl'">
+                                            <fa-icon [icon]="['fas', 'square']" class="text-success"/>
+                                            <fa-icon [inverse]="true" [icon]="['fas', 'check']"
+                                                     transform="shrink-8"/>
+                                        </fa-layers>
                                     }
                                     @case (2) {
-                                        <fa-stack class="me-1" [size]="'sm'">
-                                            <fa-icon [icon]="['fas', 'square']"
-                                                     stackItemSize="2x"
-                                                     class="text-warning"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'bell']" [inverse]="true"
-                                                     stackItemSize="1x"
-                                            ></fa-icon>
-                                        </fa-stack>
+                                        <fa-layers [size]="'xl'">
+                                            <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
+                                            <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
+                                                     transform="shrink-8"/>
+                                        </fa-layers>
                                     }
                                     @case (3) {
-                                        <fa-stack class="me-1" [size]="'sm'">
-                                            <fa-icon [icon]="['fas', 'square']"
-                                                     stackItemSize="2x"
-                                                     class="text-danger"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'exclamation']" [inverse]="true"
-                                                     stackItemSize="1x"
-                                            ></fa-icon>
-                                        </fa-stack>
+                                        <fa-layers [size]="'xl'">
+                                            <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
+                                            <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
+                                                     transform="shrink-8"/>
+                                        </fa-layers>
                                     }
                                     @default {
-                                        <fa-stack class="me-1" [size]="'sm'">
-                                            <fa-icon [icon]="['fas', 'square']"
-                                                     stackItemSize="2x"
-                                                     class="text-primary"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'question']" [inverse]="true"
-                                                     stackItemSize="1x"
-                                            ></fa-icon>
-                                        </fa-stack>
+                                        <fa-layers [size]="'xl'">
+                                            <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
+                                            <fa-icon [inverse]="true" [icon]="['fas', 'question']"
+                                                     transform="shrink-8"/>
+                                        </fa-layers>
                                     }
                                 }
                             </td>

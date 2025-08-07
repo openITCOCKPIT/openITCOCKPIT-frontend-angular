@@ -6,12 +6,12 @@
         size="xl">
         <c-modal-header>
             <h5 cModalTitle>
-                <fa-stack class="me-1">
+                <fa-stack [size]="'2xl'" class="me-2">
                     <fa-icon [icon]="['fas', 'database']"
-                             stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                             stackItemSize="1x" class="text-info"></fa-icon>
                     <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                             stackItemSize="1x" pull="right" transform="right-5 down-15"
-                    ></fa-icon>
+                             stackItemSize="1x"
+                             transform="shrink-8 right-10 down-7"></fa-icon>
                 </fa-stack>
                 {{ t('Import host group data from iTop system!') }}
             </h5>

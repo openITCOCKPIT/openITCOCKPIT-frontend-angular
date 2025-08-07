@@ -1,5 +1,13 @@
 // Used for select boxes
-import { SelectItem } from 'primeng/api/selectitem';
+
+export interface SelectItem<T = any> {
+    label?: string;
+    value: T;
+    styleClass?: string;
+    icon?: string;
+    title?: string;
+    disabled?: boolean;
+}
 
 export interface SelectKeyValue {
     key: number,
@@ -29,3 +37,15 @@ export interface SelectKeyValueOptGroup {
     items: SelectKeyValueString[]
 }
 
+export interface SelectKeyValuePath {
+    key: number,
+    value: string
+    path: string
+}
+
+export interface SelectKeyValuePathWithDisabled {
+    key: number,
+    value: string
+    path: string
+    disabled?: boolean
+}

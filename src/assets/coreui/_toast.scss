@@ -1,19 +1,21 @@
+@use "variables" as oitc;
+
 .toast-error {
-    background-color: $danger !important;
-    box-shadow: 0 0 12px $danger !important;
+    background-color: oitc.$danger !important;
+    box-shadow: 0 0 12px oitc.$danger !important;
 }
 
 .toast-success {
-    background-color: $success !important;
-    box-shadow: 0 0 12px $success !important;
+    background-color: oitc.$success !important;
+    box-shadow: 0 0 12px oitc.$success !important;
 }
 
 .toast-warning {
-    background-color: $warning !important;
-    box-shadow: 0 0 12px $warning !important;
+    background-color: oitc.$warning !important;
+    box-shadow: 0 0 12px oitc.$warning !important;
 }
 
 .toast-info {
-    background-color: $info !important;
-    box-shadow: 0 0 12px $info !important;
+    background-color: oitc.$info !important;
+    box-shadow: 0 0 12px oitc.$info !important;
 }

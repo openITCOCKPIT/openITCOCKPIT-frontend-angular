@@ -1,5 +1,5 @@
-import { Component, inject } from "@angular/core";
-import { DOCUMENT } from "@angular/common";
+import { Component, inject, DOCUMENT } from "@angular/core";
+
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
 import { snmpTrapModuleRoutes } from './modules/snmp_trap_module/snmp_trap_module.routes';
@@ -719,6 +719,21 @@ const coreRoutes: Routes = [{
 }, {
     path: 'administrators/debug',
     loadComponent: () => import('./pages/administrators/administrators-debug/administrators-debug.component').then(m => m.AdministratorsDebugComponent)
+}, {
+    path: 'organizationalcharts/index',
+    loadComponent: () => import('./pages/organizationalcharts/organizational-charts-index/organizational-charts-index.component').then(m => m.OrganizationalChartsIndexComponent)
+}, {
+    path: 'organizationalcharts/add',
+    loadComponent: () => import('./pages/organizationalcharts/organizational-charts-add/organizational-charts-add.component').then(m => m.OrganizationalChartsAddComponent)
+}, {
+    path: 'organizationalcharts/edit/:id',
+    loadComponent: () => import('./pages/organizationalcharts/organizational-charts-edit/organizational-charts-edit.component').then(m => m.OrganizationalChartsEditComponent)
+}, {
+    path: 'organizationalcharts/view/:id',
+    loadComponent: () => import('./pages/organizationalcharts/organizational-charts-view/organizational-charts-view.component').then(m => m.OrganizationalChartsViewComponent)
+}, {
+    path: 'organizationalcharts/browserView',
+    loadComponent: () => import('./pages/organizationalcharts/organizational-charts-browser-view/organizational-charts-browser-view.component').then(m => m.OrganizationalChartsBrowserViewComponent)
 }, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)
