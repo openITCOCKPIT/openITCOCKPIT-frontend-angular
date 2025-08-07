@@ -1,28 +1,27 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {
-  ButtonGroupComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  ColComponent,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent
+    ButtonGroupComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    ColComponent,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { WizardsService } from '../wizards.service';
-import { WizardElement, WizardsIndex } from '../wizards.interface';
+import { DeprecatedWizards, WizardsIndex } from '../wizards.interface';
 import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 
 import { TranslocoDirective } from '@jsverse/transloco';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { HistoryService } from '../../../history.service';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
@@ -73,6 +72,8 @@ export class WizardsIndexComponent implements OnInit, OnDestroy {
 
     protected result?: WizardsIndex;
 
+    protected deprecatedWizards: DeprecatedWizards = {};
+
     public ngOnInit() {
         this.loadWizards();
     }
@@ -85,6 +86,20 @@ export class WizardsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.WizardsService.getIndex()
             .subscribe((result: WizardsIndex) => {
                 this.result = result;
+                for (let wizardType in this.result.wizards) {
+                    let title = this.result.wizards[wizardType].title;
+                    if (title.includes('- deprecated')) {
+                        title = title.replace(' - deprecated', '');
+                        this.deprecatedWizards[wizardType] = title;
+                    }
+                }
+                for (let wizardType in this.result.possibleWizards) {
+                    let title = this.result.wizards[wizardType].title;
+                    if (title.includes('- deprecated')) {
+                        title = title.replace(' - deprecated', '');
+                        this.deprecatedWizards[wizardType] = title;
+                    }
+                }
                 this.cdr.markForCheck();
             }))
     }

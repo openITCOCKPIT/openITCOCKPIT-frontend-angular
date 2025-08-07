@@ -9,4 +9,8 @@ export const vmwareV2ModuleRoutes: Routes = [
         path: 'vmwarev2_module/wizards/vmware/:hostId/vmware-datastores',
         loadComponent: () => import('./pages/wizards/vmware-datastores/vmware-datastores.component').then(m => m.VmwareDatastoresComponent)
     },
+    {
+        path: 'vmwarev2_module/wizards/vmware/:hostId/vmware-snapshots',
+        loadComponent: () => import('./pages/wizards/vmware-snapshots/vmware-snapshots.component').then(m => m.VmwareSnapshotsComponent)
+    },
 ];
