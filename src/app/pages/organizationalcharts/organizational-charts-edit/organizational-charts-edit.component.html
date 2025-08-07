@@ -23,7 +23,7 @@
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
 
     <form cForm (ngSubmit)="submit()" class="d-flex flex-column h-100">
-        <c-card class="mb-3 d-flex h-100" *ngIf="post">
+        <c-card class="mb-3 d-flex" *ngIf="post">
             <c-card-header>
                 <h5 cCardTitle>
                     {{ t('Edit Organizational chart') }}
