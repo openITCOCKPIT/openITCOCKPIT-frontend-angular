@@ -141,18 +141,18 @@
                 </div>
             </fieldset>
 
-            <div class="mb-3 d-flex justify-content-end">
-                <button class="ripple" (click)="openAddSnapshotServiceModal()" cButton color="success">
-                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                    {{ t('Add Snapshot Service') }}
-                </button>
-            </div>
-
             <oitc-wizards-dynamicfields
                 [(post)]="post.services"
                 [errors]="errors"
                 [title]="'VMware services'|transloco"
             />
+
+            <div class="mb-3 d-flex justify-content-end">
+                <button class="ripple" (click)="openAddSnapshotServiceModal()" cButton color="success">
+                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                    {{ t('Add snapshot service') }}
+                </button>
+            </div>
 
         </c-card-body>
 
@@ -182,10 +182,27 @@
                                    required
                                    type="text"
                                    name="serviceName"
+                                   (ngModelChange)="onServiceNameChange($event)"
                                    oitcFormError [errors]="errors" errorField="serviceName"
                                    [(ngModel)]="serviceName">
-                            <oitc-form-feedback [errors]="errors" errorField="serviceName"></oitc-form-feedback>
+                            @if (this.errors && this.errors['serviceName'] && this.errors['serviceName']['_empty']) {
+                                <div class="pt-1 text-invalid">
+                                    <div>{{ this.errors['serviceName']['_empty'] }}</div>
+                                </div>
+                            }
                         </div>
+
+                        @if (serviceAlreadyExists) {
+                            <c-alert color="warning">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                {{
+                                    t('A service with the name {0} already exists on this host. Duplicate service names could lead to confusion.', {
+                                        '0': serviceName
+                                    })
+                                }}
+
+                            </c-alert>
+                        }
                     </c-col>
                     <c-col lg="12">
                         <div class="mb-3">

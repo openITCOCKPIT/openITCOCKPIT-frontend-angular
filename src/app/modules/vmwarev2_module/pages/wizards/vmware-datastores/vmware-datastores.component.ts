@@ -198,12 +198,13 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
                 for (let key in data.services[2].value) {
                     let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.datastoreServicetemplate.servicetemplatecommandargumentvalues));
                     servicetemplatecommandargumentvalues[3].value = data.services[2].value[key].name;
+                    let name = "Datastore " + String(data.services[2].value[key].name);
                     this.post.dataStoreServices.push(
                         {
-                            createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, data.services[2].value[key].name),
+                            createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, name),
                             description: '',
                             host_id: this.post.host_id,
-                            name: "Datastore " + String(data.services[2].value[key].name),
+                            name: name,
                             servicecommandargumentvalues: servicetemplatecommandargumentvalues,
                             servicetemplate_id: this.datastoreServicetemplate.id
                         });
