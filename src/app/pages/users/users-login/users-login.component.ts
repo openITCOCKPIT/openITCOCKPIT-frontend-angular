@@ -548,10 +548,10 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     }
                 },
                 "color": {
-                    "value": "#ffffff"
+                    "value": "#d0be17"
                 },
                 "shape": {
-                    "type": "circle",
+                    "type": "star",
                     "stroke": {
                         "width": 0,
                         "color": "#000000"
@@ -565,7 +565,6 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     }
                 },
                 "opacity": {
-                    "value": 1,
                     "random": true,
                     "anim": {
                         "enable": true,
@@ -586,10 +585,6 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 },
                 "line_linked": {
                     "enable": false,
-                    "distance": 150,
-                    "color": "#ffffff",
-                    "opacity": 0.4,
-                    "width": 1
                 },
                 "move": {
                     "enable": true,
