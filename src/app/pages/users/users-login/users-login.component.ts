@@ -659,7 +659,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     "value": "#1b1e34"
                 },
                 "shape": {
-                    "type": "polygon",
+                    "type": "circle",
                     "stroke": {
                         "width": 0,
                         "color": "#000"
