@@ -295,9 +295,10 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
         // /:typeId/:title/:hostId/:state/:selectedOs
         this.typeId = String(this.route.snapshot.paramMap.get('typeId'));
         this.title = String(this.route.snapshot.paramMap.get('title'));
-        if (this.title.includes('- deprecated')) {
+        if (this.title.toLowerCase().includes(('- ' + this.TranslocoService.translate('deprecated')).toLowerCase())) {
             this.isDeprecated = true;
-            this.title = this.title.replace(' - deprecated', '');
+            const regex = new RegExp('- ' + this.TranslocoService.translate('deprecated'), 'i');
+            this.title = this.title.replace(regex, '');
         }
         if (Number(this.route.snapshot.paramMap.get('hostId'))) {
             this.hostId = Number(this.route.snapshot.paramMap.get('hostId'));

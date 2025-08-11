@@ -98,16 +98,7 @@
                                 </div>
                                 <div class="pl-10">
                                     <h5>
-                                        @if (this.deprecatedWizards[wizard.value.type_id]) {
-                                            {{ this.deprecatedWizards[wizard.value.type_id] }}
-                                            <oitc-badge-outline color="warning"
-                                                                class="ms-1">
-                                                <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
-                                                {{ t('Deprecated') }}
-                                            </oitc-badge-outline>
-                                        } @else {
-                                            {{ wizard.value.title }}
-                                        }
+                                        {{ wizard.value.title }}
                                     </h5>
                                     <br/>
                                     {{ wizard.value.description }}
@@ -132,16 +123,7 @@
                                 </div>
                                 <div class="pl-10">
                                     <h5>
-                                        @if (this.deprecatedWizards[wizard.value.type_id]) {
-                                            {{ this.deprecatedWizards[wizard.value.type_id] }}
-                                            <oitc-badge-outline color="warning"
-                                                                class="ms-1">
-                                                <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
-                                                {{ t('Deprecated') }}
-                                            </oitc-badge-outline>
-                                        } @else {
-                                            {{ wizard.value.title }}
-                                        }
+                                        {{ wizard.value.title }}
                                     </h5>
                                     <br/>
                                     {{ wizard.value.description }}
@@ -167,6 +149,104 @@
                     </c-card>
                 </c-col>
             </c-row>
+
+
+            <c-accordion class="mb-3"
+                         *ngIf="this.deprecatedWizards.deprecatedWizards || this.deprecatedWizards.possibleDeprecatedWizards">
+                <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
+                    <ng-template cTemplateId="accordionHeaderTemplate">
+                        <div class="bg-primary-100" (click)="accordionItem.toggleItem()"
+                             [collapsed]="!accordionItem.visible" cAccordionButton>
+                            <h5>{{ t('Deprecated Wizards') }}</h5>
+                        </div>
+                    </ng-template>
+                    <ng-template cTemplateId="accordionBodyTemplate">
+                        <c-row class="wizard-card-group accordion-body">
+                            <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
+                                   *ngFor="let wizard of this.deprecatedWizards.deprecatedWizards | keyvalue"
+                                   [hidden]="! filterByCategory(wizard.value.category)">
+                                <c-card class="mb-3">
+                                    <c-card-body class="wizard-card-body cursor-pointer"
+                                                 [routerLink]="['/', 'wizards', 'wizardHostConfiguration', wizard.value.type_id, wizard.value.title, 0, wizard.value.state, wizard.value.selected_os]">
+                                        <div class="d-flex align-items-center">
+                                            <div class="wizard-logo-image">
+                                                <img [src]="'./assets/images/wizards/'+wizard.value.image"
+                                                     [alt]="wizard.value.title">
+                                            </div>
+                                            <div class="pl-10">
+                                                <h5>
+                                                    @if (deprecatedWizardsTitles[wizard.value.type_id]) {
+                                                        {{ deprecatedWizardsTitles[wizard.value.type_id] }}
+                                                        <oitc-badge-outline color="warning"
+                                                                            class="ms-1">
+                                                            <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                                                            {{ t('Deprecated') }}
+                                                        </oitc-badge-outline>
+                                                    } @else {
+                                                        {{ wizard.value.title }}
+                                                    }
+                                                </h5>
+                                                <br/>
+                                                {{ wizard.value.description }}
+                                            </div>
+                                        </div>
+                                    </c-card-body>
+                                    <c-card-footer class="text-end text-info">
+                                        <i class="fas fa-tags wizard-info-tags"></i>
+                                        {{ wizard.value.category.join(', ') }}
+                                    </c-card-footer>
+                                </c-card>
+                            </c-col>
+                            <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
+                                   *ngFor="let wizard of this.deprecatedWizards.possibleDeprecatedWizards | keyvalue"
+                                   [hidden]="! filterByCategory(wizard.value.category)">
+                                <c-card class="mb-3">
+                                    <c-card-body class="wizard-card-body bg-placeholder-wizard">
+                                        <div class="d-flex align-items-center">
+                                            <div class="wizard-logo-image wizard-logo-image-placeholder">
+                                                <img [src]="'./assets/images/wizards/'+wizard.value.image"
+                                                     [alt]="wizard.value.title">
+                                            </div>
+                                            <div class="pl-10">
+                                                <h5>
+                                                    @if (deprecatedWizardsTitles[wizard.value.type_id]) {
+                                                        {{ deprecatedWizardsTitles[wizard.value.type_id] }}
+                                                        <oitc-badge-outline color="warning"
+                                                                            class="ms-1">
+                                                            <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                                                            {{ t('Deprecated') }}
+                                                        </oitc-badge-outline>
+                                                    } @else {
+                                                        {{ wizard.value.title }}
+                                                    }
+                                                </h5>
+                                                <br/>
+                                                {{ wizard.value.description }}
+                                            </div>
+                                        </div>
+                                    </c-card-body>
+                                    <c-card-footer>
+                                        <c-row>
+                                            <c-col>
+
+                                                <oitc-badge-outline color="warning">
+                                                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                                                    {{ t('Requires module') }}
+                                                </oitc-badge-outline>
+                                            </c-col>
+                                            <c-col class="text-end">
+
+                                                <i class="fas fa-tags wizard-info-tags"></i>
+                                                {{ wizard.value.category.join(', ') }}
+                                            </c-col>
+                                        </c-row>
+                                    </c-card-footer>
+                                </c-card>
+                            </c-col>
+                        </c-row>
+                    </ng-template>
+                </c-accordion-item>
+            </c-accordion>
         </c-card-body>
     </c-card>
 </ng-container>

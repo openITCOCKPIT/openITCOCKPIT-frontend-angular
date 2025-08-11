@@ -21,7 +21,8 @@ export interface WizardElement {
 }
 
 export interface DeprecatedWizards {
-    [key: string]: string
+    deprecatedWizards: { [key: string]: WizardElement }
+    possibleDeprecatedWizards: { [key: string]: WizardElement }
 }
 
 // Host Select Validation
