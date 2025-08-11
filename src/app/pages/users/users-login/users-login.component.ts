@@ -166,6 +166,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.UsersService.getLoginDetails().subscribe(data => {
             this.TitleService.setTitle('Login');
 
+            this.description = data.images.description;
             this.images = data.images.images;
             this.isSsoEnabled = data.isSsoEnabled;
             this.forceRedirectSsousersToLoginScreen = data.forceRedirectSsousersToLoginScreen;
