@@ -36,6 +36,7 @@ import { AuthService } from './auth/auth.service';
 import { TitleService } from './services/title.service';
 import { SystemnameService } from './services/systemname.service';
 import { PermissionsService } from './permissions/permissions.service';
+import { TimezoneConfiguration, TimezoneService } from './services/timezone.service';
 
 @Component({
     selector: 'oitc-root',
@@ -66,6 +67,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public readonly LayoutService = inject(LayoutService);
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
+    private readonly TimezoneService: TimezoneService = inject(TimezoneService);
     private readonly TitleService: TitleService = inject(TitleService);
     private readonly document = inject(DOCUMENT);
     private readonly renderer: Renderer2 = inject(Renderer2);
@@ -122,12 +124,20 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         // Fetch the systemname
         this.watchSystemname();
+
+        // Fetch the timezoneSettings.subscriptions
+        this.fetchTimezoneSettings();
     }
 
     private watchSystemname(): void {
         this.subscription.add(this.SystemnameService.systemName$.subscribe((systemName: string) => {
             this.systemName = `${systemName}`;
             this.TitleService.setSystemName(systemName);
+        }));
+    }
+
+    private fetchTimezoneSettings(): void {
+        this.subscription.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
         }));
     }
 

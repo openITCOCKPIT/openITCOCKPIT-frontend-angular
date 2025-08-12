@@ -58,3 +58,18 @@ export class TimezoneService {
     }
 
 }
+
+/**
+ * Vanilla JavaScript Date object with user timezone offset applied.
+ * Otherwise, the Date object will always construct with UTC timezone.
+ */
+export function getUserDateObject(): Date {
+    let now: Date = new Date();
+
+    if (!cachedTimezoneconfiguration) {
+        // You shall not pass!
+        console.error('⚠️ I Tried to find a CachedTimezoneConfiguration but it was not set!');
+        return now;
+    }
+    return new Date(now.getTime() + cachedTimezoneconfiguration.user_offset * 1000);
+}
