@@ -4,6 +4,7 @@
 import { ObjectTypesEnum } from './object-types.enum';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { getUserDate } from '../../services/timezone.service';
 
 export interface ChangelogsIndexParams {
     angular: true,
@@ -30,7 +31,7 @@ export interface ChangelogsEntityParams {
 }
 
 export function getDefaultChangelogsIndexParams(): ChangelogsIndexParams {
-    let now = new Date();
+    let now = getUserDate();
     return {
         angular: true,
         scroll: true,
@@ -45,7 +46,7 @@ export function getDefaultChangelogsIndexParams(): ChangelogsIndexParams {
 }
 
 export function getDefaultChangelogsEntityParams(): ChangelogsEntityParams {
-    let now = new Date();
+    let now = getUserDate();
     return {
         angular: true,
         scroll: true,
