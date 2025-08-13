@@ -6,6 +6,7 @@ import { map, Observable, of } from 'rxjs';
 export interface TimezoneConfiguration {
     user_timezone: string
     user_time_to_server_offset: number
+    user_time_to_utc_offset: number
     user_offset: number
     server_time_utc: number
     server_time: string
@@ -71,5 +72,5 @@ export function getUserDate(): Date {
         console.error('⚠️ I Tried to find a CachedTimezoneConfiguration but it was not set!');
         return now;
     }
-    return new Date(now.getTime() + cachedTimezoneconfiguration.user_offset * 1000);
+    return new Date(now.getTime() + cachedTimezoneconfiguration.user_time_to_utc_offset * 1000);
 }
