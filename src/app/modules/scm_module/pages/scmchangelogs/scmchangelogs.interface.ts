@@ -3,6 +3,7 @@
  **********************/
 
 import { ScmObjectTypesEnum } from './scm-object-types.enum';
+import { getUserDate } from '../../../../services/timezone.service';
 
 
 export interface ScmChangelogsEntityParams {
@@ -19,7 +20,7 @@ export interface ScmChangelogsEntityParams {
 
 
 export function getDefaultScmChangelogsEntityParams(): ScmChangelogsEntityParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,
