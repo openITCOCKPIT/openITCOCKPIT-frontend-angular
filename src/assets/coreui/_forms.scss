@@ -1,3 +1,6 @@
+@use "variables" as oitc;
+@use "@coreui/coreui/scss/coreui" as cui;
+
 /* Form classes. */
 
 /************
@@ -61,7 +64,7 @@
 
 /** Make range sliders use the primary color **/
 input[type="range"] {
-    accent-color: $primary;
+    accent-color: oitc.$primary;
 }
 
 

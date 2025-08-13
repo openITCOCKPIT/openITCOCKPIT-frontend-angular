@@ -2,6 +2,7 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    DOCUMENT,
     ElementRef,
     inject,
     OnDestroy,
@@ -19,7 +20,7 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -33,7 +34,7 @@ import {
     ResourcegroupsSummaryMap,
     ResourceMap
 } from './resourcegroups-summary.interface';
-import { AsyncPipe, DOCUMENT, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import Sunburst from 'sunburst-chart';
@@ -66,9 +67,8 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
         NgClass,
         LabelLinkComponent,
         TranslocoPipe,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        NoRecordsComponent
+        NoRecordsComponent,
+        FaLayersComponent
     ],
     templateUrl: './resourcegroups-summary.component.html',
     styleUrl: './resourcegroups-summary.component.scss',

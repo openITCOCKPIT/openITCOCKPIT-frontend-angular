@@ -66,7 +66,7 @@ import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { CustomAlertsIndexFilter } from '../../modules/customalert_module/pages/customalerts/customalerts.interface';
 
 
@@ -86,7 +86,7 @@ import { CustomAlertsIndexFilter } from '../../modules/customalert_module/pages/
         FilterBookmarkExportModalComponent,
         NgSelectModule,
         FormsModule,
-        NgOptionHighlightModule,
+        NgOptionHighlightDirective,
         ContainerComponent
     ],
     templateUrl: './filter-bookmark.component.html',
@@ -129,7 +129,6 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
 
     constructor(private router: Router, private activatedRoute: ActivatedRoute) {
         // subscribe to router event
-        // console.log(activatedRoute)
         this.activatedRoute.queryParams.subscribe((params: Params) => {
             if (params['filter'] && params['filter'] !== '') {
                 this.filterUuid = params['filter'];

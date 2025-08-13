@@ -3,8 +3,11 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    DOCUMENT,
     inject,
     OnDestroy,
+    OnInit,
+    Renderer2,
     signal
 } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
@@ -16,12 +19,10 @@ import { ColorModeService, ContainerComponent, ModalService, ShadowOnScrollDirec
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
 import { HistoryService } from './history.service';
-//import { TranslocoService } from '@jsverse/transloco';
-//import { NgSelectConfig } from '@ng-select/ng-select';
 import { CoreuiHeaderComponent } from './layouts/coreui/coreui-header/coreui-header.component';
 import { CoreuiNavbarComponent } from './layouts/coreui/coreui-navbar/coreui-navbar.component';
 import { GlobalLoaderComponent } from './layouts/coreui/global-loader/global-loader.component';
-import { AsyncPipe, DOCUMENT, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { LayoutOptions, LayoutService } from './layouts/coreui/layout.service';
@@ -34,6 +35,7 @@ import { MessagesOfTheDayService } from './pages/messagesotd/messagesotd.service
 import { AuthService } from './auth/auth.service';
 import { TitleService } from './services/title.service';
 import { SystemnameService } from './services/systemname.service';
+import { PermissionsService } from './permissions/permissions.service';
 
 @Component({
     selector: 'oitc-root',
@@ -54,7 +56,7 @@ import { SystemnameService } from './services/systemname.service';
     styleUrl: './app.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnDestroy, AfterViewInit {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Inject HistoryService to keep track of the previous URLs
     private historyService: HistoryService = inject(HistoryService);
@@ -62,9 +64,11 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     // I am the current messageOfTheDay.
     protected messageOfTheDay: CurrentMessageOfTheDay = {} as CurrentMessageOfTheDay;
 
-    private readonly TitleService: TitleService = inject(TitleService);
     public readonly LayoutService = inject(LayoutService);
+    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
+    private readonly TitleService: TitleService = inject(TitleService);
     private readonly document = inject(DOCUMENT);
+    private readonly renderer: Renderer2 = inject(Renderer2);
     private navigationEndEvent: NavigationEnd | null = null;
 
     protected systemName: string = '';
@@ -152,6 +156,23 @@ export class AppComponent implements OnDestroy, AfterViewInit {
                 this.cdr.markForCheck();
             }));
         }));
+    }
+
+    ngOnInit(): void {
+        this.appendCustomStyle();
+    }
+
+    private appendCustomStyle(): void {
+        this.PermissionsService.hasModuleObservable('DesignModule').subscribe(hasModule => {
+            if (!hasModule) {
+                return;
+            }
+            let link = this.renderer.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = `/design_module/css/customStyle.css?v=${new Date().getTime()}`;
+            this.renderer.appendChild(document.head, link);
+        });
     }
 
     public ngOnDestroy(): void {

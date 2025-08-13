@@ -47,10 +47,10 @@
                     <li *ngFor="let statuslogItem of statuslog.statuslog">
                         <time class="cbp_tmtime" [dateTime]="statuslogItem.state_time">
                             <span>{{ statuslogItem.state_time }}</span>
-                            <span>{{ statuslogItem.timeAgoInWords }}</span>
+                            <span>{{ statuslogItem.timeAgoInWords }} - {{ statuslogItem.status }}</span>
                         </time>
                         <div class="cbp_tmicon"
-                             [ngClass]="{'bg-success': statuslogItem.status===1, 'bg-warning': statuslogItem.status===2, 'bg-danger': statuslogItem.status===3}">
+                             [ngClass]="{'bg-primary': statuslogItem.status===null ,'bg-success': statuslogItem.status===1, 'bg-warning': statuslogItem.status===2, 'bg-danger': statuslogItem.status===3}">
                             @switch (statuslogItem.status) {
                                 @case (1) {
                                     <fa-icon [icon]="['fas', 'check']" class="text-white"></fa-icon>
@@ -60,6 +60,9 @@
                                 }
                                 @case (3) {
                                     <fa-icon [icon]="['fas', 'exclamation']" class="text-white"></fa-icon>
+                                }
+                                @default {
+                                    <fa-icon [icon]="['fas', 'question']" class="text-white"></fa-icon>
                                 }
                             }
                         </div>

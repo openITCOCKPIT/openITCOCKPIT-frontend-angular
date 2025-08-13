@@ -9,9 +9,12 @@ export interface Statuspage {
 }
 
 export interface StatuspageProperties {
+    uuid: string
     name: string
     description: string
     public: boolean
+    public_title: string | null,
+    public_identifier: string | null,
     showDowntimes: boolean
     showDowntimeComments: boolean
     showAcknowledgements: boolean
@@ -48,10 +51,12 @@ export interface PlannedDowntimeDaum {
 }
 
 export interface StatuspagePost {
+    uuid?: string,
     container_id: null | number,
     name: '',
     description: '',
     public: boolean,
+    public_identifier: string | null,
     show_downtimes: boolean,
     show_downtime_comments: boolean,
     show_acknowledgements: boolean,
@@ -75,10 +80,13 @@ export interface StatuspagePost {
 }
 
 export interface StatuspagePostEdit {
+    id?: number,
+    uuid?: string,
     container_id: null | number,
     name: '',
     description: '',
-   // public_title: ''
+    public_title: ''
+    public_identifier: string | null,
     public: boolean,
     show_downtimes: boolean,
     show_downtime_comments: boolean,

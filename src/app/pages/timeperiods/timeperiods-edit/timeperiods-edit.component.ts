@@ -33,7 +33,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormWarningComponent } from '../../../layouts/coreui/form-warning/form-warning.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
@@ -72,7 +72,7 @@ import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/s
         InputGroupTextDirective,
         InputGroupComponent,
         NgSelectModule,
-        NgOptionHighlightModule,
+        NgOptionHighlightDirective,
         DebounceDirective,
         FormLoaderComponent,
         ObjectUuidComponent

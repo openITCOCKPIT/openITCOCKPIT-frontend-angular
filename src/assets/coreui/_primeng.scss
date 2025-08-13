@@ -1,4 +1,6 @@
 @use "sass:color";
+@use "variables" as oitc;
+@use "@coreui/coreui/scss/coreui" as cui;
 
 // things that are not possible to override using the PrimeNG theme
 
@@ -19,6 +21,7 @@
 .p-select-label {
     white-space: wrap !important;
     word-break: break-all !important; // enforce break when no spaces are in the name
+    font-size: var(--cui-body-font-size) !important;
 }
 
 // Make long options in a p-select and p-multiselect break lines
@@ -73,7 +76,7 @@
 
 // Highlight search results in the overlay panel
 .mark-highlight {
-    background-color: color.adjust($primary, $alpha: -0.85);
+    background-color: color.adjust(oitc.$primary, $alpha: -0.85);
     text-decoration: underline;
     font-weight: bold;
 }

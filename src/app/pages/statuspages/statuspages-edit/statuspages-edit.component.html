@@ -22,8 +22,14 @@
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>
-                    {{ t('Create new Status page') }}
+                    {{ t('Edit status page') }}
+                    <small class="fw-300">
+                        {{ post.name }}
+                    </small>
                 </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
+                </c-nav>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
                         <button [fallbackUrl]="['statuspages', 'index']" cButton oitcBackButton class="ripple"
@@ -43,14 +49,14 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
-                            name="container"
-                            id="container"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.container_id"
-                            [options]="containers"
-                            (onChange)="onContainerChange()"
-                            oitcFormError [errors]="errors" errorField="container_id">
+                        name="container"
+                        id="container"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.container_id"
+                        [options]="containers"
+                        (onChange)="onContainerChange()"
+                        oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
                     <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
                         {{ t('Please select a container.') }}
@@ -81,7 +87,8 @@
                     <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                 </div>
                 <fieldset class="pb-1 pt-2">
-                    <legend class="fs-md fieldset-legend-border-bottom" [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
+                    <legend class="fs-md fieldset-legend-border-bottom"
+                            [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
                         <h5>
                             {{ t('Access control') }}
                         </h5>
@@ -105,20 +112,49 @@
                     </div>
                 </div>
 
-                <!--<div class="my-2" *ngIf="post.public">
-                    <label cLabel for="publicTitle">
-                        {{ t('Public title') }}
+                @if (post.public) {
+                    <div class="my-2">
+                        <label cLabel for="publicTitle">
+                            {{ t('Public title') }}
 
-                    </label>
-                    <input cFormControl id="publicTitle"
-                           name="publicTitle"
-                           oitcFormError [errors]="errors" errorField="public_title"
-                           [(ngModel)]="post.public_title">
-                    <oitc-form-feedback [errors]="errors" errorField="public_title"></oitc-form-feedback>
-                </div>-->
+                        </label>
+                        <input cFormControl id="publicTitle"
+                               name="publicTitle"
+                               oitcFormError [errors]="errors" errorField="public_title"
+                               [(ngModel)]="post.public_title">
+                        <oitc-form-feedback [errors]="errors" errorField="public_title"></oitc-form-feedback>
+                    </div>
+
+                    <div class="my-2">
+                        <label cLabel for="publicIdentifier">
+                            {{ t('Public Identifier') }}
+
+                        </label>
+                        <input cFormControl id="publicIdentifier"
+                               name="publicIdentifier"
+                               oitcFormError [errors]="errors" errorField="public_identifier"
+                               [(ngModel)]="post.public_identifier"
+                               (input)="onPublicIdentifierInputChange($event)"/>
+                        <oitc-form-feedback [errors]="errors" errorField="public_identifier"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Public status pages will be accessible through the numeric ID or a UUID by default. It is also possible to define a custom identifier such as "datacenter".') }}
+
+                            <ul class="mt-1">
+                                <li>https://{{ hostname }}/statuspages/publicView/<b>{{ post.id }}</b></li>
+                                <li>https://{{ hostname }}/statuspages/publicView/<b>{{ post.uuid }}</b></li>
+                                @if (post.public_identifier) {
+                                    <!-- @formatter:off -->
+                                    <li>https://{{ hostname }}/statuspages/publicView/<b>{{ post.public_identifier }}</b></li>
+                                    <!-- @formatter:on -->
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
 
                 <fieldset class="pb-1 pt-2">
-                    <legend class="fs-md fieldset-legend-border-bottom" [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
+                    <legend class="fs-md fieldset-legend-border-bottom"
+                            [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
                         <h5>
                             {{ t('Downtime and Acknowledgements') }}
                         </h5>
@@ -199,7 +235,8 @@
                 </c-row>
 
                 <fieldset class="pb-1 pt-2">
-                    <legend class="fs-md fieldset-legend-border-bottom" [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
+                    <legend class="fs-md fieldset-legend-border-bottom"
+                            [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
                         <h5>
                             {{ t('Status page items') }}
                             <span class="text-danger font-xs pl-1 fw-300"
@@ -216,13 +253,13 @@
                         {{ t('Host groups') }}
                     </label>
                     <oitc-multi-select
-                            name="post.hostgroups._ids"
-                            id="post.hostgroups._ids"
-                            [(ngModel)]="post.selected_hostgroups._ids"
-                            optionValue="key"
-                            optionLabel="value"
-                            [searchCallback]="loadHostgroups"
-                            [options]="hostgroups">
+                        name="post.hostgroups._ids"
+                        id="post.hostgroups._ids"
+                        [(ngModel)]="post.selected_hostgroups._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [searchCallback]="loadHostgroups"
+                        [options]="hostgroups">
                     </oitc-multi-select>
                     <div class="form-group" *ngIf="post.selected_hostgroups._ids.length > 0">
                         <c-row class="pt-2 pb-2">
@@ -251,11 +288,11 @@
                                                 <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                             </span>
                                             <input
-                                                    cFormControl
-                                                    [attr.id]="'hostgroup_alias'+$index"
-                                                    [name]="'hostgroup_alias'+$index"
-                                                    [(ngModel)]="hostgroups[$index]._joinData.display_alias"
-                                                    placeholder="Set alias for hosthostgroup"
+                                                cFormControl
+                                                [attr.id]="'hostgroup_alias'+$index"
+                                                [name]="'hostgroup_alias'+$index"
+                                                [(ngModel)]="hostgroups[$index]._joinData.display_alias"
+                                                placeholder="Set alias for hosthostgroup"
                                             />
                                         </c-input-group>
                                     </c-col>
@@ -270,13 +307,13 @@
                         {{ t('Service groups') }}
                     </label>
                     <oitc-multi-select
-                            name="post.servicegroups._ids"
-                            id="post.servicegroups._ids"
-                            [(ngModel)]="post.selected_servicegroups._ids"
-                            optionValue="key"
-                            optionLabel="value"
-                            [searchCallback]="loadServicegroups"
-                            [options]="servicegroups">
+                        name="post.servicegroups._ids"
+                        id="post.servicegroups._ids"
+                        [(ngModel)]="post.selected_servicegroups._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [searchCallback]="loadServicegroups"
+                        [options]="servicegroups">
                     </oitc-multi-select>
                     @if (post.selected_servicegroups._ids.length > 0) {
                         <c-row class="pt-2 pb-2">
@@ -305,11 +342,11 @@
                                                 <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                             </span>
                                             <input
-                                                    cFormControl
-                                                    [attr.id]="'servicegroup_alias'+$index"
-                                                    [name]="'servicegroup_alias'+$index"
-                                                    [(ngModel)]="servicegroups[$index]._joinData.display_alias"
-                                                    placeholder="Set alias for servicegroup">
+                                                cFormControl
+                                                [attr.id]="'servicegroup_alias'+$index"
+                                                [name]="'servicegroup_alias'+$index"
+                                                [(ngModel)]="servicegroups[$index]._joinData.display_alias"
+                                                placeholder="Set alias for servicegroup">
                                         </c-input-group>
                                     </c-col>
                                 </c-row>
@@ -323,13 +360,13 @@
                         {{ t('Hosts') }}
                     </label>
                     <oitc-multi-select
-                            name="post.hosts._ids"
-                            id="post.hosts._ids"
-                            [(ngModel)]="post.selected_hosts._ids"
-                            optionValue="key"
-                            optionLabel="value"
-                            [searchCallback]="loadHosts"
-                            [options]="hosts">
+                        name="post.hosts._ids"
+                        id="post.hosts._ids"
+                        [(ngModel)]="post.selected_hosts._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [searchCallback]="loadHosts"
+                        [options]="hosts">
                     </oitc-multi-select>
                     @if (post.selected_hosts._ids.length > 0) {
                         <c-row class="pt-2 pb-2">
@@ -354,15 +391,15 @@
                                     </c-col>
                                     <c-col lg="8" md="8" xs="8">
                                         <c-input-group>
-                                            <span  cInputGroupText>
+                                            <span cInputGroupText>
                                                 <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                             </span>
                                             <input
-                                                    cFormControl
-                                                    [attr.id]="'host_alias'+$index"
-                                                    [name]="'host_alias'+$index"
-                                                    [(ngModel)]="hosts[$index]._joinData.display_alias"
-                                                    placeholder="Set alias for host">
+                                                cFormControl
+                                                [attr.id]="'host_alias'+$index"
+                                                [name]="'host_alias'+$index"
+                                                [(ngModel)]="hosts[$index]._joinData.display_alias"
+                                                placeholder="Set alias for host">
                                         </c-input-group>
                                     </c-col>
                                 </c-row>
@@ -376,13 +413,13 @@
                         {{ t('Services') }}
                     </label>
                     <oitc-multi-select
-                            name="post.services._ids"
-                            id="post.services._ids"
-                            [(ngModel)]="post.selected_services._ids"
-                            optionValue="key"
-                            optionLabel="value"
-                            [searchCallback]="loadServices"
-                            [options]="services">
+                        name="post.services._ids"
+                        id="post.services._ids"
+                        [(ngModel)]="post.selected_services._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [searchCallback]="loadServices"
+                        [options]="services">
                     </oitc-multi-select>
                     @if (post.selected_services._ids.length > 0) {
                         <c-row class="pt-2 pb-2">
@@ -407,15 +444,15 @@
                                     </c-col>
                                     <c-col lg="8" md="8" xs="8">
                                         <c-input-group>
-                                                <span cInputGroupText>
-                                                    <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
-                                                </span>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
+                                            </span>
                                             <input
-                                                    cFormControl
-                                                    [attr.id]="'service_alias'+$index"
-                                                    [name]="'service_alias'+$index"
-                                                    [(ngModel)]="services[$index]._joinData.display_alias"
-                                                    placeholder="Set alias for service">
+                                                cFormControl
+                                                [attr.id]="'service_alias'+$index"
+                                                [name]="'service_alias'+$index"
+                                                [(ngModel)]="services[$index]._joinData.display_alias"
+                                                placeholder="Set alias for service">
                                         </c-input-group>
                                     </c-col>
                                 </c-row>

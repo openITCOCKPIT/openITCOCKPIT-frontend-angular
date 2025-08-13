@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, DOCUMENT } from '@angular/core';
 import {
     AlertComponent,
     CalloutComponent,
@@ -17,7 +17,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 import { FormsModule } from '@angular/forms';
 
-import { AsyncPipe, DOCUMENT, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 

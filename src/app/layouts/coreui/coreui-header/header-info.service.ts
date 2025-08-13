@@ -1,7 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, DOCUMENT } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../tokens/proxy-path.token';
-import { DOCUMENT } from '@angular/common';
+
 import { map, Observable } from 'rxjs';
 
 export interface HeaderInfo {

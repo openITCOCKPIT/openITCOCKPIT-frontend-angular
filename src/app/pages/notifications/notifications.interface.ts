@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { NotificationReasonTypesEnum } from './notification-reason-types.enum';
 
 export interface NotificationIndexRoot extends PaginateOrScroll {
     all_notifications: NotificationIndex[]
@@ -45,6 +46,7 @@ export interface Notification {
     state: number
     output: string
     start_time: string
+    reason_type: NotificationReasonTypesEnum
 }
 
 export interface NotificationHost {

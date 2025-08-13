@@ -9,7 +9,12 @@
                 <div class="login-screen">
                     <figure *ngFor="let image of images"
                             [style.background-image]="'url(/img/login/' + image.image + ')'">
-                        <figcaption>{{ image.credit }} {{ description }}</figcaption>
+                        <figcaption>
+                            {{ image.credit }}
+                            @if (description) {
+                                - {{ description }}
+                            }
+                        </figcaption>
                     </figure>
                 </div>
             </ng-container>
@@ -19,7 +24,12 @@
                     <div class="login-screen-vnc"
                          *ngIf="$index === 0"
                          [style.background-image]="'url(/img/login/' + image.image + ')'">
-                        <figcaption>{{ image.credit }} {{ description }}</figcaption>
+                        <figcaption>
+                            {{ image.credit }}
+                            @if (description) {
+                                - {{ description }}
+                            }
+                        </figcaption>
                     </div>
                 }
             </ng-container>

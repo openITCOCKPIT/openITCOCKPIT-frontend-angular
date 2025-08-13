@@ -44,10 +44,10 @@ import {
 } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -103,15 +103,15 @@ import {
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        FaStackComponent,
-        FaStackItemSizeDirective,
         BadgeComponent,
         LabelLinkComponent,
         FormCheckComponent,
         MultiSelectComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        ResourcesSetStatusModalComponent
+        ResourcesSetStatusModalComponent,
+        AsyncPipe,
+        FaLayersComponent
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ResourcesService} // Inject the ResourcesService into the DeleteAllModalComponent
@@ -268,7 +268,7 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
             }];
         } else {
             // User clicked on delete selected button
-            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+            items = this.SelectionServiceService.getSelectedItems().filter((item) => item.allow_edit).map((item): DeleteAllItem => {
                 return {
                     id: item.id,
                     displayName: item.name
@@ -295,7 +295,7 @@ export class ResourcesIndexComponent implements OnInit, OnDestroy, IndexPage {
             items = [resource];
         } else {
             // User clicked on delete selected button
-            items = this.SelectionServiceService.getSelectedItems().map((item): ResourceEntity => {
+            items = this.SelectionServiceService.getSelectedItems().filter((item) => item.allow_set_status).map((item): ResourceEntity => {
                 return item;
             });
         }

@@ -1,0 +1,280 @@
+<ng-container *transloco="let t">
+    <div class="oc-node-body cursor-move" fDragHandle [style.min-height.px]="224">
+        <div>
+            <div class="font-xx-small">
+                <div class="d-flex mx-0 pt-1">
+                    @if (nodeObj && nodeObj.node.container_id > 0) {
+                        <div class="flex-1" [title]="nodeObj.node.container?.name"
+                             [ngClass]="{'text-dark-important':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1)}">
+                            <div class="p-0 mb-1 word-break">
+                                <span class="icon-stack">
+                                    @switch (nodeObj.node.containertype_id) {
+                                        @case (ContainerTypesEnum.CT_TENANT) {
+                                            <fa-icon [icon]="['fas', 'home']" [stackItemSize]="'1x'"></fa-icon>
+                                        }
+                                        @case (ContainerTypesEnum.CT_LOCATION) {
+                                            <fa-icon [icon]="['fas', 'location-arrow']"
+                                                     [stackItemSize]="'1x'"></fa-icon>
+                                        }
+                                        @case (ContainerTypesEnum.CT_NODE) {
+                                            <fa-icon [icon]="['fas', 'chain']" [stackItemSize]="'1x'"></fa-icon>
+                                        }
+                                    }
+                                    @if (nodeObj.node.recursive) {
+                                        <fa-icon [icon]="['fas', 'arrows-spin']" [stackItemSize]="'1x'"
+                                                 [cTextColor]="'info'"
+                                                 [transform]="'shrink-6 right-4'"
+                                                 [style.top.px]="8" [style.position]="'absolute'"
+                                                 [cTooltip]="'Recursive lookup is enabled'|transloco"
+                                                 [cTooltipPlacement]="'bottom'"></fa-icon>
+                                    }
+                                </span>
+                                <span class="ps-2" [cTooltip]="nodeObj.node.container?.path">
+                                    {{ containerName }}
+                                </span>
+
+                            </div>
+                        </div>
+                    } @else {
+                        <div class="flex-1">
+                            <div class="p-0 mb-1 word-break">
+                                <fa-icon [icon]="['fas', 'ellipsis']"></fa-icon>
+                                {{ containerName }}
+                            </div>
+                        </div>
+                    }
+
+                    <div class="pb-1 me-1">
+                        @if (nodeObj) {
+                            <button cButton class="ripple px-1 font-xs" [size]="'xs'"
+                                    (click)="editNode.emit(nodeObj.fNodeId)"
+                                    [color]="'default'">
+                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                {{ t('Edit') }}
+                            </button>
+                        }
+                    </div>
+                </div>
+
+                @if (statusCounts && statusCounts.cumulativeHoststatus !== undefined && statusCounts.cumulativeServicestatus !== undefined) {
+                    @if (statusCounts.cumulativeHoststatus === -1) {
+                        <div class="alert border-faded border-primary bg-transparent text-secondary p-2 mb-0">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon me-2">
+                                    <span class="icon-stack fs-5">
+                                        <i class="icon-stack-3x base-circle text-primary"></i>
+                                        <i class="icon-stack-1x text-white fas fa-info"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-primary">
+                                        {{ t('No hosts detected') }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (statusCounts.cumulativeHoststatus === 0 && ( statusCounts.cumulativeServicestatus === 0 || statusCounts.cumulativeServicestatus === -1 )) {
+                        <div class="alert border-faded border-success bg-transparent text-secondary p-2 mb-0">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon me-2">
+                                    <span class="icon-stack fs-5">
+                                        <i class="icon-stack-3x base-circle text-success"></i>
+                                        <i class="icon-stack-1x text-white fas fa-check"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-success">
+                                        {{ t('No problems detected') }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (statusCounts.cumulativeHoststatus === 0 && statusCounts.cumulativeServicestatus === 1) {
+                        <div class="alert border-faded border-warning bg-transparent text-secondary p-2 mb-0">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon me-2">
+                                    <span class="icon-stack fs-5">
+                                        <i class="icon-stack-3x base-circle text-warning"></i>
+                                        <i class="icon-stack-1x text-white fas fa-triangle-exclamation"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-warning">
+                                        {{ t('Warnings detected') }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (( statusCounts.cumulativeHoststatus === 1 && statusCounts.cumulativeServicestatus !== 3 ) || ( statusCounts.cumulativeHoststatus < 2 && statusCounts.cumulativeServicestatus === 2 )) {
+                        <div class="alert border-faded border-danger bg-transparent text-secondary p-2 mb-0">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon me-2">
+                                    <span class="icon-stack fs-5">
+                                        <i class="icon-stack-3x base-circle text-danger"></i>
+                                        <i class="icon-stack-1x text-white fas fa-exclamation"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-danger">
+                                        {{ t('Problems detected') }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if (statusCounts.cumulativeHoststatus === 2 || statusCounts.cumulativeServicestatus === 3) {
+                        <div class="alert border-faded border-secondary bg-transparent text-secondary p-2 mb-0">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon me-2">
+                                    <span class="icon-stack fs-5">
+                                        <i class="icon-stack-3x base-circle text-secondary"></i>
+                                        <i class="icon-stack-1x text-white fas fa-question"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-secondary">
+                                        {{ t('Undetermined problems') }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        @if (nodeObj && nodeObj.node) {
+
+            <div>
+                @if (isLoading && nodeObj.node.container_id > 0) {
+                    <!-- oc-node-body height - 24px -->
+                    <oitc-block-loader [height]="'162px'"></oitc-block-loader>
+                } @else {
+                    @if (statusCounts) {
+                        <!-- Host status -->
+                        <div>
+                            <div class="d-flex flex-row small-text mt-1">
+                                <div class="d-flex flex-1">{{ t('Host status overview') }}</div>
+                                <div class="d-flex">{{ t('Total') }}: {{ statusCounts.hoststatusSum }}</div>
+                            </div>
+
+                            <div class="d-flex text-center border border-secondary border-opacity-25 border-bottom-0">
+                                <div
+                                    class="p1 bg-dark text-white tactical-overview-first-flex-item">
+                                    <fa-icon [icon]="['fas', 'desktop']" class="font-50-percent"></fa-icon>
+                                </div>
+                                <div class="p1 bg-success text-white tactical-overview-flex-item py-2"
+                                     [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.hoststatusCountPercentage[0]+'%, transparent '+statusCounts.hoststatusCountPercentage[0]+'%)'"
+                                     [title]="statusCounts.hoststatusCountPercentage[0]+'%'">
+                                    {{ statusCounts.hoststatusCount[0] }}
+                                </div>
+                                <div class="bg-danger text-white tactical-overview-flex-item py-2"
+                                     [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.hoststatusCountPercentage[1]+'%, transparent '+statusCounts.hoststatusCountPercentage[1]+'%)'"
+                                     [title]="statusCounts.hoststatusCountPercentage[1]+'%'">
+                                    {{ statusCounts.hoststatusCount[1] }}
+                                </div>
+                                <div class="bg-secondary text-white tactical-overview-flex-item py-2"
+                                     [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.hoststatusCountPercentage[2]+'%, transparent '+statusCounts.hoststatusCountPercentage[2]+'%)'"
+                                     [title]="statusCounts.hoststatusCountPercentage[2]+'%'">
+                                    {{ statusCounts.hoststatusCount[2] }}
+                                </div>
+                            </div>
+                            <div
+                                class="d-flex border border-secondary border-opacity-25 border-start border-top-0 small-text">
+                                <div class="bg-dark text-white tactical-overview-first-flex-item text-center">
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-warning"></fa-icon>
+                                </div>
+                                <div class="bg-dark tactical-overview-flex-item text-white font-xx-small">
+                                    {{ t('Unhandled') }}
+                                </div>
+                                <div class="bg-down-soft tactical-overview-flex-item text-white text-center">
+                                    {{ statusCounts.unhandledHosts[1] }}
+                                </div>
+                                <div class="bg-unreachable-soft tactical-overview-flex-item text-white text-center">
+                                    {{ statusCounts.unhandledHosts[2] }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Service status -->
+                        <div class="mt-1">
+                            <div class="d-flex flex-row small-text">
+                                <div class="d-flex flex-1">{{ t('Service status overview') }}</div>
+                                <div class="d-flex">{{ t('Total') }}: {{ statusCounts.servicestatusSum }}</div>
+                            </div>
+
+                            <div class="d-flex text-center border border-secondary border-opacity-25 border-bottom-0">
+                                <div
+                                    class="p1 bg-dark text-white tactical-overview-first-flex-item">
+                                    <fa-icon [icon]="['fas', 'cog']" class="font-50-percent"></fa-icon>
+                                </div>
+                                <div class="p1 bg-success text-white tactical-overview-flex-item py-2"
+                                     [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.servicestatusCountPercentage[0]+'%, transparent '+statusCounts.servicestatusCountPercentage[0]+'%)'"
+                                     [title]="statusCounts.servicestatusCountPercentage[0]+'%'">
+                                    {{ statusCounts.servicestatusCount[0] }}
+                                </div>
+                                <div class="bg-color-warning  text-white tactical-overview-flex-item py-2"
+                                     [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.servicestatusCountPercentage[1]+'%, transparent '+statusCounts.servicestatusCountPercentage[1]+'%)'"
+                                     [title]="statusCounts.servicestatusCountPercentage[1]+'%'">
+                                    {{ statusCounts.servicestatusCount[1] }}
+                                </div>
+                                <div class="bg-danger  text-white tactical-overview-flex-item py-2"
+                                     [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.servicestatusCountPercentage[2]+'%, transparent '+statusCounts.servicestatusCountPercentage[2]+'%)'"
+                                     [title]="statusCounts.servicestatusCountPercentage[2]+'%'">
+                                    {{ statusCounts.servicestatusCount[2] }}
+                                </div>
+                                <div class="bg-secondary  text-white tactical-overview-flex-item py-2"
+                                     [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.servicestatusCountPercentage[3]+'%, transparent '+statusCounts.servicestatusCountPercentage[3]+'%)'"
+                                     [title]="statusCounts.servicestatusCountPercentage[3]+'%'">
+                                    {{ statusCounts.servicestatusCount[3] }}
+                                </div>
+                            </div>
+                            <div
+                                class="d-flex border border-secondary border-opacity-25 border-start border-top-0 small-text">
+                                <div class="bg-dark text-white tactical-overview-first-flex-item text-center">
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-warning"></fa-icon>
+                                </div>
+                                <div class="bg-dark tactical-overview-flex-item text-white font-xx-small">
+                                    {{ t('Unhandled') }}
+                                </div>
+                                <div class="bg-warning-soft tactical-overview-flex-item text-white text-center">
+                                    {{ statusCounts.unhandledServices[1] }}
+                                </div>
+                                <div class="bg-critical-soft tactical-overview-flex-item text-white text-center">
+                                    {{ statusCounts.unhandledServices[2] }}
+                                </div>
+                                <div class="bg-unknown-soft tactical-overview-flex-item text-white text-center">
+                                    {{ statusCounts.unhandledServices[3] }}
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+    </div>
+
+
+    <div class="output-item text-center">
+        @if (nodeObj) {
+            <div fNodeOutput
+                 class="oc-node-output"
+                 [fOutputId]="String(nodeObj.node.id)"
+                 [fOutputMultiple]="true"
+                 [isSelfConnectable]="false">
+                @if (hasConnection) {
+                    <fa-icon [icon]="['fas', 'square-xmark']" class="text-danger"
+                             (click)="onDeleteConnection()"></fa-icon>
+                } @else {
+                    <fa-icon [icon]="['far', 'square']"></fa-icon>
+                }
+            </div>
+        }
+    </div>
+</ng-container>

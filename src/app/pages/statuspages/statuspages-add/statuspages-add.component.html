@@ -106,17 +106,51 @@
                     </div>
                 </div>
 
-            <!--    <div class="my-2" *ngIf="post.public">
-                    <label cLabel for="publicTitle">
-                        {{ t('Public title') }}
+                @if (post.public) {
+                    <div class="my-2">
+                        <label cLabel for="publicTitle">
+                            {{ t('Public title') }}
 
-                    </label>
-                    <input cFormControl id="publicTitle"
-                           name="publicTitle"
-                           oitcFormError [errors]="errors" errorField="public_title"
-                           [(ngModel)]="post.public_title">
-                    <oitc-form-feedback [errors]="errors" errorField="public_title"></oitc-form-feedback>
-                </div> -->
+                        </label>
+                        <input cFormControl id="publicTitle"
+                               name="publicTitle"
+                               oitcFormError [errors]="errors" errorField="public_title"
+                               [(ngModel)]="post.public_title">
+                        <oitc-form-feedback [errors]="errors" errorField="public_title"></oitc-form-feedback>
+                    </div>
+
+                    <div class="my-2">
+                        <label cLabel for="publicIdentifier">
+                            {{ t('Public Identifier') }}
+
+                        </label>
+                        <input cFormControl id="publicIdentifier"
+                               name="publicIdentifier"
+                               oitcFormError [errors]="errors" errorField="public_identifier"
+                               [(ngModel)]="post.public_identifier"
+                               (input)="onPublicIdentifierInputChange($event)"/>
+                        <oitc-form-feedback [errors]="errors" errorField="public_identifier"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Public status pages will be accessible through the numeric ID or a UUID by default. It is also possible to define a custom identifier such as "datacenter".') }}
+
+                            <ul class="mt-1">
+                                <li>https://{{ hostname }}/statuspages/publicView/<b>&lt;id&gt;</b></li>
+                                <li>
+                                    https://{{ hostname }}/statuspages/publicView/<b>&lt;uuid&gt;</b>
+                                    <span class="text-info">
+                                        {{ t('UUID will be generated after saving the status page. URL preview is only available in edit mode.') }}
+                                    </span>
+                                </li>
+                                @if (post.public_identifier) {
+                                    <!-- @formatter:off -->
+                                    <li>https://{{ hostname }}/statuspages/publicView/<b>{{ post.public_identifier }}</b></li>
+                                    <!-- @formatter:on -->
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+
 
                 <fieldset class="pb-1 pt-2">
                     <legend class="fs-md fieldset-legend-border-bottom"
