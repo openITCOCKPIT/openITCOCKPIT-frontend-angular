@@ -31,7 +31,7 @@ export interface ChangelogsEntityParams {
 }
 
 export function getDefaultChangelogsIndexParams(): ChangelogsIndexParams {
-    let now = getUserDate();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,
@@ -46,7 +46,7 @@ export function getDefaultChangelogsIndexParams(): ChangelogsIndexParams {
 }
 
 export function getDefaultChangelogsEntityParams(): ChangelogsEntityParams {
-    let now = getUserDate();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,
