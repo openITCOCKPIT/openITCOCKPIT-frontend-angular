@@ -3,6 +3,7 @@ import { UserIdAndUsername } from '../../../../pages/users/users.interface';
 import { ContainerEntity } from '../../../../pages/containers/containers.interface';
 import { ScmNotificationLogTypesEnum } from './resourcegroups-notifications/scm-notification-log-types.enum';
 import { Resource } from '../resources/resources.interface';
+import { getUserDate } from '../../../../services/timezone.service';
 
 export interface ResourcegroupsIndex extends PaginateOrScroll {
     all_resourcegroups: Resourcegroup[]
@@ -108,7 +109,7 @@ export interface ResourcegroupsNotificationsParams {
 }
 
 export function getResourcegroupsNotificationsParams(): ResourcegroupsNotificationsParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,
