@@ -6,7 +6,8 @@ import { map, Observable, of } from 'rxjs';
 export interface TimezoneConfiguration {
     user_timezone: string
     user_time_to_server_offset: number
-    user_time_to_utc_offset: number
+    user_time_to_browser_offset: number
+    browser_timezone: string
     user_offset: number
     server_time_utc: number
     server_time: string
@@ -36,7 +37,8 @@ export class TimezoneService {
         const proxyPath = this.proxyPath;
         return this.http.get<{ timezone: TimezoneConfiguration }>(`${proxyPath}/angular/user_timezone.json`, {
             params: {
-                angular: true
+                angular: true,
+                browserTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone
             }
         }).pipe(
             map(data => {
@@ -69,8 +71,8 @@ export function getUserDate(): Date {
 
     if (!cachedTimezoneconfiguration) {
         // You shall not pass!
-        console.error('⚠️ I Tried to find a CachedTimezoneConfiguration but it was not set!');
         return now;
     }
-    return new Date(now.getTime() + cachedTimezoneconfiguration.user_time_to_utc_offset * 1000);
+
+    return new Date(now.getTime() + cachedTimezoneconfiguration.user_time_to_browser_offset * 1000);
 }
