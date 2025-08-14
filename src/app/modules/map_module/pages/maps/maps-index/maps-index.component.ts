@@ -21,6 +21,9 @@ import {
     ColComponent,
     ContainerComponent,
     DropdownDividerDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -50,6 +53,7 @@ import { getDefaultMapsIndexParams, Map, MapsIndexParams, MapsIndexRoot } from '
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
+import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-maps-index',
@@ -92,7 +96,11 @@ import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outli
         XsButtonDirective,
         TableLoaderComponent,
         AsyncPipe,
-        BadgeOutlineComponent
+        BadgeOutlineComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective
     ],
     templateUrl: './maps-index.component.html',
     styleUrl: './maps-index.component.css',
@@ -119,6 +127,11 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public hideFilter: boolean = true;
     private cdr = inject(ChangeDetectorRef);
 
+    public mapsFilter = {
+        is_auto_generated: false,
+        is_not_auto_generated: false,
+    }
+
 
     // Show or hide the filter
     public toggleFilter() {
@@ -141,6 +154,12 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public resetFilter() {
         this.params = getDefaultMapsIndexParams();
+
+        this.mapsFilter = {
+            is_auto_generated: false,
+            is_not_auto_generated: false,
+        }
+
         this.loadMaps();
     }
 
@@ -173,6 +192,13 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
         if (this.route.snapshot.queryParams.hasOwnProperty('filter.Maps.id')) {
             this.params['filter[Maps.id][]'] = this.route.snapshot.queryParams['filter.Maps.id'];
         }
+
+        let maps_generated: string = '';
+        if (this.mapsFilter.is_auto_generated !== this.mapsFilter.is_not_auto_generated) {
+            maps_generated = String(this.mapsFilter.is_auto_generated === true);
+        }
+
+        this.params['filter[is_auto_generated]'] = maps_generated;
 
         this.subscriptions.add(this.MapsService.getIndex(this.params)
             .subscribe((result: MapsIndexRoot) => {

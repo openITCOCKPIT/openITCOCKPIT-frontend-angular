@@ -94,13 +94,13 @@
                             </div>
                         }
                         <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
-                        @if (this.post.Mapgenerator.type === 1) {
+                        @if (this.post.Mapgenerator.type === MapgeneratorTypes.GENERATE_BY_CONTAINER_STRUCTURE) {
                             <div class="col-12 help-block text-info">
                                 <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                                 {{ t('The specified containers must appear in the container hierarchy of the host so that the host is taken into account during generation.') }}
                             </div>
                         }
-                        @if (this.post.Mapgenerator.type === 2) {
+                        @if (this.post.Mapgenerator.type === MapgeneratorTypes.GENERATE_BY_HOSTNAME_SPLITTING) {
                             <div class="col-12 help-block text-info">
                                 <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                                 {{ t('The specified containers must appear in the container level (specified below) of the host name so that the host is taken into account during generation.') }}
@@ -174,7 +174,7 @@
                         <oitc-form-feedback [errors]="errors" errorField="items_per_line"></oitc-form-feedback>
                     </div>
 
-                    @if (this.post.Mapgenerator.type === 2) {
+                    @if (this.post.Mapgenerator.type === MapgeneratorTypes.GENERATE_BY_HOSTNAME_SPLITTING) {
 
                         <div class="mt-4">
                             <h5>
@@ -201,7 +201,7 @@
                                                name="level_name_{{i}}"
                                                required
                                                type="text"
-                                               [placeholder]="namePlaceholder"
+                                               [placeholder]="getLevelPlaceholder(i, last)"
                                                [ngClass]="{'border-color-error': getMapgeneratorLevelErrors(level.index, 'validate_levels','name').length > 0 || getMapgeneratorLevelErrors(level.index,  'mapgenerator_levels','name').length > 0}"
                                                [(ngModel)]="level.name">
                                     </c-input-group>
@@ -280,7 +280,7 @@
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
 
-                            @for (level of mapgenerator.levels; track level.id; let i = $index) {
+                            @for (level of mapgenerator.levels; track level.id; let i = $index, last = $last) {
                                 <c-form-check>
                                     <input cFormCheckInput type="radio" [value]="mapgenerator.levels[i].index"
                                            id="mapgenerator_level_is_container_{{i}}"
@@ -291,7 +291,7 @@
                                             {{ level.name }}
                                         } @else {
                                             <span class="text-gray-500">
-                                                {{ namePlaceholder }}
+                                                {{ getLevelPlaceholder(i, last) }}
                                             </span>
                                         }
                                     </label>

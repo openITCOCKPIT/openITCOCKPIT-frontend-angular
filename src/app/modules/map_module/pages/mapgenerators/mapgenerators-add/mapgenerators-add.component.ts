@@ -39,6 +39,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { NgClass } from '@angular/common';
 import _ from 'lodash';
+import { MapgeneratorTypes } from '../mapgenerator-types';
 
 @Component({
     selector: 'oitc-mapgenerators-add',
@@ -115,9 +116,10 @@ export class MapgeneratorsAddComponent implements OnInit, OnDestroy {
         ]
     };
 
-    public namePlaceholder = this.TranslocoService.translate('Name (e.g. Company)');
     public dividerPlaceholder = this.TranslocoService.translate('Divider (e.g. -)');
     protected mapgeneratorLevelIsContainerIndex: number | null = 0;
+
+    protected readonly MapgeneratorTypes = MapgeneratorTypes;
 
     private cdr = inject(ChangeDetectorRef);
 
@@ -154,7 +156,7 @@ export class MapgeneratorsAddComponent implements OnInit, OnDestroy {
         let index = 0;
         this.post.Mapgenerator.mapgenerator_levels = [];
 
-        if (this.post.Mapgenerator.type === 2) {
+        if (this.post.Mapgenerator.type === MapgeneratorTypes.GENERATE_BY_HOSTNAME_SPLITTING) {
             for (let i in this.mapgenerator.levels) {
 
                 let is_container = false;
@@ -262,6 +264,16 @@ export class MapgeneratorsAddComponent implements OnInit, OnDestroy {
         } else {
             return [];
         }
+
+    }
+
+    public getLevelPlaceholder(index: number, isLastLevel: boolean) {
+
+        if (isLastLevel) {
+            return this.TranslocoService.translate('Name (e.g. Host)');
+        }
+
+        return this.TranslocoService.translate('Name (e.g. Level {0})', {'0': (index + 1).toString()});
 
     }
 }

@@ -60,6 +60,7 @@ export interface MapsIndexParams {
     'filter[Maps.name]': string,
     'filter[Maps.title]': string,
     'filter[Maps.id][]': number[],
+    'filter[is_auto_generated]': string
 }
 
 export function getDefaultMapsIndexParams(): MapsIndexParams {
@@ -72,6 +73,7 @@ export function getDefaultMapsIndexParams(): MapsIndexParams {
         'filter[Maps.name]': "",
         'filter[Maps.title]': "",
         'filter[Maps.id][]': [],
+        'filter[is_auto_generated]': "",
     }
 }
 
