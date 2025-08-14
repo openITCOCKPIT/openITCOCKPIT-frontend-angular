@@ -198,7 +198,7 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
             maps_generated = String(this.mapsFilter.is_auto_generated === true);
         }
 
-        this.params['filter[is_auto_generated]'] = maps_generated;
+        this.params['filter[Maps.auto_generated]'] = maps_generated;
 
         this.subscriptions.add(this.MapsService.getIndex(this.params)
             .subscribe((result: MapsIndexRoot) => {
