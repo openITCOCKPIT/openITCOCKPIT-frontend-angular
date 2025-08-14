@@ -31,6 +31,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { LoginResponse } from '../../../auth/auth.interface';
 import { TitleService } from '../../../services/title.service';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { LocalStorageService } from '../../../services/local-storage.service';
 
 @Component({
     selector: 'oitc-users-login',
@@ -62,6 +63,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     private readonly UsersService: UsersService = inject(UsersService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly LayoutService: LayoutService = inject(LayoutService);
+    private readonly LocalStorageService: LocalStorageService = inject(LocalStorageService);
     private readonly cdr = inject(ChangeDetectorRef);
     private readonly NotyService: NotyService = inject(NotyService);
     private readonly AuthService: AuthService = inject(AuthService);
@@ -267,7 +269,13 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 // Load user permissions
                 this.PermissionsService.loadPermissions();
 
-                //window.location = this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/');
+                if (this.LocalStorageService.hasItem('redirectUrl', '')) {
+                    let redirectUrl: string = this.LocalStorageService.getItemWithDefault('redirectUrl', '/');
+                    this.LocalStorageService.removeItem('redirectUrl');
+                    window.location.href = (redirectUrl);
+                    return;
+                }
+
 
                 this.router.navigate(['/']); //todo replace with last page
 
