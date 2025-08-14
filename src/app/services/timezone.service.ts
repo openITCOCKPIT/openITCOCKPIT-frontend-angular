@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../tokens/proxy-path.token';
 import { map, Observable, of } from 'rxjs';
+import { formatDate } from '@angular/common';
 
 export interface TimezoneConfiguration {
     user_timezone: string
@@ -66,7 +67,7 @@ export function getUserDate(): Date {
     let now: Date = getBrowserDate();
 
     if (!cachedTimezoneconfiguration) {
-        // You shall not pass!
+        // Fallback: return browser date
         return now;
     }
 
@@ -75,4 +76,22 @@ export function getUserDate(): Date {
 
 export function getBrowserDate(): Date {
     return new Date();
+}
+
+export function toServerDate(now: Date): Date {
+    if (!cachedTimezoneconfiguration) {
+        // Trigger async fetch for next call
+        const timezoneService = inject(TimezoneService);
+        timezoneService.getTimezoneConfiguration().subscribe();
+        // Fallback: return browser date
+        return now;
+    }
+
+    return new Date(now.getTime() - cachedTimezoneconfiguration.user_time_to_server_offset * 1000);
+}
+
+export function toFormattedServerDate(date: string): string {
+    let browserDate = new Date(date);
+    let serverDate = toServerDate(browserDate);
+    return formatDate(serverDate, 'dd.MM.y HH:mm', 'en-US');
 }

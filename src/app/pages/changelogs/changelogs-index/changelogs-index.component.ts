@@ -40,6 +40,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { IndexPage } from '../../../pages.interface';
 import { Sort } from '@angular/material/sort';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
+import { toFormattedServerDate } from '../../../services/timezone.service';
 
 
 @Component({
@@ -147,8 +148,8 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
             }
         }
 
-        this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
-        this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
+        this.params['filter[from]'] = toFormattedServerDate(this.from);
+        this.params['filter[to]'] = toFormattedServerDate(this.to);
 
         this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
             .subscribe((result: ChangelogIndexRoot) => {

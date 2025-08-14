@@ -3,6 +3,7 @@
  **********************/
 
 import { ImportObjectTypesEnum } from './import-object-types.enum';
+import { getUserDate } from '../../../../services/timezone.service';
 
 
 export interface ImportChangelogsEntityParams {
@@ -19,7 +20,7 @@ export interface ImportChangelogsEntityParams {
 
 
 export function getDefaultImportChangelogsEntityParams(): ImportChangelogsEntityParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,

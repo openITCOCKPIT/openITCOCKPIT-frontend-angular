@@ -124,9 +124,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         // Fetch the systemname
         this.watchSystemname();
-
-        // Fetch the timezoneSettings.subscriptions
-        this.fetchTimezoneSettings();
     }
 
     private watchSystemname(): void {
@@ -138,6 +135,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private fetchTimezoneSettings(): void {
         this.subscription.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
+            console.error('TZ geholt!');
         }));
     }
 
@@ -169,6 +167,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit(): void {
+        // Fetch the timezoneSettings.subscriptions
+        this.fetchTimezoneSettings();
         this.appendCustomStyle();
     }
 
