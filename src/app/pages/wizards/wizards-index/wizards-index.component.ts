@@ -85,9 +85,6 @@ export class WizardsIndexComponent implements OnInit, OnDestroy {
         deprecatedWizards: {},
         possibleDeprecatedWizards: {}
     };
-    protected deprecatedWizardsTitles: { [key: string]: string } = {};
-
-    protected deprecatedTitle = this.TranslocoService.translate('deprecated');
 
     public ngOnInit() {
         this.loadWizards();
@@ -101,22 +98,15 @@ export class WizardsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.WizardsService.getIndex()
             .subscribe((result: WizardsIndex) => {
                 this.result = result;
-                const regex = new RegExp('- ' + this.deprecatedTitle, 'i');
                 for (let wizardType in this.result.wizards) {
-                    let title = this.result.wizards[wizardType].title;
-                    if (title.toLowerCase().includes(('- ' + this.deprecatedTitle).toLowerCase())) {
-                        title = title.replace(regex, '');
+                    if (!this.result.wizards[wizardType].active) {
                         this.deprecatedWizards.deprecatedWizards[wizardType] = this.result.wizards[wizardType];
-                        this.deprecatedWizardsTitles[wizardType] = title;
                         delete this.result.wizards[wizardType]; // Remove deprecated wizards from the main list
                     }
                 }
                 for (let wizardType in this.result.possibleWizards) {
-                    let title = this.result.possibleWizards[wizardType].title;
-                    if (title.toLowerCase().includes(('- ' + this.deprecatedTitle)).toLowerCase()) {
-                        title = title.replace(regex, '');
+                    if (!this.result.possibleWizards[wizardType]) {
                         this.deprecatedWizards.possibleDeprecatedWizards[wizardType] = this.result.possibleWizards[wizardType];
-                        this.deprecatedWizardsTitles[wizardType] = title;
                         delete this.result.possibleWizards[wizardType]; // Remove deprecated wizards from the main list
                     }
                 }
