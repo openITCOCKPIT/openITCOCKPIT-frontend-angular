@@ -306,14 +306,21 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     };
 
     private getDefaultConfig = () => {
+        console.error('Default');
         return {
             "particles": {
                 "number": {
                     "value": 50,
                     "density": {
                         "enable": true,
-                        "value_area": 800
-                    }
+                        "width":1920,
+                        "height": 1080
+                    },
+                    "limit":
+                        {
+                            "mode":"delete",
+                            "value": 100
+                        }
                 },
                 "color": {
                     "value": "#ffffff"
@@ -343,7 +350,10 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     }
                 },
                 "size": {
-                    "value": 5,
+                    "value": {
+                        "min": 2,
+                        "max": 5
+                    },
                     "random": true,
                     "anim": {
                         "enable": false,
@@ -352,16 +362,18 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                         "sync": false
                     }
                 },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 150,
+                "links": {
+                    "blink":false,
                     "color": "#ffffff",
+                    "distance": 150,
+                    "enable": true,
+                    "frequency":1,
                     "opacity": 0.4,
                     "width": 1
                 },
                 "move": {
                     "enable": true,
-                    "speed": 2,
+                    "speed": 1,
                     "direction": "none",
                     "random": false,
                     "straight": false,
@@ -374,13 +386,13 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 }
             },
             "interactivity": {
-                "detect_on": "canvas",
+                "detectsOn": "canvas",
                 "events": {
-                    "onhover": {
+                    "onHover": {
                         "enable": true,
                         "mode": "repulse"
                     },
-                    "onclick": {
+                    "onClick": {
                         "enable": true,
                         "mode": "push"
                     },
@@ -494,13 +506,13 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 }
             },
             "interactivity": {
-                "detect_on": "canvas",
+                "detectsOn": "canvas",
                 "events": {
-                    "onhover": {
+                    "onHover": {
                         "enable": true,
                         "mode": "bubble"
                     },
-                    "onclick": {
+                    "onClick": {
                         "enable": true,
                         "mode": "repulse"
                     },
@@ -602,13 +614,13 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 }
             },
             "interactivity": {
-                "detect_on": "canvas",
+                "detectsOn": "canvas",
                 "events": {
-                    "onhover": {
+                    "onHover": {
                         "enable": true,
                         "mode": "bubble"
                     },
-                    "onclick": {
+                    "onClick": {
                         "enable": true,
                         "mode": "repulse"
                     },
@@ -715,13 +727,13 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 }
             },
             "interactivity": {
-                "detect_on": "canvas",
+                "detectsOn": "canvas",
                 "events": {
-                    "onhover": {
+                    "onHover": {
                         "enable": false,
                         "mode": "grab"
                     },
-                    "onclick": {
+                    "onClick": {
                         "enable": false,
                         "mode": "push"
                     },
