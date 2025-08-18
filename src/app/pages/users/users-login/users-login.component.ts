@@ -306,21 +306,19 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     };
 
     private getDefaultConfig = () => {
-        console.error('Default');
         return {
             "particles": {
                 "number": {
-                    "value": 50,
                     "density": {
                         "enable": true,
-                        "width":1920,
+                        "width": 1920,
                         "height": 1080
                     },
-                    "limit":
-                        {
-                            "mode":"delete",
-                            "value": 100
-                        }
+                    "limit": {
+                        "mode": "delete",
+                        "value": 100
+                    },
+                    "value": 100,
                 },
                 "color": {
                     "value": "#ffffff"
@@ -358,16 +356,15 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     "anim": {
                         "enable": false,
                         "speed": 40,
-                        "size_min": 0.1,
                         "sync": false
                     }
                 },
                 "links": {
-                    "blink":false,
+                    "blink": false,
                     "color": "#ffffff",
                     "distance": 150,
                     "enable": true,
-                    "frequency":1,
+                    "frequency": 1,
                     "opacity": 0.4,
                     "width": 1
                 },
@@ -440,11 +437,16 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         return {
             "particles": {
                 "number": {
-                    "value": 400,
                     "density": {
                         "enable": true,
-                        "value_area": 800
-                    }
+                        "width": 1920,
+                        "height": 1080
+                    },
+                    "limit": {
+                        "mode": "delete",
+                        "value": 400
+                    },
+                    "value": 400,
                 },
                 "color": {
                     "value": "#fff"
@@ -464,7 +466,10 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     }
                 },
                 "opacity": {
-                    "value": 0.5,
+                    "value": {
+                        "min": .1,
+                        "max": .5
+                    },
                     "random": true,
                     "anim": {
                         "enable": false,
@@ -474,12 +479,14 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     }
                 },
                 "size": {
-                    "value": 10,
+                    "value": {
+                        "min": 0.1,
+                        "max": 10
+                    },
                     "random": true,
                     "anim": {
                         "enable": false,
                         "speed": 40,
-                        "size_min": 0.1,
                         "sync": false
                     }
                 },
@@ -492,7 +499,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 },
                 "move": {
                     "enable": true,
-                    "speed": 6,
+                    "speed": 1,
                     "direction": "bottom",
                     "random": false,
                     "straight": false,
@@ -553,17 +560,22 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         return {
             "particles": {
                 "number": {
-                    "value": 160,
                     "density": {
                         "enable": true,
-                        "value_area": 800
-                    }
+                        "width": 1920,
+                        "height": 1080
+                    },
+                    "limit": {
+                        "mode": "delete",
+                        "value": 300
+                    },
+                    "value": 300,
                 },
                 "color": {
-                    "value": "#d0be17"
+                    "value": "#ffffff"
                 },
                 "shape": {
-                    "type": "star",
+                    "type": "circle",
                     "stroke": {
                         "width": 0,
                         "color": "#000000"
@@ -577,21 +589,27 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     }
                 },
                 "opacity": {
+                    "value": {
+                        "min": .1,
+                        "max": .5
+                    },
                     "random": true,
                     "anim": {
-                        "enable": true,
+                        "enable": false,
                         "speed": 1,
-                        "opacity_min": 0,
+                        "opacity_min": 0.1,
                         "sync": false
                     }
                 },
                 "size": {
-                    "value": 3,
+                    "value": {
+                        "min": .3,
+                        "max": 5
+                    },
                     "random": true,
                     "anim": {
                         "enable": false,
-                        "speed": 4,
-                        "size_min": 0.3,
+                        "speed": 40,
                         "sync": false
                     }
                 },
@@ -600,7 +618,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 },
                 "move": {
                     "enable": true,
-                    "speed": 1,
+                    "speed": .5,
                     "direction": "none",
                     "random": true,
                     "straight": false,
@@ -616,10 +634,6 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             "interactivity": {
                 "detectsOn": "canvas",
                 "events": {
-                    "onHover": {
-                        "enable": true,
-                        "mode": "bubble"
-                    },
                     "onClick": {
                         "enable": true,
                         "mode": "repulse"
@@ -664,14 +678,15 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     "value": 6,
                     "density": {
                         "enable": true,
-                        "value_area": 800
+                        "width": 1920,
+                        "height": 1080
                     }
                 },
                 "color": {
                     "value": "#1b1e34"
                 },
                 "shape": {
-                    "type": "circle",
+                    "type": "polygon",
                     "stroke": {
                         "width": 0,
                         "color": "#000"
@@ -713,7 +728,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 },
                 "move": {
                     "enable": true,
-                    "speed": 8,
+                    "speed": 2,
                     "direction": "none",
                     "random": false,
                     "straight": false,
