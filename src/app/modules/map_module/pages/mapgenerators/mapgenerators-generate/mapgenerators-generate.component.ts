@@ -36,6 +36,7 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { ProgressBar } from 'primeng/progressbar';
 import { Map } from '../../maps/maps.interface';
+import { MapgeneratorTypes } from '../mapgenerator-types';
 
 @Component({
     selector: 'oitc-mapgenerators-generate',
@@ -181,4 +182,5 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
 
     protected readonly String = String;
     protected readonly Number = Number;
+    protected readonly MapgeneratorTypes = MapgeneratorTypes;
 }

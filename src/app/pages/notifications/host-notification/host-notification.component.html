@@ -202,6 +202,9 @@
                     <th scope="col" mat-sort-header="Commands.name">
                         {{ t('Notification Method') }}
                     </th>
+                    <th scope="col" mat-sort-header="NotificationHosts.reason_type">
+                        {{ t('Notification Reason') }}
+                    </th>
                     <th scope="col" mat-sort-header="NotificationHosts.output">
                         {{ t('Output') }}
                     </th>
@@ -233,6 +236,10 @@
                         <span *oitcPermission="['commands', 'edit']; negate: true">
                             {{ notification.Command.name }}
                         </span>
+                    </td>
+                    <td>
+                        <oitc-notification-reason-type
+                            [reasonType]="notification.NotificationHost.reason_type"></oitc-notification-reason-type>
                     </td>
                     <td>
                         {{ notification.NotificationHost.output }}

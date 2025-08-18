@@ -1,9 +1,10 @@
 @use "sass:color";
+@use "../../../../assets/coreui/variables" as oitc;
 
 .evc-service-container {
     border: 2px solid var(--cui-primary);
     border-radius: var(--cui-border-radius);
-    box-shadow: rgba($primary, 0.3) 5px 0px 10px 0px;
+    box-shadow: rgba(oitc.$primary, 0.3) 5px 0px 10px 0px;
     //background: rgba(255, 255, 255, 0.1);
     background: var(--cui-card-cap-bg);
     color: var(--cui-body-color);
@@ -14,8 +15,8 @@
     top: 0;
     left: 0;
     //background: var(--cui-card-cap-bg);
-    background: color.adjust($secondary, $alpha: -0.2);
-    color: $white;
+    background: color.adjust(oitc.$secondary, $alpha: -0.2);
+    color: oitc.$white;
     opacity: 0;
     display: flex;
     height: 100%;
@@ -38,22 +39,22 @@
 
 .evc-service-ok {
     border-color: var(--cui-success);
-    box-shadow: rgba($success, 0.3) 5px 0px 10px 0px;
+    box-shadow: rgba(oitc.$success, 0.3) 5px 0px 10px 0px;
 }
 
 .evc-service-warning {
     border-color: var(--cui-warning);
-    box-shadow: rgba($warning, 0.3) 5px 0px 10px 0px;
+    box-shadow: rgba(oitc.$warning, 0.3) 5px 0px 10px 0px;
 }
 
 .evc-service-critical {
     border-color: var(--cui-danger);
-    box-shadow: rgba($danger, 0.3) 5px 0px 10px 0px;
+    box-shadow: rgba(oitc.$danger, 0.3) 5px 0px 10px 0px;
 }
 
 .evc-service-unknown {
     border-color: var(--cui-secondary);
-    box-shadow: rgba($secondary, 0.3) 5px 0px 10px 0px;
+    box-shadow: rgba(oitc.$secondary, 0.3) 5px 0px 10px 0px;
 }
 
 .evc-tree-hostname {
@@ -63,8 +64,8 @@
 .evc-operator-container {
     border-color: var(--cui-border-color);
     box-shadow: var(--cui-border-color-translucent) 5px 0px 10px 0px;
-    background: $gray-900;
-    color: $white;
+    background: oitc.$gray-900;
+    color: oitc.$white;
 }
 
 .operator-node {

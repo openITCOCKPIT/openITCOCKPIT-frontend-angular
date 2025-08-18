@@ -113,7 +113,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     private graphEnd = 0;
     protected hasEnoughData = false;
     public chartOption: EChartsOption = {};
-    public theme: null | 'dark' = null;
+    public theme: string = '';
     protected notEnoughDataString = this.TranslocoService.translate('Not enough data to display chart.');
 
     // any :(
@@ -122,7 +122,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     constructor(parent: MapCanvasComponent) {
         super(parent);
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
-            this.theme = null;
+            this.theme = '';
             if (theme === 'dark') {
                 this.theme = 'dark';
             }

@@ -1,3 +1,6 @@
+@use "variables" as oitc;
+@use "@coreui/coreui/scss/coreui" as cui;
+
 /*!
  * Copyright (C) <2015>  <it-novum GmbH>
  *
@@ -132,8 +135,8 @@
 // A class to simulate striped tables or an hover effect
 // Useful for bootstrap grid for example
 .odd {
-    color: $table-striped-color;
-    background-color: $table-striped-bg;
+    color: cui.$table-striped-color;
+    background-color: cui.$table-striped-bg;
 }
 
 
@@ -145,4 +148,15 @@
     max-width: 600px;
 }
 
+body.dark-theme .color-picker input {
+    color: #ffffff;
+}
 
+body.dark-theme .color-picker.open {
+    background: var(--cui-body-bg);
+    color: var(--cui-card-color);
+}
+
+body.dark-theme .color-picker .hex-text .box div {
+    color: var(--cui-card-color) !important;
+}

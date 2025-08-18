@@ -24,7 +24,9 @@
                                 class="p1 bg-dark text-white tactical-overview-first-flex-item">
                                 <fa-icon [icon]="['fas', 'desktop']" class="px-1"></fa-icon>
                             </div>
-                            <div class="p1 bg-success text-white tactical-overview-flex-item py-5 display-6">
+                            <div class="p1 bg-success text-white tactical-overview-flex-item py-5 display-6"
+                                 [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+hoststatusCountPercentage[0]+'%, transparent '+hoststatusCountPercentage[0]+'%)'"
+                                 [title]="hoststatusCountPercentage[0]+'%'">
                                 @if (hoststatusSummary.state[0] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
                                     <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
                                        [queryParams]="{id: hoststatusSummary.state.hostIds[0], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
@@ -34,7 +36,9 @@
                                     {{ hoststatusSummary.state[0] }}
                                 }
                             </div>
-                            <div class="bg-danger text-white tactical-overview-flex-item py-5 display-6">
+                            <div class="bg-danger text-white tactical-overview-flex-item py-5 display-6"
+                                 [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+hoststatusCountPercentage[1]+'%, transparent '+hoststatusCountPercentage[1]+'%)'"
+                                 [title]="hoststatusCountPercentage[1]+'%'">
                                 @if (hoststatusSummary.state[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
                                     <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
                                        [queryParams]="{id: hoststatusSummary.state.hostIds[1], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
@@ -44,7 +48,9 @@
                                     {{ hoststatusSummary.state[1] }}
                                 }
                             </div>
-                            <div class="bg-secondary text-white tactical-overview-flex-item py-5 display-6">
+                            <div class="bg-secondary text-white tactical-overview-flex-item py-5 display-6"
+                                 [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+hoststatusCountPercentage[2]+'%, transparent '+hoststatusCountPercentage[2]+'%)'"
+                                 [title]="hoststatusCountPercentage[2]+'%'">
                                 @if (hoststatusSummary.state[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
                                     <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
                                        [queryParams]="{id: hoststatusSummary.state.hostIds[2], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
@@ -55,15 +61,14 @@
                                 }
                             </div>
                         </div>
-                        <div
-                            class="d-flex fs-5 border border-secondary border-opacity-25 border-start border-top-0">
-                            <div class="p-1 bg-dark text-white tactical-overview-first-flex-item ">
-                                <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-warning"></fa-icon>
+                        <div class="d-flex border border-secondary border-opacity-25 border-start border-top-0">
+                            <div class="p1 ps-1 bg-dark text-white tactical-overview-first-flex-item">
+                                ⚠️
                             </div>
-                            <div class="bg-dark tactical-overview-flex-item text-white">
+                            <div class="bg-dark tactical-overview-flex-item text-white fs-5">
                                 {{ t('Unhandled Hosts') }}
                             </div>
-                            <div class="bg-down-soft tactical-overview-flex-item text-white text-center">
+                            <div class="bg-down-soft tactical-overview-flex-item text-white text-center fs-5">
                                 @if (hoststatusSummary.not_handled[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
                                     <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
                                        [queryParams]="{id: hoststatusSummary.not_handled.hostIds[1], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
@@ -73,7 +78,7 @@
                                     {{ hoststatusSummary.not_handled[1] }}
                                 }
                             </div>
-                            <div class="bg-unreachable-soft tactical-overview-flex-item text-white text-center">
+                            <div class="bg-unreachable-soft tactical-overview-flex-item text-white text-center fs-5">
                                 @if (hoststatusSummary.not_handled[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
                                     <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
                                        [queryParams]="{id: hoststatusSummary.not_handled.hostIds[2], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">

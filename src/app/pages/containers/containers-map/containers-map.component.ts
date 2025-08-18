@@ -2,6 +2,7 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    DOCUMENT,
     HostListener,
     inject,
     OnDestroy,
@@ -10,22 +11,21 @@ import {
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  ProgressComponent,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    ProgressComponent,
+    RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { DecimalPipe, DOCUMENT, NgIf } from '@angular/common';
+import { DecimalPipe, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -37,36 +37,35 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { ContainersService } from '../containers.service';
 import { ROOT_CONTAINER } from '../../changelogs/object-types.enum';
-import { Edge, Network, Node, Options } from 'vis-network';
+import { ClusterOptions, Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data/peer';
-import { ClusterOptions } from 'vis-network/declarations/network/Network';
 
 @Component({
     selector: 'oitc-containers-map',
     imports: [
-    BackButtonDirective,
-    BlockLoaderComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FaIconComponent,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PermissionDirective,
-    RowComponent,
-    SelectComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    DecimalPipe,
-    ProgressComponent,
-    TranslocoPipe
-],
+        BackButtonDirective,
+        BlockLoaderComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        FaIconComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        PermissionDirective,
+        RowComponent,
+        SelectComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        DecimalPipe,
+        ProgressComponent,
+        TranslocoPipe
+    ],
     templateUrl: './containers-map.component.html',
     styleUrl: './containers-map.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -189,10 +188,10 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                 root: {
                     shape: 'ellipse',
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 7 Free"',
                         code: '\uf0ac',
                         color: colorGroup, //color for icon,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold. // Font Awesome 6 fix https://github.com/visjs/vis-network/issues/139#issuecomment-536114158
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold. // Font Awesome 7 fix https://github.com/visjs/vis-network/issues/139#issuecomment-536114158
 
                     },
                     margin: {
@@ -216,7 +215,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     shape: 'icon',
                     color: '#ff4444',
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 7 Free"',
                         code: '\uf015',
                         size: 35,
                         color: '#ff4444',
@@ -227,7 +226,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     shape: 'icon',
                     color: '#ff8800', // color for edges
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 7 Free"',
                         code: '\uf124',
                         size: 35,
                         color: '#ff8800',
@@ -238,7 +237,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     shape: 'icon',
                     color: '#00695c', // color for edges
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 7 Free"',
                         code: '\uf0c1',
                         size: 35,
                         color: '#00695c',
@@ -249,7 +248,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     shape: 'icon',
                     color: colorGroup, // color for edges
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 7 Free"',
                         code: '\uf0c1',
                         color: colorGroup, //color for icon
                         weight: "900", // Font Awesome 5 doesn't work properly unless bold.
@@ -260,7 +259,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#00e676',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf233',
                         color: '#ffffff',
                         size: 5,
@@ -272,7 +271,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#007bff',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf108',
                         color: '#ffffff',
                         size: 5,
@@ -284,7 +283,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#8bc34a',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 7 Free"',
                         code: '\uf044',
                         color: '#ffffff',
                         size: 5,
@@ -296,7 +295,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#304ffe',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf1e2',
                         color: '#ffffff',
                         size: 5,
@@ -308,7 +307,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#66bb6a',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf0e8',
                         color: '#ffffff',
                         size: 5,
@@ -320,7 +319,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#f4511e',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf085',
                         color: '#ffffff',
                         size: 5,
@@ -332,7 +331,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#1c2a48',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 7 Free"',
                         code: '\uf0c5',
                         color: '#ffffff',
                         size: 5,
@@ -344,7 +343,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#009688',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 7 Free"',
                         code: '\uf044',
                         color: '#ffffff',
                         size: 5,
@@ -356,7 +355,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#45526e',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf1e2',
                         color: '#ffffff',
                         size: 5,
@@ -368,7 +367,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#0091ea',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf0e8',
                         color: '#ffffff',
                         size: 5,
@@ -380,7 +379,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#9933CC',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 7 Free"',
                         code: '\uf2bd',
                         color: '#ffffff',
                         size: 5,
@@ -392,7 +391,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#b388ff',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf0c0',
                         color: '#ffffff',
                         size: 5,
@@ -404,7 +403,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#800080',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 7 Free"',
                         code: '\uf2bd',
                         color: '#ffffff',
                         size: 5,
@@ -416,7 +415,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#800080',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf0c0',
                         color: '#ffffff',
                         size: 5,
@@ -428,7 +427,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#3f51b5',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 7 Free"',
                         code: '\uf017',
                         color: '#ffffff',
                         size: 5,
@@ -440,7 +439,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#f50057',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf041',
                         color: '#ffffff',
                         size: 5,
@@ -452,7 +451,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#0099CC',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 7 Free"',
                         code: '\uf1c5',
                         color: '#ffffff',
                         size: 5,
@@ -464,7 +463,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#ab47bc',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 7 Free"',
                         code: '\uf1c5',
                         color: '#ffffff',
                         size: 5,
@@ -476,7 +475,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#01579b',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf7bf',
                         color: '#ffffff',
                         size: 5,
@@ -488,7 +487,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#f05a28',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free Solid"',
+                        face: '"Font Awesome 7 Free Solid"',
                         code: '\uf1fe',
                         color: '#ffffff',
                         size: 5,
@@ -556,9 +555,9 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
 
         // https://github.com/visjs/vis-network/issues/1967
         // 'normal normal 900 24px/1 "Font Awesome 5 Free"'
-        // 'normal 400 1em/1 "Font Awesome 6 Free"'
-        //this.document.fonts.load('normal 400 1em/1 "Font Awesome 6 Free"').then(() => {
-        //console.log('Font Awesome 6 Free is available');
+        // 'normal 400 1em/1 "Font Awesome 7 Free"'
+        //this.document.fonts.load('normal 400 1em/1 "Font Awesome 7 Free"').then(() => {
+        //console.log('Font Awesome 7 Free is available');
 
         const network = new Network(elem, {nodes: nodes, edges: edges}, options);
         network.fit({

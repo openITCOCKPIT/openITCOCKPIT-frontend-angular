@@ -3,7 +3,7 @@ import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { HostgroupSummaryStateHosts } from '../../../hosts/summary_state.interface';
+import { SummaryStateHosts } from '../../../hosts/summary_state.interface';
 import { HostgroupsLoadHostgroupsByStringParams } from '../../../hostgroups/hostgroups.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { HostgroupsService } from '../../../hostgroups/hostgroups.service';
@@ -59,7 +59,8 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
 export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     protected flipped = signal<boolean>(false);
     public readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
-    public hoststatusSummary?: HostgroupSummaryStateHosts;
+    public hoststatusSummary?: SummaryStateHosts;
+    public hoststatusCountPercentage: number[] = [];
     public config?: TacticalOverviewHostsConfig;
     protected hostgroups: SelectKeyValue[] = [];
     public keywords: string[] = [];
@@ -86,6 +87,7 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
                     this.keywords = this.config.Host.keywords.split(',').filter(Boolean);
                     this.notKeywords = this.config.Host.not_keywords.split(',').filter(Boolean);
                     this.hoststatusSummary = result.hoststatusSummary;
+                    this.hoststatusCountPercentage = result.hoststatusCountPercentage;
                     this.cdr.markForCheck();
                 }));
         }
