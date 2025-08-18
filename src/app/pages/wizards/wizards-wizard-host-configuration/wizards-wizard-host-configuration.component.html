@@ -26,11 +26,19 @@
                 <small class="fw-300">
                     {{ title }}
                 </small>
+                @if (this.isDeprecated) {
+                    <oitc-badge-outline color="warning"
+                                        class="ms-1">
+                        <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                        {{ t('Deprecated') }}
+                    </oitc-badge-outline>
+                }
             </h5>
         </c-card-header>
         <c-card-body class="p-0">
             <div class="row m-0 text-end mb-3" style="min-height: 22px;">
-                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('Host Information') }}
@@ -91,14 +99,14 @@
                                 <oitc-required-icon/>
                             </label>
                             <oitc-select
-                                    name="hostId"
-                                    id="hostId"
-                                    [(ngModel)]="hostId"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [searchCallback]="loadHosts"
-                                    [options]="hosts"
-                                    oitcFormError [errors]="errors" errorField="Host">
+                                name="hostId"
+                                id="hostId"
+                                [(ngModel)]="hostId"
+                                optionValue="key"
+                                optionLabel="value"
+                                [searchCallback]="loadHosts"
+                                [options]="hosts"
+                                oitcFormError [errors]="errors" errorField="Host">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="Host"></oitc-form-feedback>
                         </div>
@@ -112,14 +120,14 @@
                                 <oitc-required-icon/>
                             </label>
                             <oitc-select
-                                    name="hostPost.container_id"
-                                    id="hostPost.container_id"
-                                    [(ngModel)]="hostPost.container_id"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    (onChange)="onContainerChange()"
-                                    [options]="containers"
-                                    oitcFormError [errors]="errors" errorField="container_id">
+                                name="hostPost.container_id"
+                                id="hostPost.container_id"
+                                [(ngModel)]="hostPost.container_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                (onChange)="onContainerChange()"
+                                [options]="containers"
+                                oitcFormError [errors]="errors" errorField="container_id">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                             <div *ngIf="!hostPost.container_id" class="text-warning-glow pt-1">
@@ -133,14 +141,14 @@
                                 <oitc-required-icon/>
                             </label>
                             <oitc-select
-                                    name="hostPost.hosttemplate_id"
-                                    id="hostPost.hosttemplate_id"
-                                    [(ngModel)]="hostPost.hosttemplate_id"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    (onChange)="onHosttemplateChange()"
-                                    [options]="hosttemplates"
-                                    oitcFormError [errors]="errors" errorField="hosttemplate_id">
+                                name="hostPost.hosttemplate_id"
+                                id="hostPost.hosttemplate_id"
+                                [(ngModel)]="hostPost.hosttemplate_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                (onChange)="onHosttemplateChange()"
+                                [options]="hosttemplates"
+                                oitcFormError [errors]="errors" errorField="hosttemplate_id">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="hosttemplate_id"></oitc-form-feedback>
                             <div *ngIf="!hostPost.hosttemplate_id" class="text-warning-glow pt-1">
@@ -228,23 +236,23 @@
                             <div class="mb-3">
                                 <label cLabel for="SatellitesSelect">
                                     <oitc-label-link
-                                            [objectId]="hostPost.satellite_id"
-                                            [route]="'/distribute_module/satellites/edit'"
-                                            [permissions]="'DistributeModule.satellites.edit'"
+                                        [objectId]="hostPost.satellite_id"
+                                        [route]="'/distribute_module/satellites/edit'"
+                                        [permissions]="'DistributeModule.satellites.edit'"
                                     >
                                         {{ t('Satellite') }}
                                     </oitc-label-link>
                                 </label>
 
                                 <oitc-select
-                                        name="SatellitesSelect"
-                                        id="SatellitesSelect"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        [(ngModel)]="hostPost.satellite_id"
-                                        (onChange)="onSatelliteChange()"
-                                        [options]="satellites"
-                                        oitcFormError [errors]="errors" errorField="satellite_id">
+                                    name="SatellitesSelect"
+                                    id="SatellitesSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="hostPost.satellite_id"
+                                    (onChange)="onSatelliteChange()"
+                                    [options]="satellites"
+                                    oitcFormError [errors]="errors" errorField="satellite_id">
                                 </oitc-select>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="satellite_id"></oitc-form-feedback>

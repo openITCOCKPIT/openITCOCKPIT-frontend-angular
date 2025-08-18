@@ -13,16 +13,17 @@
                     {{ t('Wizards') }}
                 </a></li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                {{ t('Network Basic') }}
+                <fa-icon [icon]="['fas', 'cloud']"></fa-icon>
+                {{ t('VMWare') }}
             </li>
         </ol>
     </nav>
 
+
     <c-card>
         <c-card-header>
             <h5 cCardTitle>
-                {{ t('Configuration Wizard: Network Basic') }}
+                {{ t('Configuration Wizard: VMWare Datastores') }}
             </h5>
         </c-card-header>
         <c-card-body class="p-0">
@@ -39,7 +40,7 @@
                     class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Configure SNMP for Network Monitoring') }}
+                        {{ t('VMware') }}
                     </span>
                 </div>
                 <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
@@ -64,177 +65,112 @@
                     </div>
                 </div>
             </div>
+
         </c-card-body>
         <c-card-body>
-
 
             <fieldset class="padding-bottom-20">
                 <legend class="fs-md fieldset-legend-border-bottom">
                     <h4>
-                        {{ t('SNMP Server Settings') }}
+                        {{ t('VMware Server') }}
                     </h4>
                 </legend>
 
+                <c-accordion class="mb-3">
+                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                        <ng-template cTemplateId="accordionHeaderTemplate">
+                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                                {{ t('VMware configuration help') }}
+                            </button>
+                        </ng-template>
+                        <ng-template cTemplateId="accordionBodyTemplate">
+                            <div class="accordion-body">
+                                {{ t('Please create a user within your vCenter and assign the read-only role.') }}
+                            </div>
+                        </ng-template>
+                    </c-accordion-item>
+                </c-accordion>
+
                 <div class="mb-3">
-                    <label cLabel for="post.snmpVersion">
-                        {{ t('SNMP Version') }}
-                        <oitc-required-icon/>
-                    </label>
-                    <oitc-select
-                        name="post.snmpVersion"
-                        id="post.snmpVersion"
-                        [(ngModel)]="post.snmpVersion"
-                        [options]="snmpVersions"
-                        optionValue="value"
-                        optionLabel="key"
-                        oitcFormError [errors]="errors" errorField="securityLevel">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors" errorField="snmpVersion"></oitc-form-feedback>
+                    <c-alert [color]="'info'">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('VMware ESXi Hostname from vCenter has to be identical with Hostname in openITCOCKPIT') }}
+                    </c-alert>
                 </div>
 
-                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
-                    <label cLabel for="post.securityLevel">
-                        {{ t('Security level') }}
-                    </label>
-                    <oitc-select
-                        name="post.securityLevel"
-                        id="post.securityLevel"
-                        [(ngModel)]="post.securityLevel"
-                        [options]="securityLevels"
-                        optionValue="value"
-                        optionLabel="key"
-                        oitcFormError [errors]="errors" errorField="securityLevel">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors" errorField="securityLevel"></oitc-form-feedback>
-                    <div class="help-block text-primary-light">
-                        <span
-                            *ngIf="post.securityLevel === '1'">{{ t('Communication with authentication and privacy. The protocols used for Authentication are MD5 and SHA and for Privacy, DES (Data Encryption Standard) and AES (Advanced Encryption Standard).') }}</span>
-                        <span
-                            *ngIf="post.securityLevel === '2'">{{ t('Communication with authentication and without privacy. The protocols used for Authentication are MD5 and SHA (Secure Hash Algorithm).') }}</span>
-                        <span
-                            *ngIf="post.securityLevel === '3'">{{ t('Communication without authentication and privacy.') }}</span>
-                    </div>
-                </div>
-
-
-                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
-                    <label cLabel for="post.authProtocol">
-                        {{ t('Auth Protocol') }}
-                    </label>
-                    <oitc-select
-                        name="post.authProtocol"
-                        id="post.authProtocol"
-                        [(ngModel)]="post.authProtocol"
-                        [options]="authProtocols"
-                        optionValue="value"
-                        optionLabel="key"
-                        oitcFormError [errors]="errors" errorField="authProtocol">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors" errorField="authProtocol"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
-                    <label cLabel for="post.securityName">
-                        {{ t('Security name') }}
-                    </label>
-                    <input cFormControl
-                           id="post.securityName"
-                           type="text"
-                           name="post.securityName"
-                           oitcFormError [errors]="errors" errorField="securityName"
-                           [(ngModel)]="post.securityName">
-                    <oitc-form-feedback [errors]="errors" errorField="securityName"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
-                    <label cLabel for="post.authPassword">
-                        {{ t('Auth password') }}
-                    </label>
-                    <input cFormControl
-                           id="post.authPassword"
-                           type="password"
-                           name="post.authPassword"
-                           oitcFormError [errors]="errors" errorField="authPassword"
-                           [(ngModel)]="post.authPassword">
-                    <oitc-form-feedback [errors]="errors" errorField="authPassword"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
-                    <label cLabel for="post.privacyProtocol">
-                        {{ t('Privacy Protocol') }}
-                    </label>
-                    <oitc-select
-                        name="post.privacyProtocol"
-                        id="post.privacyProtocol"
-                        [(ngModel)]="post.privacyProtocol"
-                        [options]="privacyProtocols"
-                        optionValue="value"
-                        optionLabel="key"
-                        oitcFormError [errors]="errors" errorField="privacyProtocol">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors" errorField="privacyProtocol"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
-                    <label cLabel for="post.privacyPassword">
-                        {{ t('Privacy password') }}
-                    </label>
-                    <input cFormControl
-                           id="post.privacyPassword"
-                           type="password"
-                           name="post.privacyPassword"
-                           oitcFormError [errors]="errors" errorField="privacyPassword"
-                           [(ngModel)]="post.privacyPassword">
-                    <oitc-form-feedback [errors]="errors" errorField="privacyPassword"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3" *ngIf="post.snmpVersion !== '3'">
-                    <label cLabel for="post.snmpCommunity">
-                        {{ t('Community') }}
+                <div class="mb-3">
+                    <label cLabel for="post.vcenter">
+                        {{ t('vCenter Address') }}
                         <oitc-required-icon/>
                     </label>
                     <input cFormControl
-                           id="post.snmpCommunity"
+                           id="post.vcenter"
                            type="text"
-                           name="post.snmpCommunity"
-                           oitcFormError [errors]="errors" errorField="snmpCommunity"
-                           placeholder="public"
-                           [(ngModel)]="post.snmpCommunity">
-                    <oitc-form-feedback [errors]="errors" errorField="snmpCommunity"></oitc-form-feedback>
+                           name="post.vcenter"
+                           oitcFormError [errors]="errors" errorField="vcenter"
+                           [(ngModel)]="post.vcenter">
+                    <oitc-form-feedback [errors]="errors" errorField="vcenter"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.vmwareuser">
+                        {{ t('Username') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.vmwareuser"
+                           type="text"
+                           name="post.vmwareuser"
+                           oitcFormError [errors]="errors" errorField="vmwareuser"
+                           [(ngModel)]="post.vmwareuser">
+                    <oitc-form-feedback [errors]="errors" errorField="vmwareuser"></oitc-form-feedback>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="post.vmwarepass">
+                        {{ t('Password') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.vmwarepass"
+                           type="password"
+                           name="post.vmwarepass"
+                           oitcFormError [errors]="errors" errorField="vmwarepass"
+                           [(ngModel)]="post.vmwarepass">
+                    <oitc-form-feedback [errors]="errors" errorField="vmwarepass"></oitc-form-feedback>
                 </div>
             </fieldset>
 
             <oitc-wizards-dynamicfields
                 [(post)]="post.services"
                 [errors]="errors"
-                [titleErrorField]="'services'"
-                [title]="'SNMP services'|transloco"
+                [title]="'VMware services'|transloco"
             />
 
             <fieldset>
                 <legend class="fs-md fieldset-legend-border-bottom">
-                    <h4 [ngClass]="{'text-danger': errors.hasOwnProperty('interfaces') }">
-                        {{ t('SNMP Interfaces') }}
+                    <h4 [ngClass]="{'text-danger': errors.hasOwnProperty('dataStoreServices') }">
+                        {{ t('Datastore Services') }}
                     </h4>
                     <span class="help-block italic text-primary small">
                         {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
                     </span>
-                    <oitc-form-feedback [errors]="errors" errorField="interfaces"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors" errorField="dataStoreServices"></oitc-form-feedback>
                 </legend>
 
                 <div>
                     <ng-template #contentTemplate let-data>
                         <span class="h5 text-info" *ngIf="data">
-                            {{ t('Discovering Interfaces for SNMP Services') }}
+                            {{ t('Discovering Datastores for Services') }}
                         </span>
                         <br>
-                        {{ t('Scan this device and locate all of the interfaces that reside on the device. Only possible with valid SNMP configuration') }}
+                        {{ t('Scan VMWare and find all of datastores. Only possible with valid VMWare configuration') }}
                     </ng-template>
 
                     <ng-template #buttonTemplate let-data>
                         <div class="ms-2">
-                            <button class="ripple" (click)="runSnmpDiscovery()" cButton color="info">
-                                {{ t('Start SNMP interface discovery') }}
+                            <button class="ripple" (click)="runDatastoreDiscovery()" cButton color="info">
+                                {{ t('Start Datastore discovery') }}
                             </button>
                         </div>
 
@@ -251,7 +187,7 @@
 
                 <c-row class="mb-3">
                     <c-col md="6">
-                        <oitc-form-feedback [errors]="errors" errorField="snmpcommand"></oitc-form-feedback>
+                        <oitc-form-feedback [errors]="errors" errorField="datastorecommand"></oitc-form-feedback>
                         <c-input-group>
                             <span cInputGroupText>
                                 <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -289,50 +225,49 @@
 
 
                 <ul class="m-0 p-0">
-                    <ol class="m-0 p-0" *ngFor="let interface of post.interfaces">
-                        @if (!interface.servicecommandargumentvalues.length) {
-                            <ng-container *ngIf="hasName(interface.name)">
+                    <ol class="m-0 p-0" *ngFor="let datastoreService of post.dataStoreServices">
+                        @if (!datastoreService.servicecommandargumentvalues.length) {
+                            <ng-container *ngIf="hasName(datastoreService.name)">
 
                                 <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
                                     <div class="d-flex align-items-center">
                                         <input cFormCheckInput
                                                type="checkbox"
-                                               [id]="interface.name"
+                                               [id]="datastoreService.name"
                                                class="alert-icon lg-checkbox"
                                                name="checkbox"
-                                               [(ngModel)]="interface.createService"/>
+                                               [(ngModel)]="datastoreService.createService"/>
                                         <label class="custom-control-label custom-control-label-ok"
-                                               [for]="interface.name">
-                                            {{ interface.name }}
+                                               [for]="datastoreService.name">
+                                            {{ datastoreService.name }}
                                             <span class="help-block italic">
-                                                {{ interface.description }}
+                                                {{ datastoreService.description }}
                                             </span>
                                         </label>
                                     </div>
                                 </div>
                             </ng-container>
                         } @else {
-                            <ng-container *ngIf="hasName(interface.name)">
+                            <ng-container *ngIf="hasName(datastoreService.name)">
                                 <c-accordion class="mb-3">
                                     <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
                                         <ng-template cTemplateId="accordionHeaderTemplate">
-                                            <div class="form-group bg-primary-100"
-                                                 (click)="accordionItem.toggleItem()"
+                                            <div class="form-group bg-primary-100" (click)="accordionItem.toggleItem()"
                                                  [collapsed]="!accordionItem.visible" cAccordionButton>
                                                 <div class="d-flex align-items-center">
                                                     <input cFormCheckInput
                                                            type="checkbox"
-                                                           [id]="interface.name"
+                                                           [id]="datastoreService.name"
                                                            class="alert-icon lg-checkbox"
                                                            name="checkbox"
                                                            (click)="$event.stopPropagation()"
-                                                           [(ngModel)]="interface.createService"/>
+                                                           [(ngModel)]="datastoreService.createService"/>
                                                     <label class="custom-control-label custom-control-label-ok"
                                                            (click)="$event.stopPropagation()"
-                                                           [for]="interface.name">
-                                                        {{ interface.name }}
+                                                           [for]="datastoreService.name">
+                                                        {{ datastoreService.name }}
                                                         <span class="help-block italic">
-                                                            {{ interface.description }}
+                                                            {{ datastoreService.description }}
                                                         </span>
                                                     </label>
                                                 </div>
@@ -341,13 +276,13 @@
                                         <ng-template cTemplateId="accordionBodyTemplate">
                                             <div class="accordion-body">
                                                 @for (
-                                                    commandArgument of interface.servicecommandargumentvalues; track $index) {
+                                                    commandArgument of datastoreService.servicecommandargumentvalues; track $index) {
                                                     <div
                                                         class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
                                                         {{ commandArgument.commandargument.human_name }}
                                                         <input class="form-control"
                                                                type="text"
-                                                               [disabled]="!interface.createService || $index === 0"
+                                                               [disabled]="!datastoreService.createService || $index === 0"
                                                                [(ngModel)]="commandArgument.value">
                                                     </div>
                                                 }
@@ -360,8 +295,6 @@
                     </ol>
                 </ul>
             </fieldset>
-
-
         </c-card-body>
     </c-card>
 

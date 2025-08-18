@@ -2,3 +2,12 @@
 .alert-icon {
     margin-right: 10px;
 }
+
+.accordion-button-padding-left {
+    padding-left: 1.3rem; /*var(--cui-accordion-btn-padding-x) [1.25rem] + border */
+}
+
+.lg-checkbox {
+    width: 20px;
+    height: 20px;
+}

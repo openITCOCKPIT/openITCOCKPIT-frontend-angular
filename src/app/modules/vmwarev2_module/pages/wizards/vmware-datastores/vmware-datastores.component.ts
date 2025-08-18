@@ -1,19 +1,19 @@
 import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
-import { NetworkbasicWizardService } from './networkbasic-wizard.service';
 import {
-    InterfaceServicetemplate,
-    N0,
-    NetworkbasicWizardGet,
-    NetworkbasicWizardPost
-} from './networkbasic-wizard.interface';
-import { RouterLink } from '@angular/router';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+    DatastoreService,
+    DatastoreServicetemplate,
+    VmwareDatastoresWizardGet,
+    VmwareDatastoresWizardPost
+} from './vmware-datastores-wizard.interface';
+import { VmwareDatastoresWizardService } from './vmware-datastores-wizard.service';
+import { PaginatorModule } from 'primeng/paginator';
+import { FormsModule } from '@angular/forms';
 import {
     AccordionButtonDirective,
     AccordionComponent,
     AccordionItemComponent,
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -29,130 +29,105 @@ import {
     RowComponent,
     TemplateIdDirective
 } from '@coreui/angular';
+import { RouterLink } from '@angular/router';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormsModule } from '@angular/forms';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
-import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { NgSelectComponent } from '@ng-select/ng-select';
 import { Service } from '../../../../../pages/wizards/wizards.interface';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
-    selector: 'oitc-networkbasic',
+    selector: 'oitc-vmware-esx',
     imports: [
-        RouterLink,
-        FaIconComponent,
+        PaginatorModule,
+        FormsModule,
         CardComponent,
         CardHeaderComponent,
+        CardTitleDirective,
         CardBodyComponent,
+        RouterLink,
+        FaIconComponent,
         TranslocoPipe,
+        BackButtonDirective,
         RequiredIconComponent,
-        SelectComponent,
-        FormLabelDirective,
         FormControlDirective,
-        NgIf,
+        FormErrorDirective,
+        FormFeedbackComponent,
         WizardsDynamicfieldsComponent,
         TranslocoDirective,
-        OitcAlertComponent,
-        ProgressBarModule,
-        XsButtonDirective,
-        CardTitleDirective,
-        ColComponent,
-        FormCheckInputDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        NgForOf,
-        NgSelectComponent,
-        RowComponent,
-        BackButtonDirective,
-        FormFeedbackComponent,
-        FormErrorDirective,
-        FormsModule,
-        NgClass,
-        FormCheckComponent,
-        FormCheckLabelDirective,
+        FormLabelDirective,
+        AlertComponent,
+        AccordionButtonDirective,
         AccordionComponent,
         AccordionItemComponent,
         TemplateIdDirective,
-        AccordionButtonDirective
+        ColComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NgForOf,
+        NgIf,
+        NgSelectComponent,
+        OitcAlertComponent,
+        RowComponent,
+        XsButtonDirective,
+        NgClass
     ],
-    templateUrl: './networkbasic.component.html',
-    styleUrl: './networkbasic.component.css',
+    templateUrl: './vmware-datastores.component.html',
+    styleUrl: './vmware-datastores.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NetworkbasicComponent extends WizardsAbstractComponent {
+export class VmwareDatastoresComponent extends WizardsAbstractComponent {
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
-    protected override WizardService: NetworkbasicWizardService = inject(NetworkbasicWizardService);
+    protected override WizardService: VmwareDatastoresWizardService = inject(VmwareDatastoresWizardService);
     public checked: boolean = false;
 
-    protected override post: NetworkbasicWizardPost = {
+    protected override post: VmwareDatastoresWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
+        dataStoreServices: [],
 // Fields for the wizard
-        authPassword: '',
-        authProtocol: 'md5',
-        interfaces: [],
-        privacyPassword: '',
-        privacyProtocol: 'des',
-        securityLevel: '1',
-        securityName: '',
-        snmpCommunity: '',
-        snmpVersion: '2'
-    } as NetworkbasicWizardPost;
-    protected snmpVersions: SelectKeyValueString[] = [
-        {value: '1', key: 'SNMP V 1'},
-        {value: '2', key: 'SNMP V 2c'},
-        {value: '3', key: 'SNMP V 3'},
-    ]
+        vmwareuser: '',
+        vmwarepass: '',
+        vcenter: '',
+        typeId: 'vmware-datastores'
+    } as VmwareDatastoresWizardPost;
+
     protected searchedTags: string[] = [];
+    protected datastoreServicetemplate: DatastoreServicetemplate = {} as DatastoreServicetemplate;
 
-
-    protected securityLevels: SelectKeyValueString[] = [
-        {key: 'authPriv', value: '1'},
-        {key: 'authNoPriv', value: '2'},
-        {key: 'noAuthNoPriv', value: '3'},
-    ];
-    protected authProtocols: SelectKeyValueString[] = [
-        {key: 'MD5', value: 'md5'},
-        {key: 'SHA', value: 'sha'},
-    ];
-    protected privacyProtocols: SelectKeyValueString[] = [
-        {key: 'DES', value: 'des'},
-        {key: 'AES', value: 'aes'},
-        {key: 'AES128', value: 'aes128'},
-        {key: '3DES', value: '3des'},
-        {key: '3DESDE', value: '3desde'},
-    ];
-    protected interfaceServicetemplate: InterfaceServicetemplate = {} as InterfaceServicetemplate;
-
-    protected override wizardLoad(result: NetworkbasicWizardGet): void {
-        this.interfaceServicetemplate = result.interfaceServicetemplate;
-
+    protected override wizardLoad(result: VmwareDatastoresWizardGet): void {
+        this.post.vmwareuser = result.vmwareuser;
+        this.post.vmwarepass = result.vmwarepass;
+        this.post.vcenter = result.vcenter;
+        this.datastoreServicetemplate = result.datastoreServicetemplate;
         super.wizardLoad(result);
     }
 
     public override submit(): void {
         // let request = this.post; // Clone the original post object here!
-        let request: NetworkbasicWizardPost = JSON.parse(JSON.stringify(this.post));
+        let request: VmwareDatastoresWizardPost = JSON.parse(JSON.stringify(this.post));
 
         // Remove all services from request where createService is false.
         request.services = request.services.filter((service: Service) => {
             return service.createService && this.childComponent.hasName(service.name);
         });
-        // Remove all interfaces from request where createService is false.
-        request.interfaces = request.interfaces.filter(
-            (networkInterface: N0) => networkInterface.createService && this.hasName(networkInterface.name)
+        // Remove all datastore services from request where createService is false.
+        request.dataStoreServices = request.dataStoreServices.filter(
+            (dataStoreService: DatastoreService) => dataStoreService.createService && this.hasName(dataStoreService.name)
         );
 
         this.subscriptions.add(this.WizardService.submit(request)
@@ -182,7 +157,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
 
     protected toggleCheck(checked: boolean): void {
         this.checked = checked;
-        this.post.interfaces.forEach((service: N0) => {
+        this.post.dataStoreServices.forEach((service: DatastoreService) => {
             if (!this.hasName(service.name)) {
                 return;
             }
@@ -212,25 +187,26 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         });
     }
 
-    protected runSnmpDiscovery(): void {
-        this.post.interfaces = [];
+    protected runDatastoreDiscovery(): void {
+        this.post.dataStoreServices = [];
         this.cdr.markForCheck();
-        this.WizardService.executeSNMPDiscovery(this.post).subscribe((data: any) => {
+        this.WizardService.executeDatastoreDiscovery(this.post).subscribe((data: any) => {
             this.errors = {} as GenericValidationError;
             this.cdr.markForCheck();
             // Error
-            if (data.interfaces) {
-                for (let key in data.interfaces) {
-                    let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.interfaceServicetemplate.servicetemplatecommandargumentvalues));
-                    servicetemplatecommandargumentvalues[0].value = data.interfaces[key].value.name;
-                    this.post.interfaces.push(
+            if (data.services[0].value) {
+                for (let key in data.services[2].value) {
+                    let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.datastoreServicetemplate.servicetemplatecommandargumentvalues));
+                    servicetemplatecommandargumentvalues[3].value = data.services[2].value[key].name;
+                    let name = "Datastore " + String(data.services[2].value[key].name);
+                    this.post.dataStoreServices.push(
                         {
-                            createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, data.interfaces[key].value.name),
-                            description: String(data.interfaces[key].value.number),
+                            createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, name),
+                            description: '',
                             host_id: this.post.host_id,
-                            name: String(data.interfaces[key].value.name),
+                            name: name,
                             servicecommandargumentvalues: servicetemplatecommandargumentvalues,
-                            servicetemplate_id: this.interfaceServicetemplate.id
+                            servicetemplate_id: this.datastoreServicetemplate.id
                         });
                 }
                 this.childComponentLocal.cdr.markForCheck();
@@ -242,11 +218,9 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
             const errorResponse: GenericValidationError = data.data as GenericValidationError;
             if (data.data) {
                 this.errors = errorResponse;
-                if (this.errors.hasOwnProperty('snmpCommunity')) {
-                    this.notyService.scrollContentDivToTop();
-                }
             }
             this.cdr.markForCheck();
         });
     }
+
 }

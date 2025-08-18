@@ -20,6 +20,11 @@ export interface WizardElement {
     selected_os: undefined | string
 }
 
+export interface DeprecatedWizards {
+    deprecatedWizards: { [key: string]: WizardElement }
+    possibleDeprecatedWizards: { [key: string]: WizardElement }
+}
+
 // Host Select Validation
 export interface ValidateInputFromAngularPost {
     Host: {
