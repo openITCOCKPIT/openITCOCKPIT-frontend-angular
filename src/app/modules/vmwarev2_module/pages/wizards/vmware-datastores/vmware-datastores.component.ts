@@ -194,7 +194,7 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
             this.errors = {} as GenericValidationError;
             this.cdr.markForCheck();
             // Error
-            if (data.services[0].value) {
+            if (data && data.services && data.services.length && data.services[0].value && data.services[2]) {
                 for (let key in data.services[2].value) {
                     let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.datastoreServicetemplate.servicetemplatecommandargumentvalues));
                     servicetemplatecommandargumentvalues[3].value = data.services[2].value[key].name;
@@ -210,14 +210,19 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
                         });
                 }
                 this.childComponentLocal.cdr.markForCheck();
-                this.cdr.markForCheck();
-                return;
             }
-            this.notyService.genericError();
 
-            const errorResponse: GenericValidationError = data.data as GenericValidationError;
-            if (data.data) {
-                this.errors = errorResponse;
+            if (data.success && data.success === false) {
+                this.notyService.genericError();
+                const errorResponse: GenericValidationError = data.data as GenericValidationError;
+                if (data.data) {
+                    this.errors = errorResponse;
+                }
+            } else {
+                const title = this.TranslocoService.translate('VMWare Datastores');
+                const msg = this.TranslocoService.translate('discovery finished');
+
+                this.notyService.genericSuccess(msg, title);
             }
             this.cdr.markForCheck();
         });
