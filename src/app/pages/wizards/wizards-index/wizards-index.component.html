@@ -175,16 +175,12 @@
                                             </div>
                                             <div class="pl-10">
                                                 <h5>
-                                                    @if (deprecatedWizardsTitles[wizard.value.type_id]) {
-                                                        {{ deprecatedWizardsTitles[wizard.value.type_id] }}
-                                                        <oitc-badge-outline color="warning"
-                                                                            class="ms-1">
-                                                            <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
-                                                            {{ t('Deprecated') }}
-                                                        </oitc-badge-outline>
-                                                    } @else {
-                                                        {{ wizard.value.title }}
-                                                    }
+                                                    {{ wizard.value.title }}
+                                                    <oitc-badge-outline color="warning"
+                                                                        class="ms-1">
+                                                        <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                                                        {{ t('Deprecated') }}
+                                                    </oitc-badge-outline>
                                                 </h5>
                                                 <br/>
                                                 {{ wizard.value.description }}
@@ -209,16 +205,12 @@
                                             </div>
                                             <div class="pl-10">
                                                 <h5>
-                                                    @if (deprecatedWizardsTitles[wizard.value.type_id]) {
-                                                        {{ deprecatedWizardsTitles[wizard.value.type_id] }}
-                                                        <oitc-badge-outline color="warning"
-                                                                            class="ms-1">
-                                                            <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
-                                                            {{ t('Deprecated') }}
-                                                        </oitc-badge-outline>
-                                                    } @else {
-                                                        {{ wizard.value.title }}
-                                                    }
+                                                    {{ wizard.value.title }}
+                                                    <oitc-badge-outline color="warning"
+                                                                        class="ms-1">
+                                                        <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                                                        {{ t('Deprecated') }}
+                                                    </oitc-badge-outline>
                                                 </h5>
                                                 <br/>
                                                 {{ wizard.value.description }}
