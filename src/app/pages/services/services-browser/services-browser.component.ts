@@ -318,6 +318,7 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
                 this.tags = String(result.mergedService.tags).split(',');
             }
 
+            this.availableDataSources = [];
             for (let key in result.mergedService.Perfdata) {
                 const gauge = result.mergedService.Perfdata[key];
                 this.availableDataSources.push({
