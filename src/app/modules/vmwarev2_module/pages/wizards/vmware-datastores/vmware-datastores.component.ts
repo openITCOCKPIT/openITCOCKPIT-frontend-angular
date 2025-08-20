@@ -210,19 +210,17 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
                         });
                 }
                 this.childComponentLocal.cdr.markForCheck();
+                this.cdr.markForCheck();
+                return;
             }
 
-            if (data.success && data.success === false) {
-                this.notyService.genericError();
-                const errorResponse: GenericValidationError = data.data as GenericValidationError;
-                if (data.data) {
-                    this.errors = errorResponse;
+            this.notyService.genericError();
+            const errorResponse: GenericValidationError = data.data as GenericValidationError;
+            if (data.data) {
+                this.errors = errorResponse;
+                if (this.errors.hasOwnProperty('vcenter') || this.errors.hasOwnProperty('vmwareuser') || this.errors.hasOwnProperty('vmwarepass')) {
+                    this.notyService.scrollContentDivToTop();
                 }
-            } else {
-                const title = this.TranslocoService.translate('VMWare Datastores');
-                const msg = this.TranslocoService.translate('discovery finished');
-
-                this.notyService.genericSuccess(msg, title);
             }
             this.cdr.markForCheck();
         });
