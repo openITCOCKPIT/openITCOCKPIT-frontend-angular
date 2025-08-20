@@ -157,7 +157,7 @@
                     <ng-template cTemplateId="accordionHeaderTemplate">
                         <div class="bg-primary-100" (click)="accordionItem.toggleItem()"
                              [collapsed]="!accordionItem.visible" cAccordionButton>
-                            <h5>{{ t('Deprecated Wizards') }}</h5>
+                            <h5>{{ t('Obsolete Wizards') }}</h5>
                         </div>
                     </ng-template>
                     <ng-template cTemplateId="accordionBodyTemplate">
@@ -176,10 +176,9 @@
                                             <div class="pl-10">
                                                 <h5>
                                                     {{ wizard.value.title }}
-                                                    <oitc-badge-outline color="warning"
-                                                                        class="ms-1">
+                                                    <oitc-badge-outline color="warning" class="font-xs">
                                                         <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
-                                                        {{ t('Deprecated') }}
+                                                        {{ t('Obsolete') }}
                                                     </oitc-badge-outline>
                                                 </h5>
                                                 <br/>
