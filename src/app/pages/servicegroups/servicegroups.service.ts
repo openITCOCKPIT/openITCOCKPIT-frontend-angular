@@ -16,6 +16,7 @@ import {
     ServicegroupsEditGet,
     ServicegroupsExtendedParams,
     ServicegroupsExtendedServiceListParams,
+    ServicegroupsIndexFilter,
     ServicegroupsIndexParams,
     ServicegroupsIndexRoot,
     ServicegroupsLoadServicegroupsByStringParams
@@ -34,15 +35,18 @@ export class ServicegroupsService {
     private readonly http: HttpClient = inject(HttpClient);
     private readonly proxyPath: string = inject(PROXY_PATH);
 
-    public getIndex(params: ServicegroupsIndexParams): Observable<ServicegroupsIndexRoot> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.get<ServicegroupsIndexRoot>(`${proxyPath}/servicegroups/index.json`, {
-            params: params as {} // cast ServicegroupsIndexParams into object
+    public getIndex(params: ServicegroupsIndexParams, filter: ServicegroupsIndexFilter): Observable<ServicegroupsIndexRoot> {
+        const proxyPath = this.proxyPath;
+        // ITC-2599 Change load function to use POST
+        return this.http.post<ServicegroupsIndexRoot>(`${proxyPath}/servicegroups/index.json`, {
+            filter: filter as {} // POST data used for filter
+        }, {
+            params: params as {} // query string parameter
         }).pipe(
-            map((data: ServicegroupsIndexRoot) => {
+            map(data => {
                 return data;
             })
-        )
+        );
     }
 
     public loadContainers(): Observable<LoadContainersRoot> {

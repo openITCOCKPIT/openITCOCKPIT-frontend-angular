@@ -71,7 +71,7 @@
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Containers.name]']"
+                                       [(ngModel)]="filter['Containers.name']"
                                        [placeholder]="'Filter by host group name' | transloco"
                                        aria-label="host group name"
                                        cFormControl
@@ -87,7 +87,7 @@
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Hostgroups.description]']"
+                                       [(ngModel)]="filter['Hostgroups.description']"
                                        [placeholder]="'Filter by description' | transloco"
                                        aria-label="Host group description"
                                        cFormControl

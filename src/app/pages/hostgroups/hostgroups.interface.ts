@@ -1,23 +1,17 @@
 import { PaginateOrScroll } from "../../layouts/coreui/paginator/paginator.interface";
 import { GenericValidationError } from "../../generic-responses";
 import { SelectKeyValue } from "../../layouts/primeng/select.interface";
-import { HostsIndexFilter, HoststatusObject } from '../hosts/hosts.interface';
-import { HostTypesEnum } from '../hosts/hosts.enum';
+import { HoststatusObject } from '../hosts/hosts.interface';
 
 /** INDEX PARAMS **/
 export interface HostgroupsIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
     page: number,
-    direction: 'asc' | 'desc' | '', // asc or desc
-    'filter[Hostgroups.id][]': number[],
-    'filter[Hostgroups.description]': string,
-    'filter[Containers.name]': string,
-    'Hostgroups.keywords': string[]
-    'Hostgroups.not_keywords': string[]
+    direction: 'asc' | 'desc' | ''
 }
+
 
 export function getDefaultHostgroupsIndexParams(): HostgroupsIndexParams {
     return {
@@ -25,12 +19,7 @@ export function getDefaultHostgroupsIndexParams(): HostgroupsIndexParams {
         scroll: true,
         sort: 'Containers.name',
         page: 1,
-        direction: 'asc',
-        'filter[Hostgroups.id][]': [],
-        'filter[Hostgroups.description]': "",
-        'filter[Containers.name]': "",
-        'Hostgroups.keywords':  [],
-        'Hostgroups.not_keywords':  []
+        direction: 'asc'
     }
 }
 

@@ -152,11 +152,11 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
             //console.log(params);
-
-            let id = params['id'];
-            if (id) {
-                this.params['filter[Hostgroups.id][]'] = [].concat(id); // make sure we always get an array
+            let hostgroupId = params['hostgroup_id'] || params['id'];
+            if (hostgroupId) {
+                this.filter['Hostgroups.id'] = [].concat(hostgroupId); // make sure we always get an array
             }
+
             let keywords = params['keywords'] || undefined;
             if (keywords) {
                 this.filter['Hostgroups.keywords'] = [keywords];
@@ -204,6 +204,9 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public loadHostgroups() {
         this.SelectionServiceService.deselectAll();
+        if (this.route.snapshot.queryParams.hasOwnProperty('filter.Hostgroups.id')) {
+            this.filter['Hostgroups.id'] = this.route.snapshot.queryParams['filter.Hostgroups.id'];
+        }
 
         this.subscriptions.add(this.HostgroupsService.getIndex(this.params, this.filter)
             .subscribe((result: HostgroupsIndexRoot) => {
@@ -279,15 +282,19 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
             baseUrl = '/hostgroups/listToCsv?';
         }
 
+
         let urlParams = {
             'angular': true,
-            'filter[Containers.name]': this.params['filter[Containers.name]'],
-            'filter[Hostgroups.description]': this.params['filter[Hostgroups.description]'],
+            'sort': this.params.sort,
+            'page': this.params.page,
+            'direction': this.params.direction,
+            'filter[Containers.name]': this.filter['Containers.name'],
+            'filter[Hostgroups.description]': this.filter['Hostgroups.description'],
+            'filter[Hostgroups.keywords][]': this.filter['Hostgroups.keywords'],
+            'filter[Hostgroups.not_keywords][]': this.filter['Hostgroups.not_keywords']
         };
 
-
         let stringParams: HttpParams = new HttpParams();
-
         stringParams = stringParams.appendAll(urlParams);
         return baseUrl + stringParams.toString();
 
