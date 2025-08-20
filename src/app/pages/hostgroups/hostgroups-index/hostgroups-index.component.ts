@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { Subscription } from 'rxjs';
 import { HostgroupsService } from '../hostgroups.service';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -15,28 +14,28 @@ import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import {
-  BadgeComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownComponent,
-  DropdownDividerDirective,
-  DropdownItemDirective,
-  DropdownMenuDirective,
-  DropdownToggleDirective,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    BadgeComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownComponent,
+    DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -51,7 +50,9 @@ import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-al
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import {
+    getDefaultHostgroupsIndexFilter,
     getDefaultHostgroupsIndexParams,
+    HostgroupsIndexFilter,
     HostgroupsIndexHostgroup,
     HostgroupsIndexParams,
     HostgroupsIndexRoot
@@ -62,58 +63,62 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { HostgroupExtendedTabs } from '../hostgroups.enum';
 import { IndexPage } from '../../../pages.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
     selector: 'oitc-hostgroups-index',
     imports: [
-    TranslocoDirective,
-    DeleteAllModalComponent,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    DropdownDividerDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ItemSelectComponent,
-    MatSort,
-    MatSortHeader,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    ReactiveFormsModule,
-    RowComponent,
-    SelectAllComponent,
-    TableDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    BadgeComponent,
-    TableLoaderComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    AsyncPipe
-],
+        TranslocoDirective,
+        DeleteAllModalComponent,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        DropdownDividerDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        ReactiveFormsModule,
+        RowComponent,
+        SelectAllComponent,
+        TableDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        BadgeComponent,
+        TableLoaderComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        AsyncPipe,
+        NgSelectModule,
+        FaStackComponent,
+        FaStackItemSizeDirective
+    ],
     templateUrl: './hostgroups-index.component.html',
     styleUrl: './hostgroups-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: HostgroupsService } // Inject the HostgroupsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: HostgroupsService} // Inject the HostgroupsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -127,6 +132,7 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly notyService = inject(NotyService);
 
     public params: HostgroupsIndexParams = getDefaultHostgroupsIndexParams();
+    public filter: HostgroupsIndexFilter = getDefaultHostgroupsIndexFilter();
 
     public readonly route: ActivatedRoute = inject(ActivatedRoute);
     public selectedItems: DeleteAllItem[] = [];
@@ -151,6 +157,15 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
             if (id) {
                 this.params['filter[Hostgroups.id][]'] = [].concat(id); // make sure we always get an array
             }
+            let keywords = params['keywords'] || undefined;
+            if (keywords) {
+                this.filter['Hostgroups.keywords'] = [keywords];
+            }
+
+            let not_keywords = params['not_keywords'] || undefined;
+            if (not_keywords) {
+                this.filter['Hostgroups.not_keywords'] = [not_keywords];
+            }
             this.loadHostgroups();
         }));
     }
@@ -160,7 +175,7 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public resetFilter() {
-        this.params = getDefaultHostgroupsIndexParams();
+        this.filter = getDefaultHostgroupsIndexFilter();
         this.loadHostgroups();
     }
 
@@ -190,7 +205,7 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public loadHostgroups() {
         this.SelectionServiceService.deselectAll();
 
-        this.subscriptions.add(this.HostgroupsService.getIndex(this.params)
+        this.subscriptions.add(this.HostgroupsService.getIndex(this.params, this.filter)
             .subscribe((result: HostgroupsIndexRoot) => {
                 this.hostgroups = result;
                 this.cdr.markForCheck();

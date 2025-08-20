@@ -1,7 +1,8 @@
 import { PaginateOrScroll } from "../../layouts/coreui/paginator/paginator.interface";
 import { GenericValidationError } from "../../generic-responses";
 import { SelectKeyValue } from "../../layouts/primeng/select.interface";
-import { HoststatusObject } from '../hosts/hosts.interface';
+import { HostsIndexFilter, HoststatusObject } from '../hosts/hosts.interface';
+import { HostTypesEnum } from '../hosts/hosts.enum';
 
 /** INDEX PARAMS **/
 export interface HostgroupsIndexParams {
@@ -14,6 +15,8 @@ export interface HostgroupsIndexParams {
     'filter[Hostgroups.id][]': number[],
     'filter[Hostgroups.description]': string,
     'filter[Containers.name]': string,
+    'Hostgroups.keywords': string[]
+    'Hostgroups.not_keywords': string[]
 }
 
 export function getDefaultHostgroupsIndexParams(): HostgroupsIndexParams {
@@ -25,7 +28,27 @@ export function getDefaultHostgroupsIndexParams(): HostgroupsIndexParams {
         direction: 'asc',
         'filter[Hostgroups.id][]': [],
         'filter[Hostgroups.description]': "",
-        'filter[Containers.name]': ""
+        'filter[Containers.name]': "",
+        'Hostgroups.keywords':  [],
+        'Hostgroups.not_keywords':  []
+    }
+}
+
+export interface HostgroupsIndexFilter {
+    'Hostgroups.id': number[]
+    'Containers.name': string
+    'Hostgroups.description': string
+    'Hostgroups.keywords': string[]
+    'Hostgroups.not_keywords': string[]
+}
+
+export function getDefaultHostgroupsIndexFilter(): HostgroupsIndexFilter {
+    return {
+        'Hostgroups.id': [],
+        'Containers.name': '',
+        'Hostgroups.description': '',
+        'Hostgroups.keywords': [],
+        'Hostgroups.not_keywords': []
     }
 }
 
@@ -169,6 +192,7 @@ export interface Hostgroup {
     }
     description: string
     hostgroup_url: string
+    tags: string
     hosts: {
         _ids: number[]
     }

@@ -12,6 +12,7 @@ import {
     HostgroupsEditGet,
     HostgroupsExtendedParams,
     HostgroupsExtendedServiceListParams,
+    HostgroupsIndexFilter,
     HostgroupsIndexParams,
     HostgroupsIndexRoot,
     HostgroupsLoadHostgroupsByStringParams,
@@ -35,15 +36,18 @@ export class HostgroupsService {
     private readonly http: HttpClient = inject(HttpClient);
     private readonly proxyPath: string = inject(PROXY_PATH);
 
-    public getIndex(params: HostgroupsIndexParams): Observable<HostgroupsIndexRoot> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.get<HostgroupsIndexRoot>(`${proxyPath}/hostgroups/index.json`, {
-            params: params as {} // cast HostgroupsIndexParams into object
+    public getIndex(params: HostgroupsIndexParams, filter: HostgroupsIndexFilter): Observable<HostgroupsIndexRoot> {
+        const proxyPath = this.proxyPath;
+        // ITC-2599 Change load function to use POST
+        return this.http.post<HostgroupsIndexRoot>(`${proxyPath}/hostgroups/index.json`, {
+            filter: filter as {} // POST data used for filter
+        }, {
+            params: params as {} // query string parameter
         }).pipe(
-            map((data: HostgroupsIndexRoot) => {
+            map(data => {
                 return data;
             })
-        )
+        );
     }
 
     public loadContainers(): Observable<LoadContainersRoot> {

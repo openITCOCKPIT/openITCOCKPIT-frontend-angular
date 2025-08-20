@@ -19,9 +19,9 @@
         </ol>
     </nav>
 
-    <oitc-form-loader [isVisible]="post.container.id === 0"></oitc-form-loader>
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
 
-    <form cForm *ngIf="post.container.id !== 0" (ngSubmit)="updateHostgroup()">
+    <form cForm *ngIf="post" (ngSubmit)="submit()">
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>
@@ -56,14 +56,14 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
-                            name="post.container.parent_id"
-                            id="post.container.parent_id"
-                            [(ngModel)]="post.container.parent_id"
-                            optionValue="key"
-                            optionLabel="value"
-                            [options]="containers"
-                            (onChange)="onContainerChange()"
-                            oitcFormError [errors]="errors" errorField="parent_id">
+                        name="post.container.parent_id"
+                        id="post.container.parent_id"
+                        [(ngModel)]="post.container.parent_id"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="containers"
+                        (onChange)="onContainerChange()"
+                        oitcFormError [errors]="errors" errorField="parent_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
                     <div *ngIf="post.container.parent_id === null" class="text-warning-glow pt-1">
@@ -100,7 +100,7 @@
                     <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                 </div>
                 <div class="mb-3">
-                    <label cLabel for="description">
+                    <label cLabel for="hostgroup_url">
                         {{ t('Host group URL') }}
                     </label>
                     <input cFormControl
@@ -113,18 +113,44 @@
                 </div>
 
                 <div class="mb-3">
+                    <label cLabel for="HostTags">
+                        {{ t('Tags') }}
+                    </label>
+
+                    <c-input-group>
+                        <ng-select
+                            id="HostTags"
+                            name="HostTags"
+                            [items]="[]"
+                            [(ngModel)]="tagsForSelect"
+                            [addTag]="true"
+                            [multiple]="true"
+                            [selectOnTab]="true"
+                            [placeholder]="'Add tags'|transloco"
+                            [isOpen]="false"
+                            oitcFormError [errors]="errors" errorField="tags">
+                        </ng-select>
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="tags"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Press return to separate tags') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
                     <label cLabel for="post.hosts._ids">
                         {{ t('Hosts') }}
                     </label>
                     <oitc-multi-select
-                            name="post.hosts._ids"
-                            id="post.hosts._ids"
-                            [(ngModel)]="post.hosts._ids"
-                            optionValue="key"
-                            optionLabel="value"
-                            [searchCallback]="loadHosts"
-                            [options]="hosts"
-                            oitcFormError [errors]="errors" errorField="hosts">
+                        name="post.hosts._ids"
+                        id="post.hosts._ids"
+                        [(ngModel)]="post.hosts._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [searchCallback]="loadHosts"
+                        [options]="hosts"
+                        oitcFormError [errors]="errors" errorField="hosts">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
                 </div>
@@ -134,14 +160,14 @@
                         {{ t('Host templates') }}
                     </label>
                     <oitc-multi-select
-                            name="post.hosttemplates._ids"
-                            id="post.hosttemplates._ids"
-                            [(ngModel)]="post.hosttemplates._ids"
-                            optionValue="key"
-                            optionLabel="value"
-                            [searchCallback]="loadHosttemplates"
-                            [options]="hosttemplates"
-                            oitcFormError [errors]="errors" errorField="hosttemplates">
+                        name="post.hosttemplates._ids"
+                        id="post.hosttemplates._ids"
+                        [(ngModel)]="post.hosttemplates._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [searchCallback]="loadHosttemplates"
+                        [options]="hosttemplates"
+                        oitcFormError [errors]="errors" errorField="hosttemplates">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
                 </div>
