@@ -65,6 +65,8 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     protected hostgroups: SelectKeyValue[] = [];
     public keywords: string[] = [];
     public notKeywords: string[] = [];
+    public hostgroupKeywords: string[] = [];
+    public hostgroupNotKeywords: string[] = [];
     private readonly TacticalOverviewHostsWidgetService = inject(TacticalOverviewHostsWidgetService);
     private readonly notyService = inject(NotyService);
 
@@ -86,6 +88,8 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
                     this.config = result.config;
                     this.keywords = this.config.Host.keywords.split(',').filter(Boolean);
                     this.notKeywords = this.config.Host.not_keywords.split(',').filter(Boolean);
+                    this.hostgroupKeywords = this.config.Hostgroup.keywords.split(',').filter(Boolean);
+                    this.hostgroupNotKeywords = this.config.Hostgroup.not_keywords.split(',').filter(Boolean);
                     this.hoststatusSummary = result.hoststatusSummary;
                     this.hoststatusCountPercentage = result.hoststatusCountPercentage;
                     this.cdr.markForCheck();
@@ -114,6 +118,8 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
 
         this.config.Host.keywords = this.keywords.join(',');
         this.config.Host.not_keywords = this.notKeywords.join(',');
+        this.config.Hostgroup.keywords = this.hostgroupKeywords.join(',');
+        this.config.Hostgroup.not_keywords = this.hostgroupNotKeywords.join(',');
 
         this.subscriptions.add(this.TacticalOverviewHostsWidgetService.saveWidget(this.widget, this.config)
             .subscribe({

@@ -276,10 +276,60 @@
                                         class="flex-1">
                                     </oitc-multi-select>
                                 </c-input-group>
+
+                                <c-row class="my-1">
+                                    <c-col [xs]="12" [lg]="12">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <div class="icon-stack">
+                                                    <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'tags']"
+                                                             class="text-success cornered cornered-lr"></fa-icon>
+                                                </div>
+                                            </span>
+                                            <ng-select
+                                                [id]="'HostgroupKeywordsInput-'+widget.id"
+                                                [name]="'HostgroupKeywordsInput-'+widget.id"
+                                                [items]="[]"
+                                                [(ngModel)]="hostgroupKeywords"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="'Filter by host group tags'|transloco"
+                                                [isOpen]="false">
+                                            </ng-select>
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
+                                <c-row>
+                                    <c-col [xs]="12" [lg]="12">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <div class="icon-stack">
+                                                    <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'tags']"
+                                                             class="text-danger cornered cornered-lr"></fa-icon>
+                                                </div>
+                                            </span>
+                                            <ng-select
+                                                [id]="'HostgroupNotKeywordsInput-'+widget.id"
+                                                [name]="'HostgroupNotKeywordsInput-'+widget.id"
+                                                [items]="[]"
+                                                [(ngModel)]="hostgroupNotKeywords"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="'Filter by excluded tags'|transloco"
+                                                [isOpen]="false">
+                                            </ng-select>
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
+
                             </fieldset>
                         </c-col>
                     </c-row>
-                    <c-row class="mt-2">
+                    <c-row class="my-2">
                         <c-col class="text-end">
                             <button cButton class="ripple" color="primary" (click)="submit()">
                                 {{ t('Save') }}
