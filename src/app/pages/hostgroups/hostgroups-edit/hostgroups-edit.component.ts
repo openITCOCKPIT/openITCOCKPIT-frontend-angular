@@ -104,7 +104,6 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
         this.loadContainers();
         this.subscriptions.add(this.HostgroupsService.getEdit(id)
             .subscribe((result: HostgroupsEditGet) => {
-
                 this.post = result.hostgroup.Hostgroup;
                 if (this.post.tags) {
                     this.tagsForSelect = this.post.tags.split(',');

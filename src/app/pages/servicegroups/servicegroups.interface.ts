@@ -179,6 +179,7 @@ export interface Servicegroup {
     }
     description: string
     servicegroup_url: string
+    tags: string
     services: {
         _ids: number[]
     }
