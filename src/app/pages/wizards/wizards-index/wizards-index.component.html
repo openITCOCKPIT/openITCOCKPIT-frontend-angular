@@ -155,7 +155,7 @@
                          *ngIf="this.deprecatedWizards.deprecatedWizards || this.deprecatedWizards.possibleDeprecatedWizards">
                 <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
                     <ng-template cTemplateId="accordionHeaderTemplate">
-                        <div class="bg-info-subtle text-info-emphasis" (click)="accordionItem.toggleItem()"
+                        <div class="bg-info-subtle" (click)="accordionItem.toggleItem()"
                              [collapsed]="!accordionItem.visible" cAccordionButton>
                             <h5>{{ t('Obsolete Wizards') }}</h5>
                         </div>
