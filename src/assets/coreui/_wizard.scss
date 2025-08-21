@@ -21,6 +21,7 @@ body.dark-theme .wizard-bg-inactive {
 }
 
 .accordion-button:not(.collapsed) {
-    background-color: oitc.$cui-primary-100;
-    color: rgba(var(--cui-primary-rgb)) !important;
+    background-color: var(--cui-info-bg-subtle);
+    border-color: var(--cui-info-border-subtle);
+    color: unset;
 }

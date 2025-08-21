@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewChild, ViewChildren } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { NetworkbasicWizardService } from './networkbasic-wizard.service';
@@ -91,9 +91,11 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NetworkbasicComponent extends WizardsAbstractComponent {
+    @ViewChildren('accordionItem') accordionItems: AccordionItemComponent[] = [];
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
     protected override WizardService: NetworkbasicWizardService = inject(NetworkbasicWizardService);
     public checked: boolean = false;
+    public accordionClosed: boolean = true;
 
     protected override post: NetworkbasicWizardPost = {
 // Default fields from the base wizard
@@ -191,6 +193,16 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         this.cdr.markForCheck();
     }
 
+    protected toggleAccordionClose(checked: boolean): void {
+        this.accordionClosed = checked;
+        this.accordionItems.forEach((accordionItem: AccordionItemComponent) => {
+            if ((accordionItem.visible && this.accordionClosed) || (!accordionItem.visible && !this.accordionClosed)) {
+                accordionItem.toggleItem();
+            }
+        });
+        this.cdr.markForCheck();
+    }
+
     protected detectColor = function (label: string): string {
         if (label.match(/warning/gi)) {
             return 'warning';
@@ -217,6 +229,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         this.cdr.markForCheck();
         this.WizardService.executeSNMPDiscovery(this.post).subscribe((data: any) => {
             this.errors = {} as GenericValidationError;
+            this.accordionClosed = true;
             this.cdr.markForCheck();
             // Error
             if (data.interfaces) {

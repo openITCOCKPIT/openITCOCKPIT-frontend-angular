@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewChild, ViewChildren } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import {
     DatastoreService,
@@ -90,9 +90,11 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VmwareDatastoresComponent extends WizardsAbstractComponent {
+    @ViewChildren('accordionItem') accordionItems: AccordionItemComponent[] = [];
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
     protected override WizardService: VmwareDatastoresWizardService = inject(VmwareDatastoresWizardService);
     public checked: boolean = false;
+    public accordionClosed: boolean = true;
 
     protected override post: VmwareDatastoresWizardPost = {
 // Default fields from the base wizard
@@ -166,6 +168,16 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
         this.cdr.markForCheck();
     }
 
+    protected toggleAccordionClose(checked: boolean): void {
+        this.accordionClosed = checked;
+        this.accordionItems.forEach((accordionItem: AccordionItemComponent) => {
+            if ((accordionItem.visible && this.accordionClosed) || (!accordionItem.visible && !this.accordionClosed)) {
+                accordionItem.toggleItem();
+            }
+        });
+        this.cdr.markForCheck();
+    }
+
     protected detectColor = function (label: string): string {
         if (label.match(/warning/gi)) {
             return 'warning';
@@ -192,6 +204,7 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
         this.cdr.markForCheck();
         this.WizardService.executeDatastoreDiscovery(this.post).subscribe((data: any) => {
             this.errors = {} as GenericValidationError;
+            this.accordionClosed = true;
             this.cdr.markForCheck();
             // Error
             if (data && data.services && data.services.length && data.services[0].value && data.services[2]) {

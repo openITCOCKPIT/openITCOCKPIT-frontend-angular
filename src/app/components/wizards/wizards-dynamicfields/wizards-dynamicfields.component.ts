@@ -10,6 +10,7 @@ import {
     OnChanges,
     Output,
     SimpleChanges,
+    ViewChildren,
 } from '@angular/core';
 import {
     AccordionButtonDirective,
@@ -62,12 +63,15 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WizardsDynamicfieldsComponent implements OnChanges {
+    @ViewChildren('accordionItem') accordionItems: AccordionItemComponent[] = [];
+
     public cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     protected searchedTags: string[] = [];
 
     public title = input.required<string>();
     public titleErrorField = input<string>('');
     public checked: boolean = false;
+    public accordionClosed: boolean = true;
 
     @Input() post: Service[] = [];
     @Input() errors: GenericValidationError = {} as GenericValidationError;
@@ -95,6 +99,16 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
                 return;
             }
             service.createService = this.checked;
+        });
+        this.cdr.markForCheck();
+    }
+
+    protected toggleAccordionClose(checked: boolean): void {
+        this.accordionClosed = checked;
+        this.accordionItems.forEach((accordionItem: AccordionItemComponent) => {
+            if ((accordionItem.visible && this.accordionClosed) || (!accordionItem.visible && !this.accordionClosed)) {
+                accordionItem.toggleItem();
+            }
         });
         this.cdr.markForCheck();
     }
