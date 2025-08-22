@@ -36,7 +36,6 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 
@@ -81,7 +80,6 @@ interface ServiceBrowserChartConfig {
         FaIconComponent,
         NavComponent,
         NavItemComponent,
-        NgIf,
         XsButtonDirective,
         TranslocoDirective,
         FormCheckComponent,
