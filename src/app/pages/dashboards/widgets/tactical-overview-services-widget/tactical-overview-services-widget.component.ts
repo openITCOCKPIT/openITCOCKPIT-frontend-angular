@@ -11,7 +11,7 @@ import { ServicegroupsService } from '../../../servicegroups/servicegroups.servi
 import { TacticalOverviewServicesConfig } from './tactical-overview-services-widget.interface';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { RouterLink } from '@angular/router';
 import {
     ButtonDirective,
@@ -28,6 +28,7 @@ import {
 } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-tactical-overview-services-widget',
@@ -50,7 +51,10 @@ import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/m
         RegexHelperTooltipComponent,
         NgSelectComponent,
         MultiSelectComponent,
-        ButtonDirective
+        ButtonDirective,
+        FaStackComponent,
+        FaStackItemSizeDirective,
+        XsButtonDirective
 
     ],
     templateUrl: './tactical-overview-services-widget.component.html',
@@ -66,6 +70,8 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
     protected servicegroups: SelectKeyValue[] = [];
     public keywords: string[] = [];
     public notKeywords: string[] = [];
+    public servicegroupKeywords: string[] = [];
+    public servicegroupNotKeywords: string[] = [];
     private readonly TacticalOverviewServicesWidgetService = inject(TacticalOverviewServicesWidgetService);
     private readonly notyService = inject(NotyService);
 
@@ -86,6 +92,8 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
                     this.config = result.config;
                     this.keywords = this.config.Service.keywords.split(',').filter(Boolean);
                     this.notKeywords = this.config.Service.not_keywords.split(',').filter(Boolean);
+                    this.servicegroupKeywords = this.config.Servicegroup.keywords.split(',').filter(Boolean);
+                    this.servicegroupNotKeywords = this.config.Servicegroup.not_keywords.split(',').filter(Boolean);
                     this.servicestatusSummary = result.servicestatusSummary;
                     this.servicestatusCountPercentage = result.servicestatusCountPercentage;
                     this.cdr.markForCheck();
@@ -119,6 +127,8 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
 
         this.config.Service.keywords = this.keywords.join(',');
         this.config.Service.not_keywords = this.notKeywords.join(',');
+        this.config.Servicegroup.keywords = this.servicegroupKeywords.join(',');
+        this.config.Servicegroup.not_keywords = this.servicegroupNotKeywords.join(',');
 
         this.subscriptions.add(this.TacticalOverviewServicesWidgetService.saveWidget(this.widget, this.config)
             .subscribe({
