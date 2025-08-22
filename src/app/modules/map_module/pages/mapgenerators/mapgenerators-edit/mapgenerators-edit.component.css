@@ -1,0 +1,3 @@
+.border-color-error {
+    border-color: var(--cui-form-invalid-border-color);
+}
