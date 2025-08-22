@@ -29,6 +29,7 @@ import {
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { HostgroupsService } from '../../../hostgroups/hostgroups.service';
 
 @Component({
     selector: 'oitc-tactical-overview-services-widget',
@@ -63,15 +64,19 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 })
 export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent {
     protected flipped = signal<boolean>(false);
+    public readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
     public readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
     public servicestatusSummary?: SummaryStateServices;
     public servicestatusCountPercentage: number[] = [];
     public config?: TacticalOverviewServicesConfig;
+    protected hostgroups: SelectKeyValue[] = [];
     protected servicegroups: SelectKeyValue[] = [];
     public keywords: string[] = [];
     public notKeywords: string[] = [];
     public servicegroupKeywords: string[] = [];
     public servicegroupNotKeywords: string[] = [];
+    public hostgroupKeywords: string[] = [];
+    public hostgroupNotKeywords: string[] = [];
     private readonly TacticalOverviewServicesWidgetService = inject(TacticalOverviewServicesWidgetService);
     private readonly notyService = inject(NotyService);
 
@@ -79,6 +84,7 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
         super();
         effect(() => {
             if (this.flipped()) {
+                this.loadHostgroups('');
                 this.loadServicegroups('');
             }
             this.cdr.markForCheck();
@@ -92,6 +98,8 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
                     this.config = result.config;
                     this.keywords = this.config.Service.keywords.split(',').filter(Boolean);
                     this.notKeywords = this.config.Service.not_keywords.split(',').filter(Boolean);
+                    this.hostgroupKeywords = this.config.Hostgroup.keywords.split(',').filter(Boolean);
+                    this.hostgroupNotKeywords = this.config.Hostgroup.not_keywords.split(',').filter(Boolean);
                     this.servicegroupKeywords = this.config.Servicegroup.keywords.split(',').filter(Boolean);
                     this.servicegroupNotKeywords = this.config.Servicegroup.not_keywords.split(',').filter(Boolean);
                     this.servicestatusSummary = result.servicestatusSummary;
@@ -99,6 +107,20 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
                     this.cdr.markForCheck();
                 }));
         }
+    }
+
+    protected loadHostgroups = (search: string) => {
+        let hostgroupIds: number[] = [];
+        if (this.config?.Hostgroup._ids) {
+            hostgroupIds = this.config.Hostgroup._ids;
+        }
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({
+            'filter[Containers.name]': search,
+            'selected[]': hostgroupIds
+        } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+            this.hostgroups = data;
+            this.cdr.markForCheck();
+        }));
     }
 
     protected loadServicegroups = (search: string) => {
@@ -127,6 +149,8 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
 
         this.config.Service.keywords = this.keywords.join(',');
         this.config.Service.not_keywords = this.notKeywords.join(',');
+        this.config.Hostgroup.keywords = this.hostgroupKeywords.join(',');
+        this.config.Hostgroup.not_keywords = this.hostgroupNotKeywords.join(',');
         this.config.Servicegroup.keywords = this.servicegroupKeywords.join(',');
         this.config.Servicegroup.not_keywords = this.servicegroupNotKeywords.join(',');
 
