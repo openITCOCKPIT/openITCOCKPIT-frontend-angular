@@ -128,6 +128,9 @@
                         <th scope="col" mat-sort-header="Mailinglists.description">
                             {{ t('Description') }}
                         </th>
+                        <th scope="col" mat-sort-header="Mailinglists.department">
+                            {{ t('Department') }}
+                        </th>
                         <th scope="col">
                             {{ t('Recipients') }}
                         </th>
@@ -160,6 +163,8 @@
                             </span>
                         </td>
                         <td>{{ mailinglist.description }}</td>
+                        <td>{{ mailinglist.department }}</td>
+                        <td></td>
 
 
                         <td class="width-50">

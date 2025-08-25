@@ -26,6 +26,15 @@ export interface MailinglistsIndexParams {
     'filter[Mailinglists.description]': string
 }
 
+export interface MailinglistPost {
+    id?: number
+    container_id: number | null
+    name: string
+    description: string
+    department: string
+}
+
+
 export function getMailinglistsIndexParams(): MailinglistsIndexParams {
     return {
         angular: true,
