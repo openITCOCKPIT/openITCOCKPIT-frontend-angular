@@ -140,61 +140,68 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="mailinglists">
-                    <tr *ngFor="let mailinglist of mailinglists.all_mailinglists">
-                        <td class="text-center">
-                            <oitc-item-select
-                                *oitcPermission="['scmmodule','mailinglists', 'delete']"
-                                [disabled]="!mailinglist.allow_edit"
-                                [item]="mailinglist"></oitc-item-select>
-                        </td>
-                        <td>
-                            <span *oitcPermission="['scmmodule','mailinglists', 'edit']">
-                                @if (mailinglist.allow_edit) {
-                                    <a [routerLink]="['/', 'scm_module', 'mailinglists', 'edit',mailinglist.id]">
-                                        {{ mailinglist.name }}
-                                    </a>
-                                } @else {
-                                    {{ mailinglist.name }}
-                                }
-                            </span>
-                            <span *oitcPermission="['scmmodule','mailinglists', 'edit']; negate: true">
-                                {{ mailinglist.name }}
-                            </span>
-                        </td>
-                        <td>{{ mailinglist.description }}</td>
-                        <td>{{ mailinglist.department }}</td>
-                        <td></td>
+                    @if (mailinglists) {
+                        <tbody>
+                            @for (mailinglist of mailinglists.all_mailinglists; track $index) {
+                                <tr>
+                                    <td class="text-center">
+                                        <oitc-item-select
+                                            *oitcPermission="['scmmodule','mailinglists', 'delete']"
+                                            [disabled]="!mailinglist.allow_edit"
+                                            [item]="mailinglist"></oitc-item-select>
+                                    </td>
+                                    <td>
+                                        <span *oitcPermission="['scmmodule','mailinglists', 'edit']">
+                                            @if (mailinglist.allow_edit) {
+                                                <a [routerLink]="['/', 'scm_module', 'mailinglists', 'edit',mailinglist.id]">
+                                                    {{ mailinglist.name }}
+                                                </a>
+                                            } @else {
+                                                {{ mailinglist.name }}
+                                            }
+                                        </span>
+                                        <span *oitcPermission="['scmmodule','mailinglists', 'edit']; negate: true">
+                                            {{ mailinglist.name }}
+                                        </span>
+                                    </td>
+                                    <td>{{ mailinglist.description }}</td>
+                                    <td>{{ mailinglist.department }}</td>
+                                    <td></td>
 
 
-                        <td class="width-50">
-                            <oitc-actions-button [permission]="'ScmModule.mailinglists.edit'"
-                                                 [icon]="['fas', 'cog']"
-                                                 [url]="'/scm_module/mailinglists/edit/' + mailinglist.id">
-                                <oitc-actions-button-element [permission]="'ScmModule.mailinglists.edit'"
-                                                             *ngIf="mailinglist.allow_edit"
+                                    <td class="width-50">
+                                        <oitc-actions-button [permission]="'ScmModule.mailinglists.edit'"
+                                                             [icon]="['fas', 'cog']"
                                                              [url]="'/scm_module/mailinglists/edit/' + mailinglist.id">
-                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                    {{ t('Edit') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'ScmModule.mailinglists.usedBy'"
-                                                             [url]="'/scm_module/mailinglists/usedBy/' + mailinglist.id">
-                                    <fa-icon [icon]="['fas', 'reply-all']" [flip]="'horizontal'"></fa-icon>
-                                    {{ t('Used by') }}
-                                </oitc-actions-button-element>
-                                <li cDropdownDivider></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(mailinglist)"
-                                                             *ngIf="mailinglist.allow_edit"
-                                                             [permission]="'ScmModule.mailinglists.delete'">
-                                    <span class="text-danger">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete') }}
-                                    </span>
-                                </oitc-actions-button-element>
-                            </oitc-actions-button>
-                        </td>
-                    </tr>
-                    </tbody>
+                                            @if (mailinglist.allow_edit) {
+                                                <oitc-actions-button-element
+                                                    [permission]="'ScmModule.mailinglists.edit'"
+                                                    [url]="'/scm_module/mailinglists/edit/' + mailinglist.id">
+                                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                    {{ t('Edit') }}
+                                                </oitc-actions-button-element>
+                                            }
+                                            <oitc-actions-button-element [permission]="'ScmModule.mailinglists.usedBy'"
+                                                                         [url]="'/scm_module/mailinglists/usedBy/' + mailinglist.id">
+                                                <fa-icon [icon]="['fas', 'reply-all']" [flip]="'horizontal'"></fa-icon>
+                                                {{ t('Used by') }}
+                                            </oitc-actions-button-element>
+                                            @if (mailinglist.allow_edit) {
+                                                <li cDropdownDivider></li>
+                                                <oitc-actions-button-element (click)="toggleDeleteAllModal(mailinglist)"
+                                                                             [permission]="'ScmModule.mailinglists.delete'">
+                                                    <span class="text-danger">
+                                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                        {{ t('Delete') }}
+                                                    </span>
+                                                </oitc-actions-button-element>
+                                            }
+                                        </oitc-actions-button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    }
                 </table>
             }
             @if (mailinglists && mailinglists.all_mailinglists.length === 0) {
