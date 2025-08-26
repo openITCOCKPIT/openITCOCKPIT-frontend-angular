@@ -1,7 +1,10 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { UserIdAndUsername } from '../../../../pages/users/users.interface';
 import { ContainerEntity } from '../../../../pages/containers/containers.interface';
-import { ScmNotificationLogTypesEnum } from './resourcegroups-notifications/scm-notification-log-types.enum';
+import {
+    ScmNotificationLogRecipientTypesEnum,
+    ScmNotificationLogTypesEnum
+} from './resourcegroups-notifications/scm-notification-log-types.enum';
 import { Resource } from '../resources/resources.interface';
 
 export interface ResourcegroupsIndex extends PaginateOrScroll {
@@ -132,7 +135,7 @@ export interface ResourcegroupsNotifications extends PaginateOrScroll {
 export interface ResourcegroupNotification {
     id: number
     resourcegroup_id: number
-    object_type: string
+    object_type: ScmNotificationLogRecipientTypesEnum.USER | ScmNotificationLogRecipientTypesEnum.MAILINGLIST
     object_id: number
     reason_type: number
     send_time: string
