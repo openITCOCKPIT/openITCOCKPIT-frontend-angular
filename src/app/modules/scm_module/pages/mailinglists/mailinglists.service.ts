@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -22,6 +23,24 @@ export class MailinglistsService {
                 return data;
             })
         )
+    }
+
+    public loadMailinglistsByContainerId(containerId: number, selected: any[]): Observable<SelectKeyValue[]> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.get<{
+            users: SelectKeyValue[]
+        }>(`${proxyPath}/scm_module/mailinglists/loadMailinglistsByContainerId.json`, {
+            params: {
+                angular: true,
+                containerId: containerId,
+                'selected[]': selected,
+            }
+        }).pipe(
+            map(data => {
+                return data.users;
+            })
+        );
     }
 
     /**********************

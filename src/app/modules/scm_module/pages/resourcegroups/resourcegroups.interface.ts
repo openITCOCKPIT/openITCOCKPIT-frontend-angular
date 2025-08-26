@@ -80,6 +80,15 @@ export interface ResourcegroupsPost {
     },
     region_managers: {
         _ids: number[]
+    },
+    mailinglists_users: {
+        _ids: number[]
+    },
+    mailinglists_managers: {
+        _ids: number[]
+    },
+    mailinglists_region_managers: {
+        _ids: number[]
     }
 }
 
