@@ -4,7 +4,7 @@ import { MailinglistPost, MailinglistsIndex, MailinglistsIndexParams } from './m
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../../generic-responses';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -29,9 +29,7 @@ export class MailinglistsService {
      **********************/
     public createMailinglist(mailinglist: MailinglistPost) {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/scm_module/mailinglists/add.json?angular=true`, {
-            Mailinglist: mailinglist
-        })
+        return this.http.post<any>(`${proxyPath}/scm_module/mailinglists/add.json?angular=true`, mailinglist)
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
@@ -49,6 +47,44 @@ export class MailinglistsService {
                 })
             );
     }
+
+    /**********************
+     *    Edit action    *
+     **********************/
+    public getMailinglist(id: number): Observable<MailinglistPost> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ mailinglist: MailinglistPost }>(`${proxyPath}/scm_module/mailinglists/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.mailinglist;
+            })
+        );
+    }
+
+    public saveMailinglistEdit(mailinglist: MailinglistPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/scm_module/mailinglists/edit/${mailinglist.id}.json`, mailinglist)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
 
     /**********************
      *    Delete action    *
