@@ -128,7 +128,6 @@ export class ResourcegroupsIndexComponent implements OnInit, OnDestroy, IndexPag
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
             let resourcegroupId = params['id'] || params['id'];
-            console.log(resourcegroupId);
             if (resourcegroupId) {
                 this.params['filter[Resourcegroups.id][]'] = [].concat(resourcegroupId); // make sure we always get an array
             }
