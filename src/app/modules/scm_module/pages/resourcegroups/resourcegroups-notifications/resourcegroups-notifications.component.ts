@@ -47,6 +47,7 @@ import { FormsModule } from '@angular/forms';
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 
 @Component({
     selector: 'oitc-resourcegroups-notifications',
@@ -86,7 +87,8 @@ import {
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        PaginateOrScrollComponent
+        PaginateOrScrollComponent,
+        NoRecordsComponent
     ],
     templateUrl: './resourcegroups-notifications.component.html',
     styleUrl: './resourcegroups-notifications.component.css',
