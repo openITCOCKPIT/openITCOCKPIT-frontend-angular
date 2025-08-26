@@ -40,7 +40,7 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { ScmNotificationLogTypesEnum } from './scm-notification-log-types.enum';
+import { ScmNotificationLogRecipientTypesEnum, ScmNotificationLogTypesEnum } from './scm-notification-log-types.enum';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
@@ -182,4 +182,6 @@ export class ResourcegroupsNotificationsComponent implements OnInit, OnDestroy, 
 
     public onMassActionComplete(success: boolean): void {
     }
+
+    protected readonly ScmNotificationLogRecipientTypesEnum = ScmNotificationLogRecipientTypesEnum;
 }
