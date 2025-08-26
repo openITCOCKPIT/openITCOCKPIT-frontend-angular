@@ -10,7 +10,7 @@ import { MailinglistsService } from '../mailinglists.service';
 import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enum';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { HistoryService } from '../../../../../history.service';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
@@ -23,6 +23,8 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -63,7 +65,10 @@ import { MailinglistPost } from '../mailinglists.interface';
         XsButtonDirective,
         RouterLink,
         CardFooterComponent,
-        FormCheckInputDirective
+        FormCheckInputDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TranslocoPipe
     ],
     templateUrl: './mailinglists-add.component.html',
     styleUrl: './mailinglists-add.component.css',
@@ -85,6 +90,7 @@ export class MailinglistsAddComponent implements OnInit, OnDestroy {
     private router: Router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
     public errors: GenericValidationError | null = null;
+    public recipientErrors: { [key: number]: GenericValidationError } = {};
 
     public ngOnInit(): void {
         this.loadContainers();
@@ -107,8 +113,27 @@ export class MailinglistsAddComponent implements OnInit, OnDestroy {
             container_id: null,
             name: '',
             description: '',
-            department: ''
+            department: '',
+            mailinglist_recipients: []
         }
+    }
+
+    public removeRecipient(index: number): void {
+        // instead of splice, array filter returns a new array and does not mutate the source array which will trigger
+        // the Angular change detection
+        this.post.mailinglist_recipients = this.post.mailinglist_recipients.filter((_, i) => i !== index);
+
+        // Reset any errors as if a recipient is removed, the errors index will be off
+        this.recipientErrors = {};
+        
+        this.cdr.markForCheck();
+    }
+
+    public addRecipient() {
+        this.post.mailinglist_recipients.push({
+            name: '',
+            email: ''
+        });
     }
 
     public submit() {
@@ -141,6 +166,15 @@ export class MailinglistsAddComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
+
+                    this.recipientErrors = {};
+                    if (errorResponse.hasOwnProperty('mailinglist_recipients')) {
+                        for (let i in errorResponse['mailinglist_recipients']) {
+                            const k = Number(i);
+                            this.recipientErrors[k] = (errorResponse['mailinglist_recipients'][i] as any as GenericValidationError);
+                        }
+                    }
+
                 }
             }));
 

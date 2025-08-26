@@ -78,7 +78,9 @@
                     </label>
                     <input cFormControl id="MailinglistDescription" required type="text"
                            name="description"
-                           [(ngModel)]="post.description">
+                           [(ngModel)]="post.description"
+                           oitcFormError [errors]="errors" errorField="description">
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                 </div>
                 <div class="mb-3">
                     <label cLabel for="MailinglistDepartment">
@@ -86,8 +88,80 @@
                     </label>
                     <input cFormControl id="MailinglistDepartment" required type="text"
                            name="description"
-                           [(ngModel)]="post.department">
+                           [(ngModel)]="post.department"
+                           oitcFormError [errors]="errors" errorField="department">
+                    <oitc-form-feedback [errors]="errors" errorField="department"></oitc-form-feedback>
                 </div>
+
+                <div class="margin-top-30">
+                    <div>
+                        <h5>
+                            {{ t('Recipients') }}:
+                        </h5>
+                    </div>
+                </div>
+                <hr class="border-dashed">
+
+                @for (recipient of post.mailinglist_recipients; track $index) {
+                    <div class="row mb-2">
+                        <div class="col-xs-12 col-lg-4 form-group">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'signature']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       class="form-control"
+                                       [id]="'recipient_name_'+$index"
+                                       [name]="'recipient_name_'+$index"
+                                       required
+                                       [placeholder]="'Name of recipient' | transloco"
+                                       type="text"
+                                       [(ngModel)]="recipient.name"
+                                       oitcFormError [errors]="recipientErrors[$index]" errorField="name">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="recipientErrors[$index]"
+                                                errorField="name"></oitc-form-feedback>
+
+                        </div>
+                        <div class="col-xs-12 col-lg-4  form-group">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'at']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       class="form-control"
+                                       [id]="'recipient_mail_'+$index"
+                                       [name]="'recipient_mail_'+$index"
+                                       required
+                                       [placeholder]="'E-Mail of recipient' | transloco"
+                                       type="text"
+                                       [(ngModel)]="recipient.email"
+                                       oitcFormError [errors]="recipientErrors[$index]" errorField="email">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="recipientErrors[$index]"
+                                                errorField="email"></oitc-form-feedback>
+                        </div>
+
+                        <div class="col-xs-12 col-lg-4 ">
+                            <a class="btn btn-danger ripple waves-effect waves-themed"
+                               href="javascript:void(0);"
+                               (click)="removeRecipient($index)">
+                                <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
+                            </a>
+                        </div>
+                    </div>
+                }
+
+                <div class="row mt-3">
+                    <div class="col-12 col-md-12 text-end">
+                        <button cButton class="ripple" color="success" size="xs" type="button"
+                                (click)="addRecipient()">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('Add') }}
+                        </button>
+                    </div>
+                </div>
+
             </c-card-body>
             <c-card-footer class="text-end">
                 <label class="me-2">
@@ -99,7 +173,8 @@
                 <button cButton class="ripple" color="primary" type="submit">
                     {{ t('Create mailing list') }}
                 </button>
-                <button [fallbackUrl]="['scm_module', 'mailinglists', 'index']" cButton class="ms-1 ripple" color="default"
+                <button [fallbackUrl]="['scm_module', 'mailinglists', 'index']" cButton class="ms-1 ripple"
+                        color="default"
                         oitcBackButton
                         type="button">
                     {{ t('Cancel') }}
