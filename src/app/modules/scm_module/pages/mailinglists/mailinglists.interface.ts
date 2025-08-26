@@ -31,9 +31,16 @@ export interface MailinglistPost {
     container_id: number | null
     name: string
     description: string
-    department: string
+    department: string,
+    mailinglist_recipients: MailinglistRecipient[]
 }
 
+export interface MailinglistRecipient {
+    id?: number
+    mailinglist_id?: number
+    name: string
+    email: string
+}
 
 export function getMailinglistsIndexParams(): MailinglistsIndexParams {
     return {
