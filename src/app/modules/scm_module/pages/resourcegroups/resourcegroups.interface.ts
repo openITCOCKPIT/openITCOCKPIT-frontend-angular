@@ -6,6 +6,7 @@ import {
     ScmNotificationLogTypesEnum
 } from './resourcegroups-notifications/scm-notification-log-types.enum';
 import { Resource } from '../resources/resources.interface';
+import { GenericIdAndName } from '../../../../generic.interfaces';
 
 export interface ResourcegroupsIndex extends PaginateOrScroll {
     all_resourcegroups: Resourcegroup[]
@@ -24,11 +25,14 @@ export interface Resourcegroup {
     created?: string
     modified: string
     resources: Resource[]
-    users: UserIdAndUsername[]
     container: ContainerEntity
     allow_edit: boolean
+    users: UserIdAndUsername[]
     managers: UserIdAndUsername[]
     region_managers: UserIdAndUsername[]
+    mailinglist_users: GenericIdAndName[]
+    mailinglist_managers: GenericIdAndName[]
+    mailinglist_region_managers: GenericIdAndName[]
     resource_count: number
     statesummary: number[]
 }
