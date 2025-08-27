@@ -349,7 +349,8 @@
                                         </ul>
                                     }
 
-                                    @if (resourcegroup.users.length === 0 && resourcegroup.managers.length === 0) {
+                                    @if (resourcegroup.users.length === 0 && resourcegroup.managers.length === 0 &&
+                                    resourcegroup.mailinglist_users.length === 0 && resourcegroup.mailinglist_managers.length === 0) {
                                         <div class="text-center" [title]="'Users' | transloco">
                                             <oitc-badge-outline color="danger" class="w-100">
                                                 {{ t('Empty') }}
