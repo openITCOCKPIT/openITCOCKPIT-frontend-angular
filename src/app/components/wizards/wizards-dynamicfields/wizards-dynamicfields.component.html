@@ -13,7 +13,7 @@
         </legend>
 
         <c-row class="mb-3">
-            <c-col md="8">
+            <c-col md="6">
                 <c-input-group>
                     <span cInputGroupText>
                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -43,21 +43,21 @@
                                 {{ t('Toggle checkboxes') }}
                             </label>
                         </c-form-check>
-                        <c-form-check class="ms-2">
-                            <input
-                                cFormCheckInput
-                                name="toggleAccordionClose"
-                                id="toggleAccordionClose"
-                                type="checkbox"
-
-                                (ngModelChange)="toggleAccordionClose($event)"
-                                [(ngModel)]="accordionClosed"/>
-                            <label cFormCheckLabel for="toggleAccordionClose">
-                                {{ t('Services closed') }}
-                            </label>
-                        </c-form-check>
                     </span>
                 </c-input-group>
+            </c-col>
+            <c-col md="2">
+                <button cButton
+                        class="ripple"
+                        color="primary"
+                        (click)="toggleAccordionClose(!accordionClosed)">
+                    @if (!accordionClosed) {
+                        <fa-icon [icon]="['fas', 'down-left-and-up-right-to-center']"></fa-icon>
+                    } @else {
+                        <fa-icon [icon]="['fas', 'up-right-and-down-left-from-center']"></fa-icon>
+                    }
+                    {{ t('Collapse all') }}
+                </button>
             </c-col>
         </c-row>
 

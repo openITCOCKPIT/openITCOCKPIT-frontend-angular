@@ -33,6 +33,7 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Service } from '../../../pages/wizards/wizards.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-wizards-dynamicfields',
@@ -56,7 +57,8 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
         AccordionComponent,
         AccordionItemComponent,
         TemplateIdDirective,
-        AccordionButtonDirective
+        AccordionButtonDirective,
+        XsButtonDirective
     ],
     templateUrl: './wizards-dynamicfields.component.html',
     styleUrl: './wizards-dynamicfields.component.css',

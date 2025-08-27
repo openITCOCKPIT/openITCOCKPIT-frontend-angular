@@ -1,4 +1,4 @@
-import { Component, inject, DOCUMENT } from "@angular/core";
+import { Component, DOCUMENT, inject } from "@angular/core";
 
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
@@ -37,7 +37,6 @@ import { slackModuleRoutes } from './modules/slack_module/slack_module.routes';
 import { designModuleRoutes } from './modules/design_module/design_module.routes';
 import { mattermostModuleRoutes } from './modules/mattermost_module/mattermost_module.routes';
 import { servicenowModuleRoutes } from './modules/servicenow_module/servicenow_module.routes';
-import { vmwareV2ModuleRoutes } from './modules/vmwarev2_module/vmwarev2_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -96,8 +95,7 @@ const moduleRoutes: Routes = [
     ...slackModuleRoutes,
     ...designModuleRoutes,
     ...mattermostModuleRoutes,
-    ...servicenowModuleRoutes,
-    ...vmwareV2ModuleRoutes
+    ...servicenowModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{

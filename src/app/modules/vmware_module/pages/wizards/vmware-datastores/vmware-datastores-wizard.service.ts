@@ -14,7 +14,7 @@ import {
 export class VmwareDatastoresWizardService extends WizardsService {
 
     public fetch(hostId: number): Observable<VmwareDatastoresWizardGet> {
-        return this.http.get<VmwareDatastoresWizardGet>(`${this.proxyPath}/vmwarev2_module/wizards/vmware/${hostId}.json?angular=true&typeId=vmware-datastores`).pipe(
+        return this.http.get<VmwareDatastoresWizardGet>(`${this.proxyPath}/vmware_module/wizards/vmware/${hostId}.json?angular=true&typeId=vmware-datastores`).pipe(
             map((data: VmwareDatastoresWizardGet): VmwareDatastoresWizardGet => {
                 return data;
             })
@@ -22,7 +22,7 @@ export class VmwareDatastoresWizardService extends WizardsService {
     }
 
     public submit(post: VmwareDatastoresWizardPost): Observable<GenericResponseWrapper> {
-        return this.http.post<any>(`${this.proxyPath}/vmwarev2_module/wizards/vmware.json?angular=true`, post)
+        return this.http.post<any>(`${this.proxyPath}/vmware_module/wizards/vmware.json?angular=true`, post)
             .pipe(
                 map(data => {
                     return {
@@ -41,7 +41,7 @@ export class VmwareDatastoresWizardService extends WizardsService {
     }
 
     public executeDatastoreDiscovery(post: VmwareDatastoresWizardPost): Observable<DatastoreDiscovery | GenericResponseWrapper> {
-        return this.http.post<DatastoreDiscovery>(`${this.proxyPath}/vmwarev2_module/wizards/executeDatastoreDiscovery/${post.host_id}.json?angular=true`, post)
+        return this.http.post<DatastoreDiscovery>(`${this.proxyPath}/vmware_module/wizards/executeDatastoreDiscovery/${post.host_id}.json?angular=true`, post)
             .pipe(
                 map((data: DatastoreDiscovery) => {
                     return data
