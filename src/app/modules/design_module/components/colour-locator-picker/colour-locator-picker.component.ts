@@ -10,13 +10,13 @@ import {
     Output,
     SimpleChanges
 } from '@angular/core';
-import { ColorPicker } from 'primeng/colorpicker';
 import { InputGroupComponent, InputGroupTextDirective } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { DOCUMENT } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ColorPickerComponent, ColorPickerDirective } from 'ngx-color-picker'
+import { ColorPickerDirective } from 'ngx-color-picker'
+
 @Component({
     selector: 'oitc-colour-locator-picker',
     imports: [
