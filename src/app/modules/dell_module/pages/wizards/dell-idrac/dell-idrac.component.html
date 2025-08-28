@@ -13,8 +13,8 @@
                     {{ t('Wizards') }}
                 </a></li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                {{ t('Network Basic') }}
+                <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                {{ t('Dell iDrac') }}
             </li>
         </ol>
     </nav>
@@ -22,7 +22,7 @@
     <c-card>
         <c-card-header>
             <h5 cCardTitle>
-                {{ t('Configuration Wizard: Network Basic') }}
+                {{ t('Configuration Wizard: Dell iDrac') }}
             </h5>
         </c-card-header>
         <c-card-body class="p-0">
@@ -39,7 +39,7 @@
                     class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Configure SNMP for Network Monitoring') }}
+                        {{ t('Configure SNMP for Dell iDrac Hardware Monitoring') }}
                     </span>
                 </div>
                 <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
@@ -208,7 +208,7 @@
                 [(post)]="post.services"
                 [errors]="errors"
                 [titleErrorField]="'services'"
-                [title]="'SNMP services'|transloco"
+                [title]="'Dell iDrac services'|transloco"
             />
 
 

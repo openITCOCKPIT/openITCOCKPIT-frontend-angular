@@ -18,7 +18,7 @@ export class DellIdracWizardService extends WizardsService {
     }
 
     public submit(post: DellIdracWizardPost): Observable<GenericResponseWrapper> {
-        return this.http.post<any>(`${this.proxyPath}/nwc_module/wizards/dellIdrac.json?angular=true`, post)
+        return this.http.post<any>(`${this.proxyPath}/dell_module/wizards/dellIdrac.json?angular=true`, post)
             .pipe(
                 map(data => {
                     return {
