@@ -295,44 +295,32 @@
                                             [permissions]="'scmmodule.resources.edit'">
                                             @switch (confirmed_resource.status) {
                                                 @case (1) {
-                                                    <fa-stack class="me-1" [size]="'sm'">
-                                                        <fa-icon [icon]="['fas', 'square']"
-                                                                 stackItemSize="2x"
-                                                                 class="text-success"></fa-icon>
-                                                        <fa-icon [icon]="['fas', 'check']" [inverse]="true"
-                                                                 stackItemSize="1x"
-                                                        ></fa-icon>
-                                                    </fa-stack>
+                                                    <fa-layers [size]="'lg'">
+                                                        <fa-icon [icon]="['fas', 'square']" class="text-success"/>
+                                                        <fa-icon [inverse]="true" [icon]="['fas', 'check']"
+                                                                 transform="shrink-6"/>
+                                                    </fa-layers>
                                                 }
                                                 @case (2) {
-                                                    <fa-stack class="me-1" [size]="'sm'">
-                                                        <fa-icon [icon]="['fas', 'square']"
-                                                                 stackItemSize="2x"
-                                                                 class="text-warning"></fa-icon>
-                                                        <fa-icon [icon]="['fas', 'bell']" [inverse]="true"
-                                                                 stackItemSize="1x"
-                                                        ></fa-icon>
-                                                    </fa-stack>
+                                                    <fa-layers [size]="'lg'">
+                                                        <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
+                                                        <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
+                                                                 transform="shrink-6"/>
+                                                    </fa-layers>
                                                 }
                                                 @case (3) {
-                                                    <fa-stack class="me-1" [size]="'sm'">
-                                                        <fa-icon [icon]="['fas', 'square']"
-                                                                 stackItemSize="2x"
-                                                                 class="text-danger"></fa-icon>
-                                                        <fa-icon [icon]="['fas', 'exclamation']" [inverse]="true"
-                                                                 stackItemSize="1x"
-                                                        ></fa-icon>
-                                                    </fa-stack>
+                                                    <fa-layers [size]="'lg'">
+                                                        <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
+                                                        <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
+                                                                 transform="shrink-6"/>
+                                                    </fa-layers>
                                                 }
                                                 @default {
-                                                    <fa-stack class="me-1" [size]="'sm'">
-                                                        <fa-icon [icon]="['fas', 'square']"
-                                                                 stackItemSize="2x"
-                                                                 class="text-primary"></fa-icon>
-                                                        <fa-icon [icon]="['fas', 'question']" [inverse]="true"
-                                                                 stackItemSize="1x"
-                                                        ></fa-icon>
-                                                    </fa-stack>
+                                                    <fa-layers [size]="'lg'">
+                                                        <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
+                                                        <fa-icon [inverse]="true" [icon]="['fas', 'question']"
+                                                                 transform="shrink-6"/>
+                                                    </fa-layers>
                                                 }
                                             }
                                             {{ confirmed_resource.name }}

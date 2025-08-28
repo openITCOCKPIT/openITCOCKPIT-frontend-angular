@@ -8,8 +8,8 @@ import {
     getNotificationReasonTypesForApi,
     getResourcegroupsNotificationsParams,
     Resourcegroup,
-    ResourcegroupNotification,
-    ResourcegroupNotificationReasonTypes, ResourcegroupsNotifications,
+    ResourcegroupNotificationReasonTypes,
+    ResourcegroupsNotifications,
     ResourcegroupsNotificationsParams
 } from '../resourcegroups.interface';
 import { ResourcegroupsService } from '../resourcegroups.service';
@@ -34,7 +34,7 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { formatDate, NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -73,8 +73,6 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
         NgForOf,
         TranslocoPipe,
         LabelLinkComponent,
-        FaStackComponent,
-        FaStackItemSizeDirective,
         BadgeComponent,
         ColComponent,
         DebounceDirective,
@@ -88,7 +86,8 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
         FormCheckInputDirective,
         FormCheckLabelDirective,
         PaginateOrScrollComponent,
-        NoRecordsComponent
+        NoRecordsComponent,
+        FaLayersComponent
     ],
     templateUrl: './resourcegroups-notifications.component.html',
     styleUrl: './resourcegroups-notifications.component.css',
