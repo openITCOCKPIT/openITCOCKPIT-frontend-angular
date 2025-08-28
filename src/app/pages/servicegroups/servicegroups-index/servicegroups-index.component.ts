@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { ServicegroupsService } from '../servicegroups.service';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -14,27 +14,27 @@ import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownComponent,
-  DropdownDividerDirective,
-  DropdownItemDirective,
-  DropdownMenuDirective,
-  DropdownToggleDirective,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownComponent,
+    DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -49,7 +49,9 @@ import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-al
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import {
+    getDefaultServicegroupsIndexFilter,
     getDefaultServicegroupsIndexParams,
+    ServicegroupsIndexFilter,
     ServicegroupsIndexParams,
     ServicegroupsIndexRoot,
     ServicegroupsIndexServicegroup
@@ -59,6 +61,8 @@ import { HttpParams } from '@angular/common/http';
 import { IndexPage } from '../../../pages.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+
 
 @Component({
     selector: 'oitc-servicegroups-index',
@@ -104,12 +108,15 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         DropdownItemDirective,
         DropdownMenuDirective,
         DropdownToggleDirective,
-        AsyncPipe
+        AsyncPipe,
+        NgSelectModule,
+        FaStackComponent,
+        FaStackItemSizeDirective
     ],
     templateUrl: './servicegroups-index.component.html',
     styleUrl: './servicegroups-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: ServicegroupsService } // Inject the ServicegroupsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ServicegroupsService} // Inject the ServicegroupsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -125,7 +132,9 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-    protected params: ServicegroupsIndexParams = getDefaultServicegroupsIndexParams();
+    public params: ServicegroupsIndexParams = getDefaultServicegroupsIndexParams();
+    public filter: ServicegroupsIndexFilter = getDefaultServicegroupsIndexFilter();
+
     protected selectedItems: DeleteAllItem[] = [];
     protected servicegroups: ServicegroupsIndexRoot = {all_servicegroups: undefined, _csrfToken: ''}
     protected hideFilter: boolean = true;
@@ -141,11 +150,20 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage
             // You can do something with these parameters here.
             //console.log(params);
 
-            let id = params['id'];
-            if (id) {
-                this.params['filter[Servicegroups.id][]'] = [].concat(id); // make sure we always get an array
+            let servicegroupId = params['servicegroup_id'] || params['id'];
+            if (servicegroupId) {
+                this.filter['Servicegroups.id'] = [].concat(servicegroupId); // make sure we always get an array
             }
 
+            let keywords = params['keywords'] || undefined;
+            if (keywords) {
+                this.filter['Servicegroups.keywords'] = [keywords];
+            }
+
+            let not_keywords = params['not_keywords'] || undefined;
+            if (not_keywords) {
+                this.filter['Servicegroups.not_keywords'] = [not_keywords];
+            }
 
             this.loadServicegroups();
         }));
@@ -156,7 +174,7 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage
     }
 
     public resetFilter() {
-        this.params = getDefaultServicegroupsIndexParams();
+        this.filter = getDefaultServicegroupsIndexFilter();
         this.loadServicegroups();
     }
 
@@ -185,8 +203,11 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage
 
     public loadServicegroups() {
         this.SelectionServiceService.deselectAll();
+        if (this.route.snapshot.queryParams.hasOwnProperty('filter.Servicegroups.id')) {
+            this.filter['Servicegroups.id'] = this.route.snapshot.queryParams['filter.Servicegroups.id'];
+        }
 
-        this.subscriptions.add(this.ServicegroupsService.getIndex(this.params)
+        this.subscriptions.add(this.ServicegroupsService.getIndex(this.params, this.filter)
             .subscribe((result: ServicegroupsIndexRoot) => {
                 this.servicegroups = result;
                 this.cdr.markForCheck();
@@ -261,13 +282,16 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage
 
         let urlParams = {
             'angular': true,
-            'filter[Containers.name]': this.params['filter[Containers.name]'],
-            'filter[Servicegroups.description]': this.params['filter[Servicegroups.description]'],
+            'sort': this.params.sort,
+            'page': this.params.page,
+            'direction': this.params.direction,
+            'filter[Containers.name]': this.filter['Containers.name'],
+            'filter[Servicegroups.description]': this.filter['Servicegroups.description'],
+            'filter[Servicegroups.keywords][]': this.filter['Servicegroups.keywords'],
+            'filter[Servicegroups.not_keywords][]': this.filter['Servicegroups.not_keywords']
         };
 
-
         let stringParams: HttpParams = new HttpParams();
-
         stringParams = stringParams.appendAll(urlParams);
         return baseUrl + stringParams.toString();
 

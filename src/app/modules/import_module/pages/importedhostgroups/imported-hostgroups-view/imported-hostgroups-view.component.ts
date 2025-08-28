@@ -1,22 +1,22 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  FormSelectDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    FormSelectDirective,
+    InputGroupComponent,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 
@@ -32,34 +32,39 @@ import { Subscription } from 'rxjs';
 import { ImportedhostgroupsService } from '../importedhostgroups.service';
 import { ImportedhostgroupGet } from '../importedhostgroups.interface';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { NgSelectModule } from '@ng-select/ng-select';
+
 
 @Component({
     selector: 'oitc-imported-hostgroups-view',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormLabelDirective,
-    FormsModule,
-    MultiSelectComponent,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    ReactiveFormsModule,
-    RequiredIconComponent,
-    XsButtonDirective,
-    FormSelectDirective
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormLabelDirective,
+        FormsModule,
+        MultiSelectComponent,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        ReactiveFormsModule,
+        RequiredIconComponent,
+        XsButtonDirective,
+        FormSelectDirective,
+        InputGroupComponent,
+        NgSelectModule,
+        TranslocoPipe
+    ],
     templateUrl: './imported-hostgroups-view.component.html',
     styleUrl: './imported-hostgroups-view.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -72,6 +77,7 @@ export class ImportedHostgroupsViewComponent implements OnInit, OnDestroy {
     public containerPath: string = '';
     public importedHosts: SelectKeyValue[] = [];
     public importedHostIds: number[] = [];
+    public tagsForSelect: string[] = [];
 
     private ImportedhostgroupsService = inject(ImportedhostgroupsService);
     private subscriptions: Subscription = new Subscription();
@@ -82,6 +88,9 @@ export class ImportedHostgroupsViewComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ImportedhostgroupsService.getView(this.id)
             .subscribe((result) => {
                 this.importedHostgroup = result.importedhostgroup;
+                if (this.importedHostgroup.ImportedHostgroup.tags) {
+                    this.tagsForSelect = this.importedHostgroup.ImportedHostgroup.tags.split(',');
+                }
                 if (this.importedHostgroup.ImportedHostgroup.hasOwnProperty('imported_hosts')) {
                     // @ts-ignore
                     for (let importedHost of this.importedHostgroup.ImportedHostgroup.imported_hosts) {
