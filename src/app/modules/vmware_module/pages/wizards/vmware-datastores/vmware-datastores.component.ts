@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewChildren } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import {
     DatastoreService,
@@ -36,11 +36,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import {
-    WizardsDynamicfieldsComponent
-} from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { Service } from '../../../../../pages/wizards/wizards.interface';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
@@ -63,7 +59,6 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         FormControlDirective,
         FormErrorDirective,
         FormFeedbackComponent,
-        WizardsDynamicfieldsComponent,
         TranslocoDirective,
         FormLabelDirective,
         AlertComponent,
@@ -91,7 +86,6 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 })
 export class VmwareDatastoresComponent extends WizardsAbstractComponent {
     @ViewChildren('accordionItem') accordionItems: AccordionItemComponent[] = [];
-    @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
     protected override WizardService: VmwareDatastoresWizardService = inject(VmwareDatastoresWizardService);
     public checked: boolean = false;
     public accordionClosed: boolean = true;
@@ -116,17 +110,13 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
         this.post.vmwarepass = result.vmwarepass;
         this.post.vcenter = result.vcenter;
         this.datastoreServicetemplate = result.datastoreServicetemplate;
-        super.wizardLoad(result);
+        this.cdr.markForCheck();
     }
 
     public override submit(): void {
         // let request = this.post; // Clone the original post object here!
         let request: VmwareDatastoresWizardPost = JSON.parse(JSON.stringify(this.post));
 
-        // Remove all services from request where createService is false.
-        request.services = request.services.filter((service: Service) => {
-            return service.createService && this.childComponent.hasName(service.name);
-        });
         // Remove all datastore services from request where createService is false.
         request.dataStoreServices = request.dataStoreServices.filter(
             (dataStoreService: DatastoreService) => dataStoreService.createService && this.hasName(dataStoreService.name)
@@ -222,7 +212,6 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
                             servicetemplate_id: this.datastoreServicetemplate.id
                         });
                 }
-                this.childComponentLocal.cdr.markForCheck();
                 this.cdr.markForCheck();
                 return;
             }

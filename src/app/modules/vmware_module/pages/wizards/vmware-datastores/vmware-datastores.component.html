@@ -141,12 +141,6 @@
                 </div>
             </fieldset>
 
-            <oitc-wizards-dynamicfields
-                [(post)]="post.services"
-                [errors]="errors"
-                [title]="'VMware services'|transloco"
-            />
-
             <fieldset>
                 <legend class="fs-md fieldset-legend-border-bottom">
                     <h4 [ngClass]="{'text-danger': errors.hasOwnProperty('dataStoreServices') }">
@@ -185,9 +179,13 @@
 
                 </div>
 
-                <c-row class="mb-3">
+                <c-row class="mb-1">
                     <c-col md="6">
                         <oitc-form-feedback [errors]="errors" errorField="datastorecommand"></oitc-form-feedback>
+                    </c-col>
+                </c-row>
+                <c-row class="mb-3">
+                    <c-col md="6">
                         <c-input-group>
                             <span cInputGroupText>
                                 <fa-icon [icon]="['fas', 'filter']"></fa-icon>
