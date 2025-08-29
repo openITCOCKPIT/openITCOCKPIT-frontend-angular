@@ -100,9 +100,9 @@ export class ColourLocatorPickerComponent implements OnChanges, OnInit, OnDestro
     }
 
     private getHighlightColour(): string {
-        // If colour hasn't changed, use pink to highlight.
-        //return this.changed ? this.value : '#FF00FF';
-        return '#9381FF';
+        // If colour hasn't changed, use lavendel to highlight.
+        return this.changed ? this.value : '#9381FF';
+        //return '#9381FF';
     }
 
     protected highlightElement(event: any): void {
