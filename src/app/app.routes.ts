@@ -37,6 +37,7 @@ import { slackModuleRoutes } from './modules/slack_module/slack_module.routes';
 import { designModuleRoutes } from './modules/design_module/design_module.routes';
 import { mattermostModuleRoutes } from './modules/mattermost_module/mattermost_module.routes';
 import { servicenowModuleRoutes } from './modules/servicenow_module/servicenow_module.routes';
+import { dellModuleRoutes } from './modules/dell_module/dell_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -95,7 +96,8 @@ const moduleRoutes: Routes = [
     ...slackModuleRoutes,
     ...designModuleRoutes,
     ...mattermostModuleRoutes,
-    ...servicenowModuleRoutes
+    ...servicenowModuleRoutes,
+    ...dellModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
