@@ -168,7 +168,7 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
         if (!this.post) {
             return '';
         }
-        return this.post[name] || '';
+        return String(this.post[name] || '');
     }
 
     protected setManipulatorValue(name: string, value: string): void {

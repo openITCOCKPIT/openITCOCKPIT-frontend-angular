@@ -25,7 +25,7 @@ export interface Manipulation {
 }
 
 export interface Design {
-    [key: string]: any;
+    [key: string]: string | number;
 
     logoInHeader: number
     customcsstext: string
