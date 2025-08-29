@@ -121,16 +121,16 @@
                             <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                         </span>
                         <input
-                               type="text"
-                               id="min_availability"
-                               name="min_availability"
-                               aria-label="min_availability"
-                               cFormControl
-                               oitcDebounce
-                               (debouncedValue)="onServiceChange($event)"
-                               placeholder="{{t('Filter by service name')}}"
-                               [(ngModel)]="servicenameRegex"
-                               [disabled]="selectedHostIds.length === 0"
+                            type="text"
+                            id="min_availability"
+                            name="min_availability"
+                            aria-label="min_availability"
+                            cFormControl
+                            oitcDebounce
+                            (debouncedValue)="onServiceChange($event)"
+                            placeholder="{{t('Filter by service name')}}"
+                            [(ngModel)]="servicenameRegex"
+                            [disabled]="selectedHostIds.length === 0"
                         />
                     </c-input-group>
                 </div>
@@ -339,7 +339,7 @@
                                 *ngFor="let service of host.services">
                                 <tr class="service_row report-table-bordered"
                                     *ngIf="post.Autoreport.services[service.id]">
-                                    <td class="service_option ps-1">{{ service.servicename }}</td>
+                                    <td class="service_option ps-1 word-break">{{ service.servicename }}</td>
                                     <td class="text-center">
                                         <div>
                                             <input
