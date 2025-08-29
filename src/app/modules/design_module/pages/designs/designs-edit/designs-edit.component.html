@@ -24,6 +24,436 @@
         </ol>
     </nav>
 
+    <c-card class="mb-3" style="min-height:650px;">
+        <c-card-header>
+            <h5 class="card-title ktd-grid-drag-handle"><i class="fas fa-traffic-light"></i> Status Board</h5>
+        </c-card-header>
+        <c-card-body>
+            <c-row>
+                <c-col md="12">
+                    <c-card class="mb-3">
+                        <c-row class="px-2">
+                            <c-col [md]="2" class="py-2">
+                                <div
+                                    class="h-100 w-100 d-inline-block bg-danger rounded text-white mb-g d-flex align-items-center justify-content-center">
+                                    <fa-icon [icon]="['fas', 'heartbeat']" size="5x" class="float-start h2 opacity-25"></fa-icon>
+                                </div>
+                            </c-col>
+                            <c-card-body cCol [md]="10" class="pb-0">
+                                <h3 cCardTitle>Healthy Management Dashboard</h3>
+                                <c-row class="mt-3">
+                                    <c-col [md]="4">
+                                        <div
+                                            class="d-inline-flex border border-secondary border-opacity-25 p-2 rounded my-2 w-100">
+                                            <div>
+                                                <h4>
+                                                    <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                                    15151
+                                                </h4>
+                                                <small class="text-medium-emphasis">Total hosts monitored</small>
+                                            </div>
+                                            <div class="nav-item py-1">
+                                                <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
+                                            </div>
+                                            <div class="flex align-text-bottom text-danger">
+                                                Problems detected
+                                            </div>
+                                        </div>
+
+                                    </c-col>
+                                    <c-col [md]="4">
+                                        <div
+                                            class="d-inline-flex border border-secondary border-opacity-25 p-2 rounded my-2 w-100">
+                                            <div>
+                                                <h4>
+                                                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                    38929
+                                                </h4>
+                                                <small class="text-medium-emphasis">Total services monitored</small>
+                                            </div>
+                                            <div class="nav-item py-1">
+                                                <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
+                                            </div>
+                                            <div class="align-bottom text-success">
+                                                No problems detected
+                                            </div>
+                                        </div>
+                                    </c-col>
+                                </c-row>
+                                <c-row class="mt-3">
+                                    <c-col [md]="1">
+                                        <h6>
+                                            <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                                     [cTextColor]="'danger'"></fa-icon>
+                                            Problems
+                                        </h6>
+                                    </c-col>
+                                    <c-col [md]="11" class="display-inline-flex">
+                                        <div class="marquee-text">
+
+                                            <div class="marquee-text-track">
+                                                <p>🔴 DBC Dachau/Gebäude - Kritische Warnung 1</p>
+                                                <p>🔴 DBC Dachau/Gebäude - Kritische Warnung 2</p>
+                                                <p>🔴 DBC Dachau/Gebäude - Kritische Warnung 3</p>
+                                                <p>⚪ DBC Dachau/Services - Keine Verbindung 1</p>
+                                                <p>🟡 DBC Dachau/Services - Warnung 1</p>
+                                                <p>🟡 DBC Dachau/Services - Warnung 2</p>
+                                                <p aria-hidden="true">🔴 DBC Dachau/Gebäude - Kritische Warnung 1</p>
+                                                <p aria-hidden="true">🔴 DBC Dachau/Gebäude - Kritische Warnung 2</p>
+                                                <p aria-hidden="true">🔴 DBC Dachau/Gebäude - Kritische Warnung 3</p>
+                                                <p aria-hidden="true">⚪ DBC Dachau/Services - Keine Verbindung 1</p>
+                                                <p aria-hidden="true">🟡 DBC Dachau/Services - Warnung 1</p>
+                                                <p aria-hidden="true">🟡 DBC Dachau/Services - Warnung 2</p>
+                                            </div>
+                                        </div>
+                                    </c-col>
+                                </c-row>
+                            </c-card-body>
+                        </c-row>
+                    </c-card>
+                </c-col>
+            </c-row>
+            <c-col md="12">
+                <c-card>
+                    <c-card-header>
+                        <h5 cCardTitle>{{ t('Status') }}
+                            <small class="fw-300">
+                                {{ t('overview') }}
+                            </small>
+                        </h5>
+                        <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                            <c-nav class="card-toolbar card-header-pills">
+                                <c-nav-item class="px-1">
+                                    <button cButton class="ripple" color="default" size="xs">
+                                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                                        {{ t('Refresh') }}
+                                    </button>
+                                </c-nav-item>
+                                <c-nav-item class="px-1">
+                                    <button cButton class="ripple" color="danger" size="xs">
+                                        <fa-icon [icon]="['fas', 'filter-circle-xmark']"></fa-icon>
+                                        {{ t('Problems only') }}
+                                    </button>
+                                </c-nav-item>
+                                <c-nav-item class="px-1">
+                                    <button cButton class="ripple" color="primary" size="xs">
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                        {{ t('Filter') }}
+                                    </button>
+                                </c-nav-item>
+                            </c-nav>
+                        </c-nav>
+                    </c-card-header>
+                    <c-card-body>
+                        <c-card class="mb-3">
+                            <c-row class="px-2">
+                                <c-col [md]="10" class="py-2">
+                                    <table [striped]="true" cTable bordered>
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">
+                                                Name
+                                            </th>
+                                            <th scope="col">
+                                                Umwelt
+                                                <fa-icon [icon]="['fas', 'circle']" [cTextColor]="'success'"
+                                                         class="float-start pe-1"></fa-icon>
+                                            </th>
+                                            <th scope="col">
+                                                Gebäude
+                                                <fa-icon [icon]="['fas', 'circle']" [cTextColor]="'danger'"
+                                                         class="float-start pe-1"></fa-icon>
+                                            </th>
+                                            <th scope="col">
+                                                Services
+                                                <fa-icon [icon]="['fas', 'circle']" [cTextColor]="'secondary'"
+                                                         class="float-start pe-1"></fa-icon>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">
+                                                DBC Dachau
+                                                <fa-icon [icon]="['fas', 'circle']" [cTextColor]="'danger'"
+                                                         class="float-start pe-1"></fa-icon>
+                                            </th>
+                                            <td>Okay</td>
+                                            <td class="border-start-danger border-top-0 border-bottom-0 border-end-0 border-5">
+                                                Kritische Warnung
+                                                <oitc-badge-outline [color]="'danger'">3</oitc-badge-outline>
+                                            </td>
+                                            <td>Okay</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                BDC München V8
+                                                <fa-icon [icon]="['fas', 'circle']" [cTextColor]="'secondary'"
+                                                         class="float-start pe-1"></fa-icon>
+                                            </th>
+                                            <td>Okay</td>
+                                            <td>Okay</td>
+                                            <td class="border-start-secondary border-top-0 border-bottom-0 border-end-0 border-5">
+                                                Keine Verbindung
+                                                <oitc-badge-outline [color]="'secondary'">1</oitc-badge-outline>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                LDR München V2
+                                                <fa-icon [icon]="['fas', 'circle']" [cTextColor]="'warning'"
+                                                         class="float-start pe-1"></fa-icon>
+                                            </th>
+                                            <td>Okay</td>
+                                            <td>Okay</td>
+                                            <td class="border-start-warning border-top-0 border-bottom-0 border-end-0 border-5">
+                                                Warnung
+                                                <oitc-badge-outline [color]="'warning'">2</oitc-badge-outline>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                LDR München A32
+                                                <fa-icon [icon]="['fas', 'circle']" [cTextColor]="'success'"
+                                                         class="float-start pe-1"></fa-icon>
+                                            </th>
+                                            <td>Okay</td>
+                                            <td>Okay</td>
+                                            <td>Okay</td>
+                                        </tr>
+                                        </tbody>
+                                        <tfoot></tfoot>
+                                    </table>
+                                </c-col>
+                                <c-col [md]="2">
+                                    <div echarts [options]="chartOption" *ngIf="chartOption" style="height:250px;"
+                                         (chartInit)="onChartInit($event)"></div>
+                                </c-col>
+                            </c-row>
+                        </c-card>
+                        <c-card class="mb-3">
+                            <c-row class="px-2">
+                                <c-col [md]="12" class="py-2">
+                                    <table [striped]="true" cTable bordered>
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" [style.width.px]="90">
+                                                Status
+                                            </th>
+                                            <th scope="col">
+                                                Standort
+                                            </th>
+                                            <th scope="col">
+                                                Kategorie
+                                            </th>
+                                            <th scope="col" class="col-4">
+                                                Meldung
+                                            </th>
+                                            <th scope="col">
+                                                Datum
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                <!-- Warning -->
+                                                <input cFormCheckInput id="checkstatusowarning" type="checkbox"
+                                                       class="checkbox-lg checkbox-warning border border-warning me-1"
+                                                       oitcDebounce/>
+
+                                                <!-- Critical -->
+                                                <input cFormCheckInput id="checkstatuscritical" type="checkbox"
+                                                       class="checkbox-lg checkbox-danger border border-danger me-1"
+                                                       oitcDebounce/>
+
+                                                <!-- Unknown -->
+                                                <input cFormCheckInput id="checkstatusunknown" type="checkbox"
+                                                       class="checkbox-lg checkbox-secondary border border-secondary me-1"
+                                                       oitcDebounce/>
+                                            </th>
+                                            <th>
+                                                <c-input-group>
+                                                    <span cInputGroupText id="standort">
+                                                        <fa-icon [icon]="['fas', 'building']"></fa-icon>
+                                                    </span>
+                                                    <input aria-describedby="standort"
+                                                           aria-label="standort"
+                                                           cFormControl
+                                                           placeholder="{{t('Filter by name')}}"
+                                                           oitcDebounce
+                                                    />
+                                                    <span cInputGroupText>
+                                                        <c-form-check>
+                                                            <label>
+                                                                {{ t('Enable RegEx') }}
+                                                                <input cFormCheckInput id="checkregexService"
+                                                                       type="checkbox"
+                                                                       oitcDebounce
+                                                                />
+                                                            </label>
+                                                        </c-form-check>
+                                                        <oitc-regex-helper-tooltip/>
+                                                    </span>
+                                                </c-input-group>
+                                            </th>
+                                            <th>
+                                                <c-input-group>
+                                                    <span cInputGroupText id="standort">
+                                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                                    </span>
+                                                    <input aria-describedby="standort"
+                                                           aria-label="standort"
+                                                           cFormControl
+                                                           placeholder="{{t('Filter by category')}}"
+                                                           oitcDebounce
+                                                    />
+                                                    <span cInputGroupText>
+                                                        <c-form-check>
+                                                            <label>
+                                                                {{ t('Enable RegEx') }}
+                                                                <input cFormCheckInput id="checkregexService"
+                                                                       type="checkbox"
+                                                                       oitcDebounce
+                                                                />
+                                                            </label>
+                                                        </c-form-check>
+                                                        <oitc-regex-helper-tooltip/>
+                                                    </span>
+                                                </c-input-group>
+                                            </th>
+                                            <th>
+                                                <c-input-group>
+                                                    <span cInputGroupText id="standort">
+                                                        <fa-icon [icon]="['fas', 'message']"></fa-icon>
+                                                    </span>
+                                                    <input aria-describedby="standort"
+                                                           aria-label="standort"
+                                                           cFormControl
+                                                           placeholder="{{t('Filter by message')}}"
+                                                           oitcDebounce
+                                                    />
+                                                    <span cInputGroupText>
+                                                        <c-form-check>
+                                                            <label>
+                                                                {{ t('Enable RegEx') }}
+                                                                <input cFormCheckInput id="checkregexService"
+                                                                       type="checkbox"
+                                                                       oitcDebounce
+                                                                />
+                                                            </label>
+                                                        </c-form-check>
+                                                        <oitc-regex-helper-tooltip/>
+                                                    </span>
+                                                </c-input-group>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'circle']" [cTextColor]="'danger'"></fa-icon>
+                                            </td>
+                                            <td scope="row">
+                                                DBC Dachau
+                                            </td>
+                                            <td>Gebäude</td>
+                                            <td>
+                                                Kritische Warnung 1
+                                            </td>
+                                            <td>
+                                                02:34:31 - 28.07.2025
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'circle']" [cTextColor]="'danger'"></fa-icon>
+                                            </td>
+                                            <td scope="row">
+                                                DBC Dachau
+                                            </td>
+                                            <td>Gebäude</td>
+                                            <td>
+                                                Kritische Warnung 2
+                                            </td>
+                                            <td>
+                                                12:54:31 - 30.07.2025
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'circle']" [cTextColor]="'danger'"></fa-icon>
+                                            </td>
+                                            <td scope="row">
+                                                DBC Dachau
+                                            </td>
+                                            <td>Gebäude</td>
+                                            <td>
+                                                Kritische Warnung 3
+                                            </td>
+                                            <td>
+                                                13:16:01 - 31.07.2025
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'circle']"
+                                                         [cTextColor]="'secondary'"></fa-icon>
+                                            </td>
+                                            <td scope="row">
+                                                BDC München V8
+                                            </td>
+                                            <td>Services</td>
+                                            <td>
+                                                Keine Verbindung 1
+                                            </td>
+                                            <td>
+                                                02:34:31 - 28.07.2025
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'circle']" [cTextColor]="'warning'"></fa-icon>
+                                            </td>
+                                            <td scope="row">
+                                                LDR München V2
+                                            </td>
+                                            <td>Services</td>
+                                            <td>
+                                                Warnung 1
+                                            </td>
+                                            <td>
+                                                02:34:31 - 28.07.2025
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'circle']" [cTextColor]="'warning'"></fa-icon>
+                                            </td>
+                                            <td scope="row">
+                                                LDR München V2
+                                            </td>
+                                            <td>Services</td>
+                                            <td>
+                                                Warnung 2
+                                            </td>
+                                            <td>
+                                                02:34:31 - 28.07.2025
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                        <tfoot></tfoot>
+                                    </table>
+                                </c-col>
+                            </c-row>
+                        </c-card>
+                    </c-card-body>
+                </c-card>
+            </c-col>
+        </c-card-body>
+    </c-card>
+    <br><br><br><br><br><br><br><br><br><br>
+
+
     @if (!post) {
         <oitc-form-loader></oitc-form-loader>
     } @else {
@@ -111,7 +541,6 @@
                                             <oitc-colour-locator-picker
                                                 [selector]="manipulator.selector"
                                                 [attribute]="manipulator.attribute"
-                                                [name]="manipulator.name"
                                                 [value]="getManipulatorValue(manipulator.name)"
                                                 (valueChange)="setManipulatorValue(manipulator.name, $event)"
                                                 [title]="manipulator.title | transloco"/>

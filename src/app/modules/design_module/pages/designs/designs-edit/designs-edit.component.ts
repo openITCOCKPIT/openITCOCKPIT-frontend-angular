@@ -2,7 +2,7 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
-    DOCUMENT,
+    effect,
     inject,
     OnDestroy,
     OnInit,
@@ -18,7 +18,7 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 import { DesignsService } from '../designs.service';
 import { Design, DesignsEditRoot, Manipulations, MaxUploadLimit } from '../designs.interface';
 import Dropzone from 'dropzone';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { DOCUMENT, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { AuthService } from '../../../../../auth/auth.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -32,6 +32,7 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    ColDirective,
     DropdownComponent,
     DropdownItemDirective,
     DropdownMenuDirective,
@@ -41,6 +42,8 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     ModalBodyComponent,
     ModalComponent,
     ModalFooterComponent,
@@ -48,7 +51,11 @@ import {
     ModalService,
     ModalTitleDirective,
     ModalToggleDirective,
-    RowComponent
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective,
+    TextColorDirective
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
@@ -64,6 +71,23 @@ import {
 } from '../../../components/colour-locator-picker/colour-locator-picker.component';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
+import { DebounceDirective } from '../../../../../directives/debounce.directive';
+import {
+    RegexHelperTooltipComponent
+} from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
+import { EChartsOption } from 'echarts';
+import { LayoutService } from '../../../../../layouts/coreui/layout.service';
+import * as echarts from 'echarts/core';
+import { PieChart } from 'echarts/charts';
+import { GridComponent } from 'echarts/components';
+import { EChartsCoreOption } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { PolarComponent } from 'echarts/components';
+import { BarChart } from 'echarts/charts';
+
+echarts.use([GridComponent, PieChart,CanvasRenderer,PolarComponent, BarChart]);
 
 
 @Component({
@@ -110,10 +134,24 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         FormCheckLabelDirective,
         TrueFalseDirective,
         FormLoaderComponent,
-        NgIf
+        NgIf,
+        ColDirective,
+        TableDirective,
+        TextColorDirective,
+        BadgeOutlineComponent,
+        NavComponent,
+        NavItemComponent,
+        DebounceDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        RegexHelperTooltipComponent,
+        NgxEchartsDirective
+    ],
+    providers: [
+        provideEchartsCore({echarts}),
     ],
     templateUrl: './designs-edit.component.html',
-    styleUrl: './designs-edit.component.css',
+    styleUrl: './designs-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DesignsEditComponent implements OnInit, OnDestroy {
@@ -145,6 +183,8 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
     protected customLoginBackgroundHtml: string = '';
     protected customStatusPageHeaderHtml: string = '';
     protected isCustomStatusPageHeader: boolean = false;
+
+    public chartOption: EChartsCoreOption = {};
     protected logTypeOptions: SelectKeyValueString[] = [
         {key: '0', value: this.TranslocoService.translate('Interface and PDFs')},
         {key: '1', value: this.TranslocoService.translate('Notifications')},
@@ -161,14 +201,164 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
         mapText: '',
     } as Design;
 
+    private readonly LayoutService = inject(LayoutService);
+    public theme: null | 'dark' = null;
+    public echartsInstance: any;
+
 
     @ViewChild(ColourLocatorPickerComponent) childComponent!: ColourLocatorPickerComponent;
+
+    public constructor() {
+        this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
+            this.theme = null;
+            if (theme === 'dark') {
+                this.theme = 'dark';
+            }
+
+            this.cdr.markForCheck();
+        }));
+
+        effect(() => {
+            this.renderChart();
+            this.cdr.markForCheck();
+        });
+    }
+
+    onChartInit(ec: any) {
+        this.echartsInstance = ec;
+        this.cdr.markForCheck();
+    }
+
+
+    private renderChart() {
+        this.chartOption = {
+            radius: '100%',
+            grid: {
+                left: 40,
+                right: 40,
+                top: 0,
+                bottom: 0,
+                padding: [20, 30, 20, 30]
+            },
+            paddingInner: 0.1,
+            paddingOuter: 0.1,
+            padding: [20, 30, 20, 30],
+            angleAxis: {
+                show: false,
+                max: 100
+            },
+            radiusAxis: {
+                show: false,
+                type: 'category',
+                data: ['⚪', '🔴', '🟡', '🟢']
+            },
+            polar: {
+                radius: [10, '70%'],
+                startAngle: 90,
+            },
+            series: [
+                {
+                    roundCap: true,
+                    type: 'bar',
+                    data: [
+                        {
+                            value: 12,
+                            itemStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0.5,
+                                    y: 0.5,
+                                    //    r: 0.5,
+                                    colorStops: [{
+                                        offset: 0.1, color: '#eeeeee' // color at 0%
+                                    }, {
+                                        offset: 1, color: '#cccccc' // color at 100%
+                                    }],
+                                    global: false // default is false
+                                },
+                            },
+                        },
+                        {
+                            value: 12,
+                            itemStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0.5,
+                                    y: 0.5,
+                                    r: 0.5,
+                                    colorStops: [{
+                                        offset: 0.1, color: '#CC0000' // color at 0%
+                                    }, {
+                                        offset: 1, color: '#c0022e' // color at 100%
+                                    }],
+                                    global: false // default is false
+                                },
+                            },
+                        },
+                        {
+                            value: 12,
+                            itemStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0.5,
+                                    y: 0.5,
+                                    r: 0.5,
+                                    colorStops: [{
+                                        offset: 0.1, color: '#ffbb33' // color at 0%
+                                    }, {
+                                        offset: 1, color: '#ffbb33' // color at 100%
+                                    }],
+                                    global: false // default is false
+                                },
+                            },
+                        },
+                        {
+                            value: 48,
+                            itemStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0.5,
+                                    y: 0.5,
+                                    r: 0.5,
+                                    colorStops: [{
+                                        offset: 0.1, color: '#00C851' // color at 0%
+                                    }, {
+                                        offset: 1, color: '#5b9b35' // color at 100%
+                                    }],
+                                    global: false // default is false
+                                }
+                            },
+                        },
+
+
+                    ],
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: 'rgba(200, 200, 200, 0.05)',
+                    },
+                    itemStyle: {
+                        borderColor: 'rgba(180, 180, 180, 0.3)',
+                        borderWidth: 1
+                    },
+                    label: {
+                        show: true,
+                        // Try changing it to 'insideStart'
+                        position: 'start',
+                        formatter: '{b} ({c}%)',
+                        padding: 3
+                    },
+                    coordinateSystem: 'polar'
+                }
+            ]
+        };
+        this.cdr.markForCheck();
+    }
 
     protected getManipulatorValue(name: string): string {
         if (!this.post) {
             return '';
         }
-        return String(this.post[name] || '');
+        return '';
     }
 
     protected setManipulatorValue(name: string, value: string): void {
