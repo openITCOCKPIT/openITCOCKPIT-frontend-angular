@@ -76,8 +76,8 @@
                                                 {{ globalStatusSummary[0] }}
                                             </a>
                                         } @else {
-                                        {{ globalStatusSummary[0] }}
-                                    }
+                                            {{ globalStatusSummary[0] }}
+                                        }
                                     </h6>
                                     <small class="m-0 l-h-n small">
                                         {{ t('Unconfirmed') }}
@@ -98,8 +98,8 @@
                                                 {{ globalStatusSummary[1] }}
                                             </a>
                                         } @else {
-                                        {{ globalStatusSummary[1] }}
-                                    }
+                                            {{ globalStatusSummary[1] }}
+                                        }
                                     </h6>
                                     <small class="m-0 l-h-n small">
                                         {{ t('Ok') }}
@@ -120,8 +120,8 @@
                                                 {{ globalStatusSummary[2] }}
                                             </a>
                                         } @else {
-                                        {{ globalStatusSummary[2] }}
-                                    }
+                                            {{ globalStatusSummary[2] }}
+                                        }
                                     </h6>
                                     <small class="m-0 l-h-n small">
                                         {{ t('Warning') }}
@@ -142,8 +142,8 @@
                                                 {{ globalStatusSummary[3] }}
                                             </a>
                                         } @else {
-                                        {{ globalStatusSummary[3] }}
-                                    }
+                                            {{ globalStatusSummary[3] }}
+                                        }
                                     </h6>
                                     <small class="m-0 l-h-n small">
                                         {{ t('Critical') }}
@@ -197,25 +197,25 @@
                                     </a>
                                 </c-button-group>
                             } @else {
-                            <c-button-group role="group" class="btn-group btn-group-justified w-100">
-                                <button cButton color="primary" class="state-button-small"
-                                        [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[0]===0}">
-                                    {{ selectedResoucegroup.statesummary[0] }}
-                                </button>
-                                <button cButton color="success" class="state-button-small"
-                                        [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[1]===0}">
-                                    {{ selectedResoucegroup.statesummary[1] }}
-                                </button>
-                                <button cButton color="warning" class="state-button-small"
-                                        [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[2]===0}">
-                                    {{ selectedResoucegroup.statesummary[2] }}
-                                </button>
-                                <button cButton color="danger" class="state-button-small"
-                                        [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[3]===0}">
-                                    {{ selectedResoucegroup.statesummary[3] }}
-                                </button>
-                            </c-button-group>
-                        }
+                                <c-button-group role="group" class="btn-group btn-group-justified w-100">
+                                    <button cButton color="primary" class="state-button-small"
+                                            [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[0]===0}">
+                                        {{ selectedResoucegroup.statesummary[0] }}
+                                    </button>
+                                    <button cButton color="success" class="state-button-small"
+                                            [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[1]===0}">
+                                        {{ selectedResoucegroup.statesummary[1] }}
+                                    </button>
+                                    <button cButton color="warning" class="state-button-small"
+                                            [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[2]===0}">
+                                        {{ selectedResoucegroup.statesummary[2] }}
+                                    </button>
+                                    <button cButton color="danger" class="state-button-small"
+                                            [ngClass]="{'opacity-25': selectedResoucegroup.statesummary[3]===0}">
+                                        {{ selectedResoucegroup.statesummary[3] }}
+                                    </button>
+                                </c-button-group>
+                            }
                             <ul class="list-unstyled my-2 ps-4">
                                 @for (resource of selectedResoucegroup.resources; track $index) {
                                     <li class="ps-1 my-1"
@@ -258,19 +258,22 @@
                                                         <fa-icon [inverse]="true" [icon]="['fas', 'check']"
                                                                  transform="shrink-6"/>
                                                     </fa-layers>
-                                                } @case (2) {
+                                                }
+                                                @case (2) {
                                                     <fa-layers [size]="'xl'">
                                                         <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
                                                         <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
                                                                  transform="shrink-6"/>
                                                     </fa-layers>
-                                                } @case (3) {
+                                                }
+                                                @case (3) {
                                                     <fa-layers [size]="'xl'">
                                                         <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
                                                         <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
                                                                  transform="shrink-6"/>
                                                     </fa-layers>
-                                                } @default {
+                                                }
+                                                @default {
                                                     <fa-layers [size]="'xl'">
                                                         <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
                                                         <fa-icon [inverse]="true" [icon]="['fas', 'question']"
@@ -312,7 +315,25 @@
                                         <oitc-label-link [objectId]="region_manager.id"
                                                          [route]="'/users/edit'"
                                                          [permissions]="'users.edit'">
+                                            <fa-icon [icon]="['fas', 'user']" [cTextColor]="'primary'"></fa-icon>
                                             {{ region_manager.username }}
+                                        </oitc-label-link>
+                                    </li>
+                                }
+                            </ul>
+                            @if (selectedResoucegroup.region_managers.length > 0 && selectedResoucegroup.mailinglist_region_managers.length > 0) {
+                                <hr class="border-dashed my-1"/>
+                            }
+                            <ul class="m-0 list-unstyled mb-2 pl-4">
+                                @for (
+                                    mailinglist_region_manager of selectedResoucegroup.mailinglist_region_managers; track $index) {
+                                    <li>
+                                        <oitc-label-link [objectId]="mailinglist_region_manager.id"
+                                                         [route]="'/scm_module/mailinglists/edit'"
+                                                         [permissions]="'ScmModule.mailinglists.edit'">
+                                            <fa-icon [icon]="['fas', 'envelopes-bulk']"
+                                                     [cTextColor]="'primary'"></fa-icon>
+                                            {{ mailinglist_region_manager.name }}
                                         </oitc-label-link>
                                     </li>
                                 }
@@ -326,7 +347,24 @@
                                         <oitc-label-link [objectId]="manager.id"
                                                          [route]="'/users/edit'"
                                                          [permissions]="'users.edit'">
+                                            <fa-icon [icon]="['fas', 'user']" [cTextColor]="'primary'"></fa-icon>
                                             {{ manager.username }}
+                                        </oitc-label-link>
+                                    </li>
+                                }
+                            </ul>
+                            @if (selectedResoucegroup.managers.length > 0 && selectedResoucegroup.mailinglist_managers.length > 0) {
+                                <hr class="border-dashed my-1"/>
+                            }
+                            <ul class="m-0 list-unstyled mb-2 pl-4">
+                                @for (mailinglist_manager of selectedResoucegroup.mailinglist_managers; track $index) {
+                                    <li>
+                                        <oitc-label-link [objectId]="mailinglist_manager.id"
+                                                         [route]="'/scm_module/mailinglists/edit'"
+                                                         [permissions]="'ScmModule.mailinglists.edit'">
+                                            <fa-icon [icon]="['fas', 'envelopes-bulk']"
+                                                     [cTextColor]="'primary'"></fa-icon>
+                                            {{ mailinglist_manager.name }}
                                         </oitc-label-link>
                                     </li>
                                 }
@@ -340,7 +378,24 @@
                                         <oitc-label-link [objectId]="user.id"
                                                          [route]="'/users/edit'"
                                                          [permissions]="'users.edit'">
+                                            <fa-icon [icon]="['fas', 'user']" [cTextColor]="'primary'"></fa-icon>
                                             {{ user.username }}
+                                        </oitc-label-link>
+                                    </li>
+                                }
+                            </ul>
+                            @if (selectedResoucegroup.users.length > 0 && selectedResoucegroup.mailinglist_users.length > 0) {
+                                <hr class="border-dashed my-1"/>
+                            }
+                            <ul class="m-0 list-unstyled mb-2 pl-4">
+                                @for (mailinglist_user of selectedResoucegroup.mailinglist_users; track $index) {
+                                    <li>
+                                        <oitc-label-link [objectId]="mailinglist_user.id"
+                                                         [route]="'/scm_module/mailinglists/edit'"
+                                                         [permissions]="'ScmModule.mailinglists.edit'">
+                                            <fa-icon [icon]="['fas', 'envelopes-bulk']"
+                                                     [cTextColor]="'primary'"></fa-icon>
+                                            {{ mailinglist_user.name }}
                                         </oitc-label-link>
                                     </li>
                                 }
@@ -349,8 +404,10 @@
                     </c-row>
                 </c-col>
             </c-row>
+            @if (resourcegroups && resourcegroups.length === 0) {
+                <oitc-no-records></oitc-no-records>
 
-            <oitc-no-records *ngIf="resourcegroups && resourcegroups.length === 0"></oitc-no-records>
+            }
 
         </c-card-body>
     </c-card>

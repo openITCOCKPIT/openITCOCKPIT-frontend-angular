@@ -14,6 +14,8 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -21,7 +23,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
@@ -42,6 +44,7 @@ import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enu
 import { UsersService } from '../../../../../pages/users/users.service';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { ResourcegroupsSubmitType } from '../resourcegroups.enum';
+import { MailinglistsService } from '../../mailinglists/mailinglists.service';
 
 @Component({
     selector: 'oitc-resourcegroups-add',
@@ -60,7 +63,6 @@ import { ResourcegroupsSubmitType } from '../resourcegroups.enum';
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         ReactiveFormsModule,
         RequiredIconComponent,
@@ -75,7 +77,9 @@ import { ResourcegroupsSubmitType } from '../resourcegroups.enum';
         DropdownComponent,
         DropdownItemDirective,
         DropdownMenuDirective,
-        DropdownToggleDirective
+        DropdownToggleDirective,
+        InputGroupComponent,
+        InputGroupTextDirective
     ],
     templateUrl: './resourcegroups-add.component.html',
     styleUrl: './resourcegroups-add.component.css',
@@ -86,6 +90,7 @@ export class ResourcegroupsAddComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly ContainersService = inject(ContainersService);
     private readonly UsersService = inject(UsersService);
+    private readonly MailinglistsService = inject(MailinglistsService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     public post = this.getClearForm();
@@ -96,6 +101,11 @@ export class ResourcegroupsAddComponent implements OnInit, OnDestroy {
     public users: SelectKeyValue[] = [];
     public managers: SelectKeyValue[] = [];
     public region_managers: SelectKeyValue[] = [];
+
+    public mailinglists_users: SelectKeyValue[] = [];
+    public mailinglists_managers: SelectKeyValue[] = [];
+    public mailinglists_region_managers: SelectKeyValue[] = [];
+
     protected readonly ROOT_CONTAINER = ROOT_CONTAINER;
     protected readonly ResourcegroupsSubmitType = ResourcegroupsSubmitType;
     private router: Router = inject(Router);
@@ -129,9 +139,22 @@ export class ResourcegroupsAddComponent implements OnInit, OnDestroy {
         }));
     }
 
+    private loadMailinglists() {
+        if (this.post.container.parent_id === null) {
+            return;
+        }
+        this.subscriptions.add(this.MailinglistsService.loadMailinglistsByContainerId(this.post.container.parent_id, []).subscribe((result) => {
+            this.mailinglists_users = result;
+            this.mailinglists_managers = result;
+            this.mailinglists_region_managers = result;
+            this.cdr.markForCheck();
+        }));
+    }
+
 
     public onContainerChange() {
         this.loadUsers();
+        this.loadMailinglists();
         this.cdr.markForCheck();
     }
 
@@ -153,6 +176,15 @@ export class ResourcegroupsAddComponent implements OnInit, OnDestroy {
                 _ids: []
             },
             region_managers: {
+                _ids: []
+            },
+            mailinglists_users: {
+                _ids: []
+            },
+            mailinglists_managers: {
+                _ids: []
+            },
+            mailinglists_region_managers: {
                 _ids: []
             }
         }

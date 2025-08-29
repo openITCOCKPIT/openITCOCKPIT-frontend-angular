@@ -14,6 +14,8 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -43,6 +45,7 @@ import { UsersService } from '../../../../../pages/users/users.service';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { ResourcegroupsSubmitType } from '../resourcegroups.enum';
+import { MailinglistsService } from '../../mailinglists/mailinglists.service';
 
 @Component({
     selector: 'oitc-resourcegroups-edit',
@@ -77,7 +80,9 @@ import { ResourcegroupsSubmitType } from '../resourcegroups.enum';
         DropdownComponent,
         DropdownItemDirective,
         DropdownMenuDirective,
-        DropdownToggleDirective
+        DropdownToggleDirective,
+        InputGroupComponent,
+        InputGroupTextDirective
     ],
     templateUrl: './resourcegroups-edit.component.html',
     styleUrl: './resourcegroups-edit.component.css',
@@ -89,6 +94,7 @@ export class ResourcegroupsEditComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly ContainersService = inject(ContainersService);
     private readonly UsersService = inject(UsersService);
+    private readonly MailinglistsService = inject(MailinglistsService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     public post!: ResourcegroupsPost;
@@ -96,9 +102,15 @@ export class ResourcegroupsEditComponent implements OnInit, OnDestroy {
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private ResourcegroupsService = inject(ResourcegroupsService);
     public containers: SelectKeyValue[] = [];
+
     public users: SelectKeyValue[] = [];
     public managers: SelectKeyValue[] = [];
     public region_managers: SelectKeyValue[] = [];
+
+    public mailinglists_users: SelectKeyValue[] = [];
+    public mailinglists_managers: SelectKeyValue[] = [];
+    public mailinglists_region_managers: SelectKeyValue[] = [];
+
     protected readonly ROOT_CONTAINER = ROOT_CONTAINER;
     private cdr = inject(ChangeDetectorRef);
     public errors: GenericValidationError | null = null;
@@ -120,6 +132,7 @@ export class ResourcegroupsEditComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
                 this.loadContainers();
                 this.loadUsers();
+                this.loadMailinglists();
             }));
     }
 
@@ -143,9 +156,22 @@ export class ResourcegroupsEditComponent implements OnInit, OnDestroy {
         }));
     }
 
+    private loadMailinglists() {
+        if (this.post.container.parent_id === null) {
+            return;
+        }
+        this.subscriptions.add(this.MailinglistsService.loadMailinglistsByContainerId(this.post.container.parent_id, []).subscribe((result) => {
+            this.mailinglists_users = result;
+            this.mailinglists_managers = result;
+            this.mailinglists_region_managers = result;
+            this.cdr.markForCheck();
+        }));
+    }
+
 
     public onContainerChange() {
         this.loadUsers();
+        this.loadMailinglists();
         this.cdr.markForCheck();
     }
 
@@ -167,6 +193,15 @@ export class ResourcegroupsEditComponent implements OnInit, OnDestroy {
                 _ids: []
             },
             region_managers: {
+                _ids: []
+            },
+            mailinglists_users: {
+                _ids: []
+            },
+            mailinglists_managers: {
+                _ids: []
+            },
+            mailinglists_region_managers: {
                 _ids: []
             }
         }
