@@ -1,4 +1,4 @@
-import { Component, inject, DOCUMENT } from "@angular/core";
+import { Component, DOCUMENT, inject } from "@angular/core";
 
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
