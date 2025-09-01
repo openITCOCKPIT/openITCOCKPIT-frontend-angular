@@ -27,6 +27,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-resources-statuslog',
@@ -50,7 +51,8 @@ import {
         NgClass,
         ColComponent,
         PaginateOrScrollComponent,
-        RowComponent
+        RowComponent,
+        BackButtonDirective
     ],
     templateUrl: './resources-statuslog.component.html',
     styleUrl: './resources-statuslog.component.css',
