@@ -26,6 +26,7 @@ import {
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
     selector: 'oitc-vmware-esx-directly',
@@ -50,7 +51,8 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         AccordionComponent,
         AccordionItemComponent,
         TemplateIdDirective,
-        BackButtonDirective
+        BackButtonDirective,
+        BadgeOutlineComponent
     ],
     templateUrl: './vmware-esx-directly.component.html',
     styleUrl: './vmware-esx-directly.component.css',

@@ -10,15 +10,20 @@ import {
     OnChanges,
     Output,
     SimpleChanges,
+    ViewChildren,
 } from '@angular/core';
 import {
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
-    RowComponent
+    RowComponent,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
@@ -28,6 +33,7 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Service } from '../../../pages/wizards/wizards.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-wizards-dynamicfields',
@@ -47,19 +53,27 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
         FormFeedbackComponent,
         NgClass,
         FormCheckLabelDirective,
-        FormCheckComponent
+        FormCheckComponent,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective,
+        AccordionButtonDirective,
+        XsButtonDirective
     ],
     templateUrl: './wizards-dynamicfields.component.html',
     styleUrl: './wizards-dynamicfields.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WizardsDynamicfieldsComponent implements OnChanges {
+    @ViewChildren('accordionItem') accordionItems: AccordionItemComponent[] = [];
+
     public cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     protected searchedTags: string[] = [];
 
     public title = input.required<string>();
     public titleErrorField = input<string>('');
     public checked: boolean = false;
+    public accordionClosed: boolean = true;
 
     @Input() post: Service[] = [];
     @Input() errors: GenericValidationError = {} as GenericValidationError;
@@ -87,6 +101,16 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
                 return;
             }
             service.createService = this.checked;
+        });
+        this.cdr.markForCheck();
+    }
+
+    protected toggleAccordionClose(checked: boolean): void {
+        this.accordionClosed = checked;
+        this.accordionItems.forEach((accordionItem: AccordionItemComponent) => {
+            if ((accordionItem.visible && this.accordionClosed) || (!accordionItem.visible && !this.accordionClosed)) {
+                accordionItem.toggleItem();
+            }
         });
         this.cdr.markForCheck();
     }

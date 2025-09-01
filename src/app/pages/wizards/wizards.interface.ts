@@ -18,6 +18,12 @@ export interface WizardElement {
     necessity_of_assignment: boolean
     second_url: string
     selected_os: undefined | string
+    active: boolean
+}
+
+export interface DeprecatedWizards {
+    deprecatedWizards: { [key: string]: WizardElement }
+    possibleDeprecatedWizards: { [key: string]: WizardElement }
 }
 
 // Host Select Validation

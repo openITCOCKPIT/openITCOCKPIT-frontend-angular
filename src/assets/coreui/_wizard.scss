@@ -19,3 +19,9 @@ body.dark-theme .wizard-bg-inactive {
     background: oitc.$success !important;
     color: oitc.$white;
 }
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--cui-info-bg-subtle);
+    border-color: var(--cui-info-border-subtle);
+    color: unset;
+}

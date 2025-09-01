@@ -1,7 +1,6 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { GenericResponse } from '../../../../generic-responses';
-import {Timeperiod} from '../../../../pages/timeperiods/timeperiods.interface';
-
+import { Timeperiod } from '../../../../pages/timeperiods/timeperiods.interface';
 
 
 export interface AutoreportsIndexParams {
@@ -42,27 +41,27 @@ export interface AutoreportsIndexRoot extends PaginateOrScroll {
 }
 
 export interface AutoreportIndex {
-        id: number,
-        name: string,
-        description: string,
-        container_id: number,
-        report_interval: string,
-        report_send_interval: string,
-        min_availability: number | null,
-        max_number_of_outages: number | null,
-        allowEdit: boolean
+    id: number,
+    name: string,
+    description: string,
+    container_id: number,
+    report_interval: string,
+    report_send_interval: string,
+    min_availability: number | null,
+    max_number_of_outages: number | null,
+    allowEdit: boolean
 }
 
 
 export interface AutoreportPostObject {
-    container_id: number | null,
-    name: string | null,
-    description: string | null,
+    container_id: number,
+    name: string,
+    description: string,
     use_start_time: number,
     report_start_date: string | null,
-    timeperiod_id: number | null,
-    report_interval: string| null,
-    report_send_interval: string | null,
+    timeperiod_id: number,
+    report_interval: string,
+    report_send_interval: string,
     min_availability_percent: boolean,
     min_availability: string | null,
     max_number_of_outages: number | null,
@@ -70,7 +69,7 @@ export interface AutoreportPostObject {
     check_hard_state: number, // if true -> consider only hard states from state history
     consider_downtimes: number,
     consider_holidays: number,
-    calendar_id: number | null,
+    calendar_id: number,
     users: {
         _ids: number[]
     }
@@ -85,12 +84,12 @@ export function getDefaultPost(): AutoreportPost {
         Autoreport: {
             container_id: 0,
             name: '',
-            description: null,
+            description: '',
             use_start_time: 0,
             report_start_date: null,
-            timeperiod_id: null,
-            report_interval: null,
-            report_send_interval: null,
+            timeperiod_id: 0,
+            report_interval: 'MONTH',
+            report_send_interval: 'NEVER',
             min_availability_percent: true,
             min_availability: null,
             max_number_of_outages: null,
@@ -98,7 +97,7 @@ export function getDefaultPost(): AutoreportPost {
             check_hard_state: 0, // if true -> consider only hard states from state history
             consider_downtimes: 0,
             consider_holidays: 0,
-            calendar_id: null,
+            calendar_id: 0,
             users: {
                 _ids: []
             }
@@ -116,8 +115,6 @@ export interface DynamicHostObject {
         allfailures: number
     }
 }
-
-
 
 
 export interface AutoreportObject {
@@ -161,7 +158,7 @@ export interface AutoreportObject {
     }
 }
 
-export interface AutoreportEditPost{
+export interface AutoreportEditPost {
     autoreport: AutoreportObject,
     selectedHostIds?: number[],
 }
@@ -229,7 +226,7 @@ export interface AutoReportHostWithServicesObject {
 }
 
 
-export interface  PostHost {
+export interface PostHost {
     host_id: number,
     percent: number,
     minute: number,
@@ -257,7 +254,7 @@ export interface PostAutoreport {
 }
 
 export interface AutoreportUser {
-    id:number,
+    id: number,
     firstname: string,
     lastname: string
 }
@@ -293,6 +290,7 @@ export interface ReportErrorObject {
     name: string,
     services?: string[]
 }
+
 export interface AutoreportServiceUsedByResponse {
     service: {
         id: number,
@@ -301,7 +299,7 @@ export interface AutoreportServiceUsedByResponse {
         servicename: string | null,
         servicetemplate_id?: number,
         servicetemplate?: any,
-        host?:  {
+        host?: {
             id: number,
             uuid?: string,
             name: string | null,
@@ -314,7 +312,7 @@ export interface AutoreportServiceUsedByResponse {
 }
 
 export interface AutoreportHostUsedByResponse {
-    host:  {
+    host: {
         id: number,
         uuid?: string,
         name: string | null,
@@ -326,11 +324,11 @@ export interface AutoreportHostUsedByResponse {
     autoreports: AutoreportObject[]
 }
 
-export interface GenerateResponse extends GenericResponse{
-        autoreport: GenerateReport,
-        autoreport_data: AutoreportData,
-        GraphImageBlobs: GraphImageBlob,
-        logoUrl: string
+export interface GenerateResponse extends GenericResponse {
+    autoreport: GenerateReport,
+    autoreport_data: AutoreportData,
+    GraphImageBlobs: GraphImageBlob,
+    logoUrl: string
 }
 
 export interface GraphImageBlob {
@@ -371,9 +369,9 @@ export interface AutoreportData {
                 id: number,
                 uuid: string,
                 name: string,
-                description: string|null,
+                description: string | null,
                 outages: FrontendOutage[],
-                outage_duration: number|null,
+                outage_duration: number | null,
                 state_overview: {
                     percent_up: number,
                     percent_down: number,
@@ -405,9 +403,9 @@ export interface AutoreportData {
                         id: number,
                         uuid: string,
                         name: string,
-                        description: string|null,
+                        description: string | null,
                         outages: FrontendOutage[],
-                        outage_duration: number|null,
+                        outage_duration: number | null,
                         state_overview: {
                             percent_ok: number,
                             percent_warning: number,
@@ -437,7 +435,6 @@ export interface AutoreportData {
 
     }
 }
-
 
 
 export interface DefaultSettings {
@@ -534,12 +531,12 @@ export interface FilteredOutage {
     start: number,
     end: number,
     is_downtime: boolean,
-    output: string|null,
+    output: string | null,
     is_hardstate: boolean | null
 }
 
 export interface GenerateReport {
-    calendar: string|null
+    calendar: string | null
     calendar_id: number
     check_hard_state: boolean,
     consider_downtimes: boolean,
@@ -552,7 +549,7 @@ export interface GenerateReport {
     last_absolut_value: number,
     last_number_of_outages: number
     last_percent_value: number
-    last_send_date: string|null
+    last_send_date: string | null
     max_number_of_outages: number
     min_availability: number
     min_availability_percent: boolean,
@@ -560,7 +557,7 @@ export interface GenerateReport {
     created: string,
     report_interval: string
     report_send_interval: string
-    report_start_date: string|null
+    report_start_date: string | null
     show_time: number,
     timeperiod_id: number,
     total_time: number,
@@ -576,15 +573,15 @@ export interface GenerateReportHost {
     last_number_of_outages: number,
     uuid: string,
     name: string,
-    description: string|null,
+    description: string | null,
     created: string,
     _join_data?: {
         autoreport_id: number,
         configuration_option: number,
-        created: string|null
+        created: string | null
         host_id: number,
-        id:number,
-        modified: string|null
+        id: number,
+        modified: string | null
         outage_duration: number
     }
 }
@@ -595,21 +592,21 @@ export interface GenerateReportService {
     last_absolut_value: number
     last_number_of_outages: number,
     uuid: string,
-    name: string|null,
-    description: string|null,
+    name: string | null,
+    description: string | null,
     service_type: number,
     service_template_id: number,
     created: string,
     host: {
         created: string,
-        description: string|null
+        description: string | null
         id: number,
         name: string,
         uuid: string,
     },
     servicetemplate: {
         created: string,
-        description: string|null
+        description: string | null
         id: number,
         name: string
         uuid: string
@@ -617,10 +614,10 @@ export interface GenerateReportService {
     _join_data?: {
         autoreport_id: number,
         configuration_option: number,
-        created: string|null
+        created: string | null
         host_id: number,
-        id:number,
-        modified: string|null
+        id: number,
+        modified: string | null
         outage_duration: number,
         service_id: number
     }

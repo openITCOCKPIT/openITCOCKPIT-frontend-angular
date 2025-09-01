@@ -9,6 +9,7 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
+    InputGroupComponent,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -21,7 +22,7 @@ import { NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -75,7 +76,9 @@ import {
         SelectComponent,
         MultiSelectComponent,
         FormLoaderComponent,
-        MultiSelectOptgroupComponent
+        MultiSelectOptgroupComponent,
+        InputGroupComponent,
+        TranslocoPipe
     ],
     templateUrl: './servicegroups-edit.component.html',
     styleUrl: './servicegroups-edit.component.css',
@@ -98,6 +101,7 @@ export class ServicegroupsEditComponent implements OnInit, OnDestroy {
     public post!: Servicegroup;
     protected containers: SelectKeyValue[] = [];
     protected servicetemplates: SelectKeyValue[] = [];
+    public tagsForSelect: string[] = [];
     private route = inject(ActivatedRoute);
 
 
@@ -106,9 +110,10 @@ export class ServicegroupsEditComponent implements OnInit, OnDestroy {
         this.loadContainers();
         this.subscriptions.add(this.ServicegroupsService.getEdit(id)
             .subscribe((result: ServicegroupsEditGet) => {
-
                 this.post = result.servicegroup.Servicegroup;
-
+                if (this.post.tags) {
+                    this.tagsForSelect = this.post.tags.split(',');
+                }
                 // Then force containerChange!
                 this.onContainerChange();
                 this.cdr.markForCheck();
@@ -119,8 +124,8 @@ export class ServicegroupsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public updateServicegroup(): void {
-
+    public submit(): void {
+        this.post.tags = this.tagsForSelect.join(',');
         this.subscriptions.add(this.ServicegroupsService.updateServicegroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();

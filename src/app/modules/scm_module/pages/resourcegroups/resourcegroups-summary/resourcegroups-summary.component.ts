@@ -18,7 +18,7 @@ import {
     ColComponent,
     NavComponent,
     NavItemComponent,
-    RowComponent
+    RowComponent, TextColorDirective
 } from '@coreui/angular';
 import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -68,7 +68,8 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
         LabelLinkComponent,
         TranslocoPipe,
         NoRecordsComponent,
-        FaLayersComponent
+        FaLayersComponent,
+        TextColorDirective
     ],
     templateUrl: './resourcegroups-summary.component.html',
     styleUrl: './resourcegroups-summary.component.scss',
