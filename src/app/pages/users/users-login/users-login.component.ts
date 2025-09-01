@@ -227,7 +227,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     this.NotyService.genericSuccess('Login successful');
 
                     setTimeout(() => {
-                        this.router.navigate([this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/dashboards/index')]);
+                        this.redirect();
                     }, 1000);
                 }
             } else if (!data.isLoggedIn && !hasSsoError) {
@@ -246,6 +246,10 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
             this.cdr.markForCheck();
         }));
+    }
+
+    private redirect(): void {
+        this.router.navigateByUrl(this.getRedirectUrl());
     }
 
     public particlesLoaded(container: Container): void {
@@ -269,16 +273,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 // Load user permissions
                 this.PermissionsService.loadPermissions();
 
-                if (this.LocalStorageService.hasItem('redirectUrl', '')) {
-                    let redirectUrl: string = this.LocalStorageService.getItemWithDefault('redirectUrl', '/');
-                    let redirectTarget: string = redirectUrl.split('/a/')[1] || '/dashboards/index';
-                    this.LocalStorageService.removeItem('redirectUrl');
-                    this.router.navigateByUrl(redirectTarget);
-                    return;
-                }
-
-
-                this.router.navigate(['/']); //todo replace with last page
+                this.redirect();
 
                 return;
             }
@@ -305,13 +300,15 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
     }
 
-    private getLocalStorageItemWithDefaultAndRemoveItem = function (key: string, defaultValue: any) {
-        let val = window.localStorage.getItem(key);
-        if (val === null) {
-            return defaultValue;
+    private getRedirectUrl(): string {
+        if (!this.LocalStorageService.hasItem('redirectUrl', '')) {
+            return '/dashboards/index';
         }
-        //window.localStorage.removeItem(key);
-        return val;
+
+        let redirectUrl: string = this.LocalStorageService.getItemWithDefault('redirectUrl', '/a/dashboards/index');
+        this.LocalStorageService.removeItem('redirectUrl');
+
+        return redirectUrl.split('/a/')[1] || '/dashboards/index';
     };
 
     private getDefaultConfig = () => {
