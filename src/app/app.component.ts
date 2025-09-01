@@ -135,7 +135,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private fetchTimezoneSettings(): void {
         this.subscription.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
-            console.error('TZ geholt!');
         }));
     }
 
