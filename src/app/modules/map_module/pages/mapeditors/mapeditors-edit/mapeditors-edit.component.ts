@@ -1,13 +1,13 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  inject,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  DOCUMENT
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    DOCUMENT,
+    ElementRef,
+    inject,
+    OnDestroy,
+    OnInit,
+    ViewChild
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -755,8 +755,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 // Set X and Y poss of the new copied object
                 this.currentItem = copiedItem;
-                this.currentItem.x = copiedItem.x + 10;
-                this.currentItem.y = copiedItem.y + 10;
+                this.currentItem.x = Math.floor(copiedItem.x + 10);
+                this.currentItem.y = Math.floor(copiedItem.y + 10);
 
                 this.saveItem();
 
@@ -767,10 +767,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 // Set X and Y poss of the new copied object
                 this.currentItem = copiedItem;
-                this.currentItem.startX = copiedItem.startX + 10;
-                this.currentItem.startY = copiedItem.startY + 10;
-                this.currentItem.endX = copiedItem.endX + 10;
-                this.currentItem.endY = copiedItem.endY + 10;
+                this.currentItem.startX = Math.floor(copiedItem.startX + 10);
+                this.currentItem.startY = Math.floor(copiedItem.startY + 10);
+                this.currentItem.endX = Math.floor(copiedItem.endX + 10);
+                this.currentItem.endY = Math.floor(copiedItem.endY + 10);
 
                 this.saveLine();
 
@@ -781,8 +781,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 // Set X and Y poss of the new copied object
                 this.currentItem = copiedItem;
-                this.currentItem.x = copiedItem.x + 10;
-                this.currentItem.y = copiedItem.y + 10;
+                this.currentItem.x = Math.floor(copiedItem.x + 10);
+                this.currentItem.y = Math.floor(copiedItem.y + 10);
 
                 this.saveGadget();
 
@@ -793,8 +793,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 // Set X and Y poss of the new copied object
                 this.currentItem = copiedItem;
-                this.currentItem.x = copiedItem.x + 10;
-                this.currentItem.y = copiedItem.y + 10;
+                this.currentItem.x = Math.floor(copiedItem.x + 10);
+                this.currentItem.y = Math.floor(copiedItem.y + 10);
 
                 this.saveText();
 
@@ -805,8 +805,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 // Set X and Y poss of the new copied object
                 this.currentItem = copiedItem;
-                this.currentItem.x = copiedItem.x + 10;
-                this.currentItem.y = copiedItem.y + 10;
+                this.currentItem.x = Math.floor(copiedItem.x + 10);
+                this.currentItem.y = Math.floor(copiedItem.y + 10);
 
                 this.saveIcon();
 
@@ -817,8 +817,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 // Set X and Y poss of the new copied object
                 this.currentItem = copiedItem;
-                this.currentItem.x = copiedItem.x + 10;
-                this.currentItem.y = copiedItem.y + 10;
+                this.currentItem.x = Math.floor(copiedItem.x + 10);
+                this.currentItem.y = Math.floor(copiedItem.y + 10);
 
                 this.saveSummaryItem();
 
