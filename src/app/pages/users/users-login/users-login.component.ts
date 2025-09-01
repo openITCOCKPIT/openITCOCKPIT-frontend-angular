@@ -271,8 +271,9 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
                 if (this.LocalStorageService.hasItem('redirectUrl', '')) {
                     let redirectUrl: string = this.LocalStorageService.getItemWithDefault('redirectUrl', '/');
+                    let redirectTarget: string = redirectUrl.split('/a/')[1] || '/dashboards/index';
                     this.LocalStorageService.removeItem('redirectUrl');
-                    window.location.href = (redirectUrl);
+                    this.router.navigateByUrl(redirectTarget);
                     return;
                 }
 
