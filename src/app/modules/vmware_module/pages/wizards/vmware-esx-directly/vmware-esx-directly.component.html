@@ -27,18 +27,25 @@
                 <small class="fw-300">
                     {{ t('(esx directly)') }}
                 </small>
+                <oitc-badge-outline color="warning"
+                                    class="ms-1">
+                    <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                    {{ t('Deprecated') }}
+                </oitc-badge-outline>
             </h5>
         </c-card-header>
         <c-card-body class="p-0">
 
             <div class="row m-0 text-center mb-3" style="min-height: 22px;">
-                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('Host Information') }}
                     </span>
                 </div>
-                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('VMware') }}
@@ -139,9 +146,9 @@
             </fieldset>
 
             <oitc-wizards-dynamicfields
-                    [(post)]="post.services"
-                    [errors]="errors"
-                    [title]="'VMware services'|transloco"
+                [(post)]="post.services"
+                [errors]="errors"
+                [title]="'VMware services'|transloco"
             />
         </c-card-body>
     </c-card>

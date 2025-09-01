@@ -1,28 +1,31 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {
-  ButtonGroupComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  ColComponent,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
+    ButtonGroupComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    ColComponent,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { WizardsService } from '../wizards.service';
-import { WizardElement, WizardsIndex } from '../wizards.interface';
+import { DeprecatedWizards, WizardsIndex } from '../wizards.interface';
 import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 
-import { TranslocoDirective } from '@jsverse/transloco';
-import { Router, RouterLink } from '@angular/router';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { RouterLink } from '@angular/router';
 
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { HistoryService } from '../../../history.service';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
@@ -45,7 +48,11 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
         XsButtonDirective,
         ButtonGroupComponent,
         NgClass,
-        BadgeOutlineComponent
+        BadgeOutlineComponent,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective,
+        AccordionButtonDirective
     ],
     templateUrl: './wizards-index.component.html',
     styleUrl: './wizards-index.component.css',
@@ -55,6 +62,7 @@ export class WizardsIndexComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly WizardsService: WizardsService = inject(WizardsService);
     private readonly modalService: ModalService = inject(ModalService);
+    private readonly TranslocoService = inject(TranslocoService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected filter: any = {
@@ -73,6 +81,11 @@ export class WizardsIndexComponent implements OnInit, OnDestroy {
 
     protected result?: WizardsIndex;
 
+    protected deprecatedWizards: DeprecatedWizards = {
+        deprecatedWizards: {},
+        possibleDeprecatedWizards: {}
+    };
+
     public ngOnInit() {
         this.loadWizards();
     }
@@ -85,6 +98,18 @@ export class WizardsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.WizardsService.getIndex()
             .subscribe((result: WizardsIndex) => {
                 this.result = result;
+                for (let wizardType in this.result.wizards) {
+                    if (!this.result.wizards[wizardType].active) {
+                        this.deprecatedWizards.deprecatedWizards[wizardType] = this.result.wizards[wizardType];
+                        delete this.result.wizards[wizardType]; // Remove deprecated wizards from the main list
+                    }
+                }
+                for (let wizardType in this.result.possibleWizards) {
+                    if (!this.result.possibleWizards[wizardType]) {
+                        this.deprecatedWizards.possibleDeprecatedWizards[wizardType] = this.result.possibleWizards[wizardType];
+                        delete this.result.possibleWizards[wizardType]; // Remove deprecated wizards from the main list
+                    }
+                }
                 this.cdr.markForCheck();
             }))
     }

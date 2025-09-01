@@ -1,8 +1,12 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { UserIdAndUsername } from '../../../../pages/users/users.interface';
 import { ContainerEntity } from '../../../../pages/containers/containers.interface';
-import { ScmNotificationLogTypesEnum } from './resourcegroups-notifications/scm-notification-log-types.enum';
+import {
+    ScmNotificationLogRecipientTypesEnum,
+    ScmNotificationLogTypesEnum
+} from './resourcegroups-notifications/scm-notification-log-types.enum';
 import { Resource } from '../resources/resources.interface';
+import { GenericIdAndName } from '../../../../generic.interfaces';
 import { getUserDate } from '../../../../services/timezone.service';
 
 export interface ResourcegroupsIndex extends PaginateOrScroll {
@@ -22,11 +26,14 @@ export interface Resourcegroup {
     created?: string
     modified: string
     resources: Resource[]
-    users: UserIdAndUsername[]
     container: ContainerEntity
     allow_edit: boolean
+    users: UserIdAndUsername[]
     managers: UserIdAndUsername[]
     region_managers: UserIdAndUsername[]
+    mailinglist_users: GenericIdAndName[]
+    mailinglist_managers: GenericIdAndName[]
+    mailinglist_region_managers: GenericIdAndName[]
     resource_count: number
     statesummary: number[]
 }
@@ -78,6 +85,15 @@ export interface ResourcegroupsPost {
     },
     region_managers: {
         _ids: number[]
+    },
+    mailinglists_users: {
+        _ids: number[]
+    },
+    mailinglists_managers: {
+        _ids: number[]
+    },
+    mailinglists_region_managers: {
+        _ids: number[]
     }
 }
 
@@ -103,7 +119,7 @@ export interface ResourcegroupsNotificationsParams {
     direction: 'asc' | 'desc' | '', // asc or desc
     'filter[ScmNotificationsLog.created]': string
     'filter[ScmNotificationsLog.reason_type][]': number[]
-    'filter[username]': string
+    'filter[recipient]': string
     'filter[from]': Date | string
     'filter[to]': Date | string
 }
@@ -118,7 +134,7 @@ export function getResourcegroupsNotificationsParams(): ResourcegroupsNotificati
         direction: 'desc',
         'filter[ScmNotificationsLog.created]': '',
         'filter[ScmNotificationsLog.reason_type][]': [],
-        'filter[username]': '',
+        'filter[recipient]': '',
         'filter[from]': new Date(now.getTime() - (3600 * 24 * 30 * 4 * 1000)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5 * 1000)),
     };
@@ -133,14 +149,15 @@ export interface ResourcegroupsNotifications extends PaginateOrScroll {
 export interface ResourcegroupNotification {
     id: number
     resourcegroup_id: number
-    user_id: number
+    object_type: ScmNotificationLogRecipientTypesEnum.USER | ScmNotificationLogRecipientTypesEnum.MAILINGLIST
+    object_id: number
     reason_type: number
     send_time: string
     json_data: ResourcegroupNotificationJson[]
     has_been_sent: number
     error_message: any
     created: string
-    username: string
+    recipient: string
     unconfirmed_resources: Resource[]
     confirmed_resources: Resource[]
 }

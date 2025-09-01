@@ -8,8 +8,10 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
-                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                {{ t('Wizards') }}
+                <a *oitcPermission="['wizards', 'assignments']" [routerLink]="['/', 'wizards', 'assignments']">
+                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    {{ t('Wizards') }}
+                </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'chain']"></fa-icon>
@@ -126,6 +128,13 @@
                     </td>
                     <td>
                         {{ wizard.value.title }}
+                        @if (!wizard.value.active) {
+                            <oitc-badge-outline color="warning" class="mx-1"
+                                                [cTooltip]="'Please use new VMWareV2Module'|transloco">
+                                {{ t('obsolete') }}
+                            </oitc-badge-outline>
+                        }
+
                     </td>
                     <td>
                         {{ wizard.value.description }}
@@ -150,7 +159,7 @@
             </table>
 
             <oitc-no-records
-                    *ngIf="result && Object.keys(result.wizards).length === 0"></oitc-no-records>
+                *ngIf="result && Object.keys(result.wizards).length === 0"></oitc-no-records>
 
         </c-card-body>
     </c-card>

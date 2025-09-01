@@ -78,7 +78,7 @@
         "lodash": "^4.17.21",
         "luxon": "^3.7.1",
         "ng-apexcharts": "^2.0.0",
-        "ngx-color-picker": "^20.1.0",
+        "ngx-color-picker": "^20.1.1",
         "ngx-cookie-service": "^20.0.1",
         "ngx-echarts": "^20.0.1",
         "ngx-resize-observer": "^3.1.0",
@@ -98,7 +98,7 @@
         "vis-timeline": "^8.2.1",
         "zone.js": "^0.15.1"
     },
-    "optionalDependencies":  {
+    "optionalDependencies": {
         "@rollup/rollup-linux-arm64-gnu": "^4.46.2"
     },
     "overrides": {
