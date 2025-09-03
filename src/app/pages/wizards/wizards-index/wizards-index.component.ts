@@ -11,11 +11,11 @@ import {
     CardHeaderComponent,
     ColComponent,
     FormControlDirective,
-    ModalService,
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TemplateIdDirective
+    TemplateIdDirective,
+    TooltipDirective
 } from '@coreui/angular';
 import { WizardsService } from '../wizards.service';
 import { DeprecatedWizards, WizardElement, WizardsIndex } from '../wizards.interface';
@@ -56,7 +56,8 @@ import { FormsModule } from '@angular/forms';
         TemplateIdDirective,
         AccordionButtonDirective,
         FormControlDirective,
-        FormsModule
+        FormsModule,
+        TooltipDirective
     ],
     templateUrl: './wizards-index.component.html',
     styleUrl: './wizards-index.component.css',
