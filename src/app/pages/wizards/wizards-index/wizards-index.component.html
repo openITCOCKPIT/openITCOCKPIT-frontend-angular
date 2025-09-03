@@ -87,7 +87,7 @@
             <c-row *ngIf="result" class="wizard-card-group">
                 <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
                        *ngFor="let wizard of result.wizards | keyvalue"
-                       [hidden]="! filterByCategory(wizard.value.category)">
+                       [hidden]="hidden(wizard.value)">
                     <c-card class="mb-3">
                         <c-card-body class="wizard-card-body cursor-pointer"
                                      [routerLink]="['/', 'wizards', 'wizardHostConfiguration', wizard.value.type_id, wizard.value.title, 0, wizard.value.state, wizard.value.selected_os]">
@@ -113,7 +113,7 @@
                 </c-col>
                 <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
                        *ngFor="let wizard of result.possibleWizards | keyvalue"
-                       [hidden]="! filterByCategory(wizard.value.category)">
+                       [hidden]="hidden(wizard.value)">
                     <c-card class="mb-3">
                         <c-card-body class="wizard-card-body bg-placeholder-wizard">
                             <div class="d-flex align-items-center">
@@ -164,7 +164,7 @@
                         <c-row class="wizard-card-group accordion-body">
                             <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
                                    *ngFor="let wizard of this.deprecatedWizards.deprecatedWizards | keyvalue"
-                                   [hidden]="! filterByCategory(wizard.value.category)">
+                                   [hidden]="hidden(wizard.value)">
                                 <c-card class="mb-3">
                                     <c-card-body class="wizard-card-body cursor-pointer"
                                                  [routerLink]="['/', 'wizards', 'wizardHostConfiguration', wizard.value.type_id, wizard.value.title, 0, wizard.value.state, wizard.value.selected_os]">
@@ -194,7 +194,7 @@
                             </c-col>
                             <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
                                    *ngFor="let wizard of this.deprecatedWizards.possibleDeprecatedWizards | keyvalue"
-                                   [hidden]="! filterByCategory(wizard.value.category)">
+                                   [hidden]="hidden(wizard.value)">
                                 <c-card class="mb-3">
                                     <c-card-body class="wizard-card-body bg-placeholder-wizard">
                                         <div class="d-flex align-items-center">
