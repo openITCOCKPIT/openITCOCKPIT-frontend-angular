@@ -1,0 +1,25 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['statuspagegroups', 'index']" [routerLink]="['/', 'statuspagegroups', 'index']">
+                    <fa-icon [icon]="['fas', 'layer-group']"></fa-icon>
+                    {{ t('Status page groups') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
+    </nav>
+
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
+
+
+</ng-container>
