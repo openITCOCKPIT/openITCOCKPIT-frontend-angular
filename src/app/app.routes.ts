@@ -736,10 +736,13 @@ const coreRoutes: Routes = [{
     loadComponent: () => import('./pages/organizationalcharts/organizational-charts-browser-view/organizational-charts-browser-view.component').then(m => m.OrganizationalChartsBrowserViewComponent)
 }, {
     path: 'statuspagegroups/add',
-    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-add/statuspagegroups-add.component').then(m => m.StatuspagegroupsAddComponent)
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-add-step-one/statuspagegroups-add-step-one.component').then(m => m.StatuspagegroupsAddStepOneComponent)
 }, {
     path: 'statuspagegroups/edit/:id',
-    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-edit/statuspagegroups-edit.component').then(m => m.StatuspagegroupsEditComponent)
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-edit-step-one/statuspagegroups-edit-step-one.component').then(m => m.StatuspagegroupsEditStepOneComponent)
+}, {
+    path: 'statuspagegroups/editStepTwo/:id',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-edit-step-two/statuspagegroups-edit-step-two.component').then(m => m.StatuspagegroupsEditStepTwoComponent)
 }, {
     path: 'statuspagegroups/index',
     loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-index/statuspagegroups-index.component').then(m => m.StatuspagegroupsIndexComponent)
