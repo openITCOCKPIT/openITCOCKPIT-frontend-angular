@@ -20,6 +20,89 @@
     </nav>
 
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
+    <form cForm (ngSubmit)="submit()">
+        @if (post) {
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Edit status page group:') }}
+                        <small class="fw-300">
+                            {{ post.name }}
+                        </small>
+                    </h5>
 
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['statuspagegroups', 'index']" cButton class="ripple" color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+
+                </c-card-header>
+                <c-card-body>
+                    <c-row class="m-0 text-center mb-3" style="min-height: 22px;">
+                        <c-col xs="12" md="4" lg="2"
+                               class="wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                            <span>
+                                <c-badge color="secondary">1</c-badge>
+                            </span>
+                            <span class="ms-1">
+                                {{ t('Statuspage group configuration') }}
+                            </span>
+                        </c-col>
+                        <c-col xs="12" md="4" lg="2"
+                               class="wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-border-right  wizard-active">
+                            <span>
+                                <c-badge color="secondary">2</c-badge>
+                            </span>
+                            <span class="ms-1">
+                                {{ t('Membership configuration') }}
+
+                            </span>
+                        </c-col>
+                        <c-col class="wizard-bg-inactive d-inline-flex">
+                        </c-col>
+                        <c-col xs="12" md="4" lg="1" class="ps-0 pe-0 wizard-bg-inactive">
+                            <div class="btn-group btn-group-xs w-100 h-100">
+                                <button type="button" class="btn btn-primary h-100"
+                                        style="border-radius: 0;"
+                                        [title]="'Prev' | transloco"
+                                        [routerLink]="['/', 'statuspagegroups', 'edit', post.id]"
+                                >
+                                    <i class="fa fa-arrow-left"></i>
+                                    {{ t('Prev') }}
+                                </button>
+
+                                <button type="submit" class="btn btn-success h-100 ripple"
+                                        style="border-radius: 0;"
+                                        [title]="'Finish' | transloco">
+                                    {{ t('Finish') }}
+                                    <i class="fa fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+
+                    HIER JETZT collections und catergorys matrix bauen
+
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Update status page group') }}
+                    </button>
+                    <button [fallbackUrl]="['statuspagegroups', 'index']" cButton class="ms-1 ripple" color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+
+                </c-card-footer>
+            </c-card>
+        }
+    </form>
 
 </ng-container>

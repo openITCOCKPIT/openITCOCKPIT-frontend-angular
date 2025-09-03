@@ -24,7 +24,7 @@ export interface StatuspagegroupCollectionPost {
 
 export interface StatuspagegroupCategoryPost {
     id?: number
-    statuspagegroup_id: number
+    statuspagegroup_id?: number
     name: string
     modified?: string
     created?: string

@@ -23,7 +23,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -78,6 +78,7 @@ export class StatuspagegroupsAddStepOneComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly router: Router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
@@ -119,10 +120,9 @@ export class StatuspagegroupsAddStepOneComponent implements OnInit, OnDestroy {
                     const url = ['statuspagegroups', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-
-                    this.HistoryService.navigateWithFallback(['/statuspagegroups/editStepTwo/', response.id]);
-
                     this.notyService.scrollContentDivToTop();
+
+                    this.router.navigate(['/statuspagegroups/editStepTwo/', response.id]);
                     this.errors = null;
                     return;
                 }

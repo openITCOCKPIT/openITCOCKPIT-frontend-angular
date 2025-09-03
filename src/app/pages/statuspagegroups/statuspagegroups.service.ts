@@ -52,4 +52,40 @@ export class StatuspagegroupsService {
         )
     }
 
+    public getStatuspagegroupEdit(id: number): Observable<StatuspagegroupPost> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            statuspagegroup: StatuspagegroupPost
+        }>(`${proxyPath}/statuspagegroups/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.statuspagegroup;
+            })
+        );
+    }
+
+    public saveStatuspagegroupEdit(statuspagegroup: StatuspagegroupPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/statuspagegroups/edit/${statuspagegroup.id}.json`, statuspagegroup)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
 }
