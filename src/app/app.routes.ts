@@ -735,6 +735,15 @@ const coreRoutes: Routes = [{
     path: 'organizationalcharts/browserView',
     loadComponent: () => import('./pages/organizationalcharts/organizational-charts-browser-view/organizational-charts-browser-view.component').then(m => m.OrganizationalChartsBrowserViewComponent)
 }, {
+    path: 'statuspagegroups/add',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-add/statuspagegroups-add.component').then(m => m.StatuspagegroupsAddComponent)
+}, {
+    path: 'statuspagegroups/edit/:id',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-edit/statuspagegroups-edit.component').then(m => m.StatuspagegroupsEditComponent)
+}, {
+    path: 'statuspagegroups/index',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-index/statuspagegroups-index.component').then(m => m.StatuspagegroupsIndexComponent)
+}, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)
 }, {
