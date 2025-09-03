@@ -5,6 +5,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { StatuspagegroupPost, StatuspagegroupsIndex, StatuspagegroupsIndexParams } from './statuspagegroups.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -60,5 +61,14 @@ export class StatuspagegroupsService {
                 return data.containers
             })
         )
+    }
+
+    /**********************
+     *    Delete action    *
+     **********************/
+    // Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/statuspagegroups/delete/${item.id}.json?angular=true`, {});
     }
 }

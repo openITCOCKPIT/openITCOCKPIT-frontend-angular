@@ -11,8 +11,10 @@ export interface Statuspagegroup {
     name: string
     description: string
     created?: string
+    container?: string
     modified: string
-    allow_edit: boolean
+    allowEdit: boolean
+    allowView: boolean
 }
 
 export interface StatuspagegroupsIndexParams {

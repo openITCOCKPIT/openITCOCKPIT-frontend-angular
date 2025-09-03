@@ -24,14 +24,31 @@
  */
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { PermissionsService } from '../../../permissions/permissions.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IndexPage } from '../../../pages.interface';
 import { StatuspagegroupsService } from '../statuspagegroups.service';
-import { ModalService } from '@coreui/angular';
+import {
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownDividerDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
+} from '@coreui/angular';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { Sort } from '@angular/material/sort';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
@@ -46,13 +63,61 @@ import {
     StatuspagegroupsIndex,
     StatuspagegroupsIndexParams
 } from '../statuspagegroups.interface';
+import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 
 @Component({
     selector: 'oitc-statuspagegroups-index',
     imports: [
         FormsModule,
-        PaginatorModule
+        PaginatorModule,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        DeleteAllModalComponent,
+        DropdownDividerDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        PermissionDirective,
+        RowComponent,
+        SelectAllComponent,
+        TableDirective,
+        TableLoaderComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        RouterLink
     ],
     templateUrl: './statuspagegroups-index.component.html',
     styleUrl: './statuspagegroups-index.component.css',
@@ -99,6 +164,8 @@ export class StatuspagegroupsIndexComponent implements OnInit, OnDestroy, IndexP
     }
 
     public resetFilter(): void {
+        this.params = getStatuspagegroupsIndexParams();
+        this.load();
     }
 
     public onFilterChange(event: Event): void {
