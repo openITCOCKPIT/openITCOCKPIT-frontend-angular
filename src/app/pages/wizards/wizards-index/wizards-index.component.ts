@@ -10,6 +10,7 @@ import {
     CardFooterComponent,
     CardHeaderComponent,
     ColComponent,
+    FormControlDirective,
     ModalService,
     NavComponent,
     NavItemComponent,
@@ -17,7 +18,7 @@ import {
     TemplateIdDirective
 } from '@coreui/angular';
 import { WizardsService } from '../wizards.service';
-import { DeprecatedWizards, WizardsIndex } from '../wizards.interface';
+import { DeprecatedWizards, WizardElement, WizardsIndex } from '../wizards.interface';
 import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -27,6 +28,7 @@ import { RouterLink } from '@angular/router';
 
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-wizards-index',
@@ -52,7 +54,9 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
         AccordionComponent,
         AccordionItemComponent,
         TemplateIdDirective,
-        AccordionButtonDirective
+        AccordionButtonDirective,
+        FormControlDirective,
+        FormsModule
     ],
     templateUrl: './wizards-index.component.html',
     styleUrl: './wizards-index.component.css',
@@ -61,11 +65,10 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
 export class WizardsIndexComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly WizardsService: WizardsService = inject(WizardsService);
-    private readonly modalService: ModalService = inject(ModalService);
-    private readonly TranslocoService = inject(TranslocoService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected filter: any = {
+        search: '',
         Category: {
             linux: true,
             windows: true,
@@ -114,15 +117,24 @@ export class WizardsIndexComponent implements OnInit, OnDestroy {
             }))
     }
 
-    protected filterByCategory(categories: string[]): boolean {
-        // Traverse all categories
-
-        for (let i = 0; i < categories.length; i++) {
-            if (this.filter.Category[categories[i]]) {
+    /**
+     * I will decide whether the given wizard is shown or not.
+     * @param wizard
+     * @return boolean: True, if the wizard should be hidden.
+     * @protected
+     */
+    protected hidden(wizard: WizardElement): boolean {
+        let searchTerm: string = this.filter.search?.toLowerCase();
+        if (searchTerm) {
+            let inTitle: boolean = wizard.title.toLowerCase().includes(searchTerm),
+                inDescription: boolean = wizard.description.toLowerCase().includes(searchTerm),
+                inCategory: boolean = wizard.category?.join(' ').toLowerCase().includes(searchTerm);
+            if (!inTitle && !inDescription && !inCategory) {
                 return true;
             }
         }
-        return false;
+
+        return !wizard.category.some(cat => this.filter.Category[cat]);
     }
 
 }
