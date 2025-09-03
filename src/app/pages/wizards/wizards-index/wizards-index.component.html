@@ -23,6 +23,13 @@
                     {{ t('Filter') }}
                 </c-nav-item>
                 <c-nav-item class="px-1">
+                    <input type="text"
+                           cFormControl
+                           name="search"
+                           id="search"
+                           placeholder="{{ t('Search') }}"
+                           [(ngModel)]="filter.search"
+                    />
                     <c-button-group>
                         <button cButton color="primary" size="xs"
                                 [ngClass]="{'btn-primary': filter.Category.linux, 'btn-default': !filter.Category.linux}"
