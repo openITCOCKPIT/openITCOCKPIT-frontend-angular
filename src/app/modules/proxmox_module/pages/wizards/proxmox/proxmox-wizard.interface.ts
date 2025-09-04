@@ -2,6 +2,9 @@ import { WizardGet, WizardPost } from '../../../../../pages/wizards/wizards.inte
 
 // WIZARD GET
 export interface ProxmoxWizardGet extends WizardGet {
+    pveUsername: string
+    pveApiTokenName: string
+    pveApiTokenSecret: string
     interfaceServicetemplate: InterfaceServicetemplate
 }
 

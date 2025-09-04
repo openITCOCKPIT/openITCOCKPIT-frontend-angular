@@ -19,7 +19,6 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
-import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { ProxmoxWizardGet, ProxmoxWizardPost } from './proxmox-wizard.interface';
 import { ProxmoxWizardService } from './proxmox-wizard.service';
 import { RouterLink } from '@angular/router';
@@ -67,6 +66,10 @@ export class ProxmoxComponent extends WizardsAbstractComponent {
     } as ProxmoxWizardPost;
 
     protected override wizardLoad(result: ProxmoxWizardGet): void {
+        console.warn(result);
+        this.post.pveUsername = result.pveUsername;
+        this.post.pveApiTokenName = result.pveApiTokenName;
+        this.post.pveApiTokenSecret = result.pveApiTokenSecret;
         super.wizardLoad(result);
     }
 
