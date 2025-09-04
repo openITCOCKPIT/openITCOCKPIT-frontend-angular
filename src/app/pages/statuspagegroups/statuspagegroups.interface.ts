@@ -9,7 +9,7 @@ export interface Statuspagegroup {
     id: number
     container_id: number
     name: string
-    description: string
+    description: string | null
     created?: string
     container?: string
     modified: string
@@ -46,7 +46,7 @@ export interface StatuspagegroupPost {
     id?: number
     container_id: number
     name: string
-    description: string
+    description: string | null
     modified?: string
     created?: string
     statuspages_memberships: StatuspagesMembershipPost[]
@@ -58,7 +58,7 @@ export interface StatuspagegroupCollectionPost {
     id?: number
     statuspagegroup_id?: number
     name: string
-    description: string
+    description: string | null
     modified?: string
     created?: string
 }

@@ -129,7 +129,7 @@ export class StatuspagegroupsEditStepOneComponent implements OnInit, OnDestroy {
 
         this.post.statuspagegroup_collections = [...this.post.statuspagegroup_collections, {
             name: '',
-            description: ''
+            description: null
         }];
         this.cdr.markForCheck();
     }

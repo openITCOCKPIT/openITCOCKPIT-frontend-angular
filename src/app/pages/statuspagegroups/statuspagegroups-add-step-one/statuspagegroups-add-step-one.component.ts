@@ -101,7 +101,7 @@ export class StatuspagegroupsAddStepOneComponent implements OnInit, OnDestroy {
     private getDefaultPost(): StatuspagegroupPost {
         return {
             name: '',
-            description: '',
+            description: null,
             container_id: 0,
             statuspagegroup_categories: [],
             statuspagegroup_collections: [],
