@@ -79,7 +79,7 @@ export interface StatuspagesMembershipPost {
         statuspagegroup_id?: number
         collection_id?: number
         category_id?: number
-        statuspage_id?: number
+        statuspage_id: number
         modified?: string
         created?: string
     }

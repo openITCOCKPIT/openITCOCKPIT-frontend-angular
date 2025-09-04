@@ -174,7 +174,7 @@ export class StatuspagegroupsEditStepTwoComponent implements OnInit, OnDestroy {
                             statuspagegroup_id: Number(this.post?.id),
                             collection_id: category.collectionId,
                             category_id: category.categoryId,
-                            //statuspage_id: statuspageId
+                            statuspage_id: statuspageId
                         }
                     });
                 });
