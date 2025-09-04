@@ -135,7 +135,7 @@
                         <table cTable [striped]="true" stripedColumns bordered>
                             <thead>
                             <tr>
-                                <th scope="col">
+                                <th scope="col" class="align-middle">
                                     <button cButton class="ripple" size="xs" color="success" type="button"
                                             (click)="addCollection()">
                                         <fa-icon [icon]="['fas', 'plus']"></fa-icon>
@@ -153,16 +153,19 @@
                                                 [id]="'category_id_'+categoryIndex"
                                                 [(ngModel)]="category.name"
                                                 [placeholder]="'New category #' + (categoryIndex+1) | transloco"
-                                            />
+                                                oitcFormError [errors]="categoryErrors[$index]"
+                                                errorField="name"/>
                                             <span cInputGroupText>
                                                 <fa-icon [icon]="['fas', 'trash']"
                                                          (click)="removeCategory(categoryIndex)"
                                                          class="text-danger-hover cursor-pointer"></fa-icon>
                                             </span>
                                         </c-input-group>
+                                        <oitc-form-feedback [errors]="categoryErrors[$index]"
+                                                            errorField="name"></oitc-form-feedback>
                                     </th>
                                 }
-                                <th scope="col">
+                                <th scope="col" class="align-middle">
                                     <button cButton class="ripple" size="xs" color="success" type="button"
                                             (click)="addCategory()">
                                         <fa-icon [icon]="['fas', 'plus']"></fa-icon>
@@ -183,13 +186,16 @@
                                                     [id]="'collection_id_'+collectionIndex"
                                                     [(ngModel)]="collection.name"
                                                     [placeholder]="'New collect #' + (collectionIndex+1) | transloco"
-                                                />
+                                                    oitcFormError [errors]="collectionErrors[$index]"
+                                                    errorField="name"/>
                                                 <span cInputGroupText>
                                                     <fa-icon [icon]="['fas', 'trash']"
                                                              (click)="removeCollection(collectionIndex)"
                                                              class="text-danger-hover cursor-pointer"></fa-icon>
                                                 </span>
                                             </c-input-group>
+                                            <oitc-form-feedback [errors]="collectionErrors[$index]"
+                                                                errorField="name"></oitc-form-feedback>
                                         </th>
 
 

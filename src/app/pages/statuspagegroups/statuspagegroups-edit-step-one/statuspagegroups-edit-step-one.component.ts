@@ -79,6 +79,9 @@ export class StatuspagegroupsEditStepOneComponent implements OnInit, OnDestroy {
 
     public post?: StatuspagegroupPost;
     public errors: GenericValidationError | null = null;
+    public collectionErrors: { [key: number]: GenericValidationError } = {};
+    public categoryErrors: { [key: number]: GenericValidationError } = {};
+
 
     public containers: SelectKeyValue[] = [];
 
@@ -137,6 +140,10 @@ export class StatuspagegroupsEditStepOneComponent implements OnInit, OnDestroy {
         }
 
         this.post.statuspagegroup_collections = this.post.statuspagegroup_collections.filter((_, i) => i !== index);
+
+        // Reset any errors as if a collection is removed, the errors index will be off
+        this.collectionErrors = {};
+
         this.cdr.markForCheck();
     }
 
@@ -157,6 +164,10 @@ export class StatuspagegroupsEditStepOneComponent implements OnInit, OnDestroy {
         }
 
         this.post.statuspagegroup_categories = this.post.statuspagegroup_categories.filter((_, i) => i !== index);
+
+        // Reset any errors as if a category is removed, the errors index will be off
+        this.categoryErrors = {};
+
         this.cdr.markForCheck();
     }
 
@@ -187,6 +198,22 @@ export class StatuspagegroupsEditStepOneComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
+
+                    this.collectionErrors = {};
+                    if (errorResponse.hasOwnProperty('statuspagegroup_collections')) {
+                        for (let i in errorResponse['statuspagegroup_collections']) {
+                            const k = Number(i);
+                            this.collectionErrors[k] = (errorResponse['statuspagegroup_collections'][i] as any as GenericValidationError);
+                        }
+                    }
+
+                    this.categoryErrors = {};
+                    if (errorResponse.hasOwnProperty('statuspagegroup_categories')) {
+                        for (let i in errorResponse['statuspagegroup_categories']) {
+                            const k = Number(i);
+                            this.categoryErrors[k] = (errorResponse['statuspagegroup_categories'][i] as any as GenericValidationError);
+                        }
+                    }
                 }
             }));
     }
