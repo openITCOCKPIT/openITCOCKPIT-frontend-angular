@@ -19,17 +19,12 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    FormControlDirective,
     FormDirective,
-    FormLabelDirective,
     NavComponent,
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
@@ -48,16 +43,11 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-        FormControlDirective,
         FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
         FormsModule,
         NavComponent,
         NavItemComponent,
         ReactiveFormsModule,
-        RequiredIconComponent,
         RowComponent,
         TranslocoPipe,
         XsButtonDirective
