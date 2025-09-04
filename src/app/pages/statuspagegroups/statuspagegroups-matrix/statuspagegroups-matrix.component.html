@@ -1,0 +1,83 @@
+<ng-container *transloco="let t">
+    <div>
+        <table cTable [striped]="true" stripedColumns bordered>
+            <thead>
+            <tr>
+                <th scope="col" class="align-middle">
+                    <button cButton class="ripple" size="xs" color="success" type="button"
+                            (click)="addCollection()">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('Add collection') }}
+                    </button>
+                </th>
+
+                @for (category of statuspagegroup_categories(); track $index; let
+                    categoryIndex = $index) {
+                    <th scope="col">
+                        <c-input-group>
+                            <input
+                                cFormControl
+                                [name]="'category_'+categoryIndex"
+                                [id]="'category_id_'+categoryIndex"
+                                [(ngModel)]="category.name"
+                                [placeholder]="'New category #' + (categoryIndex+1) | transloco"
+                                oitcFormError [errors]="categoryErrors[$index]"
+                                errorField="name"/>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'trash']"
+                                         (click)="removeCategory(categoryIndex)"
+                                         class="text-danger-hover cursor-pointer"></fa-icon>
+                            </span>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="categoryErrors[$index]"
+                                            errorField="name"></oitc-form-feedback>
+                    </th>
+                }
+                <th scope="col" class="align-middle">
+                    <button cButton class="ripple" size="xs" color="success" type="button"
+                            (click)="addCategory()">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('Add category') }}
+                    </button>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                @for (collection of statuspagegroup_collections(); track $index; let
+                    collectionIndex = $index) {
+                    <tr>
+                        <th class="col-2">
+                            <c-input-group>
+                                <input
+                                    cFormControl
+                                    [name]="'collection_'+collectionIndex"
+                                    [id]="'collection_id_'+collectionIndex"
+                                    [(ngModel)]="collection.name"
+                                    [placeholder]="'New collect #' + (collectionIndex+1) | transloco"
+                                    oitcFormError [errors]="collectionErrors[$index]"
+                                    errorField="name"/>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'trash']"
+                                             (click)="removeCollection(collectionIndex)"
+                                             class="text-danger-hover cursor-pointer"></fa-icon>
+                                </span>
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="collectionErrors[$index]"
+                                                errorField="name"></oitc-form-feedback>
+                        </th>
+
+
+                        @if ($first) {
+                            <td [colSpan]="statuspagegroup_categories().length+1"
+                                [rowSpan]="statuspagegroup_collections().length"
+                                class="text-muted text-center align-middle">
+                                {{ t('Statuspages can be assigned in the next step') }}
+                            </td>
+                        }
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</ng-container>

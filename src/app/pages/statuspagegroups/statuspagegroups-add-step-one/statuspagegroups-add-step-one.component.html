@@ -117,6 +117,17 @@
                     <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                 </div>
 
+                <fieldset class="mt-2">
+                    <legend class="fs-md fieldset-legend-border-bottom-thin mt-1">
+                        {{ t('Status page matrix') }}
+                    </legend>
+                </fieldset>
+                <oitc-statuspagegroups-matrix
+                    [(statuspagegroup_collections)]="post.statuspagegroup_collections"
+                    [collectionErrorsInput]="collectionErrors"
+                    [(statuspagegroup_categories)]="post.statuspagegroup_categories"
+                    [categoryErrorsInput]="categoryErrors"></oitc-statuspagegroups-matrix>
+
             </c-card-body>
             <c-card-footer class="text-end">
                 <button cButton class="ripple" color="primary" type="submit">

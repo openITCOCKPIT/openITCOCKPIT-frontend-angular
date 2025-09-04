@@ -23,12 +23,9 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent,
-    TableDirective
+    RowComponent
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -36,6 +33,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { StatuspagegroupsMatrixComponent } from '../statuspagegroups-matrix/statuspagegroups-matrix.component';
 
 @Component({
     selector: 'oitc-statuspagegroups-edit-step-one',
@@ -67,9 +65,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         SelectComponent,
         TranslocoPipe,
         XsButtonDirective,
-        TableDirective,
-        InputGroupComponent,
-        InputGroupTextDirective
+        StatuspagegroupsMatrixComponent
     ],
     templateUrl: './statuspagegroups-edit-step-one.component.html',
     styleUrl: './statuspagegroups-edit-step-one.component.css',
@@ -120,55 +116,6 @@ export class StatuspagegroupsEditStepOneComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
             })
         );
-    }
-
-    public addCollection() {
-        if (!this.post) {
-            return;
-        }
-
-        this.post.statuspagegroup_collections = [...this.post.statuspagegroup_collections, {
-            name: '',
-            description: null
-        }];
-        this.cdr.markForCheck();
-    }
-
-    public removeCollection(index: number) {
-        if (!this.post) {
-            return;
-        }
-
-        this.post.statuspagegroup_collections = this.post.statuspagegroup_collections.filter((_, i) => i !== index);
-
-        // Reset any errors as if a collection is removed, the errors index will be off
-        this.collectionErrors = {};
-
-        this.cdr.markForCheck();
-    }
-
-    public addCategory() {
-        if (!this.post) {
-            return;
-        }
-
-        this.post.statuspagegroup_categories = [...this.post.statuspagegroup_categories, {
-            name: ''
-        }];
-        this.cdr.markForCheck();
-    }
-
-    public removeCategory(index: number) {
-        if (!this.post) {
-            return;
-        }
-
-        this.post.statuspagegroup_categories = this.post.statuspagegroup_categories.filter((_, i) => i !== index);
-
-        // Reset any errors as if a category is removed, the errors index will be off
-        this.categoryErrors = {};
-
-        this.cdr.markForCheck();
     }
 
     public submit() {
