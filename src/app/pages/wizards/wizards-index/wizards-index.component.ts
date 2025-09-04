@@ -11,6 +11,8 @@ import {
     CardHeaderComponent,
     ColComponent,
     FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
     RowComponent,
@@ -21,11 +23,8 @@ import { WizardsService } from '../wizards.service';
 import { DeprecatedWizards, WizardElement, WizardsIndex } from '../wizards.interface';
 import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-
-
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
-
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 import { FormsModule } from '@angular/forms';
@@ -57,7 +56,9 @@ import { FormsModule } from '@angular/forms';
         AccordionButtonDirective,
         FormControlDirective,
         FormsModule,
-        TooltipDirective
+        TooltipDirective,
+        InputGroupComponent,
+        InputGroupTextDirective
     ],
     templateUrl: './wizards-index.component.html',
     styleUrl: './wizards-index.component.css',
