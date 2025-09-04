@@ -72,15 +72,23 @@ export interface StatuspagegroupCategoryPost {
 }
 
 export interface StatuspagesMembershipPost {
-    id?: number
-    name: string
+    id: number    // this is the ID of the status page
+    name?: string // In edit mode, the name of the status page is not relevant
     _joinData: {
         id?: number
         statuspagegroup_id?: number
         collection_id?: number
         category_id?: number
-        statuspage_id: number
+        statuspage_id?: number
         modified?: string
         created?: string
     }
+}
+
+export interface StatuspageMatrixItem {
+    collectionIndex: number  // index position in collections array
+    collectionId: number     // actual database ID of the collection
+    categoryIndex: number    // index position in categories array
+    categoryId: number       // actual database ID of the category
+    statuspageIds: number[]  // IDs of status pages assigned to this cell
 }

@@ -87,7 +87,65 @@
                         </c-col>
                     </c-row>
 
-                    HIER JETZT collections und catergorys matrix bauen
+                    <fieldset class="mt-2">
+                        <legend class="fs-md fieldset-legend-border-bottom-thin mt-1">
+                            {{ t('Status page matrix') }}
+                        </legend>
+                    </fieldset>
+                    <div>
+                        <table cTable [striped]="true" stripedColumns bordered>
+                            <thead>
+                            <tr>
+                                <th scope="col" class="align-middle">
+                                    {{ t('Collection') }}
+                                </th>
+
+                                @for (category of post.statuspagegroup_categories; track $index) {
+                                    <th scope="col">
+                                        {{ category.name }}
+                                    </th>
+                                }
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @for (collection of post.statuspagegroup_collections; track $index; let
+                                    collectionIndex = $index) {
+                                    <tr>
+                                        <th class="col-2">
+                                            {{ collection.name }}
+                                        </th>
+
+                                        @for (category of post.statuspagegroup_categories; track $index; let
+                                            categoryIndex = $index) {
+                                            <td>
+                                                <div class="mb-3">
+                                                    <label cLabel
+                                                           [for]="'statuspage_ids_'+collectionIndex+'_'+categoryIndex"
+                                                           class="form-label">
+                                                        {{ t('Assigned Status pages') }}
+                                                    </label>
+                                                    <oitc-multi-select
+                                                        [name]="'statuspage_ids_'+collectionIndex+'_'+categoryIndex"
+                                                        [id]="'statuspage_ids_'+collectionIndex+'_'+categoryIndex"
+                                                        optionValue="key"
+                                                        optionLabel="value"
+                                                        [options]="statuspages"
+                                                        [(ngModel)]="this.statuspageMatrix[collectionIndex][categoryIndex].statuspageIds"
+                                                        oitcFormError [errors]="errors" errorField="hosts">
+                                                    </oitc-multi-select>
+                                                    <oitc-form-feedback [errors]="errors"
+                                                                        errorField="hosts"></oitc-form-feedback>
+                                                </div>
+
+                                            </td>
+                                        }
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
 
                 </c-card-body>
                 <c-card-footer class="text-end">

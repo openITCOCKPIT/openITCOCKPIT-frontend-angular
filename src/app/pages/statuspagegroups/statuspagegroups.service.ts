@@ -78,9 +78,63 @@ export class StatuspagegroupsService {
         );
     }
 
+    /**
+     * editStepTwo has access to:
+     *     $statuspagegroup->setAccess('statuspages_memberships', false);
+     *     $statuspagegroup->setAccess('statuspagegroup_collections', true);
+     *     $statuspagegroup->setAccess('statuspagegroup_categories', true);
+     * @param statuspagegroup
+     */
     public saveStatuspagegroupEdit(statuspagegroup: StatuspagegroupPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/statuspagegroups/edit/${statuspagegroup.id}.json`, statuspagegroup)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getStatuspagegroupEditStepTwo(id: number): Observable<{
+        statuspagegroup: StatuspagegroupPost,
+        statuspages: SelectKeyValue[]
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            statuspagegroup: StatuspagegroupPost,
+            statuspages: SelectKeyValue[]
+        }>(`${proxyPath}/statuspagegroups/editStepTwo/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    /**
+     * editStepTwo has access to:
+     *     $statuspagegroup->setAccess('statuspages_memberships', true);
+     *     $statuspagegroup->setAccess('statuspagegroup_collections', false);
+     *     $statuspagegroup->setAccess('statuspagegroup_categories', false);
+     * @param statuspagegroup
+     */
+    public saveStatuspagegroupEditStepTwo(statuspagegroup: StatuspagegroupPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/statuspagegroups/editStepTwo/${statuspagegroup.id}.json`, statuspagegroup)
             .pipe(
                 map(data => {
                     // Return true on 200 Ok

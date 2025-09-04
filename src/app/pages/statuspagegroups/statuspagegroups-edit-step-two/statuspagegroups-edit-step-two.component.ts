@@ -4,7 +4,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { StatuspagegroupPost } from '../statuspagegroups.interface';
+import { StatuspagegroupPost, StatuspageMatrixItem, StatuspagesMembershipPost } from '../statuspagegroups.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -20,12 +20,18 @@ import {
     CardTitleDirective,
     ColComponent,
     FormDirective,
+    FormLabelDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-statuspagegroups-edit-step-two',
@@ -50,7 +56,12 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         ReactiveFormsModule,
         RowComponent,
         TranslocoPipe,
-        XsButtonDirective
+        XsButtonDirective,
+        TableDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        MultiSelectComponent
     ],
     templateUrl: './statuspagegroups-edit-step-two.component.html',
     styleUrl: './statuspagegroups-edit-step-two.component.css',
@@ -60,6 +71,10 @@ export class StatuspagegroupsEditStepTwoComponent implements OnInit, OnDestroy {
 
     public post?: StatuspagegroupPost;
     public errors: GenericValidationError | null = null;
+
+    public statuspages: SelectKeyValue[] = [];
+    //public statuspageMatrix: number[][][] = [];
+    public statuspageMatrix: StatuspageMatrixItem[][] = [];
 
     private subscriptions: Subscription = new Subscription();
     private readonly StatuspagegroupsService = inject(StatuspagegroupsService);
@@ -82,10 +97,91 @@ export class StatuspagegroupsEditStepTwoComponent implements OnInit, OnDestroy {
     }
 
     public loadStatuspagegroup(id: number) {
-        this.subscriptions.add(this.StatuspagegroupsService.getStatuspagegroupEdit(id).subscribe(statuspagegroup => {
-            this.post = statuspagegroup;
+        this.subscriptions.add(this.StatuspagegroupsService.getStatuspagegroupEditStepTwo(id).subscribe(result => {
+            this.post = result.statuspagegroup;
+            this.statuspages = result.statuspages;
+
+            // Create matrix for easier access
+            this.statuspageMatrix = this.createStatuspageMatrix();
+            this.assignStatuspagesToMatrix();
+
             this.cdr.markForCheck();
         }));
+    }
+
+    private createStatuspageMatrix(): StatuspageMatrixItem[][] {
+        // The "matrix" array will represent the table structure as array
+        // [row [columns [statuspageIds]]]
+        const matrix: StatuspageMatrixItem[][] = [];
+        if (this.post && this.post.statuspagegroup_collections) {
+            this.post.statuspagegroup_collections.forEach((collection, collectionIndex) => {
+                matrix[collectionIndex] = [];
+                if (this.post) {
+                    this.post.statuspagegroup_categories.forEach((category, categoryIndex) => {
+                        matrix[collectionIndex][categoryIndex] = {
+                            collectionIndex: collectionIndex,
+                            collectionId: Number(collection.id),
+                            categoryIndex: categoryIndex,
+                            categoryId: Number(category.id),
+                            statuspageIds: []
+                        };
+                    });
+                }
+            });
+        }
+
+        return matrix;
+    }
+
+    private assignStatuspagesToMatrix() {
+        if (this.post) {
+            // Map collection IDs to their index in the post.statuspagegroup_collections array
+            const collectionIndexMapping = new Map<number, number>();
+            this.post.statuspagegroup_collections.forEach((collection, index) => {
+                if (collection.id) {
+                    collectionIndexMapping.set(collection.id, index);
+                }
+            });
+
+            // Map category IDs to their index in the post.statuspagegroup_categories array
+            const categoryIndexMapping = new Map<number, number>();
+            this.post.statuspagegroup_categories.forEach((category, index) => {
+                if (category.id) {
+                    categoryIndexMapping.set(category.id, index);
+                }
+            });
+
+            // Assign statuspages to the matrix based on their collection_id and category_id
+            for (const statuspage of this.post.statuspages_memberships) {
+                const collectionIndex = collectionIndexMapping.get(Number(statuspage._joinData.collection_id));
+                const categoryIndex = categoryIndexMapping.get(Number(statuspage._joinData.category_id));
+                if (collectionIndex !== undefined && categoryIndex !== undefined) {
+                    this.statuspageMatrix[collectionIndex][categoryIndex].statuspageIds.push(Number(statuspage.id));
+                }
+            }
+        }
+    }
+
+    private convertMatrixIntoMembershipPost(): StatuspagesMembershipPost[] {
+        const memberships: StatuspagesMembershipPost[] = [];
+
+        this.statuspageMatrix.forEach((collection, collectionIndex) => {
+            collection.forEach((category, categoryIndex) => {
+                category.statuspageIds.forEach((statuspageId) => {
+                    memberships.push({
+                        id: statuspageId,
+                        _joinData: {
+                            statuspagegroup_id: Number(this.post?.id),
+                            collection_id: category.collectionId,
+                            category_id: category.categoryId,
+                            //statuspage_id: statuspageId
+                        }
+                    });
+                });
+            });
+        });
+
+        return memberships;
     }
 
     public submit() {
@@ -93,7 +189,9 @@ export class StatuspagegroupsEditStepTwoComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.StatuspagegroupsService.saveStatuspagegroupEdit(this.post)
+        this.post.statuspages_memberships = this.convertMatrixIntoMembershipPost();
+
+        this.subscriptions.add(this.StatuspagegroupsService.saveStatuspagegroupEditStepTwo(this.post)
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
@@ -105,8 +203,10 @@ export class StatuspagegroupsEditStepTwoComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title, url);
                     this.notyService.scrollContentDivToTop();
 
-                    this.router.navigate(['/statuspagegroups/editStepTwo/', response.id]);
                     this.errors = null;
+
+                    // The history service would navigate back to step one, so we use the router directly
+                    this.router.navigate(['/statuspagegroups/index']);
                     return;
                 }
 
