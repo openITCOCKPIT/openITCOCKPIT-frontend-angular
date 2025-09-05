@@ -4,26 +4,26 @@ import { WizardsService } from '../../../../../pages/wizards/wizards.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import {
     ProxmoxStoragesWizardPost,
-    ProxmoxWizardGet,
-    ProxmoxWizardPost,
+    ProxmoxStorageWizardGet,
+    ProxmoxStorageWizardPost,
     StorageDiscovery
-} from './proxmox-wizard.interface';
+} from './proxmox-storage-wizard.interface';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ProxmoxWizardService extends WizardsService {
+export class ProxmoxStorageWizardService extends WizardsService {
 
-    public fetch(hostId: number): Observable<ProxmoxWizardGet> {
-        return this.http.get<ProxmoxWizardGet>(`${this.proxyPath}/proxmox_module/wizards/proxmox/${hostId}.json?angular=true`).pipe(
-            map((data: ProxmoxWizardGet): ProxmoxWizardGet => {
+    public fetch(hostId: number): Observable<ProxmoxStorageWizardGet> {
+        return this.http.get<ProxmoxStorageWizardGet>(`${this.proxyPath}/proxmox_module/wizards/storage/${hostId}.json?angular=true`).pipe(
+            map((data: ProxmoxStorageWizardGet): ProxmoxStorageWizardGet => {
                 return data;
             })
         );
     }
 
-    public submit(post: ProxmoxWizardPost): Observable<GenericResponseWrapper> {
-        return this.http.post<any>(`${this.proxyPath}/proxmox_module/wizards/proxmox.json?angular=true`, post)
+    public submit(post: ProxmoxStorageWizardPost): Observable<GenericResponseWrapper> {
+        return this.http.post<any>(`${this.proxyPath}/proxmox_module/wizards/storage.json?angular=true`, post)
             .pipe(
                 map(data => {
                     return {

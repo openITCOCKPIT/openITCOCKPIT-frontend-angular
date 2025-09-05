@@ -60,6 +60,7 @@ export class ProxmoxComponent extends WizardsAbstractComponent {
         pveUsername: '',
         pveApiTokenName: '',
         pveApiTokenSecret: '',
+        storageServices: [],
 // Default fields from the base wizard
         host_id: 0,
         services: [],
