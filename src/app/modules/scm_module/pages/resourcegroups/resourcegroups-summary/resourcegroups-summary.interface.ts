@@ -1,6 +1,7 @@
 import { PaginateOrScroll } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { UserIdAndUsername } from '../../../../../pages/users/users.interface';
 import { Container } from '../../../../../pages/containers/containers.interface';
+import { GenericIdAndName } from '../../../../../generic.interfaces';
 
 export interface ResourcegroupsSummaryResponse extends PaginateOrScroll {
     resourcegroups: ResourcegroupMap[]
@@ -20,11 +21,14 @@ export interface ResourcegroupMap {
     created?: string
     modified: string
     resources: ResourceMap[]
-    users: UserIdAndUsername[]
     container: Container
     allow_edit: boolean
+    users: UserIdAndUsername[]
     managers: UserIdAndUsername[]
     region_managers: UserIdAndUsername[]
+    mailinglist_users: GenericIdAndName[]
+    mailinglist_managers: GenericIdAndName[]
+    mailinglist_region_managers: GenericIdAndName[]
     resource_count: number
     children: ResourcegroupMapChildren[]
     statesummary: number[]

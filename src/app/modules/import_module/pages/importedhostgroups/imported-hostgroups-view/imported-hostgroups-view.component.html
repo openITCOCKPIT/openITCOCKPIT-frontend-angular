@@ -81,6 +81,27 @@
                 </div>
 
                 <div class="mb-3">
+                    <label cLabel for="InportedHostgroupTags">
+                        {{ t('Tags') }}
+                    </label>
+
+                    <c-input-group>
+                        <ng-select
+                            id="InportedHostgroupTags"
+                            name="InportedHostgroupTags"
+                            [items]="[]"
+                            [disabled]="true"
+                            [(ngModel)]="tagsForSelect"
+                            [addTag]="true"
+                            [multiple]="true"
+                            [selectOnTab]="true"
+                            [placeholder]="'Add tags'|transloco"
+                            [isOpen]="false">
+                        </ng-select>
+                    </c-input-group>
+                </div>
+
+                <div class="mb-3">
                     <label cLabel for="container">
                         {{ t('Container') }}
                         <oitc-required-icon></oitc-required-icon>

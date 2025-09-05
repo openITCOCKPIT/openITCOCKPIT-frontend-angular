@@ -1,5 +1,4 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import {InstantreportsIndexParams} from '../instantreports/instantreports.interface';
 
 export interface StatuspagesIndexRoot extends PaginateOrScroll {
     all_statuspages: StatuspageObject[]
@@ -33,10 +32,13 @@ export function getDefaultStatuspagesIndexParams(): StatuspagesParams {
 
 export interface StatuspageObject {
     id: number
+    uuid: string,
     container_id: number
     name: string
     description: string
     public: boolean
+    public_title: string | null
+    public_identifier: string | null
     show_downtimes: boolean
     show_downtime_comments: boolean
     show_acknowledgements: boolean

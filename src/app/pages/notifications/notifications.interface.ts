@@ -1,4 +1,6 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { NotificationReasonTypesEnum } from './notification-reason-types.enum';
+import { getUserDate } from '../../services/timezone.service';
 
 export interface NotificationIndexRoot extends PaginateOrScroll {
     all_notifications: NotificationIndex[]
@@ -45,6 +47,7 @@ export interface Notification {
     state: number
     output: string
     start_time: string
+    reason_type: NotificationReasonTypesEnum
 }
 
 export interface NotificationHost {
@@ -113,7 +116,7 @@ export interface NotificationServicesParams {
 }
 
 export function getDefaultNotificationsIndexParams(): NotificationIndexParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,
@@ -131,7 +134,7 @@ export function getDefaultNotificationsIndexParams(): NotificationIndexParams {
 }
 
 export function getDefaultNotificationsServicesParams(): NotificationServicesParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,

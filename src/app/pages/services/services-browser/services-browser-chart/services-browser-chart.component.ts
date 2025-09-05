@@ -36,7 +36,6 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 
@@ -81,7 +80,6 @@ interface ServiceBrowserChartConfig {
         FaIconComponent,
         NavComponent,
         NavItemComponent,
-        NgIf,
         XsButtonDirective,
         TranslocoDirective,
         FormCheckComponent,
@@ -126,7 +124,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
     public selectedDatasource: string = '';
 
-    public theme: null | 'dark' = null;
+    public theme: string = '';
 
     public availableTimeranges: SelectKeyValue[] = [
         {key: 1, value: this.TranslocoService.translate('1 hour')},
@@ -182,7 +180,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
     public constructor() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
-            this.theme = null;
+            this.theme = '';
             if (theme === 'dark') {
                 this.theme = 'dark';
             }

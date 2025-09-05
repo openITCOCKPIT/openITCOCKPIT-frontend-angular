@@ -1,8 +1,9 @@
-import { HostgroupSummaryStateServices } from '../../../hosts/summary_state.interface';
+import { SummaryStateServices } from '../../../hosts/summary_state.interface';
 
 export interface TacticalOverviewServicesResponse {
     config: TacticalOverviewServicesConfig
-    servicestatusSummary: HostgroupSummaryStateServices
+    servicestatusSummary: SummaryStateServices
+    servicestatusCountPercentage: number[]
     _csrfToken: string
 }
 
@@ -11,9 +12,13 @@ export interface TacticalOverviewServicesConfig {
     Service: TacticalOverviewServiceConfig
     Hostgroup: {
         _ids: number[]
+        keywords: string
+        not_keywords: string
     }
     Servicegroup: {
         _ids: number[]
+        keywords: string
+        not_keywords: string
     }
 }
 

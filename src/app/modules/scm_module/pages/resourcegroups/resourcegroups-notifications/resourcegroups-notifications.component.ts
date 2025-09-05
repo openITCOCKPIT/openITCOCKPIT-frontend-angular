@@ -8,8 +8,8 @@ import {
     getNotificationReasonTypesForApi,
     getResourcegroupsNotificationsParams,
     Resourcegroup,
-    ResourcegroupNotification,
-    ResourcegroupNotificationReasonTypes, ResourcegroupsNotifications,
+    ResourcegroupNotificationReasonTypes,
+    ResourcegroupsNotifications,
     ResourcegroupsNotificationsParams
 } from '../resourcegroups.interface';
 import { ResourcegroupsService } from '../resourcegroups.service';
@@ -34,19 +34,20 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { formatDate, NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { ScmNotificationLogTypesEnum } from './scm-notification-log-types.enum';
+import { ScmNotificationLogRecipientTypesEnum, ScmNotificationLogTypesEnum } from './scm-notification-log-types.enum';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 
 @Component({
     selector: 'oitc-resourcegroups-notifications',
@@ -72,8 +73,6 @@ import {
         NgForOf,
         TranslocoPipe,
         LabelLinkComponent,
-        FaStackComponent,
-        FaStackItemSizeDirective,
         BadgeComponent,
         ColComponent,
         DebounceDirective,
@@ -86,7 +85,9 @@ import {
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        PaginateOrScrollComponent
+        PaginateOrScrollComponent,
+        NoRecordsComponent,
+        FaLayersComponent
     ],
     templateUrl: './resourcegroups-notifications.component.html',
     styleUrl: './resourcegroups-notifications.component.css',
@@ -180,4 +181,6 @@ export class ResourcegroupsNotificationsComponent implements OnInit, OnDestroy, 
 
     public onMassActionComplete(success: boolean): void {
     }
+
+    protected readonly ScmNotificationLogRecipientTypesEnum = ScmNotificationLogRecipientTypesEnum;
 }

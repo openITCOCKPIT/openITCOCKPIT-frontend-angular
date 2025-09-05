@@ -39,6 +39,15 @@
                         {{ t('Refresh') }}
                     </button>
                 </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="['scmmodule', 'resources', 'index']" cButton class="ripple"
+                            color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
             </c-nav>
         </c-card-header>
         <c-card-body>
@@ -47,10 +56,10 @@
                     <li *ngFor="let statuslogItem of statuslog.statuslog">
                         <time class="cbp_tmtime" [dateTime]="statuslogItem.state_time">
                             <span>{{ statuslogItem.state_time }}</span>
-                            <span>{{ statuslogItem.timeAgoInWords }}</span>
+                            <span>{{ statuslogItem.timeAgoInWords }} - {{ statuslogItem.status }}</span>
                         </time>
                         <div class="cbp_tmicon"
-                             [ngClass]="{'bg-success': statuslogItem.status===1, 'bg-warning': statuslogItem.status===2, 'bg-danger': statuslogItem.status===3}">
+                             [ngClass]="{'bg-primary': statuslogItem.status===null ,'bg-success': statuslogItem.status===1, 'bg-warning': statuslogItem.status===2, 'bg-danger': statuslogItem.status===3}">
                             @switch (statuslogItem.status) {
                                 @case (1) {
                                     <fa-icon [icon]="['fas', 'check']" class="text-white"></fa-icon>
@@ -60,6 +69,9 @@
                                 }
                                 @case (3) {
                                     <fa-icon [icon]="['fas', 'exclamation']" class="text-white"></fa-icon>
+                                }
+                                @default {
+                                    <fa-icon [icon]="['fas', 'question']" class="text-white"></fa-icon>
                                 }
                             }
                         </div>

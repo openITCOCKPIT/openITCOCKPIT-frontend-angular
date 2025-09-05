@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { HostgroupSummaryStateHosts } from '../../../hosts/summary_state.interface';
+import { SummaryStateHosts } from '../../../hosts/summary_state.interface';
 import { HostgroupsLoadHostgroupsByStringParams } from '../../../hostgroups/hostgroups.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { HostgroupsService } from '../../../hostgroups/hostgroups.service';
@@ -50,7 +50,9 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
         FormsModule,
         NgSelectComponent,
         MultiSelectComponent,
-        XsButtonDirective
+        XsButtonDirective,
+        FaStackComponent,
+        FaStackItemSizeDirective
     ],
     templateUrl: './tactical-overview-hosts-widget.component.html',
     styleUrl: './tactical-overview-hosts-widget.component.css',
@@ -59,11 +61,14 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
 export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     protected flipped = signal<boolean>(false);
     public readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
-    public hoststatusSummary?: HostgroupSummaryStateHosts;
+    public hoststatusSummary?: SummaryStateHosts;
+    public hoststatusCountPercentage: number[] = [];
     public config?: TacticalOverviewHostsConfig;
     protected hostgroups: SelectKeyValue[] = [];
     public keywords: string[] = [];
     public notKeywords: string[] = [];
+    public hostgroupKeywords: string[] = [];
+    public hostgroupNotKeywords: string[] = [];
     private readonly TacticalOverviewHostsWidgetService = inject(TacticalOverviewHostsWidgetService);
     private readonly notyService = inject(NotyService);
 
@@ -85,7 +90,10 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
                     this.config = result.config;
                     this.keywords = this.config.Host.keywords.split(',').filter(Boolean);
                     this.notKeywords = this.config.Host.not_keywords.split(',').filter(Boolean);
+                    this.hostgroupKeywords = this.config.Hostgroup.keywords.split(',').filter(Boolean);
+                    this.hostgroupNotKeywords = this.config.Hostgroup.not_keywords.split(',').filter(Boolean);
                     this.hoststatusSummary = result.hoststatusSummary;
+                    this.hoststatusCountPercentage = result.hoststatusCountPercentage;
                     this.cdr.markForCheck();
                 }));
         }
@@ -112,6 +120,8 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
 
         this.config.Host.keywords = this.keywords.join(',');
         this.config.Host.not_keywords = this.notKeywords.join(',');
+        this.config.Hostgroup.keywords = this.hostgroupKeywords.join(',');
+        this.config.Hostgroup.not_keywords = this.hostgroupNotKeywords.join(',');
 
         this.subscriptions.add(this.TacticalOverviewHostsWidgetService.saveWidget(this.widget, this.config)
             .subscribe({

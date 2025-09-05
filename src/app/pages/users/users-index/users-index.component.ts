@@ -287,7 +287,7 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
             'filter[Users.email]': this.params['filter[Users.email]'],
             'filter[Users.company]': this.params['filter[Users.company]'],
             'filter[Users.phone]': this.params['filter[Users.phone]'],
-            'filter[Users.usergroup_id]': this.params['filter[Users.usergroup_id][]'],
+            'filter[Users.usergroup_id][]': this.params['filter[Users.usergroup_id][]'],
         };
 
         let stringParams: HttpParams = new HttpParams();

@@ -1,7 +1,9 @@
 @use "sass:color";
+@use "variables" as oitc;
+@use "@coreui/coreui/scss/coreui" as cui;
 
 .wizard-bg-inactive {
-    background: color.adjust($light-bg-subtle, $lightness: -5%, $space: hsl)
+    background: color.adjust(oitc.$light-bg-subtle, $lightness: -5%, $space: hsl)
 }
 
 body.dark-theme .wizard-bg-inactive {
@@ -9,11 +11,17 @@ body.dark-theme .wizard-bg-inactive {
 }
 
 .wizard-active {
-    background: $primary !important;
-    color: $white;
+    background: oitc.$primary !important;
+    color: oitc.$white;
 }
 
 .wizard-success {
-    background: $success !important;
-    color: $white;
+    background: oitc.$success !important;
+    color: oitc.$white;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--cui-info-bg-subtle);
+    border-color: var(--cui-info-border-subtle);
+    color: unset;
 }

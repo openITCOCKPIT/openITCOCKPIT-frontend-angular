@@ -33,15 +33,25 @@
                         {{ t('Refresh') }}
                     </button>
                 </c-nav-item>
-                <c-nav-item class="px-1" *ngIf="statuspage">
-                    <button cButton class="ripple" color="primary" size="xs"
-                            *ngIf="statuspage.Statuspage.statuspage.public">
-                        <a class="text-white" href="/statuspages/publicView/{{id}}" target="_blank">
-                            <fa-icon [icon]="['fas', 'users-rectangle']"></fa-icon>
-                            {{ t('Public view') }}
-                        </a>
-                    </button>
-                </c-nav-item>
+                @if (statuspage && statuspage.Statuspage.statuspage.public) {
+                    <c-nav-item class="px-1">
+                        @if (statuspage.Statuspage.statuspage.public_identifier) {
+                            <a [href]="'/statuspages/publicView/'+statuspage.Statuspage.statuspage.public_identifier"
+                               target="_blank"
+                               class="btn btn-primary btn-xs ripple">
+                                <fa-icon [icon]="['fas', 'users-rectangle']"></fa-icon>
+                                {{ t('Public view') }}
+                            </a>
+                        } @else {
+                            <a [href]="'/statuspages/publicView/'+statuspage.Statuspage.statuspage.uuid"
+                               target="_blank"
+                               class="btn btn-primary btn-xs ripple">
+                                <fa-icon [icon]="['fas', 'users-rectangle']"></fa-icon>
+                                {{ t('Public view') }}
+                            </a>
+                        }
+                    </c-nav-item>
+                }
                 <c-nav-item class="px-1">
                     <button [fallbackUrl]="['statuspages', 'index']" cButton oitcBackButton class="ripple"
                             color="default" size="xs">

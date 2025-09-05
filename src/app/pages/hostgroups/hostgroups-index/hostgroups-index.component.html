@@ -64,14 +64,14 @@
                     </c-col>
                 </c-row>
                 <form cForm>
-                    <c-row>
+                    <c-row class="mb-2">
                         <c-col md="6">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Containers.name]']"
+                                       [(ngModel)]="filter['Containers.name']"
                                        [placeholder]="'Filter by host group name' | transloco"
                                        aria-label="host group name"
                                        cFormControl
@@ -84,10 +84,10 @@
                         <c-col md="6">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Hostgroups.description]']"
+                                       [(ngModel)]="filter['Hostgroups.description']"
                                        [placeholder]="'Filter by description' | transloco"
                                        aria-label="Host group description"
                                        cFormControl
@@ -95,6 +95,61 @@
                                        oitcDebounce
                                        type="text"
                                 />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [lg]="6">
+                            <c-input-group>
+                                <span cInputGroupText class="pe-0 ps-2">
+                                    <fa-stack>
+                                        <fa-icon [icon]="['fas', 'server']"
+                                                 stackItemSize="1x" pull="right"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']" class="text-success"
+                                                 stackItemSize="1x"
+                                                 transform="shrink-3 right-6 down-10"></fa-icon>
+                                    </fa-stack>
+                                </span>
+                                <ng-select
+                                    id="HostgroupKeywordsInput"
+                                    name="HostgroupKeywordsInput"
+                                    [items]="[]"
+                                    [(ngModel)]="filter['Hostgroups.keywords']"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by tags'|transloco"
+                                    oitcDebounce
+                                    (debouncedValue)="onFilterChange($event)"
+                                    [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+
+                        <c-col [xs]="12" [lg]="6">
+                            <c-input-group>
+                                <span cInputGroupText class="pe-0 ps-2">
+                                    <fa-stack>
+                                        <fa-icon [icon]="['fas', 'server']"
+                                                 stackItemSize="1x" pull="right"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']" class="text-danger"
+                                                 stackItemSize="1x"
+                                                 transform="shrink-3 right-6 down-10"></fa-icon>
+                                    </fa-stack>
+                                </span>
+                                <ng-select
+                                    id="HostgroupNotKeywordsInput"
+                                    name="HostgroupNotKeywordsInput"
+                                    [items]="[]"
+                                    [(ngModel)]="filter['Hostgroups.not_keywords']"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by excluded tags'|transloco"
+                                    oitcDebounce
+                                    (debouncedValue)="onFilterChange($event)"
+                                    [isOpen]="false">
+                                </ng-select>
                             </c-input-group>
                         </c-col>
                     </c-row>

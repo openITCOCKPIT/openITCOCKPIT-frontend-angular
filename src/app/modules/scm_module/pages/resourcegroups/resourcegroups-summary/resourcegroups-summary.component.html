@@ -253,44 +253,32 @@
                                             {{ t('Last time') }}
                                             @switch (resource.status) {
                                                 @case (1) {
-                                                    <fa-stack class="me-1" [size]="'sm'">
-                                                        <fa-icon [icon]="['fas', 'square']"
-                                                                 stackItemSize="2x"
-                                                                 class="text-success"></fa-icon>
-                                                        <fa-icon [icon]="['fas', 'check']" [inverse]="true"
-                                                                 stackItemSize="1x"
-                                                        ></fa-icon>
-                                                    </fa-stack>
+                                                    <fa-layers [size]="'xl'">
+                                                        <fa-icon [icon]="['fas', 'square']" class="text-success"/>
+                                                        <fa-icon [inverse]="true" [icon]="['fas', 'check']"
+                                                                 transform="shrink-6"/>
+                                                    </fa-layers>
                                                 }
                                                 @case (2) {
-                                                    <fa-stack class="me-1" [size]="'sm'">
-                                                        <fa-icon [icon]="['fas', 'square']"
-                                                                 stackItemSize="2x"
-                                                                 class="text-warning"></fa-icon>
-                                                        <fa-icon [icon]="['fas', 'bell']" [inverse]="true"
-                                                                 stackItemSize="1x"
-                                                        ></fa-icon>
-                                                    </fa-stack>
+                                                    <fa-layers [size]="'xl'">
+                                                        <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
+                                                        <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
+                                                                 transform="shrink-6"/>
+                                                    </fa-layers>
                                                 }
                                                 @case (3) {
-                                                    <fa-stack class="me-1" [size]="'sm'">
-                                                        <fa-icon [icon]="['fas', 'square']"
-                                                                 stackItemSize="2x"
-                                                                 class="text-danger"></fa-icon>
-                                                        <fa-icon [icon]="['fas', 'exclamation']" [inverse]="true"
-                                                                 stackItemSize="1x"
-                                                        ></fa-icon>
-                                                    </fa-stack>
+                                                    <fa-layers [size]="'xl'">
+                                                        <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
+                                                        <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
+                                                                 transform="shrink-6"/>
+                                                    </fa-layers>
                                                 }
                                                 @default {
-                                                    <fa-stack class="me-1" [size]="'sm'">
-                                                        <fa-icon [icon]="['fas', 'square']"
-                                                                 stackItemSize="2x"
-                                                                 class="text-primary"></fa-icon>
-                                                        <fa-icon [icon]="['fas', 'question']" [inverse]="true"
-                                                                 stackItemSize="1x"
-                                                        ></fa-icon>
-                                                    </fa-stack>
+                                                    <fa-layers [size]="'xl'">
+                                                        <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
+                                                        <fa-icon [inverse]="true" [icon]="['fas', 'question']"
+                                                                 transform="shrink-6"/>
+                                                    </fa-layers>
                                                 }
                                             }
                                             [{{ resource.last_update }}]
@@ -327,7 +315,25 @@
                                         <oitc-label-link [objectId]="region_manager.id"
                                                          [route]="'/users/edit'"
                                                          [permissions]="'users.edit'">
+                                            <fa-icon [icon]="['fas', 'user']" [cTextColor]="'primary'"></fa-icon>
                                             {{ region_manager.username }}
+                                        </oitc-label-link>
+                                    </li>
+                                }
+                            </ul>
+                            @if (selectedResoucegroup.region_managers.length > 0 && selectedResoucegroup.mailinglist_region_managers.length > 0) {
+                                <hr class="border-dashed my-1"/>
+                            }
+                            <ul class="m-0 list-unstyled mb-2 pl-4">
+                                @for (
+                                    mailinglist_region_manager of selectedResoucegroup.mailinglist_region_managers; track $index) {
+                                    <li>
+                                        <oitc-label-link [objectId]="mailinglist_region_manager.id"
+                                                         [route]="'/scm_module/mailinglists/edit'"
+                                                         [permissions]="'ScmModule.mailinglists.edit'">
+                                            <fa-icon [icon]="['fas', 'envelopes-bulk']"
+                                                     [cTextColor]="'primary'"></fa-icon>
+                                            {{ mailinglist_region_manager.name }}
                                         </oitc-label-link>
                                     </li>
                                 }
@@ -341,7 +347,24 @@
                                         <oitc-label-link [objectId]="manager.id"
                                                          [route]="'/users/edit'"
                                                          [permissions]="'users.edit'">
+                                            <fa-icon [icon]="['fas', 'user']" [cTextColor]="'primary'"></fa-icon>
                                             {{ manager.username }}
+                                        </oitc-label-link>
+                                    </li>
+                                }
+                            </ul>
+                            @if (selectedResoucegroup.managers.length > 0 && selectedResoucegroup.mailinglist_managers.length > 0) {
+                                <hr class="border-dashed my-1"/>
+                            }
+                            <ul class="m-0 list-unstyled mb-2 pl-4">
+                                @for (mailinglist_manager of selectedResoucegroup.mailinglist_managers; track $index) {
+                                    <li>
+                                        <oitc-label-link [objectId]="mailinglist_manager.id"
+                                                         [route]="'/scm_module/mailinglists/edit'"
+                                                         [permissions]="'ScmModule.mailinglists.edit'">
+                                            <fa-icon [icon]="['fas', 'envelopes-bulk']"
+                                                     [cTextColor]="'primary'"></fa-icon>
+                                            {{ mailinglist_manager.name }}
                                         </oitc-label-link>
                                     </li>
                                 }
@@ -355,7 +378,24 @@
                                         <oitc-label-link [objectId]="user.id"
                                                          [route]="'/users/edit'"
                                                          [permissions]="'users.edit'">
+                                            <fa-icon [icon]="['fas', 'user']" [cTextColor]="'primary'"></fa-icon>
                                             {{ user.username }}
+                                        </oitc-label-link>
+                                    </li>
+                                }
+                            </ul>
+                            @if (selectedResoucegroup.users.length > 0 && selectedResoucegroup.mailinglist_users.length > 0) {
+                                <hr class="border-dashed my-1"/>
+                            }
+                            <ul class="m-0 list-unstyled mb-2 pl-4">
+                                @for (mailinglist_user of selectedResoucegroup.mailinglist_users; track $index) {
+                                    <li>
+                                        <oitc-label-link [objectId]="mailinglist_user.id"
+                                                         [route]="'/scm_module/mailinglists/edit'"
+                                                         [permissions]="'ScmModule.mailinglists.edit'">
+                                            <fa-icon [icon]="['fas', 'envelopes-bulk']"
+                                                     [cTextColor]="'primary'"></fa-icon>
+                                            {{ mailinglist_user.name }}
                                         </oitc-label-link>
                                     </li>
                                 }
@@ -364,8 +404,10 @@
                     </c-row>
                 </c-col>
             </c-row>
+            @if (resourcegroups && resourcegroups.length === 0) {
+                <oitc-no-records></oitc-no-records>
 
-            <oitc-no-records *ngIf="resourcegroups && resourcegroups.length === 0"></oitc-no-records>
+            }
 
         </c-card-body>
     </c-card>

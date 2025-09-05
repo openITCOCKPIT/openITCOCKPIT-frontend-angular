@@ -1,6 +1,6 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, DOCUMENT } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { DOCUMENT } from '@angular/common';
+
 
 export enum LayoutOptions {
     Default = 'default',

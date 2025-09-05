@@ -8,8 +8,10 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
-                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                {{ t('Wizards') }}
+                <a *oitcPermission="['wizards', 'assignments']" [routerLink]="['/', 'wizards', 'assignments']">
+                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    {{ t('Wizards') }}
+                </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'chain']"></fa-icon>

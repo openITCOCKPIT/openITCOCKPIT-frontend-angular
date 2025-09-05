@@ -27,7 +27,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { CalendarContainer, CalendarEvent, CalendarPost, Countries } from '../calendars.interface';
 import { NgSelectModule } from '@ng-select/ng-select';
 
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { forkJoin, Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -62,7 +62,7 @@ import { HistoryService } from '../../../history.service';
     RequiredIconComponent,
     CardFooterComponent,
     NgSelectModule,
-    NgOptionHighlightModule,
+        NgOptionHighlightDirective,
     FullCalendarModule,
     FormCheckInputDirective,
     CalendarComponent

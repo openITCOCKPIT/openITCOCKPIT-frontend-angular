@@ -46,97 +46,111 @@
             </c-alert>
         </c-col>
     </c-row>
-    <form cForm (ngSubmit)="updateScmSettings()" *ngIf="post">
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>
-                    {{ t('Service Capacity Management Settings') }}
-                </h5>
-            </c-card-header>
-            <c-card-body>
-                <div class="mb-3">
-                    <label cLabel for="deadline">
-                        {{ t('Deadline') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl required type="text"
-                           id="deadline"
-                           name="deadline"
-                           placeholder="07:00"
-                           oitcFormError [errors]="errors" errorField="deadline"
-                           [(ngModel)]="post.deadline">
-                    <oitc-form-feedback [errors]="errors" errorField="deadline"></oitc-form-feedback>
+    @if (post) {
+        <form cForm (ngSubmit)="updateScmSettings()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Service Capacity Management Settings') }}
+                    </h5>
+                </c-card-header>
+                <c-card-body>
+                    <div class="mb-3">
+                        <label cLabel for="deadline">
+                            {{ t('Deadline') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl required type="text"
+                               id="deadline"
+                               name="deadline"
+                               placeholder="07:00"
+                               oitcFormError [errors]="errors" errorField="deadline"
+                               [(ngModel)]="post.deadline">
+                        <oitc-form-feedback [errors]="errors" errorField="deadline"></oitc-form-feedback>
 
-                    <div class="help-block">
-                        {{ t('Determines the time at which a status had to be transmitted (hh:mm).') }}
+                        <div class="help-block">
+                            {{ t('Determines the time at which a status had to be transmitted (hh:mm).') }}
+                        </div>
+                        @if (serverTimezone) {
+                            <div class="help-block">
+                                {{ t('Server timezone is:') }}
+                                <strong>
+                                    {{ serverTimezone.server_timezone }}.
+                                </strong>
+                                {{ t('Current server time:') }}
+                                <strong>
+                                    {{ serverTimezone.server_time }}
+                                </strong>
+                            </div>
+                        }
                     </div>
-                </div>
 
 
-                <div class="mb-3">
-                    <label cLabel for="reminder_time">
-                        {{ t('Reminder time') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl required type="text"
-                           id="reminder_time"
-                           name="reminder_time"
-                           placeholder="15"
-                           oitcFormError [errors]="errors" errorField="reminder_time"
-                           [(ngModel)]="post.reminder_time">
-                    <oitc-form-feedback [errors]="errors" errorField="reminder_time"></oitc-form-feedback>
+                    <div class="mb-3">
+                        <label cLabel for="reminder_time">
+                            {{ t('Reminder time') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl required type="text"
+                               id="reminder_time"
+                               name="reminder_time"
+                               placeholder="15"
+                               oitcFormError [errors]="errors" errorField="reminder_time"
+                               [(ngModel)]="post.reminder_time">
+                        <oitc-form-feedback [errors]="errors" errorField="reminder_time"></oitc-form-feedback>
 
-                    <div class="help-block">
-                        {{ t('Sends a reminder email to all users if no status had been transmitted before the deadline exceeded (in minutes).') }}
+                        <div class="help-block">
+                            {{ t('Sends a reminder email to all users if no status had been transmitted before the deadline exceeded (in minutes).') }}
+                        </div>
                     </div>
-                </div>
 
-                <div class="mb-3">
-                    <c-form-check>
-                        <input
-                            [(ngModel)]="post.allow_overwriting" cFormCheckInput
-                            id="allow_overwriting"
-                            class="checkbox-lg me-2 mt-0"
-                            name="allow_overwriting"
-                            trueFalseValue
-                            [falseValue]="0"
-                            [trueValue]="1"
-                            oitcDebounce
-                            type="checkbox"/>
-                        <label cFormCheckLabel
-                               for="allow_overwriting">{{ t('Allow status overwriting') }}</label>
-                    </c-form-check>
-                    <div class="help-block">
-                        {{ t('Allow overwriting of already committed status.') }}
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input
+                                [(ngModel)]="post.allow_overwriting" cFormCheckInput
+                                id="allow_overwriting"
+                                class="checkbox-lg me-2 mt-0"
+                                name="allow_overwriting"
+                                trueFalseValue
+                                [falseValue]="0"
+                                [trueValue]="1"
+                                oitcDebounce
+                                type="checkbox"/>
+                            <label cFormCheckLabel
+                                   for="allow_overwriting">{{ t('Allow status overwriting') }}</label>
+                        </c-form-check>
+                        <div class="help-block">
+                            {{ t('Allow overwriting of already committed status.') }}
+                        </div>
                     </div>
-                </div>
 
-                <div class="mb-3">
-                    <c-form-check>
-                        <input
-                            [(ngModel)]="post.require_user_assigment" cFormCheckInput
-                            id="require_user_assigment"
-                            class="checkbox-lg me-2 mt-0"
-                            name="require_user_assigment"
-                            trueFalseValue
-                            [falseValue]="0"
-                            [trueValue]="1"
-                            oitcDebounce
-                            type="checkbox"/>
-                        <label cFormCheckLabel
-                               for="require_user_assigment">{{ t('Require user assigment') }}</label>
-                    </c-form-check>
-                    <div class="help-block">
-                        {{ t('Only users, that are directly assigned to the ressource can set a status.') }}
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input
+                                [(ngModel)]="post.require_user_assigment" cFormCheckInput
+                                id="require_user_assigment"
+                                class="checkbox-lg me-2 mt-0"
+                                name="require_user_assigment"
+                                trueFalseValue
+                                [falseValue]="0"
+                                [trueValue]="1"
+                                oitcDebounce
+                                type="checkbox"/>
+                            <label cFormCheckLabel
+                                   for="require_user_assigment">{{ t('Require user assigment') }}</label>
+                        </c-form-check>
+                        <div class="help-block">
+                            {{ t('Only users, that are directly assigned to the ressource can set a status.') }}
+                        </div>
                     </div>
-                </div>
-            </c-card-body>
-            <c-card-footer class="text-end">
-                <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Save') }}
-                </button>
-            </c-card-footer>
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Save') }}
+                    </button>
+                </c-card-footer>
 
-        </c-card>
-    </form>
+            </c-card>
+        </form>
+    }
 </ng-container>

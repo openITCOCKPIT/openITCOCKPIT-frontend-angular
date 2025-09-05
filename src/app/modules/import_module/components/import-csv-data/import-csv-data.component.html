@@ -6,12 +6,12 @@
         size="xl">
         <c-modal-header *ngIf="importer">
             <h5 cModalTitle>
-                <fa-stack class="me-1">
+                <fa-stack [size]="'2xl'" class="me-2">
                     <fa-icon [icon]="['fas', 'file-csv']"
-                             stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                             stackItemSize="1x" class="text-info"></fa-icon>
                     <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                             stackItemSize="1x" pull="right" transform="right-15 down-20"
-                    ></fa-icon>
+                             stackItemSize="1x"
+                             transform="shrink-8 right-10 down-7"></fa-icon>
                 </fa-stack>
                 <span *ngIf="importer.data_source==='csv_with_header'">
                     {{ t('Import CSV File with header') }}

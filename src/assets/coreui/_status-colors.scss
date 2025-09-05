@@ -1,8 +1,9 @@
 @use "sass:color";
+@use "../../assets/coreui/variables" as oitc;
 
 .bg-up,
 .bg-ok {
-    background: $success !important;
+    background: oitc.$success !important;
 }
 
 .bg-ok-soft, .bg-up-soft {
@@ -10,7 +11,11 @@
 }
 
 .bg-warning {
-    background: $warning !important;
+    background: oitc.$warning !important;
+}
+
+.bg-color-warning {
+    background-color: oitc.$warning !important;
 }
 
 .bg-warning-soft {
@@ -49,23 +54,23 @@
 }
 
 .shadow-ok, .shadow-up {
-  box-shadow: 0 0 7px -2px #00C851;
+    box-shadow: 0 0 7px -2px #00C851;
 }
 
 .shadow-warning {
-  box-shadow: 0 0 7px -2px #ffbb33;
+    box-shadow: 0 0 7px -2px #ffbb33;
 }
 
 .shadow-critical, .shadow-down {
-  box-shadow: 0 0 7px -2px #CC0000;
+    box-shadow: 0 0 7px -2px #CC0000;
 }
 
 .shadow-unknown, .shadow-unreachable {
-  box-shadow: 0 0 7px -2px #727b84;
+    box-shadow: 0 0 7px -2px #727b84;
 }
 
 .shadow-not-monitored {
-  box-shadow: 0 0 7px -2px  rgb(88, 86, 214);
+    box-shadow: 0 0 7px -2px rgb(88, 86, 214);
 }
 
 /*  unnecessary because the class already exists in the coreui css
@@ -76,12 +81,12 @@
 
 .bg-down,
 .bg-critical {
-    background: $danger !important;
+    background: oitc.$danger !important;
 }
 
 .bg-unreachable,
 .bg-unknown {
-    background: $secondary !important;
+    background: oitc.$secondary !important;
 }
 
 .not-monitored {
@@ -89,35 +94,55 @@
 }
 
 .ok, .up {
-    color: $success !important;
+    color: oitc.$success !important;
 }
 
 .warning {
-    color: $warning !important;
+    color: oitc.$warning !important;
 }
 
 .critical, .down {
-    color: $danger !important;
+    color: oitc.$danger !important;
 }
 
 .unknown, .unreachable {
-    color: $secondary !important;
+    color: oitc.$secondary !important;
 }
 
 .ok-soft, .up-soft {
-    color: color.adjust($success, $lightness: 40%, $space: hsl) !important;
+    color: color.adjust(oitc.$success, $lightness: 40%, $space: hsl) !important;
 }
 
 .warning-soft {
-    color: color.adjust($warning, $lightness: 20%, $space: hsl) !important;;
+    color: color.adjust(oitc.$warning, $lightness: 20%, $space: hsl) !important;;
 }
 
 .critical-soft, .down-soft {
-    color: color.adjust($danger, $lightness: 40%, $space: hsl) !important;
+    color: color.adjust(oitc.$danger, $lightness: 40%, $space: hsl) !important;
 }
 
 .unknown-soft, .unreachable-soft {
-    color: color.adjust($secondary, $lightness: 40%, $space: hsl) !important;
+    color: color.adjust(oitc.$secondary, $lightness: 40%, $space: hsl) !important;
+}
+
+.ok-glow, .up-glow {
+    text-shadow: 0 0 9px oitc.$success;
+    color: oitc.$success !important;
+}
+
+.warning-glow {
+    text-shadow: 0 0 9px oitc.$warning;
+    color: oitc.$warning !important;
+}
+
+.critical-glow, .down-glow {
+    text-shadow: 0 0 9px oitc.$danger;
+    color: oitc.$danger !important;
+}
+
+.unknown-glow, .unknown-glow {
+    text-shadow: 0 0 9px oitc.$secondary;
+    color: oitc.$secondary !important;
 }
 
 .txt-ack {

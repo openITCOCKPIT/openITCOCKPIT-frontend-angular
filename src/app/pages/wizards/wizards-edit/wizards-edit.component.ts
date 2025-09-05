@@ -29,6 +29,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { PermissionDirective } from '../../../permissions/permission.directive';
 
 @Component({
     selector: 'oitc-wizards-edit',
@@ -54,7 +55,8 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         FormsModule,
         NgIf,
         ReactiveFormsModule,
-        FormLoaderComponent
+        FormLoaderComponent,
+        PermissionDirective
     ],
     templateUrl: './wizards-edit.component.html',
     styleUrl: './wizards-edit.component.css',
@@ -119,4 +121,3 @@ export class WizardsEditComponent implements OnDestroy, OnInit {
     }
 
 }
-
