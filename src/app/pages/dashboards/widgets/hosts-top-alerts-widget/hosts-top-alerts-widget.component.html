@@ -51,7 +51,7 @@
                     <c-col [xs]="12" [md]="6">
                         {{ t('Alert status') }}
                         @switch (config.state) {
-                            @case ('up') {
+                            @case ('recovery') {
                                 <c-badge color="success">
                                     {{ t('Up') }}
                                 </c-badge>
@@ -99,25 +99,25 @@
                         <thead>
                         <tr>
                             <th class="text-white" [ngClass]="{
-                        'bg-up': config.state === 'up',
+                        'bg-up': config.state === 'recovery',
                         'bg-down': config.state === 'down',
                         'bg-unreachable': config.state === 'unreachable'}">
                                 {{ t('State') }}
                             </th>
                             <th scope="col" class="text-white" [ngClass]="{
-                        'bg-up': config.state === 'up',
+                        'bg-up': config.state === 'recovery',
                         'bg-down': config.state === 'down',
                         'bg-unreachable': config.state === 'unreachable'}">
                                 {{ t('Host') }}
                             </th>
                             <th class="text-white" [ngClass]="{
-                        'bg-up': config.state === 'up',
+                        'bg-up': config.state === 'recovery',
                         'bg-down': config.state === 'down',
                         'bg-unreachable': config.state === 'unreachable'}">
                                 {{ t('Last date') }}
                             </th>
                             <th class="text-white" [ngClass]="{
-                        'bg-up': config.state === 'up',
+                        'bg-up': config.state === 'recovery',
                         'bg-down': config.state === 'down',
                         'bg-unreachable': config.state === 'unreachable'}">
                                 {{ t('Count') }}
@@ -185,7 +185,7 @@
                                            type="radio"
                                            [id]="'hoststatus-up-'+widget.id"
                                            [name]="'hoststatus-up-'+widget.id"
-                                           [value]="'up'"
+                                           [value]="'recovery'"
                                            [(ngModel)]="config.state"
                                     />
                                     <label cFormCheckLabel class="ms-1 mt-1"
