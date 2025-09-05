@@ -49,7 +49,7 @@ export interface StatuspagegroupPost {
     description: string | null
     modified?: string
     created?: string
-    statuspages_memberships: StatuspagesMembershipPost[]
+    statuspages: StatuspagesMembershipPost[]
     statuspagegroup_collections: StatuspagegroupCollectionPost[]
     statuspagegroup_categories: StatuspagegroupCategoryPost[]
 }

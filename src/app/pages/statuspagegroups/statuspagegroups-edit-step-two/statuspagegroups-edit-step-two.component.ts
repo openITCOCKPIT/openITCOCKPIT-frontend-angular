@@ -152,7 +152,7 @@ export class StatuspagegroupsEditStepTwoComponent implements OnInit, OnDestroy {
             });
 
             // Assign statuspages to the matrix based on their collection_id and category_id
-            for (const statuspage of this.post.statuspages_memberships) {
+            for (const statuspage of this.post.statuspages) {
                 const collectionIndex = collectionIndexMapping.get(Number(statuspage._joinData.collection_id));
                 const categoryIndex = categoryIndexMapping.get(Number(statuspage._joinData.category_id));
                 if (collectionIndex !== undefined && categoryIndex !== undefined) {
@@ -189,7 +189,7 @@ export class StatuspagegroupsEditStepTwoComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.post.statuspages_memberships = this.convertMatrixIntoMembershipPost();
+        this.post.statuspages = this.convertMatrixIntoMembershipPost();
 
         this.subscriptions.add(this.StatuspagegroupsService.saveStatuspagegroupEditStepTwo(this.post)
             .subscribe((result) => {
