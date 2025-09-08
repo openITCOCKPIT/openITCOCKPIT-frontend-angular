@@ -62,7 +62,6 @@ export class StorageComponent extends WizardsAbstractComponent {
         pveUsername: '',
         pveApiTokenName: '',
         pveApiTokenSecret: '',
-        storageServices: [],
 // Default fields from the base wizard
         host_id: 0,
         services: [],
@@ -72,19 +71,20 @@ export class StorageComponent extends WizardsAbstractComponent {
 
     protected override wizardLoad(result: ProxmoxStorageWizardGet): void {
         this.cdr.markForCheck();
+        this.post.services = [];
         this.post.pveUsername = result.pveUsername;
         this.post.pveApiTokenName = result.pveApiTokenName;
         this.post.pveApiTokenSecret = result.pveApiTokenSecret;
-        this.storageServicetemplate = result.storageServicetemplate;
+        this.storageServicetemplate = result.servicetemplates[0];
         super.wizardLoad(result);
     }
 
 
     protected runStorageDiscovery(): void {
-        this.post.storageServices = [];
+        this.post.services = [];
         this.cdr.markForCheck();
         this.WizardService.executeStorageDiscovery(this.post).subscribe((data: any) => {
-            this.post.storageServices = [];
+            this.post.services = [];
             this.errors = {} as GenericValidationError;
 //            this.accordionClosed = true;
             this.cdr.markForCheck();
@@ -94,7 +94,7 @@ export class StorageComponent extends WizardsAbstractComponent {
                     let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.storageServicetemplate.servicetemplatecommandargumentvalues));
                     servicetemplatecommandargumentvalues[3].value = data.services[2].value[key].name;
                     let name = "PVE Storage " + String(data.services[2].value[key].name);
-                    this.post.storageServices.push(
+                    this.post.services.push(
                         {
                             createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, name),
                             description: '',

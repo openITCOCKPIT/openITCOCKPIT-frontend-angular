@@ -105,7 +105,6 @@ export interface ProxmoxStorageWizardPost extends WizardPost {
     pveUsername: string
     pveApiTokenName: string
     pveApiTokenSecret: string
-    storageServices: Service[]
 }
 
 
