@@ -80,7 +80,7 @@ export class StatuspagegroupsService {
 
     /**
      * editStepTwo has access to:
-     *     $statuspagegroup->setAccess('statuspages', false);
+     *     $statuspagegroup->setAccess('statuspages_membership', false);
      *     $statuspagegroup->setAccess('statuspagegroup_collections', true);
      *     $statuspagegroup->setAccess('statuspagegroup_categories', true);
      * @param statuspagegroup
@@ -127,7 +127,7 @@ export class StatuspagegroupsService {
 
     /**
      * editStepTwo has access to:
-     *     $statuspagegroup->setAccess('statuspages', true);
+     *     $statuspagegroup->setAccess('statuspages_membership', true);
      *     $statuspagegroup->setAccess('statuspagegroup_collections', false);
      *     $statuspagegroup->setAccess('statuspagegroup_categories', false);
      * @param statuspagegroup

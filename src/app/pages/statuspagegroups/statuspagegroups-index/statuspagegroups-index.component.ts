@@ -153,6 +153,7 @@ export class StatuspagegroupsIndexComponent implements OnInit, OnDestroy, IndexP
     }
 
     public load(): void {
+        this.SelectionServiceService.deselectAll();
         this.subscriptions.add(this.StatuspagegroupsService.getStatuspagegroups(this.params).subscribe(data => {
             this.statuspagegroups = data;
             this.cdr.markForCheck();

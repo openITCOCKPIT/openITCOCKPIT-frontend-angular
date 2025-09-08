@@ -109,7 +109,7 @@ export class StatuspagegroupsAddStepOneComponent implements OnInit, OnDestroy {
             container_id: 0,
             statuspagegroup_categories: [],
             statuspagegroup_collections: [],
-            statuspages: []
+            statuspages_memberships: []
         }
     }
 

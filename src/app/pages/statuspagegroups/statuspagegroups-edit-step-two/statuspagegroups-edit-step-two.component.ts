@@ -152,11 +152,11 @@ export class StatuspagegroupsEditStepTwoComponent implements OnInit, OnDestroy {
             });
 
             // Assign statuspages to the matrix based on their collection_id and category_id
-            for (const statuspage of this.post.statuspages) {
-                const collectionIndex = collectionIndexMapping.get(Number(statuspage._joinData.collection_id));
-                const categoryIndex = categoryIndexMapping.get(Number(statuspage._joinData.category_id));
+            for (const statuspage_membership of this.post.statuspages_memberships) {
+                const collectionIndex = collectionIndexMapping.get(Number(statuspage_membership.collection_id));
+                const categoryIndex = categoryIndexMapping.get(Number(statuspage_membership.category_id));
                 if (collectionIndex !== undefined && categoryIndex !== undefined) {
-                    this.statuspageMatrix[collectionIndex][categoryIndex].statuspageIds.push(Number(statuspage.id));
+                    this.statuspageMatrix[collectionIndex][categoryIndex].statuspageIds.push(Number(statuspage_membership.statuspage_id));
                 }
             }
         }
@@ -169,13 +169,10 @@ export class StatuspagegroupsEditStepTwoComponent implements OnInit, OnDestroy {
             collection.forEach((category, categoryIndex) => {
                 category.statuspageIds.forEach((statuspageId) => {
                     memberships.push({
-                        id: statuspageId,
-                        _joinData: {
-                            statuspagegroup_id: Number(this.post?.id),
-                            collection_id: category.collectionId,
-                            category_id: category.categoryId,
-                            statuspage_id: statuspageId
-                        }
+                        statuspagegroup_id: Number(this.post?.id),
+                        collection_id: category.collectionId,
+                        category_id: category.categoryId,
+                        statuspage_id: statuspageId
                     });
                 });
             });
@@ -189,7 +186,7 @@ export class StatuspagegroupsEditStepTwoComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.post.statuspages = this.convertMatrixIntoMembershipPost();
+        this.post.statuspages_memberships = this.convertMatrixIntoMembershipPost();
 
         this.subscriptions.add(this.StatuspagegroupsService.saveStatuspagegroupEditStepTwo(this.post)
             .subscribe((result) => {

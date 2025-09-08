@@ -49,7 +49,7 @@ export interface StatuspagegroupPost {
     description: string | null
     modified?: string
     created?: string
-    statuspages: StatuspagesMembershipPost[]
+    statuspages_memberships: StatuspagesMembershipPost[]
     statuspagegroup_collections: StatuspagegroupCollectionPost[]
     statuspagegroup_categories: StatuspagegroupCategoryPost[]
 }
@@ -72,17 +72,13 @@ export interface StatuspagegroupCategoryPost {
 }
 
 export interface StatuspagesMembershipPost {
-    id: number    // this is the ID of the status page
-    name?: string // In edit mode, the name of the status page is not relevant
-    _joinData: {
-        id?: number
-        statuspagegroup_id?: number
-        collection_id?: number
-        category_id?: number
-        statuspage_id: number
-        modified?: string
-        created?: string
-    }
+    id?: number
+    statuspagegroup_id?: number
+    collection_id?: number
+    category_id?: number
+    statuspage_id: number
+    modified?: string
+    created?: string
 }
 
 export interface StatuspageMatrixItem {
