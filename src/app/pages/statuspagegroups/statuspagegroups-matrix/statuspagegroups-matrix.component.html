@@ -2,7 +2,7 @@
     <div>
         <table cTable [striped]="true" stripedColumns bordered>
             <thead>
-            <tr>
+            <tr class="align-top">
                 <th scope="col" class="align-middle">
                     <button cButton class="ripple" size="xs" color="success" type="button"
                             (click)="addCollection()">
@@ -45,7 +45,7 @@
             <tbody>
                 @for (collection of statuspagegroup_collections(); track $index; let
                     collectionIndex = $index) {
-                    <tr>
+                    <tr class="align-top">
                         <th class="col-2">
                             <c-input-group>
                                 <input
