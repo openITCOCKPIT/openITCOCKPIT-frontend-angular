@@ -99,7 +99,7 @@ export class StorageComponent extends WizardsAbstractComponent {
                 for (let key in data.services[2].value) {
                     let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.storageServicetemplate.servicetemplatecommandargumentvalues));
                     servicetemplatecommandargumentvalues[3].value = data.services[2].value[key].name;
-                    let name = "PVE Storage " + String(data.services[2].value[key].name);
+                    let name = "PVE Storage Usage " + String(data.services[2].value[key].name);
                     this.post.services.push(
                         {
                             createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, name),
