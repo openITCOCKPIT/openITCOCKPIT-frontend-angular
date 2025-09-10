@@ -6,15 +6,13 @@ import {
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    FormControlDirective, FormLabelDirective
+    FormControlDirective,
+    FormLabelDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
     WizardsDynamicfieldsComponent
@@ -36,10 +34,7 @@ import { RouterLink } from '@angular/router';
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
-        NgIf,
         ReactiveFormsModule,
-        RequiredIconComponent,
-        SelectComponent,
         TranslocoDirective,
         TranslocoPipe,
         WizardsDynamicfieldsComponent,
