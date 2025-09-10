@@ -13,7 +13,7 @@ import {
 })
 export class M365ServiceStatusService extends WizardsService {
     public fetch(hostId: number): Observable<Ms365ServiceStatusWizardGet> {
-        return this.http.get<Ms365ServiceStatusWizardGet>(`${this.proxyPath}/proxmox_module/wizards/proxmox/${hostId}.json?angular=true`).pipe(
+        return this.http.get<Ms365ServiceStatusWizardGet>(`${this.proxyPath}/ms365_module/wizards/serviceStatus/${hostId}.json?angular=true`).pipe(
             map((data: Ms365ServiceStatusWizardGet): Ms365ServiceStatusWizardGet => {
                 return data;
             })

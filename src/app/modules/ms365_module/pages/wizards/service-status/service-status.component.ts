@@ -91,7 +91,7 @@ export class ServiceStatusComponent extends WizardsAbstractComponent {
             if (data && data.services && data.services.length && data.services[0].value && data.services[2]) {
                 for (let key in data.services[2].value) {
                     let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.storageServicetemplate.servicetemplatecommandargumentvalues));
-                    servicetemplatecommandargumentvalues[3].value = data.services[2].value[key].name;
+                    servicetemplatecommandargumentvalues[0].value = data.services[2].value[key].name;
                     let name = "PVE Storage " + String(data.services[2].value[key].name);
                     this.post.services.push(
                         {
