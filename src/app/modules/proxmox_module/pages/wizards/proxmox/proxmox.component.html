@@ -26,7 +26,6 @@
             </h5>
         </c-card-header>
         <c-card-body class="p-0">
-
             <div class="row m-0 text-center mb-3" style="min-height: 22px;">
                 <div
                     class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
@@ -72,6 +71,14 @@
                         {{ t('Proxmox Server Settings') }}
                     </h4>
                 </legend>
+
+                <c-alert color="info">
+                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                    <strong>
+                        {{ t('Notice') }}:
+                    </strong>
+                    {{ t('Proxmox Hostname has to be identical with Hostname in openITCOCKPIT') }}
+                </c-alert>
 
                 <div class="mb-3">
                     <label cLabel for="post.pveUsername">

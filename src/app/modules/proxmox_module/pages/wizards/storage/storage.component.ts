@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    FormControlDirective, FormLabelDirective
+    FormControlDirective,
+    FormLabelDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -21,8 +23,11 @@ import { NgIf } from '@angular/common';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
-import { ProxmoxStorageWizardGet, StorageServiceTemplate } from './proxmox-storage-wizard.interface';
-import { ProxmoxStorageWizardPost } from './proxmox-storage-wizard.interface';
+import {
+    ProxmoxStorageWizardGet,
+    ProxmoxStorageWizardPost,
+    StorageServiceTemplate
+} from './proxmox-storage-wizard.interface';
 import { ProxmoxStorageWizardService } from './proxmox-storage-wizard.service';
 
 @Component({
@@ -45,7 +50,8 @@ import { ProxmoxStorageWizardService } from './proxmox-storage-wizard.service';
         RouterLink,
         NgIf,
         OitcAlertComponent,
-        XsButtonDirective
+        XsButtonDirective,
+        AlertComponent
     ],
     templateUrl: './storage.component.html',
     styleUrl: './storage.component.css',

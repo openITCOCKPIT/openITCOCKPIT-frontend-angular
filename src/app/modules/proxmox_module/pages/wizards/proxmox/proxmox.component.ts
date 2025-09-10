@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -39,7 +40,8 @@ import { RouterLink } from '@angular/router';
         TranslocoPipe,
         WizardsDynamicfieldsComponent,
         FormsModule,
-        RouterLink
+        RouterLink,
+        AlertComponent
     ],
     templateUrl: './proxmox.component.html',
     styleUrl: './proxmox.component.css',
