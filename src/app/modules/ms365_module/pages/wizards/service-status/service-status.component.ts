@@ -53,8 +53,6 @@ import { Servicetemplate } from '../../../../../pages/wizards/wizards.interface'
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServiceStatusComponent extends WizardsAbstractComponent {
-
-
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
     protected override WizardService: M365ServiceStatusService = inject(M365ServiceStatusService);
     public checked: boolean = false;

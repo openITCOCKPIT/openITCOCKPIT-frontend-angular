@@ -34,7 +34,6 @@ export interface Ms365ServiceStatusWizardPost extends WizardPost {
     clientSecret: string
 }
 
-
 export interface Ms365ServiceStatusWizardPost {
     host_id: number
 }
