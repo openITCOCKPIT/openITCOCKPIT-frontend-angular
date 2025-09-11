@@ -744,6 +744,10 @@ const coreRoutes: Routes = [{
     path: 'statuspagegroups/editStepTwo/:id',
     loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-edit-step-two/statuspagegroups-edit-step-two.component').then(m => m.StatuspagegroupsEditStepTwoComponent)
 }, {
+    path: 'statuspagegroups/view/:id',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-view/statuspagegroups-view.component').then(m => m.StatuspagegroupsViewComponent)
+}, {
+
     path: 'statuspagegroups/index',
     loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-index/statuspagegroups-index.component').then(m => m.StatuspagegroupsIndexComponent)
 }, {
