@@ -71,7 +71,7 @@
                         {{ t('Proxmox Server Settings') }}
                     </h4>
                 </legend>
-                
+
                 <c-alert color="info">
                     <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                     <strong>
@@ -149,6 +149,11 @@
 
             </div>
 
+            <c-row class="mb-1">
+                <c-col md="6">
+                    <oitc-form-feedback [errors]="errors" errorField="proxmoxstoragecommand"></oitc-form-feedback>
+                </c-col>
+            </c-row>
             <oitc-wizards-dynamicfields
                 [(post)]="post.services"
                 [errors]="errors"

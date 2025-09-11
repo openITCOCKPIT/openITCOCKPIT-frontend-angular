@@ -6,8 +6,10 @@ import {
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
     FormControlDirective,
-    FormLabelDirective
+    FormLabelDirective,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -51,7 +53,9 @@ import { ProxmoxStorageWizardService } from './proxmox-storage-wizard.service';
         NgIf,
         OitcAlertComponent,
         XsButtonDirective,
-        AlertComponent
+        AlertComponent,
+        ColComponent,
+        RowComponent
     ],
     templateUrl: './storage.component.html',
     styleUrl: './storage.component.css',
