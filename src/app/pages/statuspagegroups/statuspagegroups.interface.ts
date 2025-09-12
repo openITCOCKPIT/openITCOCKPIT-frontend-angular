@@ -62,6 +62,7 @@ export interface StatuspagegroupCollectionPost {
     description: string | null
     modified?: string
     created?: string
+    cumulatedCollectionState?: number // only in view
 }
 
 export interface StatuspagegroupCategoryPost {
@@ -70,6 +71,7 @@ export interface StatuspagegroupCategoryPost {
     name: string
     modified?: string
     created?: string
+    cumulatedCategoryState?: number // only in view
 }
 
 export interface StatuspagesMembershipPost {
@@ -91,9 +93,11 @@ export interface StatuspageMatrixItem {
 }
 
 export interface StatupagegroupViewRoot {
+    statuspagegroup: StatuspagegroupPost
     statuspages: StatuspageView[]
     cumulatedStategroupState: CumulatedStatuspagegroupStatus
     matrix: StatuspageMatrixViewItem[][]
+    problems: StatupagegroupProblem[]
     _csrfToken: string
 }
 
@@ -134,4 +138,24 @@ export interface StatuspageView {
     service_downtimes: number
     service_total: number
     service_problems: number
+}
+
+export interface StatupagegroupProblem {
+    statuspage: StatuspageView
+    collection: {
+        id: number
+        statuspagegroup_id: number
+        name: string
+        description: string | null
+        modified: string
+        created: string
+    }
+    category: {
+        id: number
+        statuspagegroup_id: number
+        name: string
+        modified: string
+        created: string
+    }
+    cumulatedState: CumulatedStatuspagegroupStatus
 }

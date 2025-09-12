@@ -1,3 +1,5 @@
+@use "../../../../assets/coreui/variables" as oitc;
+
 .marquee-text {
     overflow: clip;
 }
@@ -24,4 +26,24 @@
     to {
         transform: translateX(-50%);
     }
+}
+
+.inner-border-not-in-monitoring {
+    box-shadow: inset 5px 0 0 0 oitc.$primary;
+}
+
+.inner-border-up {
+    box-shadow: inset 5px 0 0 0 oitc.$success;
+}
+
+.inner-border-down, .inner-border-critical {
+    box-shadow: inset 5px 0 0 0 oitc.$danger;
+}
+
+.inner-border-warning {
+    box-shadow: inset 5px 0 0 0 oitc.$warning;
+}
+
+.inner-border-unreachable, .inner-border-unknown {
+    box-shadow: inset 5px 0 0 0 oitc.$secondary;
 }
