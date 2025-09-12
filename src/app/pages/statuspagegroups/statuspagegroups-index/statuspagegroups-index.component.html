@@ -142,16 +142,12 @@
                                         [item]="statuspagegroup"></oitc-item-select>
                                 </td>
                                 <td>
-                                    <span *oitcPermission="['statuspagegroups', 'edit']">
-                                        @if (statuspagegroup.allowEdit) {
-                                            <a [routerLink]="['/', 'statuspagegroups', 'edit',statuspagegroup.id]">
-                                                {{ statuspagegroup.name }}
-                                            </a>
-                                        } @else {
+                                    <span *oitcPermission="['statuspagegroups', 'view']">
+                                        <a [routerLink]="['/', 'statuspagegroups', 'view',statuspagegroup.id]">
                                             {{ statuspagegroup.name }}
-                                        }
+                                        </a>
                                     </span>
-                                    <span *oitcPermission="['statuspagegroups', 'edit']; negate: true">
+                                    <span *oitcPermission="['statuspagegroups', 'view']; negate: true">
                                         {{ statuspagegroup.name }}
                                     </span>
                                 </td>
@@ -161,6 +157,7 @@
                                 <td class="width-50">
                                     <oitc-actions-button [permission]="'statuspagegroups.edit'"
                                                          [icon]="['fas', 'cog']"
+                                                         [allowEdit]="statuspagegroup.allowEdit"
                                                          [url]="'/statuspagegroups/edit/' + statuspagegroup.id">
                                         @if (statuspagegroup.allowEdit) {
                                             <oitc-actions-button-element [permission]="'statuspagegroups.edit'"

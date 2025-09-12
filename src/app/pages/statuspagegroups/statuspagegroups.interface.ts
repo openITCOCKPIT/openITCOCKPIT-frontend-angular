@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { CumulatedStatuspagegroupStatus } from './cumulated-statuspagegroup-status.enum';
 
 export interface StatuspagegroupsIndex extends PaginateOrScroll {
     all_statuspagegroups: Statuspagegroup[]
@@ -87,4 +88,50 @@ export interface StatuspageMatrixItem {
     categoryIndex: number    // index position in categories array
     categoryId: number       // actual database ID of the category
     statuspageIds: number[]  // IDs of status pages assigned to this cell
+}
+
+export interface StatupagegroupViewRoot {
+    statuspages: StatuspageView[]
+    cumulatedStategroupState: CumulatedStatuspagegroupStatus
+    matrix: StatuspageMatrixViewItem[][]
+    _csrfToken: string
+}
+
+export interface StatuspageMatrixViewItem {
+    collectionIndex: number  // index position in collections array
+    collectionId: number     // actual database ID of the collection
+    categoryIndex: number    // index position in categories array
+    categoryId: number       // actual database ID of the category
+    statuspageIds: number[]  // IDs of status pages assigned to this cell
+    cumulatedStates: CumulatedStatuspagegroupStatus[] // All the cumulated states of the statuspages in this cell
+    cumulatedState: CumulatedStatuspagegroupStatus // The overall cumulated state of this cell (worst state of all statuspages in this cell)
+    statuspages: StatuspageView[]
+    total_statuspages: number
+    total_not_monitored: number
+    total_ok: number
+    total_warning: number
+    total_critical: number
+    total_unknown: number
+}
+
+export interface StatuspageView {
+    statuspage: {
+        id: number
+        uuid: string
+        container_id: number
+        name: string
+        description: string
+        public_title: string
+        public_identifier: null | string
+        public: boolean
+    }
+    cumulatedState: CumulatedStatuspagegroupStatus
+    host_acknowledgements: number
+    host_downtimes: number
+    host_total: number
+    host_problems: number
+    service_acknowledgements: number
+    service_downtimes: number
+    service_total: number
+    service_problems: number
 }
