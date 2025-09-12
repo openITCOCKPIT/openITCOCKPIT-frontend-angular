@@ -16,16 +16,24 @@ export interface HostMappingRulesPost {
     save_options: boolean
     sla_id: number
     only_unassigned: boolean
-    filter?: Filter
+    filter?: HostMappingRuleFilter
+    hostgroups: {
+        _ids: number[]
+    }
+    servicegroups: {
+        _ids: number[]
+    }
 }
 
-export interface Filter {
+export interface HostMappingRuleFilter {
     'Hosts.name': string
     'Hosts.keywords': null | string | string[]
     'Hosts.not_keywords': null | string | string[]
     'servicename': string
     'Services.keywords': null | string | string[]
     'Services.not_keywords': null | string | string[]
+    'Hostgroups.id[]': number[]
+    'Servicegroups.id[]': number[]
 }
 
 export interface HostMappingRulesAssignToHostsRoot {
@@ -44,8 +52,13 @@ export function getDefaultHostMappingRulesPost(id: number): HostMappingRulesPost
         servicename_regex: '',
         save_options: false,
         sla_id: id,
-        only_unassigned: true
-
+        only_unassigned: true,
+        hostgroups: {
+            _ids: []
+        },
+        servicegroups: {
+            _ids: []
+        },
     }
 }
 
@@ -63,6 +76,8 @@ export interface HostMappingRulesLoadHostsParams {
     'filter[servicename]': string
     'filter[Services.keywords][]': null | string | string[]
     'filter[Services.not_keywords][]': null | string | string[]
+    'filter[Hostgroups.id][]': number[]
+    'filter[Servicegroups.id][]': number[],
     resolveContainerIds: true
     onlyUnassigned: boolean
 }
@@ -82,6 +97,8 @@ export function getDefaultHostMappingRulesLoadHostsParams(id: number): HostMappi
         'filter[servicename]': '',
         'filter[Services.keywords][]': [],
         'filter[Services.not_keywords][]': [],
+        'filter[Hostgroups.id][]': [],
+        'filter[Servicegroups.id][]': [],
         resolveContainerIds: true,
         onlyUnassigned: true
 

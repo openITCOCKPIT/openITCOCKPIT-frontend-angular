@@ -9,31 +9,31 @@ import { HistoryService } from '../../../../../history.service';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  AlertComponent,
-  BadgeComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownComponent,
-  DropdownItemDirective,
-  DropdownMenuDirective,
-  DropdownToggleDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    AlertComponent,
+    BadgeComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -52,69 +52,73 @@ import {
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 
 
-
-
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { HostMappingRulesService } from '../host-mapping-rules.service';
 import {
     getDefaultHostMappingRulesLoadHostsParams,
-    getDefaultHostMappingRulesPost, HostMappingRulesAssignToHostsRoot,
+    getDefaultHostMappingRulesPost,
+    HostMappingRulesAssignToHostsRoot,
     HostMappingRulesLoadHostsParams,
     HostMappingRulesPost,
     LoadHostsRoot
 } from '../host-mapping-rules.interface';
+import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { HostgroupsService } from '../../../../../pages/hostgroups/hostgroups.service';
+import { ServicegroupsService } from '../../../../../pages/servicegroups/servicegroups.service';
+import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 @Component({
     selector: 'oitc-host-mapping-rules-assign-to-hosts',
     imports: [
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    FaIconComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    BackButtonDirective,
-    CardBodyComponent,
-    PermissionDirective,
-    FormDirective,
-    FormsModule,
-    CardFooterComponent,
-    DropdownComponent,
-    DropdownToggleDirective,
-    DropdownMenuDirective,
-    DropdownItemDirective,
-    AlertComponent,
-    NgIf,
-    DebounceDirective,
-    FormControlDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    NgSelectComponent,
-    RegexHelperTooltipComponent,
-    FormCheckComponent,
-    TrueFalseDirective,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    RowComponent,
-    ColComponent,
-    BadgeComponent,
-    MatSort,
-    MatSortHeader,
-    NgForOf,
-    TableDirective,
-    NgClass,
-    PaginateOrScrollComponent,
-    ContainerComponent,
-    AsyncPipe
-],
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        FaIconComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        BackButtonDirective,
+        CardBodyComponent,
+        PermissionDirective,
+        FormDirective,
+        FormsModule,
+        CardFooterComponent,
+        DropdownComponent,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        DropdownItemDirective,
+        AlertComponent,
+        NgIf,
+        DebounceDirective,
+        FormControlDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        NgSelectComponent,
+        RegexHelperTooltipComponent,
+        FormCheckComponent,
+        TrueFalseDirective,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        RowComponent,
+        ColComponent,
+        BadgeComponent,
+        MatSort,
+        MatSortHeader,
+        NgForOf,
+        TableDirective,
+        NgClass,
+        PaginateOrScrollComponent,
+        ContainerComponent,
+        AsyncPipe,
+        MultiSelectComponent
+    ],
     templateUrl: './host-mapping-rules-assign-to-hosts.component.html',
     styleUrl: './host-mapping-rules-assign-to-hosts.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -126,6 +130,8 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
+    private readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
     private router: Router = inject(Router);
 
     private subscriptions: Subscription = new Subscription();
@@ -139,6 +145,9 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
     public params!: HostMappingRulesLoadHostsParams;
     public sla: Sla = {} as Sla;
     private cdr = inject(ChangeDetectorRef);
+
+    public hostgroups: SelectKeyValue[] = [];
+    public servicegroups: SelectKeyValue[] = [];
 
     public ngOnInit() {
 
@@ -179,9 +188,29 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
                         result.sla.host_mapping_rule.service_not_keywords = [];
                     }
                     this.post = result.sla.host_mapping_rule;
+                    this.loadHostgroups();
+                    this.loadServicegroups();
                 }
                 this.loadHosts();
             }));
+    }
+
+    public loadHostgroups() {
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByContainerId(this.sla.container_id, this.post.hostgroups._ids)
+            .subscribe((result) => {
+                this.hostgroups = result;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    public loadServicegroups() {
+        this.subscriptions.add(this.ServicegroupsService.loadServicegroupsByContainerId(this.sla.container_id, this.post.servicegroups._ids)
+            .subscribe((result) => {
+                this.servicegroups = result;
+                this.cdr.markForCheck();
+            })
+        );
     }
 
     public submit(saveHostMappingRule: boolean = false): void {
@@ -193,6 +222,8 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
             'servicename': this.post.servicename_regex,
             'Services.keywords': (this.post.service_keywords !== null ? this.post.service_keywords : []),
             'Services.not_keywords': (this.post.service_not_keywords !== null ? this.post.service_not_keywords : []),
+            'Hostgroups.id[]': this.post.hostgroups._ids ?? [],
+            'Servicegroups.id[]': this.post.servicegroups._ids ?? []
         };
         this.post.host_keywords = (Array.isArray(this.post.host_keywords)) ? this.post.host_keywords.join(',') : this.post.host_keywords;
         this.post.host_not_keywords = (Array.isArray(this.post.host_not_keywords)) ? this.post.host_not_keywords.join(',') : this.post.host_not_keywords;
@@ -235,6 +266,8 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
         this.params['filter[Services.not_keywords][]'] = (this.post.service_not_keywords !== null ? this.post.service_not_keywords : []);
         this.params['resolveContainerIds'] = true;
         this.params['onlyUnassigned'] = this.post.only_unassigned;
+        this.params['filter[Hostgroups.id][]'] = this.post.hostgroups._ids ?? [];
+        this.params['filter[Servicegroups.id][]'] = this.post.servicegroups._ids ?? [];
 
         this.isHostsLoading = true;
         this.subscriptions.add(this.HostMappingRulesService.loadHosts(this.params)
