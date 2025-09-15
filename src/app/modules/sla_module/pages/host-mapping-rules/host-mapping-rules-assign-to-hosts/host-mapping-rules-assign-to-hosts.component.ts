@@ -165,29 +165,21 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
         this.subscriptions.add(this.HostMappingRulesService.loadAssignToHosts(this.slaId)
             .subscribe((result: HostMappingRulesAssignToHostsRoot) => {
                 this.cdr.markForCheck();
-                this.sla = result.sla;
-                if (result.sla.host_mapping_rule !== null) {
-                    if (result.sla.host_mapping_rule.host_keywords !== null && typeof result.sla.host_mapping_rule.host_keywords === 'string' && result.sla.host_mapping_rule.host_keywords.length > 0) {
-                        result.sla.host_mapping_rule.host_keywords = result.sla.host_mapping_rule.host_keywords.split(',');
-                    } else {
-                        result.sla.host_mapping_rule.host_keywords = [];
-                    }
-                    if (result.sla.host_mapping_rule.host_not_keywords !== null && typeof result.sla.host_mapping_rule.host_not_keywords === 'string' && result.sla.host_mapping_rule.host_not_keywords.length > 0) {
-                        result.sla.host_mapping_rule.host_not_keywords = result.sla.host_mapping_rule.host_not_keywords.split(',');
-                    } else {
-                        result.sla.host_mapping_rule.host_not_keywords = [];
-                    }
-                    if (result.sla.host_mapping_rule.service_keywords !== null && typeof result.sla.host_mapping_rule.service_keywords === 'string' && result.sla.host_mapping_rule.service_keywords.length > 0) {
-                        result.sla.host_mapping_rule.service_keywords = result.sla.host_mapping_rule.service_keywords.split(',');
-                    } else {
-                        result.sla.host_mapping_rule.service_keywords = [];
-                    }
-                    if (result.sla.host_mapping_rule.service_not_keywords !== null && typeof result.sla.host_mapping_rule.service_not_keywords === 'string' && result.sla.host_mapping_rule.service_not_keywords.length > 0) {
-                        result.sla.host_mapping_rule.service_not_keywords = result.sla.host_mapping_rule.service_not_keywords.split(',');
-                    } else {
-                        result.sla.host_mapping_rule.service_not_keywords = [];
-                    }
+                if (result.sla.host_mapping_rule) {
+                    this.sla = result.sla;
                     this.post = result.sla.host_mapping_rule;
+                    if (typeof this.post.host_keywords === "string") {
+                        this.post.host_keywords = this.post.host_keywords.split(',').filter(Boolean);
+                    }
+                    if (typeof this.post.host_not_keywords === "string") {
+                        this.post.host_not_keywords = this.post.host_not_keywords.split(',').filter(Boolean);
+                    }
+                    if (typeof this.post.service_keywords === "string") {
+                        this.post.service_keywords = this.post.service_keywords.split(',').filter(Boolean);
+                    }
+                    if (typeof this.post.service_not_keywords === "string") {
+                        this.post.service_not_keywords = this.post.service_not_keywords.split(',').filter(Boolean);
+                    }
                     this.loadHostgroups();
                     this.loadServicegroups();
                 }
@@ -225,11 +217,11 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
             'Hostgroups.id[]': this.post.hostgroups._ids ?? [],
             'Servicegroups.id[]': this.post.servicegroups._ids ?? []
         };
+
         this.post.host_keywords = (Array.isArray(this.post.host_keywords)) ? this.post.host_keywords.join(',') : this.post.host_keywords;
         this.post.host_not_keywords = (Array.isArray(this.post.host_not_keywords)) ? this.post.host_not_keywords.join(',') : this.post.host_not_keywords;
         this.post.service_keywords = (Array.isArray(this.post.service_keywords)) ? this.post.service_keywords.join(',') : this.post.service_keywords;
         this.post.service_not_keywords = (Array.isArray(this.post.service_not_keywords)) ? this.post.service_not_keywords.join(',') : this.post.service_not_keywords;
-
         this.subscriptions.add(this.HostMappingRulesService.assignToHosts(this.post, this.slaId)
             .subscribe((result) => {
                 this.cdr.markForCheck();
@@ -255,13 +247,12 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
     }
 
     private loadHosts(): void {
-
-        this.params['slaId'] = this.sla.id;
+        this.params['slaId'] = this.slaId;
         this.params['filter[Hosts.name]'] = this.post.hostname_regex;
         this.params['filter[hostdescription]'] = this.post.description;
         this.params['filter[Hosts.keywords][]'] = (this.post.host_keywords !== null ? this.post.host_keywords : []);
         this.params['filter[Hosts.not_keywords][]'] = (this.post.host_not_keywords !== null ? this.post.host_not_keywords : []);
-        this.params['filter[servicename]'] = this.post.servicename_regex;
+        this.params['filter[servicename]'] = (this.post.servicename_regex !== null ? this.post.servicename_regex : '');
         this.params['filter[Services.keywords][]'] = (this.post.service_keywords !== null ? this.post.service_keywords : []);
         this.params['filter[Services.not_keywords][]'] = (this.post.service_not_keywords !== null ? this.post.service_not_keywords : []);
         this.params['resolveContainerIds'] = true;

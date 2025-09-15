@@ -190,7 +190,9 @@
                             optionValue="key"
                             optionLabel="value"
                             [(ngModel)]="post.hostgroups._ids"
-                            [options]="hostgroups">
+                            [options]="hostgroups"
+                            (onChange)="onPostChange()"
+                            [debounce]="true">
                         </oitc-multi-select>
                     </div>
 
@@ -294,7 +296,9 @@
                             optionValue="key"
                             optionLabel="value"
                             [(ngModel)]="post.servicegroups._ids"
-                            [options]="servicegroups">
+                            [options]="servicegroups"
+                            (onChange)="onPostChange()"
+                            [debounce]="true">
                         </oitc-multi-select>
                     </div>
 
@@ -326,8 +330,7 @@
                                 <div class="alert-icon">
                                     <span class="icon-stack icon-stack-md">
                                         <i class="base-6 icon-stack-3x text-white"></i>
-                                        <i class="fas fa-info-circle icon-stack-1x text-primary-600"
-                                           style="bottom: 5px;"></i>
+                                        <i class="fas fa-info-circle icon-stack-2x text-primary-600"></i>
                                     </span>
                                 </div>
                                 <div class="flex-1 text-white">

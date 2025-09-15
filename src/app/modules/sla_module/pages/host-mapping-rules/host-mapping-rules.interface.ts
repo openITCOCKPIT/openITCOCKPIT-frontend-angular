@@ -6,12 +6,12 @@ import { ServicetemplateEntity } from '../../../../pages/servicetemplates/servic
 
 
 export interface HostMappingRulesPost {
-    host_keywords: null | string | string[]
-    host_not_keywords: null | string | string[]
+    host_keywords: string | string[]
+    host_not_keywords: string | string[]
     hostname_regex: string
     description: string
-    service_keywords: null | string | string[]
-    service_not_keywords: null | string | string[]
+    service_keywords: string | string[]
+    service_not_keywords: string | string[]
     servicename_regex: string
     save_options: boolean
     sla_id: number
@@ -43,12 +43,12 @@ export interface HostMappingRulesAssignToHostsRoot {
 
 export function getDefaultHostMappingRulesPost(id: number): HostMappingRulesPost {
     return {
-        host_keywords: null,
-        host_not_keywords: null,
+        host_keywords: '',
+        host_not_keywords: '',
         hostname_regex: '',
         description: '',
-        service_keywords: null,
-        service_not_keywords: null,
+        service_keywords: '',
+        service_not_keywords: '',
         servicename_regex: '',
         save_options: false,
         sla_id: id,
@@ -58,7 +58,7 @@ export function getDefaultHostMappingRulesPost(id: number): HostMappingRulesPost
         },
         servicegroups: {
             _ids: []
-        },
+        }
     }
 }
 
