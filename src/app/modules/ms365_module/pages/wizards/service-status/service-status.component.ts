@@ -91,8 +91,8 @@ export class ServiceStatusComponent extends WizardsAbstractComponent {
             if (data && data.services && data.services.length && data.services[0].value && data.services[2]) {
                 for (let key in data.services[2].value) {
                     let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.storageServicetemplate.servicetemplatecommandargumentvalues));
-                    servicetemplatecommandargumentvalues[0].value = data.services[2].value[key].name;
-                    let name = "PVE Storage " + String(data.services[2].value[key].name);
+                    servicetemplatecommandargumentvalues[0].value = data.services[2].value[key].serviceOption;
+                    let name = "M365 Service Health States " + String(data.services[2].value[key].serviceName);
                     this.post.services.push(
                         {
                             createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, name),
