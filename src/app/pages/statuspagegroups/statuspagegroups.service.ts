@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
+    StatupagegroupViewDetailsRoot,
     StatupagegroupViewRoot,
     StatuspagegroupPost,
     StatuspagegroupsIndex,
@@ -173,6 +174,15 @@ export class StatuspagegroupsService {
     public getStatuspagegroupView(id: number): Observable<StatupagegroupViewRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<StatupagegroupViewRoot>(`${proxyPath}/statuspagegroups/view/${id}.json`, {}).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    public getStatuspagegroupGetDetails(id: number): Observable<StatupagegroupViewDetailsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<StatupagegroupViewDetailsRoot>(`${proxyPath}/statuspagegroups/getDetails/${id}.json`, {}).pipe(
             map(data => {
                 return data;
             })

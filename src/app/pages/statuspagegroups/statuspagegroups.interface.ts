@@ -93,6 +93,10 @@ export interface StatuspageMatrixItem {
 }
 
 export interface StatupagegroupViewRoot {
+    totalHosts: number
+    totalServices: number
+    worstHostState: CumulatedStatuspagegroupStatus
+    worstServiceState: CumulatedStatuspagegroupStatus
     statuspagegroup: StatuspagegroupPost
     statuspages: StatuspageView[]
     cumulatedStategroupState: CumulatedStatuspagegroupStatus
@@ -158,4 +162,18 @@ export interface StatupagegroupProblem {
         created: string
     }
     cumulatedState: CumulatedStatuspagegroupStatus
+}
+
+export interface StatuspagegroupViewLocalFilter {
+    state_1: boolean
+    state_2: boolean
+    state_3: boolean
+    collection: string
+    category: string
+    statuspage_name: string
+}
+
+export interface StatupagegroupViewDetailsRoot {
+    statuspagegroup: StatuspagegroupPost
+    _csrfToken: string
 }
