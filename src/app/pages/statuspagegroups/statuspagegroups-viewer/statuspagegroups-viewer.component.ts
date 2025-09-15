@@ -27,11 +27,11 @@ import {
 } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StatuspagegroupsService } from '../statuspagegroups.service';
 import { StatupagegroupViewRoot } from '../statuspagegroups.interface';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { CumulatedStatuspagegroupStatus } from '../cumulated-statuspagegroup-status.enum';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import {
@@ -39,6 +39,7 @@ import {
 } from '../../statuspages/statuspage-icon-simple/statuspage-icon-simple.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { StatuspageStatusPipe } from '../../statuspages/statuspage-status.pipe';
+import { StatuspagegroupsMarqueeComponent } from '../statuspagegroups-marquee/statuspagegroups-marquee.component';
 
 @Component({
     selector: 'oitc-statuspagegroups-viewer',
@@ -68,12 +69,11 @@ import { StatuspageStatusPipe } from '../../statuspages/statuspage-status.pipe';
         TranslocoDirective,
         BlockLoaderComponent,
         NgClass,
-        AsyncPipe,
-        RouterLink,
         StatuspageIconSimpleComponent,
         ReactiveFormsModule,
         StatuspageStatusPipe,
-        TooltipDirective
+        TooltipDirective,
+        StatuspagegroupsMarqueeComponent
     ],
     templateUrl: './statuspagegroups-viewer.component.html',
     styleUrl: './statuspagegroups-viewer.component.scss',

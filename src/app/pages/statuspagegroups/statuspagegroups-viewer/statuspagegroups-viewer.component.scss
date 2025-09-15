@@ -1,33 +1,5 @@
 @use "../../../../assets/coreui/variables" as oitc;
 
-.marquee-text {
-    overflow: clip;
-}
-
-
-.marquee-text-track {
-    display: flex;
-    padding-left: 4.8rem;
-    gap: 4.8rem;
-    width: max-content;
-    animation: marquee-move-text var(--speed, 50s) linear infinite var(--direction, forwards);
-
-    &:hover {
-        animation-play-state: paused;
-    }
-}
-
-.marquee-text p {
-    padding: 0 0.1rem;
-}
-
-
-@keyframes marquee-move-text {
-    to {
-        transform: translateX(-50%);
-    }
-}
-
 .inner-border-not-in-monitoring {
     box-shadow: inset 5px 0 0 0 oitc.$primary;
 }

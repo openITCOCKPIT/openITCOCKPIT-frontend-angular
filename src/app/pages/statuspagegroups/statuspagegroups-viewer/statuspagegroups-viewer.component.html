@@ -66,43 +66,27 @@
                             </c-row>
 
                             <c-row class="mt-3">
-                                <c-col [md]="1">
-                                    <h6>
-                                        @if (StatupagegroupViewRootResponse.problems.length > 0) {
+                                @if (StatupagegroupViewRootResponse.problems.length > 0) {
+                                    <c-col [md]="1">
+                                        <h6>
                                             <fa-icon [icon]="['fas', 'triangle-exclamation']"
                                                      [cTextColor]="'danger'"></fa-icon>
                                             {{ t('Problems') }}
-                                        } @else {
+                                        </h6>
+                                    </c-col>
+                                } @else {
+                                    <c-col [md]="12">
+                                        <h6>
+                                            <fa-icon [icon]="['fas', 'check-circle']"
+                                                     [cTextColor]="'success'"></fa-icon>
                                             {{ t('No problems detected') }}
-                                        }
-                                    </h6>
-                                </c-col>
+                                        </h6>
+                                    </c-col>
+                                }
+
                                 <c-col [md]="11" class="display-inline-flex">
-                                    <div class="marquee-text">
-
-                                        <div class="marquee-text-track">
-                                            @for (problem of StatupagegroupViewRootResponse.problems; track $index) {
-                                                <p class="d-flex flex-align-items-center">
-                                                    <oitc-statuspage-icon-simple
-                                                        class="me-1"
-                                                        [cumulatedState]="problem.cumulatedState">
-                                                    </oitc-statuspage-icon-simple>
-
-                                                    @if (this.PermissionsService.hasPermissionObservable(['statuspages', 'view'])|async) {
-                                                        <a [routerLink]="['/', 'statuspages', 'view', problem.statuspage.statuspage.id]">
-                                                            {{ problem.collection.name }}/{{ problem.category.name }}
-                                                            -
-                                                            {{ problem.statuspage.statuspage.name }}
-                                                        </a>
-                                                    } @else {
-                                                        {{ problem.collection.name }}/{{ problem.category.name }}
-                                                        -
-                                                        {{ problem.statuspage.statuspage.name }}
-                                                    }
-                                                </p>
-                                            }
-                                        </div>
-                                    </div>
+                                    <oitc-statuspagegroups-marquee
+                                        [problems]="StatupagegroupViewRootResponse.problems"></oitc-statuspagegroups-marquee>
                                 </c-col>
                             </c-row>
                         </c-card-body>
