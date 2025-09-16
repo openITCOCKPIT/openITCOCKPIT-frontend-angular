@@ -48,6 +48,8 @@ export interface StatuspagegroupPost {
     container_id: number
     name: string
     description: string | null
+    additional_information: string
+    show_ticker: boolean
     modified?: string
     created?: string
     statuspages_memberships: StatuspagesMembershipPost[]

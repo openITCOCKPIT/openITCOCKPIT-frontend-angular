@@ -41,6 +41,8 @@ import { StatuspageStatusPipe } from '../../statuspages/statuspage-status.pipe';
 import { StatuspagegroupsMarqueeComponent } from '../statuspagegroups-marquee/statuspagegroups-marquee.component';
 import { LocalNumberPipe } from '../../../pipes/local-number.pipe';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+import { BbCodeParserService } from '../../../services/bb-code-parser.service';
+import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 
 @Component({
     selector: 'oitc-statuspagegroups-viewer',
@@ -77,7 +79,8 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
         AsyncPipe,
         RouterLink,
         NoRecordsComponent,
-        FormsModule
+        FormsModule,
+        TrustAsHtmlPipe
     ],
     templateUrl: './statuspagegroups-viewer.component.html',
     styleUrl: './statuspagegroups-viewer.component.scss',
@@ -87,6 +90,7 @@ export class StatuspagegroupsViewerComponent implements OnInit, OnDestroy {
 
     public StatupagegroupViewRootResponse?: StatupagegroupViewRoot;
     public id: number = 0;
+    public html: string = '';
 
     public filter: StatuspagegroupViewLocalFilter = this.clearFilter();
     public problemsFilered: StatupagegroupProblem[] = [];
@@ -95,6 +99,7 @@ export class StatuspagegroupsViewerComponent implements OnInit, OnDestroy {
     public readonly PermissionsService = inject(PermissionsService);
 
     private readonly StatuspagegroupsService = inject(StatuspagegroupsService);
+    private readonly BbCodeParserService = inject(BbCodeParserService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private cdr = inject(ChangeDetectorRef);
@@ -115,6 +120,11 @@ export class StatuspagegroupsViewerComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.StatuspagegroupsService.getStatuspagegroupView(this.id).subscribe(response => {
                 this.StatupagegroupViewRootResponse = response;
                 this.applyFilter();
+
+                if (this.StatupagegroupViewRootResponse.statuspagegroup.additional_information) {
+                    this.html = this.BbCodeParserService.parse(this.StatupagegroupViewRootResponse.statuspagegroup.additional_information);
+                }
+
                 this.cdr.markForCheck();
             }));
         }

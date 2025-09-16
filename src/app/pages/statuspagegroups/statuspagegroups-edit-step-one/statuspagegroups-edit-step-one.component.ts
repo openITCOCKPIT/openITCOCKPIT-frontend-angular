@@ -20,6 +20,9 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -34,6 +37,10 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { StatuspagegroupsMatrixComponent } from '../statuspagegroups-matrix/statuspagegroups-matrix.component';
+import { BbCodeEditorComponent } from '../../documentations/bb-code-editor/bb-code-editor.component';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
+import { BbCodeParserService } from '../../../services/bb-code-parser.service';
 
 @Component({
     selector: 'oitc-statuspagegroups-edit-step-one',
@@ -65,7 +72,13 @@ import { StatuspagegroupsMatrixComponent } from '../statuspagegroups-matrix/stat
         SelectComponent,
         TranslocoPipe,
         XsButtonDirective,
-        StatuspagegroupsMatrixComponent
+        StatuspagegroupsMatrixComponent,
+        BbCodeEditorComponent,
+        DebounceDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrustAsHtmlPipe
     ],
     templateUrl: './statuspagegroups-edit-step-one.component.html',
     styleUrl: './statuspagegroups-edit-step-one.component.css',
@@ -81,9 +94,12 @@ export class StatuspagegroupsEditStepOneComponent implements OnInit, OnDestroy {
 
     public containers: SelectKeyValue[] = [];
 
+    public html: string = '';
+
     private subscriptions: Subscription = new Subscription();
     private readonly StatuspagegroupsService = inject(StatuspagegroupsService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly BbCodeParserService = inject(BbCodeParserService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly router: Router = inject(Router);
@@ -105,6 +121,7 @@ export class StatuspagegroupsEditStepOneComponent implements OnInit, OnDestroy {
     public loadStatuspagegroup(id: number) {
         this.subscriptions.add(this.StatuspagegroupsService.getStatuspagegroupEdit(id).subscribe(statuspagegroup => {
             this.post = statuspagegroup;
+            this.onChangeOfBbCode(true);
             this.cdr.markForCheck();
         }));
     }
@@ -116,6 +133,12 @@ export class StatuspagegroupsEditStepOneComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
             })
         );
+    }
+
+    protected onChangeOfBbCode(event: any): void {
+        if (this.post) {
+            this.html = this.BbCodeParserService.parse(this.post.additional_information);
+        }
     }
 
     public submit() {

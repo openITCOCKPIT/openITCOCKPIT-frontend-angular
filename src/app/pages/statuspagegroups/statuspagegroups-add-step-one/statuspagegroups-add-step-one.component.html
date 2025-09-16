@@ -117,6 +117,38 @@
                     <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                 </div>
 
+                <div class="mb-3">
+                    <label cLabel for="additional_information">
+                        {{ t('Additional information') }}
+                    </label>
+
+                    <c-row>
+                        <c-col [xs]="12" [lg]="6">
+                            <oitc-bb-code-editor [(bbcode)]="post.additional_information"
+                                                 (bbcodeChange)="onChangeOfBbCode($event)"></oitc-bb-code-editor>
+                        </c-col>
+                        <c-col [xs]="12" [lg]="6">
+                            <div class="text-break" [innerHTML]="html | trustAsHtml"></div>
+                        </c-col>
+                    </c-row>
+                    <oitc-form-feedback [errors]="errors" errorField="additional_information"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Can be used to display information or instructions') }}
+                    </div>
+                </div>
+
+                <c-form-check class="mb-3">
+                    <input
+                        [(ngModel)]="post.show_ticker" cFormCheckInput
+                        id="show_ticker"
+                        class="checkbox-lg me-2 mt-0"
+                        name="show_ticker"
+                        oitcDebounce
+                        type="checkbox"/>
+                    <label cFormCheckLabel
+                           for="show_ticker">{{ t('Show alerts as Ticker message') }}</label>
+                </c-form-check>
+
                 <fieldset class="mt-2">
                     <legend class="fs-md fieldset-legend-border-bottom-thin mt-1">
                         {{ t('Status page matrix') }}
