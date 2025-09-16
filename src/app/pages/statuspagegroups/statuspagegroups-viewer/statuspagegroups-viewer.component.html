@@ -188,35 +188,40 @@
                                                     category of StatupagegroupViewRootResponse.statuspagegroup.statuspagegroup_categories; track $index; let
                                                     categoryIndex = $index) {
 
-                                                    <!-- only show important states with border -->
-                                                    <td
-                                                        [ngClass]="{'inner-border-warning': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.PERFORMANCE_ISSUES,
+                                                    @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_statuspages > 0) {
+                                                        <!-- only show important states with border -->
+                                                        <td
+                                                            [ngClass]="{'inner-border-warning': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.PERFORMANCE_ISSUES,
                                                         'inner-border-down': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.MAJOR_OUTAGE,
                                                         'inner-border-unknown': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.UNKNOWN}">
-                                                        {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState | statuspageStatus }}
-                                                        @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex]) {
-                                                            @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.PERFORMANCE_ISSUES) {
-                                                                <oitc-badge-outline [color]="'warning'">
-                                                                    {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_warning }}
-                                                                </oitc-badge-outline>
+                                                            {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState | statuspageStatus }}
+                                                            @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex]) {
+                                                                @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.PERFORMANCE_ISSUES) {
+                                                                    <oitc-badge-outline [color]="'warning'">
+                                                                        {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_warning }}
+                                                                    </oitc-badge-outline>
+                                                                }
+                                                                @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.MAJOR_OUTAGE) {
+                                                                    <oitc-badge-outline [color]="'danger'">
+                                                                        {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_critical }}
+                                                                    </oitc-badge-outline>
+                                                                }
+                                                                @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.UNKNOWN) {
+                                                                    <oitc-badge-outline [color]="'secondary'">
+                                                                        {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_unknown }}
+                                                                    </oitc-badge-outline>
+                                                                }
+                                                                @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.NOT_IN_MONITORING && StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_not_monitored > 0) {
+                                                                    <oitc-badge-outline [color]="'primary'">
+                                                                        {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_not_monitored }}
+                                                                    </oitc-badge-outline>
+                                                                }
                                                             }
-                                                            @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.MAJOR_OUTAGE) {
-                                                                <oitc-badge-outline [color]="'danger'">
-                                                                    {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_critical }}
-                                                                </oitc-badge-outline>
-                                                            }
-                                                            @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.UNKNOWN) {
-                                                                <oitc-badge-outline [color]="'secondary'">
-                                                                    {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_unknown }}
-                                                                </oitc-badge-outline>
-                                                            }
-                                                            @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.NOT_IN_MONITORING && StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_not_monitored > 0) {
-                                                                <oitc-badge-outline [color]="'primary'">
-                                                                    {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_not_monitored }}
-                                                                </oitc-badge-outline>
-                                                            }
-                                                        }
-                                                    </td>
+                                                        </td>
+                                                    } @else {
+                                                        <!-- No status pages in this collection/category -->
+                                                        <td></td>
+                                                    }
                                                 }
 
                                             </tr>
