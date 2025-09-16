@@ -1,27 +1,21 @@
-.marquee-text {
-    overflow: clip;
+@use "../../../../assets/coreui/variables" as oitc;
+
+.inner-border-not-in-monitoring {
+    box-shadow: inset 5px 0 0 0 oitc.$primary;
 }
 
-
-.marquee-text-track {
-    display: flex;
-    padding-left: 4.8rem;
-    gap: 4.8rem;
-    width: max-content;
-    animation: marquee-move-text var(--speed, 50s) linear infinite var(--direction, forwards);
-
-    &:hover {
-        animation-play-state: paused;
-    }
+.inner-border-up {
+    box-shadow: inset 5px 0 0 0 oitc.$success;
 }
 
-.marquee-text p {
-    padding: 0 0.1rem;
+.inner-border-down, .inner-border-critical {
+    box-shadow: inset 5px 0 0 0 oitc.$danger;
 }
 
+.inner-border-warning {
+    box-shadow: inset 5px 0 0 0 oitc.$warning;
+}
 
-@keyframes marquee-move-text {
-    to {
-        transform: translateX(-50%);
-    }
+.inner-border-unreachable, .inner-border-unknown {
+    box-shadow: inset 5px 0 0 0 oitc.$secondary;
 }

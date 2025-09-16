@@ -1,0 +1,48 @@
+<div class="enable-animation marquee marquee--hover-pause">
+    <ul class="marquee__content">
+        @for (problem of problems(); track $index) {
+            <li>
+                <oitc-statuspage-icon-simple
+                    class="me-1"
+                    [cumulatedState]="problem.cumulatedState">
+                </oitc-statuspage-icon-simple>
+
+                @if (this.PermissionsService.hasPermissionObservable(['statuspages', 'view'])|async) {
+                    <a [routerLink]="['/', 'statuspages', 'view', problem.statuspage.statuspage.id]">
+                        {{ problem.collection.name }}/{{ problem.category.name }}
+                        -
+                        {{ problem.statuspage.statuspage.name }}
+                    </a>
+                } @else {
+                    {{ problem.collection.name }}/{{ problem.category.name }}
+                    -
+                    {{ problem.statuspage.statuspage.name }}
+                }
+            </li>
+        }
+    </ul>
+    
+    <!-- Mirrors the content above -->
+    <ul class="marquee__content" aria-hidden="true">
+        @for (problem of problems(); track $index) {
+            <li>
+                <oitc-statuspage-icon-simple
+                    class="me-1"
+                    [cumulatedState]="problem.cumulatedState">
+                </oitc-statuspage-icon-simple>
+
+                @if (this.PermissionsService.hasPermissionObservable(['statuspages', 'view'])|async) {
+                    <a [routerLink]="['/', 'statuspages', 'view', problem.statuspage.statuspage.id]">
+                        {{ problem.collection.name }}/{{ problem.category.name }}
+                        -
+                        {{ problem.statuspage.statuspage.name }}
+                    </a>
+                } @else {
+                    {{ problem.collection.name }}/{{ problem.category.name }}
+                    -
+                    {{ problem.statuspage.statuspage.name }}
+                }
+            </li>
+        }
+    </ul>
+</div>
