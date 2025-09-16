@@ -189,9 +189,10 @@
                                                     categoryIndex = $index) {
 
                                                     @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_statuspages > 0) {
-                                                        <!-- only show important states with border -->
                                                         <td
-                                                            [ngClass]="{'inner-border-warning': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.PERFORMANCE_ISSUES,
+                                                            [ngClass]="{'inner-border-not-in-monitoring': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.NOT_IN_MONITORING,
+                                                        'inner-border-up': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.OPERATIONAL,
+                                                        'inner-border-warning': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.PERFORMANCE_ISSUES,
                                                         'inner-border-down': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.MAJOR_OUTAGE,
                                                         'inner-border-unknown': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.UNKNOWN}">
                                                             {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState | statuspageStatus }}
