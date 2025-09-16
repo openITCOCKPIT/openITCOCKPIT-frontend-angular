@@ -1,12 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     FormControlDirective,
-    FormLabelDirective
+    FormLabelDirective,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -46,7 +50,11 @@ import { Servicetemplate } from '../../../../../pages/wizards/wizards.interface'
         RouterLink,
         NgIf,
         OitcAlertComponent,
-        XsButtonDirective
+        XsButtonDirective,
+        AccordionButtonDirective,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective
     ],
     templateUrl: './service-status.component.html',
     styleUrl: './service-status.component.css',

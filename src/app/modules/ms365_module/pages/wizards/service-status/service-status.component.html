@@ -120,6 +120,60 @@
             </fieldset>
 
 
+            <c-accordion class="mb-3">
+                <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                    <ng-template cTemplateId="accordionHeaderTemplate">
+                        <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                            <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                            {{ t('How to set up') }}
+                        </button>
+                    </ng-template>
+                    <ng-template cTemplateId="accordionBodyTemplate">
+                        <div class="accordion-body">
+                            <ol>
+                                <li>
+                                    {{ t('Log in at ') }}
+                                    (
+                                    <a href="https://entra.microsoft.com/"
+                                       target="_blank">
+                                        Microsoft Entra
+                                    </a>
+                                    )
+                                </li>
+
+                                <li>
+                                    {{ t('Goto App Registration and create a new one') }}
+                                </li>
+                                <li>
+                                    {{ t('Just enter a Name for example “openITCOCKPIT Monitoring“ and click register') }}
+                                </li>
+                                <li>
+                                    {{ t('On the following Page copy and store Application (Client) ID and Directory (tenant) ID') }}
+                                </li>
+                                <li>
+                                    {{ t('Goto Certificate & Secrets, add a client secret key and copy / save it.') }}
+                                </li>
+                                <li>
+                                    {{ t('Goto API Permission and add a permission to Microsoft Graph:') }}
+                                    <ol>
+                                        <li>
+                                            {{ t('Application Permission') }}
+                                        </li>
+                                        <li>
+                                            {{ t('Reports.Read.All') }}
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    {{ t('Finally click on Grant Admin consent for ….') }}
+                                </li>
+
+                            </ol>
+                        </div>
+                    </ng-template>
+                </c-accordion-item>
+            </c-accordion>
+
             <div>
                 <ng-template #contentTemplate let-data>
                     <span class="h5 text-info" *ngIf="data">
