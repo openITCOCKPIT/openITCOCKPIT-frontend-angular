@@ -6,10 +6,10 @@
 
     @if (StatupagegroupViewRootResponse) {
         <c-row>
-            <c-col md="12">
+            <c-col [xs]="12">
                 <c-card class="mb-3">
                     <c-row class="px-2">
-                        <c-col [md]="2" class="py-2">
+                        <c-col [xs]="12" [md]="4" [lg]="2" class="py-2">
                             <div
                                 [cTooltip]="StatupagegroupViewRootResponse.cumulatedStategroupState | statuspageStatus"
                                 cTooltipPlacement="top"
@@ -23,7 +23,7 @@
                                          class="float-start h2 opacity-25"></fa-icon>
                             </div>
                         </c-col>
-                        <c-card-body cCol [md]="10" class="pb-0">
+                        <c-card-body cCol [md]="6" [lg]="10" class="pb-0">
                             <h3 cCardTitle>
                                 {{ StatupagegroupViewRootResponse.statuspagegroup.name }}
                             </h3>
@@ -31,7 +31,7 @@
                                 {{ StatupagegroupViewRootResponse.statuspagegroup.description }}
                             </div>
                             <c-row class="mt-3">
-                                <c-col [md]="4">
+                                <c-col [xs]="12" [md]="6" [lg]="4">
                                     <div
                                         class="d-inline-flex border border-secondary border-opacity-25 p-2 rounded my-2 w-100">
                                         <div>
@@ -63,7 +63,7 @@
                                     </div>
 
                                 </c-col>
-                                <c-col [md]="4">
+                                <c-col [xs]="12" [md]="6" [lg]="4">
                                     <div
                                         class="d-inline-flex border border-secondary border-opacity-25 p-2 rounded my-2 w-100">
                                         <div>
@@ -99,7 +99,7 @@
 
                             <c-row class="mt-3">
                                 @if (StatupagegroupViewRootResponse.problems.length > 0) {
-                                    <c-col [md]="1">
+                                    <c-col [xs]="12" [md]="3" [lg]="1">
                                         <h6>
                                             <fa-icon [icon]="['fas', 'triangle-exclamation']"
                                                      [cTextColor]="'danger'"></fa-icon>
@@ -107,7 +107,7 @@
                                         </h6>
                                     </c-col>
                                 } @else {
-                                    <c-col [md]="12">
+                                    <c-col [xs]="12">
                                         <h6>
                                             <fa-icon [icon]="['fas', 'check-circle']"
                                                      [cTextColor]="'success'"></fa-icon>
@@ -116,7 +116,7 @@
                                     </c-col>
                                 }
 
-                                <c-col [md]="11" class="display-inline-flex">
+                                <c-col [xs]="12" [md]="9" [lg]="11" class="display-inline-flex">
                                     <oitc-statuspagegroups-marquee
                                         [problems]="StatupagegroupViewRootResponse.problems"></oitc-statuspagegroups-marquee>
                                 </c-col>
@@ -126,6 +126,7 @@
                 </c-card>
             </c-col>
         </c-row>
+
         <c-col md="12">
             <c-card>
                 <c-card-header>
@@ -245,7 +246,7 @@
                                             <th scope="col" class="col-4">
                                                 {{ t('Status page') }}
                                             </th>
-                                            <th scope="col">
+                                            <th scope="col" class="d-none d-md-table-cell">
                                                 {{ t('Cumulated state') }}
                                             </th>
                                         </tr>
@@ -271,7 +272,7 @@
                                             </th>
                                             <th>
                                                 <c-input-group>
-                                                    <span cInputGroupText id="collection">
+                                                    <span cInputGroupText id="collection" class="d-none d-md-block">
                                                         <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
                                                     </span>
                                                     <input aria-describedby="collection"
@@ -285,7 +286,7 @@
                                             </th>
                                             <th>
                                                 <c-input-group>
-                                                    <span cInputGroupText id="category">
+                                                    <span cInputGroupText id="category" class="d-none d-md-block">
                                                         <fa-icon [icon]="['fas', 'box-open']"></fa-icon>
                                                     </span>
                                                     <input aria-describedby="category"
@@ -299,7 +300,7 @@
                                             </th>
                                             <th>
                                                 <c-input-group>
-                                                    <span cInputGroupText id="statuspage">
+                                                    <span cInputGroupText id="statuspage" class="d-none d-md-block">
                                                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                                     </span>
                                                     <input aria-describedby="statuspage"
@@ -310,6 +311,9 @@
                                                            (ngModelChange)="applyFilter()"
                                                     />
                                                 </c-input-group>
+                                            </th>
+                                            <th class="d-none d-md-table-cell">
+                                                <!-- empty -->
                                             </th>
                                         </tr>
                                         </thead>
@@ -337,7 +341,7 @@
                                                             {{ problem.statuspage.statuspage.name }}
                                                         }
                                                     </td>
-                                                    <td>
+                                                    <td class="d-none d-md-table-cell">
                                                         {{ problem.cumulatedState | statuspageStatus }}
                                                     </td>
                                                 </tr>
