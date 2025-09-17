@@ -35,10 +35,12 @@ export class StatuspagegroupsViewComponent implements OnInit, OnDestroy {
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private cdr = inject(ChangeDetectorRef);
+    public id: number = 0;
 
     public ngOnInit() {
         this.route.queryParams.subscribe(params => {
             const id = Number(this.route.snapshot.paramMap.get('id'));
+            this.id = id;
             this.loadStatuspagegroupDetails(id);
         });
     }

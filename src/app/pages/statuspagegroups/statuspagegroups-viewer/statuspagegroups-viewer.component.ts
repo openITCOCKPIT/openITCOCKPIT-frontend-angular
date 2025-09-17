@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    effect,
+    inject,
+    input,
+    OnDestroy,
+    OnInit
+} from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -86,10 +95,10 @@ import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
     styleUrl: './statuspagegroups-viewer.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StatuspagegroupsViewerComponent implements OnInit, OnDestroy {
+export class StatuspagegroupsViewerComponent implements OnDestroy {
 
     public StatupagegroupViewRootResponse?: StatupagegroupViewRoot;
-    public id: number = 0;
+    public statuspagegroupId = input<number>(0);
     public html: string = '';
 
     public filter: StatuspagegroupViewLocalFilter = this.clearFilter();
@@ -104,10 +113,11 @@ export class StatuspagegroupsViewerComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private cdr = inject(ChangeDetectorRef);
 
-    public ngOnInit() {
-        this.route.queryParams.subscribe(params => {
-            this.id = Number(this.route.snapshot.paramMap.get('id'));
-            this.loadStatuspagegroup();
+    public constructor() {
+        effect(() => {
+          if(this.statuspagegroupId() > 0){
+              this.loadStatuspagegroup();
+          }
         });
     }
 
@@ -116,8 +126,8 @@ export class StatuspagegroupsViewerComponent implements OnInit, OnDestroy {
     }
 
     public loadStatuspagegroup() {
-        if (this.id > 0) {
-            this.subscriptions.add(this.StatuspagegroupsService.getStatuspagegroupView(this.id).subscribe(response => {
+        if (this.statuspagegroupId() > 0) {
+            this.subscriptions.add(this.StatuspagegroupsService.getStatuspagegroupView(this.statuspagegroupId()).subscribe(response => {
                 this.StatupagegroupViewRootResponse = response;
                 this.applyFilter();
 

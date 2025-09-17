@@ -139,7 +139,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-automap-widget>
         }
-
+        @case (WidgetTypes.StatuspagegroupWidget) {
+            <oitc-statuspagegroup-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-statuspagegroup-widget>
+        }
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {
             <oitc-customalerts-widget
