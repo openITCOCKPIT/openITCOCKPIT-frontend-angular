@@ -18,7 +18,6 @@ import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
     StatuspagegroupsLoadStatuspagegroupsByStringParams,
-    StatuspagegroupsViewRoot,
     StatuspagegroupWidgetConfig
 } from './statuspagegroup-widget.interface';
 import { StatuspagegroupWidgetService } from './statuspagegroup-widget.service';
@@ -61,7 +60,6 @@ export class StatuspagegroupWidgetComponent extends BaseWidgetComponent implemen
     public statuspagegroups: SelectKeyValue[] = [];
     public statuspagegroup?: StatupagegroupViewDetailsRoot;
 
-    public result!: StatuspagegroupsViewRoot;
     protected selectedAutoRefresh: SelectKeyValue = {key: 0, value: 'Disabled'};
     private refreshInterval: any = null;
 

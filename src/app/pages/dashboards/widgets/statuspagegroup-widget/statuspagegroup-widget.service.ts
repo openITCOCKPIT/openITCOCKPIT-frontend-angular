@@ -3,11 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import { GenericResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
-import {
-    StatuspagegroupsViewParams,
-    StatuspagegroupsViewRoot,
-    StatuspagegroupWidgetConfig
-} from './statuspagegroup-widget.interface';
+import { StatuspagegroupWidgetConfig } from './statuspagegroup-widget.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -64,16 +60,5 @@ export class StatuspagegroupWidgetService {
                     });
                 })
             );
-    }
-
-    public view(id: number, params: StatuspagegroupsViewParams): Observable<StatuspagegroupsViewRoot> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<StatuspagegroupsViewRoot>(`${proxyPath}/statuspagegroups/view/${id}.json`, {
-            params: params as {}
-        }).pipe(
-            map(data => {
-                return data;
-            })
-        );
     }
 }

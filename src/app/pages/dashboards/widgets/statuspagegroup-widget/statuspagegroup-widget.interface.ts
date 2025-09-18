@@ -22,15 +22,3 @@ export interface StatuspagegroupsLoadStatuspagegroupsByStringParams {
     'filter[Statuspagegroups.name]': string,
     'selected[]': number[],
 }
-
-
-export interface StatupagegroupsViewRoot {
-}
-
-export interface StatupagegroupsViewParams {
-
-}
-
-export interface StatuspagegroupsViewRoot {
-
-}
