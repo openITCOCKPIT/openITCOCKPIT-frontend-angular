@@ -17,8 +17,7 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    OrganizationalchartsLoadOrganizationalchartsByStringParams,
-    OrganizationalchartsViewRoot,
+    OrganizationalchartsByStringParams,
     OrganizationalchartWidgetConfig
 } from './organizationalchart-widget.interface';
 import { OrganizationalchartWidgetService } from './organizationalchart-widget.service';
@@ -28,6 +27,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IntervalPickerComponent } from '../../../../components/interval-picker/interval-picker.component';
 import { OrganizationalChartsPost } from '../../../organizationalcharts/organizationalcharts.interface';
+import {
+    OrganizationalChartsViewerComponent
+} from '../../../organizationalcharts/organizational-charts-viewer/organizational-charts-viewer.component';
 
 @Component({
     selector: 'oitc-organizationalchart-widget',
@@ -41,7 +43,8 @@ import { OrganizationalChartsPost } from '../../../organizationalcharts/organiza
         FormsModule,
         ColComponent,
         RowComponent,
-        IntervalPickerComponent
+        IntervalPickerComponent,
+        OrganizationalChartsViewerComponent
     ],
     templateUrl: './organizationalchart-widget.component.html',
     styleUrl: './organizationalchart-widget.component.css',
@@ -55,10 +58,9 @@ export class OrganizationalchartWidgetComponent extends BaseWidgetComponent impl
     // widget config will be loaded from the server
     public config?: OrganizationalchartWidgetConfig;
 
-    public organizationalcharts: SelectKeyValue[] = [];
     public organizationalChart?: OrganizationalChartsPost;
+    public organizationalCharts: SelectKeyValue[] = [];
 
-    public result!: OrganizationalchartsViewRoot;
     protected selectedAutoRefresh: SelectKeyValue = {key: 0, value: 'Disabled'};
     private refreshInterval: any = null;
 
@@ -71,6 +73,7 @@ export class OrganizationalchartWidgetComponent extends BaseWidgetComponent impl
             this.OrganizationalchartWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {
                 this.config = response;
                 if (this.config.organizationalchart_id) {
+                    this.config.organizationalchart_id = Number(this.config.organizationalchart_id);
                     this.loadOrganizationalChart();
                 }
                 this.selectedAutoRefresh.key = this.config.refresh_key ?? 0;
@@ -85,27 +88,25 @@ export class OrganizationalchartWidgetComponent extends BaseWidgetComponent impl
             selected.push(Number(this.config.organizationalchart_id));
         }
 
-        const params: OrganizationalchartsLoadOrganizationalchartsByStringParams = {
+        const params: OrganizationalchartsByStringParams = {
             angular: true,
-            'filter[Organizationalcharts.name]': searchString,
+            'filter[OrganizationalCharts.name]': searchString,
             'selected[]': selected
         }
-        /*
-                this.subscriptions.add(this.OrganizationalchartsService.loadOrganizationalchartsByString(params)
-                    .subscribe((result) => {
-                        this.organizationalcharts = result;
-                        this.cdr.markForCheck();
-                    })
-                );
 
-         */
+        this.subscriptions.add(this.OrganizationalchartWidgetService.loadOrganizationalchartsByString(params)
+            .subscribe((result) => {
+                this.organizationalCharts = result;
+                this.cdr.markForCheck();
+            })
+        );
     };
 
     public ngAfterViewInit(): void {
     }
 
     public override onAnimationStart(event: AnimationEvent) {
-        if (event.toState && this.organizationalcharts.length === 0) {
+        if (event.toState && this.organizationalCharts.length === 0) {
             // "true" means show config.
             this.loadOrganizationalcharts('');
         }
@@ -143,7 +144,6 @@ export class OrganizationalchartWidgetComponent extends BaseWidgetComponent impl
         if (this.selectedAutoRefresh.key > 0) {
             this.startRefreshInterval(this.selectedAutoRefresh.key);
         }
-
     }
 
     private startRefreshInterval(interval: number) {

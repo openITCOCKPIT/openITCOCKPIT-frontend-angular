@@ -35,8 +35,12 @@
                                 {{ t('No element selected') }}
                             </div>
                         }
-                        @if (config && config.organizationalchart_id) {
-                        chart hererere
+                        @if (config && config.organizationalchart_id && organizationalChart) {
+                            <oitc-organizational-charts-viewer
+                                class="flex-1"
+                                [(nodeTree)]="organizationalChart.organizational_chart_nodes"
+                                [(connections)]="organizationalChart.organizational_chart_connections">
+                            </oitc-organizational-charts-viewer>
                         }
                         <!-- End Widget Content -->
                     </ng-container>
@@ -62,7 +66,8 @@
                                     optionValue="key"
                                     optionLabel="value"
                                     [(ngModel)]="config.organizationalchart_id"
-                                    [options]="organizationalcharts"
+                                    [options]="organizationalCharts"
+                                    [searchCallback]="loadOrganizationalcharts"
                                     [appendTo]="''">
                                 </oitc-select>
                             </div>

@@ -4,10 +4,10 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import { GenericResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import {
-    OrganizationalchartsViewParams,
-    OrganizationalchartsViewRoot,
+    OrganizationalchartsByStringParams,
     OrganizationalchartWidgetConfig
 } from './organizationalchart-widget.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -15,9 +15,6 @@ import {
 export class OrganizationalchartWidgetService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
-
-    constructor() {
-    }
 
     public loadWidgetConfig(widgetId: string): Observable<OrganizationalchartWidgetConfig> {
         const proxyPath = this.proxyPath;
@@ -66,14 +63,14 @@ export class OrganizationalchartWidgetService {
             );
     }
 
-    public view(id: number, params: OrganizationalchartsViewParams): Observable<OrganizationalchartsViewRoot> {
+    public loadOrganizationalchartsByString(params: OrganizationalchartsByStringParams): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
-        return this.http.get<OrganizationalchartsViewRoot>(`${proxyPath}/organizationalCharts/view/${id}.json`, {
+        return this.http.get<any>(`${proxyPath}/organizationalCharts/loadOrganizationalChartsByString.json`, {
             params: params as {}
         }).pipe(
             map(data => {
-                return data;
+                return data.organizationalCharts;
             })
-        );
+        )
     }
 }
