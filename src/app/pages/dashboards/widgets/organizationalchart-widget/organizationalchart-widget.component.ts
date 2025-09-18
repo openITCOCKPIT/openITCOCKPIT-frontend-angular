@@ -53,7 +53,9 @@ import {
 export class OrganizationalchartWidgetComponent extends BaseWidgetComponent implements AfterViewInit {
     protected flipped = signal<boolean>(false);
     @ViewChild('boxContainer') boxContainer?: ElementRef;
+
     public widgetHeight: number = 0;
+    public show: boolean = true;
 
     // widget config will be loaded from the server
     public config?: OrganizationalchartWidgetConfig;
@@ -74,6 +76,7 @@ export class OrganizationalchartWidgetComponent extends BaseWidgetComponent impl
                 this.config = response;
                 if (this.config.organizationalchart_id) {
                     this.config.organizationalchart_id = Number(this.config.organizationalchart_id);
+                    this.organizationalChart = undefined;
                     this.loadOrganizationalChart();
                 }
                 this.selectedAutoRefresh.key = this.config.refresh_key ?? 0;
@@ -108,11 +111,33 @@ export class OrganizationalchartWidgetComponent extends BaseWidgetComponent impl
     public override onAnimationStart(event: AnimationEvent) {
         if (event.toState && this.organizationalCharts.length === 0) {
             // "true" means show config.
+            // Load initial Grafana Dashboards
             this.loadOrganizationalcharts('');
         }
 
+
         super.onAnimationStart(event);
     }
+
+    public override onAnimationDone(event: AnimationEvent) {
+        super.onAnimationDone(event);
+
+        if (!event.toState) {
+            // "false" means show content.
+
+            // We have to remove the EVC from the DOM and re-add
+            // otherwise the lines are not drawn correctly
+            this.show = true;
+            this.cdr.markForCheck();
+        } else {
+            // "true" means show config.
+            // The animation has stopped, and we are in the config view - so we can now remove the EVC from the DOM
+            // We hide the EVC case if we flip back to the content, the EVC is messed up and needs to be re-rendered
+            this.show = false;
+            this.cdr.markForCheck();
+        }
+    }
+
 
     public saveConfig(): void {
         if (this.config && this.widget) {
@@ -123,6 +148,25 @@ export class OrganizationalchartWidgetComponent extends BaseWidgetComponent impl
                 this.flipped.set(false);
             });
         }
+    }
+
+    private calcOrganizationalchartWidgetHeight() {
+        this.widgetHeight = this.boxContainer?.nativeElement.offsetHeight;
+
+        let height = this.widgetHeight - 29 - 12; //Unit: px
+        //                                        ^ Show / Hide Config button
+        //                                            ^ Some Padding
+
+        if (height < 15) {
+            height = 15;
+        }
+
+        this.widgetHeight = height;
+        this.cdr.markForCheck();
+    }
+
+    public override resizeWidget(event?: KtdResizeEnd) {
+        this.calcOrganizationalchartWidgetHeight();
     }
 
 
@@ -168,8 +212,6 @@ export class OrganizationalchartWidgetComponent extends BaseWidgetComponent impl
         this.refreshInterval = null;
     }
 
-    public override resizeWidget(event?: KtdResizeEnd): void {
-    }
 
     public override layoutUpdate(event: KtdGridLayout): void {
     }
@@ -179,7 +221,6 @@ export class OrganizationalchartWidgetComponent extends BaseWidgetComponent impl
             this.subscriptions.add(this.OrganizationalChartsService.getOrganizationalChartById(this.config.organizationalchart_id as number)
                 .subscribe((result) => {
                     this.organizationalChart = result.organizationalChart;
-
                     this.cdr.markForCheck();
                     return;
                 }));

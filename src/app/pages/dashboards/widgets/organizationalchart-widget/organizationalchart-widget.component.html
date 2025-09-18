@@ -35,7 +35,7 @@
                                 {{ t('No element selected') }}
                             </div>
                         }
-                        @if (config && config.organizationalchart_id && organizationalChart) {
+                        @if (config && config.organizationalchart_id && organizationalChart && show) {
                             <oitc-organizational-charts-viewer
                                 class="flex-1"
                                 [(nodeTree)]="organizationalChart.organizational_chart_nodes"
