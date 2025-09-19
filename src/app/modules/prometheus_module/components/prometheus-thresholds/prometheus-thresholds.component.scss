@@ -1,3 +1,5 @@
+@use "sass:color";
+@use "../../../../../assets/coreui/variables" as oitc;
 /* Thresholds Warning / Critical consider min/max values and inclusive setting*/
 
 .threshold-container {
@@ -41,10 +43,10 @@
 
 .label-left {
     font-weight: bold;
-    font-size: 19px;
+    font-size: 14px;
     position: absolute;
     left: 2px;
-    top: -6px;
+    top: -5px;
     color: #ffffff;
 }
 
@@ -54,10 +56,10 @@
 
 .label-right {
     font-weight: bold;
-    font-size: 19px;
+    font-size: 14px;
     position: absolute;
     right: 2px;
-    top: -6px;
+    top: -5px;
     color: #ffffff;
 }
 
@@ -66,27 +68,29 @@
 }
 
 .label-left-inclusive {
-    font-size: 19px;
+    font-size: 14px;
     position: absolute;
     left: 2px;
-    top: -6px;
+    top: -5px;
     color: #000000;
 }
 
 .label-left-inclusive:before {
     content: '- ∞';
+    color: var(--cui-body-color);
 }
 
 .label-right-inclusive {
-    font-size: 19px;
+    font-size: 14px;
     position: absolute;
     right: 2px;
-    top: -6px;
+    top: -5px;
     color: #000000;
 }
 
 .label-right-inclusive:before {
     content: '+ ∞';
+    color: var(--cui-body-color);
 }
 
 .value-container {
@@ -161,6 +165,10 @@
     content: "";
     position: absolute;
     right: -8px;
+}
+
+.bottom-28 {
+    bottom: -28px;
 }
 
 /* ARROW INSIDE*/

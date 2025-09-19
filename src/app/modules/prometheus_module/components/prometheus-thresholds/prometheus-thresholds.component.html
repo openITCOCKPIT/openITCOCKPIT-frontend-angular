@@ -6,13 +6,13 @@
             <div class="values-left-container">
                 <div class="speech-bubble-ds">
                     <p>{{ min }}</p>
-                    <div class="speech-bubble-ds-arrow-left"></div>
+                    <div class="speech-bubble-ds-arrow-left" [ngClass]="{'bottom-28': min=== null}"></div>
                 </div>
             </div>
             <div class="values-right-container">
                 <div class="speech-bubble-ds">
                     <p>{{ max }}</p>
-                    <div class="speech-bubble-ds-arrow-right"></div>
+                    <div class="speech-bubble-ds-arrow-right" [ngClass]="{'bottom-28': max=== null}"></div>
                 </div>
             </div>
         </div>
@@ -29,13 +29,13 @@
             <div class="values-left-container">
                 <div class="speech-bubble-ds">
                     <p>{{ min }}</p>
-                    <div class="speech-bubble-ds-arrow-left"></div>
+                    <div class="speech-bubble-ds-arrow-left" [ngClass]="{'bottom-28': min=== null}"></div>
                 </div>
             </div>
             <div class="values-right-container">
                 <div class="speech-bubble-ds">
                     <p>{{ max }}</p>
-                    <div class="speech-bubble-ds-arrow-right"></div>
+                    <div class="speech-bubble-ds-arrow-right" [ngClass]="{'bottom-28': max=== null}"></div>
                 </div>
             </div>
         </div>

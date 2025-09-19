@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-prometheus-thresholds',
     imports: [
-        NgIf
+        NgIf,
+        NgClass
     ],
     templateUrl: './prometheus-thresholds.component.html',
-    styleUrl: './prometheus-thresholds.component.css',
+    styleUrl: './prometheus-thresholds.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PrometheusThresholdsComponent {
