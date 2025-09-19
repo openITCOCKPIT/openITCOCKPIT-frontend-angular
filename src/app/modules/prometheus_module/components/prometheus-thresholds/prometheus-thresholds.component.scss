@@ -136,7 +136,7 @@
 .speech-bubble-ds-arrow-left {
     border-left: 2px solid transparent;
     border-top: 14px solid rgba(0, 0, 0, 0.2);
-    bottom: -14px;
+    bottom: -28px;
     position: absolute;
     right: 16px;
 }
@@ -153,7 +153,7 @@
 .speech-bubble-ds-arrow-right {
     border-right: 2px solid transparent;
     border-top: 14px solid rgba(0, 0, 0, 0.2);
-    bottom: -14px;
+    bottom: -28px;
     position: absolute;
     right: 38px;
 }
@@ -167,8 +167,8 @@
     right: -8px;
 }
 
-.bottom-28 {
-    bottom: -28px;
+.bottom-14 {
+    bottom: -14px;
 }
 
 /* ARROW INSIDE*/
@@ -176,7 +176,7 @@
 .speech-bubble-ds-arrow-left-inside {
     border-left: 2px solid transparent;
     border-top: 14px solid rgba(0, 0, 0, 0.2);
-    bottom: -14px;
+    bottom: -28px;
     position: absolute;
     right: 20px;
 }
@@ -193,7 +193,7 @@
 .speech-bubble-ds-arrow-right-inside {
     border-right: 2px solid transparent;
     border-top: 14px solid rgba(0, 0, 0, 0.2);
-    bottom: -14px;
+    bottom: -28px;
     position: absolute;
     right: 38px;
 }
