@@ -25,18 +25,10 @@
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionsService } from '../../../permissions/permissions.service';
-import { PermissionDirective } from '../../../permissions/permission.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IndexPage } from '../../../pages.interface';
-import { StatuspagesService } from '../statuspages.service';
-import {
-    getDefaultStatuspagesIndexParams,
-    StatuspageObject,
-    StatuspagesIndexRoot,
-    StatuspagesParams,
-} from '../statuspages.interface';
+import { StatuspagegroupsService } from '../statuspagegroups.service';
 import {
     CardBodyComponent,
     CardComponent,
@@ -45,9 +37,6 @@ import {
     ColComponent,
     ContainerComponent,
     DropdownDividerDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -58,99 +47,96 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
+import { FormsModule } from '@angular/forms';
+import { PaginatorModule } from 'primeng/paginator';
+import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
+
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import {
+    getStatuspagegroupsIndexParams,
+    Statuspagegroup,
+    StatuspagegroupsIndex,
+    StatuspagegroupsIndexParams
+} from '../statuspagegroups.interface';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
-import { DebounceDirective } from '../../../directives/debounce.directive';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-
-import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
-import { NotyService } from '../../../layouts/coreui/noty.service';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 
 @Component({
-    selector: 'oitc-statuspages-index',
+    selector: 'oitc-statuspagegroups-index',
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        CardComponent,
-        AsyncPipe,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        TableLoaderComponent,
-        NgIf,
-        NgForOf,
-        CardBodyComponent,
-        MatSort,
-        TableDirective,
-        MatSortHeader,
-        ItemSelectComponent,
-        BadgeOutlineComponent,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        DropdownDividerDirective,
-        NoRecordsComponent,
-        ColComponent,
-        ContainerComponent,
-        RowComponent,
-        SelectAllComponent,
-        PaginateOrScrollComponent,
-        FormDirective,
         FormsModule,
         PaginatorModule,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
         DebounceDirective,
+        DeleteAllModalComponent,
+        DropdownDividerDirective,
+        FaIconComponent,
         FormControlDirective,
+        FormDirective,
         InputGroupComponent,
         InputGroupTextDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        PermissionDirective,
+        RowComponent,
+        SelectAllComponent,
+        TableDirective,
+        TableLoaderComponent,
+        TranslocoDirective,
         TranslocoPipe,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        DeleteAllModalComponent
+        XsButtonDirective,
+        RouterLink
     ],
-    templateUrl: './statuspages-index.component.html',
-    styleUrl: './statuspages-index.component.css',
+    templateUrl: './statuspagegroups-index.component.html',
+    styleUrl: './statuspagegroups-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: StatuspagesService}
+        {provide: DELETE_SERVICE_TOKEN, useClass: StatuspagegroupsService}
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
+export class StatuspagegroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public hideFilter: boolean = true;
-    public statuspages!: StatuspagesIndexRoot;
-    public params: StatuspagesParams = getDefaultStatuspagesIndexParams();
+    public statuspagegroups!: StatuspagegroupsIndex;
+    public params: StatuspagegroupsIndexParams = getStatuspagegroupsIndexParams();
     public is_public: boolean = false;
     public not_public: boolean = false;
     public selectedItems: DeleteAllItem[] = [];
     private subscriptions: Subscription = new Subscription();
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    private StatuspagesService: StatuspagesService = inject(StatuspagesService);
+    private StatuspagegroupsService: StatuspagegroupsService = inject(StatuspagegroupsService);
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService)
     private readonly notyService: NotyService = inject(NotyService);
@@ -168,15 +154,8 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public load(): void {
         this.SelectionServiceService.deselectAll();
-
-        let public_state = null;
-        if (this.is_public !== this.not_public) {
-            public_state = this.is_public === true;
-        }
-        this.params['filter[Statuspages.public]'] = public_state;
-
-        this.subscriptions.add(this.StatuspagesService.getStatuspagesIndex(this.params).subscribe(data => {
-            this.statuspages = data;
+        this.subscriptions.add(this.StatuspagegroupsService.getStatuspagegroups(this.params).subscribe(data => {
+            this.statuspagegroups = data;
             this.cdr.markForCheck();
         }));
     }
@@ -186,6 +165,8 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public resetFilter(): void {
+        this.params = getStatuspagegroupsIndexParams();
+        this.load();
     }
 
     public onFilterChange(event: Event): void {
@@ -208,14 +189,14 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
         }
     }
 
-    public toggleDeleteAllModal(statuspage?: StatuspageObject) {
+    public toggleDeleteAllModal(statuspagegroup?: Statuspagegroup) {
         let items: DeleteAllItem[] = [];
 
-        if (statuspage) {
+        if (statuspagegroup) {
             // User just want to delete a single command
             items = [{
-                id: statuspage.id,
-                displayName: statuspage.name
+                id: statuspagegroup.id,
+                displayName: statuspagegroup.name
             }];
         } else {
             // User clicked on delete selected button
