@@ -144,6 +144,12 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-statuspagegroup-widget>
         }
+        @case (WidgetTypes.OrganizationalchartsWidget) {
+            <oitc-organizationalchart-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-organizationalchart-widget>
+        }
+
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {
             <oitc-customalerts-widget

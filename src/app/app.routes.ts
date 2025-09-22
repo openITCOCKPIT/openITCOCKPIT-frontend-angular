@@ -38,6 +38,7 @@ import { designModuleRoutes } from './modules/design_module/design_module.routes
 import { mattermostModuleRoutes } from './modules/mattermost_module/mattermost_module.routes';
 import { servicenowModuleRoutes } from './modules/servicenow_module/servicenow_module.routes';
 import { dellModuleRoutes } from './modules/dell_module/dell_module.routes';
+import { proxmoxModuleRoutes } from './modules/proxmox_module/proxmox_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -97,7 +98,8 @@ const moduleRoutes: Routes = [
     ...designModuleRoutes,
     ...mattermostModuleRoutes,
     ...servicenowModuleRoutes,
-    ...dellModuleRoutes
+    ...dellModuleRoutes,
+    ...proxmoxModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
