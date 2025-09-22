@@ -82,6 +82,7 @@ import {
 import {
     ResourcegroupsCronjobStatusWidgetComponent
 } from '../../../../modules/scm_module/widgets/resourcegroups-cronjob-status-widget/resourcegroups-cronjob-status-widget.component';
+import { OrganizationalchartWidgetComponent } from '../organizationalchart-widget/organizationalchart-widget.component';
 
 
 @Component({
@@ -132,7 +133,8 @@ import {
         MapWidgetComponent,
         ChangecalendarWidgetComponent,
         MyResourcesSummaryWidgetComponent,
-        ResourcegroupsCronjobStatusWidgetComponent
+        ResourcegroupsCronjobStatusWidgetComponent,
+        OrganizationalchartWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl: './widget-container.component.css',

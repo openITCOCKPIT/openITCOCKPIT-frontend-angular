@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { getUserDate } from '../../services/timezone.service';
 
 export interface LogentriesRoot extends PaginateOrScroll {
     logentries: Logentry[]
@@ -30,7 +31,7 @@ export interface LogentryIndexParams {
 }
 
 export function getDefaultLogentriesParams(): LogentryIndexParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,

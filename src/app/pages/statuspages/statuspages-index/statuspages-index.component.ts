@@ -25,115 +25,118 @@
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IndexPage } from '../../../pages.interface';
 import { StatuspagesService } from '../statuspages.service';
 import {
+    getDefaultStatuspagesIndexParams,
+    StatuspageObject,
     StatuspagesIndexRoot,
-    getDefaultStatuspagesIndexParams, StatuspagesParams, StatuspageObject,
+    StatuspagesParams,
 } from '../statuspages.interface';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownDividerDirective,
-  FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective,
-  ModalService
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownDividerDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
-import { NgForOf, NgIf } from '@angular/common';
-import {AsyncPipe} from '@angular/common';
-import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {PaginatorChangeEvent} from '../../../layouts/coreui/paginator/paginator.interface';
-import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
-import {Subscription} from 'rxjs';
-import {TableLoaderComponent} from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import {ItemSelectComponent} from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import {BadgeOutlineComponent} from '../../../layouts/coreui/badge-outline/badge-outline.component';
-import {ActionsButtonComponent} from '../../../components/actions-button/actions-button.component';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { Subscription } from 'rxjs';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
+import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
-import {NoRecordsComponent} from '../../../layouts/coreui/no-records/no-records.component';
-import {SelectAllComponent} from '../../../layouts/coreui/select-all/select-all.component';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import {FormsModule} from '@angular/forms';
-import {PaginatorModule} from 'primeng/paginator';
-import {DebounceDirective} from '../../../directives/debounce.directive';
-import {TrueFalseDirective} from '../../../directives/true-false.directive';
-import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { FormsModule } from '@angular/forms';
+import { PaginatorModule } from 'primeng/paginator';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 
-import {DELETE_SERVICE_TOKEN} from '../../../tokens/delete-injection.token';
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 
 
 @Component({
     selector: 'oitc-statuspages-index',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    CardComponent,
-    AsyncPipe,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    TableLoaderComponent,
-    NgIf,
-    NgForOf,
-    CardBodyComponent,
-    MatSort,
-    TableDirective,
-    MatSortHeader,
-    ItemSelectComponent,
-    BadgeOutlineComponent,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    DropdownDividerDirective,
-    NoRecordsComponent,
-    ColComponent,
-    ContainerComponent,
-    RowComponent,
-    SelectAllComponent,
-    PaginateOrScrollComponent,
-    FormDirective,
-    FormsModule,
-    PaginatorModule,
-    DebounceDirective,
-    FormControlDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    TranslocoPipe,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    TrueFalseDirective,
-    DeleteAllModalComponent
-],
+        TranslocoDirective,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        CardComponent,
+        AsyncPipe,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        TableLoaderComponent,
+        NgIf,
+        NgForOf,
+        CardBodyComponent,
+        MatSort,
+        TableDirective,
+        MatSortHeader,
+        ItemSelectComponent,
+        BadgeOutlineComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        DropdownDividerDirective,
+        NoRecordsComponent,
+        ColComponent,
+        ContainerComponent,
+        RowComponent,
+        SelectAllComponent,
+        PaginateOrScrollComponent,
+        FormDirective,
+        FormsModule,
+        PaginatorModule,
+        DebounceDirective,
+        FormControlDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TranslocoPipe,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        DeleteAllModalComponent
+    ],
     templateUrl: './statuspages-index.component.html',
     styleUrl: './statuspages-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: StatuspagesService }
+        {provide: DELETE_SERVICE_TOKEN, useClass: StatuspagesService}
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -156,7 +159,7 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
-            this.load();
+        this.load();
     }
 
     public ngOnDestroy(): void {
@@ -164,8 +167,10 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public load(): void {
+        this.SelectionServiceService.deselectAll();
+
         let public_state = null;
-        if(this.is_public !== this.not_public) {
+        if (this.is_public !== this.not_public) {
             public_state = this.is_public === true;
         }
         this.params['filter[Statuspages.public]'] = public_state;
@@ -187,6 +192,7 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.params.page = 1;
         this.load();
     }
+
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
@@ -237,6 +243,7 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
             id: 'deleteAllModal',
         });
     }
+
     public onMassActionComplete(success: boolean): void {
         if (success) {
             this.load();

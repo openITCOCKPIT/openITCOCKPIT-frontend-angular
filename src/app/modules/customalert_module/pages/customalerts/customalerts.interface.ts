@@ -2,6 +2,7 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { formatDate } from '@angular/common';
+import { getUserDate } from '../../../../services/timezone.service';
 
 export interface CustomAlertsIndex extends PaginateOrScroll {
     customalerts: Customalert[]
@@ -139,7 +140,7 @@ export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams {
 }
 
 export function getDefaultCustomAlertsIndexFilter(): CustomAlertsIndexFilter {
-    let now = new Date();
+    let now: Date = getUserDate();
     // From: 6 months / 180 days ago
     let fromStr: string = formatDate(new Date(now.getTime() - 86400000 * 30 * 6), 'yyyy-MM-ddTHH:mm', 'en-US');
     // To: Tomorrow

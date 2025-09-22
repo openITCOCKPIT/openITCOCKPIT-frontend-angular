@@ -2,11 +2,12 @@ import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator
 import { formatDate } from '@angular/common';
 import { Outage, SlaAvailabilityStatusLogIndexParams } from '../slas/slas.interface';
 import { Container } from '../../../../pages/containers/containers.interface';
+import { getUserDate } from '../../../../services/timezone.service';
 
 export function getDefaultSlaAvailabilityStatusHostsLogIndexParams(fromParam: number | null, toParam: number | null): SlaAvailabilityStatusLogIndexParams {
-    let now = new Date();
-    let from = new Date(now.getTime() - (3600 * 24 * 30 * 1000));
-    let to = new Date(now.getTime() + (3600 * 24 * 30 * 2 * 1000));
+    let now: Date = getUserDate();
+    let from: Date = new Date(now.getTime() - (3600 * 24 * 30 * 1000));
+    let to: Date = new Date(now.getTime() + (3600 * 24 * 30 * 2 * 1000));
     if (typeof fromParam !== "undefined" && fromParam !== null) {
         from = new Date(fromParam * 1000);
     }

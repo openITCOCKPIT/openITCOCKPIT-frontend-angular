@@ -42,6 +42,7 @@ import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { saveAs } from 'file-saver';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { getUserDate } from '../../../../../services/timezone.service';
 
 
 @Component({
@@ -136,7 +137,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
 
     private getDefaultPost(id: number): SlasGeneratePost {
-        let now = new Date();
+        let now: Date = getUserDate();
         return {
             Sla: {
                 id: id,
