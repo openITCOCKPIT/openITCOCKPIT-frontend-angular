@@ -87,7 +87,7 @@ export class ServiceStatusComponent extends WizardsAbstractComponent {
     }
 
 
-    protected runStorageDiscovery(): void {
+    protected runServiceDiscovery(): void {
         this.post.services = [];
         this.cdr.markForCheck();
         this.WizardService.executeServiceDiscovery(this.post).subscribe((data: any) => {

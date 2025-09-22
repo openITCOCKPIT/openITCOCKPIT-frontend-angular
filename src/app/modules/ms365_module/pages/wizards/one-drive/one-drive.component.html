@@ -71,15 +71,12 @@
             </div>
         </c-card-body>
         <c-card-body>
-
-
             <fieldset class="padding-bottom-20">
                 <legend class="fs-md fieldset-legend-border-bottom">
                     <h4>
                         {{ t('Microsoft 365 Authentication Settings') }}
                     </h4>
                 </legend>
-
 
                 <c-accordion class="mb-3">
                     <c-accordion-item #item0="cAccordionItem" [visible]="false">
@@ -93,40 +90,36 @@
                             <div class="accordion-body">
                                 <ol>
                                     <li>
-                                        {{ t('Log in at ') }}
-                                        (
-                                        <a href="https://entra.microsoft.com/"
-                                           target="_blank">
-                                            Microsoft Entra
-                                        </a>
-                                        )
+                                        {{ t('Log in at') }}
+                                        (<a href="https://entra.microsoft.com/"
+                                            target="_blank">Microsoft Entra</a>)
                                     </li>
 
                                     <li>
-                                        {{ t('Goto App Registration and create a new one') }}
+                                        {{ t('Go to App Registration and create a new one') }}
                                     </li>
                                     <li>
-                                        {{ t('Just enter a Name for example “openITCOCKPIT Monitoring“ and click register') }}
+                                        {{ t('Just enter a Name, for example "openITCOCKPIT Monitoring" and click register') }}
                                     </li>
                                     <li>
-                                        {{ t('On the following Page copy and store Application (Client) ID and Directory (tenant) ID') }}
+                                        {{ t('On the following Page, copy and store Application (Client) ID and Directory (tenant) ID') }}
                                     </li>
                                     <li>
-                                        {{ t('Goto Certificate & Secrets, add a client secret key and copy / save it.') }}
+                                        {{ t('Go to Certificate & Secrets, add a client secret key and copy / save it.') }}
                                     </li>
                                     <li>
-                                        {{ t('Goto API Permission and add a permission to Microsoft Graph:') }}
-                                        <ol>
+                                        {{ t('Go to API Permission and add a permission to Microsoft Graph:') }}
+                                        <ol type="a">
                                             <li>
                                                 {{ t('Application Permission') }}
                                             </li>
                                             <li>
-                                                {{ t('Reports.Read.All') }}
+                                                <code>Reports.Read.All</code>
                                             </li>
                                         </ol>
                                     </li>
                                     <li>
-                                        {{ t('Finally click on Grant Admin consent for ….') }}
+                                        {{ t('Finally, click on Grant Admin consent for ….') }}
                                     </li>
 
                                 </ol>
@@ -148,19 +141,15 @@
                                 <ol>
                                     <li>
                                         {{ t('If you like to to have cleartext Names within your output. Login in at ') }}
-                                        (
-                                        <a href="https://admin.microsoft.com/"
-                                           target="_blank">
-                                            admin.microsoft.com
-                                        </a>
-                                        )
+                                        (<a href="https://admin.microsoft.com/"
+                                            target="_blank">admin.microsoft.com</a>)
                                     </li>
 
                                     <li>
                                         {{ t('Go to got to Settings -> Org Settings -> Reports') }}
                                     </li>
                                     <li>
-                                        {{ t('Uncheck „Display concealed user, group, and site names in all reports“') }}
+                                        {{ t('Uncheck "Display concealed user, group, and site names in all reports"') }}
                                     </li>
                                 </ol>
                             </div>
