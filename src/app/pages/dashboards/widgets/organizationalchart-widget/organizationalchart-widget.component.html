@@ -26,7 +26,7 @@
 
         <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
              class="box-container">
-            <div class="box-x">
+            <div class="box-x" [style.height.px]="widgetHeight">
                 @if (animationStateShowContent) {
                     <ng-container>
                         <!-- Widget Content -->
@@ -37,7 +37,7 @@
                         }
                         @if (config && config.organizationalchart_id && organizationalChart && show) {
                             <oitc-organizational-charts-viewer
-                                class="flex-1"
+                                [disable100VH]="true"
                                 [(nodeTree)]="organizationalChart.organizational_chart_nodes"
                                 [(connections)]="organizationalChart.organizational_chart_connections">
                             </oitc-organizational-charts-viewer>

@@ -106,6 +106,7 @@ export class OrganizationalchartWidgetComponent extends BaseWidgetComponent impl
     };
 
     public ngAfterViewInit(): void {
+        this.resizeWidget();
     }
 
     public override onAnimationStart(event: AnimationEvent) {
