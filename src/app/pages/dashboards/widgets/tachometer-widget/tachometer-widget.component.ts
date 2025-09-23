@@ -345,7 +345,7 @@ export class TachometerWidgetComponent extends BaseWidgetComponent implements Af
         }
 
         if (this.showLabel) {
-            if (units === null) {
+            if (units === null || units === '') {
                 units = label;
             } else {
                 units = label + ' in ' + units;
