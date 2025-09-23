@@ -21,8 +21,6 @@ import {
     ColComponent,
     FormDirective,
     FormLabelDirective,
-    NavComponent,
-    NavItemComponent,
     RowComponent,
     TableDirective
 } from '@coreui/angular';
@@ -51,8 +49,6 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
         ColComponent,
         FormDirective,
         FormsModule,
-        NavComponent,
-        NavItemComponent,
         ReactiveFormsModule,
         RowComponent,
         TranslocoPipe,

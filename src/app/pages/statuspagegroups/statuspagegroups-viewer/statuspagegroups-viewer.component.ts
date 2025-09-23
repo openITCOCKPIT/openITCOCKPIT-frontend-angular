@@ -1,13 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    effect,
-    inject,
-    input,
-    OnDestroy,
-    OnInit
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -115,9 +106,9 @@ export class StatuspagegroupsViewerComponent implements OnDestroy {
 
     public constructor() {
         effect(() => {
-          if(this.statuspagegroupId() > 0){
-              this.loadStatuspagegroup();
-          }
+            if (this.statuspagegroupId() > 0) {
+                this.loadStatuspagegroup();
+            }
         });
     }
 
@@ -176,19 +167,19 @@ export class StatuspagegroupsViewerComponent implements OnDestroy {
 
             // check if name match
             if (this.filter.statuspage_name !== '') {
-                if (!problem.statuspage.statuspage.name.toLowerCase().includes(this.filter.statuspage_name)) {
+                if (!problem.statuspage.statuspage.name.toLowerCase().includes(this.filter.statuspage_name.toLowerCase())) {
                     continue;
                 }
             }
 
             if (this.filter.collection !== '') {
-                if (!problem.collection.name.toLowerCase().includes(this.filter.collection)) {
+                if (!problem.collection.name.toLowerCase().includes(this.filter.collection.toLowerCase())) {
                     continue;
                 }
             }
 
             if (this.filter.category !== '') {
-                if (!problem.category.name.toLowerCase().includes(this.filter.category)) {
+                if (!problem.category.name.toLowerCase().includes(this.filter.category.toLowerCase())) {
                     continue;
                 }
             }
