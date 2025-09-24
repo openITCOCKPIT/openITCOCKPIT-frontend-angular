@@ -19,7 +19,7 @@
                 </a></li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                {{ t('Mailbox') }}
+                {{ t('SharePoint') }}
             </li>
         </ol>
     </nav>
@@ -27,7 +27,7 @@
     <c-card>
         <c-card-header>
             <h5 cCardTitle>
-                {{ t('Configuration Wizard: Microsoft 365 (Mailbox)') }}
+                {{ t('Configuration Wizard: Microsoft 365 (SharePoint)') }}
             </h5>
         </c-card-header>
         <c-card-body class="p-0">
@@ -202,7 +202,7 @@
                 [(post)]="post.services"
                 [errors]="errors"
                 [titleErrorField]="'services'"
-                [title]="'Office 365 Mailbox Services'|transloco"
+                [title]="'Office 365 SharePoint Services'|transloco"
             />
 
 
