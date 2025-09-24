@@ -13,7 +13,6 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import {
     DynamicalFormFieldsComponent
 } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
@@ -96,6 +95,10 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
     public formFields?: DynamicalFormFields;
 
     protected readonly ExternalMonitoringTypes = [
+        {
+            key: 'flowchief',
+            value: this.TranslocoService.translate('FlowChief')
+        },
         {
             key: 'icinga2',
             value: this.TranslocoService.translate('Icinga 2')

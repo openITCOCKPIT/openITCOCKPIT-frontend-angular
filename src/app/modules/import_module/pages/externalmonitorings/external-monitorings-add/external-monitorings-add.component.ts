@@ -2,19 +2,18 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ContainerComponent,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ContainerComponent,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -58,33 +57,33 @@ import {
 @Component({
     selector: 'oitc-external-monitorings-add',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    NgIf,
-    SelectComponent,
-    ContainerComponent,
-    NgForOf,
-    DynamicalFormFieldsComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        NgIf,
+        SelectComponent,
+        ContainerComponent,
+        NgForOf,
+        DynamicalFormFieldsComponent
+    ],
     templateUrl: './external-monitorings-add.component.html',
     styleUrl: './external-monitorings-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -105,6 +104,10 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
     public formFields?: DynamicalFormFields;
 
     protected readonly ExternalMonitoringTypes = [
+        {
+            key: 'flowchief',
+            value: this.TranslocoService.translate('FlowChief')
+        },
         {
             key: 'icinga2',
             value: this.TranslocoService.translate('Icinga 2')
