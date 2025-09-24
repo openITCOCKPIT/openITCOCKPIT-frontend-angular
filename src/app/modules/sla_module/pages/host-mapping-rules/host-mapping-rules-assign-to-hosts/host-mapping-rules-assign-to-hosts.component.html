@@ -179,6 +179,23 @@
                         </c-input-group>
                     </div>
 
+                    <div class="mb-3">
+                        <label cLabel for="HostMappingRulesHostgroups">
+                            {{ t('Host groups') }}
+                        </label>
+
+                        <oitc-multi-select
+                            name="HostMappingRulesHostgroups"
+                            id="HostMappingRulesHostgroups"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.hostgroups._ids"
+                            [options]="hostgroups"
+                            (onChange)="onPostChange()"
+                            [debounce]="true">
+                        </oitc-multi-select>
+                    </div>
+
                 </fieldset>
 
                 <fieldset class="mt-10">
@@ -268,6 +285,23 @@
                         <oitc-form-feedback [errors]="errors" errorField="servicename_regex"></oitc-form-feedback>
                     </div>
 
+                    <div class="mb-3">
+                        <label cLabel for="HostMappingRulesServicegroups">
+                            {{ t('Service groups') }}
+                        </label>
+
+                        <oitc-multi-select
+                            name="HostMappingRulesServicegroups"
+                            id="HostMappingRulesServicegroups"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.servicegroups._ids"
+                            [options]="servicegroups"
+                            (onChange)="onPostChange()"
+                            [debounce]="true">
+                        </oitc-multi-select>
+                    </div>
+
                 </fieldset>
 
                 <div class="mb-3 mt-20">
@@ -296,8 +330,7 @@
                                 <div class="alert-icon">
                                     <span class="icon-stack icon-stack-md">
                                         <i class="base-6 icon-stack-3x text-white"></i>
-                                        <i class="fas fa-info-circle icon-stack-1x text-primary-600"
-                                           style="bottom: 5px;"></i>
+                                        <i class="fas fa-info-circle icon-stack-2x text-primary-600"></i>
                                     </span>
                                 </div>
                                 <div class="flex-1 text-white">

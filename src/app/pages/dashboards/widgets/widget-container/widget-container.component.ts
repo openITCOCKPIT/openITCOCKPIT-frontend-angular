@@ -82,6 +82,7 @@ import {
 import {
     ResourcegroupsCronjobStatusWidgetComponent
 } from '../../../../modules/scm_module/widgets/resourcegroups-cronjob-status-widget/resourcegroups-cronjob-status-widget.component';
+import { StatuspagegroupWidgetComponent } from '../statuspagegroup-widget/statuspagegroup-widget.component';
 import { OrganizationalchartWidgetComponent } from '../organizationalchart-widget/organizationalchart-widget.component';
 
 
@@ -134,12 +135,16 @@ import { OrganizationalchartWidgetComponent } from '../organizationalchart-widge
         ChangecalendarWidgetComponent,
         MyResourcesSummaryWidgetComponent,
         ResourcegroupsCronjobStatusWidgetComponent,
+        StatuspagegroupWidgetComponent,
         OrganizationalchartWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
-    styleUrl: './widget-container.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrl:
+        './widget-container.component.css',
+    changeDetection:
+    ChangeDetectionStrategy.OnPush
 })
+
 export class WidgetContainerComponent extends BaseWidgetComponent {
 
 

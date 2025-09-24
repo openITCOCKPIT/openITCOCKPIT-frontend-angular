@@ -38,6 +38,7 @@ import { designModuleRoutes } from './modules/design_module/design_module.routes
 import { mattermostModuleRoutes } from './modules/mattermost_module/mattermost_module.routes';
 import { servicenowModuleRoutes } from './modules/servicenow_module/servicenow_module.routes';
 import { dellModuleRoutes } from './modules/dell_module/dell_module.routes';
+import { proxmoxModuleRoutes } from './modules/proxmox_module/proxmox_module.routes';
 import { ms365ModuleRoutes } from './modules/ms365_module/ms365_module.routes';
 
 @Component({
@@ -99,6 +100,7 @@ const moduleRoutes: Routes = [
     ...mattermostModuleRoutes,
     ...servicenowModuleRoutes,
     ...dellModuleRoutes,
+    ...proxmoxModuleRoutes,
     ...ms365ModuleRoutes
 ];
 /***    Core routes   ***/
@@ -736,6 +738,22 @@ const coreRoutes: Routes = [{
 }, {
     path: 'organizationalcharts/browserView',
     loadComponent: () => import('./pages/organizationalcharts/organizational-charts-browser-view/organizational-charts-browser-view.component').then(m => m.OrganizationalChartsBrowserViewComponent)
+}, {
+    path: 'statuspagegroups/add',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-add-step-one/statuspagegroups-add-step-one.component').then(m => m.StatuspagegroupsAddStepOneComponent)
+}, {
+    path: 'statuspagegroups/edit/:id',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-edit-step-one/statuspagegroups-edit-step-one.component').then(m => m.StatuspagegroupsEditStepOneComponent)
+}, {
+    path: 'statuspagegroups/editStepTwo/:id',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-edit-step-two/statuspagegroups-edit-step-two.component').then(m => m.StatuspagegroupsEditStepTwoComponent)
+}, {
+    path: 'statuspagegroups/view/:id',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-view/statuspagegroups-view.component').then(m => m.StatuspagegroupsViewComponent)
+}, {
+
+    path: 'statuspagegroups/index',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-index/statuspagegroups-index.component').then(m => m.StatuspagegroupsIndexComponent)
 }, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)
