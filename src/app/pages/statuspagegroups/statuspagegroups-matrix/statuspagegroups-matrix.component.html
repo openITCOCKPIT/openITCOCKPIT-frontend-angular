@@ -53,7 +53,7 @@
                                     [name]="'collection_'+collectionIndex"
                                     [id]="'collection_id_'+collectionIndex"
                                     [(ngModel)]="collection.name"
-                                    [placeholder]="'New collect #' + (collectionIndex+1) | transloco"
+                                    [placeholder]="'New collection #' + (collectionIndex+1) | transloco"
                                     oitcFormError [errors]="collectionErrors[$index]"
                                     errorField="name"/>
                                 <span cInputGroupText>
@@ -71,7 +71,7 @@
                             <td [colSpan]="statuspagegroup_categories().length+1"
                                 [rowSpan]="statuspagegroup_collections().length"
                                 class="text-muted text-center align-middle">
-                                {{ t('Statuspages can be assigned in the next step') }}
+                                {{ t('Status pages can be assigned in the next step') }}
                             </td>
                         }
 

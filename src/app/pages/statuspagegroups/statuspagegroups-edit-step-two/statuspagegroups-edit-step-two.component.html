@@ -30,28 +30,16 @@
                             {{ post.name }}
                         </small>
                     </h5>
-
-                    <c-nav class="card-toolbar card-header-pills">
-                        <c-nav-item class="px-1">
-                            <button [fallbackUrl]="['statuspagegroups', 'index']" cButton class="ripple" color="default"
-                                    oitcBackButton
-                                    size="xs">
-                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                                {{ t('Back') }}
-                            </button>
-                        </c-nav-item>
-                    </c-nav>
-
                 </c-card-header>
                 <c-card-body>
-                    <c-row class="m-0 text-center mb-3" style="min-height: 22px;">
+                    <c-row class="m-0 text-center mb-3">
                         <c-col xs="12" md="4" lg="2"
                                class="wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
                             <span>
                                 <c-badge color="secondary">1</c-badge>
                             </span>
                             <span class="ms-1">
-                                {{ t('Statuspage group configuration') }}
+                                {{ t('Status page group configuration') }}
                             </span>
                         </c-col>
                         <c-col xs="12" md="4" lg="2"
@@ -66,7 +54,7 @@
                         </c-col>
                         <c-col class="wizard-bg-inactive d-inline-flex">
                         </c-col>
-                        <c-col xs="12" md="4" lg="1" class="ps-0 pe-0 wizard-bg-inactive">
+                        <c-col xs="12" md="4" lg="2" class="ps-0 pe-0 wizard-bg-inactive">
                             <div class="btn-group btn-group-xs w-100 h-100">
                                 <button type="button" class="btn btn-primary h-100"
                                         style="border-radius: 0;"
@@ -93,7 +81,7 @@
                         </legend>
                     </fieldset>
                     <div>
-                        <table cTable [striped]="true" stripedColumns bordered>
+                        <table cTable [striped]="true" stripedColumns bordered class="table-layout-fixed">
                             <thead>
                             <tr>
                                 <th scope="col" class="align-middle">
@@ -130,6 +118,7 @@
                                                         optionValue="key"
                                                         optionLabel="value"
                                                         [options]="statuspages"
+                                                        [appendTo]="''"
                                                         [(ngModel)]="this.statuspageMatrix[collectionIndex][categoryIndex].statuspageIds"
                                                         oitcFormError [errors]="errors" errorField="hosts">
                                                     </oitc-multi-select>

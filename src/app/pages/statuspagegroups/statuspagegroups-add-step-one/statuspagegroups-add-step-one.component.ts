@@ -8,6 +8,9 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -33,6 +36,10 @@ import { HistoryService } from '../../../history.service';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { StatuspagegroupsMatrixComponent } from '../statuspagegroups-matrix/statuspagegroups-matrix.component';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { BbCodeEditorComponent } from '../../documentations/bb-code-editor/bb-code-editor.component';
+import { BbCodeParserService } from '../../../services/bb-code-parser.service';
+import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 
 @Component({
     selector: 'oitc-statuspagegroups-add-step-one',
@@ -62,7 +69,13 @@ import { StatuspagegroupsMatrixComponent } from '../statuspagegroups-matrix/stat
         BadgeComponent,
         ColComponent,
         RowComponent,
-        StatuspagegroupsMatrixComponent
+        StatuspagegroupsMatrixComponent,
+        DebounceDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        BbCodeEditorComponent,
+        TrustAsHtmlPipe
     ],
     templateUrl: './statuspagegroups-add-step-one.component.html',
     styleUrl: './statuspagegroups-add-step-one.component.css',
@@ -77,9 +90,12 @@ export class StatuspagegroupsAddStepOneComponent implements OnInit, OnDestroy {
 
     public containers: SelectKeyValue[] = [];
 
+    public html: string = '';
+
     private subscriptions: Subscription = new Subscription();
     private readonly StatuspagegroupsService = inject(StatuspagegroupsService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly BbCodeParserService = inject(BbCodeParserService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly router: Router = inject(Router);
@@ -106,6 +122,8 @@ export class StatuspagegroupsAddStepOneComponent implements OnInit, OnDestroy {
         return {
             name: '',
             description: null,
+            additional_information: '',
+            show_ticker: true,
             container_id: 0,
             statuspagegroup_categories: [],
             statuspagegroup_collections: [],
@@ -113,7 +131,14 @@ export class StatuspagegroupsAddStepOneComponent implements OnInit, OnDestroy {
         }
     }
 
+    protected onChangeOfBbCode(event: any): void {
+        if (this.post) {
+            this.html = this.BbCodeParserService.parse(this.post.additional_information);
+        }
+    }
+
     public submit() {
+
         this.subscriptions.add(this.StatuspagegroupsService.add(this.post)
             .subscribe((result) => {
                 this.cdr.markForCheck();
@@ -156,4 +181,5 @@ export class StatuspagegroupsAddStepOneComponent implements OnInit, OnDestroy {
             }));
     }
 
+    protected readonly String = String;
 }

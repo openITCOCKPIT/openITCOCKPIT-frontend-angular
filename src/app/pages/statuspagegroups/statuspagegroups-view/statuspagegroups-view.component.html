@@ -21,12 +21,16 @@
 
     <c-card class="mb-3">
         <c-card-header>
-            <h5 class="card-title ktd-grid-drag-handle"><i class="fas fa-traffic-light"></i> Status Board</h5>
+            <h5 cCardTitle>{{ t('Status page group') }}
+                @if (statuspagegroup) {
+                    <small class="fw-300">
+                        {{ statuspagegroup.statuspagegroup.name }}
+                    </small>
+                }
+            </h5>
         </c-card-header>
         <c-card-body>
-
-            <oitc-statuspagegroups-viewer></oitc-statuspagegroups-viewer>
-
+            <oitc-statuspagegroups-viewer [statuspagegroupId]="id"></oitc-statuspagegroups-viewer>
         </c-card-body>
     </c-card>
 

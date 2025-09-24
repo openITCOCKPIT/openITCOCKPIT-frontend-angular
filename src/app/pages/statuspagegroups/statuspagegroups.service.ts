@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
+    StatupagegroupViewDetailsRoot,
     StatupagegroupViewRoot,
     StatuspagegroupPost,
     StatuspagegroupsIndex,
@@ -11,6 +12,9 @@ import {
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import {
+    StatuspagegroupsLoadStatuspagegroupsByStringParams
+} from '../dashboards/widgets/statuspagegroup-widget/statuspagegroup-widget.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -32,6 +36,20 @@ export class StatuspagegroupsService {
                 return data;
             })
         )
+    }
+
+    public loadStatuspagegroupsByString(params: StatuspagegroupsLoadStatuspagegroupsByStringParams): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.get<{
+            statuspagegroups: SelectKeyValue[]
+        }>(`${proxyPath}/statuspagegroups/loadStatuspagegroupsByString.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data.statuspagegroups;
+            })
+        );
     }
 
     public add(statuspagegroup: StatuspagegroupPost): Observable<GenericResponseWrapper> {
@@ -173,6 +191,15 @@ export class StatuspagegroupsService {
     public getStatuspagegroupView(id: number): Observable<StatupagegroupViewRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<StatupagegroupViewRoot>(`${proxyPath}/statuspagegroups/view/${id}.json`, {}).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    public getStatuspagegroupGetDetails(id: number): Observable<StatupagegroupViewDetailsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<StatupagegroupViewDetailsRoot>(`${proxyPath}/statuspagegroups/getDetails/${id}.json`, {}).pipe(
             map(data => {
                 return data;
             })
