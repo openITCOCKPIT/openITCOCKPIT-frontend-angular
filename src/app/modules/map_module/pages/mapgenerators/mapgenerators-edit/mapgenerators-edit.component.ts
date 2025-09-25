@@ -327,4 +327,35 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
         return this.TranslocoService.translate('Name (e.g. Level {0})', {'0': (index + 1).toString()});
 
     }
+
+    public onTypeChange(): void {
+        switch (this.post.Mapgenerator.type) {
+            case MapgeneratorTypes.GENERATE_BY_HOSTNAME_SPLITTING:
+                this.post.Mapgenerator.containers = {_ids: []};
+                break;
+            default:
+                this.post.Mapgenerator.mapgenerator_levels = [];
+                this.mapgenerator = {
+                    levels: [
+                        {
+                            id: 1,
+                            name: '',
+                            divider: '',
+                            is_container: true,
+                            index: 0
+                        },
+                        {
+                            id: 2,
+                            name: '',
+                            divider: '',
+                            is_container: false,
+                            index: 1
+                        }
+                    ]
+                }
+                break;
+        }
+        this.cdr.markForCheck();
+    }
+
 }
