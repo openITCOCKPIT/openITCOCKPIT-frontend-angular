@@ -20,7 +20,7 @@
     </nav>
 
 
-    <form cForm (ngSubmit)="addHostgroup()">
+    <form cForm (ngSubmit)="submit()">
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>
@@ -91,7 +91,7 @@
                     <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                 </div>
                 <div class="mb-3">
-                    <label cLabel for="description">
+                    <label cLabel for="hostgroup_url">
                         {{ t('Host group URL') }}
                     </label>
                     <input cFormControl
@@ -101,6 +101,32 @@
                            oitcFormError [errors]="errors" errorField="hostgroup_url"
                            [(ngModel)]="post.hostgroup_url">
                     <oitc-form-feedback [errors]="errors" errorField="hostgroup_url"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="HostgroupTags">
+                        {{ t('Tags') }}
+                    </label>
+
+                    <c-input-group>
+                        <ng-select
+                            id="HostgroupTags"
+                            name="HostgroupTags"
+                            [items]="[]"
+                            [(ngModel)]="tagsForSelect"
+                            [addTag]="true"
+                            [multiple]="true"
+                            [selectOnTab]="true"
+                            [placeholder]="'Add tags'|transloco"
+                            [isOpen]="false"
+                            oitcFormError [errors]="errors" errorField="tags">
+                        </ng-select>
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="tags"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Press return to separate tags') }}
+                    </div>
                 </div>
 
                 <div class="mb-3">

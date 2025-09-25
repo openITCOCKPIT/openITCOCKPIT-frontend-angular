@@ -2,16 +2,20 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { RouterLink, Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
-    BadgeComponent, ButtonDirective,
+    BadgeComponent,
+    ButtonDirective,
     CalloutComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    DropdownComponent, DropdownItemDirective, DropdownMenuDirective, DropdownToggleDirective,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -26,15 +30,10 @@ import { FormsModule } from '@angular/forms';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { Subscription } from 'rxjs';
 import { AutoreportsService } from '../autoreports.service';
-import {
-    AutoreportPost,
-    CalendarParams,
-    getDefaultCalendarParams,
-    getDefaultPost
-} from '../autoreports.interface';
+import { AutoreportPost, CalendarParams, getDefaultCalendarParams, getDefaultPost } from '../autoreports.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf, formatDate } from '@angular/common';
+import { formatDate, NgIf } from '@angular/common';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
@@ -48,7 +47,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 
 @Component({
-  selector: 'oitc-autoreport-edit-step-one',
+    selector: 'oitc-autoreport-edit-step-one',
     imports: [
         FormDirective,
         FormsModule,
@@ -87,9 +86,9 @@ import { ContainersService } from '../../../../../pages/containers/containers.se
         TranslocoDirective,
         RouterLink,
     ],
-  templateUrl: './autoreport-edit-step-one.component.html',
-  styleUrl: './../../../assets/autoreport.css',//'./autoreport-edit-step-one.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './autoreport-edit-step-one.component.html',
+    styleUrl: './../../../assets/autoreport.css',//'./autoreport-edit-step-one.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
 
@@ -104,17 +103,17 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     private readonly ContainersService: ContainersService = inject(ContainersService);
 
-    public init:boolean = false;
+    public init: boolean = false;
     public id: number = 0;
-    public post: AutoreportPost = getDefaultPost() ;
+    public post: AutoreportPost = getDefaultPost();
     public errors: GenericValidationError | null = null;
     public containers: SelectKeyValue[] = [];
     public calendars: SelectKeyValue[] = [];
     public timeperiods: SelectKeyValue[] = [];
     public users: SelectKeyValue[] = [];
     protected calendarParams: CalendarParams = getDefaultCalendarParams();
-    public setMinAvailability : boolean = false;
-    public setMaxNumberOfOutages : boolean = false;
+    public setMinAvailability: boolean = false;
+    public setMaxNumberOfOutages: boolean = false;
     public evalutionperiods: SelectKeyValueString[] = [
         {key: 'YEAR', value: this.TranslocoService.translate('Year')},
         {key: 'QUARTER', value: this.TranslocoService.translate('Quarter')},
@@ -156,34 +155,34 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
     }
 
     public onAvailabilityChange($event: boolean) {
-        if(!$event ) {
+        if (!$event) {
             this.post.Autoreport.min_availability = null;
         }
     }
 
     public onOutageChange($event: boolean) {
-        if(!$event ) {
+        if (!$event) {
             this.post.Autoreport.max_number_of_outages = null;
             this.cdr.markForCheck();
         }
     }
 
     public onHolidayChange($event: any) {
-        if($event === 0 && this.post.Autoreport.calendar_id !== null){
-            this.post.Autoreport.calendar_id = null;
+        if ($event === 0 && this.post.Autoreport.calendar_id !== 0) {
+            this.post.Autoreport.calendar_id = 0;
             this.cdr.markForCheck();
         }
     }
 
     public onStartChange($event: any) {
-        if($event === 0){
+        if ($event === 0) {
             this.post.Autoreport.report_start_date = null;
             this.cdr.markForCheck();
         }
     }
 
     private loadTimeperiods() {
-        if(this.post.Autoreport.container_id === null){
+        if (this.post.Autoreport.container_id === 0) {
             return;
         }
         this.subscriptions.add(this.TimeperiodsService.loadTimeperiodsByContainerId(this.post.Autoreport.container_id).subscribe((result) => {
@@ -193,7 +192,7 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
     }
 
     private loadCalendars() {
-        if(this.post.Autoreport.container_id === null){
+        if (this.post.Autoreport.container_id === 0) {
             return;
         }
         this.calendarParams.containerId = this.post.Autoreport.container_id;
@@ -204,7 +203,7 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
     }
 
     private loadUsers() {
-        if(this.post.Autoreport.container_id === null){
+        if (this.post.Autoreport.container_id === 0) {
             return;
         }
         this.subscriptions.add(this.UsersService.loadUsersByContainerId(this.post.Autoreport.container_id, this.post.Autoreport.users._ids).subscribe((result) => {
@@ -225,25 +224,25 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
 
             this.post.Autoreport = result;
 
-            if(this.post.Autoreport.report_start_date !== null){
+            if (this.post.Autoreport.report_start_date !== null) {
                 this.post.Autoreport.report_start_date = formatDate(this.post.Autoreport.report_start_date, 'yyyy-dd-MM', 'en-US');
             }
 
             //think itis an issue that calendar_id comes with 0 an d not null whenn not set
-            if(this.post.Autoreport.calendar_id === 0){
-                this.post.Autoreport.calendar_id = null;
-            }
+            //if (this.post.Autoreport.calendar_id === 0) {
+            //    this.post.Autoreport.calendar_id = null;
+            //}
 
-            if(this.post.Autoreport.min_availability){
+            if (this.post.Autoreport.min_availability) {
                 this.setMinAvailability = true;
             }
 
-            if(this.post.Autoreport.max_number_of_outages !== null && this.post.Autoreport.max_number_of_outages >= 0 ){
+            if (this.post.Autoreport.max_number_of_outages !== null && this.post.Autoreport.max_number_of_outages >= 0) {
                 this.setMaxNumberOfOutages = true;
             }
 
             this.loadContainers();
-            if(!this.init) {
+            if (!this.init) {
                 this.loadTimeperiods();
                 this.loadCalendars();
                 this.loadUsers();
@@ -255,7 +254,7 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
 
     public submitStepOne() {
         this.errors = null;
-        if(this.post.Autoreport.report_start_date !== null){
+        if (this.post.Autoreport.report_start_date !== null) {
             this.post.Autoreport.report_start_date = formatDate(this.post.Autoreport.report_start_date, 'dd.MM.y', 'en-US');
         }
 

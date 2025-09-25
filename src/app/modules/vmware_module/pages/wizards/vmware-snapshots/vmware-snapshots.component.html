@@ -1,0 +1,235 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item">
+                <a [routerLink]="['/', 'wizards', 'index']">
+                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    {{ t('Wizards') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'cloud']"></fa-icon>
+                {{ t('VMWare') }}
+            </li>
+        </ol>
+    </nav>
+
+
+    <c-card>
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Configuration Wizard: VMWare Snapshots') }}
+            </h5>
+        </c-card-header>
+        <c-card-body class="p-0">
+
+            <div class="row m-0 text-center mb-3" style="min-height: 22px;">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Host Information') }}
+                    </span>
+                </div>
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('VMware') }}
+                    </span>
+                </div>
+                <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+                    <div class="btn-group btn-group-xs w-100 h-100">
+                        <button type="button" class="btn btn-primary"
+                                [title]="'Back' | transloco"
+                                style="border-radius: 0;"
+                                [fallbackUrl]="['wizards', 'index']"
+                                oitcBackButton>
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-success"
+                                style="border-radius: 0;"
+                                [title]="'Next' | transloco"
+                                (click)="submit()">
+                            {{ t('Next') }}
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </c-card-body>
+        <c-card-body>
+
+            <fieldset class="padding-bottom-20">
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4>
+                        {{ t('VMware Server') }}
+                    </h4>
+                </legend>
+
+                <c-accordion class="mb-3">
+                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                        <ng-template cTemplateId="accordionHeaderTemplate">
+                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                                {{ t('VMware configuration help') }}
+                            </button>
+                        </ng-template>
+                        <ng-template cTemplateId="accordionBodyTemplate">
+                            <div class="accordion-body">
+                                {{ t('Please create a user within your vCenter and assign the read-only role.') }}
+                            </div>
+                        </ng-template>
+                    </c-accordion-item>
+                </c-accordion>
+
+                <div class="mb-3">
+                    <c-alert [color]="'info'">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('If you don’t want to Monitore all of you Snapshot ages, you can add multiple checks and change the regex for your needs.') }}
+                    </c-alert>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.vcenter">
+                        {{ t('vCenter Address') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.vcenter"
+                           type="text"
+                           name="post.vcenter"
+                           oitcFormError [errors]="errors" errorField="vcenter"
+                           [(ngModel)]="post.vcenter">
+                    <oitc-form-feedback [errors]="errors" errorField="vcenter"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.vmwareuser">
+                        {{ t('Username') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.vmwareuser"
+                           type="text"
+                           name="post.vmwareuser"
+                           oitcFormError [errors]="errors" errorField="vmwareuser"
+                           [(ngModel)]="post.vmwareuser">
+                    <oitc-form-feedback [errors]="errors" errorField="vmwareuser"></oitc-form-feedback>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="post.vmwarepass">
+                        {{ t('Password') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.vmwarepass"
+                           type="password"
+                           name="post.vmwarepass"
+                           oitcFormError [errors]="errors" errorField="vmwarepass"
+                           [(ngModel)]="post.vmwarepass">
+                    <oitc-form-feedback [errors]="errors" errorField="vmwarepass"></oitc-form-feedback>
+                </div>
+            </fieldset>
+
+            <oitc-wizards-dynamicfields
+                [(post)]="post.services"
+                [errors]="errors"
+                [title]="'VMware services'|transloco"
+            />
+
+            <div class="mb-3 d-flex justify-content-end">
+                <button class="ripple" (click)="openAddSnapshotServiceModal()" cButton color="success">
+                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                    {{ t('Add snapshot service') }}
+                </button>
+            </div>
+
+        </c-card-body>
+
+    </c-card>
+
+    <!-- Add snapshot service modal -->
+    <c-modal #addSnapshotServiceModal fullscreen="md" size="xl" id="addSnapshotServiceModal">
+        <form cForm (ngSubmit)="addNewSnapshotServiceToList()">
+            <c-modal-header>
+                <h5 cModalTitle>
+                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                    {{ t('Add snapshot service') }}
+                </h5>
+                <button [cModalToggle]="addSnapshotServiceModal.id" cButtonClose></button>
+            </c-modal-header>
+            <c-modal-body>
+
+                <c-row>
+                    <c-col lg="12">
+                        <div class="mb-3">
+                            <label cLabel for="serviceName">
+                                {{ t('Name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   id="serviceName"
+                                   required
+                                   type="text"
+                                   name="serviceName"
+                                   (ngModelChange)="onServiceNameChange($event)"
+                                   oitcFormError [errors]="errors" errorField="serviceName"
+                                   [(ngModel)]="serviceName">
+                            @if (this.errors && this.errors['serviceName'] && this.errors['serviceName']['_empty']) {
+                                <div class="pt-1 text-invalid">
+                                    <div>{{ this.errors['serviceName']['_empty'] }}</div>
+                                </div>
+                            }
+                        </div>
+
+                        @if (serviceAlreadyExists) {
+                            <c-alert color="warning">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                {{
+                                    t('A service with the name {0} already exists on this host. Duplicate service names could lead to confusion.', {
+                                        '0': serviceName
+                                    })
+                                }}
+
+                            </c-alert>
+                        }
+                    </c-col>
+                    <c-col lg="12">
+                        <div class="mb-3">
+                            <label cLabel for="serviceRegex">
+                                {{ t('Regex') }}
+                            </label>
+                            <input cFormControl
+                                   id="serviceRegex"
+                                   type="text"
+                                   name="serviceRegex"
+                                   oitcFormError [errors]="errors" errorField="serviceRegex"
+                                   [(ngModel)]="serviceRegex">
+                            <oitc-form-feedback [errors]="errors" errorField="serviceRegex"></oitc-form-feedback>
+                        </div>
+                    </c-col>
+                </c-row>
+
+            </c-modal-body>
+            <c-modal-footer>
+                <button cButton color="success" type="submit" class="ripple">
+                    {{ t('Add') }}
+                </button>
+                <button [cModalToggle]="addSnapshotServiceModal.id" cButton color="default" class="ripple">
+                    {{ t('Close') }}
+                </button>
+            </c-modal-footer>
+        </form>
+    </c-modal>
+
+</ng-container>

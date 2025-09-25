@@ -39,5 +39,14 @@ export const scmModuleRoutes: Routes = [{
 }, {
     path: 'scm_module/scm_settings/index',
     loadComponent: () => import('./pages/scmsettings/scm-settings-index/scm-settings-index.component').then(m => m.ScmSettingsIndexComponent)
+}, {
+    path: 'scm_module/mailinglists/index',
+    loadComponent: () => import('./pages/mailinglists/mailinglists-index/mailinglists-index.component').then(m => m.MailinglistsIndexComponent)
+}, {
+    path: 'scm_module/mailinglists/add',
+    loadComponent: () => import('./pages/mailinglists/mailinglists-add/mailinglists-add.component').then(m => m.MailinglistsAddComponent)
+}, {
+    path: 'scm_module/mailinglists/edit/:id',
+    loadComponent: () => import('./pages/mailinglists/mailinglists-edit/mailinglists-edit.component').then(m => m.MailinglistsEditComponent)
 }
 ];

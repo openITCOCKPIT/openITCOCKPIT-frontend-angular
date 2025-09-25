@@ -105,14 +105,14 @@
                         <c-col md="6">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'user']" class="px-2"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'envelopes-bulk']" class="px-2"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[username]']"
-                                       [placeholder]="'Filter by user name' | transloco"
-                                       aria-label="NotificationUser"
+                                       [(ngModel)]="params['filter[recipient]']"
+                                       [placeholder]="'Filter by recipient' | transloco"
+                                       aria-label="NotificationRecipient"
                                        cFormControl
-                                       name="NotificationUser"
+                                       name="NotificationRecipient"
                                        oitcDebounce
                                        type="text"
                                 />
@@ -205,8 +205,8 @@
                         <th scope="col" mat-sort-header="ScmNotificationsLog.reason_type" class="col-1">
                             {{ t('Reason type') }}
                         </th>
-                        <th scope="col" mat-sort-header="username">
-                            {{ t('User') }}
+                        <th scope="col" mat-sort-header="recipient">
+                            {{ t('Recipient') }}
                         </th>
                         <th scope="col">
                             {{ t('Unconfirmed resources') }}
@@ -249,14 +249,25 @@
                             }
                         </td>
                         <td>
-                            <oitc-label-link
-                                [objectId]="notification.user_id"
-                                [route]="'/users/edit'"
-                                [permissions]="'users.edit'">
-                                {{ notification.username }}
-                            </oitc-label-link>
+                            @if (notification.object_type === ScmNotificationLogRecipientTypesEnum.USER) {
+                                <oitc-label-link
+                                    [objectId]="notification.object_id"
+                                    [route]="'/users/edit'"
+                                    [permissions]="'users.edit'">
+                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                    {{ notification.recipient }}
+                                </oitc-label-link>
+                            }
+                            @if (notification.object_type === ScmNotificationLogRecipientTypesEnum.MAILINGLIST) {
+                                <oitc-label-link
+                                    [objectId]="notification.object_id"
+                                    [route]="'/scm_module/mailinglists/edit'"
+                                    [permissions]="'ScmModule.mailinglists.edit'">
+                                    <fa-icon [icon]="['fas', 'envelopes-bulk']"></fa-icon>
+                                    {{ notification.recipient }}
+                                </oitc-label-link>
+                            }
                         </td>
-
                         <td>
                             @if (notification.unconfirmed_resources.length > 0) {
                                 <ul class="mb-0 ms-1 ps-2">
@@ -284,44 +295,32 @@
                                             [permissions]="'scmmodule.resources.edit'">
                                             @switch (confirmed_resource.status) {
                                                 @case (1) {
-                                                    <fa-stack class="me-1" [size]="'sm'">
-                                                        <fa-icon [icon]="['fas', 'square']"
-                                                                 stackItemSize="2x"
-                                                                 class="text-success"></fa-icon>
-                                                        <fa-icon [icon]="['fas', 'check']" [inverse]="true"
-                                                                 stackItemSize="1x"
-                                                        ></fa-icon>
-                                                    </fa-stack>
+                                                    <fa-layers [size]="'lg'">
+                                                        <fa-icon [icon]="['fas', 'square']" class="text-success"/>
+                                                        <fa-icon [inverse]="true" [icon]="['fas', 'check']"
+                                                                 transform="shrink-6"/>
+                                                    </fa-layers>
                                                 }
                                                 @case (2) {
-                                                    <fa-stack class="me-1" [size]="'sm'">
-                                                        <fa-icon [icon]="['fas', 'square']"
-                                                                 stackItemSize="2x"
-                                                                 class="text-warning"></fa-icon>
-                                                        <fa-icon [icon]="['fas', 'bell']" [inverse]="true"
-                                                                 stackItemSize="1x"
-                                                        ></fa-icon>
-                                                    </fa-stack>
+                                                    <fa-layers [size]="'lg'">
+                                                        <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
+                                                        <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
+                                                                 transform="shrink-6"/>
+                                                    </fa-layers>
                                                 }
                                                 @case (3) {
-                                                    <fa-stack class="me-1" [size]="'sm'">
-                                                        <fa-icon [icon]="['fas', 'square']"
-                                                                 stackItemSize="2x"
-                                                                 class="text-danger"></fa-icon>
-                                                        <fa-icon [icon]="['fas', 'exclamation']" [inverse]="true"
-                                                                 stackItemSize="1x"
-                                                        ></fa-icon>
-                                                    </fa-stack>
+                                                    <fa-layers [size]="'lg'">
+                                                        <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
+                                                        <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
+                                                                 transform="shrink-6"/>
+                                                    </fa-layers>
                                                 }
                                                 @default {
-                                                    <fa-stack class="me-1" [size]="'sm'">
-                                                        <fa-icon [icon]="['fas', 'square']"
-                                                                 stackItemSize="2x"
-                                                                 class="text-primary"></fa-icon>
-                                                        <fa-icon [icon]="['fas', 'question']" [inverse]="true"
-                                                                 stackItemSize="1x"
-                                                        ></fa-icon>
-                                                    </fa-stack>
+                                                    <fa-layers [size]="'lg'">
+                                                        <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
+                                                        <fa-icon [inverse]="true" [icon]="['fas', 'question']"
+                                                                 transform="shrink-6"/>
+                                                    </fa-layers>
                                                 }
                                             }
                                             {{ confirmed_resource.name }}
@@ -344,6 +343,10 @@
                     </tr>
                     </tbody>
                 </table>
+                @if (notifications && notifications.notifications.length === 0) {
+                    <oitc-no-records></oitc-no-records>
+                }
+
             </c-container>
             <c-container [fluid]="true">
                 <c-row>

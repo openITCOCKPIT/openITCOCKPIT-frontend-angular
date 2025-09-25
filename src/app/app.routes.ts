@@ -1,4 +1,4 @@
-import { Component, inject, DOCUMENT } from "@angular/core";
+import { Component, DOCUMENT, inject } from "@angular/core";
 
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
@@ -37,6 +37,8 @@ import { slackModuleRoutes } from './modules/slack_module/slack_module.routes';
 import { designModuleRoutes } from './modules/design_module/design_module.routes';
 import { mattermostModuleRoutes } from './modules/mattermost_module/mattermost_module.routes';
 import { servicenowModuleRoutes } from './modules/servicenow_module/servicenow_module.routes';
+import { dellModuleRoutes } from './modules/dell_module/dell_module.routes';
+import { proxmoxModuleRoutes } from './modules/proxmox_module/proxmox_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -95,7 +97,9 @@ const moduleRoutes: Routes = [
     ...slackModuleRoutes,
     ...designModuleRoutes,
     ...mattermostModuleRoutes,
-    ...servicenowModuleRoutes
+    ...servicenowModuleRoutes,
+    ...dellModuleRoutes,
+    ...proxmoxModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
@@ -732,6 +736,22 @@ const coreRoutes: Routes = [{
 }, {
     path: 'organizationalcharts/browserView',
     loadComponent: () => import('./pages/organizationalcharts/organizational-charts-browser-view/organizational-charts-browser-view.component').then(m => m.OrganizationalChartsBrowserViewComponent)
+}, {
+    path: 'statuspagegroups/add',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-add-step-one/statuspagegroups-add-step-one.component').then(m => m.StatuspagegroupsAddStepOneComponent)
+}, {
+    path: 'statuspagegroups/edit/:id',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-edit-step-one/statuspagegroups-edit-step-one.component').then(m => m.StatuspagegroupsEditStepOneComponent)
+}, {
+    path: 'statuspagegroups/editStepTwo/:id',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-edit-step-two/statuspagegroups-edit-step-two.component').then(m => m.StatuspagegroupsEditStepTwoComponent)
+}, {
+    path: 'statuspagegroups/view/:id',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-view/statuspagegroups-view.component').then(m => m.StatuspagegroupsViewComponent)
+}, {
+
+    path: 'statuspagegroups/index',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-index/statuspagegroups-index.component').then(m => m.StatuspagegroupsIndexComponent)
 }, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)

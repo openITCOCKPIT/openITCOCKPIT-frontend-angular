@@ -1,6 +1,7 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { HostObject } from '../hosts/hosts.interface';
 import { ServiceObject } from '../services/services.interface';
+import { getUserDate } from '../../services/timezone.service';
 
 export interface DowntimeObject {
     authorName: string
@@ -79,7 +80,7 @@ export interface HostDowntimesParams {
 }
 
 export function getDefaultHostDowntimesParams(): HostDowntimesParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,
@@ -119,7 +120,7 @@ export interface ServiceDowntimesParams {
 
 
 export function getDefaultServiceDowntimesParams(): ServiceDowntimesParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,

@@ -10,6 +10,7 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
+    InputGroupComponent,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -22,7 +23,7 @@ import { NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -63,7 +64,9 @@ import { HistoryService } from '../../../history.service';
         XsButtonDirective,
         RouterLink,
         SelectComponent,
-        MultiSelectComponent
+        MultiSelectComponent,
+        InputGroupComponent,
+        TranslocoPipe
     ],
     templateUrl: './hostgroups-add.component.html',
     styleUrl: './hostgroups-add.component.css',
@@ -84,6 +87,8 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
     private preselectedHostIds: number[] = [];
     protected containers: SelectKeyValue[] = [];
     protected hosttemplates: SelectKeyValue[] = [];
+    public tagsForSelect: string[] = [];
+
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private cdr = inject(ChangeDetectorRef);
@@ -109,8 +114,8 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public addHostgroup(): void {
-
+    public submit(): void {
+        this.post.tags = this.tagsForSelect.join(',');
         this.subscriptions.add(this.HostgroupsService.addHostgroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
@@ -154,13 +159,15 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
     }
 
     private getDefaultPost(): Hostgroup {
+        this.tagsForSelect = [];
         return {
             container: {
                 name: '',
                 parent_id: 0
             },
-            description: "",
-            hostgroup_url: "",
+            description: '',
+            hostgroup_url: '',
+            tags: '',
             hosts: {
                 _ids: []
             },

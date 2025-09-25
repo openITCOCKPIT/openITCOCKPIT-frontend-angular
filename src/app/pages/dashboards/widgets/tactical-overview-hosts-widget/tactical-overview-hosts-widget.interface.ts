@@ -14,9 +14,13 @@ export interface TacticalOverviewHostsConfig {
     Service: TacticalOverviewServiceConfig
     Hostgroup: {
         _ids: number[]
+        keywords: string
+        not_keywords: string
     }
     Servicegroup: {
         _ids: number[]
+        keywords: string
+        not_keywords: string
     }
 }
 

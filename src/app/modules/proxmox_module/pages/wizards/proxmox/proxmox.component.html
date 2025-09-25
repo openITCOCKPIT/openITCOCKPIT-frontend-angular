@@ -1,0 +1,135 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item">
+                <a [routerLink]="['/', 'wizards', 'index']">
+                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    {{ t('Wizards') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                {{ t('Proxmox') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card>
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Configuration Wizard: Proxmox') }}
+            </h5>
+        </c-card-header>
+        <c-card-body class="p-0">
+            <div class="row m-0 text-center mb-3" style="min-height: 22px;">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Host Information') }}
+                    </span>
+                </div>
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Configure services per Proxmox VM') }}
+                    </span>
+                </div>
+                <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+                    <div class="btn-group btn-group-xs w-100 h-100">
+                        <button type="button" class="btn btn-primary"
+                                [title]="'Back' | transloco"
+                                style="border-radius: 0;"
+                                [fallbackUrl]="['wizards', 'index']"
+                                oitcBackButton>
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-success"
+                                style="border-radius: 0;"
+                                [title]="'Next' | transloco"
+                                (click)="submit()">
+                            {{ t('Next') }}
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </c-card-body>
+        <c-card-body>
+            <fieldset class="padding-bottom-20">
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4>
+                        {{ t('Proxmox Server Settings') }}
+                    </h4>
+                </legend>
+
+                <c-alert color="info">
+                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                    <strong>
+                        {{ t('Notice') }}:
+                    </strong>
+                    {{ t('Proxmox Hostname has to be identical with Hostname in openITCOCKPIT') }}
+                </c-alert>
+
+                <div class="mb-3">
+                    <label cLabel for="post.pveUsername">
+                        {{ t('PVE Username') }}
+                    </label>
+                    <input cFormControl
+                           id="post.pveUsername"
+                           type="text"
+                           name="post.pveUsername"
+                           oitcFormError [errors]="errors" errorField="pveUsername"
+                           [(ngModel)]="post.pveUsername">
+                    <oitc-form-feedback [errors]="errors" errorField="pveUsername"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.pveApiTokenName">
+                        {{ t('PVE API Tokenname') }}
+                    </label>
+                    <input cFormControl
+                           id="post.pveApiTokenName"
+                           type="text"
+                           name="post.pveApiTokenName"
+                           oitcFormError [errors]="errors" errorField="pveApiTokenName"
+                           [(ngModel)]="post.pveApiTokenName">
+                    <oitc-form-feedback [errors]="errors" errorField="pveApiTokenName"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.pveApiTokenSecret">
+                        {{ t('PVE API Tokensecret') }}
+                    </label>
+                    <input cFormControl
+                           id="post.pveApiTokenSecret"
+                           type="password"
+                           name="post.pveApiTokenSecret"
+                           oitcFormError [errors]="errors" errorField="pveApiTokenSecret"
+                           [(ngModel)]="post.pveApiTokenSecret">
+                    <oitc-form-feedback [errors]="errors" errorField="pveApiTokenSecret"></oitc-form-feedback>
+                </div>
+
+            </fieldset>
+
+            <oitc-wizards-dynamicfields
+                [(post)]="post.services"
+                [errors]="errors"
+                [titleErrorField]="'services'"
+                [title]="'Proxmox VM services'|transloco"
+            />
+
+
+        </c-card-body>
+    </c-card>
+
+</ng-container>
