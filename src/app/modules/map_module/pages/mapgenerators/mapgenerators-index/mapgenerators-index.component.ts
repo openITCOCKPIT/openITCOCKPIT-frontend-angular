@@ -58,6 +58,7 @@ import {
     MapgeneratorsIndexRoot
 } from '../mapgenerators.interface';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'oitc-mapgenerators-index',
@@ -104,7 +105,8 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
         TrueFalseDirective,
         BadgeComponent,
         FaStackComponent,
-        FaStackItemSizeDirective
+        FaStackItemSizeDirective,
+        AsyncPipe
     ],
     templateUrl: './mapgenerators-index.component.html',
     styleUrl: './mapgenerators-index.component.css',

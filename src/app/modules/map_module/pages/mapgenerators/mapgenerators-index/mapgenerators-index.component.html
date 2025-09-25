@@ -187,13 +187,16 @@
 
                                 </td>
                                 <td class="word-break">
-                                    <a *oitcPermission="['mapmodule','mapgenerators', 'generate']"
-                                       [routerLink]="['/', 'map_module', 'mapgenerators', 'generate', mapgenerator.id]">
-                                        {{ mapgenerator.name }}
-                                    </a>
-                                    <span *oitcPermission="['mapmodule','mapgenerators', 'generate']; negate: true">
-                                        {{ mapgenerator.name }}
-                                    </span>
+                                    @if (( this.PermissionsService.hasPermissionObservable(['mapmodule', 'maps', 'add'])|async ) && ( this.PermissionsService.hasPermissionObservable(['mapmodule', 'maps', 'edit'])|async )
+                                    && ( this.PermissionsService.hasPermissionObservable(['mapmodule', 'mapgenerators', 'generate'])|async )) {
+                                        <a [routerLink]="['/', 'map_module', 'mapgenerators', 'generate', mapgenerator.id]">
+                                            {{ mapgenerator.name }}
+                                        </a>
+                                    } @else {
+                                        <span>
+                                            {{ mapgenerator.name }}
+                                        </span>
+                                    }
                                     @if (mapgenerator.maps && mapgenerator.maps.length > 0) {
                                         <a *oitcPermission="['mapmodule','maps', 'index']"
                                            [routerLink]="['/', 'map_module', 'maps', 'index']"
@@ -219,19 +222,22 @@
                                             <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                             {{ t('Edit') }}
                                         </oitc-actions-button-element>
-                                        <li cDropdownDivider
-                                            *oitcPermission="['MapModule', 'mapgenerators', 'generate']"></li>
-                                        <oitc-actions-button-element [permission]="'mapmodule.mapgenerators.generate'"
-                                                                     [url]="'/map_module/mapgenerators/generate/' + mapgenerator.id">
-                                            <fa-stack>
-                                                <fa-icon [icon]="['fas', 'layer-group']"
-                                                         stackItemSize="1x"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'plus']" class="text-success"
-                                                         stackItemSize="1x"
-                                                         transform="shrink-8 right-3 down-7"></fa-icon>
-                                            </fa-stack>
-                                            {{ t('Generate') }}
-                                        </oitc-actions-button-element>
+                                        @if (( this.PermissionsService.hasPermissionObservable(['mapmodule', 'maps', 'add'])|async ) && ( this.PermissionsService.hasPermissionObservable(['mapmodule', 'maps', 'edit'])|async )) {
+                                            <li cDropdownDivider
+                                                *oitcPermission="['MapModule', 'mapgenerators', 'generate']"></li>
+                                            <oitc-actions-button-element
+                                                [permission]="'mapmodule.mapgenerators.generate'"
+                                                [url]="'/map_module/mapgenerators/generate/' + mapgenerator.id">
+                                                <fa-stack>
+                                                    <fa-icon [icon]="['fas', 'layer-group']"
+                                                             stackItemSize="1x"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'plus']" class="text-success"
+                                                             stackItemSize="1x"
+                                                             transform="shrink-8 right-3 down-7"></fa-icon>
+                                                </fa-stack>
+                                                {{ t('Generate') }}
+                                            </oitc-actions-button-element>
+                                        }
                                         <li cDropdownDivider
                                             *oitcPermission="['MapModule', 'mapgenerators', 'delete']"></li>
                                         <oitc-actions-button-element (click)="toggleDeleteAllModal(mapgenerator)"
