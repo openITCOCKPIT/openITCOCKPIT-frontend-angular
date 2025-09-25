@@ -56,46 +56,11 @@
                         optionValue="key"
                         optionLabel="value"
                         [(ngModel)]="post.Mapgenerator.type"
+                        (onChange)="onTypeChange()"
                         [options]="types"
                         oitcFormError [errors]="errors" errorField="type">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="type"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="mapgenerator_container">
-                        {{ t('Container') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-
-                    <oitc-multi-select
-                        name="mapgenerator_container"
-                        id="mapgenerator_container"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.Mapgenerator.containers._ids"
-                        [options]="containers"
-                        [debounce]="true"
-                        oitcFormError [errors]="errors" errorField="containers">
-                    </oitc-multi-select>
-                    @if (post.Mapgenerator.containers._ids.length === 0) {
-                        <div class="text-warning-glow pt-1">
-                            {{ t('Please select a container.') }}
-                        </div>
-                    }
-                    <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
-                    @if (this.post.Mapgenerator.type === MapgeneratorTypes.GENERATE_BY_CONTAINER_STRUCTURE) {
-                        <div class="col-12 help-block text-info">
-                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                            {{ t('The specified containers must appear in the container hierarchy of the host so that the host is taken into account during generation.') }}
-                        </div>
-                    }
-                    @if (this.post.Mapgenerator.type === MapgeneratorTypes.GENERATE_BY_HOSTNAME_SPLITTING) {
-                        <div class="col-12 help-block text-info">
-                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                            {{ t('The specified containers must appear in the container level (specified below) of the host name so that the host is taken into account during generation.') }}
-                        </div>
-                    }
                 </div>
 
                 <div class="mb-3">
@@ -126,43 +91,35 @@
                     <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                 </div>
 
-                <div class="mt-4">
-                    <h5>
-                        {{ t('Generator Configuration:') }}
-                    </h5>
-                </div>
-                <hr class="border-dashed">
+                @if (post.Mapgenerator.type === MapgeneratorTypes.GENERATE_BY_CONTAINER_STRUCTURE) {
+                    <div class="mb-3">
+                        <label cLabel for="mapgenerator_container">
+                            {{ t('Container') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
 
-                <div class="mb-3">
-                    <label cLabel for="mapgenerator_interval">
-                        {{ t('Map refresh interval') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl
-                           id="mapgenerator_interval"
-                           type="number"
-                           name="mapgenerator_interval"
-                           min="5"
-                           max="180"
-                           [(ngModel)]="post.Mapgenerator.map_refresh_interval"
-                           oitcFormError [errors]="errors" errorField="map_refresh_interval">
-                    <oitc-form-feedback [errors]="errors" errorField="map_refresh_interval"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="mapgenerator_items_per_line">
-                        {{ t('Items per line') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl
-                           id="mapgenerator_items_per_line"
-                           type="number"
-                           name="mapgenerator_items_per_line"
-                           min="5"
-                           [(ngModel)]="post.Mapgenerator.items_per_line"
-                           oitcFormError [errors]="errors" errorField="items_per_line">
-                    <oitc-form-feedback [errors]="errors" errorField="items_per_line"></oitc-form-feedback>
-                </div>
+                        <oitc-multi-select
+                            name="mapgenerator_container"
+                            id="mapgenerator_container"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.Mapgenerator.containers._ids"
+                            [options]="containers"
+                            [debounce]="true"
+                            oitcFormError [errors]="errors" errorField="containers">
+                        </oitc-multi-select>
+                        @if (post.Mapgenerator.containers._ids.length === 0) {
+                            <div class="text-warning-glow pt-1">
+                                {{ t('Please select a container.') }}
+                            </div>
+                        }
+                        <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
+                        <div class="col-12 help-block text-info">
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('The specified containers must appear in the container hierarchy of the host so that the host is taken into account during generation.') }}
+                        </div>
+                    </div>
+                }
 
                 @if (this.post.Mapgenerator.type === MapgeneratorTypes.GENERATE_BY_HOSTNAME_SPLITTING) {
 
@@ -219,8 +176,6 @@
                                            name="level_divider_{{i}}"
                                            required
                                            type="text"
-                                           size="5"
-                                           maxlength="5"
                                            [disabled]="last"
                                            [placeholder]="dividerPlaceholder"
                                            [ngClass]="{'border-color-error': getMapgeneratorLevelErrors(level.index, 'validate_levels','divider').length > 0 || getMapgeneratorLevelErrors(level.index, 'mapgenerator_levels','divider').length > 0}"
@@ -291,11 +246,48 @@
                                             errorField="validate_levels_is_container"></oitc-form-feedback>
                         <div class="col-12 help-block text-info">
                             <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                            {{ t('The specified level must correspond to a container to which you also have rights so that the host is taken into account.') }}
+                            {{ t('The specified level must correspond to the tenant container of the host to which you also have rights so that the host is taken into account.') }}
                         </div>
                     </div>
 
                 }
+
+                <div class="mt-4">
+                    <h5>
+                        {{ t('Generator Configuration:') }}
+                    </h5>
+                </div>
+                <hr class="border-dashed">
+
+                <div class="mb-3">
+                    <label cLabel for="mapgenerator_interval">
+                        {{ t('Map refresh interval') }}
+                    </label>
+                    <input cFormControl
+                           id="mapgenerator_interval"
+                           type="number"
+                           name="mapgenerator_interval"
+                           min="5"
+                           max="180"
+                           [(ngModel)]="post.Mapgenerator.map_refresh_interval"
+                           oitcFormError [errors]="errors" errorField="map_refresh_interval">
+                    <oitc-form-feedback [errors]="errors" errorField="map_refresh_interval"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="mapgenerator_items_per_line">
+                        {{ t('Items per line') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           id="mapgenerator_items_per_line"
+                           type="number"
+                           name="mapgenerator_items_per_line"
+                           min="5"
+                           [(ngModel)]="post.Mapgenerator.items_per_line"
+                           oitcFormError [errors]="errors" errorField="items_per_line">
+                    <oitc-form-feedback [errors]="errors" errorField="items_per_line"></oitc-form-feedback>
+                </div>
 
             </c-card-body>
             <c-card-footer class="text-end">

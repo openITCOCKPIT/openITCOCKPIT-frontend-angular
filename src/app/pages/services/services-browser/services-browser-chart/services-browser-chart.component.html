@@ -103,15 +103,28 @@
         </c-card-header>
 
         <c-card-body>
+            @if (hasEnoughData && this.currentGraphUnit === 'c'){
+                <c-row>
+                    <c-col [xs]="12">
+                        <c-alert [color]="'info'">
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('Counter value detected. Note: Counters show a positive difference between the previous and current value.') }}
+                        </c-alert>
+                    </c-col>
+                </c-row>
+            }
 
-            <c-row *ngIf="!hasEnoughData">
-                <c-col [xs]="12">
-                    <c-alert [color]="'info'">
-                        <fa-icon [icon]="['fas', 'chart-area']"></fa-icon>
-                        {{ t('Not enough data to display chart.') }}
-                    </c-alert>
-                </c-col>
-            </c-row>
+            @if (!hasEnoughData){
+                <c-row>
+                    <c-col [xs]="12">
+                        <c-alert [color]="'info'">
+                            <fa-icon [icon]="['fas', 'chart-area']"></fa-icon>
+                            {{ t('Not enough data to display chart.') }}
+                        </c-alert>
+                    </c-col>
+                </c-row>
+            }
+
 
             <!-- isLoading animation has an issue on theme switch so for now I disabled it -->
             <div echarts [options]="chartOption"
