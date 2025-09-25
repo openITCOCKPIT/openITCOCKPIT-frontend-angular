@@ -42,7 +42,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -81,8 +81,6 @@ import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outli
         MatSortHeader,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         PermissionDirective,
@@ -128,7 +126,6 @@ export class ResourcegroupsIndexComponent implements OnInit, OnDestroy, IndexPag
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
             let resourcegroupId = params['id'] || params['id'];
-            console.log(resourcegroupId);
             if (resourcegroupId) {
                 this.params['filter[Resourcegroups.id][]'] = [].concat(resourcegroupId); // make sure we always get an array
             }

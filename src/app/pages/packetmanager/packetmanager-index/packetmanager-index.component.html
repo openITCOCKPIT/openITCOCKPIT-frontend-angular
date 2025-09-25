@@ -53,7 +53,7 @@
             <c-row [lg]="3">
 
                 <!-- No update available -->
-                <c-col *ngIf="!data.result.data.newVersion">
+                <c-col *ngIf="!newVersionAvailable">
                     <c-card class="mb-3 mt-3">
                         <c-card-header class="community-bg-header">
                             <c-container>
@@ -68,7 +68,7 @@
                                 <c-row>
                                     <c-col *ngIf="data.result.data.changelog.length > 0"
                                            class="text-white text-end italic">
-                                        {{ data.result.data.changelog[0].Changelog.version }}
+                                        {{ data.OPENITCOCKPIT_VERSION }}
                                     </c-col>
                                 </c-row>
                             </c-container>
@@ -84,7 +84,7 @@
                             </div>
                         </c-card-body>
                         <c-card-footer class="text-end">
-                            <a class="btn btn-default"
+                            <a class="btn btn-default ripple"
                                (click)="openChangeLog()">
                                 <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
                                 {{ t('Changelog') }}
@@ -94,7 +94,7 @@
                 </c-col>
 
                 <!-- update available -->
-                <c-col *ngIf="data.result.data.newVersion && data.result.data.changelog.length > 0">
+                <c-col *ngIf="newVersionAvailable && data.result.data.changelog.length > 0">
                     <c-card class="mb-3 mt-3">
                         <c-card-header class="community-bg-header">
                             <c-container>
@@ -120,16 +120,16 @@
                         <c-card-footer class="text-end">
 
 
-                            <a href="https://openitcockpit.io/2018/01/02/how-to-update-openitcockpit/"
+                            <a href="https://docs.openitcockpit.io/en/update/general/"
                                target="_blank"
-                               class="btn btn-success">
+                               class="btn btn-success ripple">
                                 <span class="btn-label">
                                     <i class="fa fa-rocket"></i>
                                 </span>
                                 {{ t('How to Update') }}
                             </a>
 
-                            <a class="btn btn-default"
+                            <a class="btn btn-default ms-1 ripple"
                                (click)="openChangeLog()">
                                 <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
                                 {{ t('Changelog') }}

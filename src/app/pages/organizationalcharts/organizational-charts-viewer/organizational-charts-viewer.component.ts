@@ -45,7 +45,7 @@ import { OcTreeNode } from '../organizational-charts-editor/organizational-chart
 import { Subscription } from 'rxjs';
 import { OrganizationalChartNodesService } from '../organizationalchartnodes.service';
 import { OrganizationalChartsService } from '../organizationalcharts.service';
-import { Point } from '@foblex/2d';
+import { Point, PointExtensions } from '@foblex/2d';
 import { NgClass } from '@angular/common';
 import { OcNodeViewerComponent } from './oc-node-viewer/oc-node-viewer.component';
 import { OrganizationalchartUserRoles } from '../organizationalcharts.enum';
@@ -90,6 +90,7 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
     public connections = model<OcConnection[]>([]);
 
     public selectedContainerId = input<number>(0);
+    public disable100VH = input<boolean>(false);
 
     public nodes: OcTreeNode[] = [];
 

@@ -2,22 +2,26 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { RouterLink, Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
-    BadgeComponent, ButtonDirective,
+    BadgeComponent,
+    ButtonDirective,
     CalloutComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    DropdownComponent, DropdownItemDirective, DropdownMenuDirective, DropdownToggleDirective,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective, FormTextDirective,
+    FormLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
     RowComponent
@@ -26,12 +30,7 @@ import { FormsModule } from '@angular/forms';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { Subscription } from 'rxjs';
 import { AutoreportsService } from '../autoreports.service';
-import {
-    AutoreportPost,
-    CalendarParams,
-    getDefaultPost,
-    getDefaultCalendarParams
-} from '../autoreports.interface';
+import { AutoreportPost, CalendarParams, getDefaultCalendarParams, getDefaultPost } from '../autoreports.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { formatDate, NgIf } from '@angular/common';
@@ -48,7 +47,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 
 @Component({
-  selector: 'oitc-autoreport-add-step-one',
+    selector: 'oitc-autoreport-add-step-one',
     imports: [
         TranslocoDirective,
         FaIconComponent,
@@ -87,9 +86,9 @@ import { ContainersService } from '../../../../../pages/containers/containers.se
         DebounceDirective,
         MultiSelectComponent,
     ],
-  templateUrl: './autoreport-add-step-one.component.html',
-  styleUrl: './../../../assets/autoreport.css', //'./autoreport-add-step-one.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './autoreport-add-step-one.component.html',
+    styleUrl: './../../../assets/autoreport.css', //'./autoreport-add-step-one.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
 
@@ -110,8 +109,8 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     public users: SelectKeyValue[] = [];
     public post: AutoreportPost = getDefaultPost();
     protected calendarParams: CalendarParams = getDefaultCalendarParams();
-    public setMinAvailability : boolean = false;
-    public setMaxNumberOfOutages : boolean = false;
+    public setMinAvailability: boolean = false;
+    public setMaxNumberOfOutages: boolean = false;
     public evalutionperiods: SelectKeyValueString[] = [
         {key: 'YEAR', value: this.TranslocoService.translate('Year')},
         {key: 'QUARTER', value: this.TranslocoService.translate('Quarter')},
@@ -160,34 +159,34 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     }
 
     public onAvailabilityChange($event: boolean) {
-        if(!$event ) {
+        if (!$event) {
             this.post.Autoreport.min_availability = null;
         }
     }
 
     public onOutageChange($event: boolean) {
-        if(!$event ) {
+        if (!$event) {
             this.post.Autoreport.max_number_of_outages = null;
             this.cdr.markForCheck();
         }
     }
 
     public onHolidayChange($event: any) {
-        if($event === 0 && this.post.Autoreport.calendar_id !== null){
-            this.post.Autoreport.calendar_id = null;
+        if ($event === 0 && this.post.Autoreport.calendar_id !== 0) {
+            this.post.Autoreport.calendar_id = 0;
             this.cdr.markForCheck();
         }
     }
 
     public onStartChange($event: any) {
-        if($event === 0){
+        if ($event === 0) {
             this.post.Autoreport.report_start_date = null;
             this.cdr.markForCheck();
         }
     }
 
     private loadTimeperiods() {
-        if(this.post.Autoreport.container_id === null){
+        if (this.post.Autoreport.container_id === 0) {
             return;
         }
         this.subscriptions.add(this.TimeperiodsService.loadTimeperiodsByContainerId(this.post.Autoreport.container_id).subscribe((result) => {
@@ -197,7 +196,7 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     }
 
     private loadCalendars() {
-        if(this.post.Autoreport.container_id === null){
+        if (this.post.Autoreport.container_id === 0) {
             return;
         }
         this.calendarParams.containerId = this.post.Autoreport.container_id;
@@ -208,7 +207,7 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     }
 
     private loadUsers() {
-        if(this.post.Autoreport.container_id === null){
+        if (this.post.Autoreport.container_id === 0) {
             return;
         }
         this.subscriptions.add(this.UsersService.loadUsersByContainerId(this.post.Autoreport.container_id, this.post.Autoreport.users._ids).subscribe((result) => {
@@ -219,7 +218,7 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
 
     public submitStepOne() {
         this.errors = null;
-        if(this.post.Autoreport.report_start_date !== null){
+        if (this.post.Autoreport.report_start_date !== null) {
             this.post.Autoreport.report_start_date = formatDate(this.post.Autoreport.report_start_date, 'dd.MM.y', 'en-US');
         }
         this.subscriptions.add(this.AutoreportsService.setAddStepOne(this.post).subscribe((result: GenericResponseWrapper): void => {

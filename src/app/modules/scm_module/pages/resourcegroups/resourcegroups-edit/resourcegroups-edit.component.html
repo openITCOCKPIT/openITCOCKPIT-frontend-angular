@@ -60,12 +60,12 @@
                         [(ngModel)]="this.post.container.parent_id"
                         [debounce]="true"
                         (onChange)="onContainerChange()"
-                        oitcFormError [errors]="errors" errorField="container_id">
+                        oitcFormError [errors]="errors" errorField="container.parent_id">
                     </oitc-select>
                     <div *ngIf="!this.post.container.parent_id" class="text-warning-glow pt-1">
                         {{ t('Please select a container.') }}
                     </div>
-                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors" errorField="container.parent_id"></oitc-form-feedback>
                 </div>
                 <div class="mb-3">
                     <label cLabel for="ResourcegroupName">
@@ -87,59 +87,172 @@
                            [(ngModel)]="post.description"
                            oitcFormError [errors]="errors" errorField="description">
                 </div>
-                <div class="mb-3">
-                    <label cLabel for="RegionManagersSelect">
-                        {{ t('Region managers') }}
-                    </label>
-                    <oitc-multi-select
-                        name="RegionManagersSelect"
-                        id="RegionManagersSelect"
-                        optionValue="key"
-                        optionLabel="value"
-                        [appendTo]="''"
-                        [(ngModel)]="post.region_managers._ids"
-                        [options]="region_managers"
-                        oitcFormError [errors]="errors" errorField="region_managers">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors"
-                                        errorField="region_managers"></oitc-form-feedback>
-                </div>
-                <div class="mb-3">
-                    <label cLabel for="ManagersSelect">
-                        {{ t('Managers') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <oitc-multi-select
-                        name="ManagersSelect"
-                        id="ManagersSelect"
-                        optionValue="key"
-                        optionLabel="value"
-                        [appendTo]="''"
-                        [(ngModel)]="post.managers._ids"
-                        [options]="managers"
-                        oitcFormError [errors]="errors" errorField="managers">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors"
-                                        errorField="managers"></oitc-form-feedback>
-                </div>
-                <div class="mb-3">
-                    <label cLabel for="UsersSelect">
-                        {{ t('Users') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <oitc-multi-select
-                        name="UsersSelect"
-                        id="UsersSelect"
-                        optionValue="key"
-                        optionLabel="value"
-                        [appendTo]="''"
-                        [(ngModel)]="post.users._ids"
-                        [options]="users"
-                        oitcFormError [errors]="errors" errorField="users">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors"
-                                        errorField="users"></oitc-form-feedback>
-                </div>
+                <fieldset class="pt-3">
+                    <legend class="fs-md fieldset-legend-border-bottom-thin">
+                        <h5>
+                            {{ t('Region managers') }}
+                        </h5>
+                    </legend>
+                    <div class="mb-1">
+                        <label cLabel for="RegionManagersUserSelect">
+                            {{ t('Users') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText class="bg-primary" [title]="t('Users')">
+                                <fa-icon [icon]="['fas', 'users']" class="text-white"></fa-icon>
+                            </span>
+                            <oitc-multi-select
+                                name="RegionManagersUserSelect"
+                                id="RegionManagersUserSelect"
+                                optionValue="key"
+                                optionLabel="value"
+                                [appendTo]="''"
+                                [(ngModel)]="post.region_managers._ids"
+                                [options]="region_managers"
+                                oitcFormError [errors]="errors" errorField="region_managers"
+                                class="flex-1 rounded-end">
+                            </oitc-multi-select>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="region_managers"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-1">
+                        <label cLabel for="RegionManagersMailinglistSelect">
+                            {{ t('Mailing lists') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText class="bg-primary" [title]="t('Users')">
+                                <fa-icon [icon]="['fas', 'envelopes-bulk']" class="text-white"></fa-icon>
+                            </span>
+                            <oitc-multi-select
+                                name="RegionManagersMailinglistSelect"
+                                id="RegionManagersMailinglistSelect"
+                                optionValue="key"
+                                optionLabel="value"
+                                [appendTo]="''"
+                                [(ngModel)]="post.mailinglists_region_managers._ids"
+                                [options]="mailinglists_region_managers"
+                                oitcFormError [errors]="errors" errorField="mailinglists_region_managers"
+                                class="flex-1 rounded-end">
+                            </oitc-multi-select>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="mailinglists_region_managers"></oitc-form-feedback>
+
+                    </div>
+                </fieldset>
+
+                <fieldset class="pt-3">
+                    <legend class="fs-md fieldset-legend-border-bottom-thin">
+                        <h5>
+                            {{ t('Managers') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </h5>
+                    </legend>
+
+                    <div class="mb-1">
+                        <label cLabel for="ManagersSelect">
+                            {{ t('Users') }}
+
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText class="bg-primary" [title]="t('Users')">
+                                <fa-icon [icon]="['fas', 'users']" class="text-white"></fa-icon>
+                            </span>
+                            <oitc-multi-select
+                                name="ManagersSelect"
+                                id="ManagersSelect"
+                                optionValue="key"
+                                optionLabel="value"
+                                [appendTo]="''"
+                                [(ngModel)]="post.managers._ids"
+                                [options]="managers"
+                                oitcFormError [errors]="errors" errorField="managers"
+                                class="flex-1 rounded-end">
+                            </oitc-multi-select>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="managers"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-1">
+                        <label cLabel for="ManagersMailinglistSelect">
+                            {{ t('Mailing lists') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText class="bg-primary" [title]="t('Mailing lists')">
+                                <fa-icon [icon]="['fas', 'envelopes-bulk']" class="text-white"></fa-icon>
+                            </span>
+                            <oitc-multi-select
+                                name="ManagersMailinglistSelect"
+                                id="ManagersMailinglistSelect"
+                                optionValue="key"
+                                optionLabel="value"
+                                [appendTo]="''"
+                                [(ngModel)]="post.mailinglists_managers._ids"
+                                [options]="mailinglists_managers"
+                                oitcFormError [errors]="errors" errorField="mailinglists_managers"
+                                class="flex-1 rounded-end">
+                            </oitc-multi-select>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="mailinglists_managers"></oitc-form-feedback>
+                    </div>
+                </fieldset>
+
+                <fieldset class="pt-3">
+                    <legend class="fs-md fieldset-legend-border-bottom-thin">
+                        <h5>
+                            {{ t('Users') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </h5>
+                    </legend>
+                    <div class="mb-3">
+                        <label cLabel for="UsersSelect">
+                            {{ t('Users') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText class="bg-primary" [title]="t('Users')">
+                                <fa-icon [icon]="['fas', 'users']" class="text-white"></fa-icon>
+                            </span>
+                            <oitc-multi-select
+                                name="UsersSelect"
+                                id="UsersSelect"
+                                optionValue="key"
+                                optionLabel="value"
+                                [appendTo]="''"
+                                [(ngModel)]="post.users._ids"
+                                [options]="users"
+                                oitcFormError [errors]="errors" errorField="users"
+                                class="flex-1 rounded-end">
+                            </oitc-multi-select>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="users"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="UsersMailinglistSelect">
+                            {{ t('Mailing lists') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText class="bg-primary" [title]="t('Users')">
+                                <fa-icon [icon]="['fas', 'envelopes-bulk']" class="text-white"></fa-icon>
+                            </span>
+                            <oitc-multi-select
+                                name="UsersMailinglistSelect"
+                                id="UsersMailinglistSelect"
+                                optionValue="key"
+                                optionLabel="value"
+                                [appendTo]="''"
+                                [(ngModel)]="post.mailinglists_users._ids"
+                                [options]="mailinglists_users"
+                                oitcFormError [errors]="errors" errorField="mailinglists_users"
+                                class="flex-1 rounded-end">
+                            </oitc-multi-select>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="mailinglists_users"></oitc-form-feedback>
+                    </div>
+                </fieldset>
             </c-card-body>
             <c-card-footer class="text-end">
 

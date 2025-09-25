@@ -5,16 +5,13 @@ import { HoststatusObject } from '../hosts/hosts.interface';
 
 /** INDEX PARAMS **/
 export interface HostgroupsIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
     page: number,
-    direction: 'asc' | 'desc' | '', // asc or desc
-    'filter[Hostgroups.id][]': number[],
-    'filter[Hostgroups.description]': string,
-    'filter[Containers.name]': string,
+    direction: 'asc' | 'desc' | ''
 }
+
 
 export function getDefaultHostgroupsIndexParams(): HostgroupsIndexParams {
     return {
@@ -22,10 +19,25 @@ export function getDefaultHostgroupsIndexParams(): HostgroupsIndexParams {
         scroll: true,
         sort: 'Containers.name',
         page: 1,
-        direction: 'asc',
-        'filter[Hostgroups.id][]': [],
-        'filter[Hostgroups.description]': "",
-        'filter[Containers.name]': ""
+        direction: 'asc'
+    }
+}
+
+export interface HostgroupsIndexFilter {
+    'Hostgroups.id': number[]
+    'Containers.name': string
+    'Hostgroups.description': string
+    'Hostgroups.keywords': string[]
+    'Hostgroups.not_keywords': string[]
+}
+
+export function getDefaultHostgroupsIndexFilter(): HostgroupsIndexFilter {
+    return {
+        'Hostgroups.id': [],
+        'Containers.name': '',
+        'Hostgroups.description': '',
+        'Hostgroups.keywords': [],
+        'Hostgroups.not_keywords': []
     }
 }
 
@@ -169,6 +181,7 @@ export interface Hostgroup {
     }
     description: string
     hostgroup_url: string
+    tags: string
     hosts: {
         _ids: number[]
     }

@@ -1,0 +1,381 @@
+<ng-container *transloco="let t">
+
+    @if (!StatupagegroupViewRootResponse) {
+        <oitc-block-loader [height]="'25rem'"></oitc-block-loader>
+    }
+
+    @if (StatupagegroupViewRootResponse) {
+        <c-row>
+            <c-col [xs]="12">
+                <c-card class="mb-3">
+                    <c-row class="px-2">
+                        <c-col [xs]="12" [md]="5" [lg]="2" class="py-2">
+                            <div
+                                [cTooltip]="StatupagegroupViewRootResponse.cumulatedStategroupState | statuspageStatus"
+                                cTooltipPlacement="top"
+                                class="h-100 w-100 d-inline-block rounded text-white mb-g d-flex align-items-center justify-content-center"
+                                [ngClass]="{'bg-primary': StatupagegroupViewRootResponse.cumulatedStategroupState === CumulatedStatuspagegroupStatus.NOT_IN_MONITORING,
+                            'bg-up':StatupagegroupViewRootResponse.cumulatedStategroupState === CumulatedStatuspagegroupStatus.OPERATIONAL,
+                            'bg-warning':StatupagegroupViewRootResponse.cumulatedStategroupState === CumulatedStatuspagegroupStatus.PERFORMANCE_ISSUES,
+                            'bg-down':StatupagegroupViewRootResponse.cumulatedStategroupState === CumulatedStatuspagegroupStatus.MAJOR_OUTAGE,
+                            'bg-unknown':StatupagegroupViewRootResponse.cumulatedStategroupState === CumulatedStatuspagegroupStatus.UNKNOWN}">
+                                <fa-icon [icon]="['fas', 'heartbeat']" size="5x"
+                                         class="float-start h2 opacity-25"></fa-icon>
+                            </div>
+                        </c-col>
+                        <c-card-body cCol [md]="7" [lg]="10" class="pb-0">
+                            <h3 cCardTitle>
+                                {{ StatupagegroupViewRootResponse.statuspagegroup.name }}
+                            </h3>
+                            <div>
+                                {{ StatupagegroupViewRootResponse.statuspagegroup.description }}
+                            </div>
+                            <c-row class="mt-3">
+                                @if (StatupagegroupViewRootResponse.statuspagegroup.additional_information) {
+                                    <c-col [xs]="12" [md]="12" [lg]="12" [order]="{lg:'last', md: 'first'}">
+                                        <div
+                                            class="d-inline-flex border border-secondary border-opacity-25 p-2 rounded my-2 w-100">
+                                            <div class="word-break"
+                                                 [innerHTML]="html | trustAsHtml "></div>
+                                        </div>
+                                    </c-col>
+                                }
+                                <c-col [xs]="12" [md]="6" [lg]="6" class="my-2">
+                                    <div
+                                        class="d-inline-flex border border-secondary border-opacity-25 p-2 rounded my-2 w-100 h-100">
+                                        <div class="w-25">
+                                            <h4>
+                                                <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                                {{ StatupagegroupViewRootResponse.totalHosts | localNumber }}
+                                            </h4>
+                                            <small class="text-medium-emphasis">
+                                                {{ t('Total hosts monitored') }}
+                                            </small>
+                                        </div>
+                                        <div class="nav-item py-1">
+                                            <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
+                                        </div>
+                                        <div class="flex align-text-bottom"
+                                             [ngClass]="{'text-primary': StatupagegroupViewRootResponse.worstHostState === CumulatedStatuspagegroupStatus.NOT_IN_MONITORING,
+                                                        'text-success': StatupagegroupViewRootResponse.worstHostState === CumulatedStatuspagegroupStatus.OPERATIONAL,
+                                                        'text-warning': StatupagegroupViewRootResponse.worstHostState === CumulatedStatuspagegroupStatus.PERFORMANCE_ISSUES,
+                                                        'text-danger': StatupagegroupViewRootResponse.worstHostState === CumulatedStatuspagegroupStatus.MAJOR_OUTAGE,
+                                                        'text-secondary': StatupagegroupViewRootResponse.worstHostState === CumulatedStatuspagegroupStatus.UNKNOWN}">
+                                            @if (StatupagegroupViewRootResponse.worstHostState <= CumulatedStatuspagegroupStatus.OPERATIONAL) {
+                                                <!-- A Host will never have PERFORMANCE_ISSUES but we keep it to have the same logic as for services -->
+                                                {{ t('No problems detected') }}
+                                            } @else {
+                                                {{ t('Problems detected:') }}
+                                                {{ StatupagegroupViewRootResponse.worstHostState | statuspageStatus }}
+                                            }
+                                        </div>
+                                    </div>
+
+                                </c-col>
+                                <c-col [xs]="12" [md]="6" [lg]="6" class="my-2">
+                                    <div
+                                        class="d-inline-flex border border-secondary border-opacity-25 p-2 rounded my-2 w-100 h-100">
+                                        <div class="w-25">
+                                            <h4>
+                                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                {{ StatupagegroupViewRootResponse.totalServices | localNumber }}
+                                            </h4>
+                                            <small class="text-medium-emphasis">
+                                                {{ t('Total services monitored') }}
+                                            </small>
+                                        </div>
+                                        <div class="nav-item py-1">
+                                            <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
+                                        </div>
+                                        <div class="align-bottom text-success">
+                                            <div class="flex align-text-bottom"
+                                                 [ngClass]="{'text-primary': StatupagegroupViewRootResponse.worstServiceState === CumulatedStatuspagegroupStatus.NOT_IN_MONITORING,
+                                                        'text-success': StatupagegroupViewRootResponse.worstServiceState === CumulatedStatuspagegroupStatus.OPERATIONAL,
+                                                        'text-warning': StatupagegroupViewRootResponse.worstServiceState === CumulatedStatuspagegroupStatus.PERFORMANCE_ISSUES,
+                                                        'text-danger': StatupagegroupViewRootResponse.worstServiceState === CumulatedStatuspagegroupStatus.MAJOR_OUTAGE,
+                                                        'text-secondary': StatupagegroupViewRootResponse.worstServiceState === CumulatedStatuspagegroupStatus.UNKNOWN}">
+                                                @if (StatupagegroupViewRootResponse.worstServiceState <= CumulatedStatuspagegroupStatus.OPERATIONAL) {
+                                                    {{ t('No problems detected') }}
+                                                } @else {
+                                                    {{ t('Problems detected:') }}
+                                                    {{ StatupagegroupViewRootResponse.worstServiceState | statuspageStatus }}
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c-col>
+                            </c-row>
+
+                            @if (StatupagegroupViewRootResponse.statuspagegroup.show_ticker) {
+                                <c-row class="mt-3">
+                                    @if (StatupagegroupViewRootResponse.problems.length > 0) {
+                                        <c-col [xs]="12" [md]="3" [lg]="1">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                                         [cTextColor]="'danger'"></fa-icon>
+                                                {{ t('Problems') }}
+                                            </h6>
+                                        </c-col>
+                                    } @else {
+                                        <c-col [xs]="12">
+                                            <h6>
+                                                <fa-icon [icon]="['fas', 'check-circle']"
+                                                         [cTextColor]="'success'"></fa-icon>
+                                                {{ t('No problems detected') }}
+                                            </h6>
+                                        </c-col>
+                                    }
+
+                                    <c-col [xs]="12" [md]="9" [lg]="11" class="display-inline-flex">
+                                        <oitc-statuspagegroups-marquee
+                                            [problems]="StatupagegroupViewRootResponse.problems"></oitc-statuspagegroups-marquee>
+                                    </c-col>
+                                </c-row>
+                            }
+                        </c-card-body>
+                    </c-row>
+                </c-card>
+            </c-col>
+        </c-row>
+
+        <c-col md="12">
+            <c-card>
+                <c-card-header>
+                    <h5 cCardTitle>{{ t('Status') }}
+                        <small class="fw-300">
+                            {{ t('overview') }}
+                        </small>
+                    </h5>
+                    <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                        <c-nav class="card-toolbar card-header-pills">
+                            <c-nav-item class="px-1">
+                                <button cButton class="ripple" color="default" size="xs"
+                                        (click)="loadStatuspagegroup()">
+                                    <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                                    {{ t('Refresh') }}
+                                </button>
+                            </c-nav-item>
+                        </c-nav>
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
+                    <c-card class="mb-3">
+                        <c-row class="px-2">
+                            <c-col [xs]="12" class="py-2">
+
+                                <table cTable [striped]="true" stripedColumns bordered class="my-2">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" class="align-middle">
+                                            {{ t('Collection') }}
+                                        </th>
+
+                                        @for (
+                                            category of StatupagegroupViewRootResponse.statuspagegroup.statuspagegroup_categories; track $index) {
+                                            <th scope="col">
+                                                <oitc-statuspage-icon-simple
+                                                    class="me-1"
+                                                    [cumulatedState]="Number(category.cumulatedCategoryState)">
+                                                </oitc-statuspage-icon-simple>
+                                                {{ category.name }}
+                                            </th>
+                                        }
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (
+                                            collection of StatupagegroupViewRootResponse.statuspagegroup.statuspagegroup_collections; track $index; let
+                                            collectionIndex = $index) {
+                                            <tr>
+                                                <th class="col-2">
+                                                    <oitc-statuspage-icon-simple
+                                                        class="me-1"
+                                                        [cumulatedState]="Number(collection.cumulatedCollectionState)">
+                                                    </oitc-statuspage-icon-simple>
+                                                    {{ collection.name }}
+                                                </th>
+
+                                                @for (
+                                                    category of StatupagegroupViewRootResponse.statuspagegroup.statuspagegroup_categories; track $index; let
+                                                    categoryIndex = $index) {
+
+                                                    @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_statuspages > 0) {
+                                                        <td
+                                                            [ngClass]="{'inner-border-not-in-monitoring': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.NOT_IN_MONITORING,
+                                                        'inner-border-up': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.OPERATIONAL,
+                                                        'inner-border-warning': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.PERFORMANCE_ISSUES,
+                                                        'inner-border-down': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.MAJOR_OUTAGE,
+                                                        'inner-border-unknown': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.UNKNOWN}">
+                                                            {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState | statuspageStatus }}
+                                                            @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex]) {
+                                                                @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.PERFORMANCE_ISSUES) {
+                                                                    <oitc-badge-outline [color]="'warning'">
+                                                                        {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_warning }}
+                                                                    </oitc-badge-outline>
+                                                                }
+                                                                @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.MAJOR_OUTAGE) {
+                                                                    <oitc-badge-outline [color]="'danger'">
+                                                                        {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_critical }}
+                                                                    </oitc-badge-outline>
+                                                                }
+                                                                @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.UNKNOWN) {
+                                                                    <oitc-badge-outline [color]="'secondary'">
+                                                                        {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_unknown }}
+                                                                    </oitc-badge-outline>
+                                                                }
+                                                                @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.NOT_IN_MONITORING && StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_not_monitored > 0) {
+                                                                    <oitc-badge-outline [color]="'primary'">
+                                                                        {{ StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_not_monitored }}
+                                                                    </oitc-badge-outline>
+                                                                }
+                                                            }
+                                                        </td>
+                                                    } @else {
+                                                        <!-- No status pages in this collection/category -->
+                                                        <td></td>
+                                                    }
+                                                }
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </c-col>
+                        </c-row>
+                    </c-card>
+
+                    @if (StatupagegroupViewRootResponse.problems.length > 0) {
+                        <c-card class="mb-3">
+                            <c-row class="px-2">
+                                <c-col [md]="12" class="py-2">
+                                    <table [striped]="true" cTable bordered class="my-2">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" [style.width.px]="90">
+                                                {{ t('Status') }}
+                                            </th>
+                                            <th scope="col">
+                                                {{ t('Collection') }}
+                                            </th>
+                                            <th scope="col">
+                                                {{ t('Category') }}
+                                            </th>
+                                            <th scope="col" class="col-4">
+                                                {{ t('Status page') }}
+                                            </th>
+                                            <th scope="col" class="d-none d-md-table-cell">
+                                                {{ t('Cumulated state') }}
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                <!-- Warning -->
+                                                <input cFormCheckInput id="statuspage_status_warning" type="checkbox"
+                                                       class="checkbox-lg checkbox-warning border border-warning me-1"
+                                                       [(ngModel)]="filter.state_1"
+                                                       (change)="applyFilter()"/>
+
+                                                <!-- Critical -->
+                                                <input cFormCheckInput id="statuspage_status_critical" type="checkbox"
+                                                       class="checkbox-lg checkbox-danger border border-danger me-1"
+                                                       [(ngModel)]="filter.state_2"
+                                                       (change)="applyFilter()"/>
+
+                                                <!-- Unknown -->
+                                                <input cFormCheckInput id="statuspage_status_unknown" type="checkbox"
+                                                       class="checkbox-lg checkbox-secondary border border-secondary me-1"
+                                                       [(ngModel)]="filter.state_3"
+                                                       (change)="applyFilter()"/>
+                                            </th>
+                                            <th>
+                                                <c-input-group>
+                                                    <span cInputGroupText id="collection" class="d-none d-md-block">
+                                                        <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
+                                                    </span>
+                                                    <input aria-describedby="collection"
+                                                           aria-label="collection"
+                                                           cFormControl
+                                                           [placeholder]="'Filter by collection' | transloco"
+                                                           [(ngModel)]="filter.collection"
+                                                           (ngModelChange)="applyFilter()"
+                                                    />
+                                                </c-input-group>
+                                            </th>
+                                            <th>
+                                                <c-input-group>
+                                                    <span cInputGroupText id="category" class="d-none d-md-block">
+                                                        <fa-icon [icon]="['fas', 'box-open']"></fa-icon>
+                                                    </span>
+                                                    <input aria-describedby="category"
+                                                           aria-label="category"
+                                                           cFormControl
+                                                           [placeholder]="'Filter by category' | transloco"
+                                                           [(ngModel)]="filter.category"
+                                                           (ngModelChange)="applyFilter()"
+                                                    />
+                                                </c-input-group>
+                                            </th>
+                                            <th>
+                                                <c-input-group>
+                                                    <span cInputGroupText id="statuspage" class="d-none d-md-block">
+                                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                                    </span>
+                                                    <input aria-describedby="statuspage"
+                                                           aria-label="statuspage"
+                                                           cFormControl
+                                                           [placeholder]="'Filter by status page' | transloco"
+                                                           [(ngModel)]="filter.statuspage_name"
+                                                           (ngModelChange)="applyFilter()"
+                                                    />
+                                                </c-input-group>
+                                            </th>
+                                            <th class="d-none d-md-table-cell">
+                                                <!-- empty -->
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (problem of problemsFilered; track $index) {
+                                                <tr>
+                                                    <td class="text-center">
+                                                        <oitc-statuspage-icon-simple
+                                                            [cumulatedState]="problem.cumulatedState"
+                                                        ></oitc-statuspage-icon-simple>
+                                                    </td>
+                                                    <td>
+                                                        {{ problem.collection.name }}
+                                                    </td>
+                                                    <td>
+                                                        {{ problem.category.name }}
+
+                                                    </td>
+                                                    <td>
+                                                        @if (this.PermissionsService.hasPermissionObservable(['statuspages', 'view'])|async) {
+                                                            <a [routerLink]="['/', 'statuspages', 'view', problem.statuspage.statuspage.id]">
+                                                                {{ problem.statuspage.statuspage.name }}
+                                                            </a>
+                                                        } @else {
+                                                            {{ problem.statuspage.statuspage.name }}
+                                                        }
+                                                    </td>
+                                                    <td class="d-none d-md-table-cell">
+                                                        {{ problem.cumulatedState | statuspageStatus }}
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot></tfoot>
+                                    </table>
+                                    @if (StatupagegroupViewRootResponse.problems.length === 0) {
+                                        <oitc-no-records></oitc-no-records>
+                                    }
+                                </c-col>
+                            </c-row>
+                        </c-card>
+                    }
+                </c-card-body>
+            </c-card>
+        </c-col>
+    }
+
+</ng-container>

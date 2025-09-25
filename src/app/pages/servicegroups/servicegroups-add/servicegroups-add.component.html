@@ -20,7 +20,7 @@
     </nav>
 
 
-    <form cForm (ngSubmit)="addServicegroup()">
+    <form cForm (ngSubmit)="submit()">
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>
@@ -101,6 +101,32 @@
                            oitcFormError [errors]="errors" errorField="servicegroup_url"
                            [(ngModel)]="post.servicegroup_url">
                     <oitc-form-feedback [errors]="errors" errorField="servicegroup_url"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="ServicegroupTags">
+                        {{ t('Tags') }}
+                    </label>
+
+                    <c-input-group>
+                        <ng-select
+                            id="ServicegroupTags"
+                            name="ServicegroupTags"
+                            [items]="[]"
+                            [(ngModel)]="tagsForSelect"
+                            [addTag]="true"
+                            [multiple]="true"
+                            [selectOnTab]="true"
+                            [placeholder]="'Add tags'|transloco"
+                            [isOpen]="false"
+                            oitcFormError [errors]="errors" errorField="tags">
+                        </ng-select>
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="tags"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Press return to separate tags') }}
+                    </div>
                 </div>
 
                 <div class="mb-3">

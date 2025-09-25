@@ -111,6 +111,7 @@
                                             <oitc-colour-locator-picker
                                                 [selector]="manipulator.selector"
                                                 [attribute]="manipulator.attribute"
+                                                [name]="manipulator.name"
                                                 [value]="getManipulatorValue(manipulator.name)"
                                                 (valueChange)="setManipulatorValue(manipulator.name, $event)"
                                                 [title]="manipulator.title | transloco"/>

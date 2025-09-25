@@ -66,7 +66,7 @@
                     </button>
                 </c-nav-item>
 
-                @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'elements', 'service_configuration']) |async )) {
+                @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'ServicenowSettings', 'servicespecific']) |async )) {
                     <c-nav-item>
                         <button
                             class="nav-link"
@@ -1282,7 +1282,7 @@
 
             <!-- ServiceNow Module start -->
             <div *ngIf="selectedTab == ServiceBrowserTabs.ServiceNow">
-                @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'elements', 'service_configuration'])|async )) {
+                @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'ServicenowSettings', 'servicespecific'])|async )) {
                     <oitc-servicenow-service-browser-tab
                         *ngIf="result && result.mergedService"
                         [serviceUuid]="String(result.mergedService.uuid)"
