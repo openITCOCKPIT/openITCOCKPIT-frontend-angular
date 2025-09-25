@@ -123,6 +123,24 @@
                                     [(ngModel)]="post.json_data[formField['ngModel']]">
                                 </oitc-dynamical-form-fields>
                             </div>
+
+                            @if (post.system_type === ExternalMonitoringSystems.FlowChief) {
+                                <c-row
+                                    *oitcPermission="['ImportModule', 'ExternalMonitorings', 'flowchiefNodeSelection']">
+                                    <c-col class="mb-3">
+                                        <c-alert color="info" class="d-flex align-items-center">
+                                            <fa-icon [icon]="['fas', 'folder-tree']" class="me-2"></fa-icon>
+                                            <div>
+                                                {{ t('FlowChief Nodes from the Plantexplorer can be assigend') }}
+                                                <a [routerLink]="['/', 'import_module', 'ExternalMonitorings', 'flowchiefNodeSelection', post.id]">
+                                                    {{ t('here') }}.
+                                                </a>
+                                            </div>
+                                        </c-alert>
+                                    </c-col>
+                                </c-row>
+                            }
+
                         }
                     </fieldset>
                 </c-container>

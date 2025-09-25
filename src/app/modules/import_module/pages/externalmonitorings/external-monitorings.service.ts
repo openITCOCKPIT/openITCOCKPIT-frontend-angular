@@ -1,16 +1,18 @@
 import { inject, Injectable } from '@angular/core';
 import {
     ExternalMonitoringConfig,
-    ExternalMonitoringGet,
     ExternalMonitoringPost,
     ExternalMonitoringsIndexParams,
-    ExternalMonitoringsIndexRoot
+    ExternalMonitoringsIndexRoot,
+    ExternalMonitoringWithFlowchiefNodesMembershipPost,
+    FlowchiefNodesByStringParams
 } from './external-monitorings.interface';
 import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -38,15 +40,17 @@ export class ExternalMonitoringsService {
         return this.http.post<ExternalMonitoringConfig>(`${proxyPath}/import_module/external_monitorings/loadConfigFieldsBySystemType/${system_type}.json?angular=true`, {});
     }
 
-    public getEdit(id: number): Observable<ExternalMonitoringGet> {
+    public getEdit(id: number): Observable<ExternalMonitoringPost> {
         const proxyPath = this.proxyPath;
-        return this.http.get<ExternalMonitoringGet>(`${proxyPath}/import_module/external_monitorings/edit/${id}.json`, {
+        return this.http.get<{
+            externalMonitoring: ExternalMonitoringPost
+        }>(`${proxyPath}/import_module/external_monitorings/edit/${id}.json`, {
             params: {
                 angular: true
             }
         }).pipe(
             map(data => {
-                return data;
+                return data.externalMonitoring;
             })
         );
     }
@@ -106,5 +110,32 @@ export class ExternalMonitoringsService {
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/import_module/external_monitorings/delete/${item.id}.json?angular=true`, {});
+    }
+
+    /***************************************
+     *    flowchiefNodeSelection action    *
+     ***************************************/
+    public getFlowchiefNodeSelection(externalMonitoringId: number): Observable<ExternalMonitoringWithFlowchiefNodesMembershipPost> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            externalMonitoring: ExternalMonitoringWithFlowchiefNodesMembershipPost
+        }>(`${proxyPath}/import_module/external_monitorings/flowchiefNodeSelection/${externalMonitoringId}.json`).pipe(
+            map(data => {
+                return data.externalMonitoring;
+            })
+        );
+    }
+
+    public loadFlowchiefNodesByString(params: FlowchiefNodesByStringParams): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            nodes: SelectKeyValue[]
+        }>(`${proxyPath}/import_module/external_monitorings/loadFlowchiefNodesByString.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data.nodes;
+            })
+        )
     }
 }

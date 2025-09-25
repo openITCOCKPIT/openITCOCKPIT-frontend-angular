@@ -27,10 +27,6 @@ export interface ExternalMonitoringPost {
     json_data: any
 }
 
-export interface ExternalMonitoringGet {
-    externalMonitoring: ExternalMonitoringPost
-}
-
 export interface ExternalMonitoringsIndexParams {
     angular: true,
     scroll: boolean,
@@ -100,10 +96,42 @@ export interface ExternalMonitoringConfigFlowChief {
     api_password: string
     use_proxy: number
     ignore_ssl_certificate: number
-    node_ids: number[]
-    is_recursive: number
+    //node_ids: number[]
+    //is_recursive: number
 }
 
 export interface ExternalMonitoringsAsList {
     externalMonitorings: SelectKeyValue[]
+}
+
+
+export interface ExternalMonitoringWithFlowchiefNodesMembershipPost extends ExternalMonitoringPost {
+    flowchief_nodes_membership: FlowchiefNodesMembership[]
+}
+
+export interface FlowchiefNodesMembership {
+    id?: number
+    external_monitoring_id: number
+    name?: string
+    path: string
+    external_flowchief_node_id?: number
+    external_flowchief_node_parent_id?: number
+    tag?: string
+    created?: string
+    modified?: string
+    _joinData: {
+        id?: number
+        flowchief_node_id: number
+        external_monitoring_id: number
+        is_recursive: boolean
+    }
+}
+
+/**********************
+ *     Global action    *
+ **********************/
+export interface FlowchiefNodesByStringParams {
+    externalMonitoringId: number,
+    'filter[FlowchiefNodes.name]': string,
+    'selected[]': number[],
 }

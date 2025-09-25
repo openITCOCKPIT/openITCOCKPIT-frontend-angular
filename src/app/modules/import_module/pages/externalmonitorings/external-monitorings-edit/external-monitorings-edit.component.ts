@@ -1,17 +1,20 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
     ContainerComponent,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import {
     DynamicalFormFieldsComponent
@@ -73,7 +76,10 @@ import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        FormLoaderComponent
+        FormLoaderComponent,
+        RowComponent,
+        ColComponent,
+        AlertComponent
     ],
     templateUrl: './external-monitorings-edit.component.html',
     styleUrl: './external-monitorings-edit.component.css',
@@ -150,7 +156,7 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ExternalMonitoringsService.getEdit(this.id)
             .subscribe((result) => {
                 //Fire on page load
-                this.post = result.externalMonitoring;
+                this.post = result;
                 this.cdr.markForCheck();
                 this.loadContainers();
                 this.loadConfigFieldsBySystemType();
