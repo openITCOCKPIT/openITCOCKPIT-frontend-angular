@@ -41,6 +41,7 @@ import { ExternalMonitoringConfig, ExternalMonitoringPost } from '../external-mo
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { SystemnameService } from '../../../../../services/systemname.service';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
 
 
 @Component({
@@ -96,19 +97,19 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
 
     protected readonly ExternalMonitoringTypes = [
         {
-            key: 'flowchief',
+            key: ExternalMonitoringSystems.FlowChief,
             value: this.TranslocoService.translate('FlowChief')
         },
         {
-            key: 'icinga2',
+            key: ExternalMonitoringSystems.Icinga2,
             value: this.TranslocoService.translate('Icinga 2')
         },
         {
-            key: 'opmanager',
+            key: ExternalMonitoringSystems.OpManager,
             value: this.TranslocoService.translate('ManageEngine OpManager')
         },
         {
-            key: 'prtg',
+            key: ExternalMonitoringSystems.PRTG,
             value: this.TranslocoService.translate('Paessler PRTG System')
         }
     ];
@@ -184,4 +185,6 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
+
+    protected readonly ExternalMonitoringSystems = ExternalMonitoringSystems;
 }

@@ -1,6 +1,7 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { ExternalMonitoringSystems } from './external-monitoring-systems.enum';
 
 export interface ExternalMonitoringsIndexRoot extends PaginateOrScroll {
     externalMonitorings: ExternalMonitoring[]
@@ -12,7 +13,7 @@ export interface ExternalMonitoring {
     name: string
     container_id: number
     description: string
-    system_type: string
+    system_type: ExternalMonitoringSystems
     container: string
     allowEdit: boolean
 }
@@ -22,7 +23,7 @@ export interface ExternalMonitoringPost {
     container_id: number | null
     name: string
     description: string
-    system_type: string
+    system_type: ExternalMonitoringSystems | ''
     json_data: any
 }
 
@@ -58,7 +59,7 @@ export function getDefaultExternalMonitoringsIndexParams(): ExternalMonitoringsI
 
 export interface ExternalMonitoringConfig {
     config: {
-        config: ExternalMonitoringConfigIcinga2 | ExternalMonitoringConfigOpmanager | ExternalMonitoringConfigPrtg
+        config: ExternalMonitoringConfigIcinga2 | ExternalMonitoringConfigOpmanager | ExternalMonitoringConfigPrtg | ExternalMonitoringConfigFlowChief
         formFields: DynamicalFormFields
     }
 }
@@ -93,6 +94,16 @@ export interface ExternalMonitoringConfigPrtg {
     include_channels: number
 }
 
-export interface ExternalMonitoringsAsList{
+export interface ExternalMonitoringConfigFlowChief {
+    api_url: string
+    api_user: string
+    api_password: string
+    use_proxy: number
+    ignore_ssl_certificate: number
+    node_ids: number[]
+    is_recursive: number
+}
+
+export interface ExternalMonitoringsAsList {
     externalMonitorings: SelectKeyValue[]
 }
