@@ -104,7 +104,7 @@ export class FlowchiefNodeSelectionComponent implements OnInit, OnDestroy {
     public loadExternalMonitoringFlowchiefConfig(id: number) {
         this.subscriptions.add(this.ExternalMonitoringsService.getFlowchiefNodeSelection(id).subscribe(response => {
             this.post = response;
-            this.selectedNodes = response.flowchief_nodes_membership.map(item => item._joinData.flowchief_node_id);
+            this.selectedNodes = response.flowchief_nodes_membership.map(item => item.flowchief_node_id);
 
             this.loadFlowchiefNodes('');
             this.cdr.markForCheck();
@@ -136,10 +136,10 @@ export class FlowchiefNodeSelectionComponent implements OnInit, OnDestroy {
         const alreadyInMembership: number[] = [];
 
         this.post.flowchief_nodes_membership.forEach((flowchief_node) => {
-            if (this.selectedNodes.includes(flowchief_node._joinData.flowchief_node_id)) {
+            if (this.selectedNodes.includes(flowchief_node.flowchief_node_id)) {
                 flowchief_nodes_membership.push(flowchief_node);
             }
-            alreadyInMembership.push(flowchief_node._joinData.flowchief_node_id);
+            alreadyInMembership.push(flowchief_node.flowchief_node_id);
         });
 
         // All selected nodes to membership (so we can sret is_recursive properly)
@@ -155,14 +155,10 @@ export class FlowchiefNodeSelectionComponent implements OnInit, OnDestroy {
                 const node = this.flowchiefNodes.find(n => n.key === nodeId);
                 if (node) {
                     flowchief_nodes_membership.push({
-                        id: externalMonitoringId,
+                        flowchief_node_id: nodeId,
                         external_monitoring_id: externalMonitoringId,
-                        path: node.value,
-                        _joinData: {
-                            flowchief_node_id: nodeId,
-                            external_monitoring_id: externalMonitoringId,
-                            is_recursive: false
-                        }
+                        is_recursive: false,
+                        path: node.value // only used by the Angular Frontend
                     });
                 }
             }

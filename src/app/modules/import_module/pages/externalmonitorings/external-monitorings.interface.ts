@@ -110,21 +110,11 @@ export interface ExternalMonitoringWithFlowchiefNodesMembershipPost extends Exte
 }
 
 export interface FlowchiefNodesMembership {
-    id?: number
+    id?: number // auto increment of linking table
     external_monitoring_id: number
-    name?: string
-    path: string
-    external_flowchief_node_id?: number
-    external_flowchief_node_parent_id?: number
-    tag?: string
-    created?: string
-    modified?: string
-    _joinData: {
-        id?: number
-        flowchief_node_id: number
-        external_monitoring_id: number
-        is_recursive: boolean
-    }
+    flowchief_node_id: number
+    is_recursive: boolean
+    path?: string // only used by the Angular Frontend
 }
 
 /**********************
