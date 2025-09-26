@@ -77,8 +77,13 @@
                     <div class="mb-3">
 
                         @for (nodeMembership of post.flowchief_nodes_membership; track $index) {
-                            <div>
-
+                            <div class="my-1 py-1 ps-2 border-start border-primary border-4"
+                                 [ngClass]="{odd: $index % 2 === 0, even: $index % 2 !== 0}">
+                                @if (nodeMembership._joinData.is_recursive) {
+                                    <fa-icon [icon]="['far', 'folder-open']" [cTextColor]="'primary'"></fa-icon>
+                                } @else {
+                                    <fa-icon [icon]="['far', 'folder']" [cTextColor]="'primary'"></fa-icon>
+                                }
                                 {{ nodeMembership.path }}
                                 <c-form-check>
                                     <input
@@ -92,7 +97,7 @@
                                     <label cFormCheckLabel
                                            [for]="'is_recursive'+$index"
                                            class="ms-1 mt-1">
-                                        {{ t('Load PVs recursive') }}
+                                        {{ t('Include sub-tree PVs') }}
                                     </label>
                                 </c-form-check>
 
@@ -116,4 +121,3 @@
         </form>
     }
 </ng-container>
-

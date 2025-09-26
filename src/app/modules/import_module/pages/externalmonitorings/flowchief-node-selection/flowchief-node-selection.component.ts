@@ -17,7 +17,7 @@ import {
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent, TextColorDirective
 } from '@coreui/angular';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -34,6 +34,7 @@ import {
     FlowchiefNodesByStringParams,
     FlowchiefNodesMembership
 } from '../external-monitorings.interface';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-flowchief-node-selection',
@@ -60,7 +61,9 @@ import {
         FormLoaderComponent,
         FormCheckComponent,
         FormCheckInputDirective,
-        FormCheckLabelDirective
+        FormCheckLabelDirective,
+        NgClass,
+        TextColorDirective
     ],
     templateUrl: './flowchief-node-selection.component.html',
     styleUrl: './flowchief-node-selection.component.css',
