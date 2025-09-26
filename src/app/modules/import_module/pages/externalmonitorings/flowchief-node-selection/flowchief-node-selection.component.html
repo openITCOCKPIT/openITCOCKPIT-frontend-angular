@@ -66,8 +66,11 @@
                             {{ t('openITCOCKPIT will import all Process Variables from the selected nodes.') }}
                             <br>
                             {{ t('In case the list is empty, execute the command') }}
-                            <code>oitc import_module.flowchief_import_nodes
-                                --external-monitoring-system-id {{ post.id }}</code>
+                            <oitc-copy-to-clipboard
+                                [data]="'oitc import_module.flowchief_import_nodes --external-monitoring-system-id '+post.id">
+                                <code>oitc import_module.flowchief_import_nodes
+                                    --external-monitoring-system-id {{ post.id }}</code>
+                            </oitc-copy-to-clipboard>
                             {{ t('on the openITCOCKPIT server to get the list of available nodes.') }}
                         </div>
                         <oitc-form-feedback [errors]="errors"

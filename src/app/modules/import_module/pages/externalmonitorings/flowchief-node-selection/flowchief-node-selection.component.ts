@@ -35,6 +35,7 @@ import {
     FlowchiefNodesMembership
 } from '../external-monitorings.interface';
 import { NgClass } from '@angular/common';
+import { CopyToClipboardComponent } from '../../../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 
 @Component({
     selector: 'oitc-flowchief-node-selection',
@@ -63,7 +64,8 @@ import { NgClass } from '@angular/common';
         FormCheckInputDirective,
         FormCheckLabelDirective,
         NgClass,
-        TextColorDirective
+        TextColorDirective,
+        CopyToClipboardComponent
     ],
     templateUrl: './flowchief-node-selection.component.html',
     styleUrl: './flowchief-node-selection.component.css',
