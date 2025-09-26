@@ -12,10 +12,10 @@
                 {{ t('Import Module') }}
             </li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['importmodule','ExternalSystems', 'index']"
-                   [routerLink]="['/', 'import_module', 'ExternalSystems', 'index']">
-                    <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
-                    {{ t('External Systems') }}
+                <a *oitcPermission="['importmodule','ExternalMonitorings', 'index']"
+                   [routerLink]="['/', 'import_module', 'ExternalMonitorings', 'index']">
+                    <fa-icon [icon]="['fas', 'tower-observation']"></fa-icon>
+                    {{ t('External Monitoring Systems') }}
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
@@ -34,7 +34,8 @@
                     <h5 cCardTitle>{{ t('Select FlowChief Nodes') }}</h5>
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
-                            <button [fallbackUrl]="['import_module', 'ExternalSystems', 'index']" cButton class="ripple"
+                            <button [fallbackUrl]="['import_module', 'ExternalMonitorings', 'index']" cButton
+                                    class="ripple"
                                     color="default"
                                     oitcBackButton
                                     size="xs">
@@ -115,7 +116,7 @@
                     <button cButton class="ripple" color="primary" type="submit">
                         {{ t('Save') }}
                     </button>
-                    <button [fallbackUrl]="['import_module','ExternalSystems', 'index']" cButton class="ms-1 ripple"
+                    <button [fallbackUrl]="['import_module','ExternalMonitorings', 'index']" cButton class="ms-1 ripple"
                             color="default" oitcBackButton type="button">
                         {{ t('Cancel') }}
                     </button>
