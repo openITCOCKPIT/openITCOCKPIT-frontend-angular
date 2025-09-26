@@ -17,16 +17,17 @@ import {
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent, TextColorDirective
+    NavItemComponent,
+    TextColorDirective
 } from '@coreui/angular';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { GenericValidationError } from '../../../../../generic-responses';
+import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import {
@@ -82,6 +83,7 @@ export class FlowchiefNodeSelectionComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
     private readonly ExternalMonitoringsService = inject(ExternalMonitoringsService);
+    private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly router: Router = inject(Router);
@@ -153,6 +155,7 @@ export class FlowchiefNodeSelectionComponent implements OnInit, OnDestroy {
                 const node = this.flowchiefNodes.find(n => n.key === nodeId);
                 if (node) {
                     flowchief_nodes_membership.push({
+                        id: externalMonitoringId,
                         external_monitoring_id: externalMonitoringId,
                         path: node.value,
                         _joinData: {
@@ -169,7 +172,32 @@ export class FlowchiefNodeSelectionComponent implements OnInit, OnDestroy {
     }
 
     public submit() {
+        if (!this.post) {
+            return;
+        }
 
+        this.subscriptions.add(this.ExternalMonitoringsService.editFlowchiefNodeSelection(this.post)
+            .subscribe((result) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
+                    const title = this.TranslocoService.translate('FlowChief Nodes');
+                    const msg = this.TranslocoService.translate('updated successfully');
+                    const url = ['import_module', 'ExternalMonitorings', 'flowchiefNodeSelection', response.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+                    this.HistoryService.navigateWithFallback(['/import_module/ExternalMonitorings/index']);
+                    this.notyService.scrollContentDivToTop();
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            }));
     }
 
 }

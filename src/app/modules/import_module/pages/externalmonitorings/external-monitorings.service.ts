@@ -126,6 +126,27 @@ export class ExternalMonitoringsService {
         );
     }
 
+    public editFlowchiefNodeSelection(externalMonitoring: ExternalMonitoringWithFlowchiefNodesMembershipPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/import_module/external_monitorings/flowchiefNodeSelection/${externalMonitoring.id}.json`, externalMonitoring)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.externalMonitoring as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
     public loadFlowchiefNodesByString(params: FlowchiefNodesByStringParams): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
