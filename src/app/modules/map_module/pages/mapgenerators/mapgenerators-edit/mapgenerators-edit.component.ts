@@ -184,7 +184,7 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
                             id: <number>this.post.Mapgenerator.mapgenerator_levels[key].id,
                             name: this.post.Mapgenerator.mapgenerator_levels[key].name,
                             divider: this.post.Mapgenerator.mapgenerator_levels[key].divider,
-                            is_container: this.post.Mapgenerator.mapgenerator_levels[key].is_container,
+                            is_container: Boolean(this.post.Mapgenerator.mapgenerator_levels[key].is_container),
                             index: Number(key)
                         });
                         if (this.post.Mapgenerator.mapgenerator_levels[key].is_container) {
@@ -215,11 +215,17 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
                     is_container = true;
                 }
 
+                let divider = this.mapgenerator.levels[i].divider.trim();
+                // remove divider for last level
+                if (Number(i) === this.mapgenerator.levels.length - 1) {
+                    divider = '';
+                }
+
                 this.post.Mapgenerator.mapgenerator_levels[index] = {
                     'id': this.mapgenerator.levels[i].id,
                     'name': this.mapgenerator.levels[i].name,
-                    'divider': this.mapgenerator.levels[i].divider,
-                    'is_container': is_container
+                    'divider': divider,
+                    'is_container': Number(is_container)
                 };
                 index++;
             }

@@ -164,10 +164,16 @@ export class MapgeneratorsAddComponent implements OnInit, OnDestroy {
                     is_container = true;
                 }
 
+                let divider = this.mapgenerator.levels[i].divider.trim();
+                // remove divider for last level
+                if (Number(i) === this.mapgenerator.levels.length - 1) {
+                    divider = '';
+                }
+
                 this.post.Mapgenerator.mapgenerator_levels[index] = {
                     'name': this.mapgenerator.levels[i].name,
-                    'divider': this.mapgenerator.levels[i].divider,
-                    'is_container': is_container,
+                    'divider': divider,
+                    'is_container': Number(is_container),
                 };
                 index++;
             }

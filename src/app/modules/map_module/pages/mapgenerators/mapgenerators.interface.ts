@@ -31,7 +31,7 @@ export interface MapgeneratorLevel {
     mapgenerator_id?: number
     name: string
     divider: string
-    is_container: boolean
+    is_container: boolean | number
 }
 
 export interface InternalLevel {

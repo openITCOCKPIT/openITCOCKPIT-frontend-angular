@@ -138,10 +138,9 @@
                                 {{ t('Levels:') }}
                                 <oitc-required-icon></oitc-required-icon>
                             </h5>
-                            <oitc-form-feedback [errors]="errors" errorField="mapgenerator_levels"></oitc-form-feedback>
                             <div class="col-12 help-block text-info">
                                 <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                                {{ t('The host name is split with the dividers and a map is created for each part. The last level specifies the host to be added and must also exist and the number of levels must match the number of parts so that the host can be taken into account during generation. The name is only used as a description in the form.') }}
+                                {{ t('The host name is split with the dividers and a map is created for each part. The last level specifies the host to be added. The name is only used as a description in the form.') }}
                             </div>
                         </div>
                         <hr class="border-dashed">
