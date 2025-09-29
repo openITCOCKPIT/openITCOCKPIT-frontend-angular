@@ -5,7 +5,8 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import {
     HostMappingRulesAssignToHostsRoot,
-    HostMappingRulesLoadHostsParams, HostMappingRulesPost,
+    HostMappingRulesLoadHostsParams,
+    HostMappingRulesPost,
     LoadHostsRoot
 } from './host-mapping-rules.interface';
 

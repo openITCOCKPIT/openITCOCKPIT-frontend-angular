@@ -28,6 +28,8 @@ export enum WidgetTypes {
     ServiceStatusOverviewExtendedWidget = 20,
     AutomapWidget = 19,
     WebsiteWidget = 18,
+    StatuspagegroupWidget = 37,
+    OrganizationalchartsWidget = 38,
 
     // MapModule Widgets.php (Core Module)
     MapWidget = 100,

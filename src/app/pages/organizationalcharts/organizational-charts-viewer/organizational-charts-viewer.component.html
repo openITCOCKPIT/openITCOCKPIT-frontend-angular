@@ -1,5 +1,6 @@
 <div class="oc-wrapper">
     <f-flow class="oc-flow"
+            [ngClass]="{'disable-100vh': disable100VH()}"
             fDraggable
             (fLoaded)="onInitialized()">
 

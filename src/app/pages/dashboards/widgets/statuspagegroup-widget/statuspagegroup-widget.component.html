@@ -1,0 +1,83 @@
+<ng-container *transloco="let t">
+    <div class="d-flex h-100 flex-column" #boxContainer>
+        <c-row>
+            <c-col [xs]="12" [md]="1">
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())">
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        }
+                    </button>
+                }
+            </c-col>
+            <c-col [xs]="12" [md]="11">
+                <c-row>
+                    @if (widget && config && !flipped()) {
+                        <c-col [xs]="12" class="text-end">
+                            <oitc-interval-picker (change)="onRefreshChange($event)"></oitc-interval-picker>
+                        </c-col>
+                    }
+                </c-row>
+            </c-col>
+        </c-row>
+
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container">
+            <div class="box-x">
+                @if (animationStateShowContent) {
+                    <ng-container>
+                        <!-- Widget Content -->
+                        @if (!config || !config.statuspagegroup_id) {
+                            <div class="ps-2 text-info">
+                                {{ t('No element selected') }}
+                            </div>
+                        }
+                        @if (config && config.statuspagegroup_id) {
+                            <oitc-statuspagegroups-viewer
+                                [statuspagegroupId]="Number(config.statuspagegroup_id)"></oitc-statuspagegroups-viewer>
+                        }
+                        <!-- End Widget Content -->
+                    </ng-container>
+                }
+            </div>
+
+            <div class="box-x">
+                @if (animationStateShowConfig) {
+                    <ng-container>
+                        <!-- Config area -->
+                        @if (widget && config) {
+
+                            <div class="mb-3">
+                                <label cLabel [for]="'statuspagegroup_id_widget_'+widget.id">
+                                    {{ t('Status page group') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+
+                                <oitc-select
+                                    [id]="'statuspagegroup_id_widget_'+widget.id"
+                                    [name]="'statuspagegroup_id_widget_'+widget.id"
+                                    [attr.id]="'statuspagegroup_id_widget_'+widget.id"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="config.statuspagegroup_id"
+                                    [options]="statuspagegroups"
+                                    [appendTo]="''">
+                                </oitc-select>
+                            </div>
+                            <div class="mt-1 text-end">
+                                <button cButton type="button" class="ripple" (click)="saveConfig()">
+                                    {{ t('Save') }}
+                                </button>
+                            </div>
+                        }
+                        <!-- End Config area -->
+                    </ng-container>
+                }
+            </div>
+        </div>
+    </div>
+
+</ng-container>

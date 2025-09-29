@@ -9,7 +9,7 @@
             <li class="breadcrumb-item">
                 <a *oitcPermission="['statuspages', 'index']" [routerLink]="['/', 'statuspages', 'index']">
                     <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                    {{ t('Statuspages') }}
+                    {{ t('Status pages') }}
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
@@ -102,7 +102,7 @@
                     <div class="help-block mt-0">
                         <span class="font-lg"
                               [class]="{'warning-icon-gray' : post.public == false}">⚠️</span>
-                        {{ t('Grant unrestricted access to this Statuspage without user authentication.') }}
+                        {{ t('Grant unrestricted access to this Status page without user authentication.') }}
                     </div>
                 </div>
 
