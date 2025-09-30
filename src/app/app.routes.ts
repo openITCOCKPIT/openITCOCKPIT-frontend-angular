@@ -39,6 +39,7 @@ import { mattermostModuleRoutes } from './modules/mattermost_module/mattermost_m
 import { servicenowModuleRoutes } from './modules/servicenow_module/servicenow_module.routes';
 import { dellModuleRoutes } from './modules/dell_module/dell_module.routes';
 import { proxmoxModuleRoutes } from './modules/proxmox_module/proxmox_module.routes';
+import { ms365ModuleRoutes } from './modules/ms365_module/ms365_module.routes';
 import { mshypervModuleRoutes } from './modules/mshyperv_module/mshyperv_module.routes';
 
 @Component({
@@ -101,6 +102,7 @@ const moduleRoutes: Routes = [
     ...servicenowModuleRoutes,
     ...dellModuleRoutes,
     ...proxmoxModuleRoutes,
+    ...ms365ModuleRoutes,
     ...mshypervModuleRoutes
 ];
 /***    Core routes   ***/
