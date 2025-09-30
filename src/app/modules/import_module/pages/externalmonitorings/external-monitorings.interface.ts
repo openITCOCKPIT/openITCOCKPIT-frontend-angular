@@ -60,6 +60,7 @@ export interface ExternalMonitoringConfig {
     }
 }
 
+// Server code: IcingaExternalMonitoringJson.php
 export interface ExternalMonitoringConfigIcinga2 {
     api_url: string
     api_user: string
@@ -71,6 +72,7 @@ export interface ExternalMonitoringConfigIcinga2 {
     receive_acknowledgements: number
 }
 
+// Server code: OpManagerExternalMonitoringJson.php
 export interface ExternalMonitoringConfigOpmanager {
     api_url: string
     api_key: string
@@ -79,6 +81,7 @@ export interface ExternalMonitoringConfigOpmanager {
     polling_interval: number
 }
 
+// Server code: PrtgExternalMonitoringJson.php
 export interface ExternalMonitoringConfigPrtg {
     api_url: string
     api_token: string
@@ -90,14 +93,14 @@ export interface ExternalMonitoringConfigPrtg {
     include_channels: number
 }
 
+// Server code: FlowChiefExternalMonitoringJson.php
 export interface ExternalMonitoringConfigFlowChief {
     api_url: string
     api_user: string
     api_password: string
     use_proxy: number
     ignore_ssl_certificate: number
-    //node_ids: number[]
-    //is_recursive: number
+    host_prefix: string
 }
 
 export interface ExternalMonitoringsAsList {
