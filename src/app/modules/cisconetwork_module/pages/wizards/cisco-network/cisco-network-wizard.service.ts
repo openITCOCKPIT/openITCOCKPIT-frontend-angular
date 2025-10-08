@@ -10,7 +10,7 @@ import { CiscoNetworkWizardGet, CiscoNetworkWizardPost } from './cisco-network-w
 export class CiscoNetworkWizardService extends WizardsService {
 
     public fetch(hostId: number): Observable<CiscoNetworkWizardGet> {
-        return this.http.get<CiscoNetworkWizardGet>(`${this.proxyPath}/cisco_network_module/wizards/CiscoNetwork/${hostId}.json?angular=true`).pipe(
+        return this.http.get<CiscoNetworkWizardGet>(`${this.proxyPath}/cisco_network_module/wizards/ciscoNetwork/${hostId}.json?angular=true`).pipe(
             map((data: CiscoNetworkWizardGet): CiscoNetworkWizardGet => {
                 return data;
             })
@@ -18,7 +18,7 @@ export class CiscoNetworkWizardService extends WizardsService {
     }
 
     public submit(post: CiscoNetworkWizardPost): Observable<GenericResponseWrapper> {
-        return this.http.post<any>(`${this.proxyPath}/cisco_network_module/wizards/CiscoNetwork.json?angular=true`, post)
+        return this.http.post<any>(`${this.proxyPath}/cisco_network_module/wizards/ciscoNetwork.json?angular=true`, post)
             .pipe(
                 map(data => {
                     return {
