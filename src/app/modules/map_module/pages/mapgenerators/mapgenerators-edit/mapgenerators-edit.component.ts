@@ -127,6 +127,8 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
 
     protected mapgeneratorId: number = 0;
 
+    protected areContainersChangeable: boolean = true;
+
     constructor() {
         this.post = this.getDefaultPost();
     }
@@ -174,6 +176,7 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
                 this.post.Mapgenerator.map_refresh_interval = (parseInt(mapgenerator.map_refresh_interval.toString(), 10) / 1000);
                 this.post.Mapgenerator.type = mapgenerator.type;
                 this.post.Mapgenerator.items_per_line = mapgenerator.items_per_line;
+                this.areContainersChangeable = result.areContainersChangeable;
 
                 if (this.post.Mapgenerator.type === MapgeneratorTypes.GENERATE_BY_HOSTNAME_SPLITTING && mapgenerator.mapgenerator_levels && mapgenerator.mapgenerator_levels.length > 0) {
                     this.post.Mapgenerator.mapgenerator_levels = mapgenerator.mapgenerator_levels;

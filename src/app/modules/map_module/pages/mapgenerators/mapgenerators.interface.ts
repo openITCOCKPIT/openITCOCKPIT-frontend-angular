@@ -99,6 +99,7 @@ export interface MapgeneratorEdit {
 
 export interface MapgeneratorsEditRoot {
     mapgenerator: Mapgenerator
+    areContainersChangeable: boolean
     _csrfToken: string
 }
 

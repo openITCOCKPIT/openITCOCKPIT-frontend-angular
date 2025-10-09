@@ -113,6 +113,7 @@
                                 optionValue="key"
                                 optionLabel="value"
                                 [(ngModel)]="post.Mapgenerator.containers._ids"
+                                [disabled]="!areContainersChangeable"
                                 [options]="containers"
                                 [debounce]="true"
                                 oitcFormError [errors]="errors" errorField="containers">
