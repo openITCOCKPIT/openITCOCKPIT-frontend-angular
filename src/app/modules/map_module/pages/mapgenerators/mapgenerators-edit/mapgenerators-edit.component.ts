@@ -128,6 +128,7 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
     protected mapgeneratorId: number = 0;
 
     protected areContainersChangeable: boolean = true;
+    protected containersSelection: number[] = [];
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -151,7 +152,6 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.mapgeneratorId = Number(this.route.snapshot.paramMap.get('id'));
-        this.loadContainers();
         this.load();
     }
 
@@ -202,10 +202,17 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
                         .value();
                 }
 
+                this.loadContainers();
+
             }));
     }
 
     public updateMapgenerator(): void {
+
+        //update container ids if it was edited
+        if (this.areContainersChangeable) {
+            this.post.Mapgenerator.containers._ids = this.containersSelection;
+        }
 
         let index = 0;
         this.post.Mapgenerator.mapgenerator_levels = [];
@@ -262,7 +269,16 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.MapgeneratorsService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
+                this.containersSelection = [];
                 this.containers = result.containers;
+
+                this.post.Mapgenerator.containers._ids.forEach(value => {
+                    let permittetCheck = this.containers.find(({key}) => key === value);
+                    if (permittetCheck) {
+                        this.containersSelection.push(value);
+                    }
+                });
+
                 this.cdr.markForCheck();
             }))
     }

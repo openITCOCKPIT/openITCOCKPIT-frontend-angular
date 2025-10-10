@@ -65,6 +65,7 @@
                             optionValue="key"
                             optionLabel="value"
                             [(ngModel)]="post.Mapgenerator.type"
+                            [disabled]="!areContainersChangeable"
                             (onChange)="onTypeChange()"
                             [options]="types"
                             oitcFormError [errors]="errors" errorField="type">
@@ -112,7 +113,7 @@
                                 id="mapgenerator_container"
                                 optionValue="key"
                                 optionLabel="value"
-                                [(ngModel)]="post.Mapgenerator.containers._ids"
+                                [(ngModel)]="containersSelection"
                                 [disabled]="!areContainersChangeable"
                                 [options]="containers"
                                 [debounce]="true"
