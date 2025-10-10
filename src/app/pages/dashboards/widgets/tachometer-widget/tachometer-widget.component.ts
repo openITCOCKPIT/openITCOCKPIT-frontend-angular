@@ -33,6 +33,7 @@ import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 import { RadialGauge } from 'canvas-gauges';
 import { TachometerWidgetPerfdata } from './tachometer-widget.interface';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
+import { ServiceTypesEnum } from '../../../services/services.enum';
 
 @Component({
     selector: 'oitc-tachometer-widget',
@@ -103,9 +104,23 @@ export class TachometerWidgetComponent extends BaseWidgetComponent implements Af
                 }
 
                 this.perfdata = undefined;
+
+                // For legacy Prometheus Services we may have to voerwrite the metric but we do not want to change the
+                // selected value in the selectbox
+                let metricKey = this.metric;
+
                 if (!Array.isArray(response.service.Perfdata)) {
-                    if (this.metric && response.service.Perfdata[this.metric]) {
-                        this.perfdata = response.service.Perfdata[this.metric];
+                    if (!Array.isArray(response.service.Service)) {
+                        if (response.service.Service.serviceType === ServiceTypesEnum.PROMETHEUS_SERVICE && metricKey === 'value') {
+                            // 'value' is a legacy value for prometheus services
+                            // See ITC-2824 and the PrometheusPerfdataLoader for more details
+                            // This only effects Prometheus Services with 1 metric
+                            metricKey = Object.keys(response.service.Perfdata)[0];
+                        }
+                    }
+
+                    if (metricKey && response.service.Perfdata[metricKey]) {
+                        this.perfdata = response.service.Perfdata[metricKey];
                     }
                 }
 
@@ -330,7 +345,7 @@ export class TachometerWidgetComponent extends BaseWidgetComponent implements Af
         }
 
         if (this.showLabel) {
-            if (units === null) {
+            if (units === null || units === '') {
                 units = label;
             } else {
                 units = label + ' in ' + units;
