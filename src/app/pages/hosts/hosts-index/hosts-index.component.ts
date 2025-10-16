@@ -317,7 +317,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
                 this.filter['Hosts.address'] = address;
             }
 
-            let address_regex = params['address_regex'] ;
+            let address_regex = params['address_regex'];
             if (address_regex === 'true') {
                 this.filter['Hosts.address_regex'] = true;
             }
@@ -596,7 +596,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Host.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'hosts', 'copy', ids]);
-        }else {
+        } else {
             const message = this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
             return;
