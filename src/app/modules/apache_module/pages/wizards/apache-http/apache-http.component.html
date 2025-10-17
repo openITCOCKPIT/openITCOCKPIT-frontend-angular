@@ -14,7 +14,7 @@
                 </a></li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                {{ t('Apache Status') }}
+                {{ t('Apache HTTP Status') }}
             </li>
         </ol>
     </nav>
@@ -22,7 +22,7 @@
     <c-card>
         <c-card-header>
             <h5 cCardTitle>
-                {{ t('Configuration Wizard: Apache Status') }}
+                {{ t('Configuration Wizard: Apache HTTP Status') }}
             </h5>
         </c-card-header>
         <c-card-body class="p-0">
@@ -38,7 +38,7 @@
                     class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Configure services for Apache Status') }}
+                        {{ t('Configure services for Apache HTTP Status') }}
                     </span>
                 </div>
                 <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
@@ -70,7 +70,7 @@
                 [(post)]="post.services"
                 [errors]="errors"
                 [titleErrorField]="'services'"
-                [title]="'Apache Status services'|transloco"
+                [title]="'Apache HTTP Status services'|transloco"
             />
 
 

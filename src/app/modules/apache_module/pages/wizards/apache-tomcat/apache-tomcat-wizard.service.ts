@@ -2,23 +2,23 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { WizardsService } from '../../../../../pages/wizards/wizards.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { ApacheWizardGet, ApacheWizardPost, } from './apache-wizard.interface';
+import { ApacheTomcatWizardGet, ApacheTomcatWizardPost, } from './apache-tomcat-wizard.interface';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ApacheWizardService extends WizardsService {
+export class ApacheTomcatWizardService extends WizardsService {
 
-    public fetch(hostId: number): Observable<ApacheWizardGet> {
-        return this.http.get<ApacheWizardGet>(`${this.proxyPath}/apache_module/wizards/apache/${hostId}.json?angular=true`).pipe(
-            map((data: ApacheWizardGet): ApacheWizardGet => {
+    public fetch(hostId: number): Observable<ApacheTomcatWizardGet> {
+        return this.http.get<ApacheTomcatWizardGet>(`${this.proxyPath}/apache_module/wizards/apache_tomcat/${hostId}.json?angular=true`).pipe(
+            map((data: ApacheTomcatWizardGet): ApacheTomcatWizardGet => {
                 return data;
             })
         );
     }
 
-    public submit(post: ApacheWizardPost): Observable<GenericResponseWrapper> {
-        return this.http.post<any>(`${this.proxyPath}/apache_module/wizards/apache.json?angular=true`, post)
+    public submit(post: ApacheTomcatWizardPost): Observable<GenericResponseWrapper> {
+        return this.http.post<any>(`${this.proxyPath}/apache_module/wizards/apache_tomcat.json?angular=true`, post)
             .pipe(
                 map(data => {
                     return {

@@ -8,12 +8,12 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
-import { ApacheWizardGet, ApacheWizardPost } from './apache-wizard.interface';
-import { ApacheWizardService } from './apache-wizard.service';
+import { ApacheHttpWizardPost } from './apache-http-wizard.interface';
+import { ApacheHttpWizardService } from './apache-http-wizard.service';
 import { RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'oitc-apache',
+    selector: 'oitc-apache-http',
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -28,32 +28,19 @@ import { RouterLink } from '@angular/router';
         FormsModule,
         RouterLink,
     ],
-    templateUrl: './apache.component.html',
-    styleUrl: './apache.component.css',
+    templateUrl: './apache-http.component.html',
+    styleUrl: './apache-http.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ApacheComponent extends WizardsAbstractComponent {
+export class ApacheHttpComponent extends WizardsAbstractComponent {
 
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
-    protected override WizardService: ApacheWizardService = inject(ApacheWizardService);
+    protected override WizardService: ApacheHttpWizardService = inject(ApacheHttpWizardService);
     public checked: boolean = false;
 
-    protected override post: ApacheWizardPost = {
-        pveUsername: '',
-        pveApiTokenName: '',
-        pveApiTokenSecret: '',
-        storageServices: [],
-// Default fields from the base wizard
+    protected override post: ApacheHttpWizardPost = {
         host_id: 0,
         services: [],
-    } as ApacheWizardPost;
-
-    protected override wizardLoad(result: ApacheWizardGet): void {
-        console.warn(result);
-        this.post.pveUsername = result.pveUsername;
-        this.post.pveApiTokenName = result.pveApiTokenName;
-        this.post.pveApiTokenSecret = result.pveApiTokenSecret;
-        super.wizardLoad(result);
-    }
+    } as ApacheHttpWizardPost;
 
 }

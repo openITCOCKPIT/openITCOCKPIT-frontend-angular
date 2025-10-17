@@ -1,10 +1,7 @@
 import { WizardGet, WizardPost } from '../../../../../pages/wizards/wizards.interface';
 
 // WIZARD GET
-export interface ApacheWizardGet extends WizardGet {
-    pveUsername: string
-    pveApiTokenName: string
-    pveApiTokenSecret: string
+export interface ApacheHttpWizardGet extends WizardGet {
 }
 
 
@@ -29,10 +26,6 @@ export interface Commandargument {
 
 
 // WIZARD POST
-export interface ApacheWizardPost extends WizardPost {
-    pveUsername: string
-    pveApiTokenName: string
-    pveApiTokenSecret: string
-    storageServices: any[] | undefined
+export interface ApacheHttpWizardPost extends WizardPost {
 }
 

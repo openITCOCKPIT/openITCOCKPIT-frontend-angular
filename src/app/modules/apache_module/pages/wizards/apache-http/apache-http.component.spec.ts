@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ApacheComponent } from './apache.component';
+import { ApacheHttpComponent } from './apache-http.component';
 
-describe('ApacheComponent', () => {
-    let component: ApacheComponent;
-    let fixture: ComponentFixture<ApacheComponent>;
+describe('ApacheHttpComponent', () => {
+    let component: ApacheHttpComponent;
+    let fixture: ComponentFixture<ApacheHttpComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ApacheComponent]
+            imports: [ApacheHttpComponent]
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(ApacheComponent);
+        fixture = TestBed.createComponent(ApacheHttpComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
