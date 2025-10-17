@@ -114,7 +114,7 @@ export class FlowchiefNodeSelectionComponent implements OnInit, OnDestroy {
     public loadFlowchiefNodes = (searchString: string): void => {
         const params: FlowchiefNodesByStringParams = {
             externalMonitoringId: this.post?.id || 0,
-            'filter[FlowchiefNodes.name]': searchString,
+            'filter[FlowchiefNodes.path]': searchString,
             'selected[]': this.selectedNodes
         }
 

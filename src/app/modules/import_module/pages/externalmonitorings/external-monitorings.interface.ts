@@ -125,6 +125,6 @@ export interface FlowchiefNodesMembership {
  **********************/
 export interface FlowchiefNodesByStringParams {
     externalMonitoringId: number,
-    'filter[FlowchiefNodes.name]': string,
+    'filter[FlowchiefNodes.path]': string,
     'selected[]': number[],
 }
