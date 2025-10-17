@@ -233,8 +233,8 @@ export class NetworkinterfacesComponent extends WizardsAbstractComponent {
             if (data && data.interfaces && data.interfaces.length && data.interfaces[0].value && data.interfaces[2]) {
                 for (let key in data.interfaces[2].value) {
                     let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.interfaceServicetemplate.servicetemplatecommandargumentvalues));
-                    servicetemplatecommandargumentvalues[0].value = data.services[2].value[key].name;
-                    let name = String(data.services[2].value[key].name);
+                    servicetemplatecommandargumentvalues[0].value = data.interfaces[2].value[key].name;
+                    let name = String(data.interfaces[2].value[key].name);
                     this.post.interfaces.push(
                         {
                             createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, name),
