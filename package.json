@@ -8,7 +8,8 @@
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
         "i18n:extract": "transloco-keys-manager extract",
-        "i18n:find": "transloco-keys-manager find"
+        "i18n:find": "transloco-keys-manager find",
+        "check:licenses": "node parse-3rdpartylicenses.js dist/frontend-angular/3rdpartylicenses.txt"
     },
     "private": true,
     "dependencies": {
