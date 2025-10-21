@@ -24,7 +24,12 @@ import {
 } from "./hostgroups.interface";
 import { HttpClient } from "@angular/common/http";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from "../../generic-responses";
+import {
+    GenericActionErrorResponse,
+    GenericIdResponse,
+    GenericResponseWrapper,
+    GenericValidationError
+} from "../../generic-responses";
 import { DeleteAllItem } from "../../layouts/coreui/delete-all-modal/delete-all.interface";
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
@@ -243,7 +248,27 @@ export class HostgroupsService {
 
     public appendHosts(param: HostgroupAppend): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/hostgroups/append/.json?angular=true`, param);
+        return this.http.post<any>(`${proxyPath}/hostgroups/append/.json?angular=true`, param)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.message as GenericActionErrorResponse;
+                    return of({
+                        success: false,
+                        data: {
+                            hostgroup_id: {
+                                err
+                            }
+                        }
+                    });
+                })
+            );
     }
 
     public loadHostgroupsByContainerId(containerId: number, selected: any[], resolveContainerIds: boolean = true): Observable<SelectKeyValue[]> {

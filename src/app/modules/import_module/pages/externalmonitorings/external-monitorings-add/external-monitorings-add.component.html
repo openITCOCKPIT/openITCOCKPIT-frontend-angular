@@ -94,7 +94,7 @@
                         [showClear]="false">
                     </oitc-select>
                     <div class="help-block text-info">
-                        @if (post.system_type === 'icinga2') {
+                        @if (post.system_type === ExternalMonitoringSystems.Icinga2) {
                             {{ t('Synchronize status information from Icinga 2 with openITCOCKPIT.') }}
                         }
                     </div>
