@@ -78,6 +78,14 @@ export class HostPieChartComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['statusDataPercentage']) {
+            if (!changes['statusDataPercentage'].firstChange) {
+                this.statusDataPercentage = [
+                    changes['statusDataPercentage'].currentValue[0] || 0, // Up
+                    changes['statusDataPercentage'].currentValue[1] || 0, // Down
+                    changes['statusDataPercentage'].currentValue[2] || 0, // Unreachable
+                ];
+            }
+            this.initializeChartOptions();
             this.cdr.markForCheck();
         }
     }

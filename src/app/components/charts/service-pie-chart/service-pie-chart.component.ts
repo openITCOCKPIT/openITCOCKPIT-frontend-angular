@@ -76,6 +76,15 @@ export class ServicePieChartComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['statusDataPercentage']) {
+            if (!changes['statusDataPercentage'].firstChange) {
+                this.statusDataPercentage = [
+                    changes['statusDataPercentage'].currentValue[0] || 0, // Ok
+                    changes['statusDataPercentage'].currentValue[1] || 0, // Warning
+                    changes['statusDataPercentage'].currentValue[2] || 0, // Critical
+                    changes['statusDataPercentage'].currentValue[3] || 0, // Unknown
+                ];
+            }
+            this.initializeChartOptions();
             this.cdr.markForCheck();
         }
     }
