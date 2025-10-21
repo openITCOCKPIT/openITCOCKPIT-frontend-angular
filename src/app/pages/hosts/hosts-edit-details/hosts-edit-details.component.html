@@ -471,21 +471,14 @@
             </c-card-body>
             <c-card-footer class="text-end">
                 <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Update sharing') }}
+                    {{ t('Update host details') }}
                 </button>
-                <button [fallbackUrl]="['commands', 'index']" cButton class="ms-1 ripple" color="default"
+                <button [fallbackUrl]="['hosts', 'index']" cButton class="ms-1 ripple" color="default"
                         oitcBackButton
                         type="button">
                     {{ t('Cancel') }}
                 </button>
-
-
             </c-card-footer>
         </c-card>
     </form>
-
-
 </ng-container>
-
-
-
