@@ -200,7 +200,8 @@ import { TitleService } from '../../../services/title.service';
         ServicePieChartComponent,
         ColumnsConfigExportModalComponent,
         ColumnsConfigImportModalComponent,
-        AsyncPipe
+        AsyncPipe,
+        ServicePieChartComponent
     ],
     templateUrl: './browsers-index.component.html',
     styleUrl: './browsers-index.component.css',
