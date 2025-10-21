@@ -1,1 +1,7 @@
 <!--The content below is only a placeholder and can be replaced.-->
+<div [style.max-height.px]="widgetHeight" [style.height.px]="widgetHeight" class="overflow-hidden">
+    <div echarts [options]="chartOptions"
+         [theme]="theme"
+         (chartInit)="onChartInit($event)"
+         class="w-100"></div>
+</div>
