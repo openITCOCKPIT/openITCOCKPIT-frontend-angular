@@ -46,7 +46,6 @@
                     </c-nav>
                 </c-card-header>
                 <c-card-body>
-
                     <div class="mb-3">
                         <label cLabel for="FlowChiefNodesSelect">
                             {{ t('FlowChief Nodes (Plantexplorer)') }}
@@ -79,6 +78,20 @@
                     </div>
 
                     <div class="mb-3">
+                        @if (post.flowchief_nodes_membership.length > 0) {
+                            <c-alert color="warning">
+                                <h4 cAlertHeading>
+                                    <div class='icon-stack  icon-stack-sm'>
+                                        <i class="base base-9 icon-stack-3x opacity-100 text-warning"></i>
+                                        <i class="fas fa-exclamation-circle icon-stack-1x opacity-100 text-white"></i>
+                                    </div>
+                                    {{ t('Attention!') }}
+                                </h4>
+                                <p class="mb-0">
+                                    {{ t('Please note that enabling the "Include sub-tree PVs" option may result in a large number of unnecessary imports, which can cause performance issues.') }}
+                                </p>
+                            </c-alert>
+                        }
 
                         @for (nodeMembership of post.flowchief_nodes_membership; track $index) {
                             <div class="my-2 py-1 ps-2 border-start border-primary border-4"
