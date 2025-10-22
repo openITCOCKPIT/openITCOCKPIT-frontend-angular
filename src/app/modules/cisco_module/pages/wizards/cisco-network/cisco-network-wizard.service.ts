@@ -2,23 +2,23 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { WizardsService } from '../../../../../pages/wizards/wizards.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { CiscoWlcWizardGet, CiscoWlcWizardPost } from './cisco-wlc-wizard.interface';
+import { CiscoNetworkWizardGet, CiscoNetworkWizardPost } from './cisco-network-wizard.interface';
 
 @Injectable({
     providedIn: 'root'
 })
-export class CiscoWlcWizardService extends WizardsService {
+export class CiscoNetworkWizardService extends WizardsService {
 
-    public fetch(hostId: number): Observable<CiscoWlcWizardGet> {
-        return this.http.get<CiscoWlcWizardGet>(`${this.proxyPath}/cisco_wlc_module/wizards/cisco_wlc/${hostId}.json?angular=true`).pipe(
-            map((data: CiscoWlcWizardGet): CiscoWlcWizardGet => {
+    public fetch(hostId: number): Observable<CiscoNetworkWizardGet> {
+        return this.http.get<CiscoNetworkWizardGet>(`${this.proxyPath}/cisco_module/wizards/cisco_network/${hostId}.json?angular=true`).pipe(
+            map((data: CiscoNetworkWizardGet): CiscoNetworkWizardGet => {
                 return data;
             })
         );
     }
 
-    public submit(post: CiscoWlcWizardPost): Observable<GenericResponseWrapper> {
-        return this.http.post<any>(`${this.proxyPath}/cisco_wlc_module/wizards/cisco_wlc.json?angular=true`, post)
+    public submit(post: CiscoNetworkWizardPost): Observable<GenericResponseWrapper> {
+        return this.http.post<any>(`${this.proxyPath}/cisco_module/wizards/cisco_network.json?angular=true`, post)
             .pipe(
                 map(data => {
                     return {
@@ -34,6 +34,6 @@ export class CiscoWlcWizardService extends WizardsService {
                     });
                 })
             );
-    }
 
+    }
 }
