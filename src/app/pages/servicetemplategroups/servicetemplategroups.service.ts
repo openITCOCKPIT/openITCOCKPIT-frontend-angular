@@ -23,7 +23,12 @@ import {
     ServiceTemplateGroupssGetEditPostServicetemplategroup
 } from './servicetemplategroups.interface';
 import { catchError, map, Observable, of } from 'rxjs';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import {
+    GenericActionErrorResponse,
+    GenericIdResponse,
+    GenericResponseWrapper,
+    GenericValidationError
+} from '../../generic-responses';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
@@ -146,10 +151,6 @@ export class ServicetemplategroupsService {
         return this.http.get<AllocateToHostGroupGet>(`${this.proxyPath}/servicetemplategroups/allocateToHostgroup/${servicetemplategroupId}.json?angular=true&hostgroupId=${hostgroupId}`);
     }
 
-    public allocateToHostgroup(servicetemplategroupId: number, item: AllocateToHostgroupPost): Observable<GenericResponseWrapper> {
-        return this.http.post<GenericResponseWrapper>(`${this.proxyPath}/servicetemplategroups/allocateToHostgroup/${servicetemplategroupId}.json?angular=true`, item);
-    }
-
     public allocateToMatchingHostgroup(servicetemplategroupId: number): Observable<AllocateToMatchingHostgroupResponse> {
         return this.http.post<AllocateToMatchingHostgroupResponse>(`${this.proxyPath}/servicetemplategroups/allocateToMatchingHostgroup/${servicetemplategroupId}.json?angular=true`, {})
             .pipe(
@@ -177,7 +178,27 @@ export class ServicetemplategroupsService {
     }
 
     public allocateToHost(servicetemplategroupId: number, item: AllocateToHostgroupPost): Observable<GenericResponseWrapper> {
-        return this.http.post<GenericResponseWrapper>(`${this.proxyPath}/servicetemplategroups/allocateToHost/${servicetemplategroupId}.json?angular=true`, item);
+        return this.http.post<any>(`${this.proxyPath}/servicetemplategroups/allocateToHost/${servicetemplategroupId}.json?angular=true`, item)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.message as GenericActionErrorResponse;
+                    return of({
+                        success: false,
+                        data: {
+                            hostId: {
+                                err
+                            }
+                        }
+                    });
+                })
+            );
     }
 
     public append(appendPost: ServicetemplategroupsAppendPost): Observable<GenericResponseWrapper> {

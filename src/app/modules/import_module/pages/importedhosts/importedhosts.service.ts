@@ -132,7 +132,7 @@ export class ImportedhostsService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data as GenericResponse // Containers a ImportedHostPost
+                        data: data.importedhost as GenericResponse // Containers a ImportedHostPost
                     };
                 }),
                 catchError((error: any) => {
