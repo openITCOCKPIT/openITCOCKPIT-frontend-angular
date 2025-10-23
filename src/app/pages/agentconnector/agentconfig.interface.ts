@@ -21,6 +21,7 @@ export interface AgentConfigStringFields {
     autossl_crt_file: string
     autossl_key_file: string
     autossl_ca_file: string
+    tls_security_level: 'lax' | 'intermediate' | 'modern'
     config_version: string
 }
 
