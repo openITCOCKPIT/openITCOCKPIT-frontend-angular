@@ -2,19 +2,18 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ContainerComponent,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ContainerComponent,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -32,6 +31,7 @@ import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface'
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
 import {
     ExternalMonitoringConfig,
+    ExternalMonitoringConfigFlowChief,
     ExternalMonitoringConfigIcinga2,
     ExternalMonitoringConfigOpmanager,
     ExternalMonitoringConfigPrtg,
@@ -54,37 +54,38 @@ import { DynamicalFormFields } from '../../../../../components/dynamical-form-fi
 import {
     DynamicalFormFieldsComponent
 } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
+import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
 
 @Component({
     selector: 'oitc-external-monitorings-add',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    NgIf,
-    SelectComponent,
-    ContainerComponent,
-    NgForOf,
-    DynamicalFormFieldsComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        NgIf,
+        SelectComponent,
+        ContainerComponent,
+        NgForOf,
+        DynamicalFormFieldsComponent
+    ],
     templateUrl: './external-monitorings-add.component.html',
     styleUrl: './external-monitorings-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -106,15 +107,19 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
 
     protected readonly ExternalMonitoringTypes = [
         {
-            key: 'icinga2',
+            key: ExternalMonitoringSystems.FlowChief,
+            value: this.TranslocoService.translate('FlowChief')
+        },
+        {
+            key: ExternalMonitoringSystems.Icinga2,
             value: this.TranslocoService.translate('Icinga 2')
         },
         {
-            key: 'opmanager',
+            key: ExternalMonitoringSystems.OpManager,
             value: this.TranslocoService.translate('ManageEngine OpManager')
         },
         {
-            key: 'prtg',
+            key: ExternalMonitoringSystems.PRTG,
             value: this.TranslocoService.translate('Paessler PRTG System')
         }
     ];
@@ -182,17 +187,24 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
                 .subscribe((result: ExternalMonitoringConfig) => {
                     this.errors = null;
                     switch (this.post.system_type) {
-                        case 'icinga2':
+                        case ExternalMonitoringSystems.Icinga2:
                             const icinga2 = result.config.config as ExternalMonitoringConfigIcinga2;
                             this.post.json_data = icinga2;
                             break;
-                        case 'opmanager':
+
+                        case ExternalMonitoringSystems.OpManager:
                             const opmanager = result.config.config as ExternalMonitoringConfigOpmanager;
                             this.post.json_data = opmanager;
                             break;
-                        case 'prtg':
+
+                        case ExternalMonitoringSystems.PRTG:
                             const prtg = result.config.config as ExternalMonitoringConfigPrtg;
                             this.post.json_data = prtg;
+                            break;
+
+                        case ExternalMonitoringSystems.FlowChief:
+                            const flowChief = result.config.config as ExternalMonitoringConfigFlowChief;
+                            this.post.json_data = flowChief;
                             break;
                     }
 
@@ -204,4 +216,5 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
     }
 
     protected readonly Object = Object;
+    protected readonly ExternalMonitoringSystems = ExternalMonitoringSystems;
 }

@@ -1088,7 +1088,6 @@
                         </span>
                     </td>
 
-
                     <td class="width-50">
                         <oitc-actions-button [permission]="'hosts.edit'"
                                              [url]="'/hosts/edit/' + host.Host.id"
@@ -1162,8 +1161,6 @@
                                 </oitc-actions-button-element>
                             }
 
-
-
                             <oitc-actions-button-element [permission]="'hosts.usedBy'"
                                                          [url]="'/hosts/usedBy/' + host.Host.id">
                                 <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
@@ -1182,17 +1179,16 @@
                                 <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                 {{ t('Copy') }}
                             </oitc-actions-button-element>
-
-                            <li cDropdownDivider *ngIf="host.Host.allow_edit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(host.Host)"
-                                                         [permission]="'hosts.delete'"
-                                                         *ngIf="host.Host.allow_edit">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-
+                            @if (host.Host.allow_edit && ( PermissionsService.hasPermissionObservable(['hosts', 'delete'])|async )) {
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(host.Host)"
+                                                             [permission]="'hosts.delete'">
+                                    <span class="text-danger">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </oitc-actions-button-element>
+                            }
                         </oitc-actions-button>
                     </td>
                 </tr>
@@ -1254,7 +1250,7 @@
                                             <a href="javascript:void(0);" cDropdownItem
                                                (click)="confirmAddHostsToHostgroup()"
                                             >
-                                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'folder-plus']"></fa-icon>
                                                 {{ t('Add to host group') }}</a>
                                         </li>
 
