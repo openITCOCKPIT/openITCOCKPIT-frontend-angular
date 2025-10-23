@@ -1,19 +1,21 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
     ContainerComponent,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import {
     DynamicalFormFieldsComponent
 } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
@@ -42,6 +44,7 @@ import { ExternalMonitoringConfig, ExternalMonitoringPost } from '../external-mo
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { SystemnameService } from '../../../../../services/systemname.service';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
 
 
 @Component({
@@ -73,7 +76,10 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        FormLoaderComponent
+        FormLoaderComponent,
+        RowComponent,
+        ColComponent,
+        AlertComponent
     ],
     templateUrl: './external-monitorings-edit.component.html',
     styleUrl: './external-monitorings-edit.component.css',
@@ -97,15 +103,19 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
 
     protected readonly ExternalMonitoringTypes = [
         {
-            key: 'icinga2',
+            key: ExternalMonitoringSystems.FlowChief,
+            value: this.TranslocoService.translate('FlowChief')
+        },
+        {
+            key: ExternalMonitoringSystems.Icinga2,
             value: this.TranslocoService.translate('Icinga 2')
         },
         {
-            key: 'opmanager',
+            key: ExternalMonitoringSystems.OpManager,
             value: this.TranslocoService.translate('ManageEngine OpManager')
         },
         {
-            key: 'prtg',
+            key: ExternalMonitoringSystems.PRTG,
             value: this.TranslocoService.translate('Paessler PRTG System')
         }
     ];
@@ -146,7 +156,7 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ExternalMonitoringsService.getEdit(this.id)
             .subscribe((result) => {
                 //Fire on page load
-                this.post = result.externalMonitoring;
+                this.post = result;
                 this.cdr.markForCheck();
                 this.loadContainers();
                 this.loadConfigFieldsBySystemType();
@@ -181,4 +191,6 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
+
+    protected readonly ExternalMonitoringSystems = ExternalMonitoringSystems;
 }
