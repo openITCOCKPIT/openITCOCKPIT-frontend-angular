@@ -6,6 +6,8 @@ import { ExternalMonitoringsService } from '../external-monitorings.service';
 import { HistoryService } from '../../../../../history.service';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import {
+    AlertComponent,
+    AlertHeadingDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -66,7 +68,9 @@ import { CopyToClipboardComponent } from '../../../../../layouts/coreui/copy-to-
         FormCheckLabelDirective,
         NgClass,
         TextColorDirective,
-        CopyToClipboardComponent
+        CopyToClipboardComponent,
+        AlertComponent,
+        AlertHeadingDirective
     ],
     templateUrl: './flowchief-node-selection.component.html',
     styleUrl: './flowchief-node-selection.component.css',
@@ -195,5 +199,4 @@ export class FlowchiefNodeSelectionComponent implements OnInit, OnDestroy {
                 }
             }));
     }
-
 }

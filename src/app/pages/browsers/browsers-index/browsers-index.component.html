@@ -159,14 +159,12 @@
 
                                     @if (statusCounts && statusCounts.hoststatusCount.length === 3) {
                                         <div class="w-100 text-center">
-                                            <oitc-host-pie-chart
-                                                [statusDataPercentage]="statusCounts.hoststatusCountPercentage"></oitc-host-pie-chart>
-                                            <!--
-                                            <img
-                                                alt="hoststatus_summary"
-                                                [src]="'/angular/getPieChart/'+statusCounts.hoststatusCount[0]+'/'+statusCounts.hoststatusCount[1]+'/'+statusCounts.hoststatusCount[2]+'.png'">
-                                            -->
+                                            <div>
+                                                <oitc-host-pie-chart
+                                                    [statusDataPercentage]="statusCounts.hoststatusCountPercentage">
 
+                                                </oitc-host-pie-chart>
+                                            </div>
                                             <div class="row text-center font-xs">
                                                 <div class="col-xs-12 col-md-4 no-padding">
                                                     @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
@@ -235,15 +233,11 @@
                                     }
                                     @if (statusCounts && statusCounts.servicestatusCount.length === 4) {
                                         <div class="w-100 text-center">
-                                            <!--
-                                            <img
-                                                alt="servicestatus_summary"
-                                                [src]="'/angular/getPieChart/'+statusCounts.servicestatusCount[0]+'/'+statusCounts.servicestatusCount[1]+'/'+statusCounts.servicestatusCount[2]+'/'+statusCounts.servicestatusCount[3]+'.png'">
-                                             -->
-
-                                            <oitc-service-pie-chart
-                                                [statusDataPercentage]="statusCounts.servicestatusCountPercentage"></oitc-service-pie-chart>
-
+                                            <div>
+                                                <oitc-service-pie-chart
+                                                    [statusDataPercentage]="statusCounts.servicestatusCountPercentage">
+                                                </oitc-service-pie-chart>
+                                            </div>
                                             <div class="row text-center font-xs">
                                                 <div class="col-xs-12 col-md-3 no-padding">
                                                     @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
