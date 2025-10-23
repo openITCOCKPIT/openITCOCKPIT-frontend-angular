@@ -393,6 +393,25 @@
                                              *ngIf="connectionType === AgentconnectorConnectionTypes.AutoTls">
                                             {{ t('openITCOCKPIT automatically generate a TLS certificate for authentication and encryption purpose. Auto-TLS is only available in Pull mode.') }}
                                         </div>
+
+                                        @if (connectionType === AgentconnectorConnectionTypes.AutoTls) {
+                                            <div class="mt-3">
+                                                <c-form-check>
+                                                    <input cFormCheckInput
+                                                           name="verify_autossl_expiry"
+                                                           id="verify_autossl_expiry"
+                                                           type="checkbox"
+                                                           [(ngModel)]="config.bool.verify_autossl_expiry"/>
+                                                    <label cFormCheckLabel for="verify_autossl_expiry">
+                                                        {{ t('Verify expiry of Auto-TLS certificate') }}
+                                                    </label>
+                                                    <div class="help-block">
+                                                        {{ t('The generated client certificate is valid for 10 years. If enabled, openITCOCKPIT will not be able to query the Agent after the certificate has been expired.') }}
+                                                    </div>
+                                                </c-form-check>
+                                            </div>
+                                        }
+
                                         <div class="help-block"
                                              *ngIf="connectionType === AgentconnectorConnectionTypes.Https">
                                             {{ t('Start the Agents web server with own TLS certificates from Let\'s Encrypt for example.') }}

@@ -33,6 +33,7 @@ export interface AgentConfigBoolFields {
     push_enable_webserver: boolean
     push_webserver_use_https: boolean
     use_autossl: boolean
+    verify_autossl_expiry: boolean
     use_https: boolean
     use_https_verify: boolean
     cpustats: boolean
