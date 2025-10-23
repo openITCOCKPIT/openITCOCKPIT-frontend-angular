@@ -73,6 +73,9 @@ export interface ResourcegroupsGet {
 export interface ResourcegroupsPost {
     id?: number
     description: string
+    timeperiod_id: number | null
+    reminder_time: number
+    deadline:string
     container: {
         parent_id: number | null
         name: string
