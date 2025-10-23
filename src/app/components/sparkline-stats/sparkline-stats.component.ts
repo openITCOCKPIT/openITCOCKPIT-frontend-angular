@@ -8,52 +8,13 @@ import {
     SimpleChanges
 } from '@angular/core';
 
-import {
-    ApexAxisChartSeries,
-    ApexChart,
-    ApexDataLabels,
-    ApexFill,
-    ApexLegend,
-    ApexPlotOptions,
-    ApexTitleSubtitle,
-    ApexTooltip,
-    ApexXAxis,
-    ApexYAxis,
-    NgApexchartsModule
-} from "ng-apexcharts";
+
 import { UUID } from '../../classes/UUID';
 import uPlot from 'uplot';
 
-
-export type ChartOptions = {
-    series: ApexAxisChartSeries;
-    chart: ApexChart;
-    xaxis: ApexXAxis;
-    markers: any; //ApexMarkers;
-    stroke: any; //ApexStroke;
-    yaxis: ApexYAxis | ApexYAxis[];
-    plotOptions: ApexPlotOptions;
-    dataLabels: ApexDataLabels;
-    colors: string[];
-    labels: string[] | number[];
-    title: ApexTitleSubtitle;
-    subtitle: ApexTitleSubtitle;
-    legend: ApexLegend;
-    fill: ApexFill;
-    tooltip: ApexTooltip;
-};
-
-declare global {
-    interface Window {
-        Apex: any;
-    }
-}
-
 @Component({
     selector: 'oitc-sparkline-stats',
-    imports: [
-        NgApexchartsModule
-    ],
+    imports: [],
     templateUrl: './sparkline-stats.component.html',
     styleUrl: './sparkline-stats.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -72,13 +33,7 @@ export class SparklineStatsComponent implements OnChanges {
     public values: number[] = [];
 
     private cdr = inject(ChangeDetectorRef);
-
-
-//    ngOnChanges(changes: SimpleChanges) {
-//        // REMOVE ME WHEN APEXCHARTS IS READY FOR ANGULAR !(
-//        return;
-//    }
-
+    
 
     ngOnChanges(changes: SimpleChanges) {
         /* The "value" input is a number that is pushed into the "values" array. The "value" is the last value we want to display
