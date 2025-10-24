@@ -67,6 +67,7 @@ export interface Timeperiod {
     timeperiod_timeranges: TimeperiodRange[],
     validate_timeranges: true,
     description: string
+    calendar?: GenericIdAndName
 }
 
 export interface TimeperiodRange {
