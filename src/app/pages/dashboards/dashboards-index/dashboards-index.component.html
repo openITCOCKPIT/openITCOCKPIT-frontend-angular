@@ -67,6 +67,7 @@
                 </c-nav-item>
                 <c-nav-item class="px-1">
                     <button (click)="toggleFullscreenMode()" cButton class="ripple" color="default"
+                            id="dashboardToggleFullscreenBtn"
                             size="xs" [cTooltip]="'Fullscreen mode'|transloco" cTooltipPlacement="bottom">
                         <fa-icon [icon]="['fas', 'expand-arrows-alt']"></fa-icon>
                     </button>
@@ -170,8 +171,8 @@
                                 <c-card-body class="overflow-auto pt-2 pb-0" [attr.id]="'widget-body-'+widget.id">
                                     <ng-container *ngIf="isWidgetAvailable(widget)">
                                         <oitc-widget-container
-                                                [widgetInput]="widget"
-                                                [isReadonly]="isReadonly"></oitc-widget-container>
+                                            [widgetInput]="widget"
+                                            [isReadonly]="isReadonly"></oitc-widget-container>
                                     </ng-container>
                                     <ng-container *ngIf="!isWidgetAvailable(widget)">
                                         <c-alert color="warning">

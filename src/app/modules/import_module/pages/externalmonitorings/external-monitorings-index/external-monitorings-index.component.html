@@ -174,6 +174,14 @@
                                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                 {{ t('Edit') }}
                             </oitc-actions-button-element>
+                            @if (externalMonitoring.system_type === ExternalMonitoringSystems.FlowChief && externalMonitoring.allowEdit) {
+                                <oitc-actions-button-element
+                                    [permission]="'ImportModule.ExternalMonitorings.flowchiefNodeSelection'"
+                                    [url]="'/import_module/ExternalMonitorings/flowchiefNodeSelection/' + externalMonitoring.id">
+                                    <fa-icon [icon]="['fas', 'folder-tree']"></fa-icon>
+                                    {{ t('Select FlowChef Nodes') }}
+                                </oitc-actions-button-element>
+                            }
                             <oitc-actions-button-element [permission]="'ImportModule.importchangelogs.index'"
                                                          [url]="'/import_module/import_changelogs/entity/ExternalMonitoring/' + externalMonitoring.id">
                                 <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
