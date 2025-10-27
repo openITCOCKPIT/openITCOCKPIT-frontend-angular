@@ -26,7 +26,6 @@
             </h5>
         </c-card-header>
         <c-card-body class="p-0">
-
             <div class="row m-0 text-center mb-3" style="min-height: 22px;">
                 <div
                     class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
@@ -173,6 +172,46 @@
                 [errors]="errors"
                 [titleErrorField]="'services'"
                 [title]="'Apache Tomcat services'|transloco"
+            />
+
+            <div>
+                <ng-template #contentTemplate let-data>
+                    <span class="h5 text-info" *ngIf="data">
+                        {{ t('Discovering Memory Pools for Services') }}
+                    </span>
+                    <br>
+                    {{ t('Scan the Apache Tomcat server and find all memory pools. Only possible with a valid configuration for that Apache Tomcat server.') }}
+                </ng-template>
+
+                <ng-template #buttonTemplate let-data>
+                    <div class="ms-2">
+                        <button class="ripple" (click)="executeMemoryPoolDiscovery()" cButton color="info">
+                            {{ t('Start memory pool discovery') }}
+                        </button>
+                    </div>
+
+                </ng-template>
+
+                <oitc-alert
+                    baseIcon="circle"
+                    color="info"
+                    [icon]="['fas', 'info']"
+                    [contentTemplate]="contentTemplate"
+                    [buttonTemplate]="buttonTemplate"></oitc-alert>
+
+            </div>
+
+            <c-row class="mb-1">
+                <c-col md="6">
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="WizardTomcatMemoryPoolDiscovery"></oitc-form-feedback>
+                </c-col>
+            </c-row>
+            <oitc-wizards-dynamicfields
+                [(post)]="post.memoryPoolServices"
+                [errors]="errors"
+                [titleErrorField]="'memoryPoolServices'"
+                [title]="'Apache Tomcat memory pool Services'|transloco"
             />
 
 
