@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewChild, ViewChildren } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
@@ -10,8 +10,13 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     RowComponent,
     TemplateIdDirective
 } from '@coreui/angular';
@@ -33,9 +38,11 @@ import { GenericValidationError } from '../../../../../generic-responses';
 import {
     StorageServiceTemplate
 } from '../../../../proxmox_module/pages/wizards/storage/proxmox-storage-wizard.interface';
-import { NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { N0 } from '../../../../nwc_module/pages/wizards/networkbasic/networkbasic-wizard.interface';
 
 @Component({
     selector: 'oitc-apache-tomcat',
@@ -65,7 +72,15 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         OitcAlertComponent,
         XsButtonDirective,
         RowComponent,
-        ColComponent
+        ColComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NgForOf,
+        NgSelectComponent,
+        NgClass
     ],
     templateUrl: './apache-tomcat.component.html',
     styleUrl: './apache-tomcat.component.css',
@@ -73,9 +88,12 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 })
 export class ApacheTomcatComponent extends WizardsAbstractComponent {
 
+    @ViewChildren('accordionItem') accordionItems: AccordionItemComponent[] = [];
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
     protected override WizardService: ApacheTomcatWizardService = inject(ApacheTomcatWizardService);
     public checked: boolean = false;
+    protected searchedTags: string[] = [];
+    public accordionClosed: boolean = true;
 
     protected override post: ApacheTomcatWizardPost = {
         host_id: 0,
@@ -107,9 +125,8 @@ export class ApacheTomcatComponent extends WizardsAbstractComponent {
         this.post.memoryPoolServices = [];
         this.cdr.markForCheck();
         this.WizardService.executeMemoryPoolDiscovery(this.post).subscribe((data: any) => {
-            this.post.memoryPoolServices = [];
             this.errors = {} as GenericValidationError;
-//            this.accordionClosed = true;
+            this.accordionClosed = true;
             this.cdr.markForCheck();
             // Error
             if (data && data.memorypools && data.memorypools.length && data.memorypools[0].value && data.memorypools[2]) {
@@ -143,6 +160,49 @@ export class ApacheTomcatComponent extends WizardsAbstractComponent {
             this.cdr.markForCheck();
         });
 
+    }
+
+
+    protected toggleCheck(checked: boolean): void {
+        this.checked = checked;
+        this.post.memoryPoolServices.forEach((service: N0) => {
+            if (!this.hasName(service.name)) {
+                return;
+            }
+            service.createService = this.checked;
+        });
+        this.cdr.markForCheck();
+    }
+
+    protected toggleAccordionClose(checked: boolean): void {
+        this.accordionClosed = checked;
+        this.accordionItems.forEach((accordionItem: AccordionItemComponent) => {
+            if ((accordionItem.visible && this.accordionClosed) || (!accordionItem.visible && !this.accordionClosed)) {
+                accordionItem.toggleItem();
+            }
+        });
+        this.cdr.markForCheck();
+    }
+
+    protected detectColor = function (label: string): string {
+        if (label.match(/warning/gi)) {
+            return 'warning';
+        }
+
+        if (label.match(/critical/gi)) {
+            return 'critical';
+        }
+
+        return '';
+    };
+
+    protected hasName = (name: string): boolean => {
+        if (this.searchedTags.length === 0) {
+            return true;
+        }
+        return this.searchedTags.some((tag) => {
+            return name.toLowerCase().includes(tag.toLowerCase());
+        });
     }
 
 }

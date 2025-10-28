@@ -164,7 +164,6 @@
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="TOMCAT_AUTH_MODE"></oitc-form-feedback>
                 </div>
-
             </fieldset>
 
             <oitc-wizards-dynamicfields
@@ -173,46 +172,176 @@
                 [titleErrorField]="'services'"
                 [title]="'Apache Tomcat services'|transloco"
             />
-
-            <div>
-                <ng-template #contentTemplate let-data>
-                    <span class="h5 text-info" *ngIf="data">
-                        {{ t('Discovering Memory Pools for Services') }}
-                    </span>
-                    <br>
-                    {{ t('Scan the Apache Tomcat server and find all memory pools. Only possible with a valid configuration for that Apache Tomcat server.') }}
-                </ng-template>
-
-                <ng-template #buttonTemplate let-data>
-                    <div class="ms-2">
-                        <button class="ripple" (click)="executeMemoryPoolDiscovery()" cButton color="info">
-                            {{ t('Start memory pool discovery') }}
-                        </button>
-                    </div>
-
-                </ng-template>
-
-                <oitc-alert
-                    baseIcon="circle"
-                    color="info"
-                    [icon]="['fas', 'info']"
-                    [contentTemplate]="contentTemplate"
-                    [buttonTemplate]="buttonTemplate"></oitc-alert>
-
-            </div>
-
             <c-row class="mb-1">
                 <c-col md="6">
                     <oitc-form-feedback [errors]="errors"
                                         errorField="WizardTomcatMemoryPoolDiscovery"></oitc-form-feedback>
                 </c-col>
             </c-row>
-            <oitc-wizards-dynamicfields
-                [(post)]="post.memoryPoolServices"
-                [errors]="errors"
-                [titleErrorField]="'memoryPoolServices'"
-                [title]="'Apache Tomcat memory pool Services'|transloco"
-            />
+            <fieldset>
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4 [ngClass]="{'text-danger': errors.hasOwnProperty('memoryPoolServices') }">
+                        {{ t('Apache Tomcat memory pool Services') }}
+                    </h4>
+                    <span class="help-block italic text-primary small">
+                        {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
+                    </span>
+                    <oitc-form-feedback [errors]="errors" errorField="memoryPoolServices"></oitc-form-feedback>
+                </legend>
+
+                <div>
+                    <ng-template #contentTemplate let-data>
+                        <span class="h5 text-info" *ngIf="data">
+                            {{ t('Discovering Memory Pools for Services') }}
+                        </span>
+                        <br>
+                        {{ t('Scan the Apache Tomcat server and find all memory pools. Only possible with a valid configuration for that Apache Tomcat server.') }}
+                    </ng-template>
+
+                    <ng-template #buttonTemplate let-data>
+                        <div class="ms-2">
+                            <button class="ripple" (click)="executeMemoryPoolDiscovery()" cButton color="info">
+                                {{ t('Start memory pool discovery') }}
+                            </button>
+                        </div>
+
+                    </ng-template>
+
+                    <oitc-alert
+                        baseIcon="circle"
+                        color="info"
+                        [icon]="['fas', 'info']"
+                        [contentTemplate]="contentTemplate"
+                        [buttonTemplate]="buttonTemplate"></oitc-alert>
+
+                </div>
+
+                <c-row class="mb-1">
+                    <c-col md="6">
+                        <oitc-form-feedback [errors]="errors" errorField="snmpcommand"></oitc-form-feedback>
+                    </c-col>
+                </c-row>
+                <c-row class="mb-3">
+                    <c-col md="6">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            </span>
+                            <ng-select
+                                id="tags"
+                                name="tags"
+                                [items]="[]"
+                                [(ngModel)]="searchedTags"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                [isOpen]="false"
+                                [placeholder]="'Filter by interface name'|transloco">
+                            </ng-select>
+                            <span cInputGroupText>
+                                <c-form-check>
+                                    <input
+                                        cFormCheckInput
+                                        name="toggleNetworkCheckboxes"
+                                        id="toggleNetworkCheckboxes"
+                                        type="checkbox"
+                                        (ngModelChange)="toggleCheck($event)"
+                                        [(ngModel)]="checked"/>
+                                    <label cFormCheckLabel for="toggleNetworkCheckboxes">
+                                        {{ t('Toggle checkboxes') }}
+                                    </label>
+                                </c-form-check>
+                            </span>
+                        </c-input-group>
+                    </c-col>
+                    <c-col md="2">
+                        <button cButton
+                                class="ripple"
+                                color="primary"
+                                (click)="toggleAccordionClose(!accordionClosed)">
+                            @if (!accordionClosed) {
+                                <fa-icon [icon]="['fas', 'down-left-and-up-right-to-center']"></fa-icon>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'up-right-and-down-left-from-center']"></fa-icon>
+                            }
+                            {{ t('Collapse all') }}
+                        </button>
+                    </c-col>
+                </c-row>
+
+
+                <ul class="m-0 p-0">
+                    <ol class="m-0 p-0" *ngFor="let memoryPoolService of post.memoryPoolServices">
+                        @if (!memoryPoolService.servicecommandargumentvalues.length) {
+                            <ng-container *ngIf="hasName(memoryPoolService.name)">
+
+                                <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
+                                    <div class="d-flex align-items-center">
+                                        <input cFormCheckInput
+                                               type="checkbox"
+                                               [id]="memoryPoolService.name"
+                                               class="alert-icon lg-checkbox"
+                                               name="checkbox"
+                                               [(ngModel)]="memoryPoolService.createService"/>
+                                        <label class="custom-control-label custom-control-label-ok"
+                                               [for]="memoryPoolService.name">
+                                            {{ memoryPoolService.name }}
+                                            <span class="help-block italic">
+                                                {{ memoryPoolService.description }}
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        } @else {
+                            <ng-container *ngIf="hasName(memoryPoolService.name)">
+                                <c-accordion class="mb-3">
+                                    <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
+                                        <ng-template cTemplateId="accordionHeaderTemplate">
+                                            <div class="form-group bg-info-subtle"
+                                                 (click)="accordionItem.toggleItem()"
+                                                 [collapsed]="!accordionItem.visible" cAccordionButton>
+                                                <div class="d-flex align-items-center">
+                                                    <input cFormCheckInput
+                                                           type="checkbox"
+                                                           [id]="memoryPoolService.name"
+                                                           class="alert-icon lg-checkbox"
+                                                           name="checkbox"
+                                                           (click)="$event.stopPropagation()"
+                                                           [(ngModel)]="memoryPoolService.createService"/>
+                                                    <label class="custom-control-label custom-control-label-ok"
+                                                           (click)="$event.stopPropagation()"
+                                                           [for]="memoryPoolService.name">
+                                                        {{ memoryPoolService.name }}
+                                                        <span class="help-block italic">
+                                                            {{ memoryPoolService.description }}
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template cTemplateId="accordionBodyTemplate">
+                                            <div class="accordion-body">
+                                                @for (
+                                                    commandArgument of memoryPoolService.servicecommandargumentvalues; track $index) {
+                                                    <div
+                                                        class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
+                                                        {{ commandArgument.commandargument.human_name }}
+                                                        <input class="form-control"
+                                                               type="text"
+                                                               [disabled]="!memoryPoolService.createService || $index === 0"
+                                                               [(ngModel)]="commandArgument.value">
+                                                    </div>
+                                                }
+                                            </div>
+                                        </ng-template>
+                                    </c-accordion-item>
+                                </c-accordion>
+                            </ng-container>
+                        }
+                    </ol>
+                </ul>
+            </fieldset>
 
 
         </c-card-body>
