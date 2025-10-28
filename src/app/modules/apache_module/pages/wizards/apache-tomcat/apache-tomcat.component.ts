@@ -87,7 +87,7 @@ export class ApacheTomcatComponent extends WizardsAbstractComponent {
         memoryPoolServices: []
     } as ApacheTomcatWizardPost;
 
-    protected memoryPoolServiceTemplate: StorageServiceTemplate = {} as StorageServiceTemplate;
+    protected memoryPoolServicetemplate: StorageServiceTemplate = {} as StorageServiceTemplate;
 
     protected override wizardLoad(result: ApacheTomcatWizardGet): void {
         this.cdr.markForCheck();
@@ -95,7 +95,7 @@ export class ApacheTomcatComponent extends WizardsAbstractComponent {
         this.post.TOMCAT_PW = result.TOMCAT_PW;
         this.post.TOMCAT_PORT = result.TOMCAT_PORT;
         this.post.TOMCAT_AUTH_MODE = result.TOMCAT_AUTH_MODE;
-        this.memoryPoolServiceTemplate = result.servicetemplates[0];
+        this.memoryPoolServicetemplate = result.memoryPoolServicetemplate;
         super.wizardLoad(result);
     }
 
@@ -115,9 +115,8 @@ export class ApacheTomcatComponent extends WizardsAbstractComponent {
             if (data && data.memorypools && data.memorypools.length && data.memorypools[0].value && data.memorypools[2]) {
                 for (let key in data.memorypools[2].value) {
                     let myStoragePool: string = String(data.memorypools[2].value[key]);
-                    console.warn(myStoragePool);
-                    let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.memoryPoolServiceTemplate.servicetemplatecommandargumentvalues));
-                    servicetemplatecommandargumentvalues[0].value = myStoragePool;
+                    let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.memoryPoolServicetemplate.servicetemplatecommandargumentvalues));
+                    servicetemplatecommandargumentvalues[3].value = myStoragePool;
                     let name = "Tomcat Memory-Pool " + myStoragePool;
                     this.post.memoryPoolServices.push(
                         {
@@ -126,7 +125,7 @@ export class ApacheTomcatComponent extends WizardsAbstractComponent {
                             host_id: this.post.host_id,
                             name: name,
                             servicecommandargumentvalues: servicetemplatecommandargumentvalues,
-                            servicetemplate_id: this.memoryPoolServiceTemplate.id
+                            servicetemplate_id: this.memoryPoolServicetemplate.id
                         });
                 }
                 this.cdr.markForCheck();

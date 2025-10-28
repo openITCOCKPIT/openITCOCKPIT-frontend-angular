@@ -1,4 +1,4 @@
-import { Service, WizardGet, WizardPost } from '../../../../../pages/wizards/wizards.interface';
+import { Service, Servicetemplate, WizardGet, WizardPost } from '../../../../../pages/wizards/wizards.interface';
 
 // WIZARD GET
 export interface ApacheTomcatWizardGet extends WizardGet {
@@ -6,6 +6,7 @@ export interface ApacheTomcatWizardGet extends WizardGet {
     TOMCAT_PW: string
     TOMCAT_PORT: number
     TOMCAT_AUTH_MODE: string
+    memoryPoolServicetemplate: Servicetemplate
 }
 
 
