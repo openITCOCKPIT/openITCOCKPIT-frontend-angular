@@ -1,22 +1,37 @@
 <oitc-global-loader></oitc-global-loader>
 <div class="main-container">
     <!--sidebar-->
-    <oitc-coreui-navbar *ngIf="(this.LayoutService.layout$ | async) == LayoutOptions.Default">
-    </oitc-coreui-navbar>
+    @if (( this.LayoutService.layout$ | async ) == LayoutOptions.Default) {
+        <oitc-coreui-navbar></oitc-coreui-navbar>
+    }
     <div id="right" class="column">
-        <div class="top-right" *ngIf="(this.LayoutService.layout$ | async) == LayoutOptions.Default">
-            <!--app-header-->
-            <oitc-coreui-header [cShadowOnScroll]="'sm'"
-                                [messageOfTheDay]="messageOfTheDay"
-                                class="w-100 shadow-sm p-0"
-                                position="sticky"
-                                sidebarId="sidebar1"/>
-        </div>
+        @if (( this.LayoutService.layout$ | async ) == LayoutOptions.Default) {
+            <div class="top-right">
+                <!--app-header-->
+                <oitc-coreui-header [cShadowOnScroll]="'sm'"
+                                    [messageOfTheDay]="messageOfTheDay"
+                                    class="w-100 shadow-sm p-0"
+                                    position="sticky"
+                                    sidebarId="sidebar1"/>
+            </div>
+        }
         <div class="d-flex bottom">
             <!--main-->
             <!--app-body-->
             <c-container [fluid]="true" id="mainContentContainer"
                          [ngClass]="{'p-0': (this.LayoutService.layout$ | async) == LayoutOptions.Blank}">
+                @if (( this.LayoutService.layout$ | async ) == LayoutOptions.Kiosk) {
+                    <ng-container *transloco="let t">
+                        <div class="kiosk-mode-bar position-absolute start-50 translate-middle-x top-0">
+                            <button
+                                class="btn btn-outline-info btn-xs"
+                                (click)="this.LayoutService.setLayout(LayoutOptions.Default)"
+                                type="button">
+                                {{ t('Exit Kiosk Mode') }}
+                            </button>
+                        </div>
+                    </ng-container>
+                }
                 <!-- Content will be here -->
                 <router-outlet/>
             </c-container>
@@ -25,5 +40,7 @@
         </div>
     </div>
 
-    <oitc-message-of-the-day-modal [messageOfTheDay]="messageOfTheDay"/>
+    @if (( this.LayoutService.layout$ | async ) != LayoutOptions.Kiosk) {
+        <oitc-message-of-the-day-modal [messageOfTheDay]="messageOfTheDay"></oitc-message-of-the-day-modal>
+    }
 </div>
