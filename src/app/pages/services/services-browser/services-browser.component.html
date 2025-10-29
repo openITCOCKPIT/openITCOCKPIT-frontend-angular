@@ -492,6 +492,118 @@
                             </c-col>
                         </c-row>
 
+                        <!-- Planned Service Downtimes (downtimes in the future) -->
+                        @if (result && result.plannedDowntimes && result.plannedDowntimes.length > 0) {
+                            <c-row>
+                                <c-col [xs]="12">
+                                    <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                            class="mb-3">
+                                        <c-card-header>
+                                            <h5 class="text-info">
+                                                <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                                {{ t('Upcoming  planned maintenance periods for the service') }}
+                                            </h5>
+                                        </c-card-header>
+                                        <c-card-body>
+                                            <table cTable [striped]="true">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">{{ t('User') }}</th>
+                                                    <th scope="col">{{ t('Start time') }}</th>
+                                                    <th scope="col">{{ t('End time') }}</th>
+                                                    <th scope="col"> {{ t('Comment') }}</th>
+                                                    <th scope="col" class="text-end">{{ t('Cancel') }}</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @for (downtime of result.plannedDowntimes; track $index) {
+                                                        <tr>
+                                                            <td>{{ downtime.authorName }}</td>
+                                                            <td>{{ downtime.scheduledStartTime }}</td>
+                                                            <td>{{ downtime.scheduledEndTime }}</td>
+                                                            <td>{{ downtime.commentData }}</td>
+                                                            <td class="text-end">
+                                                                @if (downtime.allowEdit && downtime.isCancellable) {
+                                                                    <div class="w-100"
+                                                                         *oitcPermission="['downtimes', 'delete']">
+                                                                        <button
+                                                                            (click)="toggleCancelServiceDowntimeModal(downtime)"
+                                                                            cButton
+                                                                            class="ripple" color="danger"
+                                                                            size="xs">
+                                                                            <fa-icon
+                                                                                [icon]="['fas', 'trash']"></fa-icon>
+                                                                            {{ t('Cancel') }}
+                                                                        </button>
+                                                                    </div>
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                            </c-row>
+                        }
+
+                        <!-- Planned Host Downtimes (downtimes in the future) -->
+                        @if (result && result.plannedHostDowntimes && result.plannedHostDowntimes.length > 0) {
+                            <c-row>
+                                <c-col [xs]="12">
+                                    <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                            class="mb-3">
+                                        <c-card-header>
+                                            <h5 class="text-info">
+                                                <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                                {{ t('Upcoming  planned maintenance periods for the host of this service') }}
+                                            </h5>
+                                        </c-card-header>
+                                        <c-card-body>
+                                            <table cTable [striped]="true">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">{{ t('User') }}</th>
+                                                    <th scope="col">{{ t('Start time') }}</th>
+                                                    <th scope="col">{{ t('End time') }}</th>
+                                                    <th scope="col"> {{ t('Comment') }}</th>
+                                                    <th scope="col" class="text-end">{{ t('Cancel') }}</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @for (downtime of result.plannedHostDowntimes; track $index) {
+                                                        <tr>
+                                                            <td>{{ downtime.authorName }}</td>
+                                                            <td>{{ downtime.scheduledStartTime }}</td>
+                                                            <td>{{ downtime.scheduledEndTime }}</td>
+                                                            <td>{{ downtime.commentData }}</td>
+                                                            <td class="text-end">
+                                                                @if (downtime.allowEdit && downtime.isCancellable) {
+                                                                    <div class="w-100"
+                                                                         *oitcPermission="['downtimes', 'delete']">
+                                                                        <button
+                                                                            (click)="toggleCancelHostDowntimeModal(downtime)"
+                                                                            cButton
+                                                                            class="ripple" color="danger"
+                                                                            size="xs">
+                                                                            <fa-icon
+                                                                                [icon]="['fas', 'trash']"></fa-icon>
+                                                                            {{ t('Cancel') }}
+                                                                        </button>
+                                                                    </div>
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                            </c-row>
+                        }
+
                         <c-row>
                             <!-- Check command -->
                             <c-col [xs]="12" [sm]="12" [md]="9" class="mt-1">

@@ -766,7 +766,9 @@ export interface ServiceBrowserResult {
     servicestatus: ServicestatusObject
     acknowledgement?: AcknowledgementObject
     downtime?: DowntimeObject
+    plannedDowntimes: DowntimeObject[],
     hostDowntime?: DowntimeObject
+    plannedHostDowntimes: DowntimeObject[],
     hostAcknowledgement?: AcknowledgementObject
     checkCommand: CheckCommandCake2
     checkPeriod: TimeperiodEnity
