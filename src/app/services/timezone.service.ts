@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../tokens/proxy-path.token';
-import { map, Observable, of } from 'rxjs';
-import { formatDate } from '@angular/common';
+import { map, Observable } from 'rxjs';
 
 export interface TimezoneConfiguration {
     user_timezone: string
@@ -32,9 +31,9 @@ export class TimezoneService {
     private readonly proxyPath = inject(PROXY_PATH);
 
     public getTimezoneConfiguration(): Observable<TimezoneConfiguration> {
-        if (cachedTimezoneconfiguration) {
-            return of(cachedTimezoneconfiguration);
-        }
+        //if (cachedTimezoneconfiguration) {
+        //    return of(cachedTimezoneconfiguration);
+        //}
         const proxyPath = this.proxyPath;
         return this.http.get<{ timezone: TimezoneConfiguration }>(`${proxyPath}/angular/user_timezone.json`, {
             params: {
