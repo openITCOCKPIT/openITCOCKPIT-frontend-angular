@@ -364,7 +364,7 @@
                                     <ng-container *ngIf="host.value.Services">
                                         <tr *ngFor="let service of host.value.Services | keyvalue: keepOrder ">
                                             <td></td>
-                                            <td>
+                                            <td class="word-break">
                                                 <span>
                                                     <fa-icon [icon]="['fas', 'cog']" class="ms-3"></fa-icon>
                                                     @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
@@ -618,7 +618,7 @@
                                 <c-col class="col-12 border-top pt-3 pb-3"
                                        *ngIf="service.value.Service.state_overview">
                                     <c-row>
-                                        <c-col class="col-md-3 d-sm-flex">
+                                        <c-col class="col-md-3 d-sm-flex word-break">
                                             <span class="ps-10">
                                                 <fa-icon [icon]="['fas', 'cog']" class="ps-3"></fa-icon>
                                                 @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
@@ -632,7 +632,6 @@
                                                 }
                                             </span>
                                         </c-col>
-
                                         <c-col md="2">
                                             <c-row class="report-border-sucess">
                                                 <c-col class="col-12"
