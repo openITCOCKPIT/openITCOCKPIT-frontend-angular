@@ -778,6 +778,7 @@ export interface HostBrowserResult {
     },
     acknowledgement?: AcknowledgementObject,
     downtime?: DowntimeObject,
+    plannedDowntimes: DowntimeObject[],
     checkCommand: CheckCommandCake2,
     checkPeriod: TimeperiodEnity,
     notifyPeriod: TimeperiodEnity,

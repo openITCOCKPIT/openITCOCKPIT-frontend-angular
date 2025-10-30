@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HostRadialbarChartComponent } from './host-radialbar-chart.component';
+import { CiscoNetworkComponent } from './cisco-network.component';
 
-describe('HostRadialbarChartComponent', () => {
-    let component: HostRadialbarChartComponent;
-    let fixture: ComponentFixture<HostRadialbarChartComponent>;
+describe('CiscoNetworkComponent', () => {
+    let component: CiscoNetworkComponent;
+    let fixture: ComponentFixture<CiscoNetworkComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [HostRadialbarChartComponent]
+            imports: [CiscoNetworkComponent]
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(HostRadialbarChartComponent);
+        fixture = TestBed.createComponent(CiscoNetworkComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

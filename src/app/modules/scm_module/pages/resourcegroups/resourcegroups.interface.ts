@@ -8,6 +8,7 @@ import {
 import { Resource } from '../resources/resources.interface';
 import { GenericIdAndName } from '../../../../generic.interfaces';
 import { getUserDate } from '../../../../services/timezone.service';
+import { Timeperiod } from '../../../../pages/timeperiods/timeperiods.interface';
 
 export interface ResourcegroupsIndex extends PaginateOrScroll {
     all_resourcegroups: Resourcegroup[]
@@ -18,6 +19,10 @@ export interface Resourcegroup {
     id: number
     container_id: number
     description: string
+    deadline: string
+    timeperiod_id: number | null
+    timeperiod?: Timeperiod
+    reminder_time: number
     last_state: number
     last_update: string
     last_update_failed: boolean
@@ -73,6 +78,9 @@ export interface ResourcegroupsGet {
 export interface ResourcegroupsPost {
     id?: number
     description: string
+    timeperiod_id: number | null
+    reminder_time: number
+    deadline: string
     container: {
         parent_id: number | null
         name: string

@@ -54,8 +54,12 @@
                         [(ngModel)]="post.Hostgroup.id"
                         optionValue="key"
                         optionLabel="value"
-                        [options]="hostgroups">
+                        [options]="hostgroups"
+                        [searchCallback]="loadHostgroups"
+                        oitcFormError [errors]="errors" errorField="hostgroup_id">
                     </oitc-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="hostgroup_id"></oitc-form-feedback>
                 </div>
 
 

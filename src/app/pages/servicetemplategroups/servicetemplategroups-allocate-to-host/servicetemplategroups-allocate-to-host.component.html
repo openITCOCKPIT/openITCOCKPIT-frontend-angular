@@ -20,7 +20,7 @@
         </ol>
     </nav>
 
-    <form cForm (ngSubmit)="allocateToHost()">
+    <form cForm (ngSubmit)="submit()">
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>
@@ -55,7 +55,7 @@
                         id="servicetemplategroupId"
                         [(ngModel)]="servicetemplategroupId"
                         optionValue="key"
-                        (ngModelChange)="hostIdChanged()"
+                        (onChange)="loadServices()"
                         optionLabel="value"
                         [searchCallback]="loadServicetemplategroups"
                         [options]="servicetemplategroups"
@@ -78,7 +78,7 @@
                         name="hostId"
                         id="hostId"
                         [(ngModel)]="hostId"
-                        (ngModelChange)="hostIdChanged()"
+                        (onChange)="loadServices()"
                         optionValue="key"
                         optionLabel="value"
                         [searchCallback]="loadHosts"
@@ -115,7 +115,7 @@
                     <fieldset class="mb-3 hostWithServicesToDeploy">
                         <h5>{{ t('Service/s to deploy on target host:') }}</h5>
                         <div class="mb-1"
-                            *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
+                             *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
 
                             <label for="checkbox_{{hostWithServicesToDeploy.servicetemplate.id}}">
                                 <input type="checkbox" cFormCheckInput
@@ -164,9 +164,6 @@
                 </div>
 
                 <div class="row padding-top-15"><!-- spacer--></div>
-
-                <c-progress *ngIf="isProcessing" [value]="percentage" class="m-3"></c-progress>
-
             </c-card-body>
             <c-card-footer class="text-end">
 
