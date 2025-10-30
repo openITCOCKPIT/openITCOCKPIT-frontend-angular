@@ -12,7 +12,7 @@
 
             <div class="container table-responsive">
                 <fa-icon [icon]="['fas', 'calendar-days']" class="text-primary"></fa-icon>
-                {{ timeperiod.name }}
+                {{ timeperiod?.name }}
                 <table bordered cTable class="mt-2">
                     <thead>
                     <tr class="bg-primary text-white text-center small">
@@ -26,32 +26,37 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngIf="weekDays">
-                        <td *ngFor="let day of weekDays | keyvalue" class="ps-1 pb-1 pt-1 pe-1 text-center">
-                            @if (day.value.length > 0) {
-                                <c-badge class="width-90" color="success" textColor="white">
-                                    {{ label.messageExists }}
-                                </c-badge>
-                            } @else {
-                                <c-badge class="width-90" color="danger" textColor="white">
-                                    {{ label.messageNotExists }}
-                                </c-badge>
-                            }
-                        </td>
-                    </tr>
-                    <tr *ngIf="weekDays">
-                        <td *ngFor="let day of weekDays | keyvalue" class="text-center ps-1 pb-1 pt-1 pe-1">
-                            @if (day.value.length > 0) {
-                                <ul class="inside-list">
-                                    <li *ngFor="let timerange of day.value">
-                                        {{ timerange.start + ' - ' + timerange.end }}
-                                    </li>
-                                </ul>
-                            } @else {
-                                <fa-icon [icon]="['fas', 'minus']" class="text-danger bg-transparent"></fa-icon>
-                            }
-                        </td>
-                    </tr>
+                        @if (weekDays) {
+                            <tr>
+                                @for (day of weekDays | keyvalue; track $index) {
+                                    <td class="ps-1 pb-1 pt-1 pe-1 text-center">
+                                        @if (day.value.length > 0) {
+                                            <c-badge class="width-90" color="success" textColor="white">
+                                                {{ label.messageExists }}
+                                            </c-badge>
+                                        } @else {
+                                            <c-badge class="width-90" color="danger" textColor="white">
+                                                {{ label.messageNotExists }}
+                                            </c-badge>
+                                        }
+                                        <div class="px-3">
+                                            @if (day.value.length > 0) {
+                                                <ul class="no-padding pt-2">
+                                                    @for (timerange of day.value; track $index) {
+                                                        <li>
+                                                            {{ timerange.start + ' - ' + timerange.end }}
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            } @else {
+                                                <fa-icon [icon]="['fas', 'minus']"
+                                                         class="text-danger bg-transparent"></fa-icon>
+                                            }
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

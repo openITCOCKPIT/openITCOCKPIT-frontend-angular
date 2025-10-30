@@ -27,7 +27,7 @@ import { AsyncPipe, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -46,6 +46,11 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { ResourcegroupsSubmitType } from '../resourcegroups.enum';
 import { MailinglistsService } from '../../mailinglists/mailinglists.service';
+import { TimeperiodsService } from '../../../../../pages/timeperiods/timeperiods.service';
+import { TimezoneConfiguration, TimezoneService } from '../../../../../services/timezone.service';
+import {
+    TimeperiodDetailsTooltipComponent
+} from '../../../../sla_module/components/timeperiod-details-tooltip/timeperiod-details-tooltip.component';
 
 @Component({
     selector: 'oitc-resourcegroups-edit',
@@ -82,7 +87,9 @@ import { MailinglistsService } from '../../mailinglists/mailinglists.service';
         DropdownMenuDirective,
         DropdownToggleDirective,
         InputGroupComponent,
-        InputGroupTextDirective
+        InputGroupTextDirective,
+        TimeperiodDetailsTooltipComponent,
+        TranslocoPipe
     ],
     templateUrl: './resourcegroups-edit.component.html',
     styleUrl: './resourcegroups-edit.component.css',
@@ -95,6 +102,8 @@ export class ResourcegroupsEditComponent implements OnInit, OnDestroy {
     private readonly ContainersService = inject(ContainersService);
     private readonly UsersService = inject(UsersService);
     private readonly MailinglistsService = inject(MailinglistsService);
+    private readonly TimeperiodsService: TimeperiodsService = inject(TimeperiodsService);
+    private readonly TimezoneService = inject(TimezoneService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     public post!: ResourcegroupsPost;
@@ -102,6 +111,8 @@ export class ResourcegroupsEditComponent implements OnInit, OnDestroy {
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private ResourcegroupsService = inject(ResourcegroupsService);
     public containers: SelectKeyValue[] = [];
+    public timeperiods: SelectKeyValue[] = [];
+    public serverTimezone: TimezoneConfiguration | null = null;
 
     public users: SelectKeyValue[] = [];
     public managers: SelectKeyValue[] = [];
@@ -122,6 +133,14 @@ export class ResourcegroupsEditComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));
         this.loadResourcegroup();
+        this.load();
+    }
+
+    private load(): void {
+        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
+            this.serverTimezone = data;
+            this.cdr.markForCheck();
+        }));
     }
 
     public loadResourcegroup() {
@@ -133,6 +152,7 @@ export class ResourcegroupsEditComponent implements OnInit, OnDestroy {
                 this.loadContainers();
                 this.loadUsers();
                 this.loadMailinglists();
+                this.loadTimeperiods();
             }));
     }
 
@@ -168,10 +188,21 @@ export class ResourcegroupsEditComponent implements OnInit, OnDestroy {
         }));
     }
 
+    private loadTimeperiods() {
+        if (this.post.container.parent_id === null) {
+            return;
+        }
+        this.subscriptions.add(this.TimeperiodsService.loadTimeperiodsByContainerId(this.post.container.parent_id).subscribe((result) => {
+            this.timeperiods = result;
+            this.cdr.markForCheck();
+        }));
+    }
+
 
     public onContainerChange() {
         this.loadUsers();
         this.loadMailinglists();
+        this.loadTimeperiods();
         this.cdr.markForCheck();
     }
 
@@ -182,6 +213,9 @@ export class ResourcegroupsEditComponent implements OnInit, OnDestroy {
     public getClearForm(): ResourcegroupsPost {
         return {
             description: '',
+            timeperiod_id: null,
+            reminder_time: 15,
+            deadline: '',
             container: {
                 parent_id: null,
                 name: ''
