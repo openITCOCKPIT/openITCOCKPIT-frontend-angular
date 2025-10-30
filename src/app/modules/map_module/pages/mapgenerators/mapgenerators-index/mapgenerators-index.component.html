@@ -171,6 +171,9 @@
                         <th scope="col" mat-sort-header="description">
                             {{ t('Mapgenerator description') }}
                         </th>
+                        <th class="width-50 text-center">
+                            <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
+                        </th>
                         <th class="text-center col-1 width-50" scope="col">
                             <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                         </th>
@@ -209,6 +212,15 @@
                                 </td>
                                 <td>
                                     {{ mapgenerator.description }}
+                                </td>
+
+                                <td class="text-center">
+                                    @if (!mapgenerator.allowEdit && mapgenerator.containers.length) {
+                                        <fa-icon [icon]="['fas', 'low-vision']"
+                                                 [cTooltip]="'Restricted view' | transloco"
+                                                 cTooltipPlacement="right"></fa-icon>
+
+                                    }
                                 </td>
 
                                 <td class="width-50">

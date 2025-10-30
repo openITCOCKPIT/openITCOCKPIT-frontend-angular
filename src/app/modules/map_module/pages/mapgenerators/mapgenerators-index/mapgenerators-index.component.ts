@@ -33,7 +33,8 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -106,7 +107,8 @@ import { AsyncPipe } from '@angular/common';
         BadgeComponent,
         FaStackComponent,
         FaStackItemSizeDirective,
-        AsyncPipe
+        AsyncPipe,
+        TooltipDirective
     ],
     templateUrl: './mapgenerators-index.component.html',
     styleUrl: './mapgenerators-index.component.css',
