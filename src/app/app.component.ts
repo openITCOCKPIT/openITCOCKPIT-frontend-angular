@@ -10,7 +10,7 @@ import {
     Renderer2,
     signal
 } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
@@ -22,7 +22,7 @@ import { HistoryService } from './history.service';
 import { CoreuiHeaderComponent } from './layouts/coreui/coreui-header/coreui-header.component';
 import { CoreuiNavbarComponent } from './layouts/coreui/coreui-navbar/coreui-navbar.component';
 import { GlobalLoaderComponent } from './layouts/coreui/global-loader/global-loader.component';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { LayoutOptions, LayoutService } from './layouts/coreui/layout.service';
@@ -36,7 +36,8 @@ import { AuthService } from './auth/auth.service';
 import { TitleService } from './services/title.service';
 import { SystemnameService } from './services/systemname.service';
 import { PermissionsService } from './permissions/permissions.service';
-import { TimezoneConfiguration, TimezoneService } from './services/timezone.service';
+import { TimezoneService } from './services/timezone.service';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-root',
@@ -48,17 +49,17 @@ import { TimezoneConfiguration, TimezoneService } from './services/timezone.serv
         CoreuiNavbarComponent,
         GlobalLoaderComponent,
         ShadowOnScrollDirective,
-        NgIf,
         AsyncPipe,
         NgClass,
-        MessageOfTheDayModalComponent
+        MessageOfTheDayModalComponent,
+        TranslocoDirective
     ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
-
+    
     // Inject HistoryService to keep track of the previous URLs
     private historyService: HistoryService = inject(HistoryService);
 
@@ -80,6 +81,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(library: FaIconLibrary,
                 private router: Router,
+                private route: ActivatedRoute,
                 private IconSetService: IconSetService,
                 // private selectConfig: NgSelectConfig,
                 // private TranslocoService: TranslocoService,
@@ -116,6 +118,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 } else {
                     this.LayoutService.setTheme('light');
                 }
+            }
+        }));
+
+        this.subscription.add(this.route.queryParams.subscribe(params => {
+            if (params && params.hasOwnProperty('kiosk')) {
+                this.LayoutService.setLayout(LayoutOptions.Kiosk);
             }
         }));
 
