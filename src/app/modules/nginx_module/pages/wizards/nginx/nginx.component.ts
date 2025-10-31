@@ -8,7 +8,7 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
-import { NginxWizardGet, NginxWizardPost } from './nginx-wizard.interface';
+import { NginxWizardPost } from './nginx-wizard.interface';
 import { NginxWizardService } from './nginx-wizard.service';
 import { RouterLink } from '@angular/router';
 
@@ -39,21 +39,9 @@ export class NginxComponent extends WizardsAbstractComponent {
     public checked: boolean = false;
 
     protected override post: NginxWizardPost = {
-        pveUsername: '',
-        pveApiTokenName: '',
-        pveApiTokenSecret: '',
-        storageServices: [],
 // Default fields from the base wizard
         host_id: 0,
         services: [],
     } as NginxWizardPost;
-
-    protected override wizardLoad(result: NginxWizardGet): void {
-        console.warn(result);
-        this.post.pveUsername = result.pveUsername;
-        this.post.pveApiTokenName = result.pveApiTokenName;
-        this.post.pveApiTokenSecret = result.pveApiTokenSecret;
-        super.wizardLoad(result);
-    }
 
 }

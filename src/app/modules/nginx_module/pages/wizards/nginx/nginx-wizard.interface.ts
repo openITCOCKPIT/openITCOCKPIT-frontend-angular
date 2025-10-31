@@ -2,9 +2,6 @@ import { WizardGet, WizardPost } from '../../../../../pages/wizards/wizards.inte
 
 // WIZARD GET
 export interface NginxWizardGet extends WizardGet {
-    pveUsername: string
-    pveApiTokenName: string
-    pveApiTokenSecret: string
 }
 
 
@@ -30,9 +27,5 @@ export interface Commandargument {
 
 // WIZARD POST
 export interface NginxWizardPost extends WizardPost {
-    pveUsername: string
-    pveApiTokenName: string
-    pveApiTokenSecret: string
-    storageServices: any[] | undefined
 }
 
