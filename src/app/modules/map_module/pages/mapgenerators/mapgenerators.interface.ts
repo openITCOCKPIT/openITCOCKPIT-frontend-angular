@@ -40,6 +40,7 @@ export interface InternalLevel {
     divider: string,
     is_container: boolean,
     index: number
+    new?: boolean
 }
 
 export interface MapgeneratorContainer extends Container {
@@ -115,6 +116,3 @@ export interface GeneratedMapsAndItems {
     maps: number[]
     newMaps: number[]
 }
-
-
-

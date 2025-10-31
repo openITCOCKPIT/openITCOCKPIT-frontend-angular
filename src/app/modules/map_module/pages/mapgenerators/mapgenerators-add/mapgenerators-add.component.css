@@ -1,3 +1,7 @@
 .border-color-error {
     border-color: var(--cui-form-invalid-border-color);
 }
+
+.border-opacity-100 {
+    border-inline-start-color: transparent !important;
+}
