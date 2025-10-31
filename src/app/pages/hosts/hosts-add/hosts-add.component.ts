@@ -135,6 +135,9 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         isHostnameInUse: false
     };
 
+    public hostnameCheckedForDuplicates: string = '';
+
+
     public hosttemplates: SelectKeyValue[] = [];
     public hostgroups: SelectKeyValue[] = [];
     public timeperiods: SelectKeyValue[] = [];
@@ -417,6 +420,8 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.checkForDuplicateHostname(this.post.name)
             .subscribe((result) => {
                 this.data.isHostnameInUse = result;
+                // Ensure that the host name in the warning box will not change until the user changes the name again
+                this.hostnameCheckedForDuplicates = this.post.name;
                 this.cdr.markForCheck();
             })
         );
