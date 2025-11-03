@@ -153,7 +153,7 @@ export class ApacheTomcatComponent extends WizardsAbstractComponent {
             const errorResponse: GenericValidationError = data.data as GenericValidationError;
             if (data.data) {
                 this.errors = errorResponse;
-                if (this.errors.hasOwnProperty('vcenter') || this.errors.hasOwnProperty('vmwareuser') || this.errors.hasOwnProperty('vmwarepass')) {
+                if (this.errors.hasOwnProperty('TOMCAT_USER') || this.errors.hasOwnProperty('TOMCAT_PW') || this.errors.hasOwnProperty('TOMCAT_PORT')) {
                     this.notyService.scrollContentDivToTop();
                 }
             }
