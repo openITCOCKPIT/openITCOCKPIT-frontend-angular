@@ -192,7 +192,7 @@
                 <div>
                     <ng-template #contentTemplate let-data>
                         <span class="h5 text-info" *ngIf="data">
-                            {{ t('Discovering Memory Pools for Services') }}
+                            {{ t('Discovering memory pools for Services') }}
                         </span>
                         <br>
                         {{ t('Scan the Apache Tomcat server and find all memory pools. Only possible with a valid configuration for that Apache Tomcat server.') }}
@@ -236,7 +236,7 @@
                                 [multiple]="true"
                                 [selectOnTab]="true"
                                 [isOpen]="false"
-                                [placeholder]="'Filter by interface name'|transloco">
+                                [placeholder]="'Filter by memory pool name'|transloco">
                             </ng-select>
                             <span cInputGroupText>
                                 <c-form-check>
