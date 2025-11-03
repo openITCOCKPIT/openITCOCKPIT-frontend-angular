@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, inject, OnDestroy } from '@angular/core';
 import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
-import { ResourcegroupsCronjobStatus, ResourcesWidgetResponse } from '../scm-widget.interface';
+import { Deadline, ResourcegroupsCronjobStatus, ResourcesWidgetResponse } from '../scm-widget.interface';
 import { ScmWidgetService } from '../scm-widget.service';
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
@@ -8,6 +8,7 @@ import { ColComponent, RowComponent } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
+import { PermissionDirective } from '../../../../permissions/permission.directive';
 
 @Component({
     selector: 'oitc-resourcegroups-cronjob-status-widget',
@@ -20,7 +21,8 @@ import { RouterLink } from '@angular/router';
         RowComponent,
         TranslocoDirective,
         RouterLink,
-        NgClass
+        NgClass,
+        PermissionDirective
     ],
     templateUrl: './resourcegroups-cronjob-status-widget.component.html',
     styleUrl: './resourcegroups-cronjob-status-widget.component.css',
@@ -30,10 +32,8 @@ export class ResourcegroupsCronjobStatusWidgetComponent extends BaseWidgetCompon
     public widgetHeight: number = 0;
     public fontSize: number = 0;
     public resources!: ResourcesWidgetResponse;
-    public deadline!: string;
+    public deadlines!: Deadline[];
     public cronjobStatus!: ResourcegroupsCronjobStatus;
-    public deadlineExceeded!: boolean;
-    public timerangeArrives!: boolean;
     private readonly ScmWidgetService = inject(ScmWidgetService);
 
     public override load() {
@@ -41,9 +41,7 @@ export class ResourcegroupsCronjobStatusWidgetComponent extends BaseWidgetCompon
             this.subscriptions.add(this.ScmWidgetService.getResourcegroupsCronjobStatusWidget(this.widget)
                 .subscribe((result) => {
                     this.resources = result;
-                    this.deadline = result.deadline;
-                    this.deadlineExceeded = result.deadlineExceeded;
-                    this.timerangeArrives = result.timerangeArrives;
+                    this.deadlines = result.deadlines;
                     this.cronjobStatus = result.cronjobStatus;
                     this.cdr.markForCheck();
                 }));

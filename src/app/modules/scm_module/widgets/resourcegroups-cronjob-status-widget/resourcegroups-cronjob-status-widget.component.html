@@ -8,52 +8,105 @@
                         <fa-icon [icon]="['fas', 'circle-info']" class="text-info"></fa-icon>
                         {{ t('No resource groups defined!') }}
                     </h5>
-                    @if (!deadlineExceeded && !timerangeArrives) {
-                        <h5 class="fw-normal">
-                            {{ t('Waiting for cronjob execution') }}
-                            <fa-icon [icon]="['fas', 'hourglass-start']" class="text-secondary"></fa-icon>
-                        </h5>
-                    } @else if (!deadlineExceeded && ( timerangeArrives && cronjobStatus.pending > 0 )) {
-                        <h5 class="fw-normal">
-                            {{ t('Time range for cronjob execution is arrives') }}
-                            <fa-icon [icon]="['fas', 'sync']" class="text-primary"
-                                     [animation]="'spin'"></fa-icon>
-                        </h5>
-                    } @else if (!deadlineExceeded && ( timerangeArrives && cronjobStatus.pending === 0 )) {
-                        <h5 class="fw-normal">
-                            {{ t('Cronjobs are successfully finished') }}
-                            <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
-                            <span class="pl-3 float-end">
-                                ⏰ {{ t('Deadline') }}
-                                <time>{{ deadline }}</time>
-                            </span>
-                        </h5>
-                    } @else if (deadlineExceeded) {
-                        @if (cronjobStatus.failed > 0) {
-                            <h5 class="m-0 fw-normal">
-                                {{ t('Cronjobs are not successfully finished') }}
-                                <span class="pl-3 float-end">
-                                    ⏰ {{ t('Deadline') }}
-                                    <time>{{ deadline }}</time>
-                                </span>
-                                <div *ngIf="deadlineExceeded" class="text-info font-xs py-1">
-                                    <fa-icon [icon]="['fas', 'circle-info']" class="text-info"></fa-icon>
-                                    {{ t('Deadline has been exceeded!!') }}
-                                </div>
-                            </h5>
-                        } @else {
-                            <h5 class="fw-normal">
+
+                    @for (deadlineItem of deadlines; track $index) {
+                        <div class="pb-1">
+                            ⏰ {{ t('Deadline') }}
+                            <time>{{ deadlineItem.key }}</time>
+                        </div>
+
+                        @if (!deadlineItem.exceeded && !deadlineItem.timerangeArrives) {
+                            <h6 class="fw-normal text-info">
+                                {{ t('Waiting for cronjob execution') }}
+                                <fa-icon [icon]="['fas', 'hourglass-start']" class="text-info"></fa-icon>
+                            </h6>
+                            <div class="pl-3 w-100">
+                                <ul class="list-inline">
+                                    @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                        @if (cronjobStatus.pendingIds.includes(resourcegroup.id)) {
+                                            <li class="list-inline-item pe-1">
+                                                •<a *oitcPermission="['scmmodule','resources', 'index']"
+                                                    [routerLink]="['/','scm_module', 'resources', 'index']"
+                                                    [queryParams]="{resourcegroupId: resourcegroup.id}">
+                                                {{ resourcegroup.name }}
+                                            </a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+
+                        } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending > 0 )) {
+                            <h6 class="fw-normal">
+                                {{ t('Time range for cronjob execution is arrives') }}
+                                <fa-icon [icon]="['fas', 'sync']" class="text-primary"
+                                         [animation]="'spin'"></fa-icon>
+                            </h6>
+                            <ul class="list-inline">
+                                @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                    <li class="list-inline-item  pe-1">
+                                        •<a *oitcPermission="['scmmodule','resources', 'index']"
+                                            [routerLink]="['/','scm_module', 'resources', 'index']"
+                                            [queryParams]="{resourcegroupId: resourcegroup.id}">
+                                        {{ resourcegroup.name }}
+                                    </a>
+                                    </li>
+                                }
+                            </ul>
+                        } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending === 0 )) {
+                            <h6 class="fw-normal">
                                 {{ t('Cronjobs are successfully finished') }}
                                 <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
-                                <span class="pl-3 float-end">
-                                    ⏰ {{ t('Deadline') }}
-                                    <time>{{ deadline }}</time>
-                                </span>
-                                <div *ngIf="deadlineExceeded" class="text-info font-xs py-1">
-                                    <fa-icon [icon]="['fas', 'circle-info']" class="text-info"></fa-icon>
-                                    {{ t('Deadline has been exceeded!!') }}
-                                </div>
-                            </h5>
+                            </h6>
+                            <br/>
+                            <ul class="list-inline">
+                                @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                    @if (cronjobStatus.successIds.includes(resourcegroup.id)) {
+                                        <li class="list-inline-item pe-1">
+                                            •<a *oitcPermission="['scmmodule','resources', 'index']"
+                                                [routerLink]="['/','scm_module', 'resources', 'index']"
+                                                [queryParams]="{resourcegroupId: resourcegroup.id}">
+                                            {{ resourcegroup.name }}
+                                        </a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        } @else if (deadlineItem.exceeded) {
+                            @if (cronjobStatus.failed > 0) {
+                                <h6 class="m-0 fw-normal text-danger">
+                                    {{ t('Cronjobs are not successfully finished') }}
+                                </h6>
+                                <ul class="list-inline">
+                                    @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                        @if (cronjobStatus.failedIds.includes(resourcegroup.id)) {
+                                            <li class="list-inline-item pe-1">
+                                                •<a *oitcPermission="['scmmodule','resources', 'index']"
+                                                    [routerLink]="['/','scm_module', 'resources', 'index']"
+                                                    [queryParams]="{resourcegroupId: resourcegroup.id}">
+                                                {{ resourcegroup.name }}
+                                            </a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            } @else {
+                                <h6 class="fw-normal">
+                                    {{ t('Cronjobs are successfully finished') }}
+                                    <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
+                                </h6>
+                                <ul class="list-inline">
+                                    @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                        <li class="list-inline-item pe-1">
+                                            •<a *oitcPermission="['scmmodule','resources', 'index']"
+                                                [routerLink]="['/','scm_module', 'resources', 'index']"
+                                                [queryParams]="{resourcegroupId: resourcegroup.id}">
+                                            {{ resourcegroup.name }}
+                                        </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
                         }
                     }
                 </c-col>

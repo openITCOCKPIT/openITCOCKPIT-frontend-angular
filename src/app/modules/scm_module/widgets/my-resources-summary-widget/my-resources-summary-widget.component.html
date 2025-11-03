@@ -16,16 +16,34 @@
                     @if (resources.resources.total > 0 && resources.resources.status_overview[0] > 0) {
                         <h5 class="m-0 fw-normal">
                             {{ t('Unconfirmed resources exists') }}
-                            <span class="pl-3 float-end">
-                                ⏰ {{ t('Deadline') }}
-                                <time>{{ deadline }}</time>
-                            </span>
-                            <div *ngIf="deadlineExceeded" class="text-danger font-xs py-2">
-                                ‼️ {{ t('Deadline has been exceeded!!') }}
-                            </div>
-                            <div *ngIf="!deadlineExceeded" class="text-warning font-xs py-2">
-                                ⚠️ {{ t('Please confirm the missing resource status before the deadline expires!') }}
-                            </div>
+                            <hr class="my-1 border-dashed">
+                            @for (deadlineItem of deadlines; track $index) {
+                                <div class="pl-3 w-100 py-1 font-xs">
+                                    ⏰ {{ t('Deadline') }}
+                                    <time>{{ deadlineItem.key }}</time>
+                                    @if (deadlineItem.exceeded) {
+                                        <span class="text-danger font-xs py-2">
+                                            ‼️ {{ t('Deadline has been exceeded!!') }}
+                                        </span>
+                                    } @else {
+                                        <span class="text-warning font-xs py-2">
+                                            ⚠️ {{ t('Please confirm the missing resource status before the deadline expires!') }}
+                                        </span>
+                                    }
+                                    <br/>
+                                    <ul class="list-inline">
+                                        @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                            <li class="list-inline-item  pe-1">
+                                                •<a *oitcPermission="['scmmodule','resources', 'index']"
+                                                   [routerLink]="['/','scm_module', 'resources', 'index']"
+                                                   [queryParams]="{resourcegroupId: resourcegroup.id}">
+                                                    {{ resourcegroup.name }}
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
                         </h5>
                     }
                 </c-col>
