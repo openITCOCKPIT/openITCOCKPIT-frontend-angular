@@ -40,6 +40,7 @@ import { servicenowModuleRoutes } from './modules/servicenow_module/servicenow_m
 import { dellModuleRoutes } from './modules/dell_module/dell_module.routes';
 import { proxmoxModuleRoutes } from './modules/proxmox_module/proxmox_module.routes';
 import { ms365ModuleRoutes } from './modules/ms365_module/ms365_module.routes';
+import { mshypervModuleRoutes } from './modules/mshyperv_module/mshyperv_module.routes';
 import { ciscoModuleRoutes } from './modules/cisco_module/cisco_module.routes';
 import { broadcomProxyModuleRoutes } from './modules/broadcomproxy_module/broadcomproxy_module.routes';
 import { apacheModuleRoutes } from './modules/apache_module/apache_module.routes';
@@ -105,6 +106,8 @@ const moduleRoutes: Routes = [
     ...dellModuleRoutes,
     ...proxmoxModuleRoutes,
     ...ms365ModuleRoutes,
+    ...mshypervModuleRoutes,
+    ...ciscoModuleRoutes,
     ...broadcomProxyModuleRoutes,
     ...apacheModuleRoutes
 ];
