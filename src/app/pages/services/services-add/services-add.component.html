@@ -131,7 +131,7 @@
                             <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
                             {{
                                 t('A service with the name {0} already exists on this host. Duplicate service names could lead to confusion.', {
-                                    '0': post.name
+                                    '0': servicenameCheckedForDuplicates
                                 })
                             }}
 
