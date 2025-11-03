@@ -20,7 +20,7 @@
         </ol>
     </nav>
 
-    <form cForm (ngSubmit)="allocateToHostgroup()">
+    <form cForm (ngSubmit)="submit()">
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>
@@ -55,7 +55,7 @@
                         id="servicetemplategroupId"
                         [(ngModel)]="servicetemplategroupId"
                         optionValue="key"
-                        (ngModelChange)="hostGroupIdChanged()"
+                        (onChange)="loadServices()"
                         optionLabel="value"
                         [searchCallback]="loadServicetemplategroups"
                         [options]="servicetemplategroups"
@@ -78,7 +78,7 @@
                         name="hostgroupId"
                         id="hostgroupId"
                         [(ngModel)]="hostgroupId"
-                        (ngModelChange)="hostGroupIdChanged()"
+                        (onChange)="loadServices()"
                         optionValue="key"
                         optionLabel="value"
                         [searchCallback]="loadHostgroups"
@@ -114,7 +114,8 @@
 
                 <ng-container *ngIf="hostgroupId !== null">
                     <c-row
-                        *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;" class="mb-3">
+                        *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;"
+                        class="mb-3">
                         <fieldset class="hostWithServicesToDeploy">
                             <h5>
                                 <label for="{{hostWithServicesToDeploy.host.id}}_ALL">
@@ -191,10 +192,12 @@
             </c-card-body>
             <c-card-footer class="text-end">
 
-                <button cButton class="ripple" color="primary" type="submit">
+                <button cButton class="ripple" color="primary"
+                        [disabled]="!servicetemplategroupId || !hostgroupId" type="submit">
                     {{ t('Allocate to host group') }}
                 </button>
-                <button [fallbackUrl]="['servicetemplategroups', 'index']" cButton class="ms-1 ripple"
+                <button [fallbackUrl]=" [
+                'servicetemplategroups', 'index']" cButton class="ms-1 ripple"
                         color="default"
                         oitcBackButton
                         type="button">

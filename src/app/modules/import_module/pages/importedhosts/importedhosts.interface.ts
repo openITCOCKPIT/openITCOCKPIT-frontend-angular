@@ -285,6 +285,7 @@ export interface ImportedHostPost {
     identifier: string
     name: string
     description: string
+    tags: string
     address: string
     container_id: number
     hosttemplate_id: number

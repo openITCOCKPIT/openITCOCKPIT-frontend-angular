@@ -8,7 +8,8 @@
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
         "i18n:extract": "transloco-keys-manager extract",
-        "i18n:find": "transloco-keys-manager find"
+        "i18n:find": "transloco-keys-manager find",
+        "check:licenses": "node parse-3rdpartylicenses.js dist/frontend-angular/3rdpartylicenses.txt"
     },
     "private": true,
     "dependencies": {
@@ -77,13 +78,12 @@
         "leaflet": "^1.9.4",
         "lodash": "^4.17.21",
         "luxon": "^3.7.1",
-        "ng-apexcharts": "^2.0.0",
         "ngx-color-picker": "^20.1.1",
         "ngx-cookie-service": "^20.0.1",
         "ngx-echarts": "^20.0.1",
         "ngx-resize-observer": "^3.1.0",
         "ngx-scrollbar": "^18.0.0",
-        "ngx-toastr": "^19.0.0",
+        "ngx-toastr": "^19.1.0",
         "prettier": "^3.6.2",
         "primeng": "^20.0.1",
         "rxjs": "~7.8.2",

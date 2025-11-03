@@ -1,10 +1,11 @@
-import { inject, Injectable, DOCUMENT } from '@angular/core';
+import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 
 export enum LayoutOptions {
     Default = 'default',
-    Blank = 'blank'
+    Blank = 'blank',
+    Kiosk = 'kiosk'
 }
 
 @Injectable({
