@@ -69,6 +69,7 @@ export class DashboardAllocateModalComponent implements OnDestroy {
     public triggerReloadEvent = output<boolean>();
 
     public tab?: DashboardTab;
+    public originalTab?: DashboardTab;
     public errors: GenericValidationError | null = null;
 
     public mode: 'add' | 'edit' = 'add';
@@ -121,6 +122,7 @@ export class DashboardAllocateModalComponent implements OnDestroy {
                 // Load containers if not already loaded
                 this.loadContainers();
             }
+            this.originalTab = JSON.parse(JSON.stringify(this.tab)) as DashboardTab;
 
             // Open the modal
             this.modalService.toggle({
@@ -129,6 +131,14 @@ export class DashboardAllocateModalComponent implements OnDestroy {
             });
 
         }));
+
+        this.subscriptions.add(
+            this.modalService.modalState$.subscribe((event: any) => {
+                if (event.show === false) {
+                    this.cleanup();
+                }
+            })
+        )
 
         this.cdr.markForCheck();
     }
@@ -264,6 +274,13 @@ export class DashboardAllocateModalComponent implements OnDestroy {
                 this.errors = errorResponse;
             }
         }));
+    }
+
+    protected cleanup(): void {
+        if (!this.tab || !this.originalTab) {
+            return;
+        }
+        this.tab.dashboard_tab_allocation = this.originalTab.dashboard_tab_allocation;
     }
 
 }
