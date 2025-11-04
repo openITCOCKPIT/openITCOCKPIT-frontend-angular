@@ -4,9 +4,17 @@ import { Deadline, ResourcegroupsCronjobStatus, ResourcesWidgetResponse } from '
 import { ScmWidgetService } from '../scm-widget.service';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { ColComponent, RowComponent } from '@coreui/angular';
+import {
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
+    ColComponent,
+    RowComponent,
+    TemplateIdDirective,
+    TooltipDirective
+} from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 
@@ -21,7 +29,13 @@ import { PermissionDirective } from '../../../../permissions/permission.directiv
         TranslocoDirective,
         RouterLink,
         NgClass,
-        PermissionDirective
+        PermissionDirective,
+        AccordionItemComponent,
+        AccordionButtonDirective,
+        TemplateIdDirective,
+        AccordionComponent,
+        TranslocoPipe,
+        TooltipDirective
     ],
     templateUrl: './resourcegroups-cronjob-status-widget.component.html',
     styleUrl: './resourcegroups-cronjob-status-widget.component.css',
@@ -31,7 +45,7 @@ export class ResourcegroupsCronjobStatusWidgetComponent extends BaseWidgetCompon
     public widgetHeight: number = 0;
     public fontSize: number = 0;
     public resources!: ResourcesWidgetResponse;
-    public deadlines!: Deadline[];
+    public deadlines: Deadline[] = [];
     public cronjobStatus!: ResourcegroupsCronjobStatus;
     private readonly ScmWidgetService = inject(ScmWidgetService);
 

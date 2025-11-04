@@ -14,100 +14,10 @@
                                     {{ t('No resource groups defined!') }}
                                 </h5>
                             }
-
-                            @for (deadlineItem of deadlines; track $index) {
-                                <div class="pb-1">
-                                    ⏰ {{ t('Deadline') }}
-                                    <time>{{ deadlineItem.key }}</time>
-                                </div>
-
-                                @if (!deadlineItem.exceeded && !deadlineItem.timerangeArrives) {
-                                    <h6 class="fw-normal text-info">
-                                        {{ t('Waiting for cronjob execution') }}
-                                        <fa-icon [icon]="['fas', 'hourglass-start']" class="text-info"></fa-icon>
-                                    </h6>
-                                    <div class="pl-3 w-100">
-                                        <ul class="list-inline">
-                                            @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
-                                                @if (cronjobStatus.pendingIds.includes(resourcegroup.id)) {
-                                                    <li class="list-inline-item pe-1">
-                                                        •<a *oitcPermission="['scmmodule','resourcegroups', 'edit']"
-                                                            [routerLink]="['/','scm_module', 'resourcegroups', 'edit', resourcegroup.id]">
-                                                        {{ resourcegroup.name }}
-                                                    </a>
-                                                    </li>
-                                                }
-                                            }
-                                        </ul>
-                                    </div>
-
-                                } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending > 0 )) {
-                                    <h6 class="fw-normal">
-                                        {{ t('Time range for cronjob execution is arrives') }}
-                                        <fa-icon [icon]="['fas', 'sync']" class="text-primary"
-                                                 [animation]="'spin'"></fa-icon>
-                                    </h6>
-                                    <ul class="list-inline">
-                                        @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
-                                            <li class="list-inline-item pe-1">
-                                                •<a *oitcPermission="['scmmodule','resourcegroups', 'edit']"
-                                                    [routerLink]="['/','scm_module', 'resourcegroups', 'edit', resourcegroup.id]">
-                                                {{ resourcegroup.name }}
-                                            </a>
-                                            </li>
-                                        }
-                                    </ul>
-                                } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending === 0 )) {
-                                    <h6 class="fw-normal">
-                                        {{ t('Cronjobs are successfully finished') }}
-                                        <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
-                                    </h6>
-                                    <br/>
-                                    <ul class="list-inline">
-                                        @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
-                                            @if (cronjobStatus.successIds.includes(resourcegroup.id)) {
-                                                <li class="list-inline-item pe-1">
-                                                    •<a *oitcPermission="['scmmodule','resourcegroups', 'edit']"
-                                                        [routerLink]="['/','scm_module', 'resourcegroups', 'edit', resourcegroup.id]">
-                                                    {{ resourcegroup.name }}
-                                                </a>
-                                                </li>
-                                            }
-                                        }
-                                    </ul>
-                                } @else if (deadlineItem.exceeded) {
-                                    @if (cronjobStatus.failed > 0) {
-                                        <h6 class="m-0 fw-normal text-danger">
-                                            {{ t('Cronjobs are not successfully finished') }}
-                                        </h6>
-                                        <ul class="list-inline">
-                                            @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
-                                                @if (cronjobStatus.failedIds.includes(resourcegroup.id)) {
-                                                    <li class="list-inline-item pe-1">
-                                                        •<a *oitcPermission="['scmmodule','resourcegroups', 'edit']"
-                                                            [routerLink]="['/','scm_module', 'resourcegroups', 'edit', resourcegroup.id]">
-                                                        {{ resourcegroup.name }}
-                                                    </a>
-                                                    </li>
-                                                }
-                                            }
-                                        </ul>
-                                    } @else {
-                                        <h6 class="fw-normal">
-                                            {{ t('Cronjobs are successfully finished') }}
-                                            <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
-                                        </h6>
-                                        <ul class="list-inline">
-                                            @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
-
-
-                                            }
-                                        </ul>
-                                    }
-                                }
-                            }
                         </c-col>
                     </c-row>
+
+                    <!-- status overview -->
                     <c-row>
                         <c-col>
                             <div>
@@ -250,6 +160,137 @@
                             </div>
                         </c-col>
                     </c-row>
+
+                    <!-- accordion -->
+                    <c-row class="mt-2">
+                        <c-col>
+                            <c-accordion>
+                                @for (deadlineItem of deadlines; track $index) {
+
+                                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                                        <ng-template cTemplateId="accordionHeaderTemplate">
+                                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible"
+                                                    cAccordionButton>
+                                                ⏰ {{ t('Deadline') }}
+
+                                                {{ deadlineItem.key }}
+
+                                                <span class="px-1">
+                                                    @if (!deadlineItem.exceeded && !deadlineItem.timerangeArrives) {
+                                                        <fa-icon [icon]="['fas', 'hourglass-start']" class="text-info"
+                                                                 [cTooltip]="'Waiting for cronjob execution' | transloco"
+                                                                 cTooltipPlacement="top"></fa-icon>
+                                                    } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending > 0 )) {
+                                                        <fa-icon [icon]="['fas', 'sync']" class="text-primary"
+                                                                 [cTooltip]="'Time range for cronjob execution is arrives' | transloco"
+                                                                 cTooltipPlacement="top"></fa-icon>
+                                                    } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending === 0 )) {
+                                                        <fa-icon [icon]="['fas', 'sync']" class="text-success"
+                                                                 [cTooltip]="'Cronjobs are successfully finished' | transloco"
+                                                                 cTooltipPlacement="top"></fa-icon>
+                                                    } @else if (deadlineItem.exceeded) {
+                                                        @if (cronjobStatus.failed > 0) {
+                                                            <fa-icon [icon]="['fas', 'times']" class="text-danger"
+                                                                     [cTooltip]="'Cronjobs are not successfully finished' | transloco"
+                                                                     cTooltipPlacement="top"></fa-icon>
+                                                        } @else {
+                                                            <fa-icon [icon]="['fas', 'check']" class="text-success"
+                                                                     [cTooltip]="'Cronjobs are successfully finished' | transloco"
+                                                                     cTooltipPlacement="top"></fa-icon>
+                                                        }
+                                                    }
+                                                </span>
+                                            </button>
+                                        </ng-template>
+                                        <ng-template cTemplateId="accordionBodyTemplate">
+                                            <div class="accordion-body">
+                                                @if (!deadlineItem.exceeded && !deadlineItem.timerangeArrives) {
+                                                    <ul class="list-inline">
+                                                        @for (
+                                                            resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                                            @if (cronjobStatus.pendingIds.includes(resourcegroup.id)) {
+                                                                <li class="list-inline-item pe-1">
+                                                                    •<a
+                                                                    *oitcPermission="['scmmodule','resourcegroups', 'edit']"
+                                                                    [routerLink]="['/','scm_module', 'resourcegroups', 'edit', resourcegroup.id]">
+                                                                    {{ resourcegroup.name }}
+                                                                </a>
+                                                                </li>
+                                                            }
+                                                        }
+                                                    </ul>
+
+                                                } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending > 0 )) {
+                                                    <ul class="list-inline">
+                                                        @for (
+                                                            resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                                            <li class="list-inline-item pe-1">
+                                                                •<a
+                                                                *oitcPermission="['scmmodule','resourcegroups', 'edit']"
+                                                                [routerLink]="['/','scm_module', 'resourcegroups', 'edit', resourcegroup.id]">
+                                                                {{ resourcegroup.name }}
+                                                            </a>
+                                                            </li>
+                                                        }
+                                                    </ul>
+
+                                                } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending === 0 )) {
+                                                    <ul class="list-inline">
+                                                        @for (
+                                                            resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                                            @if (cronjobStatus.successIds.includes(resourcegroup.id)) {
+                                                                <li class="list-inline-item pe-1">
+                                                                    •<a
+                                                                    *oitcPermission="['scmmodule','resourcegroups', 'edit']"
+                                                                    [routerLink]="['/','scm_module', 'resourcegroups', 'edit', resourcegroup.id]">
+                                                                    {{ resourcegroup.name }}
+                                                                </a>
+                                                                </li>
+                                                            }
+                                                        }
+                                                    </ul>
+
+                                                } @else if (deadlineItem.exceeded) {
+                                                    @if (cronjobStatus.failed > 0) {
+                                                        <ul class="list-inline">
+                                                            @for (
+                                                                resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                                                @if (cronjobStatus.failedIds.includes(resourcegroup.id)) {
+                                                                    <li class="list-inline-item pe-1">
+                                                                        •<a
+                                                                        *oitcPermission="['scmmodule','resourcegroups', 'edit']"
+                                                                        [routerLink]="['/','scm_module', 'resourcegroups', 'edit', resourcegroup.id]">
+                                                                        {{ resourcegroup.name }}
+                                                                    </a>
+                                                                    </li>
+                                                                }
+                                                            }
+                                                        </ul>
+                                                    } @else {
+                                                        <ul class="list-inline">
+                                                            @for (
+                                                                resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                                                @if (cronjobStatus.successIds.includes(resourcegroup.id)) {
+                                                                    <li class="list-inline-item pe-1">
+                                                                        •<a
+                                                                        *oitcPermission="['scmmodule','resourcegroups', 'edit']"
+                                                                        [routerLink]="['/','scm_module', 'resourcegroups', 'edit', resourcegroup.id]">
+                                                                        {{ resourcegroup.name }}
+                                                                    </a>
+                                                                    </li>
+                                                                }
+                                                            }
+                                                        </ul>
+                                                    }
+                                                }
+                                            </div>
+                                        </ng-template>
+                                    </c-accordion-item>
+                                }
+                            </c-accordion>
+                        </c-col>
+                    </c-row>
+
                 </div>
             }
 
