@@ -69,6 +69,7 @@ export class DashboardAllocateModalComponent implements OnDestroy {
     public triggerReloadEvent = output<boolean>();
 
     public tab?: DashboardTab;
+    public originalTab?: DashboardTab;
     public errors: GenericValidationError | null = null;
 
     public mode: 'add' | 'edit' = 'add';
