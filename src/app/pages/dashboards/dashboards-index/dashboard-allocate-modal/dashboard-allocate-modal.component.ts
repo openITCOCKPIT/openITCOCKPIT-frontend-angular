@@ -122,6 +122,7 @@ export class DashboardAllocateModalComponent implements OnDestroy {
                 // Load containers if not already loaded
                 this.loadContainers();
             }
+            this.originalTab = JSON.parse(JSON.stringify(this.tab)) as DashboardTab;
 
             // Open the modal
             this.modalService.toggle({
