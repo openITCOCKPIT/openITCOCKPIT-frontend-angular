@@ -132,6 +132,14 @@ export class DashboardAllocateModalComponent implements OnDestroy {
 
         }));
 
+        this.subscriptions.add(
+            this.modalService.modalState$.subscribe((event: any) => {
+                if (event.show === false) {
+                    this.cleanup();
+                }
+            })
+        )
+
         this.cdr.markForCheck();
     }
 
