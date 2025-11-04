@@ -92,7 +92,7 @@
 
                                             <c-row>
                                                 <c-col [xs]="12" [md]="4" [lg]="4"
-                                                       class="border-end border-white border-2">
+                                                       class="border-end border-white border-2 z-2">
                                                     <h6 class="display-4 d-block l-h-n m-0 fw-500">
                                                         @if (cronjobStatus.pending > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
                                                             <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
@@ -109,7 +109,7 @@
                                                     </small>
                                                 </c-col>
                                                 <c-col [xs]="12" [md]="4" [lg]="4"
-                                                       class="border-end border-white border-2">
+                                                       class="border-end border-white border-2 z-2">
                                                     <h6 class="display-4 d-block l-h-n m-0 fw-500">
                                                         @if (cronjobStatus.success > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
                                                             <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
@@ -125,7 +125,7 @@
                                                         {{ t('Done') }}
                                                     </small>
                                                 </c-col>
-                                                <c-col [xs]="12" [md]="4" [lg]="4">
+                                                <c-col [xs]="12" [md]="4" [lg]="4" class="z-2">
                                                     <h6 class="display-4 d-block l-h-n m-0 fw-500">
                                                         @if (cronjobStatus.total > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
                                                             <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
