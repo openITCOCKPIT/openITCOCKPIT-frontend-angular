@@ -1,254 +1,258 @@
 <ng-container *transloco="let t">
-    <div class="d-flex h-100 flex-column" *ngIf="widget">
-        <oitc-block-loader *ngIf="!cronjobStatus"></oitc-block-loader>
-        <div *ngIf="cronjobStatus">
-            <c-row>
-                <c-col class="flex-1">
-                    <h5 *ngIf="cronjobStatus.total === 0" class="fw-normal">
-                        <fa-icon [icon]="['fas', 'circle-info']" class="text-info"></fa-icon>
-                        {{ t('No resource groups defined!') }}
-                    </h5>
-
-                    @for (deadlineItem of deadlines; track $index) {
-                        <div class="pb-1">
-                            ⏰ {{ t('Deadline') }}
-                            <time>{{ deadlineItem.key }}</time>
-                        </div>
-
-                        @if (!deadlineItem.exceeded && !deadlineItem.timerangeArrives) {
-                            <h6 class="fw-normal text-info">
-                                {{ t('Waiting for cronjob execution') }}
-                                <fa-icon [icon]="['fas', 'hourglass-start']" class="text-info"></fa-icon>
-                            </h6>
-                            <div class="pl-3 w-100">
-                                <ul class="list-inline">
-                                    @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
-                                        @if (cronjobStatus.pendingIds.includes(resourcegroup.id)) {
-                                            <li class="list-inline-item pe-1">
-                                                •<a *oitcPermission="['scmmodule','resources', 'index']"
-                                                    [routerLink]="['/','scm_module', 'resources', 'index']"
-                                                    [queryParams]="{resourcegroupId: resourcegroup.id}">
-                                                {{ resourcegroup.name }}
-                                            </a>
-                                            </li>
-                                        }
-                                    }
-                                </ul>
-                            </div>
-
-                        } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending > 0 )) {
-                            <h6 class="fw-normal">
-                                {{ t('Time range for cronjob execution is arrives') }}
-                                <fa-icon [icon]="['fas', 'sync']" class="text-primary"
-                                         [animation]="'spin'"></fa-icon>
-                            </h6>
-                            <ul class="list-inline">
-                                @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
-                                    <li class="list-inline-item  pe-1">
-                                        •<a *oitcPermission="['scmmodule','resources', 'index']"
-                                            [routerLink]="['/','scm_module', 'resources', 'index']"
-                                            [queryParams]="{resourcegroupId: resourcegroup.id}">
-                                        {{ resourcegroup.name }}
-                                    </a>
-                                    </li>
-                                }
-                            </ul>
-                        } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending === 0 )) {
-                            <h6 class="fw-normal">
-                                {{ t('Cronjobs are successfully finished') }}
-                                <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
-                            </h6>
-                            <br/>
-                            <ul class="list-inline">
-                                @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
-                                    @if (cronjobStatus.successIds.includes(resourcegroup.id)) {
-                                        <li class="list-inline-item pe-1">
-                                            •<a *oitcPermission="['scmmodule','resources', 'index']"
-                                                [routerLink]="['/','scm_module', 'resources', 'index']"
-                                                [queryParams]="{resourcegroupId: resourcegroup.id}">
-                                            {{ resourcegroup.name }}
-                                        </a>
-                                        </li>
-                                    }
-                                }
-                            </ul>
-                        } @else if (deadlineItem.exceeded) {
-                            @if (cronjobStatus.failed > 0) {
-                                <h6 class="m-0 fw-normal text-danger">
-                                    {{ t('Cronjobs are not successfully finished') }}
-                                </h6>
-                                <ul class="list-inline">
-                                    @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
-                                        @if (cronjobStatus.failedIds.includes(resourcegroup.id)) {
-                                            <li class="list-inline-item pe-1">
-                                                •<a *oitcPermission="['scmmodule','resources', 'index']"
-                                                    [routerLink]="['/','scm_module', 'resources', 'index']"
-                                                    [queryParams]="{resourcegroupId: resourcegroup.id}">
-                                                {{ resourcegroup.name }}
-                                            </a>
-                                            </li>
-                                        }
-                                    }
-                                </ul>
-                            } @else {
-                                <h6 class="fw-normal">
-                                    {{ t('Cronjobs are successfully finished') }}
-                                    <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
-                                </h6>
-                                <ul class="list-inline">
-                                    @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
-                                        <li class="list-inline-item pe-1">
-                                            •<a *oitcPermission="['scmmodule','resources', 'index']"
-                                                [routerLink]="['/','scm_module', 'resources', 'index']"
-                                                [queryParams]="{resourcegroupId: resourcegroup.id}">
-                                            {{ resourcegroup.name }}
-                                        </a>
-                                        </li>
-                                    }
-                                </ul>
+    @if (widget) {
+        <div class="d-flex h-100 flex-column">
+            @if (!cronjobStatus) {
+                <oitc-block-loader></oitc-block-loader>
+            }
+            @if (cronjobStatus) {
+                <div>
+                    <c-row>
+                        <c-col class="flex-1">
+                            @if (cronjobStatus.total === 0) {
+                                <h5 class="fw-normal">
+                                    <fa-icon [icon]="['fas', 'circle-info']" class="text-info"></fa-icon>
+                                    {{ t('No resource groups defined!') }}
+                                </h5>
                             }
-                        }
-                    }
-                </c-col>
-            </c-row>
-            <c-row>
-                <c-col>
-                    <div>
-                        <div>
-                            <c-row>
-                                <c-col [xs]="12" [md]="6" [lg]="6">
-                                    <c-row class="h-100 py-1 pe-3 fs-5">
-                                        <c-col [xs]="12" [md]="6" [lg]="6">
-                                            {{ t('Pending') }}
-                                        </c-col>
-                                        <c-col [xs]="12" [md]="6" [lg]="6" class="text-primary text-start"
-                                               [ngClass]="{'opacity-50': cronjobStatus.pending === 0}">
-                                            @if (cronjobStatus.pending > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
-                                                <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
-                                                   class="text-primary"
-                                                   [queryParams]="{id: cronjobStatus.pendingIds}">
-                                                    {{ cronjobStatus.pending }}
-                                                </a>
-                                            } @else {
-                                                {{ cronjobStatus.pending }}
-                                            }
-                                        </c-col>
-                                        <c-col [xs]="12" [md]="6" [lg]="6">
-                                            {{ t('Done') }}
-                                        </c-col>
-                                        <c-col [xs]="12" [md]="6" [lg]="6" class="text-success text-start"
-                                               [ngClass]="{'opacity-50': cronjobStatus.success === 0}">
-                                            @if (cronjobStatus.success > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
-                                                <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
-                                                   class="text-success"
-                                                   [queryParams]="{id: cronjobStatus.successIds}">
-                                                    {{ cronjobStatus.success }}
-                                                </a>
-                                            } @else {
-                                                {{ cronjobStatus.success }}
-                                            }
 
-                                        </c-col>
-                                        <c-col [xs]="12" [md]="6" [lg]="6">
-                                            {{ t('Failed') }}
-                                        </c-col>
-                                        <c-col [xs]="12" [md]="6" [lg]="6" class="text-danger text-start"
-                                               [ngClass]="{'opacity-50': cronjobStatus.failed === 0}">
-                                            @if (cronjobStatus.failed > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
-                                                <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
-                                                   class="text-danger"
-                                                   [queryParams]="{id: cronjobStatus.failedIds}">
-                                                    {{ cronjobStatus.failed }}
-                                                </a>
-                                            } @else {
-                                                {{ cronjobStatus.failed }}
-                                            }
-                                        </c-col>
-                                        <hr class="border-dashed m-0">
-                                        <c-col [xs]="12" [md]="12" [lg]="12" class="text-end">
-                                            {{ t('Total') }}
-                                            @if (cronjobStatus.total > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
-                                                <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
-                                                   class="text-primary"
-                                                   [queryParams]="{id: cronjobStatus.totalIds}">
-                                                    {{ cronjobStatus.total }}
-                                                </a>
-                                            } @else {
-                                                {{ cronjobStatus.total }}
-                                            }
-                                        </c-col>
-                                    </c-row>
-                                </c-col>
-                                <c-col [xs]="12" [md]="6" [lg]="6"
-                                       class="p-2 rounded overflow-hidden position-relative text-white mb-g text-center"
-                                       [ngClass]="{'bg-primary': (cronjobStatus.total=== 0 || cronjobStatus.pending > 0), 'bg-success':cronjobStatus.total === cronjobStatus.success, 'bg-danger': cronjobStatus.failed > 0}">
+                            @for (deadlineItem of deadlines; track $index) {
+                                <div class="pb-1">
+                                    ⏰ {{ t('Deadline') }}
+                                    <time>{{ deadlineItem.key }}</time>
+                                </div>
 
+                                @if (!deadlineItem.exceeded && !deadlineItem.timerangeArrives) {
+                                    <h6 class="fw-normal text-info">
+                                        {{ t('Waiting for cronjob execution') }}
+                                        <fa-icon [icon]="['fas', 'hourglass-start']" class="text-info"></fa-icon>
+                                    </h6>
+                                    <div class="pl-3 w-100">
+                                        <ul class="list-inline">
+                                            @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                                @if (cronjobStatus.pendingIds.includes(resourcegroup.id)) {
+                                                    <li class="list-inline-item pe-1">
+                                                        •<a *oitcPermission="['scmmodule','resourcegroups', 'edit']"
+                                                            [routerLink]="['/','scm_module', 'resourcegroups', 'edit', resourcegroup.id]">
+                                                        {{ resourcegroup.name }}
+                                                    </a>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+
+                                } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending > 0 )) {
+                                    <h6 class="fw-normal">
+                                        {{ t('Time range for cronjob execution is arrives') }}
+                                        <fa-icon [icon]="['fas', 'sync']" class="text-primary"
+                                                 [animation]="'spin'"></fa-icon>
+                                    </h6>
+                                    <ul class="list-inline">
+                                        @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                            <li class="list-inline-item pe-1">
+                                                •<a *oitcPermission="['scmmodule','resourcegroups', 'edit']"
+                                                    [routerLink]="['/','scm_module', 'resourcegroups', 'edit', resourcegroup.id]">
+                                                {{ resourcegroup.name }}
+                                            </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending === 0 )) {
+                                    <h6 class="fw-normal">
+                                        {{ t('Cronjobs are successfully finished') }}
+                                        <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
+                                    </h6>
+                                    <br/>
+                                    <ul class="list-inline">
+                                        @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                            @if (cronjobStatus.successIds.includes(resourcegroup.id)) {
+                                                <li class="list-inline-item pe-1">
+                                                    •<a *oitcPermission="['scmmodule','resourcegroups', 'edit']"
+                                                        [routerLink]="['/','scm_module', 'resourcegroups', 'edit', resourcegroup.id]">
+                                                    {{ resourcegroup.name }}
+                                                </a>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                } @else if (deadlineItem.exceeded) {
+                                    @if (cronjobStatus.failed > 0) {
+                                        <h6 class="m-0 fw-normal text-danger">
+                                            {{ t('Cronjobs are not successfully finished') }}
+                                        </h6>
+                                        <ul class="list-inline">
+                                            @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                                @if (cronjobStatus.failedIds.includes(resourcegroup.id)) {
+                                                    <li class="list-inline-item pe-1">
+                                                        •<a *oitcPermission="['scmmodule','resourcegroups', 'edit']"
+                                                            [routerLink]="['/','scm_module', 'resourcegroups', 'edit', resourcegroup.id]">
+                                                        {{ resourcegroup.name }}
+                                                    </a>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                    } @else {
+                                        <h6 class="fw-normal">
+                                            {{ t('Cronjobs are successfully finished') }}
+                                            <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
+                                        </h6>
+                                        <ul class="list-inline">
+                                            @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
+
+
+                                            }
+                                        </ul>
+                                    }
+                                }
+                            }
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col>
+                            <div>
+                                <div>
                                     <c-row>
-                                        <c-col [xs]="12" [md]="4" [lg]="4" class="border-end border-white border-2">
-                                            <h6 class="display-4 d-block l-h-n m-0 fw-500">
-                                                @if (cronjobStatus.pending > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
-                                                    <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
-                                                       class="text-white"
-                                                       [queryParams]="{id: cronjobStatus.pendingIds}">
+                                        <c-col [xs]="12" [md]="6" [lg]="6">
+                                            <c-row class="h-100 py-1 pe-3 fs-5">
+                                                <c-col [xs]="12" [md]="6" [lg]="6">
+                                                    {{ t('Pending') }}
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="6" [lg]="6" class="text-primary text-start"
+                                                       [ngClass]="{'opacity-50': cronjobStatus.pending === 0}">
+                                                    @if (cronjobStatus.pending > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
+                                                        <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
+                                                           class="text-primary"
+                                                           [queryParams]="{id: cronjobStatus.pendingIds}">
+                                                            {{ cronjobStatus.pending }}
+                                                        </a>
+                                                    } @else {
                                                         {{ cronjobStatus.pending }}
-                                                    </a>
-                                                } @else {
-                                                    {{ cronjobStatus.pending }}
-                                                }
-                                            </h6>
-                                            <small class="m-0 l-h-n small">
-                                                {{ t('Pending') }}
-                                            </small>
-                                        </c-col>
-                                        <c-col [xs]="12" [md]="4" [lg]="4" class="border-end border-white border-2">
-                                            <h6 class="display-4 d-block l-h-n m-0 fw-500">
-                                                @if (cronjobStatus.success > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
-                                                    <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
-                                                       class="text-white"
-                                                       [queryParams]="{id: cronjobStatus.successIds}">
+                                                    }
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="6" [lg]="6">
+                                                    {{ t('Done') }}
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="6" [lg]="6" class="text-success text-start"
+                                                       [ngClass]="{'opacity-50': cronjobStatus.success === 0}">
+                                                    @if (cronjobStatus.success > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
+                                                        <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
+                                                           class="text-success"
+                                                           [queryParams]="{id: cronjobStatus.successIds}">
+                                                            {{ cronjobStatus.success }}
+                                                        </a>
+                                                    } @else {
                                                         {{ cronjobStatus.success }}
-                                                    </a>
-                                                } @else {
-                                                    {{ cronjobStatus.success }}
-                                                }
-                                            </h6>
-                                            <small class="m-0 l-h-n small">
-                                                {{ t('Done') }}
-                                            </small>
-                                        </c-col>
-                                        <c-col [xs]="12" [md]="4" [lg]="4">
-                                            <h6 class="display-4 d-block l-h-n m-0 fw-500">
-                                                @if (cronjobStatus.total > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
-                                                    <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
-                                                       class="text-white"
-                                                       [queryParams]="{id: cronjobStatus.totalIds}">
+                                                    }
+
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="6" [lg]="6">
+                                                    {{ t('Failed') }}
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="6" [lg]="6" class="text-danger text-start"
+                                                       [ngClass]="{'opacity-50': cronjobStatus.failed === 0}">
+                                                    @if (cronjobStatus.failed > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
+                                                        <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
+                                                           class="text-danger"
+                                                           [queryParams]="{id: cronjobStatus.failedIds}">
+                                                            {{ cronjobStatus.failed }}
+                                                        </a>
+                                                    } @else {
+                                                        {{ cronjobStatus.failed }}
+                                                    }
+                                                </c-col>
+                                                <hr class="border-dashed m-0">
+                                                <c-col [xs]="12" [md]="12" [lg]="12" class="text-end">
+                                                    {{ t('Total') }}
+                                                    @if (cronjobStatus.total > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
+                                                        <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
+                                                           class="text-primary"
+                                                           [queryParams]="{id: cronjobStatus.totalIds}">
+                                                            {{ cronjobStatus.total }}
+                                                        </a>
+                                                    } @else {
                                                         {{ cronjobStatus.total }}
-                                                    </a>
-                                                } @else {
-                                                    {{ cronjobStatus.total }}
-                                                }
-                                            </h6>
-                                            <small class="m-0 l-h-n small">
-                                                {{ t('Total') }}
-                                            </small>
+                                                    }
+                                                </c-col>
+                                            </c-row>
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="6" [lg]="6"
+                                               class="p-2 rounded overflow-hidden position-relative text-white mb-g text-center"
+                                               [ngClass]="{'bg-primary': (cronjobStatus.total=== 0 || cronjobStatus.pending > 0), 'bg-success':cronjobStatus.total === cronjobStatus.success, 'bg-danger': cronjobStatus.failed > 0}">
+
+                                            <c-row>
+                                                <c-col [xs]="12" [md]="4" [lg]="4"
+                                                       class="border-end border-white border-2">
+                                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                                        @if (cronjobStatus.pending > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
+                                                            <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
+                                                               class="text-white"
+                                                               [queryParams]="{id: cronjobStatus.pendingIds}">
+                                                                {{ cronjobStatus.pending }}
+                                                            </a>
+                                                        } @else {
+                                                            {{ cronjobStatus.pending }}
+                                                        }
+                                                    </h6>
+                                                    <small class="m-0 l-h-n small">
+                                                        {{ t('Pending') }}
+                                                    </small>
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="4" [lg]="4"
+                                                       class="border-end border-white border-2">
+                                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                                        @if (cronjobStatus.success > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
+                                                            <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
+                                                               class="text-white"
+                                                               [queryParams]="{id: cronjobStatus.successIds}">
+                                                                {{ cronjobStatus.success }}
+                                                            </a>
+                                                        } @else {
+                                                            {{ cronjobStatus.success }}
+                                                        }
+                                                    </h6>
+                                                    <small class="m-0 l-h-n small">
+                                                        {{ t('Done') }}
+                                                    </small>
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="4" [lg]="4">
+                                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                                        @if (cronjobStatus.total > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resourcegroups', 'index'])|async )) {
+                                                            <a [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']"
+                                                               class="text-white"
+                                                               [queryParams]="{id: cronjobStatus.totalIds}">
+                                                                {{ cronjobStatus.total }}
+                                                            </a>
+                                                        } @else {
+                                                            {{ cronjobStatus.total }}
+                                                        }
+                                                    </h6>
+                                                    <small class="m-0 l-h-n small">
+                                                        {{ t('Total') }}
+                                                    </small>
+                                                </c-col>
+                                            </c-row>
+                                            @if (cronjobStatus.failed > 0) {
+                                                <fa-icon [icon]="['fas', 'exclamation']"
+                                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                            }
+                                            @if (cronjobStatus.failed === 0 && cronjobStatus.pending === 0) {
+                                                <fa-icon [icon]="['fas', 'check']"
+                                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                            }
+                                            @if (cronjobStatus.failed === 0 && cronjobStatus.pending > 0) {
+                                                <fa-icon [icon]="['fas', 'pause']"
+                                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                            }
                                         </c-col>
                                     </c-row>
-                                    <fa-icon [icon]="['fas', 'exclamation']" *ngIf="cronjobStatus.failed > 0"
-                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'check']"
-                                             *ngIf="cronjobStatus.failed === 0  && cronjobStatus.pending === 0"
-                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'pause']"
-                                             *ngIf="cronjobStatus.failed === 0  && cronjobStatus.pending > 0"
-                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-
-                                </c-col>
-                            </c-row>
-                        </div>
-                    </div>
-                </c-col>
-            </c-row>
+                                </div>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </div>
+            }
 
         </div>
-    </div>
+    }
 </ng-container>

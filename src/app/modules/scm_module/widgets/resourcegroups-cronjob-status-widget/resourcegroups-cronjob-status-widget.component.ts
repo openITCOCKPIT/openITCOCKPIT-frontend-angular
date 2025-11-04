@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, inject, OnDestroy } 
 import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
 import { Deadline, ResourcegroupsCronjobStatus, ResourcesWidgetResponse } from '../scm-widget.interface';
 import { ScmWidgetService } from '../scm-widget.service';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { ColComponent, RowComponent } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -17,7 +17,6 @@ import { PermissionDirective } from '../../../../permissions/permission.directiv
         BlockLoaderComponent,
         ColComponent,
         FaIconComponent,
-        NgIf,
         RowComponent,
         TranslocoDirective,
         RouterLink,
