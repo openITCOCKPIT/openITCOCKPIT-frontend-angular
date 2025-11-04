@@ -121,7 +121,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label cLabel for="post.clientSecret">
+                    <label cLabel for="post.TOMCAT_PW">
                         {{ t('Tomcat Password') }}
                         <oitc-required-icon></oitc-required-icon>
                     </label>
@@ -216,11 +216,6 @@
 
                 </div>
 
-                <c-row class="mb-1">
-                    <c-col md="6">
-                        <oitc-form-feedback [errors]="errors" errorField="snmpcommand"></oitc-form-feedback>
-                    </c-col>
-                </c-row>
                 <c-row class="mb-3">
                     <c-col md="6">
                         <c-input-group>
