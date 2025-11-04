@@ -118,7 +118,8 @@ $warning-text-emphasis: rgb(255, 198, 121) !default;
 $danger-text-emphasis: rgb(253, 120, 151) !default;
 */
 
-$primary-text-emphasis: #8b09ba !default;
+//$primary-text-emphasis: #8b09ba !default;
+$primary-text-emphasis: #3634a3 !default;
 $secondary-text-emphasis: #434a51 !default;
 $success-text-emphasis: #5b9b35 !default;
 $info-text-emphasis: #376a90 !default;
@@ -127,7 +128,8 @@ $danger-text-emphasis: #c0022e !default;
 
 
 // scss-docs-start theme-text-dark-variables
-$primary-text-emphasis-dark: rgb(216, 124, 249) !default;
+//$primary-text-emphasis-dark: rgb(216, 124, 249) !default;
+$primary-text-emphasis-dark: color.scale($primary-text-emphasis, $saturation: -10%) !default; // stylelint-disable-line scss/at-function-named-arguments
 $secondary-text-emphasis-dark: rgb(165, 171, 177) !default;
 $success-text-emphasis-dark: rgb(134, 239, 71) !default;
 $info-text-emphasis-dark: rgb(130, 197, 248) !default;
@@ -139,7 +141,8 @@ $dark-text-emphasis-dark: $gray-300-dark !default;
 
 
 // scss-docs-start theme-bg-subtle-variables
-$primary-bg-subtle: rgb(245, 222, 253) !default;
+//$primary-bg-subtle: rgb(245, 222, 253) !default;
+$primary-bg-subtle: #cfc7f3 !default;
 $secondary-bg-subtle: rgb(244, 245, 246) !default;
 $success-bg-subtle: rgb(236, 250, 228) !default;
 $info-bg-subtle: rgb(225, 239, 250) !default;
@@ -150,7 +153,8 @@ $dark-bg-subtle: $gray-400 !default;
 // scss-docs-end theme-bg-subtle-variables
 
 // scss-docs-start theme-bg-subtle-dark-variables
-$primary-bg-subtle-dark: rgba(187, 27, 244, 0.2) !default;
+//$primary-bg-subtle-dark: rgba(187, 27, 244, 0.2) !default;
+$primary-bg-subtle-dark: $primary-bg-subtle !default;
 $secondary-bg-subtle-dark: rgba(67, 74, 81, 0.2) !default;
 $success-bg-subtle-dark: rgba(82, 191, 17, 0.2) !default;
 $info-bg-subtle-dark: rgba(33, 152, 243, 0.2) !default;
@@ -161,7 +165,8 @@ $dark-bg-subtle-dark: color.mix($gray-800-dark, $black) !default;
 // scss-docs-end theme-bg-subtle-dark-variables
 
 // scss-docs-start theme-border-subtle-variables
-$primary-border-subtle: rgb(216, 124, 249) !default;
+//$primary-border-subtle: rgb(216, 124, 249) !default;
+$primary-border-subtle: #9d92e6 !default;
 $secondary-border-subtle: rgb(211, 214, 218) !default;
 $success-border-subtle: rgb(176, 237, 139) !default;
 $info-border-subtle: rgb(180, 213, 239) !default;
@@ -171,7 +176,8 @@ $light-border-subtle: $gray-200 !default;
 $dark-border-subtle: $gray-500 !default;
 
 // scss-docs-start theme-border-subtle-dark-variables
-$primary-border-subtle-dark: rgba(187, 27, 244, 0.6) !default;
+//$primary-border-subtle-dark: rgba(187, 27, 244, 0.6) !default;
+$primary-border-subtle-dark: $primary-border-subtle !default;
 $secondary-border-subtle-dark: rgba(67, 74, 81, 0.6) !default;
 $success-border-subtle-dark: rgba(82, 191, 17, 0.6) !default;
 $info-border-subtle-dark: rgba(33, 152, 243, 0.6) !default;
