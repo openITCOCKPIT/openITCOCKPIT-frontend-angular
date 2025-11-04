@@ -6,8 +6,8 @@
             <!-- status overview -->
             <c-row>
                 <c-col [xs]="12" [md]="3" [lg]="3">
-                    <div class="p-2 bg-primary rounded overflow-hidden position-relative text-white mb-g">
-                        <div>
+                    <div class="p-2 bg-primary rounded overflow-hidden position-relative text-white mb-g h-100">
+                        <div class="position-relative z-1">
                             <h6 class="display-4 d-block l-h-n m-0 fw-500">
                                 @if (resources.resources.status_overview[0] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
                                     <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
@@ -27,8 +27,8 @@
                     </div>
                 </c-col>
                 <c-col [xs]="12" [md]="3" [lg]="3">
-                    <div class="p-2 bg-success rounded overflow-hidden position-relative text-white mb-g">
-                        <div>
+                    <div class="p-2 bg-success rounded overflow-hidden position-relative text-white mb-g h-100">
+                        <div class="position-relative z-1">
                             <h6 class="display-4 d-block l-h-n m-0 fw-500">
                                 @if (resources.resources.status_overview[1] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
                                     <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
@@ -48,8 +48,8 @@
                     </div>
                 </c-col>
                 <c-col [xs]="12" [md]="3" [lg]="3">
-                    <div class="p-2 bg-warning rounded overflow-hidden position-relative text-white mb-g">
-                        <div>
+                    <div class="p-2 bg-warning rounded overflow-hidden position-relative text-white mb-g h-100">
+                        <div class="position-relative z-1">
                             <h6 class="display-4 d-block l-h-n m-0 fw-500">
                                 @if (resources.resources.status_overview[2] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
                                     <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
@@ -69,8 +69,8 @@
                     </div>
                 </c-col>
                 <c-col [xs]="12" [md]="3" [lg]="3">
-                    <div class="p-2 bg-critical rounded overflow-hidden position-relative text-white mb-g">
-                        <div>
+                    <div class="p-2 bg-critical rounded overflow-hidden position-relative text-white mb-g h-100">
+                        <div class="position-relative z-1">
                             <h6 class="display-4 d-block l-h-n m-0 fw-500">
                                 @if (resources.resources.status_overview[3] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
                                     <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
