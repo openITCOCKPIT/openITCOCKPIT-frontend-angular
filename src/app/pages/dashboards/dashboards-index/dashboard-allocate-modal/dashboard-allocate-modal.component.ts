@@ -268,4 +268,11 @@ export class DashboardAllocateModalComponent implements OnDestroy {
         }));
     }
 
+    protected cleanup(): void {
+        if (!this.tab || !this.originalTab) {
+            return;
+        }
+        this.tab.dashboard_tab_allocation = this.originalTab.dashboard_tab_allocation;
+    }
+
 }
