@@ -21,7 +21,6 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CheckAttemptsInputComponent
 } from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -135,6 +134,8 @@ export class ServicesAddComponent {
         areContactsInheritedFromHost: false,
         areContactsInheritedFromServicetemplate: false,
     };
+
+    public servicenameCheckedForDuplicates: string = '';
 
     public servicetemplates: SelectKeyValue[] = [];
     public servicegroups: SelectKeyValue[] = [];
@@ -380,6 +381,8 @@ export class ServicesAddComponent {
     public checkForDuplicateServicename() {
         const existingServicesNames: string[] = Object.values(this.existingServices);
         this.data.isServicenameInUse = existingServicesNames.includes(this.post.name);
+        // Ensure that the service name in the warning box will not change until the user changes the name again
+        this.servicenameCheckedForDuplicates = this.post.name;
         this.cdr.markForCheck();
     }
 
