@@ -34,15 +34,6 @@ export interface MapgeneratorLevel {
     is_container: boolean | number
 }
 
-export interface InternalLevel {
-    id: number | null,
-    name: string,
-    divider: string,
-    is_container: boolean,
-    index: number
-    new?: boolean
-}
-
 export interface MapgeneratorContainer extends Container {
     _joinData: MapgeneratorContainerJoinData
 }
@@ -78,15 +69,17 @@ export function getDefaultMapgeneratorsIndexParams(): MapgeneratorsIndexParams {
     }
 }
 
+export interface MapgeneratorGet {
+    mapgenerator: MapgeneratorPost
+    areContainersChangeable?: boolean
+}
+
 /***************************
  *    Add / Edit action    *
  ***************************/
 
 export interface MapgeneratorPost {
-    Mapgenerator: MapgeneratorEdit
-}
-
-export interface MapgeneratorEdit {
+    id?: number
     name: string
     description: string
     map_refresh_interval: number
@@ -97,6 +90,7 @@ export interface MapgeneratorEdit {
     }
     mapgenerator_levels: MapgeneratorLevel[]
 }
+
 
 export interface MapgeneratorsEditRoot {
     mapgenerator: Mapgenerator

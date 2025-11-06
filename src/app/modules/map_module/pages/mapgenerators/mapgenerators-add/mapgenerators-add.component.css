@@ -5,3 +5,81 @@
 .border-opacity-100 {
     border-inline-start-color: transparent !important;
 }
+
+.lock-icon-gradient {
+    background-image: -webkit-linear-gradient(to bottom, #cccccc 0%, #cccccc 30%, #ffbb33 30%, #ffbb33 100%);
+    background-image: -moz-linear-gradient(to bottom, #cccccc 0%, #cccccc 30%, #ffbb33 30%, #ffbb33 100%);
+    background-image: linear-gradient(to bottom, #cccccc 0%, #cccccc 30%, #ffbb33 30%, #ffbb33 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.icon-stack .cornered-rd {
+    right: 2px;
+    top: 22px;
+    text-align: right;
+}
+
+.example-map-tree {
+    --spacing: 1.5rem;
+    --radius: 12px;
+}
+
+.example-map-tree li {
+    display: block;
+    position: relative;
+    padding-left: calc(2 * var(--spacing) - var(--radius));
+}
+
+.example-map-tree ul {
+    margin-left: calc(var(--radius) - var(--spacing));
+    padding-left: 0;
+}
+
+.example-map-tree ul li:last-child {
+    border-color: transparent;
+}
+
+.example-map-tree ul li::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: calc(var(--spacing) / -2.1);
+    left: 0;
+    width: calc(var(--spacing));
+    height: calc(var(--spacing) + 1px);
+    border: solid var(--cui-primary);
+    border-width: 0 0 2px 2px;
+}
+
+.example-map-tree summary {
+    display: block;
+    padding-left: 8px;
+}
+
+.example-map-tree summary::before {
+    content: '\f3c5';
+    font: var(--fa-font-solid);
+    display: block;
+    position: absolute;
+    color: var(--cui-primary);
+    top: calc(var(--spacing) / 1.8 - var(--radius));
+    left: calc(var(--spacing) - var(--radius) + 8px);
+    width: calc(2 * var(--radius));
+    height: calc(2 * var(--radius));
+    border-radius: 50%;
+    background: var(--cui-body-bg);
+    z-index: 2;
+}
+
+body.dark-theme :host .example-map-tree summary::before {
+    background: var(--cui-body-bg);
+}
+
+.example-map-tree details > summary::before {
+    background-position: calc(-2 * var(--radius)) 0;
+}
+
+.force-pl-2 {
+    padding-left: 2rem !important;
+}

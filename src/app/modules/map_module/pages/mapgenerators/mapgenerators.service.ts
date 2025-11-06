@@ -30,6 +30,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import {
+    MapgeneratorGet,
     MapgeneratorPost,
     MapgeneratorsEditRoot,
     MapgeneratorsIndexParams,
@@ -64,9 +65,14 @@ export class MapgeneratorsService {
         )
     }
 
-    public add(post: MapgeneratorPost): Observable<GenericResponseWrapper> {
+    /**********************
+     *    Add action    *
+     **********************/
+    public add(mapgenerator: MapgeneratorPost) {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/map_module/mapgenerators/add.json?angular=true`, post)
+        return this.http.post<any>(`${proxyPath}/map_module/mapgenerators/add.json?angular=true`, {
+            Mapgenerator: mapgenerator
+        })
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
@@ -85,18 +91,30 @@ export class MapgeneratorsService {
             );
     }
 
-    public getEdit(id: number): Observable<MapgeneratorsEditRoot> {
+
+    public getEdit(id: number): Observable<MapgeneratorGet> {
         const proxyPath = this.proxyPath;
-        return this.http.get<any>(`${proxyPath}/map_module/mapgenerators/edit/${id}.json?angular=true`, {}).pipe(
+        return this.http.get<{
+            mapgenerator: MapgeneratorPost,
+            areContainersChangeable: boolean
+
+        }>(`${proxyPath}/map_module/mapgenerators/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
             map(data => {
                 return data;
             })
-        )
+        );
     }
 
-    public updateMapgenerator(post: MapgeneratorPost, id: number): Observable<GenericResponseWrapper> {
+
+    public edit(mapgenerator: MapgeneratorPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/map_module/mapgenerators/edit/${id}.json?angular=true`, post)
+        return this.http.post<any>(`${proxyPath}/map_module/mapgenerators/edit/${mapgenerator.id}.json?angular=true`, {
+            Mapgenerator: mapgenerator
+        })
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
@@ -114,6 +132,7 @@ export class MapgeneratorsService {
                 })
             );
     }
+
 
     public getGenerator(id: number): Observable<MapgeneratorsEditRoot> {
         const proxyPath = this.proxyPath;

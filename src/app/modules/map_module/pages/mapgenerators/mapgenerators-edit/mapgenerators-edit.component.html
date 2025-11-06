@@ -34,7 +34,7 @@
                         {{ t('Edit map generator') }}
 
                         <small class="fw-300">
-                            {{ post.Mapgenerator.name }}
+                            {{ post.name }}
                         </small>
                     </h5>
 
@@ -64,7 +64,7 @@
                             id="mapgenerator_type"
                             optionValue="key"
                             optionLabel="value"
-                            [(ngModel)]="post.Mapgenerator.type"
+                            [(ngModel)]="post.type"
                             [disabled]="!areContainersChangeable"
                             (onChange)="onTypeChange()"
                             [options]="types"
@@ -84,7 +84,7 @@
                                type="text"
                                name="mapgenerator_name"
                                oitcFormError [errors]="errors" errorField="name"
-                               [(ngModel)]="post.Mapgenerator.name">
+                               [(ngModel)]="post.name">
                         <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                     </div>
 
@@ -97,11 +97,11 @@
                                type="text"
                                name="mapgenerator_description"
                                oitcFormError [errors]="errors" errorField="description"
-                               [(ngModel)]="post.Mapgenerator.description">
+                               [(ngModel)]="post.description">
                         <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                     </div>
 
-                    @if (post.Mapgenerator.type === MapgeneratorTypes.GENERATE_BY_CONTAINER_STRUCTURE) {
+                    @if (post.type === MapgeneratorTypes.GENERATE_BY_CONTAINER_STRUCTURE) {
                         <div class="mb-3">
                             <label cLabel for="mapgenerator_container">
                                 {{ t('Container') }}
@@ -113,14 +113,13 @@
                                 id="mapgenerator_container"
                                 optionValue="key"
                                 optionLabel="value"
-                                [(ngModel)]="containersSelection"
-                                [disabled]="!areContainersChangeable"
+                                [(ngModel)]="post.containers._ids"
                                 [options]="containers"
                                 [debounce]="true"
+                                [disabled]="!areContainersChangeable"
                                 oitcFormError [errors]="errors" errorField="containers">
                             </oitc-multi-select>
-
-                            @if (post.Mapgenerator.containers._ids.length === 0) {
+                            @if (post.containers._ids.length === 0) {
                                 <div class="text-warning-glow pt-1">
                                     {{ t('Please select a container.') }}
                                 </div>
@@ -133,173 +132,317 @@
                         </div>
                     }
 
-                    @if (this.post.Mapgenerator.type === MapgeneratorTypes.GENERATE_BY_HOSTNAME_SPLITTING) {
+                    @if (this.post.type === MapgeneratorTypes.GENERATE_BY_HOSTNAME_SPLITTING) {
+                        <fieldset>
+                            <legend class="small fieldset-legend-border-bottom mb-3">
+                                <h5>
+                                    {{ t('Levels:') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </h5>
+                            </legend>
+                            <div class="mt-4">
+                                <div class="col-12 help-block text-info">
+                                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                    {{ t('Based on a separator pattern, an attempt is made to create a map. By setting the "Map Container", this container will be checked for presence and then used as a container in the map.') }}
+                                </div>
+                                <div class="pt-3">
+                                    {{ t('For example with host name:') }}
+                                    <ul>
+                                        <li>
+                                            <code>DE-Fulda_MyCompany_LinuxServer-LoadBalancerNetScaler</code>
+                                        </li>
+                                        <li>
+                                            <code>DE-Fulda_MyCompany_LinuxServer-Webserver01</code>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <c-row class="ps-3">
+                                    <c-col [cCol]="10">
+                                        <c-row
+                                            class="border border-secondary border-opacity-25 border-top-0 border-start-0 border-end-0">
+                                            <c-col [cCol]="2" [offset]="1">
+                                                <fa-icon [icon]="['fas', '1']" [cTextColor]="'info'"></fa-icon>
+                                                {{ t('Divider') }} <code>-</code>
+                                            </c-col>
+                                            <c-col [cCol]="2">
+                                                <fa-icon [icon]="['fas', '2']" [cTextColor]="'info'"></fa-icon>
+                                                {{ t('Divider') }}  <code>_</code>
+                                            </c-col>
+                                            <c-col [cCol]="2">
+                                                <fa-icon [icon]="['fas', '3']" [cTextColor]="'info'"></fa-icon>
+                                                {{ t('Divider') }}  <code>_</code>
+                                            </c-col>
+                                            <c-col [cCol]="2">
+                                                <fa-icon [icon]="['fas', '4']" [cTextColor]="'info'"></fa-icon>
+                                                {{ t('Divider') }} <code>-</code>
+                                            </c-col>
+                                            <c-col [cCol]="3">
+                                                <fa-icon [icon]="['fas', '5']" [cTextColor]="'info'"></fa-icon>
+                                                {{ t('Remaining part of the name') }}
+                                            </c-col>
 
-                        <div class="mt-4">
-                            <h5>
-                                {{ t('Levels:') }}
-                                <oitc-required-icon></oitc-required-icon>
-                            </h5>
-                            <div class="col-12 help-block text-info">
-                                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                                {{ t('The host name is split with the dividers and a map is created for each part. The last level specifies the host to be added. The name is only used as a description in the form.') }}
+                                        </c-row>
+                                        <c-row class="pt-1">
+                                            <c-col [cCol]="1">
+                                                {{ t('Maps') }}
+                                            </c-col>
+                                            <c-col [cCol]="2">
+                                                <code>DE</code>
+                                            </c-col>
+                                            <c-col [cCol]="2">
+                                                <code>Fulda</code>
+                                            </c-col>
+                                            <c-col [cCol]="2">
+                                                <code>MyCompany</code>
+                                            </c-col>
+                                            <c-col [cCol]="2">
+                                                <code>LinuxServer</code>
+                                            </c-col>
+                                            <c-col [cCol]="3">
+                                                <code>LoadBalancerNetScaler</code>
+                                            </c-col>
+                                        </c-row>
+                                        <c-row class="pt-1">
+                                            <c-col [offset]="1" [cCol]="2">
+                                                <code>DE</code>
+                                            </c-col>
+                                            <c-col [cCol]="2">
+                                                <code>Fulda</code>
+                                            </c-col>
+                                            <c-col [cCol]="2">
+                                                <code>MyCompany</code>
+                                            </c-col>
+                                            <c-col [cCol]="2">
+                                                <code>LinuxServer</code>
+                                            </c-col>
+                                            <c-col [cCol]="3">
+                                                <code>Webserver01</code>
+                                            </c-col>
+                                        </c-row>
+                                    </c-col>
+                                </c-row>
+
+                                <ul class="example-map-tree p-0 pt-1">
+                                    <li>
+                                        <details open>
+                                            <summary>DE</summary>
+                                            <ul>
+                                                <li>
+                                                    <details open>
+                                                        <summary>
+                                                            Fulda
+                                                        </summary>
+                                                        <ul>
+                                                            <li>
+                                                                <details open>
+                                                                    <summary>
+                                                                        MyCompany
+                                                                    </summary>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <details open>
+                                                                                <summary>
+                                                                                    LinuxServer
+                                                                                </summary>
+                                                                                <ul>
+                                                                                    <li class="force-pl-2">
+                                                                                        <fa-icon
+                                                                                            [cTextColor]="'primary'"
+                                                                                            [icon]="['fas', 'desktop']"></fa-icon>
+                                                                                        DE-Fulda_MyCompany_LinuxServer-LoadBalancerNetScaler
+                                                                                    </li>
+                                                                                    <li class="force-pl-2">
+                                                                                        <fa-icon
+                                                                                            [cTextColor]="'primary'"
+                                                                                            [icon]="['fas', 'desktop']"></fa-icon>
+                                                                                        DE-Fulda_MyCompany_LinuxServer-Webserver01
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </details>
+                                                                        </li>
+                                                                    </ul>
+                                                                </details>
+                                                            </li>
+                                                        </ul>
+                                                    </details>
+                                                </li>
+                                            </ul>
+                                        </details>
+                                    </li>
+                                </ul>
                             </div>
-                        </div>
-                        <hr class="border-dashed">
 
-                        @for (level of mapgenerator.levels; track level.id; let i = $index, last = $last) {
-                            <div class="row mb-2">
-                                <div class="mb-3 col-lg-4">
-                                    <c-input-group>
-                                        <span cInputGroupText>
-                                            <fa-icon [icon]="['fas', 'fingerprint']"></fa-icon>
-                                        </span>
-                                        <input cFormControl
-                                               id="level_name_{{i}}"
-                                               name="level_name_{{i}}"
-                                               required
-                                               type="text"
-                                               [placeholder]="getLevelPlaceholder(i, last)"
-                                               [ngClass]="{'border-color-error': getMapgeneratorLevelErrors(level.index, 'validate_levels','name').length > 0 || getMapgeneratorLevelErrors(level.index,  'mapgenerator_levels','name').length > 0}"
-                                               [(ngModel)]="level.name">
-                                    </c-input-group>
-                                    @for (
-                                        error of getMapgeneratorLevelErrors(level.index, 'mapgenerator_levels', 'name'); track error) {
-                                        <div>
-                                            <div class="help-block text-danger font-xs">{{ error }}</div>
-                                        </div>
-                                    }
-                                    @for (
-                                        error of getMapgeneratorLevelErrors(level.index, 'validate_levels', 'name'); track error) {
-                                        <div>
-                                            <div class="help-block text-danger font-xs">{{ error }}</div>
-                                        </div>
-                                    }
-                                </div>
 
-                                <div class="mb-3 col-lg-3">
-                                    <c-input-group>
-                                        <span cInputGroupText>
-                                            <fa-icon [icon]="['fas', 'scissors']"></fa-icon>
-                                        </span>
-                                        <input cFormControl
-                                               id="level_divider_{{i}}"
-                                               name="level_divider_{{i}}"
-                                               required
-                                               type="text"
-                                               [disabled]="last"
-                                               [placeholder]="dividerPlaceholder"
-                                               [ngClass]="{'border-color-error': getMapgeneratorLevelErrors(level.index, 'validate_levels','divider').length > 0 || getMapgeneratorLevelErrors(level.index, 'mapgenerator_levels','divider').length > 0}"
-                                               [(ngModel)]="level.divider">
-                                    </c-input-group>
-                                    @for (
-                                        error of getMapgeneratorLevelErrors(level.index, 'mapgenerator_levels', 'divider'); track error) {
-                                        <div>
-                                            <div class="help-block text-danger font-xs">{{ error }}</div>
-                                        </div>
-                                    }
-                                    @for (
-                                        error of getMapgeneratorLevelErrors(level.index, 'validate_levels', 'divider'); track error) {
-                                        <div>
-                                            <div class="help-block text-danger font-xs">{{ error }}</div>
-                                        </div>
-                                    }
-                                </div>
+                            <hr class="border-dashed">
+                            <c-row class="py-2">
+                                <c-col [offset]="4" [cCol]="4" class="text-end">
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="validate_levels_is_container">
+                                    </oitc-form-feedback>
+                                </c-col>
+                            </c-row>
 
-                                @if (mapgenerator.levels.length > 2) {
-                                    <div class="col-lg-1">
-                                        <a class="btn btn-danger ripple waves-effect waves-themed"
-                                           href="javascript:void(0);"
-                                           (click)="removeLevel(level.index)">
-                                            <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
-                                        </a>
+                            @for (level of post.mapgenerator_levels; track $index; let last = $last) {
+                                <div class="row mb-2 border-start border-start-primary border-opacity-25 border-5"
+                                     [ngClass]="{'border-opacity-100':!post.mapgenerator_levels[$index].is_container, 'shadow-xs bg-primary rounded pt-1 bg-opacity-10': post.mapgenerator_levels[$index].is_container}">
+                                    <div class="col-lg-4">
+
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'fingerprint']"></fa-icon>
+                                            </span>
+                                            <input cFormControl
+                                                   [id]="'level_name_'+$index"
+                                                   [name]="'level_name_'+$index"
+                                                   required
+                                                   type="text"
+                                                   [placeholder]="getLevelPlaceholder($index, last)"
+                                                   [(ngModel)]="level.name"
+                                                   errorField="validate_levels.{{$index}}"
+                                                   oitcFormError [errors]="errors">
+                                        </c-input-group>
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="validate_levels.{{$index}}.name"></oitc-form-feedback>
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="mapgenerator_levels.{{$index}}.name"></oitc-form-feedback>
                                     </div>
-                                }
-                            </div>
-                        }
+                                    <div class="col-lg-4">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'scissors']"></fa-icon>
+                                            </span>
+                                            <input cFormControl
+                                                   [id]="'level_divider_'+$index"
+                                                   [name]="'level_divider_'+$index"
+                                                   required
+                                                   type="text"
+                                                   [disabled]="last"
+                                                   [placeholder]="dividerPlaceholder"
+                                                   [(ngModel)]="level.divider"
+                                                   errorField="validate_levels.{{$index}}.divider"
+                                                   oitcFormError [errors]="errors">
+                                            <span cInputGroupText class="py-0"
+                                                  [ngClass]="{'bg-danger bg-opacity-25': missingContainerLevel && !$last}">
+                                                <c-form-check>
+                                                    @if (!$last) {
+                                                        <input cFormCheckInput
+                                                               [value]="$index"
+                                                               [id]="'mapgenerator_level_is_container_'+$index"
+                                                               [(ngModel)]="mapgeneratorLevelIsContainerIndex"
+                                                               name="mapgenerator_level_is_container"
+                                                               type="radio"
+                                                               class="radio-lg"
+                                                               errorField="validate_levels_is_container"
+                                                               oitcFormError [errors]="errors"
+                                                               (ngModelChange)="updateMapgeneratorLevels()"
+                                                        />
+                                                    } @else {
+                                                        <input cFormCheckInput
+                                                               [value]="$index"
+                                                               [id]="'mapgenerator_level_is_container_'+$index+'_last'"
+                                                               [name]="'mapgenerator_level_is_container_'+$index+'_last'"
+                                                               [(ngModel)]="post.mapgenerator_levels[$index].is_container"
+                                                               type="radio"
+                                                               class="radio-lg"
+                                                               [disabled]="$last"
+                                                        />
+                                                    }
 
-                        <div class="row mt-3">
-                            <div class="col-12 col-md-12 text-end">
-                                <button cButton class="ripple" color="success" size="xs" type="button"
-                                        (click)="addLevel()">
-                                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                    {{ t('Add Level') }}
-                                </button>
+                                                    <label cFormCheckLabel class="pt-1 px-1"
+                                                           [for]="'mapgenerator_level_is_container_'+$index">
+                                                        {{ t('Map Container') }}
+                                                        <oitc-required-icon></oitc-required-icon>
+                                                        <span class="col-12 help-block text-info"
+                                                              [cTooltip]="t('This container is checked for presence and then used as a container in the map.')">
+                                                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                                        </span>
+                                                    </label>
+                                                </c-form-check>
+                                            </span>
+                                        </c-input-group>
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="validate_levels.{{$index}}.divider"></oitc-form-feedback>
+
+
+                                    </div>
+                                    <div class="col-lg-1 d-inline-flex pb-1">
+                                        <c-row class="w-100 h-100">
+                                            <c-col [cCol]="6" class="p-0">
+                                                @if (post.mapgenerator_levels[$index].is_container) {
+                                                    <div>
+                                                        <span class="icon-stack icon-stack-md">
+                                                            <i class="fas fa-lock icon-stack-2x fa-lg lock-icon-gradient"></i>
+                                                            <i class="fas fa-exclamation-triangle fa-xs text-danger cornered cornered-rd"></i>
+                                                        </span>
+
+                                                    </div>
+                                                }
+                                            </c-col>
+                                            <c-col [cCol]="6">
+                                                <button class="btn btn-danger ripple waves-effect waves-themed"
+                                                        type="button"
+                                                        (click)="removeLevel($index)"
+                                                        [disabled]="post.mapgenerator_levels.length <= 2">
+                                                    <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
+                                                </button>
+                                            </c-col>
+                                        </c-row>
+
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="row mt-3">
+                                <div class="col-12 col-md-12 text-end">
+                                    <button cButton class="ripple" color="success" size="xs" type="button"
+                                            (click)="addLevel()">
+                                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                        {{ t('Add Level') }}
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        </fieldset>
+                    }
+                    <fieldset>
+                        <legend class="small fieldset-legend-border-bottom mb-3">
+                            <h5>
+                                {{ t('Generator Configuration:') }}
+                            </h5>
+                        </legend>
 
                         <hr class="border-dashed">
 
                         <div class="mb-3">
-                            <label cLabel for="mapgenerator_level_is_container">
-                                {{ t('Container Level') }}
-                                <oitc-required-icon></oitc-required-icon>
+                            <label cLabel for="mapgenerator_interval">
+                                {{ t('Map refresh interval') }}
                             </label>
-
-                            @for (level of mapgenerator.levels; track level.id; let i = $index, last = $last) {
-                                <c-form-check>
-                                    <input cFormCheckInput type="radio" [value]="mapgenerator.levels[i].index"
-                                           id="mapgenerator_level_is_container_{{i}}"
-                                           [(ngModel)]="mapgeneratorLevelIsContainerIndex"
-                                           name="mapgenerator_level_is_container"/>
-                                    <label cFormCheckLabel for="mapgenerator_level_is_container_{{i}}">
-                                        @if (level.name !== "") {
-                                            {{ level.name }}
-                                        } @else {
-                                            <span class="text-gray-500">
-                                                {{ getLevelPlaceholder(i, last) }}
-                                            </span>
-                                        }
-                                    </label>
-                                </c-form-check>
-                            }
+                            <input cFormControl
+                                   id="mapgenerator_interval"
+                                   type="number"
+                                   name="mapgenerator_interval"
+                                   min="5"
+                                   max="180"
+                                   [(ngModel)]="post.map_refresh_interval"
+                                   oitcFormError [errors]="errors" errorField="map_refresh_interval">
                             <oitc-form-feedback [errors]="errors"
-                                                errorField="validate_levels_is_container"></oitc-form-feedback>
-                            <div class="col-12 help-block text-info">
-                                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                                {{ t('The specified level must correspond to the tenant container of the host to which you also have rights so that the host is taken into account.') }}
-                            </div>
+                                                errorField="map_refresh_interval"></oitc-form-feedback>
                         </div>
 
-                    }
-
-                    <div class="mt-4">
-                        <h5>
-                            {{ t('Generator Configuration:') }}
-                        </h5>
-                    </div>
-                    <hr class="border-dashed">
-
-                    <div class="mb-3">
-                        <label cLabel for="mapgenerator_interval">
-                            {{ t('Map refresh interval') }}
-                        </label>
-                        <input cFormControl
-                               id="mapgenerator_interval"
-                               type="number"
-                               name="mapgenerator_interval"
-                               min="5"
-                               max="180"
-                               [(ngModel)]="post.Mapgenerator.map_refresh_interval"
-                               oitcFormError [errors]="errors" errorField="map_refresh_interval">
-                        <oitc-form-feedback [errors]="errors" errorField="map_refresh_interval"></oitc-form-feedback>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="mapgenerator_items_per_line">
-                            {{ t('Items per line') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl
-                               id="mapgenerator_items_per_line"
-                               type="number"
-                               name="mapgenerator_items_per_line"
-                               min="5"
-                               [(ngModel)]="post.Mapgenerator.items_per_line"
-                               oitcFormError [errors]="errors" errorField="items_per_line">
-                        <oitc-form-feedback [errors]="errors" errorField="items_per_line"></oitc-form-feedback>
-                    </div>
-
+                        <div class="mb-3">
+                            <label cLabel for="mapgenerator_items_per_line">
+                                {{ t('Items per line') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   id="mapgenerator_items_per_line"
+                                   type="number"
+                                   [name]="'items_per_line'"
+                                   min="5"
+                                   [(ngModel)]="post.items_per_line"
+                                   oitcFormError [errors]="errors" errorField="items_per_line">
+                            <oitc-form-feedback [errors]="errors" errorField="items_per_line"></oitc-form-feedback>
+                        </div>
+                    </fieldset>
                 </c-card-body>
                 <c-card-footer class="text-end">
                     <button cButton class="ripple" color="primary" type="submit">
