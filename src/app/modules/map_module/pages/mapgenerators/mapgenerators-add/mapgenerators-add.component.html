@@ -116,7 +116,7 @@
                         <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
                         <div class="col-12 help-block text-info">
                             <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                            {{ t('The specified containers must appear in the container hierarchy of the host so that the host is taken into account during generation.') }}
+                            {{ t('A map is created for the selected container and its sub-containers, including all hosts in each container. Empty containers are skipped.') }}
                         </div>
                     </div>
                 }
@@ -132,7 +132,7 @@
                         <div class="mt-4">
                             <div class="col-12 help-block text-info">
                                 <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                                {{ t('Based on a separator pattern, an attempt is made to create a map. By setting the "Map Container", this container will be checked for presence and then used as a container in the map.') }}
+                                {{ t('The levels are automatically created based on the hostnames and a separator pattern. Each level is created as a map. All hosts are added to the last level. This allows overview maps to be generated automatically, which become more detailed with each level.') }}
                             </div>
                             <div class="pt-3">
                                 {{ t('For example with host name:') }}
@@ -339,7 +339,7 @@
                                                     {{ t('Map Container') }}
                                                     <oitc-required-icon></oitc-required-icon>
                                                     <span class="col-12 help-block text-info"
-                                                          [cTooltip]="t('This container is checked for presence and then used as a container in the map.')">
+                                                          [cTooltip]="t('Will be used as a container for all maps that will be generated (e.g. /root/MyCompany). The container has to exist. Otherwise, no maps will be created.')">
                                                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                                                     </span>
                                                 </label>

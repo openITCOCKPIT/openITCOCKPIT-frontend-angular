@@ -165,6 +165,7 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
                     this.HistoryService.navigateWithFallback(['/map_module/mapgenerators/index']);
                     return;
                 }
+                this.cdr.markForCheck();
 
                 // Error
                 const errorResponse = result.data as GenericValidationError;
