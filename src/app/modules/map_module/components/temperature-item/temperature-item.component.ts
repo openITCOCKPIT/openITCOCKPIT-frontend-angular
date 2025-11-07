@@ -292,7 +292,7 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
             myTick = setup.scale.min;
 
         for (let index = 0; index <= numberOfTicks; index++) {
-            tickArr.push(myTick);
+            tickArr.push(Math.round(myTick));
 
             myTick += tickSize;
         }

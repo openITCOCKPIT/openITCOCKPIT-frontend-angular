@@ -415,7 +415,7 @@ export class TachometerWidgetComponent extends BaseWidgetComponent implements Af
             myTick = perfdataMin;
 
         for (let index = 0; index <= numberOfTicks; index++) {
-            tickArr.push(myTick);
+            tickArr.push(Math.round(myTick));
 
             myTick += tickSize;
         }
