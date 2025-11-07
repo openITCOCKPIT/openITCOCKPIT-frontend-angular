@@ -107,8 +107,7 @@ export interface ExternalMonitoringConfigFlowChief {
 export interface ExternalMonitoringConfigLibreNMS {
     api_url: string
     api_key: string
-    import_device_network: number
-    import_device_server: number
+    device_types: string[] // one of appliance,collaboration,environment,firewall,loadbalancer,management,network,printer,power,server,storage,wireless,workstation
     import_ports: number
     import_services: number
     track_alerts: number

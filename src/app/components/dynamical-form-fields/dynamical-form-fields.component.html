@@ -149,8 +149,35 @@
                 [(ngModel)]="ngModel"
                 (ngModelChange)="ngModelChange.emit($event)"
                 [ngModelOptions]="{standalone: true}"
-                [showClear]="false">
+                [showClear]="false"
+                oitcFormError [errors]="errors" errorField="{{formField['ngModel']}}">
             </oitc-select>
+            <oitc-form-feedback [errors]="errors"
+                                errorField="{{formField['ngModel']}}"></oitc-form-feedback>
+            <div class="help-block small" *ngIf="formField['help']">
+                {{ formField['help'] }}
+            </div>
+        </div>
+        <!-- MULTI SELECT FIELDS -->
+        <div *ngIf="formField['type'] === 'multiselect'" class="mb-3">
+            {{ formField['label'] }}
+            @if (formField['required']) {
+                <oitc-required-icon></oitc-required-icon>
+            }
+            <oitc-multi-select
+                [attr.id]="formField['ngModel']"
+                [name]="name"
+                optionValue="key"
+                optionLabel="value"
+                [options]="formField['options']"
+                [(ngModel)]="ngModel"
+                (ngModelChange)="ngModelChange.emit($event)"
+                [ngModelOptions]="{standalone: true}"
+                [showClear]="false"
+                oitcFormError [errors]="errors" errorField="{{formField['ngModel']}}">
+            </oitc-multi-select>
+            <oitc-form-feedback [errors]="errors"
+                                errorField="{{formField['ngModel']}}"></oitc-form-feedback>
             <div class="help-block small" *ngIf="formField['help']">
                 {{ formField['help'] }}
             </div>
