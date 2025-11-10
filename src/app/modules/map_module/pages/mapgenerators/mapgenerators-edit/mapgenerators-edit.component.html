@@ -341,10 +341,13 @@
                                                                [value]="$index"
                                                                [id]="'mapgenerator_level_is_container_'+$index+'_last'"
                                                                [name]="'mapgenerator_level_is_container_'+$index+'_last'"
-                                                               [(ngModel)]="post.mapgenerator_levels[$index].is_container"
+                                                               [(ngModel)]="mapgeneratorLevelIsContainerIndex"
                                                                type="radio"
                                                                class="radio-lg"
                                                                [disabled]="$last"
+                                                               errorField="validate_levels_is_container"
+                                                               oitcFormError [errors]="errors"
+                                                               (ngModelChange)="updateMapgeneratorLevels()"
                                                         />
                                                     }
 

@@ -132,11 +132,17 @@ export class MapgeneratorsEditComponent implements OnInit, OnDestroy {
     private load() {
         this.subscriptions.add(this.MapgeneratorsService.getEdit(this.id)
             .subscribe((result) => {
-                this.cdr.markForCheck();
                 this.post = result.mapgenerator;
                 this.post.map_refresh_interval = (parseInt(this.post.map_refresh_interval.toString(), 10) / 1000);
-
                 this.areContainersChangeable = result.areContainersChangeable ?? false;
+                this.post.mapgenerator_levels.forEach(
+                    (level, index) => {
+                        if (level.is_container === 1) {
+                            this.mapgeneratorLevelIsContainerIndex = index;
+                        }
+                    }
+                );
+                this.cdr.markForCheck();
             }));
     }
 
