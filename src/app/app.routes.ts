@@ -43,6 +43,7 @@ import { ms365ModuleRoutes } from './modules/ms365_module/ms365_module.routes';
 import { mshypervModuleRoutes } from './modules/mshyperv_module/mshyperv_module.routes';
 import { ciscoModuleRoutes } from './modules/cisco_module/cisco_module.routes';
 import { broadcomProxyModuleRoutes } from './modules/broadcomproxy_module/broadcomproxy_module.routes';
+import { fortinetModuleRoutes } from './modules/fortinet_module/fortinet_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -107,7 +108,8 @@ const moduleRoutes: Routes = [
     ...ms365ModuleRoutes,
     ...mshypervModuleRoutes,
     ...ciscoModuleRoutes,
-    ...broadcomProxyModuleRoutes
+    ...broadcomProxyModuleRoutes,
+    ...fortinetModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
