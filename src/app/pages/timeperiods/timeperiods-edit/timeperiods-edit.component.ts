@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { TimeperiodsService } from '../timeperiods.service';
-import { InternalRange, Timeperiod } from '../timeperiods.interface';
+import { Timeperiod } from '../timeperiods.interface';
 import _ from 'lodash';
 import { WeekdaysService } from '../../../weekdays.service';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
@@ -27,7 +27,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -39,6 +39,7 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 import { HistoryService } from '../../../history.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
+import { sprintf } from 'sprintf-js';
 
 @Component({
     selector: 'oitc-timeperiods-edit',
@@ -58,7 +59,6 @@ import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/s
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgForOf,
         NgIf,
         PermissionDirective,
         ReactiveFormsModule,
@@ -82,18 +82,12 @@ import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/s
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeperiodsEditComponent implements OnInit, OnDestroy {
-
+    private id: number = 0;
     public post!: Timeperiod;
 
     public containers: SelectKeyValue[] = [];
-
-    public timeperiod: { ranges: InternalRange[] } = {
-        ranges: []
-    };
-
     public calendars: SelectKeyValue[] = [];
 
-    private router: Router = inject(Router);
     private TimeperiodsService = inject(TimeperiodsService);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -108,149 +102,107 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.TimeperiodsService.getEdit(id).subscribe(data => {
-            this.init(data.timeperiod);
-            this.cdr.markForCheck();
-        }));
-        this.loadContainer();
+        this.id = Number(this.route.snapshot.paramMap.get('id'));
+        this.loadContainers();
     }
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
 
-    private init(timeperiod: Timeperiod) {
-        this.post = timeperiod;
-
-        this.timeperiod.ranges = [];
-
-        for (let key in this.post.timeperiod_timeranges) {
-            this.timeperiod.ranges.push({
-                id: <number>this.post.timeperiod_timeranges[key].id,
-                day: this.post.timeperiod_timeranges[key].day,
-                start: this.post.timeperiod_timeranges[key].start,
-                end: this.post.timeperiod_timeranges[key].end,
-                index: Number(key)
-            });
-        }
-
-        this.timeperiod.ranges = _(this.timeperiod.ranges)
-            .chain()
-            .flatten()
-            .sortBy(
-                function (range) {
-                    return [range.day, range.start];
-                })
-            .value();
-
-        this.convertContainerIdEmptyValue();
-        this.onContainerIdChange();
-
+    private load() {
+        this.subscriptions.add(this.TimeperiodsService.getEdit(this.id).subscribe(result => {
+            this.post = result.timeperiod;
+            this.post.timeperiod_timeranges = _.orderBy(
+                this.post.timeperiod_timeranges,
+                ['day', 'start'],
+                ['asc', 'asc']
+            );
+            this.loadCalendars('');
+            this.cdr.markForCheck();
+        }));
     }
 
-    public loadContainer() {
-        this.subscriptions.add(this.TimeperiodsService.getContainers()
+    public loadContainers() {
+        this.subscriptions.add(this.TimeperiodsService.loadContainers()
             .subscribe((result) => {
                 this.containers = result;
                 this.cdr.markForCheck();
+                this.load();
             })
         );
     };
 
-    public trackByIndex(index: number, item: any): number {
-        return index;
-    }
-
     public loadCalendars(searchString: string) {
+        if (!this.post?.container_id) {
+            return;
+        }
         this.subscriptions.add(this.TimeperiodsService.getCalendars(searchString, this.post.container_id)
             .subscribe((result) => {
                 this.calendars = result;
+                if (this.post.calendar_id) {
+                    const key = _.findKey(this.calendars, {key: this.post.calendar_id});
+                    if (!key) {
+                        this.post.calendar_id = null;
+                    }
+                }
                 this.cdr.markForCheck();
             })
         );
     }
 
-    public removeTimerange(rangeIndex: any) {
-        let timeperiodranges = [];
-        for (let i in this.timeperiod.ranges) {
-            if (this.timeperiod.ranges[i]['index'] !== rangeIndex) {
-                timeperiodranges.push(this.timeperiod.ranges[i])
-            }
-        }
-        if (this.errors && (typeof this.errors['validate_timeranges'] !== 'undefined' ||
-            typeof this.errors['timeperiod_timeranges'] !== 'undefined')) {
-            this.timeperiod.ranges = timeperiodranges;
-        } else {
-            this.timeperiod.ranges = _(timeperiodranges)
-                .chain()
-                .flatten()
-                .sortBy(
-                    function (range) {
-                        return [range.day, range.start];
-                    })
-                .value();
-        }
-        this.cdr.markForCheck();
-    };
-
     public addTimerange() {
-        this.timeperiod.ranges.push({
-            id: null,
+        let count = this.post.timeperiod_timeranges.length;
+        this.post.timeperiod_timeranges.push({
+            id: count,
             day: '1',
             start: '',
-            end: '',
-            index: Object.keys(this.timeperiod.ranges).length
+            end: ''
         });
 
-        if (this.errors && (typeof this.errors['validate_timeranges'] !== 'undefined' ||
-            typeof this.errors['timeperiod_timeranges'] !== 'undefined')) {
-            this.timeperiod.ranges = this.timeperiod.ranges;
-        } else {
-            this.timeperiod.ranges = _(this.timeperiod.ranges)
-                .chain()
-                .flatten()
-                .sortBy(
-                    function (range) {
-                        return [range.day, range.start];
-                    })
-                .value();
-        }
         this.cdr.markForCheck();
     }
 
-    public hasTimeRange(errors: any, range: any) {
-        if (errors && errors['validate_timeranges']) {
-            errors = errors['validate_timeranges'];
-            if (errors[parseInt(range['day'])] && errors[parseInt(range['day'])]['state-error']) {
-                const stateErrors = errors[parseInt(range['day'])]['state-error'];
-                for (let i in stateErrors) {
-                    if (stateErrors[i]['start'] === range['start'] && stateErrors[i]['end'] === range['end']) {
-                        return true;
-                    }
+    public removeTimerange(index: number) {
+        this.post.timeperiod_timeranges.splice(index, 1);
+        this.removeErrorIfExists(index, 'timeperiod_timeranges');
+    }
+
+    private removeErrorIfExists(index: number, errorKey: string) {
+        if (this.errors) {
+            if (this.errors.hasOwnProperty(errorKey) && this.errors[errorKey].hasOwnProperty(index)) {
+                if (Array.isArray(this.errors[errorKey])) {
+                    // CakePHP returns an array bacuase the index with the error starts at 0
+                    this.errors[errorKey].splice(index, 1);
+                } else {
+                    // CakePHP returns an array bacuase the index with the error starts at is > 0
+                    delete this.errors[errorKey][index];
                 }
             }
+
+            // Reduce all indexes > index by 1
+            // If a user remove an element with error above other elements
+            const newErrors: GenericValidationError = {};
+            for (const key in this.errors[errorKey]) {
+                let numericKey = Number(key);
+                if (numericKey > index) {
+                    numericKey = numericKey - 1;
+                }
+                if (!newErrors.hasOwnProperty(errorKey)) {
+                    newErrors[errorKey] = {};
+                }
+
+                newErrors[errorKey][numericKey] = this.errors[errorKey][key];
+            }
+
+            this.errors[errorKey] = newErrors[errorKey];
+
+            this.errors = structuredClone(this.errors); // get new reference to trigger change detection if signals
+            this.cdr.markForCheck();
         }
+    }
 
-        return false;
-    };
-
-    public saveTimeperiod() {
-
-        let index = 0;
-        this.post.timeperiod_timeranges = [];
-        for (let i in this.timeperiod.ranges) {
-            this.post.timeperiod_timeranges[index] = {
-                'id': this.timeperiod.ranges[i].id,
-                'day': this.timeperiod.ranges[i].day,
-                'start': this.timeperiod.ranges[i].start,
-                'end': this.timeperiod.ranges[i].end
-            };
-            index++;
-        }
-
-        this.convertContainerIdEmptyValue();
-
+    public submit() {
         this.subscriptions.add(this.TimeperiodsService.updateTimeperiod(this.post)
             .subscribe((result) => {
                 this.cdr.markForCheck();
@@ -271,8 +223,39 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
                 const errorResponse = result.data as GenericValidationError;
                 this.notyService.genericError();
                 if (result) {
-                    this.convertContainerIdEmptyValue();
                     this.errors = errorResponse;
+                    // add overlapping time ranges error if exists
+                    if (this.errors.hasOwnProperty('validate_timeranges')) {
+                        let timerangeOverlappingArray: string[] = [];
+                        for (let index in this.errors['validate_timeranges']) {
+                            if (this.errors) {
+                                if (!this.errors.hasOwnProperty('timeperiod_timeranges')) {
+                                    this.errors['timeperiod_timeranges'] = {};
+                                }
+                                for (const [key, value] of Object.entries(this.errors['validate_timeranges'][index])) {
+                                    if (Array.isArray(value)) {
+                                        for (let overlappingInfo of value) {
+                                            timerangeOverlappingArray.push(
+                                                sprintf(
+                                                    '%s - %s',
+                                                    overlappingInfo.start,
+                                                    overlappingInfo.end
+                                                )
+                                            );
+                                        }
+                                    }
+                                }
+                                (this.errors['timeperiod_timeranges'] as any)[index.toString()] = {
+                                    start: {
+                                        overlapping: _.join(timerangeOverlappingArray, ', ')
+                                    },
+                                    end: {
+                                        overlapping: this.TranslocoService.translate('Time period ranges overlap with existing time period ranges')
+                                    }
+                                };
+                            }
+                        }
+                    }
                 }
             })
         );
@@ -281,29 +264,4 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
     public onContainerIdChange() {
         this.loadCalendars('');
     }
-
-    public getTimeperiodTimeranges(index: number, keyName: string): string[] {
-        if (this.errors && this.errors['timeperiod_timeranges'] && this.errors['timeperiod_timeranges'][index]) {
-            let timeranges = <any>this.errors['timeperiod_timeranges'][index];
-            if (timeranges && timeranges[keyName]) {
-                return Object.keys(timeranges[keyName]).map((key) => timeranges[keyName][key]);
-            }
-            return [];
-        } else {
-            return [];
-        }
-
-    }
-
-    // Empty value will be saved as 0 but it does not show the placeholder in the select
-    private convertContainerIdEmptyValue() {
-        this.cdr.markForCheck();
-        if (this.post.calendar_id === 0) {
-            this.post.calendar_id = null;
-        } else if (this.post.calendar_id === null) {
-            this.post.calendar_id = 0;
-        }
-
-    }
-
 }
