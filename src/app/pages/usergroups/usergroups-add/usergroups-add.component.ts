@@ -156,7 +156,11 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
     }
 
     protected loadLdapGroups = (search: string = '') => {
-        this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search).subscribe((ldapgroups: LoadLdapgroups) => {
+        let selected: number[] = [];
+        if (this.post.Usergroup.ldapgroups && this.post.Usergroup.ldapgroups._ids) {
+            selected = this.post.Usergroup.ldapgroups._ids;
+        }
+        this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search, selected).subscribe((ldapgroups: LoadLdapgroups) => {
             this.ldapGroups = ldapgroups.ldapgroups;
             this.cdr.markForCheck();
         }));

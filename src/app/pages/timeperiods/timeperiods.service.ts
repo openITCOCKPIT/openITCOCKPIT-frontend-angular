@@ -66,7 +66,7 @@ export class TimeperiodsService {
         )
     }
 
-    public getContainers(): Observable<SelectKeyValue[]> {
+    public loadContainers(): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             containers: SelectKeyValue[]
