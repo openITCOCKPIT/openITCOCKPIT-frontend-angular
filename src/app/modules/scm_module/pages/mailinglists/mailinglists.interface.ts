@@ -13,6 +13,7 @@ export interface Mailinglist {
     description: string
     department: string
     allow_edit: boolean
+    mailinglist_recipients?: MailinglistRecipient[]
 }
 
 export interface MailinglistsIndexParams {
