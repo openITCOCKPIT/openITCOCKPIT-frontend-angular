@@ -1,7 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { CardBodyComponent, CardComponent, CardHeaderComponent, CardTitleDirective } from '@coreui/angular';
+import {
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    TemplateIdDirective
+} from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -27,6 +36,10 @@ import { RouterLink } from '@angular/router';
         WizardsDynamicfieldsComponent,
         FormsModule,
         RouterLink,
+        AccordionButtonDirective,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective,
     ],
     templateUrl: './nginx.component.html',
     styleUrl: './nginx.component.css',

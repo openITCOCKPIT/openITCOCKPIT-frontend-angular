@@ -66,6 +66,45 @@
         </c-card-body>
         <c-card-body>
 
+            <fieldset class="padding-bottom-20">
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4>
+                        {{ t('nginx Status') }}
+                    </h4>
+                </legend>
+
+                <c-accordion class="mb-3">
+                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                        <ng-template cTemplateId="accordionHeaderTemplate">
+                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                                {{ t('nginx Status configuration help') }}
+                            </button>
+                        </ng-template>
+                        <ng-template cTemplateId="accordionBodyTemplate">
+                            <div class="accordion-body">
+                                <ol>
+                                    <li>
+                                        {{ t('Add the following code to your nginx configuration file in the monitored server:') }}
+                                        <pre>location /stub_status &#123;
+  # Turn on nginx stats
+  stub_status on;
+
+  # Disable access.log for stats
+  access_log off;
+  &#125;</pre>
+                                    </li>
+                                    <li>
+                                        {{ t('Restart the ngninx server:') }}
+                                        <pre>systemctl restart nginx</pre>
+                                    </li>
+                                </ol>
+                            </div>
+                        </ng-template>
+                    </c-accordion-item>
+                </c-accordion>
+            </fieldset>
+
             <oitc-wizards-dynamicfields
                 [(post)]="post.services"
                 [errors]="errors"
