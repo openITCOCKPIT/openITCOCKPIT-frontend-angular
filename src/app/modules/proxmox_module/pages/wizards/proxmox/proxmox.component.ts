@@ -21,6 +21,7 @@ import {
 import { ProxmoxWizardGet, ProxmoxWizardPost } from './proxmox-wizard.interface';
 import { ProxmoxWizardService } from './proxmox-wizard.service';
 import { RouterLink } from '@angular/router';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 
 @Component({
     selector: 'oitc-proxmox',
@@ -41,7 +42,8 @@ import { RouterLink } from '@angular/router';
         WizardsDynamicfieldsComponent,
         FormsModule,
         RouterLink,
-        AlertComponent
+        AlertComponent,
+        RequiredIconComponent
     ],
     templateUrl: './proxmox.component.html',
     styleUrl: './proxmox.component.css',

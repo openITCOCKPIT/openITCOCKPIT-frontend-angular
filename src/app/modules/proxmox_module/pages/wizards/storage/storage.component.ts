@@ -31,6 +31,7 @@ import {
     StorageServiceTemplate
 } from './proxmox-storage-wizard.interface';
 import { ProxmoxStorageWizardService } from './proxmox-storage-wizard.service';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 
 @Component({
     selector: 'oitc-storage',
@@ -55,7 +56,8 @@ import { ProxmoxStorageWizardService } from './proxmox-storage-wizard.service';
         XsButtonDirective,
         AlertComponent,
         ColComponent,
-        RowComponent
+        RowComponent,
+        RequiredIconComponent
     ],
     templateUrl: './storage.component.html',
     styleUrl: './storage.component.css',
