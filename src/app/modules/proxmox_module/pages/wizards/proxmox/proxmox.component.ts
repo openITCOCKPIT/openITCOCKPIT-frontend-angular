@@ -2,13 +2,16 @@ import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
-    AlertComponent,
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     FormControlDirective,
-    FormLabelDirective
+    FormLabelDirective,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -21,6 +24,7 @@ import {
 import { ProxmoxWizardGet, ProxmoxWizardPost } from './proxmox-wizard.interface';
 import { ProxmoxWizardService } from './proxmox-wizard.service';
 import { RouterLink } from '@angular/router';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 
 @Component({
     selector: 'oitc-proxmox',
@@ -41,7 +45,11 @@ import { RouterLink } from '@angular/router';
         WizardsDynamicfieldsComponent,
         FormsModule,
         RouterLink,
-        AlertComponent
+        RequiredIconComponent,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective,
+        AccordionButtonDirective
     ],
     templateUrl: './proxmox.component.html',
     styleUrl: './proxmox.component.css',
