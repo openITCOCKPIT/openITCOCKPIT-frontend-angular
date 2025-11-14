@@ -34,7 +34,7 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
-import { GenericValidationError } from '../../../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import {
     StorageServiceTemplate
 } from '../../../../proxmox_module/pages/wizards/storage/proxmox-storage-wizard.interface';
@@ -43,6 +43,7 @@ import { OitcAlertComponent } from '../../../../../components/alert/alert.compon
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { N0 } from '../../../../nwc_module/pages/wizards/networkbasic/networkbasic-wizard.interface';
+import { Service } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-apache-tomcat',
@@ -120,6 +121,45 @@ export class ApacheTomcatComponent extends WizardsAbstractComponent {
     protected tomcatAuthModes: SelectKeyValueString[] = [
         {key: 'basic', value: 'basic'}
     ];
+
+    public override submit(): void {
+        // let request = this.post; // Clone the original post object here!
+        let request: ApacheTomcatWizardPost = JSON.parse(JSON.stringify(this.post));
+
+        // Remove all services from request where createService is false.
+        request.services = request.services.filter((service: Service) => {
+            return service.createService && this.childComponent.hasName(service.name);
+        });
+
+        // Remove all Apache Tomcat memory pool services from request where createService is false.
+        request.memoryPoolServices = request.memoryPoolServices.filter(
+            (memoryPoolServices: Service) => memoryPoolServices.createService && this.hasName(memoryPoolServices.name)
+        );
+
+        this.subscriptions.add(this.WizardService.submit(request)
+            .subscribe((result: GenericResponseWrapper) => {
+                this.errors = {} as GenericValidationError;
+                if (result.success) {
+                    const title: string = this.TranslocoService.translate('Success');
+                    const msg: string = this.TranslocoService.translate('Data saved successfully');
+
+                    this.notyService.genericSuccess(msg, title);
+                    this.router.navigate(['/services/notMonitored']);
+                    this.cdr.markForCheck();
+                    return;
+                }
+                // Error
+                this.notyService.genericError();
+                this.notyService.scrollContentDivToTop();
+                const errorResponse: GenericValidationError = result.data as GenericValidationError;
+                if (result) {
+                    this.errors = errorResponse;
+
+                }
+                this.cdr.markForCheck();
+            })
+        );
+    }
 
     protected executeMemoryPoolDiscovery(): void {
         this.post.memoryPoolServices = [];
