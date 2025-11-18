@@ -152,9 +152,8 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
     }
 
     public addTimerange() {
-        let count = this.post.timeperiod_timeranges.length;
         this.post.timeperiod_timeranges.push({
-            id: count,
+            id: null,
             day: '1',
             start: '',
             end: ''
