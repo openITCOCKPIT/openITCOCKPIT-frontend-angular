@@ -70,7 +70,7 @@
                 </c-row>
                 <form cForm>
 
-                    <c-row>
+                    <c-row class="mb-2">
                         <c-col md="6">
                             <c-input-group>
                                 <span cInputGroupText>
@@ -102,6 +102,44 @@
                                        type="text"
                                 />
                             </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" lg="2">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Maps') }}
+                                </h5>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="maps.is_auto_generated"
+                                        id="maps.is_auto_generated"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="mapsFilter.is_auto_generated"/>
+
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="maps.is_auto_generated">{{ t('Auto Generated') }}</label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="maps.is_not_auto_generated"
+                                        id="maps.is_not_auto_generated"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="mapsFilter.is_not_auto_generated"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="maps.is_not_auto_generated">{{ t('Not auto generated') }}</label>
+                                </c-form-check>
+                            </fieldset>
                         </c-col>
                     </c-row>
                     <c-row class="mt-2">
@@ -146,6 +184,12 @@
                     </td>
                     <td class="word-break"><a
                         [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.id, false]">{{ map.name }}</a>
+                        @if (map.auto_generated) {
+                            <oitc-badge-outline class="ms-2"
+                                                [title]="'Auto generated' | transloco"
+                                                color="info"> {{ t('Auto generated') }}
+                            </oitc-badge-outline>
+                        }
                     </td>
                     <td class="word-break">{{ map.title }}</td>
 
