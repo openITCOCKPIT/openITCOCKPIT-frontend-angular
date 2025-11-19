@@ -18,7 +18,7 @@
             </li>
         </ol>
     </nav>
-    <form cForm ngNativeValidate (ngSubmit)="saveTimeperiod()">
+    <form cForm ngNativeValidate (ngSubmit)="submit()">
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>{{ t('Create new time period') }}</h5>
@@ -48,7 +48,7 @@
                                [placeholder]="'Please choose' | transloco"
                                oitcDebounce
                                bindLabel="value" bindValue="key"
-                               [clearable]="false"
+                               [clearable]="true"
                                [(ngModel)]="post.container_id"
                                (ngModelChange)="onContainerIdChange()"
                                oitcFormError [errors]="errors" errorField="containers">
@@ -56,9 +56,12 @@
                             <div [ngOptionHighlight]="search">{{ container.value }}</div>
                         </ng-template>
                     </ng-select>
-                    <oitc-form-warning
-                        *ngIf="!post.container_id">{{ t('Please select a container.') }}
-                    </oitc-form-warning>
+                    @if (!post.container_id) {
+                        <oitc-form-warning>
+                            {{ t('Please select a container.') }}
+                        </oitc-form-warning>
+                    }
+
                     <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
                 </div>
 
@@ -88,20 +91,13 @@
 
                 <div class="mb-3">
                     <label cLabel for="timeperiodCalendar">
-                        <span *oitcPermission="['calendars', 'edit']">
-                            <a [routerLink]="['/', 'calendars', 'edit', post.calendar_id]"
-                               *ngIf="post.calendar_id && post.calendar_id > 0">
-                                {{ t('Calendar') }}
-                                <oitc-required-icon></oitc-required-icon>
-                            </a>
-                            <span *ngIf="!post.calendar_id">
-                                {{ t('Calendar') }}
-                            </span>
-                        </span>
-                        <span *oitcPermission="['calendars', 'edit']; negate: true">
+                        <oitc-label-link
+                            [objectId]="post.calendar_id"
+                            [route]="'/calendars/edit'"
+                            [permissions]="'calendars.edit'">
                             {{ t('Calendar') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </span>
+                        </oitc-label-link>
+
                     </label>
                     <ng-select id="timeperiodCalendar"
                                name="calendar_id"
@@ -109,13 +105,9 @@
                                [items]="calendars"
                                oitcDebounce
                                bindLabel="value" bindValue="key"
-                               [(ngModel)]="post.calendar_id"
-                               oitcFormError [errors]="errors" errorField="containers">
-                        <ng-template ng-option-tmp let-calendar="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ calendar.value }}</div>
-                        </ng-template>
+                               [clearable]="true"
+                               [(ngModel)]="post.calendar_id">
                     </ng-select>
-                    <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
                     <div class="help-block">
                         {{ t('In addition to the interval defined by the given time ranges, you are able to add 24x7 days using a calendar. This will only affect the monitoring engine.') }}
                     </div>
@@ -127,80 +119,89 @@
                             {{ t('Time ranges:') }}
                         </h5>
                     </div>
-                    <div class="text-danger" *ngIf="errors?.['validate_timeranges']">
-                        {{ t('Do not enter overlapping timeframes') }}
-                    </div>
+                    @if (errors?.['validate_timeranges']) {
+                        <div class="text-danger">
+                            {{ t('Do not enter overlapping timeframes') }}
+                        </div>
+                    }
                 </div>
                 <hr class="border-dashed">
 
-                <div class="row mb-2"
-                     *ngFor="let range of timeperiod.ranges; let i = index; trackBy: trackByIndex">
-                    <div class="col-lg-4 form-group">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <fa-icon [icon]="['fas', 'calendar-day']"></fa-icon>
-                            </span>
-                            <ng-select id="tp_day_{{i}}"
-                                       name="tp_day_{{i}}"
-                                       [items]="weekdays"
-                                       oitcDebounce
-                                       bindLabel="value" bindValue="key"
-                                       [clearable]="false"
-                                       [(ngModel)]="timeperiod.ranges[i]['day']"
-                                       [required]="true">
-                                <ng-template ng-option-tmp let-weekday="item" let-search="searchTerm">
-                                    <div [ngOptionHighlight]="search">{{ weekday.value }}</div>
-                                </ng-template>
-                            </ng-select>
-                        </c-input-group>
-                    </div>
-                    <div class="col-lg-3 form-group">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                            </span>
-                            <input cFormControl id="tp_start_{{i}}" name="tp_start_{{i}}" class="form-control"
-                                   required
-                                   [ngClass]="{'border-color-error': hasTimeRange(errors, range) || getTimeperiodTimeranges(range.index, 'start').length > 0}"
-                                   [placeholder]="startPlaceholder"
-                                   type="text"
-                                   size="5"
-                                   maxlength="5"
-                                   [(ngModel)]="range.start">
-                        </c-input-group>
-                        <div
-                            *ngFor="let error of getTimeperiodTimeranges(range.index, 'start')">
-                            <div class="help-block text-danger font-xs">{{ error }}</div>
+                @for (range of post.timeperiod_timeranges; track $index) {
+                    <div class="row mb-2">
+                        <div class="col-lg-4 form-group">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'calendar-day']"></fa-icon>
+                                </span>
+                                <ng-select id="tp_day_{{$index}}"
+                                           name="tp_day_{{$index}}"
+                                           [items]="weekdays"
+                                           oitcDebounce
+                                           bindLabel="value" bindValue="key"
+                                           [clearable]="false"
+                                           [(ngModel)]="post.timeperiod_timeranges[$index]['day']"
+                                           [required]="true">
+                                    <ng-template ng-option-tmp let-weekday="item" let-search="searchTerm">
+                                        <div [ngOptionHighlight]="search">{{ weekday.value }}</div>
+                                    </ng-template>
+                                </ng-select>
+                            </c-input-group>
                         </div>
-                    </div>
-                    <div class="col-lg-3 form-group">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                            </span>
-                            <input cFormControl id="tp_end_{{i}}" name="tp_end_{{i}}" class="form-control" required
-                                   [ngClass]="{'border-color-error': hasTimeRange(errors, range) ||
-                                                       getTimeperiodTimeranges(range.index, 'end').length > 0}"
-                                   [placeholder]="endPlaceholder"
-                                   type="text"
-                                   size="5"
-                                   maxlength="5"
-                                   [(ngModel)]="range.end">
-                        </c-input-group>
-                        <div
-                            *ngFor="let error of getTimeperiodTimeranges(range.index, 'end')">
-                            <div class="help-block text-danger font-xs">{{ error }}</div>
+                        <div class="col-lg-3 form-group">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       [id]="'tp_start_'+$index"
+                                       [name]="'tp_start_'+$index"
+                                       required
+                                       [placeholder]="startPlaceholder"
+                                       type="text"
+                                       size="5"
+                                       maxlength="5"
+                                       [(ngModel)]="range.start"
+                                       oitcFormError [errors]="errors"
+                                       errorField="timeperiod_timeranges.{{$index}}.start">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="timeperiod_timeranges.{{$index}}.start">
+                            </oitc-form-feedback>
                         </div>
-                    </div>
+                        <div class="col-lg-3 form-group">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                </span>
+                                <input cFormControl
+                                       [id]="'tp_end_'+$index"
+                                       [name]="'tp_end_'+$index"
+                                       required
+                                       [placeholder]="endPlaceholder"
+                                       type="text"
+                                       size="5"
+                                       maxlength="5"
+                                       [(ngModel)]="range.end"
+                                       oitcFormError [errors]="errors"
+                                       errorField="timeperiod_timeranges.{{$index}}.end">
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="timeperiod_timeranges.{{$index}}.end">
+                            </oitc-form-feedback>
 
-                    <div class="col-lg-1">
-                        <a class="btn btn-danger ripple waves-effect waves-themed"
-                           href="javascript:void(0);"
-                           (click)="removeTimerange(range.index)">
-                            <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
-                        </a>
+                        </div>
+
+                        <div class="col-lg-1">
+                            <a class="btn btn-danger ripple waves-effect waves-themed"
+                               href="javascript:void(0);"
+                               (click)="removeTimerange($index)">
+                                <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                }
+
+
+
 
                 <div class="row mt-3">
                     <div class="col-12 col-md-12 text-end">
@@ -230,7 +231,3 @@
     </form>
 
 </ng-container>
-
-
-
-

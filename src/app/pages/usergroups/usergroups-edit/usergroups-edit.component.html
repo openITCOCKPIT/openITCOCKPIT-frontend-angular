@@ -19,295 +19,300 @@
             </li>
         </ol>
     </nav>
+    @if (!post) {
+        <oitc-form-loader/>
+    }
 
-    <oitc-form-loader [isVisible]="post.Usergroup.id === 0"/>
-    <form *ngIf="post.Usergroup.id !== 0" cForm (ngSubmit)="editUserrole()">
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>
-                    {{ t('Edit user role:') }}
-                    <small class="fw-300">
-                        {{ post.Usergroup.name }}
-                    </small>
-                </h5>
+    @if (post) {
+        <form cForm (ngSubmit)="editUserrole()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Edit user role:') }}
+                        <small class="fw-300">
+                            {{ post.Usergroup.name }}
+                        </small>
+                    </h5>
 
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['usergroups', 'index']" cButton class="ripple" color="default"
-                                oitcBackButton
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                            {{ t('Back') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['usergroups', 'index']" cButton class="ripple" color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
 
-            </c-card-header>
-            <c-card-body>
+                </c-card-header>
+                <c-card-body>
 
-                <div class="mb-3">
-                    <label cLabel for="post.Usergroup.name">
-                        {{ t('Name') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl
-                           id="post.Usergroup.name"
-                           required
-                           type="text"
-                           name="post.Usergroup.name"
-                           oitcFormError [errors]="errors" errorField="name"
-                           [(ngModel)]="post.Usergroup.name"
-                           [disabled]="post.Usergroup.name === 'Administrator' || post.Usergroup.name === 'Viewer'">
-                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="post.Usergroup.description">
-                        {{ t('Description') }}
-                    </label>
-                    <input cFormControl
-                           id="post.Usergroup.description"
-                           type="text"
-                           name="post.Usergroup.description"
-                           oitcFormError [errors]="errors" errorField="description"
-                           [(ngModel)]="post.Usergroup.description">
-                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-                </div>
-
-
-                <div class="mb-3">
-                    <label cLabel for="post.User.ldapgroups._ids">
-                        {{ t('LDAP Groups') }}
-                    </label>
-                    <oitc-multi-select
-                        name="post.User.ldapgroups._ids"
-                        id="post.User.ldapgroups._ids"
-                        [(ngModel)]="post.Usergroup.ldapgroups._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [searchCallback]="loadLdapGroups"
-                        [options]="ldapGroups"
-                        oitcFormError [errors]="errors" errorField="ldapgroups">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="ldapgroups"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('LDAP users which are member of the selected LDAP groups will be assigned automatically to the user container role.') }}
+                    <div class="mb-3">
+                        <label cLabel for="post.Usergroup.name">
+                            {{ t('Name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               id="post.Usergroup.name"
+                               required
+                               type="text"
+                               name="post.Usergroup.name"
+                               oitcFormError [errors]="errors" errorField="name"
+                               [(ngModel)]="post.Usergroup.name"
+                               [disabled]="post.Usergroup.name === 'Administrator' || post.Usergroup.name === 'Viewer'">
+                        <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                     </div>
-                </div>
 
-                <c-alert color="info"
-                         *ngIf="post.Usergroup.name === 'Administrator' || post.Usergroup.name === 'Viewer'">
-                    <h5>{{ t('Notice!') }}</h5>
-                    <p>
-                        {{ t('Upon every update of {0}, the permissions for both the Administrator and Viewer user roles will automatically revert to their default settings.', {systemname: systemname}) }}
-                    </p>
-                </c-alert>
+                    <div class="mb-3">
+                        <label cLabel for="post.Usergroup.description">
+                            {{ t('Description') }}
+                        </label>
+                        <input cFormControl
+                               id="post.Usergroup.description"
+                               type="text"
+                               name="post.Usergroup.description"
+                               oitcFormError [errors]="errors" errorField="description"
+                               [(ngModel)]="post.Usergroup.description">
+                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                    </div>
 
-                <c-card class="mb-3">
-                    <c-card-body>
-                        <c-row>
-                            <c-col md="6">
 
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                    </span>
-                                    <input
-                                        [(ngModel)]="controllerFilter"
-                                        [placeholder]="'Filter by controller' | transloco"
-                                        cFormControl
-                                        name="Usergroups.description"
-                                        type="text"
-                                    />
-                                </c-input-group>
-                            </c-col>
-                            <c-col md="6" class="text-end">
-                                <button cButton class="ripple" color="primary" type="submit">
-                                    {{ t('Update user role') }}
-                                </button>
-                                <button [fallbackUrl]="['usergroups', 'index']" cButton class="ms-1 ripple"
-                                        color="default"
-                                        oitcBackButton
-                                        type="button">
-                                    {{ t('Cancel') }}
-                                </button>
+                    <div class="mb-3">
+                        <label cLabel for="post.User.ldapgroups._ids">
+                            {{ t('LDAP Groups') }}
+                        </label>
+                        <oitc-multi-select
+                            name="post.User.ldapgroups._ids"
+                            id="post.User.ldapgroups._ids"
+                            [(ngModel)]="post.Usergroup.ldapgroups._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadLdapGroups"
+                            [options]="ldapGroups"
+                            oitcFormError [errors]="errors" errorField="ldapgroups">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors" errorField="ldapgroups"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('LDAP users which are member of the selected LDAP groups will be assigned automatically to the user container role.') }}
+                        </div>
+                    </div>
 
-                                <c-dropdown [autoClose]="'outside'" variant="btn-group">
-                                    <button cButton cDropdownToggle class="ms-1" color="default" [caret]="true">
-                                        {{ t('Bulk actions') }}
+                    <c-alert color="info"
+                             *ngIf="post.Usergroup.name === 'Administrator' || post.Usergroup.name === 'Viewer'">
+                        <h5>{{ t('Notice!') }}</h5>
+                        <p>
+                            {{ t('Upon every update of {0}, the permissions for both the Administrator and Viewer user roles will automatically revert to their default settings.', {systemname: systemname}) }}
+                        </p>
+                    </c-alert>
+
+                    <c-card class="mb-3">
+                        <c-card-body>
+                            <c-row>
+                                <c-col md="6">
+
+                                    <c-input-group>
+                                        <span cInputGroupText>
+                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                        </span>
+                                        <input
+                                            [(ngModel)]="controllerFilter"
+                                            [placeholder]="'Filter by controller' | transloco"
+                                            cFormControl
+                                            name="Usergroups.description"
+                                            type="text"
+                                        />
+                                    </c-input-group>
+                                </c-col>
+                                <c-col md="6" class="text-end">
+                                    <button cButton class="ripple" color="primary" type="submit">
+                                        {{ t('Update user role') }}
                                     </button>
-                                    <ul cDropdownMenu>
-                                        <li>
-                                            <button cDropdownItem type="button" class="ripple" [autoClose]="false"
-                                                    (click)="forceTicks('all', true)">
-                                                <fa-icon [icon]="['fas', 'check-square']" class="text-primary"/>
-                                                {{ t('Tick all') }}
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button cDropdownItem type="button" class="ripple" [autoClose]="false"
-                                                    (click)="forceTicks('all', false)">
-                                                <fa-icon [icon]="['far', 'square']"/>
-                                                {{ t('Untick all') }}
-                                            </button>
-                                        </li>
-                                        <li cDropdownDivider></li>
-                                        <li>
-                                            <button cDropdownItem type="button" class="ripple" [autoClose]="false"
-                                                    (click)="forceTicks('index', true)">
-                                                <fa-icon [icon]="['fas', 'check-square']" class="text-primary"/>
-                                                {{ t('Tick all: index') }}
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button cDropdownItem type="button" class="ripple" [autoClose]="false"
-                                                    (click)="forceTicks('index', false)">
-                                                <fa-icon [icon]="['far', 'square']"/>
-                                                {{ t('Untick all: index') }}
-                                            </button>
-                                        </li>
-                                        <li cDropdownDivider></li>
-                                        <li>
-                                            <button cDropdownItem type="button" class="ripple" [autoClose]="false"
-                                                    (click)="forceTicks('add', true)">
-                                                <fa-icon [icon]="['fas', 'check-square']" class="text-success"/>
-                                                {{ t('Tick all: add') }}
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button cDropdownItem type="button" [autoClose]="false" class="ripple"
-                                                    (click)="forceTicks('add', false)">
-                                                <fa-icon [icon]="['far', 'square']"/>
-                                                {{ t('Untick all: add') }}
-                                            </button>
-                                        </li>
-                                        <li cDropdownDivider></li>
-                                        <li>
-                                            <button cDropdownItem type="button" [autoClose]="false" class="ripple"
-                                                    (click)="forceTicks('edit', true)">
-                                                <fa-icon [icon]="['fas', 'check-square']" class="text-warning"/>
-                                                {{ t('Tick all: edit') }}
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button cDropdownItem type="button" [autoClose]="false" class="ripple"
-                                                    (click)="forceTicks('edit', false)">
-                                                <fa-icon [icon]="['far', 'square']"/>
-                                                {{ t('Untick all: edit') }}
-                                            </button>
-                                        </li>
-                                        <li cDropdownDivider></li>
-                                        <li>
-                                            <button cDropdownItem type="button" [autoClose]="false" class="ripple"
-                                                    (click)="forceTicks('delete', true)">
-                                                <fa-icon [icon]="['fas', 'check-square']" class="text-danger"/>
-                                                {{ t('Tick all: delete') }}
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button cDropdownItem type="button" [autoClose]="false" class="ripple"
-                                                    (click)="forceTicks('delete', false)">
-                                                <fa-icon [icon]="['far', 'square']"/>
-                                                {{ t('Untick all: delete') }}
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </c-dropdown>
-                            </c-col>
-                        </c-row>
-                    </c-card-body>
-                </c-card>
+                                    <button [fallbackUrl]="['usergroups', 'index']" cButton class="ms-1 ripple"
+                                            color="default"
+                                            oitcBackButton
+                                            type="button">
+                                        {{ t('Cancel') }}
+                                    </button>
 
-                <ng-container *ngIf="showController(acos.acos)">
+                                    <c-dropdown [autoClose]="'outside'" variant="btn-group">
+                                        <button cButton cDropdownToggle class="ms-1" color="default" [caret]="true">
+                                            {{ t('Bulk actions') }}
+                                        </button>
+                                        <ul cDropdownMenu>
+                                            <li>
+                                                <button cDropdownItem type="button" class="ripple" [autoClose]="false"
+                                                        (click)="forceTicks('all', true)">
+                                                    <fa-icon [icon]="['fas', 'check-square']" class="text-primary"/>
+                                                    {{ t('Tick all') }}
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button cDropdownItem type="button" class="ripple" [autoClose]="false"
+                                                        (click)="forceTicks('all', false)">
+                                                    <fa-icon [icon]="['far', 'square']"/>
+                                                    {{ t('Untick all') }}
+                                                </button>
+                                            </li>
+                                            <li cDropdownDivider></li>
+                                            <li>
+                                                <button cDropdownItem type="button" class="ripple" [autoClose]="false"
+                                                        (click)="forceTicks('index', true)">
+                                                    <fa-icon [icon]="['fas', 'check-square']" class="text-primary"/>
+                                                    {{ t('Tick all: index') }}
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button cDropdownItem type="button" class="ripple" [autoClose]="false"
+                                                        (click)="forceTicks('index', false)">
+                                                    <fa-icon [icon]="['far', 'square']"/>
+                                                    {{ t('Untick all: index') }}
+                                                </button>
+                                            </li>
+                                            <li cDropdownDivider></li>
+                                            <li>
+                                                <button cDropdownItem type="button" class="ripple" [autoClose]="false"
+                                                        (click)="forceTicks('add', true)">
+                                                    <fa-icon [icon]="['fas', 'check-square']" class="text-success"/>
+                                                    {{ t('Tick all: add') }}
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button cDropdownItem type="button" [autoClose]="false" class="ripple"
+                                                        (click)="forceTicks('add', false)">
+                                                    <fa-icon [icon]="['far', 'square']"/>
+                                                    {{ t('Untick all: add') }}
+                                                </button>
+                                            </li>
+                                            <li cDropdownDivider></li>
+                                            <li>
+                                                <button cDropdownItem type="button" [autoClose]="false" class="ripple"
+                                                        (click)="forceTicks('edit', true)">
+                                                    <fa-icon [icon]="['fas', 'check-square']" class="text-warning"/>
+                                                    {{ t('Tick all: edit') }}
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button cDropdownItem type="button" [autoClose]="false" class="ripple"
+                                                        (click)="forceTicks('edit', false)">
+                                                    <fa-icon [icon]="['far', 'square']"/>
+                                                    {{ t('Untick all: edit') }}
+                                                </button>
+                                            </li>
+                                            <li cDropdownDivider></li>
+                                            <li>
+                                                <button cDropdownItem type="button" [autoClose]="false" class="ripple"
+                                                        (click)="forceTicks('delete', true)">
+                                                    <fa-icon [icon]="['fas', 'check-square']" class="text-danger"/>
+                                                    {{ t('Tick all: delete') }}
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button cDropdownItem type="button" [autoClose]="false" class="ripple"
+                                                        (click)="forceTicks('delete', false)">
+                                                    <fa-icon [icon]="['far', 'square']"/>
+                                                    {{ t('Untick all: delete') }}
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </c-dropdown>
+                                </c-col>
+                            </c-row>
+                        </c-card-body>
+                    </c-card>
 
-                    <ng-container *ngFor="let controller of acos.acos[0].children | keyvalue: keepOrder">
-                        <ng-container
-                            *ngIf="controllerFilter === '' || controller.value.alias.toLowerCase().includes(controllerFilter)">
+                    <ng-container *ngIf="showController(acos.acos)">
+
+                        <ng-container *ngFor="let controller of acos.acos[0].children | keyvalue: keepOrder">
                             <ng-container
-                                *ngIf="showController(controller.value.children) && ! controller.value.alias.endsWith('Module')">
-                                <h5 class="pt-3">
-                                    {{ controller.value.alias }}
+                                *ngIf="controllerFilter === '' || controller.value.alias.toLowerCase().includes(controllerFilter)">
+                                <ng-container
+                                    *ngIf="showController(controller.value.children) && ! controller.value.alias.endsWith('Module')">
+                                    <h5 class="pt-3">
+                                        {{ controller.value.alias }}
+                                    </h5>
+                                    <c-row class="pb-2">
+                                        <c-col [xs]="12" [md]="4" [lg]="3"
+                                               *ngFor="let action of controller.value.children | keyvalue: keepOrder"
+                                               [ngClass]="{'text-primary': action.value.alias == 'index', 'text-success': action.value.alias == 'add', 'text-warning': action.value.alias == 'edit', 'text-danger': action.value.alias == 'delete'}">
+                                            <c-form-check class="px-0">
+                                                <input cFormCheckInput
+                                                       class="checkbox-lg checkbox-primary mx-1"
+                                                       name="post.Acos[{{action.value.id}}]"
+                                                       id="post.Acos[{{action.value.id}}]"
+                                                       type="checkbox"
+                                                       trueFalseValue
+                                                       [trueValue]="1"
+                                                       [falseValue]="0"
+                                                       [(ngModel)]="post.Acos[action.value.id]"
+                                                />
+                                                <label cFormCheckLabel class="ms-1 mt-1"
+                                                       for="post.Acos[{{action.value.id}}]">
+                                                    {{ action.value.alias }}
+                                                </label>
+                                            </c-form-check>
+                                        </c-col>
+                                    </c-row>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+
+                        <ng-container *ngFor="let plugin of acos.acos[0].children | keyvalue: keepOrder">
+                            <ng-container
+                                *ngIf="showController(plugin.value.children) && plugin.value.alias.endsWith('Module')">
+                                <hr/>
+                                <h5 class="ok">
+                                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                                    {{ plugin.value.alias }}
                                 </h5>
                                 <c-row class="pb-2">
-                                    <c-col [xs]="12" [md]="4" [lg]="3"
-                                           *ngFor="let action of controller.value.children | keyvalue: keepOrder"
-                                           [ngClass]="{'text-primary': action.value.alias == 'index', 'text-success': action.value.alias == 'add', 'text-warning': action.value.alias == 'edit', 'text-danger': action.value.alias == 'delete'}">
-                                        <c-form-check class="px-0">
-                                            <input cFormCheckInput
-                                                   class="checkbox-lg checkbox-primary mx-1"
-                                                   name="post.Acos[{{action.value.id}}]"
-                                                   id="post.Acos[{{action.value.id}}]"
-                                                   type="checkbox"
-                                                   trueFalseValue
-                                                   [trueValue]="1"
-                                                   [falseValue]="0"
-                                                   [(ngModel)]="post.Acos[action.value.id]"
-                                            />
-                                            <label cFormCheckLabel class="ms-1 mt-1"
-                                                   for="post.Acos[{{action.value.id}}]">
-                                                {{ action.value.alias }}
-                                            </label>
-                                        </c-form-check>
+                                    <c-col [xs]="12" [md]="4" [lg]="2"
+                                           *ngFor="let controller of plugin.value.children | keyvalue: keepOrder">
+                                        <h5>
+                                            {{ controller.value.alias }}
+                                        </h5>
+                                        <div
+                                            *ngFor="let action of controller.value.children | keyvalue: keepOrder"
+                                            [ngClass]="{'text-primary': action.value.alias == 'index', 'text-success': action.value.alias == 'add', 'text-warning': action.value.alias == 'edit', 'text-danger': action.value.alias == 'delete'}">
+                                            <c-form-check class="px-0">
+                                                <input cFormCheckInput
+                                                       class="checkbox-lg checkbox-primary mx-1"
+                                                       name="post.Acos[{{action.value.id}}]"
+                                                       id="post.Acos[{{action.value.id}}]"
+                                                       type="checkbox"
+                                                       trueFalseValue
+                                                       [trueValue]="1"
+                                                       [falseValue]="0"
+                                                       [(ngModel)]="post.Acos[action.value.id]"
+                                                />
+                                                <label cFormCheckLabel class="mt-1 ms-1"
+                                                       for="post.Acos[{{action.value.id}}]">
+                                                    {{ action.value.alias }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
                                     </c-col>
                                 </c-row>
                             </ng-container>
                         </ng-container>
                     </ng-container>
 
-                    <ng-container *ngFor="let plugin of acos.acos[0].children | keyvalue: keepOrder">
-                        <ng-container
-                            *ngIf="showController(plugin.value.children) && plugin.value.alias.endsWith('Module')">
-                            <hr/>
-                            <h5 class="ok">
-                                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                                {{ plugin.value.alias }}
-                            </h5>
-                            <c-row class="pb-2">
-                                <c-col [xs]="12" [md]="4" [lg]="2"
-                                       *ngFor="let controller of plugin.value.children | keyvalue: keepOrder">
-                                    <h5>
-                                        {{ controller.value.alias }}
-                                    </h5>
-                                    <div
-                                        *ngFor="let action of controller.value.children | keyvalue: keepOrder"
-                                        [ngClass]="{'text-primary': action.value.alias == 'index', 'text-success': action.value.alias == 'add', 'text-warning': action.value.alias == 'edit', 'text-danger': action.value.alias == 'delete'}">
-                                        <c-form-check class="px-0">
-                                            <input cFormCheckInput
-                                                   class="checkbox-lg checkbox-primary mx-1"
-                                                   name="post.Acos[{{action.value.id}}]"
-                                                   id="post.Acos[{{action.value.id}}]"
-                                                   type="checkbox"
-                                                   trueFalseValue
-                                                   [trueValue]="1"
-                                                   [falseValue]="0"
-                                                   [(ngModel)]="post.Acos[action.value.id]"
-                                            />
-                                            <label cFormCheckLabel class="mt-1 ms-1"
-                                                   for="post.Acos[{{action.value.id}}]">
-                                                {{ action.value.alias }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-                                </c-col>
-                            </c-row>
-                        </ng-container>
-                    </ng-container>
-                </ng-container>
+
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Update user role') }}
+                    </button>
+                    <button [fallbackUrl]="['usergroups', 'index']" cButton class="ms-1 ripple" color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
 
 
-            </c-card-body>
-            <c-card-footer class="text-end">
-                <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Update user role') }}
-                </button>
-                <button [fallbackUrl]="['usergroups', 'index']" cButton class="ms-1 ripple" color="default"
-                        oitcBackButton
-                        type="button">
-                    {{ t('Cancel') }}
-                </button>
+                </c-card-footer>
+            </c-card>
+        </form>
+    }
 
-
-            </c-card-footer>
-        </c-card>
-    </form>
 </ng-container>
