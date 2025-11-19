@@ -21,7 +21,6 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CheckAttemptsInputComponent
 } from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -142,6 +141,7 @@ export class ServicesEditComponent {
         areContactsInheritedFromHost: false,
         areContactsInheritedFromServicetemplate: false,
     };
+    public servicenameCheckedForDuplicates: string = '';
 
     public servicetemplates: SelectKeyValue[] = [];
     public servicegroups: SelectKeyValue[] = [];
@@ -149,7 +149,7 @@ export class ServicesEditComponent {
     public checkperiods: SelectKeyValue[] = [];
     public contacts: SelectKeyValue[] = [];
     public contactgroups: SelectKeyValue[] = [];
-    public existingServices: object = {}
+    public existingServices: Record<number, string> = {};
     public isSlaHost: boolean = false;
 
     public errors: GenericValidationError | null = null;
@@ -326,8 +326,17 @@ export class ServicesEditComponent {
     }
 
     public checkForDuplicateServicename() {
+        // Remove current service from existing services to avoid false positive
+        const serviceId = this.post.id;
+        if (serviceId && this.existingServices) {
+            if (this.existingServices.hasOwnProperty(serviceId)) {
+                delete this.existingServices[serviceId];
+            }
+        }
+
         const existingServicesNames: string[] = Object.values(this.existingServices);
         this.data.isServicenameInUse = existingServicesNames.includes(this.post.name);
+        this.servicenameCheckedForDuplicates = this.post.name;
         this.cdr.markForCheck();
     }
 

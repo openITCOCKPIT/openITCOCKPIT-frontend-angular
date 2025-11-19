@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
-    AlertComponent,
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -9,7 +11,8 @@ import {
     ColComponent,
     FormControlDirective,
     FormLabelDirective,
-    RowComponent
+    RowComponent,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -31,6 +34,7 @@ import {
     StorageServiceTemplate
 } from './proxmox-storage-wizard.interface';
 import { ProxmoxStorageWizardService } from './proxmox-storage-wizard.service';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 
 @Component({
     selector: 'oitc-storage',
@@ -53,9 +57,13 @@ import { ProxmoxStorageWizardService } from './proxmox-storage-wizard.service';
         NgIf,
         OitcAlertComponent,
         XsButtonDirective,
-        AlertComponent,
         ColComponent,
-        RowComponent
+        RowComponent,
+        RequiredIconComponent,
+        AccordionButtonDirective,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective
     ],
     templateUrl: './storage.component.html',
     styleUrl: './storage.component.css',
