@@ -166,7 +166,25 @@
                                     </td>
                                     <td>{{ mailinglist.description }}</td>
                                     <td>{{ mailinglist.department }}</td>
-                                    <td></td>
+                                    <td>
+                                        <ul>
+                                            @for (
+                                                mailinglist_recipient of mailinglist.mailinglist_recipients; track $index) {
+                                                <li>
+                                                    {{ mailinglist_recipient.name }}
+                                                    <span class="ps-1">
+                                                        <
+                                                        <fa-icon [icon]="['fas', 'envelope']"
+                                                                 [cTextColor]="'primary'"></fa-icon>
+                                                        {{ mailinglist_recipient.email }}
+                                                        >
+                                                    </span>
+
+                                                </li>
+                                            }
+                                        </ul>
+
+                                    </td>
 
 
                                     <td class="width-50">
