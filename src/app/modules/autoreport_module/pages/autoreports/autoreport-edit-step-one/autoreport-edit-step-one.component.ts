@@ -3,10 +3,10 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+
 import {
     BadgeComponent,
     ButtonDirective,
-    CalloutComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -30,10 +30,9 @@ import { FormsModule } from '@angular/forms';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { Subscription } from 'rxjs';
 import { AutoreportsService } from '../autoreports.service';
-import { AutoreportPost, CalendarParams, getDefaultCalendarParams, getDefaultPost } from '../autoreports.interface';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
+import { AutoreportPost, CalendarParams, getDefaultCalendarParams } from '../autoreports.interface';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { formatDate, NgIf } from '@angular/common';
+import { formatDate, NgClass } from '@angular/common';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
@@ -41,34 +40,30 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 import { TimeperiodsService } from '../../../../../pages/timeperiods/timeperiods.service';
 import { UsersService } from '../../../../../pages/users/users.service';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 
 @Component({
     selector: 'oitc-autoreport-edit-step-one',
     imports: [
-        FormDirective,
         FormsModule,
         CardBodyComponent,
         TranslocoPipe,
         BadgeComponent,
         RowComponent,
         ColComponent,
-        FormErrorDirective,
         FormFeedbackComponent,
-        FormLabelDirective,
-        NgIf,
         RequiredIconComponent,
         SelectComponent,
-        FormControlDirective,
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
         LabelLinkComponent,
-        CalloutComponent,
         InputGroupComponent,
         InputGroupTextDirective,
         DropdownComponent,
@@ -76,7 +71,6 @@ import { ContainersService } from '../../../../../pages/containers/containers.se
         DropdownToggleDirective,
         DropdownMenuDirective,
         DropdownItemDirective,
-        DebounceDirective,
         MultiSelectComponent,
         CardComponent,
         CardHeaderComponent,
@@ -85,6 +79,13 @@ import { ContainersService } from '../../../../../pages/containers/containers.se
         PermissionDirective,
         TranslocoDirective,
         RouterLink,
+        XsButtonDirective,
+        NgClass,
+        FormLoaderComponent,
+        FormDirective,
+        FormErrorDirective,
+        FormLabelDirective,
+        FormControlDirective
     ],
     templateUrl: './autoreport-edit-step-one.component.html',
     styleUrl: './../../../assets/autoreport.css',//'./autoreport-edit-step-one.component.css',
@@ -103,9 +104,8 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     private readonly ContainersService: ContainersService = inject(ContainersService);
 
-    public init: boolean = false;
     public id: number = 0;
-    public post: AutoreportPost = getDefaultPost();
+    public post?: AutoreportPost;
     public errors: GenericValidationError | null = null;
     public containers: SelectKeyValue[] = [];
     public calendars: SelectKeyValue[] = [];
@@ -154,34 +154,49 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     }
 
-    public onAvailabilityChange($event: boolean) {
-        if (!$event) {
+    public onAvailabilityChange() {
+        if (!this.post) {
+            return;
+        }
+        if (!this.setMinAvailability) {
             this.post.Autoreport.min_availability = null;
         }
     }
 
-    public onOutageChange($event: boolean) {
-        if (!$event) {
+    public onOutageChange() {
+        if (!this.post) {
+            return;
+        }
+        if (!this.setMaxNumberOfOutages) {
             this.post.Autoreport.max_number_of_outages = null;
             this.cdr.markForCheck();
         }
     }
 
-    public onHolidayChange($event: any) {
-        if ($event === 0 && this.post.Autoreport.calendar_id !== 0) {
-            this.post.Autoreport.calendar_id = 0;
+    public onHolidayChange() {
+        if (!this.post) {
+            return;
+        }
+        if (this.post.Autoreport.consider_holidays === 0 && this.post.Autoreport.calendar_id !== 0) {
+            this.post.Autoreport.calendar_id = null;
             this.cdr.markForCheck();
         }
     }
 
-    public onStartChange($event: any) {
-        if ($event === 0) {
+    public onStartChange() {
+        if (!this.post) {
+            return;
+        }
+        if (this.post.Autoreport.use_start_time === 0) {
             this.post.Autoreport.report_start_date = null;
             this.cdr.markForCheck();
         }
     }
 
     private loadTimeperiods() {
+        if (!this.post) {
+            return;
+        }
         if (this.post.Autoreport.container_id === 0) {
             return;
         }
@@ -192,6 +207,9 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
     }
 
     private loadCalendars() {
+        if (!this.post) {
+            return;
+        }
         if (this.post.Autoreport.container_id === 0) {
             return;
         }
@@ -203,6 +221,9 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
     }
 
     private loadUsers() {
+        if (!this.post) {
+            return;
+        }
         if (this.post.Autoreport.container_id === 0) {
             return;
         }
@@ -222,7 +243,9 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
     public loadAutoreport() {
         this.subscriptions.add(this.AutoreportsService.getEditStepOne(this.id).subscribe((result) => {
 
-            this.post.Autoreport = result;
+            this.post = {
+                Autoreport: result
+            };
 
             if (this.post.Autoreport.report_start_date !== null) {
                 this.post.Autoreport.report_start_date = formatDate(this.post.Autoreport.report_start_date, 'yyyy-dd-MM', 'en-US');
@@ -242,35 +265,39 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
             }
 
             this.loadContainers();
-            if (!this.init) {
+            if (this.post) {
                 this.loadTimeperiods();
                 this.loadCalendars();
                 this.loadUsers();
             }
-            this.init = true;
             this.cdr.markForCheck();
         }));
     }
 
     public submitStepOne() {
-        this.errors = null;
+        if (!this.post) {
+            return;
+        }
         if (this.post.Autoreport.report_start_date !== null) {
             this.post.Autoreport.report_start_date = formatDate(this.post.Autoreport.report_start_date, 'dd.MM.y', 'en-US');
         }
 
         this.subscriptions.add(this.AutoreportsService.setEditStepOne(this.id, this.post).subscribe((result: GenericResponseWrapper): void => {
-                    if (result.success) {
-                        this.errors = null;
-                        this.router.navigate(['/autoreport_module/autoreports/editStepTwo', result.data.autoreport.id]);
-                    } else {
-                        this.errors = result.data as GenericValidationError;
-                        this.notyService.genericError();
-                    }
-
-                    this.cdr.markForCheck();
+                this.cdr.markForCheck();
+                if (result.success) {
+                    this.errors = null;
+                    this.router.navigate(['/autoreport_module/autoreports/editStepTwo', result.data.autoreport.id]);
                 }
-            )
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                    console.log(this.errors);
+                }
+                this.cdr.markForCheck();
+            })
         );
     }
-
 }
