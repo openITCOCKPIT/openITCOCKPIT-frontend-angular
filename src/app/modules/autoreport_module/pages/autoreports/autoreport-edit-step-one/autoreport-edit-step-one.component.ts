@@ -83,9 +83,9 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
         NgClass,
         FormLoaderComponent,
         FormDirective,
-        FormErrorDirective,
         FormLabelDirective,
-        FormControlDirective
+        FormControlDirective,
+        FormErrorDirective
     ],
     templateUrl: './autoreport-edit-step-one.component.html',
     styleUrl: './../../../assets/autoreport.css',//'./autoreport-edit-step-one.component.css',
