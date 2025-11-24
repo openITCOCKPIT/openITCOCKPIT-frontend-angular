@@ -6,7 +6,6 @@ import { Router, RouterLink } from '@angular/router';
 import {
     BadgeComponent,
     ButtonDirective,
-    CalloutComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -33,7 +32,7 @@ import { AutoreportsService } from '../autoreports.service';
 import { AutoreportPost, CalendarParams, getDefaultCalendarParams, getDefaultPost } from '../autoreports.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { formatDate, NgIf } from '@angular/common';
+import { formatDate, NgClass } from '@angular/common';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
@@ -41,10 +40,10 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 import { TimeperiodsService } from '../../../../../pages/timeperiods/timeperiods.service';
 import { UsersService } from '../../../../../pages/users/users.service';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-autoreport-add-step-one',
@@ -63,19 +62,17 @@ import { ContainersService } from '../../../../../pages/containers/containers.se
         BadgeComponent,
         RowComponent,
         ColComponent,
-        FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
-        NgIf,
         RequiredIconComponent,
         SelectComponent,
         FormControlDirective,
+        FormErrorDirective,
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
         LabelLinkComponent,
-        CalloutComponent,
         InputGroupComponent,
         InputGroupTextDirective,
         DropdownComponent,
@@ -83,8 +80,9 @@ import { ContainersService } from '../../../../../pages/containers/containers.se
         DropdownToggleDirective,
         DropdownMenuDirective,
         DropdownItemDirective,
-        DebounceDirective,
         MultiSelectComponent,
+        XsButtonDirective,
+        NgClass,
     ],
     templateUrl: './autoreport-add-step-one.component.html',
     styleUrl: './../../../assets/autoreport.css', //'./autoreport-add-step-one.component.css',
@@ -144,13 +142,6 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    private loadContainers() {
-        this.subscriptions.add(this.ContainersService.loadAllContainers().subscribe((result) => {
-            this.containers = result;
-            this.cdr.markForCheck();
-        }));
-    }
-
     public onContainerChange() {
         this.loadTimeperiods();
         this.loadCalendars();
@@ -158,34 +149,49 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     }
 
-    public onAvailabilityChange($event: boolean) {
-        if (!$event) {
+    public onAvailabilityChange() {
+        if (!this.post) {
+            return;
+        }
+        if (!this.setMinAvailability) {
             this.post.Autoreport.min_availability = null;
         }
     }
 
-    public onOutageChange($event: boolean) {
-        if (!$event) {
+    public onOutageChange() {
+        if (!this.post) {
+            return;
+        }
+        if (!this.setMaxNumberOfOutages) {
             this.post.Autoreport.max_number_of_outages = null;
             this.cdr.markForCheck();
         }
     }
 
-    public onHolidayChange($event: any) {
-        if ($event === 0 && this.post.Autoreport.calendar_id !== 0) {
-            this.post.Autoreport.calendar_id = 0;
+    public onHolidayChange() {
+        if (!this.post) {
+            return;
+        }
+        if (this.post.Autoreport.consider_holidays === 0 && this.post.Autoreport.calendar_id !== 0) {
+            this.post.Autoreport.calendar_id = null;
             this.cdr.markForCheck();
         }
     }
 
-    public onStartChange($event: any) {
-        if ($event === 0) {
+    public onStartChange() {
+        if (!this.post) {
+            return;
+        }
+        if (this.post.Autoreport.use_start_time === 0) {
             this.post.Autoreport.report_start_date = null;
             this.cdr.markForCheck();
         }
     }
 
     private loadTimeperiods() {
+        if (!this.post) {
+            return;
+        }
         if (this.post.Autoreport.container_id === 0) {
             return;
         }
@@ -196,6 +202,9 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     }
 
     private loadCalendars() {
+        if (!this.post) {
+            return;
+        }
         if (this.post.Autoreport.container_id === 0) {
             return;
         }
@@ -207,11 +216,21 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
     }
 
     private loadUsers() {
+        if (!this.post) {
+            return;
+        }
         if (this.post.Autoreport.container_id === 0) {
             return;
         }
         this.subscriptions.add(this.UsersService.loadUsersByContainerId(this.post.Autoreport.container_id, this.post.Autoreport.users._ids).subscribe((result) => {
             this.users = result;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    private loadContainers() {
+        this.subscriptions.add(this.ContainersService.loadAllContainers().subscribe((result) => {
+            this.containers = result;
             this.cdr.markForCheck();
         }));
     }

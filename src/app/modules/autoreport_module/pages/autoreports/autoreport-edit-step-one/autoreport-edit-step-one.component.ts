@@ -294,7 +294,6 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
-                    console.log(this.errors);
                 }
                 this.cdr.markForCheck();
             })
