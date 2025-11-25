@@ -21,7 +21,7 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective, TextColorDirective
 } from '@coreui/angular';
 import { Subscription } from 'rxjs';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
@@ -113,7 +113,8 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        TextColorDirective
 
     ],
     providers: [
