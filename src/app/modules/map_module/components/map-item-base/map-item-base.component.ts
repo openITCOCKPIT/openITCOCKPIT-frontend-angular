@@ -354,4 +354,16 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         this.cdr.markForCheck();
     }
 
+    protected shortenLabel(text: string, maxLength: number, shortenEnd: boolean = false): string {
+        if (text.length <= maxLength) {
+            return text;
+        }
+
+        if (shortenEnd) {
+            return '...' + text.substring(text.length - (maxLength - 3));
+        }
+
+        return text.substring(0, maxLength - 3) + '...';
+    }
+
 }

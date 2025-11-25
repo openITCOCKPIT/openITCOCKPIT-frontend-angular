@@ -143,7 +143,7 @@
                             <div class="mt-4">
                                 <div class="col-12 help-block text-info">
                                     <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                                    {{ t('The levels are automatically created based on the hostnames and a separator pattern. Each level is created as a map. All hosts are added to the last level. This allows overview maps to be generated automatically, which become more detailed with each level.') }}
+                                    {{ t('The levels are automatically created based on the hostnames and a separator pattern. Each level is created as a map. All hosts are added to the last level. This allows overview maps to be generated automatically, which become more detailed with each level. Hosts in root container will be ignored.') }}
                                 </div>
                                 <div class="pt-3">
                                     {{ t('For example with host name:') }}
@@ -356,7 +356,7 @@
                                                         {{ t('Map Container') }}
                                                         <oitc-required-icon></oitc-required-icon>
                                                         <span class="col-12 help-block text-info"
-                                                              [cTooltip]="t('Will be used as a container for all maps that will be generated (e.g. /root/MyCompany). The container has to exist. Otherwise, no maps will be created.')">
+                                                              [cTooltip]="t('Will be used as a container for all maps that will be generated (e.g. /root/MyCompany). The container has to exist in the host container hierarchy. Otherwise, no maps will be created.')">
                                                             <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                                                         </span>
                                                     </label>
