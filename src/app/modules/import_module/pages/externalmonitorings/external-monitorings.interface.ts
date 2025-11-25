@@ -111,6 +111,8 @@ export interface ExternalMonitoringConfigLibreNMS {
     import_ports: number
     import_services: number
     track_alerts: number
+    warning_alerts_force_down_state: number
+    critical_alerts_force_down_state: number
     polling_interval: number
     use_proxy: number
     ignore_ssl_certificate: number
