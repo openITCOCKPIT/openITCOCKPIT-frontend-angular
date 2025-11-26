@@ -133,22 +133,27 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         switch (this.item()!.type) {
             case 'host':
                 this.label = data.Host.hostname;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'service':
                 this.label = data.Host.hostname + '/' + data.Service.servicename;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'hostgroup':
                 this.label = data.Hostgroup!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'servicegroup':
                 this.label = data.Servicegroup!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'map':
                 this.label = data.Map!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
         }
         this.cdr.markForCheck();

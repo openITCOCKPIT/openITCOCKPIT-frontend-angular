@@ -2,38 +2,12 @@
     <div class="d-flex h-100 flex-column" *ngIf="widget">
         <oitc-block-loader *ngIf="!resources"></oitc-block-loader>
         <div *ngIf="resources">
-            <c-row>
-                <c-col class="flex-1">
-                    <h5 *ngIf="resources.resources.total === 0" class="fw-normal">
-                        <fa-icon [icon]="['fas', 'circle-info']" class="text-info"></fa-icon>
-                        {{ t('No own resources defined!') }}
-                    </h5>
-                    <h5 *ngIf="resources.resources.total > 0 && resources.resources.status_overview[0] === 0"
-                        class="fw-normal">
-                        {{ t('All resources are confirmed') }}
-                        <fa-icon [icon]="['fas', 'check-check']" class="text-success"></fa-icon>
-                    </h5>
-                    @if (resources.resources.total > 0 && resources.resources.status_overview[0] > 0) {
-                        <h5 class="m-0 fw-normal">
-                            {{ t('Unconfirmed resources exists') }}
-                            <span class="pl-3 float-end">
-                                ⏰ {{ t('Deadline') }}
-                                <time>{{ deadline }}</time>
-                            </span>
-                            <div *ngIf="deadlineExceeded" class="text-danger font-xs py-2">
-                                ‼️ {{ t('Deadline has been exceeded!!') }}
-                            </div>
-                            <div *ngIf="!deadlineExceeded" class="text-warning font-xs py-2">
-                                ⚠️ {{ t('Please confirm the missing resource status before the deadline expires!') }}
-                            </div>
-                        </h5>
-                    }
-                </c-col>
-            </c-row>
+
+            <!-- status overview -->
             <c-row>
                 <c-col [xs]="12" [md]="3" [lg]="3">
-                    <div class="p-2 bg-primary rounded overflow-hidden position-relative text-white mb-g">
-                        <div>
+                    <div class="p-2 bg-primary rounded overflow-hidden position-relative text-white mb-g h-100">
+                        <div class="position-relative z-1">
                             <h6 class="display-4 d-block l-h-n m-0 fw-500">
                                 @if (resources.resources.status_overview[0] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
                                     <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
@@ -53,8 +27,8 @@
                     </div>
                 </c-col>
                 <c-col [xs]="12" [md]="3" [lg]="3">
-                    <div class="p-2 bg-success rounded overflow-hidden position-relative text-white mb-g">
-                        <div>
+                    <div class="p-2 bg-success rounded overflow-hidden position-relative text-white mb-g h-100">
+                        <div class="position-relative z-1">
                             <h6 class="display-4 d-block l-h-n m-0 fw-500">
                                 @if (resources.resources.status_overview[1] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
                                     <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
@@ -74,8 +48,8 @@
                     </div>
                 </c-col>
                 <c-col [xs]="12" [md]="3" [lg]="3">
-                    <div class="p-2 bg-warning rounded overflow-hidden position-relative text-white mb-g">
-                        <div>
+                    <div class="p-2 bg-warning rounded overflow-hidden position-relative text-white mb-g h-100">
+                        <div class="position-relative z-1">
                             <h6 class="display-4 d-block l-h-n m-0 fw-500">
                                 @if (resources.resources.status_overview[2] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
                                     <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
@@ -95,8 +69,8 @@
                     </div>
                 </c-col>
                 <c-col [xs]="12" [md]="3" [lg]="3">
-                    <div class="p-2 bg-critical rounded overflow-hidden position-relative text-white mb-g">
-                        <div>
+                    <div class="p-2 bg-critical rounded overflow-hidden position-relative text-white mb-g h-100">
+                        <div class="position-relative z-1">
                             <h6 class="display-4 d-block l-h-n m-0 fw-500">
                                 @if (resources.resources.status_overview[3] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
                                     <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
@@ -114,6 +88,54 @@
                         <fa-icon [icon]="['fas', 'exclamation']"
                                  class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
                     </div>
+                </c-col>
+            </c-row>
+
+            <!-- accordion -->
+            <c-row class="mt-2">
+                <c-col>
+                    <c-accordion>
+                        @for (deadlineItem of deadlines; track $index) {
+
+                            <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                                <ng-template cTemplateId="accordionHeaderTemplate">
+                                    <button (click)="item0.toggleItem()" [collapsed]="!item0.visible"
+                                            cAccordionButton>
+                                        ⏰ {{ t('Deadline') }}
+
+                                        {{ deadlineItem.key }}
+
+                                        <span class="px-1">
+                                            @if (deadlineItem.exceeded) {
+                                                <span class="text-danger">
+                                                    ‼️ {{ t('Deadline has been exceeded!!') }}
+                                                </span>
+                                            } @else {
+                                                <span class="text-warning">
+                                                    ⚠️ {{ t('Please confirm the missing resource status before the deadline expires!') }}
+                                                </span>
+                                            }
+                                        </span>
+                                    </button>
+                                </ng-template>
+                                <ng-template cTemplateId="accordionBodyTemplate">
+                                    <div class="accordion-body">
+                                        <ul class="list-inline">
+                                            @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                                <li class="list-inline-item  pe-1">
+                                                    •<a *oitcPermission="['scmmodule','resources', 'index']"
+                                                        [routerLink]="['/','scm_module', 'resources', 'index']"
+                                                        [queryParams]="{resourcegroupId: resourcegroup.id}">
+                                                    {{ resourcegroup.name }}
+                                                </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </ng-template>
+                            </c-accordion-item>
+                        }
+                    </c-accordion>
                 </c-col>
             </c-row>
         </div>
