@@ -115,127 +115,158 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!maps"></oitc-table-loader>
-            <table *ngIf="maps" bordered cTable class="mt-2 mb-0" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="text-center col-1" scope="col" style="width: 5px;">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Maps.name">
-                        {{ t('Map name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Maps.title">
-                        {{ t('Map title') }}
-                    </th>
-                    <th class="text-center col-1 width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let map of maps.all_maps">
-                    <td class="text-center">
-                        @if (( PermissionsService.hasPermissionObservable(['MapModule', 'maps', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['MapModule', 'maps', 'copy'])|async )) {
-                            <oitc-item-select
-                                [disabled]="!map.allowEdit"
-                                [item]="map"></oitc-item-select>
-                        }
-                    </td>
-                    <td class="word-break"><a
-                        [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.id, false]">{{ map.name }}</a>
-                    </td>
-                    <td class="word-break">{{ map.title }}</td>
+            @if (!maps) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (maps) {
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="text-center col-1" scope="col" style="width: 5px;">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Maps.name">
+                            {{ t('Map name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Maps.title">
+                            {{ t('Map title') }}
+                        </th>
+                        <th class="text-center col-1 width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-                    <td class="width-50">
-                        <oitc-actions-button [allowEdit]="map.allowEdit"
-                                             [permission]="'mapmodule.maps.edit'"
-                                             [url]="'/map_module/mapeditors/edit/' + map.id">
+                        @for (map of maps.all_maps; track $index) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (( PermissionsService.hasPermissionObservable(['MapModule', 'maps', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['MapModule', 'maps', 'copy'])|async )) {
+                                        <oitc-item-select
+                                            [disabled]="!map.allowEdit"
+                                            [item]="map"></oitc-item-select>
+                                    }
+                                </td>
+                                <td class="word-break">
+                                    <a *oitcPermission="['MapModule', 'mapeditors', 'view']"
+                                       [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.id, false]">
+                                        {{ map.name }}
+                                    </a>
+                                    <span
+                                        *oitcPermission="['MapModule', 'mapeditors', 'view']; negate: true">
+                                        {{ map.name }}
+                                    </span>
+                                </td>
+                                <td class="word-break">{{ map.title }}</td>
 
-                            <oitc-actions-button-element [permission]="'mapmodule.maps.edit'"
-                                                         [allow]="map.allowEdit"
+                                <td class="width-50">
+                                    <oitc-actions-button [allowEdit]="map.allowEdit"
+                                                         [permission]="'mapmodule.maps.edit'"
                                                          [url]="'/map_module/mapeditors/edit/' + map.id">
-                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                {{ t('Edit in Map editor') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'mapmodule.maps.edit'"
-                                                         [allow]="map.allowEdit"
-                                                         [url]="'/map_module/maps/edit/' + map.id">
-                                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                                {{ t('Edit settings') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *oitcPermission="['MapModule', 'maps', 'copy']"></li>
-                            <oitc-actions-button-element [permission]="'mapmodule.maps.copy'"
-                                                         [allow]="map.allowCopy"
-                                                         [url]="'/map_module/maps/copy/' + map.id">
-                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                {{ t('Copy') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element [permission]="'mapmodule.mapeditors.view'"
-                                                         [url]="'/map_module/mapeditors/view/' + map.id + '/' + false">
-                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                                {{ t('View') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'mapmodule.mapeditors.view'"
-                                                         [url]="'/map_module/mapeditors/view/' + map.id + '/' + true">
-                                <fa-icon [icon]="['fas', 'expand']"></fa-icon>
-                                {{ t('View in fullscreen') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *oitcPermission="['MapModule', 'maps', 'delete']"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(map)"
-                                                         [permission]="'mapmodule.maps.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
 
-            <oitc-no-records *ngIf="maps && maps.all_maps.length === 0"></oitc-no-records>
-            <ng-container *ngIf="maps && maps.all_maps">
-                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                             [fluid]="true">
-                    <c-row>
-                        <c-col>
-                            <oitc-select-all
-                                [itemsCount]="maps.all_maps.length"></oitc-select-all>
-                        </c-col>
-                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                            <div class="btn-group d-flex flex-row" role="group">
-                                <button class="btn btn-outline-primary col-3 border-0" type="button"
-                                        *oitcPermission="['MapModule', 'maps', 'copy']"
-                                        (click)="navigateCopy()">
-                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                    {{ t('Copy') }}
-                                </button>
-                                <button (click)="toggleDeleteAllModal()"
-                                        *oitcPermission="['MapModule', 'maps', 'delete']"
-                                        class="btn btn-outline-danger col-3 border-0"
-                                        type="button">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete selected') }}
-                                </button>
-                            </div>
-                        </c-col>
-                    </c-row>
-                </c-container>
-            </ng-container>
+                                        <oitc-actions-button-element [permission]="'mapmodule.maps.edit'"
+                                                                     [allow]="map.allowEdit"
+                                                                     [url]="'/map_module/mapeditors/edit/' + map.id">
+                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                            {{ t('Edit in Map editor') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'mapmodule.maps.edit'"
+                                                                     [allow]="map.allowEdit"
+                                                                     [url]="'/map_module/maps/edit/' + map.id">
+                                            <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                                            {{ t('Edit settings') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *oitcPermission="['MapModule', 'maps', 'copy']"></li>
+                                        <oitc-actions-button-element [permission]="'mapmodule.maps.copy'"
+                                                                     [allow]="map.allowCopy"
+                                                                     [url]="'/map_module/maps/copy/' + map.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+
+                                        @if (this.PermissionsService.hasPermissionObservable(['mapmodule', 'mapeditors', 'view'])|async) {
+                                            @if (( this.PermissionsService.hasPermissionObservable(['mapmodule', 'mapeditors', 'edit'])|async ) ||
+                                            ( this.PermissionsService.hasPermissionObservable(['mapmodule', 'mapeditors', 'copy'])|async )) {
+                                                <li cDropdownDivider></li>
+                                            }
+                                            <oitc-actions-button-element [permission]="'mapmodule.mapeditors.view'"
+                                                                         [url]="'/map_module/mapeditors/view/' + map.id + '/' + false">
+                                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                                {{ t('View') }}
+                                            </oitc-actions-button-element>
+                                            <oitc-actions-button-element [permission]="'mapmodule.mapeditors.view'"
+                                                                         [url]="'/map_module/mapeditors/view/' + map.id + '/' + true">
+                                                <fa-icon [icon]="['fas', 'expand']"></fa-icon>
+                                                {{ t('View in fullscreen') }}
+                                            </oitc-actions-button-element>
+                                        }
+
+                                        @if (map.allowEdit && ( this.PermissionsService.hasPermissionObservable(['mapmodule', 'maps', 'delete'])|async )) {
+                                            <li cDropdownDivider *oitcPermission="['MapModule', 'maps', 'delete']"></li>
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(map)"
+                                                                         [permission]="'mapmodule.maps.delete'">
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @if (maps && maps.all_maps.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+
+            @if (maps && maps.all_maps) {
+                <ng-container>
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                                 [fluid]="true">
+                        <c-row>
+                            <c-col>
+                                <oitc-select-all
+                                    [itemsCount]="maps.all_maps.length"></oitc-select-all>
+                            </c-col>
+                            <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                                <div class="btn-group d-flex flex-row" role="group">
+                                    <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                            *oitcPermission="['MapModule', 'maps', 'copy']"
+                                            (click)="navigateCopy()">
+                                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                        {{ t('Copy') }}
+                                    </button>
+                                    <button (click)="toggleDeleteAllModal()"
+                                            *oitcPermission="['MapModule', 'maps', 'delete']"
+                                            class="btn btn-outline-danger col-3 border-0"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete selected') }}
+                                    </button>
+                                </div>
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                </ng-container>
+            }
+
+
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="maps"
-                            [paginateOrScroll]="maps"></oitc-paginate-or-scroll>
+                        @if (maps) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="maps"></oitc-paginate-or-scroll>
+                        }
+
                     </c-col>
                 </c-row>
             </c-container>
