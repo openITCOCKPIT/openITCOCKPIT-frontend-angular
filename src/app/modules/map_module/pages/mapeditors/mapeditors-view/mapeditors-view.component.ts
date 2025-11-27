@@ -73,13 +73,15 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
     private rotationInterval: number = 0;
     private rotationPosition: number = 1;
     protected intervalParam: number = 0;
-
-    private interval = null;
     private refreshInterval: number = 0;
 
     public ngOnInit(): void {
 
         this.subscriptions.add(this.route.params.subscribe(params => {
+
+            if (this.intervalSubscription) {
+                this.intervalSubscription.unsubscribe();
+            }
 
             this.mapId = Number(params['id'] ?? 0);
             this.fullscreen = (params['fullscreen'] ?? 'false') === 'true';
@@ -90,7 +92,7 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
             }
 
             this.intervalParam = Number(params['interval'] ?? 0);
-            if (isNaN(this.intervalParam) || this.intervalParam <= 0) {
+            if (isNaN(this.intervalParam)) {
                 this.intervalParam = 90;
             }
             this.rotationInterval = this.intervalParam * 1000;
@@ -100,9 +102,11 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
             this.loadMapDetails();
             this.cdr.markForCheck();
 
-            if (this.rotate.length > 0 && !this.rotate.includes("0")) {
+            if (this.rotate.length > 0 && !this.rotate.includes("0") && this.rotationInterval > 0) {
+
                 // Handle map rotations
                 this.intervalSubscription = interval(this.rotationInterval).subscribe(() => {
+
                     this.rotationPosition++;
                     if (this.rotate != null && (this.rotationPosition > this.rotate.length)) {
                         this.rotationPosition = 1;
