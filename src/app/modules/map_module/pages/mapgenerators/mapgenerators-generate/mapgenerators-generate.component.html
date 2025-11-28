@@ -221,7 +221,19 @@
                                                             }
                                                         </td>
                                                         <td>
-                                                            {{ generatedMapsAndItems.amountOfTotalMaps }}
+                                                            @if (allGeneratedMaps.length) {
+                                                                <a *oitcPermission="['mapmodule','maps', 'index']"
+                                                                   [routerLink]="['/', 'map_module', 'maps', 'index']"
+                                                                   [queryParams]="{'filter.Maps.id': allGeneratedMaps}">
+                                                                    {{ generatedMapsAndItems.amountOfTotalMaps }}
+                                                                </a>
+                                                                <span
+                                                                    *oitcPermission="['mapmodule','maps', 'index']; negate: true">
+                                                                    {{ generatedMapsAndItems.amountOfTotalMaps }}
+                                                                </span>
+                                                            } @else {
+                                                                {{ generatedMapsAndItems.amountOfTotalMaps }}
+                                                            }
                                                         </td>
                                                     </tr>
 
@@ -242,7 +254,19 @@
                                                             }
                                                         </td>
                                                         <td>
-                                                            {{ generatedMapsAndItems.amountOfNewGeneratedMaps }}
+                                                            @if (newGeneratedMaps.length) {
+                                                                <a *oitcPermission="['mapmodule','maps', 'index']"
+                                                                   [routerLink]="['/', 'map_module', 'maps', 'index']"
+                                                                   [queryParams]="{'filter.Maps.id': newGeneratedMaps}">
+                                                                    {{ generatedMapsAndItems.amountOfNewGeneratedMaps }}
+                                                                </a>
+                                                                <span
+                                                                    *oitcPermission="['mapmodule','maps', 'index']; negate: true">
+                                                                    {{ generatedMapsAndItems.amountOfNewGeneratedMaps }}
+                                                                </span>
+                                                            } @else {
+                                                                {{ generatedMapsAndItems.amountOfNewGeneratedMaps }}
+                                                            }
                                                         </td>
                                                     </tr>
 
