@@ -69,7 +69,7 @@ export interface AutoreportPostObject {
     check_hard_state: number, // if true -> consider only hard states from state history
     consider_downtimes: number,
     consider_holidays: number,
-    calendar_id: number,
+    calendar_id: null | number,
     users: {
         _ids: number[]
     }
