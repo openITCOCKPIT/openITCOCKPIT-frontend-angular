@@ -38,7 +38,7 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -53,7 +53,7 @@ import { getDefaultMapsIndexParams, Map, MapsIndexParams, MapsIndexRoot } from '
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
-import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
+
 
 @Component({
     selector: 'oitc-maps-index',
@@ -84,8 +84,6 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
         MatSortHeader,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         ReactiveFormsModule,
@@ -100,7 +98,6 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        TrueFalseDirective
     ],
     templateUrl: './maps-index.component.html',
     styleUrl: './maps-index.component.css',
@@ -186,6 +183,7 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
         }
     }
 
+
     public loadMaps() {
         this.SelectionServiceService.deselectAll();
 
@@ -197,8 +195,8 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
         if (this.mapsFilter.is_auto_generated !== this.mapsFilter.is_not_auto_generated) {
             maps_generated = String(this.mapsFilter.is_auto_generated === true);
         }
-
         this.params['filter[Maps.auto_generated]'] = maps_generated;
+
 
         this.subscriptions.add(this.MapsService.getIndex(this.params)
             .subscribe((result: MapsIndexRoot) => {
