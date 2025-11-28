@@ -129,9 +129,9 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
         {key: 'WEEK', value: this.TranslocoService.translate('weekly')},
         {key: 'DAY', value: this.TranslocoService.translate('daily')}
     ];
-    public graphoptions: SelectKeyValue[] = [
-        {key: 0, value: this.TranslocoService.translate('in %')},
-        {key: 1, value: this.TranslocoService.translate('in h')}
+    public graphoptions: SelectKeyValueString[] = [
+        {key: '0', value: this.TranslocoService.translate('in %')},
+        {key: '1', value: this.TranslocoService.translate('in h')}
     ];
     public checkstates: SelectKeyValue[] = [
         {key: 0, value: this.TranslocoService.translate('soft and hard state')},
@@ -287,6 +287,7 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
                 if (result.success) {
                     this.errors = null;
                     this.router.navigate(['/autoreport_module/autoreports/editStepTwo', result.data.autoreport.id]);
+                    return;
                 }
 
                 // Error

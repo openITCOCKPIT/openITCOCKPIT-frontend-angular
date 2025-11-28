@@ -83,6 +83,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         MultiSelectComponent,
         XsButtonDirective,
         NgClass,
+
     ],
     templateUrl: './autoreport-add-step-one.component.html',
     styleUrl: './../../../assets/autoreport.css', //'./autoreport-add-step-one.component.css',
@@ -124,9 +125,9 @@ export class AutoreportAddStepOneComponent implements OnInit, OnDestroy {
         {key: 'WEEK', value: this.TranslocoService.translate('weekly')},
         {key: 'DAY', value: this.TranslocoService.translate('daily')}
     ];
-    public graphoptions: SelectKeyValue[] = [
-        {key: 0, value: this.TranslocoService.translate('in %')},
-        {key: 1, value: this.TranslocoService.translate('in h')}
+    public graphoptions: SelectKeyValueString[] = [
+        {key: '0', value: this.TranslocoService.translate('in %')},
+        {key: '1', value: this.TranslocoService.translate('in h')}
     ];
     public checkstates: SelectKeyValue[] = [
         {key: 0, value: this.TranslocoService.translate('soft and hard state')},
