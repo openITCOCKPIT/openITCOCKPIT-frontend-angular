@@ -117,6 +117,10 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
         {
             key: ExternalMonitoringSystems.PRTG,
             value: this.TranslocoService.translate('Paessler PRTG System')
+        },
+        {
+            key: ExternalMonitoringSystems.LibreNMS,
+            value: this.TranslocoService.translate('LibreNMS')
         }
     ];
     protected readonly Object = Object;

@@ -24,6 +24,7 @@ export interface Map {
     background_size_y?: number | null
     refresh_interval?: number
     json_data?: string
+    auto_generated?: boolean
     created?: string
     modified?: string
     containers?: MapContainer[]
@@ -58,17 +59,21 @@ export interface MapsIndexParams {
     direction: 'asc' | 'desc' | '', // asc or desc
     'filter[Maps.name]': string,
     'filter[Maps.title]': string,
+    'filter[Maps.id][]': number[],
+    'filter[Maps.auto_generated]': string
 }
 
 export function getDefaultMapsIndexParams(): MapsIndexParams {
     return {
         angular: true,
-        scroll: false,
+        scroll: true,
         sort: 'Maps.name',
         page: 1,
         direction: 'asc',
         'filter[Maps.name]': "",
         'filter[Maps.title]': "",
+        'filter[Maps.id][]': [],
+        'filter[Maps.auto_generated]': "",
     }
 }
 

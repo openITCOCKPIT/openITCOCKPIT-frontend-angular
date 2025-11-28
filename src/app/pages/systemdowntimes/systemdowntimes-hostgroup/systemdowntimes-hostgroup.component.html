@@ -229,6 +229,9 @@
                     <th scope="col" mat-sort-header="Containers.name">
                         {{ t('Host group name') }}
                     </th>
+                    <th scope="col" mat-sort-header="Systemdowntimes.downtimetype_id">
+                        {{ t('Include services') }}
+                    </th>
                     <th scope="col" mat-sort-header="Systemdowntimes.author">
                         {{ t('User') }}
                     </th>
@@ -270,6 +273,13 @@
                         <span *oitcPermission="['hostgroups', 'edit']; negate: true">
                             {{ hostgroupSystemdowntime.Container.name }}
                         </span>
+                    </td>
+                    <td>
+                        @if (hostgroupSystemdowntime.Systemdowntime.downtimeTypeId == 1) {
+                            {{ t('Yes') }}
+                        } @else {
+                            {{ t('No') }}
+                        }
                     </td>
                     <td>
                         {{ hostgroupSystemdowntime.Systemdowntime.author }}

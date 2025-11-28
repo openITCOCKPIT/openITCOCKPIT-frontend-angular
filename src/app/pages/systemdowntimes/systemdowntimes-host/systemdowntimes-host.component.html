@@ -228,6 +228,9 @@
                     <th scope="col" mat-sort-header="Hosts.name">
                         {{ t('Host name') }}
                     </th>
+                    <th scope="col" mat-sort-header="Systemdowntimes.downtimetype_id">
+                        {{ t('Include services') }}
+                    </th>
                     <th scope="col" mat-sort-header="Systemdowntimes.author">
                         {{ t('User') }}
                     </th>
@@ -269,6 +272,13 @@
                         <span *oitcPermission="['hosts', 'browser']; negate: true">
                             {{ hostSystemdowntime.Host.hostname }}
                         </span>
+                    </td>
+                    <td>
+                        @if (hostSystemdowntime.Systemdowntime.downtimeTypeId == 1) {
+                            {{ t('Yes') }}
+                        } @else {
+                            {{ t('No') }}
+                        }
                     </td>
                     <td>
                         {{ hostSystemdowntime.Systemdowntime.author }}

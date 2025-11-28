@@ -58,7 +58,7 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
      */
     private _options: any[] | undefined;
     @Input()
-    set options(value: any[]) {
+    set options(value: any[] | undefined) {
         this._options = value;
         this.onOptionsChanged();
     }
