@@ -233,7 +233,18 @@
 
                     <ng-template #buttonTemplate let-data>
                         <div class="ms-2">
-                            <button class="ripple" (click)="runSnmpDiscovery()" cButton color="info">
+                            <button
+                                cButton
+                                class="ripple"
+                                color="primary"
+                                type="button"
+                                [disabled]="DiscoveryIsRunning"
+                                (click)="runSnmpDiscovery()">
+                                @if (DiscoveryIsRunning) {
+                                    <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                                } @else {
+                                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                                }
                                 {{ t('Start SNMP interface discovery') }}
                             </button>
                         </div>

@@ -191,6 +191,7 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
 
     protected runDatastoreDiscovery(): void {
         this.post.dataStoreServices = [];
+        this.beginDiscovery();
         this.cdr.markForCheck();
         this.WizardService.executeDatastoreDiscovery(this.post).subscribe((data: any) => {
             this.errors = {} as GenericValidationError;
@@ -212,6 +213,7 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
                             servicetemplate_id: this.datastoreServicetemplate.id
                         });
                 }
+                this.endDiscovery();
                 this.cdr.markForCheck();
                 return;
             }
@@ -224,6 +226,7 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
                     this.notyService.scrollContentDivToTop();
                 }
             }
+            this.endDiscovery();
             this.cdr.markForCheck();
         });
     }

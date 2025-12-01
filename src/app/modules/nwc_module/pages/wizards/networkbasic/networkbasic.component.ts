@@ -226,6 +226,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
 
     protected runSnmpDiscovery(): void {
         this.post.interfaces = [];
+        this.beginDiscovery();
         this.cdr.markForCheck();
         this.WizardService.executeSNMPDiscovery(this.post).subscribe((data: any) => {
             this.errors = {} as GenericValidationError;
@@ -247,6 +248,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
                         });
                 }
                 this.childComponentLocal.cdr.markForCheck();
+                this.endDiscovery();
                 this.cdr.markForCheck();
                 return;
             }
@@ -259,6 +261,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
                     this.notyService.scrollContentDivToTop();
                 }
             }
+            this.endDiscovery();
             this.cdr.markForCheck();
         });
     }

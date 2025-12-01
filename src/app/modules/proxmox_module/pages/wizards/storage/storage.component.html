@@ -169,11 +169,21 @@
 
                 <ng-template #buttonTemplate let-data>
                     <div class="ms-2">
-                        <button class="ripple" (click)="runStorageDiscovery()" cButton color="info">
+                        <button
+                            cButton
+                            class="ripple"
+                            color="primary"
+                            type="button"
+                            [disabled]="DiscoveryIsRunning"
+                            (click)="runStorageDiscovery()">
+                            @if (DiscoveryIsRunning) {
+                                <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                            }
                             {{ t('Start Storage discovery') }}
                         </button>
                     </div>
-
                 </ng-template>
 
                 <oitc-alert

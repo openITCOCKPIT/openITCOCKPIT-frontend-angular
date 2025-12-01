@@ -180,7 +180,18 @@
 
                 <ng-template #buttonTemplate let-data>
                     <div class="ms-2">
-                        <button class="ripple" (click)="runServiceDiscovery()" cButton color="info">
+                        <button
+                            cButton
+                            class="ripple"
+                            color="primary"
+                            type="button"
+                            [disabled]="DiscoveryIsRunning"
+                            (click)="runServiceDiscovery()">
+                            @if (DiscoveryIsRunning) {
+                                <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                            }
                             {{ t('Start Service discovery') }}
                         </button>
                     </div>
