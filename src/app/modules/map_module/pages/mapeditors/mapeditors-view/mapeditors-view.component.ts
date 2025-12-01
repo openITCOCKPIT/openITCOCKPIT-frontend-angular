@@ -73,13 +73,16 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
     private rotationInterval: number = 0;
     private rotationPosition: number = 1;
     protected intervalParam: number = 0;
-
-    private interval = null;
     private refreshInterval: number = 0;
 
     public ngOnInit(): void {
 
         this.subscriptions.add(this.route.params.subscribe(params => {
+
+            if (this.intervalSubscription) {
+                this.intervalSubscription.unsubscribe();
+            }
+
             this.mapId = Number(params['id'] ?? 0);
             this.fullscreen = (params['fullscreen'] ?? 'false') === 'true';
 
@@ -88,20 +91,22 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
                 this.rotate = String(rotationParam).split(',');
             }
 
-            let intervalParam = Number(params['interval'] ?? 0);
-            if (isNaN(intervalParam)) {
-                intervalParam = 90;
+            this.intervalParam = Number(params['interval'] ?? 0);
+            if (isNaN(this.intervalParam)) {
+                this.intervalParam = 90;
             }
-            this.rotationInterval = intervalParam * 1000;
+            this.rotationInterval = this.intervalParam * 1000;
 
 
             // Load the current map / first map of a rotation
             this.loadMapDetails();
             this.cdr.markForCheck();
 
-            if (this.rotate.length > 0) {
+            if (this.rotate.length > 0 && !this.rotate.includes("0") && this.rotationInterval > 0) {
+
                 // Handle map rotations
                 this.intervalSubscription = interval(this.rotationInterval).subscribe(() => {
+
                     this.rotationPosition++;
                     if (this.rotate != null && (this.rotationPosition > this.rotate.length)) {
                         this.rotationPosition = 1;
@@ -130,15 +135,17 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     private loadMapDetails() {
-        this.subscriptions.add(this.MapeditorsService.loadMapDetails(this.mapId)
-            .subscribe((result) => {
-                this.map = result.map;
-                this.refreshInterval = this.map.Map.refresh_interval!;
-                if (this.refreshInterval !== 0 && this.refreshInterval < 5000) {
-                    this.refreshInterval = 5000;
-                }
-                this.cdr.markForCheck();
-            }));
+        if (this.mapId) {
+            this.subscriptions.add(this.MapeditorsService.loadMapDetails(this.mapId)
+                .subscribe((result) => {
+                    this.map = result.map;
+                    this.refreshInterval = this.map.Map.refresh_interval!;
+                    if (this.refreshInterval !== 0 && this.refreshInterval < 5000) {
+                        this.refreshInterval = 5000;
+                    }
+                    this.cdr.markForCheck();
+                }));
+        }
     };
 
     public toggleFullscreenMode(initialLoad: boolean = false, leavePage: boolean = false) {

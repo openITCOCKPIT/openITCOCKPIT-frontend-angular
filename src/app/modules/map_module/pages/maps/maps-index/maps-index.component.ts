@@ -21,6 +21,9 @@ import {
     ColComponent,
     ContainerComponent,
     DropdownDividerDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -35,7 +38,7 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -49,6 +52,8 @@ import { MapsService } from '../maps.service';
 import { getDefaultMapsIndexParams, Map, MapsIndexParams, MapsIndexRoot } from '../maps.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
+
 
 @Component({
     selector: 'oitc-maps-index',
@@ -79,8 +84,6 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         MatSortHeader,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         ReactiveFormsModule,
@@ -90,7 +93,11 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         TranslocoPipe,
         XsButtonDirective,
         TableLoaderComponent,
-        AsyncPipe
+        AsyncPipe,
+        BadgeOutlineComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
     ],
     templateUrl: './maps-index.component.html',
     styleUrl: './maps-index.component.css',
@@ -117,6 +124,11 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public hideFilter: boolean = true;
     private cdr = inject(ChangeDetectorRef);
 
+    public mapsFilter = {
+        is_auto_generated: false,
+        is_not_auto_generated: false,
+    }
+
 
     // Show or hide the filter
     public toggleFilter() {
@@ -139,6 +151,12 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public resetFilter() {
         this.params = getDefaultMapsIndexParams();
+
+        this.mapsFilter = {
+            is_auto_generated: false,
+            is_not_auto_generated: false,
+        }
+
         this.loadMaps();
     }
 
@@ -165,8 +183,20 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
         }
     }
 
+
     public loadMaps() {
         this.SelectionServiceService.deselectAll();
+
+        if (this.route.snapshot.queryParams.hasOwnProperty('filter.Maps.id')) {
+            this.params['filter[Maps.id][]'] = this.route.snapshot.queryParams['filter.Maps.id'];
+        }
+
+        let maps_generated: string = '';
+        if (this.mapsFilter.is_auto_generated !== this.mapsFilter.is_not_auto_generated) {
+            maps_generated = String(this.mapsFilter.is_auto_generated === true);
+        }
+        this.params['filter[Maps.auto_generated]'] = maps_generated;
+
 
         this.subscriptions.add(this.MapsService.getIndex(this.params)
             .subscribe((result: MapsIndexRoot) => {

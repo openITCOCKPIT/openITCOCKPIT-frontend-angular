@@ -184,10 +184,18 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                             }
                             if (!data.success) {
                                 let response = data.data as ImportersErrorMessageResponse;
-                                this.importData = {
-                                    success: false,
-                                    errorMessage: response.message,
-                                    errors: response.errors.notValidRawData
+                                if (!response.errors) {
+                                    this.importData = {
+                                        success: false,
+                                        errorMessage: response.message,
+                                        errors: response.message
+                                    }
+                                } else {
+                                    this.importData = {
+                                        success: false,
+                                        errorMessage: response.message,
+                                        errors: response.errors.notValidRawData ?? 'error'
+                                    }
                                 }
                             }
                             this.cdr.markForCheck();

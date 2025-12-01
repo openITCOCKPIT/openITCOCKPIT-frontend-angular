@@ -72,35 +72,70 @@
                     </h4>
                 </legend>
 
-                <c-alert color="info">
-                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                    <strong>
-                        {{ t('Notice') }}:
-                    </strong>
-                    {{ t('Proxmox Hostname has to be identical with Hostname in openITCOCKPIT') }}
-                </c-alert>
+                <c-accordion class="mb-3">
+                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                        <ng-template cTemplateId="accordionHeaderTemplate">
+                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                                {{ t('Setup Guide') }}:
+                            </button>
+                        </ng-template>
+                        <ng-template cTemplateId="accordionBodyTemplate">
+                            <div class="accordion-body">
+                                <p>
+                                    {{ t('To connect openITCOCKPIT to your Proxmox Virtual Environment, follow these steps:') }}
+                                </p>
+                                <ol>
+                                    <li>{{ t('Log in to your Proxmox Virtual Environment.') }}</li>
+                                    <li>
+                                        {{ t('In the server view, select the root element of your datacenter. Then, on the left hand navigation, go to [Permissions] -> [API Tokens]') }}
+                                    </li>
+                                    <li>
+                                        {{ t('Create a new API Token:') }}
+                                        <ol>
+                                            <li>{{ t('Select the user, your Token will be created for.') }}</li>
+                                            <li>{{ t('Provide a Token ID to distinguish between multiple different tokens.') }}</li>
+                                            <li>
+                                                {{ t('Click [add] and on the next screen, copy the generated Secret. As usual for tokens, it will be hidden for good.') }}
+                                            </li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                                <p>
+
+                                    <img width="600" [src]="'./assets/images/wizards/proxmox_screenshot.png'"
+                                         alt="Proxmox Wizard "/>
+                                </p>
+                            </div>
+                        </ng-template>
+                    </c-accordion-item>
+                </c-accordion>
 
                 <div class="mb-3">
                     <label cLabel for="post.pveUsername">
-                        {{ t('PVE Username') }}
+                        {{ t('User') }}
+                        <oitc-required-icon/>
                     </label>
                     <input cFormControl
                            id="post.pveUsername"
                            type="text"
                            name="post.pveUsername"
                            oitcFormError [errors]="errors" errorField="pveUsername"
+                           placeholder="root@pam"
                            [(ngModel)]="post.pveUsername">
                     <oitc-form-feedback [errors]="errors" errorField="pveUsername"></oitc-form-feedback>
                 </div>
 
                 <div class="mb-3">
                     <label cLabel for="post.pveApiTokenName">
-                        {{ t('PVE API Tokenname') }}
+                        {{ t('Token ID') }}
+                        <oitc-required-icon/>
                     </label>
                     <input cFormControl
                            id="post.pveApiTokenName"
                            type="text"
                            name="post.pveApiTokenName"
+                           placeholder="openITCOCKPIT"
                            oitcFormError [errors]="errors" errorField="pveApiTokenName"
                            [(ngModel)]="post.pveApiTokenName">
                     <oitc-form-feedback [errors]="errors" errorField="pveApiTokenName"></oitc-form-feedback>
@@ -108,7 +143,8 @@
 
                 <div class="mb-3">
                     <label cLabel for="post.pveApiTokenSecret">
-                        {{ t('PVE API Tokensecret') }}
+                        {{ t('Secret') }}
+                        <oitc-required-icon/>
                     </label>
                     <input cFormControl
                            id="post.pveApiTokenSecret"

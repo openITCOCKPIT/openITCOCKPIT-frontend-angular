@@ -42,7 +42,9 @@ import { proxmoxModuleRoutes } from './modules/proxmox_module/proxmox_module.rou
 import { ms365ModuleRoutes } from './modules/ms365_module/ms365_module.routes';
 import { mshypervModuleRoutes } from './modules/mshyperv_module/mshyperv_module.routes';
 import { ciscoModuleRoutes } from './modules/cisco_module/cisco_module.routes';
+import { networkModuleRoutes } from './modules/network_module/network_module.routes';
 import { broadcomProxyModuleRoutes } from './modules/broadcomproxy_module/broadcomproxy_module.routes';
+import { nutanixModuleRoutes } from './modules/nutanix_module/nutanix_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -107,7 +109,9 @@ const moduleRoutes: Routes = [
     ...ms365ModuleRoutes,
     ...mshypervModuleRoutes,
     ...ciscoModuleRoutes,
-    ...broadcomProxyModuleRoutes
+    ...broadcomProxyModuleRoutes,
+    ...nutanixModuleRoutes,
+    ...networkModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
