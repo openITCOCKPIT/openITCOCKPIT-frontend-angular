@@ -130,13 +130,11 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
     }
 
     protected beginDiscovery(): void {
-        console.warn('Beginning discovery');
         this.DiscoveryIsRunning = true;
         this.cdr.markForCheck();
     }
 
     protected endDiscovery(): void {
-        console.warn('Ending discovery');
         this.DiscoveryIsRunning = false;
         this.cdr.markForCheck();
     }
