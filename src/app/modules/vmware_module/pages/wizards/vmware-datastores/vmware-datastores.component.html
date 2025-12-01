@@ -161,13 +161,24 @@
                         {{ t('Scan VMWare and find all of datastores. Only possible with valid VMWare configuration') }}
                     </ng-template>
 
+
                     <ng-template #buttonTemplate let-data>
                         <div class="ms-2">
-                            <button class="ripple" (click)="runDatastoreDiscovery()" cButton color="info">
+                            <button
+                                cButton
+                                class="ripple"
+                                color="info"
+                                type="button"
+                                [disabled]="DiscoveryIsRunning"
+                                (click)="runDatastoreDiscovery()">
+                                @if (DiscoveryIsRunning) {
+                                    <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                                } @else {
+                                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                                }
                                 {{ t('Start Datastore discovery') }}
                             </button>
                         </div>
-
                     </ng-template>
 
                     <oitc-alert
