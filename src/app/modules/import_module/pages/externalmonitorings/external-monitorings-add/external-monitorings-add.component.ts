@@ -33,6 +33,7 @@ import {
     ExternalMonitoringConfig,
     ExternalMonitoringConfigFlowChief,
     ExternalMonitoringConfigIcinga2,
+    ExternalMonitoringConfigLibreNMS,
     ExternalMonitoringConfigOpmanager,
     ExternalMonitoringConfigPrtg,
     ExternalMonitoringPost
@@ -121,6 +122,10 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
         {
             key: ExternalMonitoringSystems.PRTG,
             value: this.TranslocoService.translate('Paessler PRTG System')
+        },
+        {
+            key: ExternalMonitoringSystems.LibreNMS,
+            value: this.TranslocoService.translate('LibreNMS')
         }
     ];
 
@@ -205,6 +210,11 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
                         case ExternalMonitoringSystems.FlowChief:
                             const flowChief = result.config.config as ExternalMonitoringConfigFlowChief;
                             this.post.json_data = flowChief;
+                            break;
+
+                        case ExternalMonitoringSystems.LibreNMS:
+                            const LibreNMS = result.config.config as ExternalMonitoringConfigLibreNMS;
+                            this.post.json_data = LibreNMS;
                             break;
                     }
 

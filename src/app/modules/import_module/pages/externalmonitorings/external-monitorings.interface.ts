@@ -55,7 +55,7 @@ export function getDefaultExternalMonitoringsIndexParams(): ExternalMonitoringsI
 
 export interface ExternalMonitoringConfig {
     config: {
-        config: ExternalMonitoringConfigIcinga2 | ExternalMonitoringConfigOpmanager | ExternalMonitoringConfigPrtg | ExternalMonitoringConfigFlowChief
+        config: ExternalMonitoringConfigIcinga2 | ExternalMonitoringConfigOpmanager | ExternalMonitoringConfigPrtg | ExternalMonitoringConfigFlowChief | ExternalMonitoringConfigLibreNMS
         formFields: DynamicalFormFields
     }
 }
@@ -101,6 +101,21 @@ export interface ExternalMonitoringConfigFlowChief {
     use_proxy: number
     ignore_ssl_certificate: number
     host_prefix: string
+}
+
+// Server code: LibreNMSExternalMonitoringJson.php
+export interface ExternalMonitoringConfigLibreNMS {
+    api_url: string
+    api_key: string
+    device_types: string[] // one of appliance,collaboration,environment,firewall,loadbalancer,management,network,printer,power,server,storage,wireless,workstation
+    import_ports: number
+    import_services: number
+    track_alerts: number
+    warning_alerts_force_down_state: number
+    critical_alerts_force_down_state: number
+    polling_interval: number
+    use_proxy: number
+    ignore_ssl_certificate: number
 }
 
 export interface ExternalMonitoringsAsList {

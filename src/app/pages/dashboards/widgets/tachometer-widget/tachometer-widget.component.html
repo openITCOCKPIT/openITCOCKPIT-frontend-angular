@@ -23,7 +23,8 @@
                     </div>
 
                     @if (service_id && widget) {
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-center"
+                             (click)="naviagteToBrowser()" [ngClass]="{'cursor-pointer': isLink}">
                             <canvas [id]="'tachometer-widget-canvas-' + widget.id"></canvas>
                         </div>
                     }
