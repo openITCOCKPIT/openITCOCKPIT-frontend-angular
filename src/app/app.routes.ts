@@ -45,6 +45,7 @@ import { ciscoModuleRoutes } from './modules/cisco_module/cisco_module.routes';
 import { networkModuleRoutes } from './modules/network_module/network_module.routes';
 import { broadcomProxyModuleRoutes } from './modules/broadcomproxy_module/broadcomproxy_module.routes';
 import { nutanixModuleRoutes } from './modules/nutanix_module/nutanix_module.routes';
+import { netAppModuleRoutes } from './modules/netapp_module/netapp_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -111,7 +112,8 @@ const moduleRoutes: Routes = [
     ...ciscoModuleRoutes,
     ...broadcomProxyModuleRoutes,
     ...nutanixModuleRoutes,
-    ...networkModuleRoutes
+    ...networkModuleRoutes,
+    ...netAppModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
