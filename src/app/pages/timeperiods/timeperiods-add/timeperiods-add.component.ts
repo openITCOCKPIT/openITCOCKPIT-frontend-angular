@@ -36,10 +36,10 @@ import { NgClass } from '@angular/common';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { HistoryService } from '../../../history.service';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
-import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { sprintf } from 'sprintf-js';
 import _ from 'lodash';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 
 @Component({
     selector: 'oitc-timeperiods-add',
@@ -73,8 +73,8 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
         NgSelectModule,
         NgOptionHighlightDirective,
         DebounceDirective,
-        LabelLinkComponent,
-        SelectComponent
+        SelectComponent,
+        LabelLinkComponent
     ],
     templateUrl: './timeperiods-add.component.html',
     styleUrl: './timeperiods-add.component.css',

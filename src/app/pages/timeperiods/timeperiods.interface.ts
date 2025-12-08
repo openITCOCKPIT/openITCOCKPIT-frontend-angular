@@ -150,6 +150,7 @@ export interface TimeperiodUsedByObjects {
     Serviceescalations: GenericIdResponse[]
     Services: TimeperiodUsedByService[]
     Servicetemplates: GenericIdAndName[]
+    Timeperiods: GenericIdAndName[]
     Autoreports: GenericIdAndName[]
 }
 
