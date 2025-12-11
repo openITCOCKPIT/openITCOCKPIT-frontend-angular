@@ -133,3 +133,38 @@ export interface SlaCalendarStatusLog {
         class: string
     }
 }
+
+
+export interface SlasSummaryWidgetResponse {
+    slas: SlaOverview[]
+    config: SlaConfig
+    ACL: {
+        sla: {
+            viewDetails: boolean
+        }
+    }
+    _csrfToken: any
+}
+
+export interface SlaOverview {
+    key: number
+    hostsAndServicesOverview: HostsAndServicesOverview
+}
+
+export interface HostsAndServicesOverview {
+    hosts: SlaObjectsSummary
+    services: SlaObjectsSummary
+}
+export interface SlaObjectsSummary {
+    total: number
+    failed: SlaSummaryStatus
+    warning: SlaSummaryStatus
+    passed: SlaSummaryStatus
+    not_calculated: SlaSummaryStatus
+}
+
+export interface SlaSummaryStatus {
+    count: number
+    percentage: any
+    ids: number[]
+}
