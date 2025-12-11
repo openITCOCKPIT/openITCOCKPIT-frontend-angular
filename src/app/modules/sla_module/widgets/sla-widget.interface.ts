@@ -136,7 +136,7 @@ export interface SlaCalendarStatusLog {
 
 
 export interface SlasSummaryWidgetResponse {
-    slas: SlaOverview[]
+    slas: SlaOverviewExtended[]
     config: SlaConfig
     ACL: {
         sla: {
@@ -145,6 +145,22 @@ export interface SlasSummaryWidgetResponse {
     }
     _csrfToken: any
 }
+
+export interface SlaOverviewExtended {
+    key: number
+    value: {
+        slaDetails: {
+            id: number
+            name: string
+            description: string
+        }
+        fulfill: boolean
+        status_percent: number
+        hostsAndServicesOverview: HostsAndServicesOverview
+    }
+
+}
+
 
 export interface SlaOverview {
     key: number
@@ -155,6 +171,7 @@ export interface HostsAndServicesOverview {
     hosts: SlaObjectsSummary
     services: SlaObjectsSummary
 }
+
 export interface SlaObjectsSummary {
     total: number
     failed: SlaSummaryStatus

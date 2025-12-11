@@ -3,12 +3,12 @@ import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-w
 import { SlasSummaryWidgetService } from './slas-summary-widget.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { AsyncPipe } from '@angular/common';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { SlasService } from '../../pages/slas/slas.service';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { AlertComponent, AlertHeadingDirective, ColComponent, RowComponent } from '@coreui/angular';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule } from '@angular/forms';
-import { SlaConfig, SlaHostsAndServicesWithContainer, SlasSummaryWidgetResponse } from '../sla-widget.interface';
+import { SlaConfig, SlasSummaryWidgetResponse } from '../sla-widget.interface';
+import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 
 @Component({
     selector: 'oitc-slas-summary-widget',
@@ -17,12 +17,12 @@ import { SlaConfig, SlaHostsAndServicesWithContainer, SlasSummaryWidgetResponse 
         TranslocoDirective,
         RowComponent,
         ColComponent,
+        LabelLinkComponent,
         AsyncPipe,
         AlertComponent,
         AlertHeadingDirective,
         XsButtonDirective,
-        FormsModule,
-        TranslocoPipe
+        FormsModule
     ],
     templateUrl: './slas-summary-widget.component.html',
     styleUrl: './slas-summary-widget.component.css',
@@ -31,9 +31,7 @@ import { SlaConfig, SlaHostsAndServicesWithContainer, SlasSummaryWidgetResponse 
 export class SlasSummaryWidgetComponent extends BaseWidgetComponent implements OnDestroy, AfterViewInit {
     protected flipped = signal<boolean>(false);
     private readonly SlasSummaryWidgetService = inject(SlasSummaryWidgetService);
-    private readonly SlasService = inject(SlasService);
     public slasSummaryResponse?: SlasSummaryWidgetResponse;
-    public SlaAvailabilityView?: SlaHostsAndServicesWithContainer[];
     public config?: SlaConfig;
 
     constructor() {

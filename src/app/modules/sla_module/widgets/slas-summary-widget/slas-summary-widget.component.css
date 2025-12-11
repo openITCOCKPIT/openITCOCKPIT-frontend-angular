@@ -15,3 +15,16 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+.status-passed {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: radial-gradient(at 86% 80%, rgba(0, 200, 81, 1.0) 0%, rgba(0, 200, 81, 1.0) 30%, #4285F4 33%, #7DACF5 100%);
+}
+
+
+.status-failed {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: radial-gradient(at 86% 80%, rgba(204, 0, 0, 1.0) 0%, rgba(204, 0, 0, 1.0) 30%, #4285F4 33%, #7DACF5 100%);
+}

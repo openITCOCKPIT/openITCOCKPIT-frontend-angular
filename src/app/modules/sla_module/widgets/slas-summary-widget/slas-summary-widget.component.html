@@ -22,15 +22,25 @@
                         <ng-container>
                             @if (PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'viewDetails'])|async) {
                                 @if (slasSummaryResponse) {
-                                    Response here
-                                    <i class="fas fa-bars fa-4x sla-passed helptext"
-                                       [title]="'Passed' | transloco"></i>
-                                    <i class="fas fa-bars fa-4x sla-warning helptext"
-                                       [title]="'Warning' | transloco"></i>
-                                    <i class="fas fa-bars fa-4x sla-failed helptext"
-                                       [title]="'Failed' | transloco"></i>
+                                    @for (sla of slasSummaryResponse.slas; track $index) {
+                                        <c-row [class]="{odd: $index % 2 === 0, even: $index % 2 !== 0}">
+                                            <c-col>
+                                                @if (sla.value.fulfill) {
+                                                    <i class="fas fa-file-circle-xmark fa-2x status-passed py-1"></i>
+                                                }
+                                                @if (!sla.value.fulfill) {
+                                                    <i class="fas fa-file-circle-xmark fa-2x status-failed py-1"></i>
+                                                }
+                                                <oitc-label-link
+                                                    [objectId]="sla.value.slaDetails.id"
+                                                    [route]="'/sla_module/slas/viewDetails'"
+                                                    [permissions]="'slamodule.slas.viewdetails'">
+                                                    {{ sla.value.slaDetails.name }}
+                                                </oitc-label-link>
+                                            </c-col>
+                                        </c-row>
+                                    }
                                 }
-
                             } @else {
                                 <c-row>
                                     <c-col>
