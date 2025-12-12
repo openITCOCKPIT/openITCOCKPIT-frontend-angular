@@ -9,6 +9,9 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { FormsModule } from '@angular/forms';
 import { SlaConfig, SlasSummaryWidgetResponse } from '../sla-widget.interface';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
+import {
+    SlaOverviewMiniEchartComponent
+} from '../../components/charts/sla-overview-mini-echart/sla-overview-mini-echart.component';
 
 @Component({
     selector: 'oitc-slas-summary-widget',
@@ -22,7 +25,8 @@ import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-
         AlertComponent,
         AlertHeadingDirective,
         XsButtonDirective,
-        FormsModule
+        FormsModule,
+        SlaOverviewMiniEchartComponent
     ],
     templateUrl: './slas-summary-widget.component.html',
     styleUrl: './slas-summary-widget.component.css',
@@ -50,7 +54,6 @@ export class SlasSummaryWidgetComponent extends BaseWidgetComponent implements O
             this.subscriptions.add(
                 this.SlasSummaryWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {
                     this.slasSummaryResponse = response;
-                    //this.SlaAvailabilityView = _.toArray(this.slaResponse.sla.hostsAndServicesOverview);
                     this.config = response.config;
                     this.cdr.markForCheck();
                 })

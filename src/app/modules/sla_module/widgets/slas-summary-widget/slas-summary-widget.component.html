@@ -24,7 +24,7 @@
                                 @if (slasSummaryResponse) {
                                     @for (sla of slasSummaryResponse.slas; track $index) {
                                         <c-row [class]="{odd: $index % 2 === 0, even: $index % 2 !== 0}">
-                                            <c-col>
+                                            <c-col md="6">
                                                 @if (sla.value.fulfill) {
                                                     <i class="fas fa-file-circle-xmark fa-2x status-passed py-1"></i>
                                                 }
@@ -37,6 +37,19 @@
                                                     [permissions]="'slamodule.slas.viewdetails'">
                                                     {{ sla.value.slaDetails.name }}
                                                 </oitc-label-link>
+                                            </c-col>
+                                            <c-col md="2" class="text-end">
+                                                @if (sla.value.status_percent !== null) {
+                                                    {{ sla.value.status_percent }}%
+                                                }
+
+                                            </c-col>
+                                            <c-col md="4">
+                                                @if (sla.value.status_percent !== null && sla.value.slaDetails.status_log) {
+                                                    <oitc-sla-overview-mini-echart [sla]="sla.value.slaDetails">
+
+                                                    </oitc-sla-overview-mini-echart>
+                                                }
                                             </c-col>
                                         </c-row>
                                     }

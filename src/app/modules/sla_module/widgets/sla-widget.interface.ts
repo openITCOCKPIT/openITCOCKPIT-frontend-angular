@@ -149,16 +149,24 @@ export interface SlasSummaryWidgetResponse {
 export interface SlaOverviewExtended {
     key: number
     value: {
-        slaDetails: {
-            id: number
-            name: string
-            description: string
-        }
+        slaDetails: SlaDetails
         fulfill: boolean
         status_percent: number
         hostsAndServicesOverview: HostsAndServicesOverview
-    }
 
+    }
+}
+
+
+export interface SlaDetails {
+    id: number
+    name: string
+    description: string
+    warning_threshold: number
+    minimal_availability: number
+    status_log: {
+        [key: number]: number
+    }
 }
 
 
