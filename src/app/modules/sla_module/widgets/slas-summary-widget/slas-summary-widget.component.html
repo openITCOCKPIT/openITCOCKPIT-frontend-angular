@@ -26,7 +26,7 @@
                                         <c-row
                                             [ngClass]="{'border-success': sla.value.fulfill, 'border-danger': !sla.value.fulfill && sla.value.status_percent !== null, 'border-primary': sla.value.status_percent === null, odd: $index % 2 === 0, even: $index % 2 !== 0}"
                                             class="border-start border-4 rounded-top rounded-bottom px-2 py-1 my-2">
-                                            <c-col [sm]="7">
+                                            <c-col [sm]="sla.value.status_percent !== null?7:12">
                                                 <c-row class="fs-6">
                                                     <c-col [xs]="8" class="border-bottom mb-1"
                                                            [ngClass]="{'border-bottom' :sla.value.status_percent !== null}">
