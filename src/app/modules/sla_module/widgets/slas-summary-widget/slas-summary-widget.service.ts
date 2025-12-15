@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import { GenericResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
-import { SlasSummaryWidgetResponse } from '../sla-widget.interface';
+import { SlasConfig, SlasSummaryWidgetResponse } from '../sla-widget.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -32,9 +32,10 @@ export class SlasSummaryWidgetService {
         )
     }
 
-    public saveWidgetConfig(widgetId: string): Observable<GenericResponseWrapper> {
+    public saveWidgetConfig(widgetId: string, config: SlasConfig): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/sla_module/slas/slasSummaryWidget.json?angular=true`, {
+            ...config,
             Widget: {
                 id: widgetId
             }

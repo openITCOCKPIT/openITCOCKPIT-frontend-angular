@@ -2,16 +2,25 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, effect, inject, OnDe
 import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
 import { SlasSummaryWidgetService } from './slas-summary-widget.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe } from '@angular/common';
-import { TranslocoDirective } from '@jsverse/transloco';
-import { AlertComponent, AlertHeadingDirective, ColComponent, RowComponent } from '@coreui/angular';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import {
+    AlertComponent,
+    AlertHeadingDirective,
+    ColComponent,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    RowComponent
+} from '@coreui/angular';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule } from '@angular/forms';
-import { SlaConfig, SlasSummaryWidgetResponse } from '../sla-widget.interface';
+import { SlasConfig, SlasSummaryWidgetResponse } from '../sla-widget.interface';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import {
     SlaOverviewMiniEchartComponent
 } from '../../components/charts/sla-overview-mini-echart/sla-overview-mini-echart.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-slas-summary-widget',
@@ -26,7 +35,13 @@ import {
         AlertHeadingDirective,
         XsButtonDirective,
         FormsModule,
-        SlaOverviewMiniEchartComponent
+        SlaOverviewMiniEchartComponent,
+        NgClass,
+        RouterLink,
+        TranslocoPipe,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        FormControlDirective
     ],
     templateUrl: './slas-summary-widget.component.html',
     styleUrl: './slas-summary-widget.component.css',
@@ -36,7 +51,7 @@ export class SlasSummaryWidgetComponent extends BaseWidgetComponent implements O
     protected flipped = signal<boolean>(false);
     private readonly SlasSummaryWidgetService = inject(SlasSummaryWidgetService);
     public slasSummaryResponse?: SlasSummaryWidgetResponse;
-    public config?: SlaConfig;
+    public config?: SlasConfig;
 
     constructor() {
         super();
@@ -70,10 +85,10 @@ export class SlasSummaryWidgetComponent extends BaseWidgetComponent implements O
 
 
     public saveWidgetConfig(): void {
-        if (!this.widget) {
+        if (!this.widget || !this.config) {
             return;
         }
-        this.subscriptions.add(this.SlasSummaryWidgetService.saveWidgetConfig(this.widget.id).subscribe((response) => {
+        this.subscriptions.add(this.SlasSummaryWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
             this.flipped.set(false);
 

@@ -77,6 +77,14 @@ export interface SlaConfig {
     }
 }
 
+export interface SlasConfig {
+    Slas: {
+        name?: string
+        description?: string
+    }
+}
+
+
 export interface SlaHostsAndServicesOverview {
     [key: string]: SlaHostsAndServicesWithContainer
 }
@@ -137,7 +145,7 @@ export interface SlaCalendarStatusLog {
 
 export interface SlasSummaryWidgetResponse {
     slas: SlaOverviewExtended[]
-    config: SlaConfig
+    config: SlasConfig
     ACL: {
         sla: {
             viewDetails: boolean
@@ -152,8 +160,8 @@ export interface SlaOverviewExtended {
         slaDetails: SlaDetails
         fulfill: boolean
         status_percent: number
-        hostsAndServicesOverview: HostsAndServicesOverview
-
+        human_last_updated: string
+        hostsAndServicesOverview: SlaHostsAndServices
     }
 }
 
