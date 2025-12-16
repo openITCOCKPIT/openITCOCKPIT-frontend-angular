@@ -190,8 +190,6 @@ export interface UsedByEvcObject {
 }
 
 
-
-
 export interface EvcUsedByEntity {
     id: number
     name: string
@@ -235,16 +233,25 @@ export interface EventcorrelationsEditCorrelationRoot {
 
 
 export interface EvcModalService {
-    servicename: string,
-    servicetemplate_id: number,
-    service_ids: (number | string)[], // 1 or 2_vService
-    operator: EventcorrelationOperators | null,
-    operator_modifier: number,
+    servicename: string
+    servicetemplate_id: number
+    service_ids: (number | string)[] // 1 or 2_vService
+    operator: EventcorrelationOperators | null
+    operator_modifier: number
+    operator_warning_min: number | null
+    operator_warning_max: number | null
+    operator_critical_min: number | null
+    operator_critical_max: number | null
+    operator_unknown_min: number | null
+    operator_unknown_max: number | null
+    score_warning: number | null
+    score_critical: number | null
+    score_unknown: number | null
     current_evc: {
-        id: number,
-        layerIndex: number,
-        mode: EvcVServiceModalMode,
-        evc_node_id?: string | number, // edit only
+        id: number
+        layerIndex: number
+        mode: EvcVServiceModalMode
+        evc_node_id?: string | number // edit only
         old_service_ids?: (number | string)[] // edit only // 1 or 2_vService
     }
 }
@@ -256,6 +263,15 @@ export function getDefaultEvcModalService(evcId: number, layerIndex: number): Ev
         service_ids: [],
         operator: null,
         operator_modifier: 0,
+        operator_warning_min: null,
+        operator_warning_max: null,
+        operator_critical_min: null,
+        operator_critical_max: null,
+        operator_unknown_min: null,
+        operator_unknown_max: null,
+        score_warning: null,
+        score_critical: null,
+        score_unknown: null,
         current_evc: {
             id: evcId,
             layerIndex: layerIndex,

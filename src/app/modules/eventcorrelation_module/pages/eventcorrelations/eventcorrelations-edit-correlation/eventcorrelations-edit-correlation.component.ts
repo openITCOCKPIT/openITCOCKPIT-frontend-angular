@@ -41,7 +41,6 @@ import {
 } from '@coreui/angular';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -84,7 +83,6 @@ import { FormsModule } from '@angular/forms';
         FaIconComponent,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         RowComponent,
         TranslocoDirective,
@@ -252,6 +250,15 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             service_ids: this.getServicesIdsByLayerIndexAndParentId(layerIndexToLoadServicesFrom, eventCorrelation.id),
             operator: operator.operator,
             operator_modifier: operator.modifier,
+            operator_warning_min: operator.operator_warning_min,
+            operator_warning_max: operator.operator_warning_max,
+            operator_critical_min: operator.operator_critical_min,
+            operator_critical_max: operator.operator_critical_max,
+            operator_unknown_min: operator.operator_unknown_min,
+            operator_unknown_max: operator.operator_unknown_max,
+            score_warning: operator.score_warning,
+            score_critical: operator.score_critical,
+            score_unknown: operator.score_unknown,
             current_evc: {
                 id: this.id,
                 layerIndex: layerIndex,
@@ -403,14 +410,33 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
      * @private
      */
     private getParsedOperator(operatorString: string | null): {
+        operator: EventcorrelationOperators | null,
         modifier: number,
-        operator: EventcorrelationOperators | null
+        operator_warning_min: null,
+        operator_warning_max: null,
+        operator_critical_min: null,
+        operator_critical_max: null,
+        operator_unknown_min: null,
+        operator_unknown_max: null,
+        score_warning: null,
+        score_critical: null,
+        score_unknown: null,
+
     } {
 
         if (operatorString === null) {
             return {
                 operator: null,
-                modifier: 0
+                modifier: 0,
+                operator_warning_min: null,
+                operator_warning_max: null,
+                operator_critical_min: null,
+                operator_critical_max: null,
+                operator_unknown_min: null,
+                operator_unknown_max: null,
+                score_warning: null,
+                score_critical: null,
+                score_unknown: null
             };
         }
 
@@ -423,14 +449,32 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                 //min1, min 10, min300
                 return {
                     operator: EventcorrelationOperators.MIN,
-                    modifier: parseInt(operatorString.substring(3), 10)
+                    modifier: parseInt(operatorString.substring(3), 10),
+                    operator_warning_min: null,
+                    operator_warning_max: null,
+                    operator_critical_min: null,
+                    operator_critical_max: null,
+                    operator_unknown_min: null,
+                    operator_unknown_max: null,
+                    score_warning: null,
+                    score_critical: null,
+                    score_unknown: null,
                 };
 
             default:
                 //AND, OR, EQ
                 return {
                     operator: operatorString as EventcorrelationOperators,
-                    modifier: 0
+                    modifier: 0,
+                    operator_warning_min: null,
+                    operator_warning_max: null,
+                    operator_critical_min: null,
+                    operator_critical_max: null,
+                    operator_unknown_min: null,
+                    operator_unknown_max: null,
+                    score_warning: null,
+                    score_critical: null,
+                    score_unknown: null,
                 };
         }
     }
