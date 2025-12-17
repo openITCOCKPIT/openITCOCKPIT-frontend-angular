@@ -281,6 +281,185 @@
                         <oitc-form-feedback [errors]="errors" errorField="operator_modifier"></oitc-form-feedback>
                     </div>
                 }
+
+                <fieldset class="mt-10">
+                    <legend class="fieldset-legend-border-bottom">
+                        <h5>
+                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                            {{ t('Score settings') }}
+                        </h5>
+                    </legend>
+
+                    <fieldset class="mt-2">
+                        <legend class="small m-0">
+                            <h6 class="text-warning">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']" [cTextColor]="'warning'"></fa-icon>
+                                {{ t('Score for warning') }}
+                            </h6>
+                        </legend>
+                        <c-row>
+                            <c-col>
+                                <div>
+                                    <label cLabel for="ValidateService.warning_min">
+                                        {{ t('Warning') }}
+                                        @if (modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE ||
+                                        modalVService.operator === EventcorrelationOperators.SCORERANGEEXCLUSIVE) {
+                                            <span>
+                                                {{ t('min') }}
+                                            </span>
+                                        }
+                                        <oitc-required-icon/>
+                                    </label>
+                                    <input cFormControl
+                                           id="ValidateService.warning_min"
+                                           type="number"
+                                           name="ValidateService.warning_min"
+                                           oitcFormError [errors]="errors" errorField="warning_min">
+                                    <oitc-form-feedback [errors]="errors" errorField="warning_min"></oitc-form-feedback>
+                                </div>
+                            </c-col>
+                            @if (modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE ||
+                            modalVService.operator === EventcorrelationOperators.SCORERANGEEXCLUSIVE) {
+                                <c-col [xs]="5">
+                                    <div>
+                                        <label cLabel for="ValidateService.warning_max">
+                                            {{ t('Warning max') }}
+                                            <oitc-required-icon/>
+                                        </label>
+                                        <input cFormControl
+                                               id="ValidateService.warning_max"
+                                               type="number"
+                                               name="ValidateService.warning_max"
+                                               oitcFormError [errors]="errors" errorField="warning_max">
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="warning_max"></oitc-form-feedback>
+                                    </div>
+                                </c-col>
+                                <c-col xs="2">
+                                    Range example !!!
+                                </c-col>
+                            }
+                        </c-row>
+                    </fieldset>
+                    <fieldset class="mt-2">
+                        <legend class="small m-0">
+                            <h6 class="text-danger">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']" [cTextColor]="'danger'"></fa-icon>
+                                {{ t('Score for critical') }}
+                            </h6>
+                        </legend>
+                        <c-row>
+                            <c-col>
+                                <div>
+                                    <label cLabel for="ValidateService.critical_min">
+                                        {{ t('Critical') }}
+                                        @if (modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE ||
+                                        modalVService.operator === EventcorrelationOperators.SCORERANGEEXCLUSIVE) {
+                                            <span>
+                                                {{ t('min') }}
+                                            </span>
+                                        }
+                                        <oitc-required-icon/>
+                                    </label>
+                                    <input cFormControl
+                                           id="ValidateService.critical_min"
+                                           type="number"
+                                           name="ValidateService.critical_min"
+                                           oitcFormError [errors]="errors" errorField="critical_min">
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="critical_min"></oitc-form-feedback>
+                                </div>
+                            </c-col>
+                            @if (modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE ||
+                            modalVService.operator === EventcorrelationOperators.SCORERANGEEXCLUSIVE) {
+                                <c-col [xs]="5">
+                                    <div>
+                                        <label cLabel for="ValidateService.critical_max">
+                                            {{ t('Critical max') }}
+                                            <oitc-required-icon/>
+                                        </label>
+                                        <input cFormControl
+                                               id="ValidateService.critical_max"
+                                               type="number"
+                                               name="ValidateService.critical_max"
+                                               oitcFormError [errors]="errors" errorField="critical_max">
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="critical_max"></oitc-form-feedback>
+                                    </div>
+                                </c-col>
+                                <c-col xs="2">
+                                    Range example !!!
+                                </c-col>
+                            }
+                        </c-row>
+                    </fieldset>
+                    <fieldset class="mt-2">
+                        <legend class="small m-0">
+                            <h6 class="text-secondary">
+                                <fa-icon [icon]="['fas', 'circle-question']" [cTextColor]="'secondary'"></fa-icon>
+                                {{ t('Score for unknown') }}
+                            </h6>
+                        </legend>
+                        <c-row>
+                            <c-col>
+                                <div>
+                                    <label cLabel for="ValidateService.unknown_min">
+                                        {{ t('Unknown') }}
+                                        @if (modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE ||
+                                        modalVService.operator === EventcorrelationOperators.SCORERANGEEXCLUSIVE) {
+                                            <span>
+                                                {{ t('min') }}
+                                            </span>
+                                        }
+                                        <oitc-required-icon/>
+                                    </label>
+                                    <input cFormControl
+                                           id="ValidateService.unknown_min"
+                                           type="number"
+                                           name="ValidateService.unknown_min"
+                                           oitcFormError [errors]="errors" errorField="unknown_min">
+                                    <oitc-form-feedback [errors]="errors" errorField="unknown_min"></oitc-form-feedback>
+                                </div>
+                            </c-col>
+                            @if (modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE ||
+                            modalVService.operator === EventcorrelationOperators.SCORERANGEEXCLUSIVE) {
+                                <c-col xs="5">
+                                    <div>
+                                        <label cLabel for="ValidateService.unknown_max">
+                                            {{ t('Unknown max') }}
+                                            <oitc-required-icon/>
+                                        </label>
+                                        <input cFormControl
+                                               id="ValidateService.unknown_max"
+                                               type="number"
+                                               name="ValidateService.unknown_max"
+                                               oitcFormError [errors]="errors" errorField="unknown_max">
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="unknown_max"></oitc-form-feedback>
+                                    </div>
+                                </c-col>
+                                <c-col xs="2">
+                                    Range example !!!
+                                </c-col>
+                            }
+                        </c-row>
+                    </fieldset>
+                </fieldset>
+
+                @switch (modalVService.operator) {
+                    @case (EventcorrelationOperators.SCORESCLALARGREATER) {
+                        *Scalar greater*
+                    }
+                    @case (EventcorrelationOperators.SCORESCLALARLESSER) {
+                        *Scalar lesser*
+                    }
+                    @case (EventcorrelationOperators.SCORERANGEINCLUSIVE) {
+                        *Range inclusive*
+                    }
+                    @case (EventcorrelationOperators.SCORERANGEEXCLUSIVE) {
+                        *Range exclusive*
+                    }
+                }
             </c-modal-body>
         }
         <c-modal-footer>

@@ -37,7 +37,8 @@ import {
     ModalTitleDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent
+    RowComponent,
+    TextColorDirective
 } from '@coreui/angular';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -105,7 +106,8 @@ import { FormsModule } from '@angular/forms';
         SelectComponent,
         MultiSelectOptgroupComponent,
         BadgeComponent,
-        FormsModule
+        FormsModule,
+        TextColorDirective
     ],
     templateUrl: './eventcorrelations-edit-correlation.component.html',
     styleUrl: './eventcorrelations-edit-correlation.component.css',
@@ -144,7 +146,23 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
         {key: EventcorrelationOperators.AND, value: this.TranslocoService.translate('AND')},
         {key: EventcorrelationOperators.OR, value: this.TranslocoService.translate('OR')},
         {key: EventcorrelationOperators.EQ, value: this.TranslocoService.translate('EQUAL')},
-        {key: EventcorrelationOperators.MIN, value: this.TranslocoService.translate('MIN')}
+        {key: EventcorrelationOperators.MIN, value: this.TranslocoService.translate('MIN')},
+        {
+            key: EventcorrelationOperators.SCORESCLALARGREATER,
+            value: this.TranslocoService.translate('SCORE scalar >= (greater-or-equal)')
+        },
+        {
+            key: EventcorrelationOperators.SCORESCLALARLESSER,
+            value: this.TranslocoService.translate('SCORE scalar <= (lesser-or-equal)')
+        },
+        {
+            key: EventcorrelationOperators.SCORERANGEINCLUSIVE,
+            value: this.TranslocoService.translate('SCORE Range Inclusive (≥ 10 and ≤ 20 - inside the range of 10 to 20)')
+        },
+        {
+            key: EventcorrelationOperators.SCORERANGEEXCLUSIVE,
+            value: this.TranslocoService.translate('SCORE Range Exclusive (< 10 or > 20 - outside the range of 10 to 20)')
+        }
     ];
     public errors: GenericValidationError | null = null;
 
