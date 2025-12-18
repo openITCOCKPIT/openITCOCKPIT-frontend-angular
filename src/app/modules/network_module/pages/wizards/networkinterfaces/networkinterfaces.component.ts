@@ -224,6 +224,7 @@ export class NetworkinterfacesComponent extends WizardsAbstractComponent {
 
     protected runNetworkinterfacesDiscovery(): void {
         this.post.interfaces = [];
+        this.beginDiscovery();
         this.cdr.markForCheck();
         this.WizardService.executeNetworkinterfacesDiscovery(this.post).subscribe((data: any) => {
             this.errors = {} as GenericValidationError;
@@ -246,6 +247,7 @@ export class NetworkinterfacesComponent extends WizardsAbstractComponent {
                         });
                 }
                 this.childComponentLocal.cdr.markForCheck();
+                this.endDiscovery();
                 this.cdr.markForCheck();
                 return;
             }
@@ -258,6 +260,7 @@ export class NetworkinterfacesComponent extends WizardsAbstractComponent {
                     this.notyService.scrollContentDivToTop();
                 }
             }
+            this.endDiscovery();
             this.cdr.markForCheck();
         });
     }
