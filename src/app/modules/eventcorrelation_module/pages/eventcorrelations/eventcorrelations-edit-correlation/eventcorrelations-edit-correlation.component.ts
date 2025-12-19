@@ -69,6 +69,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { EvcTreeValidationErrors } from '../eventcorrelations-view/evc-tree/evc-tree.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { FormsModule } from '@angular/forms';
+import { ScoreThresholdsComponent } from '../../../components/score-thresholds/score-thresholds.component';
 
 @Component({
     selector: 'oitc-eventcorrelations-edit-correlation',
@@ -107,7 +108,8 @@ import { FormsModule } from '@angular/forms';
         MultiSelectOptgroupComponent,
         BadgeComponent,
         FormsModule,
-        TextColorDirective
+        TextColorDirective,
+        ScoreThresholdsComponent
     ],
     templateUrl: './eventcorrelations-edit-correlation.component.html',
     styleUrl: './eventcorrelations-edit-correlation.component.css',
@@ -227,6 +229,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     }
 
     public showAddVServiceModal(layerIndex: number): void {
+        this.errors = null; // reset previous errors
         this.modalCurrentLayerIndex = layerIndex;
 
         this.modalVService = getDefaultEvcModalService(this.id, layerIndex);
@@ -258,6 +261,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     }
 
     public showEditVServiceModal(layerIndex: number, eventCorrelation: EvcTreeItem) {
+        this.errors = null; // reset previous errors
         this.modalCurrentLayerIndex = layerIndex - 1;
         let layerIndexToLoadServicesFrom = layerIndex - 1;
 
