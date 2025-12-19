@@ -92,7 +92,7 @@
 
   # Disable access.log for stats
   access_log off;
-  &#125;</pre>
+&#125;</pre>
                                     </li>
                                     <li>
                                         {{ t('Restart the ngninx server:') }}
@@ -103,6 +103,28 @@
                         </ng-template>
                     </c-accordion-item>
                 </c-accordion>
+
+                <div class="mb-3">
+                    <c-form-check>
+                        <input
+                            cFormCheckInput
+                            class="checkbox-lg checkbox-primary"
+                            name="useSsl"
+                            id="useSsl"
+                            type="checkbox"
+                            [(ngModel)]="useSsl"
+                            (ngModelChange)="useSslChanged()"
+                            oitcFormError [errors]="errors" errorField="hostNginxOptions"/>
+                        <label cFormCheckLabel class="ms-1 mt-1"
+                               for="useSsl">
+                            {{ t('Use SSL') }}
+                        </label>
+                    </c-form-check>
+                    <div class="help-block">
+                        {{ t('If your nginx server is running SSL, the check-command needs the optional parameter --ssl.') }}
+                    </div>
+                </div>
+
             </fieldset>
 
             <oitc-wizards-dynamicfields
