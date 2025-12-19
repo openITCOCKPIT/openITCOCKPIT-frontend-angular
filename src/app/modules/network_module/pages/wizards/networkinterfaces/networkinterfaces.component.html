@@ -242,7 +242,18 @@
 
                     <ng-template #buttonTemplate let-data>
                         <div class="ms-2">
-                            <button class="ripple" (click)="runNetworkinterfacesDiscovery()" cButton color="info">
+                            <button
+                                cButton
+                                class="ripple"
+                                color="primary"
+                                type="button"
+                                [disabled]="DiscoveryIsRunning"
+                                (click)="runNetworkinterfacesDiscovery()">
+                                @if (DiscoveryIsRunning) {
+                                    <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                                } @else {
+                                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                                }
                                 {{ t('Start Network interface discovery') }}
                             </button>
                         </div>
@@ -366,8 +377,7 @@
                                             </ng-template>
                                             <ng-template cTemplateId="accordionBodyTemplate">
                                                 <div class="accordion-body">
-                                                    @for (
-                                                        commandArgument of interface.servicecommandargumentvalues; track $index) {
+                                                    @for (commandArgument of interface.servicecommandargumentvalues; track $index) {
                                                         <div
                                                             class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
                                                             {{ commandArgument.commandargument.human_name }}

@@ -42,6 +42,7 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
     protected errors: GenericValidationError = {} as GenericValidationError;
 
     // These fields are implemented in the child classes
+    protected DiscoveryIsRunning: boolean = false;
     protected WizardService: WizardsService = {} as WizardsService;
     protected WizardGet: WizardGet = {} as WizardGet;
     protected post: WizardPost = {
@@ -127,6 +128,16 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
     protected wizardLoad(result: WizardGet): void {
         this.cdr.markForCheck();
         this.childComponent.cdr.markForCheck();
+    }
+
+    protected beginDiscovery(): void {
+        this.DiscoveryIsRunning = true;
+        this.cdr.markForCheck();
+    }
+
+    protected endDiscovery(): void {
+        this.DiscoveryIsRunning = false;
+        this.cdr.markForCheck();
     }
 
 }
