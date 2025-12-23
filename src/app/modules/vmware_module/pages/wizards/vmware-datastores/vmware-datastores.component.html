@@ -79,7 +79,8 @@
                 <c-accordion class="mb-3">
                     <c-accordion-item #item0="cAccordionItem" [visible]="false">
                         <ng-template cTemplateId="accordionHeaderTemplate">
-                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                            <button class="wizard-accordion bg-info-subtle" (click)="item0.toggleItem()"
+                                    [collapsed]="!item0.visible" cAccordionButton>
                                 <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
                                 {{ t('VMware configuration help') }}
                             </button>
@@ -161,13 +162,24 @@
                         {{ t('Scan VMWare and find all of datastores. Only possible with valid VMWare configuration') }}
                     </ng-template>
 
+
                     <ng-template #buttonTemplate let-data>
                         <div class="ms-2">
-                            <button class="ripple" (click)="runDatastoreDiscovery()" cButton color="info">
+                            <button
+                                cButton
+                                class="ripple"
+                                color="info"
+                                type="button"
+                                [disabled]="DiscoveryIsRunning"
+                                (click)="runDatastoreDiscovery()">
+                                @if (DiscoveryIsRunning) {
+                                    <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                                } @else {
+                                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                                }
                                 {{ t('Start Datastore discovery') }}
                             </button>
                         </div>
-
                     </ng-template>
 
                     <oitc-alert
@@ -261,7 +273,7 @@
                                 <c-accordion class="mb-3">
                                     <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
                                         <ng-template cTemplateId="accordionHeaderTemplate">
-                                            <div class="form-group bg-primary-subtle"
+                                            <div class="form-group wizard-accordion bg-info-subtle"
                                                  (click)="accordionItem.toggleItem()"
                                                  [collapsed]="!accordionItem.visible" cAccordionButton>
                                                 <div class="d-flex align-items-center">
