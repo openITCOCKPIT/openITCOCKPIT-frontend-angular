@@ -208,8 +208,13 @@
                         <c-row class="mb-2">
                             <c-col [xs]="12" [lg]="6">
                                 <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    <span cInputGroupText class="p-1">
+                                        <fa-stack>
+                                            <fa-icon [icon]="['fas', 'desktop']" stackItemSize="1x"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']" class="text-success"
+                                                     stackItemSize="1x"
+                                                     transform="shrink-6 right-8 down-8"></fa-icon>
+                                        </fa-stack>
                                     </span>
                                     <ng-select
                                         id="HostKeywordsInput"
@@ -229,8 +234,13 @@
 
                             <c-col [xs]="12" [lg]="6">
                                 <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    <span cInputGroupText class="p-1">
+                                        <fa-stack>
+                                            <fa-icon [icon]="['fas', 'desktop']" stackItemSize="1x"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']" class="text-danger"
+                                                     stackItemSize="1x"
+                                                     transform="shrink-6 right-8 down-8"></fa-icon>
+                                        </fa-stack>
                                     </span>
                                     <ng-select
                                         id="HostNotKeywordsInput"
@@ -269,7 +279,26 @@
                                     </oitc-multi-select>
                                 </c-input-group>
                             </c-col>
+                            <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                    </span>
 
+                                    <oitc-multi-select
+                                        name="hostgroups_ids"
+                                        id="hostgroups_ids"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="filter['Hostgroups.id']"
+                                        [options]="hostgroups"
+                                        [debounce]="true"
+                                        [placeholder]="'Filter by host groups' | transloco"
+                                        (onChange)="onFilterChange(null)"
+                                        [searchCallback]="loadHostgroups">
+                                    </oitc-multi-select>
+                                </c-input-group>
+                            </c-col>
                         </c-row>
 
                         <c-row class="mb-2">
