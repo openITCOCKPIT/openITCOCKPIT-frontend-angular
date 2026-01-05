@@ -70,6 +70,7 @@ import { EvcTreeValidationErrors } from '../eventcorrelations-view/evc-tree/evc-
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { FormsModule } from '@angular/forms';
 import { ScoreThresholdsComponent } from '../../../components/score-thresholds/score-thresholds.component';
+import { JsonPipe } from '@angular/common';
 
 @Component({
     selector: 'oitc-eventcorrelations-edit-correlation',
@@ -109,7 +110,8 @@ import { ScoreThresholdsComponent } from '../../../components/score-thresholds/s
         BadgeComponent,
         FormsModule,
         TextColorDirective,
-        ScoreThresholdsComponent
+        ScoreThresholdsComponent,
+        JsonPipe
     ],
     templateUrl: './eventcorrelations-edit-correlation.component.html',
     styleUrl: './eventcorrelations-edit-correlation.component.css',
@@ -143,6 +145,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     public modalVService?: EvcModalService;
     public modalServicesForSelect: SelectItemOptionGroup[] = [];
     public showSpinner: boolean = false;
+    protected readonly EventcorrelationOperators = EventcorrelationOperators;
 
     public modalOperators: SelectKeyValueString[] = [
         {key: EventcorrelationOperators.AND, value: this.TranslocoService.translate('AND')},
@@ -464,7 +467,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
         operatorString = operatorString.toLowerCase();
         const first3Chars = operatorString.substring(0, 3);
-
+console.log('HDJHFJDFH');
         // switch in case we add more operators in the future
         switch (first3Chars) {
             case 'min':
@@ -920,7 +923,8 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             this.notyService.genericError();
             return;
         }
-
+        console.log(this.evcTree);
+        return;
         this.subscriptions.add(this.EventcorrelationsService.saveCorrelation(this.id, this.evcTree)
             .subscribe((result) => {
                 this.cdr.markForCheck();
@@ -1097,5 +1101,24 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
         }
     }
 
-    protected readonly EventcorrelationOperators = EventcorrelationOperators;
+    public updateServiceScores = () => {
+        if (!this.modalVService) {
+            return;
+        }
+        if (!this.modalVService.operator) {
+            return;
+        }
+        if (![EventcorrelationOperators.SCORESCLALARGREATER,
+            EventcorrelationOperators.SCORESCLALARLESSER,
+            EventcorrelationOperators.SCORERANGEINCLUSIVE,
+            EventcorrelationOperators.SCORERANGEINCLUSIVE].includes(this.modalVService.operator)) {
+            return;
+        }
+        console.log(this.modalVService);
+        if (this.modalVService.service_ids) {
+            console.log('CHANGES HERERERERRE !!!');
+            console.log(this.modalVService.service_ids);
+            console.log(this.modalVService);
+        }
+    }
 }

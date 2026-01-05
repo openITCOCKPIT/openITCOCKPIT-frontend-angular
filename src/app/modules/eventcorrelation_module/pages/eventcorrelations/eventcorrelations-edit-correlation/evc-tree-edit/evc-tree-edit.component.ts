@@ -415,10 +415,18 @@ export class EvcTreeEditComponent implements OnDestroy {
 
                         // Add the operator
                         if (evcTreeItem.operator !== null) {
+                            let operator: EventcorrelationOperators = evcTreeItem.operator as EventcorrelationOperators;
+                            let operatorText = evcTreeItem.operator;
+                            if ([EventcorrelationOperators.SCORESCLALARGREATER,
+                                EventcorrelationOperators.SCORESCLALARLESSER,
+                                EventcorrelationOperators.SCORERANGEINCLUSIVE,
+                                EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(operator)) {
+                                operatorText = this.TranslocoService.translate('score');
+                            }
                             nodes.push({
                                 id: `${evcTreeItem.id}_operator`,
                                 parentId: evcTreeItem.id.toString(),
-                                operator: evcTreeItem.operator,
+                                operator: operatorText,
                                 type: 'operator',
                                 layerIndex: layerIndex,
                                 totalHeight: totalHeight,
@@ -531,4 +539,5 @@ export class EvcTreeEditComponent implements OnDestroy {
     protected readonly Number = Number;
     protected readonly EFConnectableSide = EFConnectableSide;
 
+    protected readonly EventcorrelationOperators = EventcorrelationOperators;
 }
