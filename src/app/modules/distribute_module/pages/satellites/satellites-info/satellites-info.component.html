@@ -68,7 +68,329 @@
                 </c-nav-item>
             </c-nav>
         </c-card-header>
+
         <c-card-body>
+
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Satellites.name]']"
+                                       [placeholder]="'Filter by satellite name' | transloco"
+                                       aria-label="Filter by satellite name"
+                                       cFormControl
+                                       id="params['filter[Satellites.name]']"
+                                       name="params['filter[Satellites.name]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'code-branch']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[SatelliteInformation.oitc_version]']"
+                                       [placeholder]="'Filter by openITCOCKPIT version' | transloco"
+                                       aria-label="Filter by openITCOCKPIT version"
+                                       cFormControl
+                                       id="params['filter[SatelliteInformation.oitc_version]']"
+                                       name="params['filter[SatelliteInformation.oitc_version]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fab', 'linux']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[SatelliteInformation.os_version]']"
+                                       [placeholder]="'Filter by operating system version' | transloco"
+                                       aria-label="Filter by operating system version"
+                                       cFormControl
+                                       id="params['filter[SatelliteInformation.os_version]']"
+                                       name="params['filter[SatelliteInformation.os_version]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset Filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            @if (!result) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+
+            @if (result) {
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="Satellites.name">
+                            {{ t('Instance name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatelliteInformation.oitc_version">
+                            {{ t('Software') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Hardware') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatelliteInformation.number_of_hosts">
+                            {{ t('Number of hosts') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatelliteInformation.number_of_services">
+                            {{ t('Number of services') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatelliteInformation.modified">
+                            {{ t('Last update') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (satellite of result.all_satellite_information; track $index) {
+                            @if (satellite.system_health === '{}' || !satellite.system_health) {
+                                <tr class="bg-no-data ">
+                                    <td>
+                                        {{ satellite.satellite.name }}
+                                    </td>
+                                    <td colspan="4" class="text-center italic">
+                                        {{ t('No system health data available') }}
+                                    </td>
+                                    <td>
+                                        {{ satellite.last_update }}
+                                    </td>
+                                </tr>
+                            } @else {
+                                <tr>
+                                    <td>
+                                        {{ satellite.satellite.name }}
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            <li>
+                                                {{ t('openITCOCKPIT') }}: {{ satellite.oitc_version }}
+                                            </li>
+                                            <li>
+                                                {{ t('Web interface') }}:
+                                                @if (satellite.system_health_json.oitc_webinterface_enabled) {
+                                                    <oitc-badge-outline color="success">
+                                                        {{ t('Enabled') }}
+                                                    </oitc-badge-outline>
+                                                } @else {
+                                                    <oitc-badge-outline color="danger">
+                                                        {{ t('Disabled') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                            </li>
+                                            <li>
+                                                {{ t('Monitoring engine') }}:
+                                                {{ satellite.system_health_json.monitoring_engine }}
+                                            </li>
+                                            <li>
+                                                {{ t('Operating system') }}:
+                                                {{ satellite.system_health_json.os_version }}
+                                            </li>
+                                            <li>
+                                                {{ t('PHP') }}:
+                                                {{ satellite.php_version }}
+                                            </li>
+                                        </ul>
+
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            <li>
+                                                {{ t('CPU cores') }}:
+                                                {{ satellite.system_health_json.cpu_cores }}
+                                                <span class="text-muted">
+                                                    ({{ satellite.system_health_json.os_architecture }})
+                                                </span>
+                                            </li>
+                                            <li>
+                                                {{ satellite.system_health_json.cpu_processor }}
+                                            </li>
+                                            <li>
+                                                {{ t('CPU load') }}:
+                                                {{ satellite.system_health_json.cpu_load1 }},
+                                                {{ satellite.system_health_json.cpu_load5 }},
+                                                {{ satellite.system_health_json.cpu_load15 }}
+                                            </li>
+                                        </ul>
+
+                                        @if (satellite.system_health_json.memory) {
+                                            <hr/>
+                                            <div>
+                                                <strong>{{ t('Memory') }}</strong>
+                                                <span class="text-muted">
+                                                    {{ satellite.system_health_json.memory.memory.used / 1024 | localNumber }}
+                                                    /
+                                                    {{ satellite.system_health_json.memory.memory.total / 1024 | localNumber }}{{ t('GB') }}
+                                                    ({{ satellite.system_health_json.memory.memory.percentage }}%)
+                                                </span>
+                                                <div>
+                                                    @switch (satellite.system_health_json.memory.memory.state) {
+                                                        @case ('critical') {
+                                                            <c-progress [height]="5"
+                                                                        color="danger"
+                                                                        [value]="satellite.system_health_json.memory.memory.percentage"/>
+                                                        }
+                                                        @case ('warning') {
+                                                            <c-progress [height]="5"
+                                                                        color="warning"
+                                                                        [value]="satellite.system_health_json.memory.memory.percentage"/>
+                                                        }
+                                                        @default {
+                                                            <c-progress [height]="5"
+                                                                        color="success"
+                                                                        [value]="satellite.system_health_json.memory.memory.percentage"/>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+
+                                        @if (satellite.system_health_json.memory) {
+                                            <div>
+                                                <strong>{{ t('Swap') }}</strong>
+                                                <span class="text-muted">
+                                                    {{ satellite.system_health_json.memory.swap.used / 1024 | localNumber }}
+                                                    /
+                                                    {{ satellite.system_health_json.memory.swap.total / 1024 | localNumber }}{{ t('GB') }}
+                                                    ({{ satellite.system_health_json.memory.swap.percentage }}%)
+                                                </span>
+                                                <div>
+                                                    @switch (satellite.system_health_json.memory.swap.state) {
+                                                        @case ('critical') {
+                                                            <c-progress [height]="5"
+                                                                        color="danger"
+                                                                        [value]="satellite.system_health_json.memory.swap.percentage"/>
+                                                        }
+                                                        @case ('warning') {
+                                                            <c-progress [height]="5"
+                                                                        color="warning"
+                                                                        [value]="satellite.system_health_json.memory.swap.percentage"/>
+                                                        }
+                                                        @default {
+                                                            <c-progress [height]="5"
+                                                                        color="success"
+                                                                        [value]="satellite.system_health_json.memory.swap.percentage"/>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+
+                                        @if (satellite.system_health_json.disks) {
+                                            <hr/>
+                                            @for (disk of satellite.system_health_json.disks; track $index) {
+                                                <div>
+                                                    <strong>{{ t('Disk') }}</strong>
+                                                    <span class="text-muted">
+                                                        {{ disk.mountpoint }}
+                                                        {{ disk.used }}
+                                                        /
+                                                        {{ disk.size }}
+                                                        ({{ disk.use_percentage }}%)
+                                                    </span>
+                                                    <div>
+                                                        @switch (disk.state) {
+                                                            @case ('critical') {
+                                                                <c-progress [height]="5"
+                                                                            color="danger"
+                                                                            [value]="disk.use_percentage"/>
+                                                            }
+                                                            @case ('warning') {
+                                                                <c-progress [height]="5"
+                                                                            color="warning"
+                                                                            [value]="disk.use_percentage"/>
+                                                            }
+                                                            @default {
+                                                                <c-progress [height]="5"
+                                                                            color="success"
+                                                                            [value]="disk.use_percentage"/>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        {{ satellite.system_health_json.naemonstats.NUMHOSTS }}
+                                    </td>
+                                    <td>
+                                        {{ satellite.system_health_json.naemonstats.NUMSERVICES }}
+                                    </td>
+                                    <td>
+                                        {{ satellite.last_update }}
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            }
+
+
+            @if (result && result.all_satellite_information.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+
+
+            @if (result && result.all_satellite_information) {
+                <ng-container>
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                                 [fluid]="true">
+                    </c-container>
+                </ng-container>
+            }
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        @if (result) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        }
+                    </c-col>
+                </c-row>
+            </c-container>
+
         </c-card-body>
+
     </c-card>
 </ng-container>

@@ -4,8 +4,17 @@ import {
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    ProgressComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { RouterLink } from '@angular/router';
@@ -14,14 +23,23 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { IndexPage } from '../../../../../pages.interface';
 import { Subscription } from 'rxjs';
 import { SatellitesService } from '../satellites.service';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import {
     getDefaultSatellitesInformationParams,
     SatelliteInfoIndex,
     SatellitesInformationParams
 } from '../satellites.interface';
-import { Sort } from '@angular/material/sort';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { DebounceDirective } from '../../../../../directives/debounce.directive';
+import { FormsModule } from '@angular/forms';
+import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
+import { LocalNumberPipe } from '../../../../../pipes/local-number.pipe';
 
 @Component({
     selector: 'oitc-satellites-info',
@@ -36,7 +54,26 @@ import { Sort } from '@angular/material/sort';
         CardBodyComponent,
         XsButtonDirective,
         TranslocoDirective,
-        CardHeaderComponent
+        CardHeaderComponent,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        MatSort,
+        MatSortHeader,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        RowComponent,
+        TableDirective,
+        TableLoaderComponent,
+        TranslocoPipe,
+        BadgeOutlineComponent,
+        ProgressComponent,
+        LocalNumberPipe
     ],
     templateUrl: './satellites-info.component.html',
     styleUrl: './satellites-info.component.css',
