@@ -28,6 +28,7 @@ import { NextcloudWizardGet, NextcloudWizardPost } from './nextcloud-wizard.inte
 import { NextcloudWizardService } from './nextcloud-wizard.service';
 import { RouterLink } from '@angular/router';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
+import { Service } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-nextcloud',
@@ -82,11 +83,17 @@ export class NextcloudComponent extends WizardsAbstractComponent {
     }
 
     protected useSslChanged(): void {
-        if (this.useSsl) {
-            this.post.services[0].servicecommandargumentvalues[2].value = this.post.services[0].servicecommandargumentvalues[2].value + ' --ssl';
-        } else {
-            this.post.services[0].servicecommandargumentvalues[2].value = this.post.services[0].servicecommandargumentvalues[2].value.replace('--ssl', '');
-        }
+        // Traverse this.post.services and do the same for all array positions.
+        this.post.services.forEach((service: Service): void => {
+
+            if (this.useSsl) {
+                service.servicecommandargumentvalues[2].value = service.servicecommandargumentvalues[2].value + ' --ssl';
+            } else {
+                service.servicecommandargumentvalues[2].value = service.servicecommandargumentvalues[2].value.replace('--ssl', '');
+            }
+
+        });
+
 
         this.cdr.markForCheck();
         this.childComponent.cdr.markForCheck();
