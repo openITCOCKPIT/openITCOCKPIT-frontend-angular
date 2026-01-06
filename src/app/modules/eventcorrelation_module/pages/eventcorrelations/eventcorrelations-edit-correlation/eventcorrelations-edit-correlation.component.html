@@ -305,12 +305,13 @@
                                 </legend>
                                 @if (evcTree[this.modalVService.current_evc.layerIndex - 1] && modalVService.current_evc.evc_node_id) {
                                     @for (service of evcTree[this.modalVService.current_evc.layerIndex - 1][modalVService.current_evc.evc_node_id]; track $index) {
-                                        <c-row [ngClass]="{odd: $index % 2 === 0, even: $index % 2 !== 0}">
+                                        <c-row class="pb-1"
+                                               [ngClass]="{odd: $index % 2 === 0, even: $index % 2 !== 0}">
                                             <c-col [xs]="12" [md]="12" [lg]="6">
                                                 {{ service.service.host.name }}/{{ service.service.servicename }}
                                             </c-col>
                                             <c-col [xs]="12" [md]="12" [lg]="2">
-                                                <c-input-group class="mb-3" sizing="sm">
+                                                <c-input-group sizing="sm">
                                                     <span cInputGroupText>
                                                         <fa-icon [icon]="['fas', 'weight-hanging']"
                                                                  [cTextColor]="'warning'"></fa-icon>
@@ -320,7 +321,7 @@
                                                 </c-input-group>
                                             </c-col>
                                             <c-col [xs]="12" [md]="12" [lg]="2">
-                                                <c-input-group class="mb-3" sizing="sm">
+                                                <c-input-group sizing="sm">
                                                     <span cInputGroupText>
                                                         <fa-icon [icon]="['fas', 'weight-hanging']"
                                                                  [cTextColor]="'danger'"></fa-icon>
@@ -330,7 +331,7 @@
                                                 </c-input-group>
                                             </c-col>
                                             <c-col [xs]="12" [md]="12" [lg]="2">
-                                                <c-input-group class="mb-3" sizing="sm">
+                                                <c-input-group sizing="sm">
                                                     <span cInputGroupText>
                                                         <fa-icon [icon]="['fas', 'weight-hanging']"
                                                                  [cTextColor]="'secondary'"></fa-icon>
