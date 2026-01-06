@@ -229,6 +229,9 @@
                     <th scope="col" mat-sort-header="Containers.name">
                         {{ t('Container name') }}
                     </th>
+                    <th scope="col" mat-sort-header="Systemdowntimes.downtimetype_id">
+                        {{ t('Include services') }}
+                    </th>
                     <th scope="col" mat-sort-header="Systemdowntimes.author">
                         {{ t('User') }}
                     </th>
@@ -264,6 +267,13 @@
                     </td>
                     <td class="word-break">
                         {{ nodeSystemdowntime.Container.name }}
+                    </td>
+                    <td>
+                        @if (nodeSystemdowntime.Systemdowntime.downtimeTypeId == 1) {
+                            {{ t('Yes') }}
+                        } @else {
+                            {{ t('No') }}
+                        }
                     </td>
                     <td>
                         {{ nodeSystemdowntime.Systemdowntime.author }}
