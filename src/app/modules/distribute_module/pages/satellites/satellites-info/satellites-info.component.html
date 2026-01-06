@@ -1,0 +1,74 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Distribute Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['distributeModule', 'satellites', 'index']"
+                   [routerLink]="['/', 'distribute_module', 'satellites', 'index']">
+                    <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
+                    {{ t('Satellites') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                {{ t('Satellites Information') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Satellites') }}
+                <small class="fw-300">
+                    {{ t('Information') }}
+                </small>
+            </h5>
+
+            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                <c-nav-item *oitcPermission="['distributeModule', 'satellites', 'status']">
+                    <button class="nav-link" [routerLink]="['/', 'distribute_module', 'satellites', 'status']">
+                        <fa-icon [icon]="['fas', 'satellite-dish']"></fa-icon>
+                        {{ t('Satellites Status') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item *oitcPermission="['distributeModule', 'satellites', 'info']">
+                    <button class="active nav-link" [routerLink]="['/', 'distribute_module', 'satellites', 'info']">
+                        <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                        {{ t('Satellites Information') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item *oitcPermission="['distributeModule', 'satellites', 'tasks']">
+                    <button class="nav-link" [routerLink]="['/', 'distribute_module', 'satellites', 'tasks']">
+                        <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
+                        {{ t('Satellite Tasks') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="reload()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+        </c-card-body>
+    </c-card>
+</ng-container>
