@@ -96,7 +96,17 @@ export interface EvcTreeItem {
     parent_id: null | number | string // string in editCorrelation for new items "ui-id-f9fbdaab-70d1-4af1-a571-14d20b5657f"
     host_id: number
     service_id: number | string // new created vServices "ui-id-780d1d4d-e90d-4cf4-aa09-e344bdaa04d5_vService"
-    operator: EventcorrelationOperators | string | null, // min1, min10, min300
+    operator: EventcorrelationOperators | string | null // min1, min10, min300
+    operator_warning_min: number | null
+    operator_warning_max: number | null
+    operator_critical_min: number | null
+    operator_critical_max: number | null
+    operator_unknown_min: number | null
+    operator_unknown_max: number | null
+    score_warning: number | null
+    score_critical: number | null
+    score_unknown: number | null
+
     service: EvcService,
     usedBy?: string[], //editCorrelation only
 }
@@ -333,12 +343,21 @@ export interface EvcEditVServiceValidationResult {
     success: boolean,
     // updates."0".uu-id."0" = EvcTreeItem
     services: {
-        id: number | string,
-        parent_id: number | string,
-        host_id: number,
-        service_id: number | string,
-        operator: EventcorrelationOperators | string | null,
-        service: EvcService,
+        id: number | string
+        parent_id: number | string
+        host_id: number
+        service_id: number | string
+        operator: EventcorrelationOperators | string | null
+        operator_warning_min: number | null
+        operator_warning_max: number | null
+        operator_critical_min: number | null
+        operator_critical_max: number | null
+        operator_unknown_min: number | null
+        operator_unknown_max: number | null
+        score_warning: number | null
+        score_critical: number | null
+        score_unknown: number | null
+        service: EvcService
     }[]
 
 }

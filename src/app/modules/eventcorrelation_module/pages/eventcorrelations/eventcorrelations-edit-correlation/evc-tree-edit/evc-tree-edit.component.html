@@ -112,16 +112,13 @@
                         <div class="d-flex align-items-center h-100">
                             <fa-icon [icon]="['fas', 'microchip']" class="evc-operator-icon ps-1"></fa-icon>
 
-                            <div class="flex-1 text-center">
+                            <div class="flex-1 text-center operator-color">
                                 {{ node.evcNode.operator }}
                             </div>
                         </div>
                     </div>
                 }
-
             </div>
-
-
         }
     </f-canvas>
     <f-minimap [fMinSize]="2000" [title]="'Navigator' | transloco" class="cursor-grab"></f-minimap>

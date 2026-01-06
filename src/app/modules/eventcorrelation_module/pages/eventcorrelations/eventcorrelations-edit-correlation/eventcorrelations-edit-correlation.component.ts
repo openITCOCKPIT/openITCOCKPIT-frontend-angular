@@ -29,6 +29,7 @@ import {
     FormControlDirective,
     FormLabelDirective,
     InputGroupComponent,
+    InputGroupTextDirective,
     ModalBodyComponent,
     ModalComponent,
     ModalFooterComponent,
@@ -43,7 +44,7 @@ import {
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { EvcTreeEditComponent } from './evc-tree-edit/evc-tree-edit.component';
 import {
@@ -70,7 +71,7 @@ import { EvcTreeValidationErrors } from '../eventcorrelations-view/evc-tree/evc-
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { FormsModule } from '@angular/forms';
 import { ScoreThresholdsComponent } from '../../../components/score-thresholds/score-thresholds.component';
-import { JsonPipe } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-eventcorrelations-edit-correlation',
@@ -111,7 +112,9 @@ import { JsonPipe } from '@angular/common';
         FormsModule,
         TextColorDirective,
         ScoreThresholdsComponent,
-        JsonPipe
+        InputGroupTextDirective,
+        TranslocoPipe,
+        NgClass
     ],
     templateUrl: './eventcorrelations-edit-correlation.component.html',
     styleUrl: './eventcorrelations-edit-correlation.component.css',
@@ -467,7 +470,6 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
         operatorString = operatorString.toLowerCase();
         const first3Chars = operatorString.substring(0, 3);
-console.log('HDJHFJDFH');
         // switch in case we add more operators in the future
         switch (first3Chars) {
             case 'min':
@@ -891,7 +893,6 @@ console.log('HDJHFJDFH');
                             evcNodeWithErrors[evcTreeItem.id] = true;
                         }
                     }
-
                 }
             }
 
@@ -1020,7 +1021,7 @@ console.log('HDJHFJDFH');
 
         // find the parent id in evcTree
         const nodeDetails = this.findEvcNodeInTreeForDelete(layerIndex, evcNodeId);
-
+        this.cdr.markForCheck();
         //delete real services from 1st layer in evcTree
         if (layerIndex === 1) {
             delete this.evcTree[0][evcNodeId];
@@ -1114,11 +1115,17 @@ console.log('HDJHFJDFH');
             EventcorrelationOperators.SCORERANGEINCLUSIVE].includes(this.modalVService.operator)) {
             return;
         }
-        console.log(this.modalVService);
+
+        if (this.evcTree[this.modalVService.current_evc.layerIndex - 1] && this.modalVService.current_evc.evc_node_id) {
+            console.log(this.evcTree[this.modalVService.current_evc.layerIndex - 1]);
+            console.log(this.evcTree[this.modalVService.current_evc.layerIndex - 1][this.modalVService.current_evc.evc_node_id])
+        }
+        //console.log(this.modalVService.current_evc.layerIndex);
+        //console.log(this.evcTree);
         if (this.modalVService.service_ids) {
             console.log('CHANGES HERERERERRE !!!');
-            console.log(this.modalVService.service_ids);
-            console.log(this.modalVService);
+            //console.log(this.modalVService.service_ids);
+            //console.log(this.modalVService);
         }
     }
 }

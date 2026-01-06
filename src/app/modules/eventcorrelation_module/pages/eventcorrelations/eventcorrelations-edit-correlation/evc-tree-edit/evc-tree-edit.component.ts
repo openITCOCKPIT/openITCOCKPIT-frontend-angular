@@ -421,7 +421,7 @@ export class EvcTreeEditComponent implements OnDestroy {
                                 EventcorrelationOperators.SCORESCLALARLESSER,
                                 EventcorrelationOperators.SCORERANGEINCLUSIVE,
                                 EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(operator)) {
-                                operatorText = this.TranslocoService.translate('score');
+                                operatorText = this.TranslocoService.translate('score') + ' ⚖️';
                             }
                             nodes.push({
                                 id: `${evcTreeItem.id}_operator`,
