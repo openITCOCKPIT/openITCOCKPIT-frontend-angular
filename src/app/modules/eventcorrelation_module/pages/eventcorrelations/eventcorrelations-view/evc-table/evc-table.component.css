@@ -100,5 +100,5 @@ body.dark-theme :host .evc-summary-disabled-service {
 
 .operator-color {
     color: transparent;
-    text-shadow: 0 0 0 #ffffff;
+    text-shadow: 0 0 0 var(--cui-body-color);
 }
