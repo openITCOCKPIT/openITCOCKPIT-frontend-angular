@@ -8,3 +8,8 @@
 */
 
 @use "../../../../assets/eventcorrelation_module.scss";
+
+.operator-color {
+    color: transparent;
+    text-shadow: 0 0 0 #ffffff;
+}

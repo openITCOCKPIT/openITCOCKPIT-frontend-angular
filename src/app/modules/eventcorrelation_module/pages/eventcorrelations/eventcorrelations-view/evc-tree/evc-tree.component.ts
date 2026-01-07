@@ -332,10 +332,18 @@ export class EvcTreeComponent {
                     });
 
                     if (vService.operator !== null) {
+                        let operator: EventcorrelationOperators = vService.operator as EventcorrelationOperators;
+                        let operatorText = vService.operator;
+                        if ([EventcorrelationOperators.SCORESCLALARGREATER,
+                            EventcorrelationOperators.SCORESCLALARLESSER,
+                            EventcorrelationOperators.SCORERANGEINCLUSIVE,
+                            EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(operator)) {
+                            operatorText = this.TranslocoService.translate('score') + ' ⚖️';
+                        }
                         nodes.push({
                             id: `${vService.id}_operator`,
                             parentId: vService.id.toString(),
-                            operator: vService.operator,
+                            operator: operatorText,
                             type: 'operator'
                         });
                     }

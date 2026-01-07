@@ -933,8 +933,8 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             this.notyService.genericError();
             return;
         }
-        console.log(this.evcTree);
-        return;
+        //console.log(this.evcTree);
+        //return;
         this.subscriptions.add(this.EventcorrelationsService.saveCorrelation(this.id, this.evcTree)
             .subscribe((result) => {
                 this.cdr.markForCheck();

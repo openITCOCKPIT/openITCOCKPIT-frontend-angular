@@ -165,7 +165,7 @@
 
                 @if (node.evcNode.type === 'operator') {
                     <!-- Operator container -->
-                    <div class="operator-node">
+                    <div class="operator-node operator-color">
                         <div class="d-flex align-items-center h-100">
                             <fa-icon [icon]="['fas', 'microchip']" class="evc-operator-icon ps-1"></fa-icon>
 
@@ -181,7 +181,6 @@
     </f-canvas>
     <f-minimap [fMinSize]="2000" [title]="'Navigator' | transloco" class="cursor-grab"></f-minimap>
 </f-flow>
-
 
 
 <oitc-evc-servicestatus-toaster></oitc-evc-servicestatus-toaster>
