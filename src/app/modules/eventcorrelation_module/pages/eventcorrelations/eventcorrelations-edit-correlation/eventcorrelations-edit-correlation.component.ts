@@ -278,15 +278,15 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             service_ids: this.getServicesIdsByLayerIndexAndParentId(layerIndexToLoadServicesFrom, eventCorrelation.id),
             operator: operator.operator,
             operator_modifier: operator.modifier,
-            operator_warning_min: operator.operator_warning_min,
-            operator_warning_max: operator.operator_warning_max,
-            operator_critical_min: operator.operator_critical_min,
-            operator_critical_max: operator.operator_critical_max,
-            operator_unknown_min: operator.operator_unknown_min,
-            operator_unknown_max: operator.operator_unknown_max,
-            score_warning: operator.score_warning,
-            score_critical: operator.score_critical,
-            score_unknown: operator.score_unknown,
+            operator_warning_min: eventCorrelation.operator_warning_min,
+            operator_warning_max: eventCorrelation.operator_warning_max,
+            operator_critical_min: eventCorrelation.operator_critical_min,
+            operator_critical_max: eventCorrelation.operator_critical_max,
+            operator_unknown_min: eventCorrelation.operator_unknown_min,
+            operator_unknown_max: eventCorrelation.operator_unknown_max,
+            score_warning: eventCorrelation.score_warning,
+            score_critical: eventCorrelation.score_critical,
+            score_unknown: eventCorrelation.score_unknown,
             current_evc: {
                 id: this.id,
                 layerIndex: layerIndex,
@@ -757,6 +757,15 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                             //Find the vService node that was edited
                             if (evcNode.id === this.modalVService.current_evc.evc_node_id) {
                                 this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator = this.getOperatorString(this.modalVService.operator, this.modalVService.operator_modifier);
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator_warning_min = this.modalVService.operator_warning_min;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator_warning_max = this.modalVService.operator_warning_max;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator_critical_min = this.modalVService.operator_critical_min;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator_critical_max = this.modalVService.operator_critical_max;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator_unknown_min = this.modalVService.operator_unknown_min;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator_unknown_max = this.modalVService.operator_unknown_max;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].score_warning = this.modalVService.score_warning;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].score_critical = this.modalVService.score_critical;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].score_unknown = this.modalVService.score_unknown;
                                 this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].service.servicename = this.modalVService.servicename;
                                 this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].service.name = this.modalVService.servicename;
                                 this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].service.servicetemplate_id = this.modalVService.servicetemplate_id;
