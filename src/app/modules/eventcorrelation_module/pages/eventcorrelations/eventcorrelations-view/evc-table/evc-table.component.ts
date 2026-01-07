@@ -4,7 +4,7 @@ import { NgClass, NgIf } from '@angular/common';
 import { EvcSummaryService } from '../../eventcorrelations.interface';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 import { AcknowledgementTypes } from '../../../../../../pages/acknowledgements/acknowledgement-types.enum';
 import {
@@ -13,16 +13,18 @@ import {
 import {
     EvcServicestatusToasterService
 } from '../evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.service';
+import { EventcorrelationOperators } from '../../eventcorrelations.enum';
 
 @Component({
     selector: 'oitc-evc-table',
     imports: [
-    NgIf,
-    NgClass,
-    FaIconComponent,
-    TooltipDirective,
-    EvcServicestatusToasterComponent
-],
+        NgIf,
+        NgClass,
+        FaIconComponent,
+        TooltipDirective,
+        EvcServicestatusToasterComponent,
+        TranslocoPipe
+    ],
     templateUrl: './evc-table.component.html',
     styleUrl: './evc-table.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -105,4 +107,5 @@ export class EvcTableComponent {
 
     protected readonly Number = Number;
     protected readonly AcknowledgementTypes = AcknowledgementTypes;
+    protected readonly EventcorrelationOperators = EventcorrelationOperators;
 }

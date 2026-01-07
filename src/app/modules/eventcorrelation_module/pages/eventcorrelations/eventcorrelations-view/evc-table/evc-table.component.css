@@ -97,3 +97,8 @@ body.dark-theme :host .evc-summary-disabled-service {
     max-width: 400px;
     padding: 5px;
 }
+
+.operator-color {
+    color: transparent;
+    text-shadow: 0 0 0 #ffffff;
+}

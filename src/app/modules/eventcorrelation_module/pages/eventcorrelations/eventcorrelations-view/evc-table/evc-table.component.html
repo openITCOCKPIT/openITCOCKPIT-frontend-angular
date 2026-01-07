@@ -70,8 +70,16 @@
                             [ngClass]="{'evc-summary-ok':column.current_state === 0, 'evc-summary-warning': column.current_state === 1, 'evc-summary-critical': column.current_state === 2,'evc-summary-unknown': column.current_state === 3,'evc-summary-not-monitored': (!column.current_state && column.current_state !== 0)}"
                             (mouseenter)="toggleToaster(column.serviceId)"
                             (mouseleave)="cancelToaster()">
-                            <div class="evc-summary-operator">
-                                {{ column.operator }}
+                            <div class="evc-summary-operator operator-color">
+                                @if (column.operator && [EventcorrelationOperators.SCORESCLALARGREATER,
+                                                         EventcorrelationOperators.SCORESCLALARLESSER,
+                                                         EventcorrelationOperators.SCORERANGEINCLUSIVE,
+                                                         EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(column.operator)) {
+                                    {{ 'score' | transloco }} ⚖️
+                                } @else {
+                                    {{ column.operator }}
+                                }
+
                             </div>
                             <span class="evc-summary-vservice">{{ column.serviceName }}</span>
                         </td>
