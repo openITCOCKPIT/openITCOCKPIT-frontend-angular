@@ -26,6 +26,10 @@ export const distributeModuleRoutes: Routes = [
         loadComponent: () => import('./pages/satellites/satellites-status/satellites-status.component').then(m => m.SatellitesStatusComponent)
     },
     {
+        path: 'distribute_module/satellites/info',
+        loadComponent: () => import('./pages/satellites/satellites-info/satellites-info.component').then(m => m.SatellitesInfoComponent)
+    },
+    {
         path: 'distribute_module/satellites/tasks',
         loadComponent: () => import('./pages/satellites/satellites-tasks/satellites-tasks.component').then(m => m.SatellitesTasksComponent)
     },
