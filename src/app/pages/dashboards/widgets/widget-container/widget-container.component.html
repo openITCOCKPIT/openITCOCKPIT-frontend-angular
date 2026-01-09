@@ -190,6 +190,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-sla-calendar-widget>
         }
+        @case (WidgetTypes.SlasSummaryWidget) {
+            <oitc-slas-summary-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-slas-summary-widget>
+        }
         @case (WidgetTypes.ChangecalendarWidget) {
             <oitc-changecalendar-widget
                 [widgetInput]="widget"
