@@ -52,6 +52,7 @@ export enum WidgetTypes {
     SlaWidget = 500,
     SlaCalendarWidget = 501,
     SlaSummaryWidget = 502,
+    SlasSummaryWidget = 503,
 
     // CustomalertModule Widgets.php (EE Module)
     CustomalertsWidget = 600,

@@ -36,9 +36,10 @@ import { NgClass } from '@angular/common';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { HistoryService } from '../../../history.service';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
-import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { sprintf } from 'sprintf-js';
 import _ from 'lodash';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 
 @Component({
     selector: 'oitc-timeperiods-add',
@@ -72,6 +73,7 @@ import _ from 'lodash';
         NgSelectModule,
         NgOptionHighlightDirective,
         DebounceDirective,
+        SelectComponent,
         LabelLinkComponent
     ],
     templateUrl: './timeperiods-add.component.html',
@@ -84,6 +86,7 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
         container_id: null,
         name: '',
         calendar_id: null,
+        exclude_timeperiod_id: null,
         timeperiod_timeranges: [],
         validate_timeranges: true,
         description: '',
@@ -91,6 +94,8 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
 
     public containers: SelectKeyValue[] = [];
     public calendars: SelectKeyValue[] = [];
+    public timeperiods: SelectKeyValue[] = [];
+
     public errors: GenericValidationError | null = null;
 
     private TimeperiodsService = inject(TimeperiodsService);
@@ -133,6 +138,16 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
             })
         );
+    }
+
+    private loadTimeperiods() {
+        if (this.post.container_id === null) {
+            return;
+        }
+        this.subscriptions.add(this.TimeperiodsService.loadTimeperiodsByContainerId(this.post.container_id).subscribe((result) => {
+            this.timeperiods = result;
+            this.cdr.markForCheck();
+        }));
     }
 
     public addTimerange() {
@@ -248,5 +263,6 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
 
     public onContainerIdChange() {
         this.loadCalendars('');
+        this.loadTimeperiods();
     }
 }

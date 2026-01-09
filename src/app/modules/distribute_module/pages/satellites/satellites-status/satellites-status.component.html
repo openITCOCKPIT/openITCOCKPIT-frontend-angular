@@ -35,13 +35,19 @@
             </h5>
 
             <c-nav variant="underline" class="card-toolbar card-header-pills mR-3" style="margin-right:15px;">
-                <c-nav-item>
+                <c-nav-item *oitcPermission="['distributeModule', 'satellites', 'status']">
                     <button class="active nav-link" [routerLink]="['/', 'distribute_module', 'satellites', 'status']">
                         <fa-icon [icon]="['fas', 'satellite-dish']"></fa-icon>
                         {{ t('Satellites Status') }}
                     </button>
                 </c-nav-item>
-                <c-nav-item>
+                <c-nav-item *oitcPermission="['distributeModule', 'satellites', 'info']">
+                    <button class="nav-link" [routerLink]="['/', 'distribute_module', 'satellites', 'info']">
+                        <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                        {{ t('Satellites Information') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item *oitcPermission="['distributeModule', 'satellites', 'tasks']">
                     <button class="nav-link" [routerLink]="['/', 'distribute_module', 'satellites', 'tasks']">
                         <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
                         {{ t('Satellite Tasks') }}

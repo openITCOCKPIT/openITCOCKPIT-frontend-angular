@@ -1,0 +1,335 @@
+<ng-container *transloco="let t">
+    @if (widget) {
+        <div class="d-flex h-100 flex-column" #boxContainer>
+            <div>
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())">
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        }
+                    </button>
+                }
+
+            </div>
+
+            <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+                 class="box-container">
+                <div class="box-x">
+                    @if (animationStateShowContent) {
+                        <ng-container>
+                            @if (PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'viewDetails'])|async) {
+                                @if (slasSummaryResponse) {
+                                    @for (sla of slasSummaryResponse.slas; track $index) {
+                                        <c-row
+                                            [ngClass]="{'border-success': sla.value.fulfill, 'border-danger': !sla.value.fulfill && sla.value.status_percent !== null, 'border-primary': sla.value.status_percent === null, odd: $index % 2 === 0, even: $index % 2 !== 0}"
+                                            class="border-start border-4 rounded-top rounded-bottom px-2 py-1 my-2">
+                                            <c-col [sm]="sla.value.status_percent !== null?7:12">
+                                                <c-row class="fs-6">
+                                                    <c-col [xs]="8" class="border-bottom mb-1"
+                                                           [ngClass]="{'border-bottom' :sla.value.status_percent !== null}">
+
+                                                        @if (sla.value.fulfill) {
+                                                            <i class="fas fa-file-circle-check fs-5 status-passed py-1"></i>
+                                                        }
+                                                        @if (!sla.value.fulfill && sla.value.status_percent !== null) {
+                                                            <i class="fas fa-file-circle-xmark fs-5 status-failed py-1"></i>
+                                                        }
+                                                        @if (sla.value.status_percent === null) {
+                                                            <i class="fas fa-file-circle-question fs-5 status-not-calculated py-1"></i>
+                                                        }
+                                                        <oitc-label-link
+                                                            [objectId]="sla.value.slaDetails.id"
+                                                            [route]="'/sla_module/slas/viewDetails'"
+                                                            [permissions]="'slamodule.slas.viewdetails'">
+                                                            {{ sla.value.slaDetails.name }}
+                                                        </oitc-label-link>
+                                                    </c-col>
+                                                    <c-col [xs]="4" class="text-end mb-1"
+                                                           [ngClass]="{'border-bottom' :sla.value.status_percent !== null}">
+                                                        @if (sla.value.status_percent !== null) {
+                                                            {{ sla.value.status_percent }}%
+                                                        }
+                                                    </c-col>
+                                                    @if (sla.value.status_percent !== null) {
+                                                        <c-col [xs]="12"
+                                                               class="d-inline-flex align-items-center">
+                                                            <c-col [xs]="1" class="text-center">
+                                                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                            </c-col>
+                                                            <c-col [xs]="2">
+                                                                <div [title]="'Failed' | transloco"
+                                                                     [ngClass]="{'opacity-25': sla.value.hostsAndServicesOverview.hosts.failed.count === 0}"
+                                                                     class="m-1 p-1 bg-danger rounded overflow-hidden position-relative text-white">
+                                                                    <div>
+                                                                        @if (sla.value.hostsAndServicesOverview.hosts.failed.ids.length > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                                                            <a [routerLink]="['/', 'hosts', 'index']"
+                                                                               class="text-white"
+                                                                               [queryParams]="{id: sla.value.hostsAndServicesOverview.hosts.failed.ids}">
+                                                                                {{ sla.value.hostsAndServicesOverview.hosts.failed.count }}
+                                                                            </a>
+                                                                        } @else {
+                                                                            {{ sla.value.hostsAndServicesOverview.hosts.failed.count }}
+                                                                        }
+                                                                    </div>
+                                                                    <fa-icon
+                                                                        class="position-absolute bottom-0 end-0 opacity-15"
+                                                                        [icon]="['fas', 'bolt']"></fa-icon>
+
+                                                                </div>
+                                                            </c-col>
+                                                            <c-col [xs]="2">
+                                                                <div [title]="'Warning' | transloco"
+                                                                     [ngClass]="{'opacity-25': sla.value.hostsAndServicesOverview.hosts.warning.count === 0}"
+                                                                     class="m-1 p-1 bg-warning rounded overflow-hidden position-relative text-white">
+                                                                    <div>
+                                                                        @if (sla.value.hostsAndServicesOverview.hosts.warning.ids.length > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                                                            <a [routerLink]="['/', 'hosts', 'index']"
+                                                                               class="text-white"
+                                                                               [queryParams]="{id: sla.value.hostsAndServicesOverview.hosts.warning.ids}">
+                                                                                {{ sla.value.hostsAndServicesOverview.hosts.warning.count }}
+                                                                            </a>
+                                                                        } @else {
+                                                                            {{ sla.value.hostsAndServicesOverview.hosts.warning.count }}
+                                                                        }
+                                                                    </div>
+                                                                    <fa-icon
+                                                                        class="position-absolute bottom-0 end-0 opacity-15"
+                                                                        [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+
+                                                                </div>
+                                                            </c-col>
+                                                            <c-col [xs]="2">
+                                                                <div [title]="'Passed' | transloco"
+                                                                     [ngClass]="{'opacity-25': sla.value.hostsAndServicesOverview.hosts.passed.count === 0}"
+                                                                     class="m-1 p-1 bg-success rounded overflow-hidden position-relative text-white">
+                                                                    <div>
+                                                                        @if (sla.value.hostsAndServicesOverview.hosts.passed.ids.length > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                                                            <a [routerLink]="['/', 'hosts', 'index']"
+                                                                               class="text-white"
+                                                                               [queryParams]="{id: sla.value.hostsAndServicesOverview.hosts.passed.ids}">
+                                                                                {{ sla.value.hostsAndServicesOverview.hosts.passed.count }}
+                                                                            </a>
+                                                                        } @else {
+                                                                            {{ sla.value.hostsAndServicesOverview.hosts.passed.count }}
+                                                                        }
+                                                                    </div>
+                                                                    <fa-icon
+                                                                        class="position-absolute bottom-0 end-0 opacity-15"
+                                                                        [icon]="['fas', 'check']"></fa-icon>
+
+                                                                </div>
+                                                            </c-col>
+                                                            <c-col [xs]="2">
+                                                                <div [title]="'Not calculated' | transloco"
+                                                                     [ngClass]="{'opacity-25': sla.value.hostsAndServicesOverview.hosts.not_calculated.count === 0}"
+                                                                     class="m-1 p-1 bg-primary rounded overflow-hidden position-relative text-white">
+                                                                    <div>
+                                                                        @if (sla.value.hostsAndServicesOverview.hosts.not_calculated.ids.length > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                                                            <a [routerLink]="['/', 'hosts', 'index']"
+                                                                               class="text-white"
+                                                                               [queryParams]="{id: sla.value.hostsAndServicesOverview.hosts.not_calculated.ids}">
+                                                                                {{ sla.value.hostsAndServicesOverview.hosts.not_calculated.count }}
+                                                                            </a>
+                                                                        } @else {
+                                                                            {{ sla.value.hostsAndServicesOverview.hosts.not_calculated.count }}
+                                                                        }
+                                                                    </div>
+                                                                    <fa-icon
+                                                                        class="position-absolute bottom-0 end-0 opacity-15"
+                                                                        [icon]="['fas', 'question']"></fa-icon>
+                                                                </div>
+                                                            </c-col>
+                                                            <c-col [xs]="3" class="text-end">
+                                                                {{ t('Total:') }}
+                                                                {{ sla.value.hostsAndServicesOverview.hosts.totalHosts }}
+                                                            </c-col>
+                                                        </c-col>
+                                                        <c-col [xs]="12" class="d-inline-flex align-items-center">
+                                                            <c-col [xs]="1" class="text-center">
+                                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                            </c-col>
+                                                            <c-col [xs]="2">
+                                                                <div [title]="'Failed' | transloco"
+                                                                     [ngClass]="{'opacity-25': sla.value.hostsAndServicesOverview.services.failed.count === 0}"
+                                                                     class="m-1 p-1 bg-danger rounded overflow-hidden position-relative text-white">
+                                                                    <div>
+                                                                        @if (sla.value.hostsAndServicesOverview.services.failed.ids.length > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                                                            <a [routerLink]="['/', 'services', 'index']"
+                                                                               class="text-white"
+                                                                               [queryParams]="{id: sla.value.hostsAndServicesOverview.services.failed.ids}">
+                                                                                {{ sla.value.hostsAndServicesOverview.services.failed.count }}
+                                                                            </a>
+                                                                        } @else {
+                                                                            {{ sla.value.hostsAndServicesOverview.services.failed.count }}
+                                                                        }
+                                                                    </div>
+                                                                    <fa-icon
+                                                                        class="position-absolute bottom-0 end-0 opacity-15"
+                                                                        [icon]="['fas', 'bolt']"></fa-icon>
+
+                                                                </div>
+                                                            </c-col>
+                                                            <c-col [xs]="2">
+                                                                <div [title]="'Warning' | transloco"
+                                                                     [ngClass]="{'opacity-25': sla.value.hostsAndServicesOverview.services.warning.count === 0}"
+                                                                     class="m-1 p-1  bg-warning rounded overflow-hidden position-relative text-white">
+                                                                    <div>
+                                                                        @if (sla.value.hostsAndServicesOverview.services.warning.ids.length > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                                                            <a [routerLink]="['/', 'services', 'index']"
+                                                                               class="text-white"
+                                                                               [queryParams]="{id: sla.value.hostsAndServicesOverview.services.warning.ids}">
+                                                                                {{ sla.value.hostsAndServicesOverview.services.warning.count }}
+                                                                            </a>
+                                                                        } @else {
+                                                                            {{ sla.value.hostsAndServicesOverview.services.warning.count }}
+                                                                        }
+                                                                    </div>
+                                                                    <fa-icon
+                                                                        class="position-absolute bottom-0 end-0 opacity-15"
+                                                                        [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+
+                                                                </div>
+                                                            </c-col>
+                                                            <c-col [xs]="2">
+                                                                <div [title]="'Passed' | transloco"
+                                                                     [ngClass]="{'opacity-25': sla.value.hostsAndServicesOverview.services.passed.count === 0}"
+                                                                     class="m-1 p-1  bg-success rounded overflow-hidden position-relative text-white">
+                                                                    <div>
+                                                                        @if (sla.value.hostsAndServicesOverview.services.passed.ids.length > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                                                            <a [routerLink]="['/', 'services', 'index']"
+                                                                               class="text-white"
+                                                                               [queryParams]="{id: sla.value.hostsAndServicesOverview.services.passed.ids}">
+                                                                                {{ sla.value.hostsAndServicesOverview.services.passed.count }}
+                                                                            </a>
+                                                                        } @else {
+                                                                            {{ sla.value.hostsAndServicesOverview.services.passed.count }}
+                                                                        }
+                                                                    </div>
+                                                                    <fa-icon
+                                                                        class="position-absolute bottom-0 end-0 opacity-15"
+                                                                        [icon]="['fas', 'check']"></fa-icon>
+
+                                                                </div>
+                                                            </c-col>
+                                                            <c-col [xs]="2">
+                                                                <div [title]="'Not calculated' | transloco"
+                                                                     [ngClass]="{'opacity-25': sla.value.hostsAndServicesOverview.services.not_calculated.count === 0}"
+                                                                     class="m-1 p-1 bg-primary rounded overflow-hidden position-relative text-white">
+                                                                    <div>
+                                                                        @if (sla.value.hostsAndServicesOverview.services.not_calculated.ids.length > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                                                            <a [routerLink]="['/', 'services', 'index']"
+                                                                               class="text-white"
+                                                                               [queryParams]="{id: sla.value.hostsAndServicesOverview.services.not_calculated.ids}">
+                                                                                {{ sla.value.hostsAndServicesOverview.services.not_calculated.count }}
+                                                                            </a>
+                                                                        } @else {
+                                                                            {{ sla.value.hostsAndServicesOverview.hosts.not_calculated.count }}
+                                                                        }
+                                                                    </div>
+                                                                    <fa-icon
+                                                                        class="position-absolute bottom-0 end-0 opacity-15"
+                                                                        [icon]="['fas', 'question']"></fa-icon>
+
+                                                                </div>
+                                                            </c-col>
+                                                            <c-col [xs]="3" class="text-end">
+                                                                {{ t('Total:') }}
+                                                                {{ sla.value.hostsAndServicesOverview.services.totalServices }}
+                                                            </c-col>
+                                                        </c-col>
+                                                    }
+                                                </c-row>
+                                            </c-col>
+                                            @if (sla.value.status_percent !== null && sla.value.slaDetails.status_log) {
+                                                <c-col [sm]="5">
+                                                    <oitc-sla-overview-mini-echart [sla]="sla.value.slaDetails">
+                                                    </oitc-sla-overview-mini-echart>
+                                                </c-col>
+                                            }
+                                            @if (sla.value.human_last_updated) {
+                                                <c-row class="p-0">
+                                                    <c-col class="text-end info-update-date p-0">
+                                                        {{ t('Last update: ') }}{{ sla.value.human_last_updated }}
+                                                    </c-col>
+                                                </c-row>
+                                            }
+
+                                        </c-row>
+
+
+                                    }
+                                }
+                            } @else {
+                                <c-row>
+                                    <c-col>
+                                        <c-alert color="danger" class="my-3 p-1 h-100">
+                                            <h4 cAlertHeading> {{ t('Attention!') }}</h4>
+                                            <p>
+                                                <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                                         class="text-danger"></fa-icon>
+                                                {{ t('You are not permitted to access this object') }}
+                                            </p>
+                                        </c-alert>
+                                    </c-col>
+                                </c-row>
+                            }
+                        </ng-container>
+                    }
+
+                </div>
+                <div class="box-x">
+                    @if (animationStateShowConfig && config) {
+                        <ng-container>
+                            <c-row class="mb-1">
+                                <c-col [xs]="12" [lg]="12">
+                                    <c-input-group>
+                                        <span cInputGroupText>
+                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                        </span>
+                                        <input [(ngModel)]="config['Slas']['name']"
+                                               [placeholder]="'Filter by sla name' | transloco"
+                                               cFormControl
+                                               [id]="'Slas.name-'+widget.id"
+                                               [name]="'Slas.name-'+widget.id"
+                                               type="text"
+                                        />
+                                    </c-input-group>
+                                </c-col>
+                            </c-row>
+                            <c-row class="mb-1">
+                                <c-col [xs]="12" [lg]="12">
+                                    <c-input-group>
+                                        <span cInputGroupText>
+                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                        </span>
+                                        <input [(ngModel)]="config['Slas']['description']"
+                                               [placeholder]="'Filter by sla description' | transloco"
+                                               cFormControl
+                                               [id]="'Hosts.description-'+widget.id"
+                                               [name]="'Hosts.description-'+widget.id"
+                                               type="text"
+                                        />
+                                    </c-input-group>
+                                </c-col>
+                            </c-row>
+
+
+                            <c-row class="my-2">
+                                <c-col class="text-end">
+                                    <button cButton class="ripple" color="primary" (click)="saveWidgetConfig()">
+                                        {{ t('Save') }}
+                                    </button>
+                                </c-col>
+                            </c-row>
+                        </ng-container>
+                    }
+
+                </div>
+            </div>
+        </div>
+    }
+
+</ng-container>

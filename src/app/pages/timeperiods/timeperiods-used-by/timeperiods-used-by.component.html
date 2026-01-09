@@ -20,257 +20,329 @@
     </nav>
 
     <oitc-form-loader [isVisible]="!timeperiod"></oitc-form-loader>
-    <c-card class="mb-3" *ngIf="timeperiod">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Time period') }}
-                <small class="fw-300">
-                    <i>
-                        <strong>
-                            »{{ timeperiod.name }}«
-                        </strong>
-                        {{ t('is used by') }}
-                        {{ total }}
-                        {{ t('objects.') }}
-                    </i>
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['timeperiods', 'index']" cButton class="ripple" color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
-            <c-container
-                [fluid]="true">
-                <table bordered cTable class="mt-2 mb-0" hover striped *ngIf="objects">
-                    <tbody>
-                    <!-- Contacts -->
-                    <tr *ngIf="objects.Contacts.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                            {{ t('Contacts') }} ({{ objects.Contacts.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let contact of objects.Contacts">
-                        <td colspan="2">
-                            <a *oitcPermission="['contacts', 'edit']"
-                               [routerLink]="['/', 'contacts', 'edit', contact.id]">
-                                {{ contact.name }}
-                            </a>
-                            <span *oitcPermission="['contacts', 'edit']; negate: true">
-                                {{ contact.name }}
-                            </span>
-                        </td>
-                    </tr>
+    @if (timeperiod) {
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Time period') }}
+                    <small class="fw-300">
+                        <i>
+                            <strong>
+                                »{{ timeperiod.name }}«
+                            </strong>
+                            {{ t('is used by') }}
+                            {{ total }}
+                            {{ t('objects.') }}
+                        </i>
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['timeperiods', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <c-container
+                    [fluid]="true">
+                    @if (objects) {
+                        <table bordered cTable class="mt-2 mb-0" hover striped>
+                            <tbody>
+                            <!-- Contacts -->
+                                @if (objects.Contacts.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                            {{ t('Contacts') }} ({{ objects.Contacts.length }})
+                                        </th>
+                                    </tr>
 
-                    <!-- Host dependencies -->
-                    <tr *ngIf="objects.Hostdependencies.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
-                            {{ t('Host dependencies') }} ({{ objects.Hostdependencies.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let hostdependency of objects.Hostdependencies; let i = index">
-                        <td colspan="2">
-                            <a *oitcPermission="['hostdependencies', 'edit']"
-                               [routerLink]="['/', 'hostdependencies', 'edit', hostdependency.id]">
-                                {{ t('Host dependency') }} #{{ i + 1 }}
-                            </a>
-                            <span *oitcPermission="['hostdependencies', 'edit']; negate: true">
-                                {{ t('Host dependency') }} #{{ i + 1 }}
-                            </span>
-                        </td>
-                    </tr>
+                                    @for (contact of objects.Contacts; track $index) {
+                                        <tr>
+                                            <td colspan="2">
+                                                <oitc-label-link
+                                                    [objectId]="contact.id"
+                                                    [route]="'/contacts/edit'"
+                                                    [permissions]="'contacts.edit'">
+                                                    {{ contact.name }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            <!-- Host dependencies -->
+                                @if (objects.Hostdependencies.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                            {{ t('Host dependencies') }} ({{ objects.Hostdependencies.length }})
+                                        </th>
+                                    </tr>
+                                    @for (hostdependency of objects.Hostdependencies; track $index) {
+                                        <tr>
+                                            <td colspan="2">
+                                                <oitc-label-link
+                                                    [objectId]="hostdependency.id"
+                                                    [route]="'/hostdependencies/edit'"
+                                                    [permissions]="'hostdependencies.edit'">
+                                                    {{ t('Host dependency') }} #{{ $index + 1 }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
 
-                    <!-- Host escalations -->
-                    <tr *ngIf="objects.Hostescalations.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
-                            {{ t('Host escalations') }} ({{ objects.Hostescalations.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let hostescalation of objects.Hostescalations; let i = index">
-                        <td colspan="2">
-                            <a *oitcPermission="['hostescalations', 'edit']"
-                               [routerLink]="['/', 'hostescalations', 'edit', hostescalation.id]">
-                                {{ t('Host escalation') }} #{{ i + 1 }}
-                            </a>
-                            <span *oitcPermission="['hostescalations', 'edit']; negate: true">
-                                {{ t('Host escalation') }} #{{ i + 1 }}
-                            </span>
-                        </td>
-                    </tr>
+                            <!-- Host escalations -->
+                                @if (objects.Hostescalations.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
+                                            {{ t('Host escalations') }} ({{ objects.Hostescalations.length }})
+                                        </th>
+                                    </tr>
+                                    @for (hostescalation of objects.Hostescalations; track $index) {
+                                        <tr>
+                                            <td colspan="2">
+                                                <oitc-label-link
+                                                    [objectId]="hostescalation.id"
+                                                    [route]="'/hostescalations/edit'"
+                                                    [permissions]="'hostescalations.edit'">
+                                                    {{ t('Host escalation') }} #{{ $index + 1 }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
 
-                    <!-- Hosts -->
-                    <tr *ngIf="objects.Hosts.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                            {{ t('Hosts') }} ({{ objects.Hosts.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let host of objects.Hosts">
-                        <td colspan="2">
-                            <a *oitcPermission="['hosts', 'edit']"
-                               [routerLink]="['/', 'hosts', 'edit', host.id]">
-                                {{ host.name }}
-                            </a>
-                            <span *oitcPermission="['hosts', 'edit']; negate: true">
-                                {{ host.name }}
-                            </span>
-                        </td>
-                    </tr>
 
-                    <!-- Host templates -->
-                    <tr *ngIf="objects.Hosttemplates.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'pencil-square']"></fa-icon>
-                            {{ t('Host templates') }} ({{ objects.Hosttemplates.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let hosttemplate of objects.Hosttemplates">
-                        <td colspan="2">
-                            <a *oitcPermission="['hosttemplates', 'edit']"
-                               [routerLink]="['/', 'hosttemplates', 'edit', hosttemplate.id]">
-                                {{ hosttemplate.name }}
-                            </a>
-                            <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
-                                {{ hosttemplate.name }}
-                            </span>
-                        </td>
-                    </tr>
+                            <!-- Hosts -->
+                                @if (objects.Hosts.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            {{ t('Hosts') }} ({{ objects.Hosts.length }})
+                                        </th>
+                                    </tr>
+                                    @for (host of objects.Hosts; track $index) {
+                                        <tr>
+                                            <td colspan="2">
+                                                <oitc-label-link
+                                                    [objectId]="host.id"
+                                                    [route]="'/hosts/edit'"
+                                                    [permissions]="'hosts.edit'">
+                                                    {{ host.name }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
 
-                    <!-- Instant reports -->
-                    <tr *ngIf="objects.Instantreports.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-                            {{ t('Instant reports') }} ({{ objects.Instantreports.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let instantreport of objects.Instantreports">
-                        <td colspan="2">
-                            <a *oitcPermission="['instantreports', 'edit']"
-                               [routerLink]="['/', 'instantreports', 'edit', instantreport.id]">
-                                {{ instantreport.name }}
-                            </a>
-                            <span *oitcPermission="['instantreports', 'edit']; negate: true">
-                                {{ instantreport.name }}
-                            </span>
-                        </td>
-                    </tr>
 
-                    <!-- Service dependencies -->
-                    <tr *ngIf="objects.Servicedependencies.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
-                            {{ t('Service dependencies') }} ({{ objects.Servicedependencies.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let servicedependency of objects.Servicedependencies; let i = index">
-                        <td colspan="2">
-                            <a *oitcPermission="['servicedependencies', 'edit']"
-                               [routerLink]="['/', 'servicedependencies', 'edit', servicedependency.id]">
-                                {{ t('Service dependency') }} #{{ i + 1 }}
-                            </a>
-                            <span *oitcPermission="['servicedependencies', 'edit']; negate: true">
-                                {{ t('Service dependency') }} #{{ i + 1 }}
-                            </span>
-                        </td>
-                    </tr>
+                            <!-- Host templates -->
+                                @if (objects.Hosttemplates.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'pencil-square']"></fa-icon>
+                                            {{ t('Host templates') }} ({{ objects.Hosttemplates.length }})
+                                        </th>
+                                    </tr>
+                                    @for (hosttemplate of objects.Hosttemplates; track $index) {
+                                        <tr>
+                                            <td colspan="2">
+                                                <oitc-label-link
+                                                    [objectId]="hosttemplate.id"
+                                                    [route]="'/hosttemplates/edit'"
+                                                    [permissions]="'hosttemplates.edit'">
+                                                    {{ hosttemplate.name }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
 
-                    <!-- Service escalations -->
-                    <tr *ngIf="objects.Serviceescalations.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
-                            {{ t('Service escalations') }} ({{ objects.Serviceescalations.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let serviceescalation of objects.Serviceescalations; let i = index">
-                        <td colspan="2">
-                            <a *oitcPermission="['serviceescalations', 'edit']"
-                               [routerLink]="['/', 'serviceescalations', 'edit', serviceescalation.id]">
-                                {{ t('Service escalation') }} #{{ i + 1 }}
-                            </a>
-                            <span *oitcPermission="['hostescalations', 'edit']; negate: true">
-                                {{ t('Service escalation') }} #{{ i + 1 }}
-                            </span>
-                        </td>
-                    </tr>
 
-                    <!-- Services -->
-                    <tr *ngIf="objects.Services.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                            {{ t('Services') }} ({{ objects.Services.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let service of objects.Services">
-                        <td colspan="2">
-                            <a *oitcPermission="['services', 'edit']"
-                               [routerLink]="['/', 'services', 'edit', service.id]">
-                                {{ service._matchingData.Hosts.name }} / {{ service.servicename }}
-                            </a>
-                            <span *oitcPermission="['services', 'edit']; negate: true">
-                                {{ service._matchingData.Hosts.name }} / {{ service.servicename }}
-                            </span>
-                        </td>
-                    </tr>
+                            <!-- Instant reports -->
+                                @if (objects.Hosttemplates.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                                            {{ t('Instant reports') }} ({{ objects.Instantreports.length }})
+                                        </th>
+                                    </tr>
+                                    @for (instantreport of objects.Instantreports; track $index) {
+                                        <tr>
+                                            <td colspan="2">
+                                                <oitc-label-link
+                                                    [objectId]="instantreport.id"
+                                                    [route]="'/instantreports/edit'"
+                                                    [permissions]="'instantreports.edit'">
+                                                    {{ instantreport.name }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
 
-                    <!-- Service templates -->
-                    <tr *ngIf="objects.Servicetemplates.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'pencil-square']"></fa-icon>
-                            {{ t('Service templates') }} ({{ objects.Servicetemplates.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let servicetemplate of objects.Servicetemplates">
-                        <td colspan="2">
-                            <a *oitcPermission="['servicetemplates', 'edit']"
-                               [routerLink]="['/', 'servicetemplates', 'edit', servicetemplate.id]">
-                                {{ servicetemplate.name }}
-                            </a>
-                            <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
-                                {{ servicetemplate.name }}
-                            </span>
-                        </td>
-                    </tr>
 
-                    <!-- auto reports -->
-                    <tr *ngIf="objects.Autoreports.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-                            {{ t('Autoreports') }} ({{ objects.Autoreports.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let autoreport of objects.Autoreports">
-                        <td colspan="2">
-                            <a *oitcPermission="['autoreportmodule', 'autoreports', 'edit']"
-                               [routerLink]="['/', 'autoreport_module', 'autoreports', 'editStepOne', autoreport.id]">
-                                {{ autoreport.name }}
-                            </a>
-                            <span *oitcPermission="['autoreportmodule', 'autoreports', 'edit']; negate: true">
-                                {{ autoreport.name }}
-                            </span>
-                        </td>
-                    </tr>
+                            <!-- Service dependencies -->
+                                @if (objects.Servicedependencies.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                            {{ t('Service dependencies') }} ({{ objects.Servicedependencies.length }})
+                                        </th>
+                                    </tr>
+                                    @for (servicedependency of objects.Servicedependencies; track $index) {
+                                        <tr>
+                                            <td colspan="2">
+                                                <oitc-label-link
+                                                    [objectId]="servicedependency.id"
+                                                    [route]="'/servicedependencies/edit'"
+                                                    [permissions]="'servicedependencies.edit'">
+                                                    {{ t('Service dependency') }} #{{ $index + 1 }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
 
-                    </tbody>
-                </table>
-                <oitc-not-used-by-object *ngIf="total === 0">
-                    {{ t('This timeperiod is not used by any object') }}
-                </oitc-not-used-by-object>
-            </c-container>
-        </c-card-body>
-    </c-card>
+                            <!-- Service escalations -->
+                                @if (objects.Serviceescalations.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
+                                            {{ t('Service escalations') }} ({{ objects.Serviceescalations.length }})
+                                        </th>
+                                    </tr>
+                                    @for (serviceescalation of objects.Serviceescalations; track $index) {
+                                        <tr>
+                                            <td colspan="2">
+                                                <oitc-label-link
+                                                    [objectId]="serviceescalation.id"
+                                                    [route]="'/serviceescalations/edit'"
+                                                    [permissions]="'serviceescalations.edit'">
+                                                    {{ t('Service escalation') }} #{{ $index + 1 }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
+                            <!-- Services -->
+                                @if (objects.Services.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                            {{ t('Services') }} ({{ objects.Services.length }})
+                                        </th>
+                                    </tr>
+                                    @for (service of objects.Services; track $index) {
+                                        <tr>
+                                            <td colspan="2">
+                                                <oitc-label-link
+                                                    [objectId]="service.id"
+                                                    [route]="'/services/edit'"
+                                                    [permissions]="'services.edit'">
+                                                    {{ service._matchingData.Hosts.name }} / {{ service.servicename }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
+
+                            <!-- Service templates -->
+                                @if (objects.Servicetemplates.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'pencil-square']"></fa-icon>
+                                            {{ t('Service templates') }} ({{ objects.Servicetemplates.length }})
+                                        </th>
+                                    </tr>
+                                    @for (servicetemplate of objects.Servicetemplates; track $index) {
+                                        <tr>
+                                            <td colspan="2">
+                                                <oitc-label-link
+                                                    [objectId]="servicetemplate.id"
+                                                    [route]="'/servicetemplates/edit'"
+                                                    [permissions]="'servicetemplates.edit'">
+                                                    {{ servicetemplate.name }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
+
+                            <!-- Time periods -->
+                                @if (objects.Timeperiods.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                            {{ t('Time periods (as excluded time period)') }}
+                                            ({{ objects.Timeperiods.length }})
+                                        </th>
+                                    </tr>
+                                    @for (timeperiod of objects.Timeperiods; track $index) {
+                                        <tr>
+                                            <td colspan="2">
+                                                <oitc-label-link
+                                                    [objectId]="timeperiod.id"
+                                                    [route]="'/timeperiods/edit'"
+                                                    [permissions]="'timeperiods.edit'">
+                                                    {{ timeperiod.name }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
+
+
+                            <!-- auto reports -->
+                                @if (objects.Autoreports.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                                            {{ t('Autoreports') }} ({{ objects.Autoreports.length }})
+                                        </th>
+                                    </tr>
+                                    @for (autoreport of objects.Autoreports; track $index) {
+                                        <tr>
+                                            <td colspan="2">
+                                                <oitc-label-link
+                                                    [objectId]="autoreport.id"
+                                                    [route]="'/autoreport_module/autoreports/editStepOne'"
+                                                    [permissions]="'autoreportmodule.autoreports.edit'">
+                                                    {{ autoreport.name }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    }
+                    @if (total === 0) {
+                        <oitc-not-used-by-object>
+                            {{ t('This time period is not used by any object') }}
+                        </oitc-not-used-by-object>
+                    }
+                </c-container>
+            </c-card-body>
+        </c-card>
+    }
+
+
 </ng-container>

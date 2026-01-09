@@ -67,6 +67,7 @@ export interface ConfigurationitemsImportFileInformation {
     checksum: string
     commands_count: number
     timeperiods_count: number
+    calendars_count: number
     contacts_count: number
     contactgroups_count: number
     servicetemplates_count: number
