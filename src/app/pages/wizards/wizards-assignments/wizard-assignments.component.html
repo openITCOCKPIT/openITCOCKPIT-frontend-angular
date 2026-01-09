@@ -90,6 +90,12 @@
                             <fa-icon [icon]="['fas', 'server']"></fa-icon>
                             {{ t('Hardware') }}
                         </button>
+                        <button cButton color="primary" size="xs"
+                                [ngClass]="{'btn-primary': filter.Category.webserver, 'btn-default': !filter.Category.webserver}"
+                                (click)="filter.Category.webserver=!filter.Category.webserver">
+                            <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                            {{ t('Webserver') }}
+                        </button>
 
                     </c-button-group>
                 </c-nav-item>
