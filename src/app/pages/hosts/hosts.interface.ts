@@ -237,6 +237,7 @@ export interface HostsIndexFilter {
     'Hoststatus.is_hardstate': string,
     'Hoststatus.active_checks_enabled': string,
     'hostpriority': string[]
+    'Hostgroups.id': number[]
 }
 
 export interface HostsCurrentStateFilter {
@@ -280,7 +281,8 @@ export function getDefaultHostsIndexFilter(): HostsIndexFilter {
         'Hoststatus.notifications_enabled': '',
         'Hoststatus.is_hardstate': '',
         'Hoststatus.active_checks_enabled': '',
-        'hostpriority': []
+        'hostpriority': [],
+        'Hostgroups.id': []
     }
 }
 

@@ -45,6 +45,7 @@ import { ciscoModuleRoutes } from './modules/cisco_module/cisco_module.routes';
 import { networkModuleRoutes } from './modules/network_module/network_module.routes';
 import { broadcomProxyModuleRoutes } from './modules/broadcomproxy_module/broadcomproxy_module.routes';
 import { nutanixModuleRoutes } from './modules/nutanix_module/nutanix_module.routes';
+import { nginxModuleRoutes } from './modules/nginx_module/nginx_module.routes';
 import { fujitsuModuleRoutes } from './modules/fujitsu_module/fujitsu_module.routes';
 
 @Component({
@@ -113,6 +114,7 @@ const moduleRoutes: Routes = [
     ...broadcomProxyModuleRoutes,
     ...nutanixModuleRoutes,
     ...networkModuleRoutes,
+    ...nginxModuleRoutes,
     ...fujitsuModuleRoutes
 ];
 /***    Core routes   ***/

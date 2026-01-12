@@ -28,13 +28,15 @@
         <c-card-body class="p-0">
 
             <div class="row m-0 text-center mb-3" style="min-height: 22px;">
-                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('Host Information') }}
                     </span>
                 </div>
-                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('Configure DB2 Monitoring') }}
@@ -77,8 +79,9 @@
                 <c-accordion class="mb-3">
                     <c-accordion-item #item0="cAccordionItem" [visible]="false">
                         <ng-template cTemplateId="accordionHeaderTemplate">
-                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
-                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                            <button class="wizard-accordion bg-info-subtle" (click)="item0.toggleItem()"
+                                    [collapsed]="!item0.visible"
+                                    cAccordionButton><i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
                                 {{ t('DB2 configuration help') }}
                             </button>
                         </ng-template>
@@ -197,9 +200,9 @@ db2stop; db2start</pre>
             </fieldset>
 
             <oitc-wizards-dynamicfields
-                    [(post)]="post.services"
-                    [errors]="errors"
-                    [title]="'DB2 Database services'|transloco"
+                [(post)]="post.services"
+                [errors]="errors"
+                [title]="'DB2 Database services'|transloco"
             />
 
         </c-card-body>
