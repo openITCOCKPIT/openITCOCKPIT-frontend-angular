@@ -233,7 +233,18 @@
 
                     <ng-template #buttonTemplate let-data>
                         <div class="ms-2">
-                            <button class="ripple" (click)="runSnmpDiscovery()" cButton color="info">
+                            <button
+                                cButton
+                                class="ripple"
+                                color="primary"
+                                type="button"
+                                [disabled]="DiscoveryIsRunning"
+                                (click)="runSnmpDiscovery()">
+                                @if (DiscoveryIsRunning) {
+                                    <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                                } @else {
+                                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                                }
                                 {{ t('Start SNMP interface discovery') }}
                             </button>
                         </div>
@@ -331,7 +342,7 @@
                                 <c-accordion class="mb-3">
                                     <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
                                         <ng-template cTemplateId="accordionHeaderTemplate">
-                                            <div class="form-group bg-primary-subtle"
+                                            <div class="form-group wizard-accordion bg-info-subtle"
                                                  (click)="accordionItem.toggleItem()"
                                                  [collapsed]="!accordionItem.visible" cAccordionButton>
                                                 <div class="d-flex align-items-center">
