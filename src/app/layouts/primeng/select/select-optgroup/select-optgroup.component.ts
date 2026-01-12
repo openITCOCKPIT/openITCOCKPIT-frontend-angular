@@ -276,7 +276,7 @@ export class SelectOptgroupComponent implements ControlValueAccessor, OnInit, On
      *
      * @param event
      */
-    public onShow(event: AnimationEvent) {
+    public onShow(event: any) {
         console.log(event);
 
         /*
