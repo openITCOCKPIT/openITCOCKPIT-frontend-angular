@@ -4,8 +4,7 @@
             <c-col xs="12">
                 <c-dropdown class="d-inline">
                     <button cButton cDropdownToggle color="primary">
-                        {{ t('Add holiday') }}
-                        <span class="fi" [ngClass]="'fi-'+countryCode"></span>
+                        {{ t('Add national holidays') }}
                     </button>
                     <ul cDropdownMenu>
                         <li *ngFor="let c of countries | keyvalue">
