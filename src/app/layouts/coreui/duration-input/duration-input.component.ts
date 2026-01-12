@@ -17,26 +17,25 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { HumanTimeComponent } from '../interval-input/human-time/human-time.component';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-duration-input',
     imports: [
-        ButtonGroupComponent,
-        ColComponent,
-        FormControlDirective,
-        HumanTimeComponent,
-        InputGroupComponent,
-        NgForOf,
-        ReactiveFormsModule,
-        RowComponent,
-        TranslocoPipe,
-        XsButtonDirective,
-        FormsModule,
-        NgClass
-    ],
+    ButtonGroupComponent,
+    ColComponent,
+    FormControlDirective,
+    HumanTimeComponent,
+    InputGroupComponent,
+    ReactiveFormsModule,
+    RowComponent,
+    TranslocoPipe,
+    XsButtonDirective,
+    FormsModule,
+    NgClass
+],
     templateUrl: './duration-input.component.html',
     styleUrl: './duration-input.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

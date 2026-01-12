@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SummaryStateHosts } from '../../../hosts/summary_state.interface';
 import { HostgroupsLoadHostgroupsByStringParams } from '../../../hostgroups/hostgroups.interface';
@@ -32,28 +32,27 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
 @Component({
     selector: 'oitc-tactical-overview-hosts-widget',
     imports: [
-        FaIconComponent,
-        NgIf,
-        TranslocoDirective,
-        AsyncPipe,
-        RouterLink,
-        ColComponent,
-        DebounceDirective,
-        FormCheckInputDirective,
-        FormControlDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ReactiveFormsModule,
-        RegexHelperTooltipComponent,
-        RowComponent,
-        TranslocoPipe,
-        FormsModule,
-        NgSelectComponent,
-        MultiSelectComponent,
-        XsButtonDirective,
-        FaStackComponent,
-        FaStackItemSizeDirective
-    ],
+    FaIconComponent,
+    TranslocoDirective,
+    AsyncPipe,
+    RouterLink,
+    ColComponent,
+    DebounceDirective,
+    FormCheckInputDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ReactiveFormsModule,
+    RegexHelperTooltipComponent,
+    RowComponent,
+    TranslocoPipe,
+    FormsModule,
+    NgSelectComponent,
+    MultiSelectComponent,
+    XsButtonDirective,
+    FaStackComponent,
+    FaStackItemSizeDirective
+],
     templateUrl: './tactical-overview-hosts-widget.component.html',
     styleUrl: './tactical-overview-hosts-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

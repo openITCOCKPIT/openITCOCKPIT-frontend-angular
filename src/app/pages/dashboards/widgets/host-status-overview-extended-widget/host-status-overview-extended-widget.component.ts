@@ -16,7 +16,7 @@ import { HostStatusOverviewExtendedWidgetService } from './host-status-overview-
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { GenericValidationError } from '../../../../generic-responses';
 import {
@@ -52,33 +52,32 @@ import { ContainersLoadContainersByStringParams } from '../../../containers/cont
 @Component({
     selector: 'oitc-host-status-overview-extended-widget',
     imports: [
-        FaIconComponent,
-        NgIf,
-        TranslocoDirective,
-        RowComponent,
-        NgClass,
-        AsyncPipe,
-        ColComponent,
-        RouterLink,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormsModule,
-        TranslocoPipe,
-        XsButtonDirective,
-        TrueFalseDirective,
-        InputGroupTextDirective,
-        InputGroupComponent,
-        DebounceDirective,
-        MultiSelectComponent,
-        NgSelectComponent,
-        RegexHelperTooltipComponent,
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective
-    ],
+    FaIconComponent,
+    TranslocoDirective,
+    RowComponent,
+    NgClass,
+    AsyncPipe,
+    ColComponent,
+    RouterLink,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormsModule,
+    TranslocoPipe,
+    XsButtonDirective,
+    TrueFalseDirective,
+    InputGroupTextDirective,
+    InputGroupComponent,
+    DebounceDirective,
+    MultiSelectComponent,
+    NgSelectComponent,
+    RegexHelperTooltipComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective
+],
     templateUrl: './host-status-overview-extended-widget.component.html',
     styleUrl: './host-status-overview-extended-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

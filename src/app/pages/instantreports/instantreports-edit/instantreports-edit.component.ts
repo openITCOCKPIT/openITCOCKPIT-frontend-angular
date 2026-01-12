@@ -24,7 +24,7 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import {
     MultiSelectOptgroupComponent
 } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
@@ -53,38 +53,37 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 @Component({
     selector: 'oitc-instantreports-edit',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        LabelLinkComponent,
-        MultiSelectComponent,
-        MultiSelectOptgroupComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PermissionDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        TrueFalseDirective,
-        XsButtonDirective,
-        RouterLink,
-        FormLoaderComponent,
-        DebounceDirective
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    LabelLinkComponent,
+    MultiSelectComponent,
+    MultiSelectOptgroupComponent,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    RequiredIconComponent,
+    SelectComponent,
+    TranslocoDirective,
+    TrueFalseDirective,
+    XsButtonDirective,
+    RouterLink,
+    FormLoaderComponent,
+    DebounceDirective
+],
     templateUrl: './instantreports-edit.component.html',
     styleUrl: './instantreports-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

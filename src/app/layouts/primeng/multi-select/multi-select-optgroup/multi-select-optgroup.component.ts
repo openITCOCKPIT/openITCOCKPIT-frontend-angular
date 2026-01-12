@@ -22,7 +22,6 @@ import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { CheckboxModule } from 'primeng/checkbox';
 import _ from 'lodash';
-import { AnimationEvent } from '@angular/animations';
 
 
 @Component({
@@ -296,6 +295,9 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
      * @param event
      */
     public onShow(event: AnimationEvent) {
+        console.log(event)
+
+        /*
         event.element.parentElement.style.width = event.element.parentElement.style.minWidth;
 
         // 🩹
@@ -309,6 +311,8 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
                 const selectBoxPosition = this.multiSelectOptgroup.el.nativeElement.getBoundingClientRect();
                 event.element.parentElement.style.left = selectBoxPosition.x + 'px';
             }
-        }
+        }*/
     }
+
+    protected readonly Infinity = Infinity;
 }

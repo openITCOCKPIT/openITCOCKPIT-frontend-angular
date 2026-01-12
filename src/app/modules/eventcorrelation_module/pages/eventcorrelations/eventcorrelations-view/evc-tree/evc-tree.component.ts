@@ -16,7 +16,7 @@ import { IPoint, PointExtensions } from '@foblex/2d';
 import { generateGuid } from '@foblex/utils';
 import { EvcTreeDirection } from './evc-tree.enum';
 import { EvcService, EvcTree } from '../../eventcorrelations.interface';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { ButtonGroupComponent, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum';
@@ -92,25 +92,23 @@ const OPERATOR_WIDTH = 100;
 @Component({
     selector: 'oitc-evc-tree',
     imports: [
-        FFlowModule,
-        // NgxResizeObserverModule,
-        NgClass,
-        RowComponent,
-        ColComponent,
-        NgIf,
-        TooltipDirective,
-        FaIconComponent,
-        DowntimeIconComponent,
-        PermissionDirective,
-        AsyncPipe,
-        AcknowledgementIconComponent,
-        TranslocoPipe,
-        RouterLink,
-        XsButtonDirective,
-        ButtonGroupComponent,
-        EvcServicestatusToasterComponent,
-        FormsModule,
-    ],
+    FFlowModule,
+    NgClass,
+    RowComponent,
+    ColComponent,
+    TooltipDirective,
+    FaIconComponent,
+    DowntimeIconComponent,
+    PermissionDirective,
+    AsyncPipe,
+    AcknowledgementIconComponent,
+    TranslocoPipe,
+    RouterLink,
+    XsButtonDirective,
+    ButtonGroupComponent,
+    EvcServicestatusToasterComponent,
+    FormsModule
+],
     templateUrl: './evc-tree.component.html',
     styleUrl: './evc-tree.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

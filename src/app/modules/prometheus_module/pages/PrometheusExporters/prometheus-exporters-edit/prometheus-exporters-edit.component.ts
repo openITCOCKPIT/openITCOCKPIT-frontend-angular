@@ -27,7 +27,7 @@ import {
 } from '@coreui/angular';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -41,35 +41,34 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
     selector: 'oitc-prometheus-exporters-edit',
     standalone: true,
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        FormDirective,
-        FormLoaderComponent,
-        FormsModule,
-        NgIf,
-        PaginatorModule,
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        FormControlDirective,
-        SelectComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        TrueFalseDirective,
-        FormCheckLabelDirective,
-        CardFooterComponent
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    FormDirective,
+    FormLoaderComponent,
+    FormsModule,
+    PaginatorModule,
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormControlDirective,
+    SelectComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    TrueFalseDirective,
+    FormCheckLabelDirective,
+    CardFooterComponent
+],
     templateUrl: './prometheus-exporters-edit.component.html',
     styleUrl: './prometheus-exporters-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

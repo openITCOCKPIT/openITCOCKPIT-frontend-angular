@@ -19,7 +19,7 @@ import {
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
 import { ProgressBar } from 'primeng/progressbar';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -39,32 +39,31 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 @Component({
     selector: 'oitc-backups-restore',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        AlertComponent,
-        CardFooterComponent,
-        ColComponent,
-        FormLabelDirective,
-        FormsModule,
-        NgIf,
-        OitcAlertComponent,
-        ProgressBar,
-        RequiredIconComponent,
-        RowComponent,
-        NgClass,
-        DeleteAllModalComponent,
-        ReloadInterfaceModalComponent,
-        SelectComponent
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    AlertComponent,
+    CardFooterComponent,
+    ColComponent,
+    FormLabelDirective,
+    FormsModule,
+    OitcAlertComponent,
+    ProgressBar,
+    RequiredIconComponent,
+    RowComponent,
+    NgClass,
+    DeleteAllModalComponent,
+    ReloadInterfaceModalComponent,
+    SelectComponent
+],
     templateUrl: './backups-restore.component.html',
     styleUrl: './backups-restore.component.css',
     providers: [

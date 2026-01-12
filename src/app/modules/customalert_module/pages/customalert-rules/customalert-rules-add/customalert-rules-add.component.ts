@@ -40,7 +40,7 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { NgIf } from '@angular/common';
+
 import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
@@ -76,7 +76,6 @@ import {
     FormControlDirective,
     CardFooterComponent,
     SelectComponent,
-    NgIf,
     RegexHelperTooltipComponent
 ],
     templateUrl: './customalert-rules-add.component.html',

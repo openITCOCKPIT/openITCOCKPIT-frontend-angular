@@ -37,7 +37,7 @@ import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -108,7 +108,6 @@ import { FormsModule } from '@angular/forms';
     MatSortHeader,
     NavComponent,
     NavItemComponent,
-    NgIf,
     NgSelectModule,
     NoRecordsComponent,
     PaginateOrScrollComponent,

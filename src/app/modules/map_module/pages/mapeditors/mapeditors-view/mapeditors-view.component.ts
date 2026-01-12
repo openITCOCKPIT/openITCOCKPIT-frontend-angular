@@ -25,7 +25,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { MapViewComponent } from '../../../components/map-view/map-view.component';
 import { SidebarService } from '../../../../../layouts/coreui/coreui-navbar/sidebar.service';
@@ -33,22 +33,21 @@ import { SidebarService } from '../../../../../layouts/coreui/coreui-navbar/side
 @Component({
     selector: 'oitc-mapeditors-view',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        BackButtonDirective,
-        CardBodyComponent,
-        RouterLink,
-        TranslocoDirective,
-        NgIf,
-        XsButtonDirective,
-        MapViewComponent,
-        NgClass
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    BackButtonDirective,
+    CardBodyComponent,
+    RouterLink,
+    TranslocoDirective,
+    XsButtonDirective,
+    MapViewComponent,
+    NgClass
+],
     templateUrl: './mapeditors-view.component.html',
     styleUrl: './mapeditors-view.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

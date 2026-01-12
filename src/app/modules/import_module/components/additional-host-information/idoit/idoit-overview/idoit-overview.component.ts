@@ -13,7 +13,7 @@ import {
   TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { OnlineOfflineComponent } from '../../online-offline/online-offline.component';
 import { PermissionDirective } from '../../../../../../permissions/permission.directive';
 import { IdoitStatus } from '../idoit.enum';
@@ -26,7 +26,6 @@ import { DependencyTreeComponent } from '../../../dependency-tree/dependency-tre
     ColComponent,
     RowComponent,
     FaIconComponent,
-    NgIf,
     OnlineOfflineComponent,
     CardComponent,
     CardHeaderComponent,
@@ -36,7 +35,6 @@ import { DependencyTreeComponent } from '../../../dependency-tree/dependency-tre
     PermissionDirective,
     CardBodyComponent,
     TableDirective,
-    NgForOf,
     DependencyTreeComponent,
     NgClass
 ],

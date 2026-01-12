@@ -26,7 +26,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { HostAddEditSuccessResponse, HostDnsLookup, HostPost } from '../../hosts/hosts.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
@@ -42,34 +42,33 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
 @Component({
     selector: 'oitc-wizards-wizard-host-configuration',
     imports: [
-        FaIconComponent,
-        TranslocoDirective,
-        RouterLink,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        CardBodyComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormsModule,
-        FormCheckLabelDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        NgIf,
-        AlertComponent,
-        FormControlDirective,
-        FormLabelDirective,
-        TranslocoPipe,
-        AsyncPipe,
-        LabelLinkComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TemplateDiffComponent,
-        BackButtonDirective,
-        BadgeOutlineComponent
-    ],
+    FaIconComponent,
+    TranslocoDirective,
+    RouterLink,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    CardBodyComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormsModule,
+    FormCheckLabelDirective,
+    RequiredIconComponent,
+    SelectComponent,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    AlertComponent,
+    FormControlDirective,
+    FormLabelDirective,
+    TranslocoPipe,
+    AsyncPipe,
+    LabelLinkComponent,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    TemplateDiffComponent,
+    BackButtonDirective,
+    BadgeOutlineComponent
+],
     templateUrl: './wizards-wizard-host-configuration.component.html',
     styleUrl: './wizards-wizard-host-configuration.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

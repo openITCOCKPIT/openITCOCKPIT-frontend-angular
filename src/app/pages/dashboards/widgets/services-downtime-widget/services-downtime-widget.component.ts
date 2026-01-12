@@ -28,7 +28,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgIf } from '@angular/common';
+
 import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-records.component';
 import { ScrollIndexComponent } from '../../../../layouts/coreui/paginator/scroll-index/scroll-index.component';
 import { SliderTimeComponent } from '../../../../components/slider-time/slider-time.component';
@@ -42,33 +42,32 @@ import { ServiceDowntimeWidgetParams, ServicesDowntimeWidgetConfig } from './ser
 @Component({
     selector: 'oitc-services-downtime-widget',
     imports: [
-        ColComponent,
-        ContainerComponent,
-        DowntimeSimpleIconComponent,
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        LabelLinkComponent,
-        MatSort,
-        MatSortHeader,
-        NgIf,
-        NoRecordsComponent,
-        RowComponent,
-        ScrollIndexComponent,
-        SliderTimeComponent,
-        TableDirective,
-        TableLoaderComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        TooltipDirective
-    ],
+    ColComponent,
+    ContainerComponent,
+    DowntimeSimpleIconComponent,
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    LabelLinkComponent,
+    MatSort,
+    MatSortHeader,
+    NoRecordsComponent,
+    RowComponent,
+    ScrollIndexComponent,
+    SliderTimeComponent,
+    TableDirective,
+    TableLoaderComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    TooltipDirective
+],
     templateUrl: './services-downtime-widget.component.html',
     styleUrl: './services-downtime-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

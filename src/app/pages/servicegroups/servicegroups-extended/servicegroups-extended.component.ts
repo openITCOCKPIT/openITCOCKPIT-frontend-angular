@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
@@ -110,7 +110,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     FormsModule,
     NavComponent,
     NavItemComponent,
-    NgIf,
     PaginatorModule,
     PermissionDirective,
     SelectComponent,
@@ -124,7 +123,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     ServiceResetChecktimeModalComponent,
     DebounceDirective,
     TableDirective,
-    NgForOf,
     TranslocoPipe,
     RowComponent,
     ColComponent,

@@ -14,7 +14,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { AgentConfig } from '../agentconfig.interface';
@@ -32,23 +32,22 @@ import { GenericValidationError } from '../../../generic-responses';
 @Component({
     selector: 'oitc-agentconnector-select-agent',
     imports: [
-        AgentconnectorWizardProgressbarComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        FaIconComponent,
-        NgIf,
-        PermissionDirective,
-        RowComponent,
-        TranslocoDirective,
-        RouterLink,
-        ProgressBarModule,
-        FormLabelDirective,
-        RequiredIconComponent,
-        SelectComponent
-    ],
+    AgentconnectorWizardProgressbarComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FaIconComponent,
+    PermissionDirective,
+    RowComponent,
+    TranslocoDirective,
+    RouterLink,
+    ProgressBarModule,
+    FormLabelDirective,
+    RequiredIconComponent,
+    SelectComponent
+],
     templateUrl: './agentconnector-select-agent.component.html',
     styleUrl: './agentconnector-select-agent.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

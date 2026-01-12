@@ -24,7 +24,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 
 
-import { KeyValuePipe, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 
 
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -44,34 +44,29 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 @Component({
     selector: 'oitc-systemsettings-index',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        NgForOf,
-        NgIf,
-        PermissionDirective,
-        TableDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        AlertComponent,
-        AlertHeadingDirective,
-        TooltipDirective,
-        KeyValuePipe,
-        FormSelectDirective,
-        NgSwitch,
-        NgSwitchCase,
-        NgSwitchMultiCasePipe,
-        NgSwitchDefault,
-        ReloadInterfaceModalComponent,
-        TableLoaderComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    PermissionDirective,
+    TableDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    AlertComponent,
+    AlertHeadingDirective,
+    TooltipDirective,
+    KeyValuePipe,
+    FormSelectDirective,
+    NgSwitchMultiCasePipe,
+    ReloadInterfaceModalComponent,
+    TableLoaderComponent
+],
     templateUrl: './systemsettings-index.component.html',
     styleUrl: './systemsettings-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

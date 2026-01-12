@@ -25,7 +25,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { RegistersService } from '../registers.service';
-import { NgIf } from '@angular/common';
+
 import { LicenseResponse } from '../registers.interface';
 import { CreditsComponent } from '../credits/credits.component';
 
@@ -52,7 +52,6 @@ import { CreditsComponent } from '../credits/credits.component';
     RequiredIconComponent,
     RowComponent,
     ColComponent,
-    NgIf,
     CreditsComponent
 ],
     templateUrl: './registers-index.component.html',

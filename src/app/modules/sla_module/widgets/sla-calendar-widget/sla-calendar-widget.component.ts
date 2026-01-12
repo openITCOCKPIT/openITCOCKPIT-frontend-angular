@@ -28,7 +28,7 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { CalendarDateDetails } from '../../../../pages/dashboards/widgets/calendar-widget/calendar-widget.interface';
 import { KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -40,29 +40,27 @@ import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-
 @Component({
     selector: 'oitc-sla-calendar-widget',
     imports: [
-        BadgeComponent,
-        BgColorDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        ColComponent,
-        NgForOf,
-        NgIf,
-        RowComponent,
-        TableDirective,
-        NgClass,
-        FaIconComponent,
-        TranslocoDirective,
-        AsyncPipe,
-        AlertComponent,
-        AlertHeadingDirective,
-        FormLabelDirective,
-        SelectComponent,
-        TranslocoPipe,
-        XsButtonDirective,
-        LabelLinkComponent
-    ],
+    BadgeComponent,
+    BgColorDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    ColComponent,
+    RowComponent,
+    TableDirective,
+    NgClass,
+    FaIconComponent,
+    TranslocoDirective,
+    AsyncPipe,
+    AlertComponent,
+    AlertHeadingDirective,
+    FormLabelDirective,
+    SelectComponent,
+    TranslocoPipe,
+    XsButtonDirective,
+    LabelLinkComponent
+],
     templateUrl: './sla-calendar-widget.component.html',
     styleUrl: './sla-calendar-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

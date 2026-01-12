@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf, SlicePipe } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgClass, SlicePipe } from '@angular/common';
 
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -43,10 +43,8 @@ import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-
     imports: [
     TranslocoDirective,
     SkeletonModule,
-    NgIf,
     ColComponent,
     FaIconComponent,
-    NgForOf,
     RowComponent,
     RouterLink,
     FormsModule,

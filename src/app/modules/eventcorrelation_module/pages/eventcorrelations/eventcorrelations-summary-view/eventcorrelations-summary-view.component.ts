@@ -14,7 +14,7 @@ import {
 } from '@coreui/angular';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -38,7 +38,6 @@ import { EvcTableComponent } from '../eventcorrelations-view/evc-table/evc-table
     FaIconComponent,
     NavComponent,
     NavItemComponent,
-    NgIf,
     PermissionDirective,
     RowComponent,
     TranslocoDirective,

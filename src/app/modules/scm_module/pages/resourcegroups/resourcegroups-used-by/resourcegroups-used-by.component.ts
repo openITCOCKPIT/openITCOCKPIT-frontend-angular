@@ -13,7 +13,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ResourcegroupsService } from '../resourcegroups.service';
 import { ResourcegroupWithRelations } from '../resourcegroups.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
@@ -26,26 +26,24 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
 @Component({
     selector: 'oitc-resourcegroups-used-by',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        NavComponent,
-        TranslocoDirective,
-        RouterLink,
-        NgIf,
-        NavItemComponent,
-        ContainerComponent,
-        NgForOf,
-        TableDirective,
-        AsyncPipe,
-        BackButtonDirective,
-        FormLoaderComponent,
-        PermissionDirective,
-        XsButtonDirective,
-        NoRecordsComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    TranslocoDirective,
+    RouterLink,
+    NavItemComponent,
+    ContainerComponent,
+    TableDirective,
+    AsyncPipe,
+    BackButtonDirective,
+    FormLoaderComponent,
+    PermissionDirective,
+    XsButtonDirective,
+    NoRecordsComponent
+],
     templateUrl: './resourcegroups-used-by.component.html',
     styleUrl: './resourcegroups-used-by.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -15,7 +15,7 @@ import {
     ChangelogIndex,
     DataUnserializedRaw
 } from '../changelogs.interface';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -24,12 +24,10 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'oitc-changelogs-entry',
     imports: [
-    NgIf,
     NgClass,
     PermissionDirective,
     TranslocoDirective,
     FaIconComponent,
-    NgForOf,
     RouterLink
 ],
     templateUrl: './changelogs-entry.component.html',

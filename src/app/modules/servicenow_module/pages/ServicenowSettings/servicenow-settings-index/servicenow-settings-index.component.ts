@@ -22,7 +22,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { RouterLink } from '@angular/router';
@@ -35,31 +35,30 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 @Component({
     selector: 'oitc-servicenow-settings-index',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NgIf,
-        PermissionDirective,
-        RequiredIconComponent,
-        RouterLink,
-        TranslocoDirective,
-        XsButtonDirective,
-        FormLoaderComponent,
-        FormControlDirective,
-        SelectComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        TrueFalseDirective,
-        FormCheckLabelDirective,
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    RouterLink,
+    TranslocoDirective,
+    XsButtonDirective,
+    FormLoaderComponent,
+    FormControlDirective,
+    SelectComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    TrueFalseDirective,
+    FormCheckLabelDirective
+],
     templateUrl: './servicenow-settings-index.component.html',
     styleUrl: './servicenow-settings-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -5,16 +5,15 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { QueryHandler } from './query-handler.interfaces';
 import { Subscription } from 'rxjs';
 import { QueryHandlerService } from './query-handler.service';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-query-handler-checker',
     imports: [
-        AlertComponent,
-        TranslocoDirective,
-        FaIconComponent,
-        NgIf
-    ],
+    AlertComponent,
+    TranslocoDirective,
+    FaIconComponent
+],
     templateUrl: './query-handler-checker.component.html',
     styleUrl: './query-handler-checker.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ServicePieChartComponent } from '../../../../components/charts/service-pie-chart/service-pie-chart.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -12,14 +12,13 @@ import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-
 @Component({
     selector: 'oitc-services-piechart-widget180',
     imports: [
-        AsyncPipe,
-        FaIconComponent,
-        NgIf,
-        ServicePieChartComponent,
-        TranslocoDirective,
-        RouterLink,
-        BlockLoaderComponent
-    ],
+    AsyncPipe,
+    FaIconComponent,
+    ServicePieChartComponent,
+    TranslocoDirective,
+    RouterLink,
+    BlockLoaderComponent
+],
     templateUrl: './services-piechart-widget180.component.html',
     styleUrl: './services-piechart-widget180.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

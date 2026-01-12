@@ -285,7 +285,7 @@ Check the terminal for any errors.
    version.
 
 ```
-npm install --save typescript@~5.5.3
+npm install --save typescript@~5.9.3
 ```
 
 ### How to Upgrade Font Awesome

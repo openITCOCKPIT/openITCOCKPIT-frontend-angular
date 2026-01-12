@@ -30,7 +30,7 @@ import {
     AutomapsViewParams,
     AutomapsViewRoot
 } from '../../../automaps/automaps.interface';
-import { NgIf } from '@angular/common';
+
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { FormsModule } from '@angular/forms';
 import { AutomapViewerComponent } from '../../../automaps/automaps-view/automap-viewer/automap-viewer.component';
@@ -40,22 +40,21 @@ import { SliderTimeComponent } from '../../../../components/slider-time/slider-t
 @Component({
     selector: 'oitc-automap-widget',
     imports: [
-        FormLabelDirective,
-        SelectComponent,
-        RequiredIconComponent,
-        XsButtonDirective,
-        FaIconComponent,
-        NgIf,
-        TranslocoDirective,
-        FormControlDirective,
-        FormsModule,
-        AutomapViewerComponent,
-        ColComponent,
-        RowComponent,
-        SliderTimeComponent,
-        TranslocoPipe,
-        TooltipDirective
-    ],
+    FormLabelDirective,
+    SelectComponent,
+    RequiredIconComponent,
+    XsButtonDirective,
+    FaIconComponent,
+    TranslocoDirective,
+    FormControlDirective,
+    FormsModule,
+    AutomapViewerComponent,
+    ColComponent,
+    RowComponent,
+    SliderTimeComponent,
+    TranslocoPipe,
+    TooltipDirective
+],
     templateUrl: './automap-widget.component.html',
     styleUrl: './automap-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

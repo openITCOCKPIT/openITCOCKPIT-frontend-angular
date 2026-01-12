@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core
 import { SummaryState } from '../../../hosts/summary_state.interface';
 import { BadgeComponent, TableDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf } from '@angular/common';
+
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
@@ -13,7 +13,6 @@ import { HostEntity } from '../../../hosts/hosts.interface';
     imports: [
     BadgeComponent,
     FaIconComponent,
-    NgForOf,
     PermissionDirective,
     TableDirective,
     TranslocoDirective,

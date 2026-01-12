@@ -1,31 +1,32 @@
 <c-row>
-    <c-col [xs]="12" [lg]="6">
-        <c-button-group role="group" class="flex-wrap">
-            <button
-                cButton
-                class="rounded-0"
-                color="primary"
-                *ngFor="let intervalArray of interval"
-                [ngClass]="{'active show': selectedInterval == intervalArray.interval}"
-                (click)="changeInterval(intervalArray.interval)"
-                [title]="intervalArray.long">
-                {{ intervalArray.short }}
-            </button>
-        </c-button-group>
-    </c-col>
-    <c-col [xs]="12" [lg]="6">
-        <c-input-group>
-            <input cFormControl type="number"
-                   [id]="id"
-                   [name]="name"
-                   [placeholder]="'Interval in seconds' | transloco"
-                   [(ngModel)]="selectedInterval"
-                   (ngModelChange)="updateInterval()">
-            <ng-content></ng-content>
-        </c-input-group>
-        <div class="help-block">
-            <oitc-human-time [seconds]="selectedInterval"></oitc-human-time>
-        </div>
-    </c-col>
+  <c-col [xs]="12" [lg]="6">
+    <c-button-group role="group" class="flex-wrap">
+      @for (intervalArray of interval; track intervalArray) {
+        <button
+          cButton
+          class="rounded-0"
+          color="primary"
+          [ngClass]="{'active show': selectedInterval == intervalArray.interval}"
+          (click)="changeInterval(intervalArray.interval)"
+          [title]="intervalArray.long">
+          {{ intervalArray.short }}
+        </button>
+      }
+    </c-button-group>
+  </c-col>
+  <c-col [xs]="12" [lg]="6">
+    <c-input-group>
+      <input cFormControl type="number"
+        [id]="id"
+        [name]="name"
+        [placeholder]="'Interval in seconds' | transloco"
+        [(ngModel)]="selectedInterval"
+        (ngModelChange)="updateInterval()">
+      <ng-content></ng-content>
+    </c-input-group>
+    <div class="help-block">
+      <oitc-human-time [seconds]="selectedInterval"></oitc-human-time>
+    </div>
+  </c-col>
 </c-row>
 

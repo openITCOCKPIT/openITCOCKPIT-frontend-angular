@@ -19,7 +19,7 @@ import {
   ModalTitleDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -40,7 +40,6 @@ import { RouterLink } from '@angular/router';
     ModalFooterComponent,
     ModalHeaderComponent,
     ModalTitleDirective,
-    NgForOf,
     TranslocoDirective,
     FormsModule,
     NgSelectModule,

@@ -1,91 +1,99 @@
 <ng-container *transloco="let t">
-    <div id="fullscreenDependencyTree">
-        <c-row *ngIf="showOnlineOffline">
-            <c-col [xs]="12">
-                <sup>
-                    <small>
-                        <oitc-online-offline [isOnline]="isOnline"></oitc-online-offline>
-                    </small>
-                </sup>
+  <div id="fullscreenDependencyTree">
+    @if (showOnlineOffline) {
+      <c-row>
+        <c-col [xs]="12">
+          <sup>
+            <small>
+              <oitc-online-offline [isOnline]="isOnline"></oitc-online-offline>
+            </small>
+          </sup>
+        </c-col>
+      </c-row>
+    }
+
+    @if (dependencyTree) {
+      <c-row>
+        <c-col [xs]="12">
+          <c-row class="fieldset-legend-border-bottom">
+            <c-col [xs]="12" [md]="6" [lg]="8" class="h6 p-2">
+              {{ t('Elements impacted by:') }}
+              <span class="fw-300 text-primary">
+                <i>{{ name }}</i>
+              </span>
             </c-col>
-        </c-row>
-
-        <c-row *ngIf="dependencyTree">
-            <c-col [xs]="12">
-
-                <c-row class="fieldset-legend-border-bottom">
-                    <c-col [xs]="12" [md]="6" [lg]="8" class="h6 p-2">
-                        {{ t('Elements impacted by:') }}
-                        <span class="fw-300 text-primary">
-                            <i>{{ name }}</i>
-                        </span>
-                    </c-col>
-                    <c-col [xs]="12" [md]="6" [lg]="4" class="text-end">
-                        <button cButton class="ripple" color="default"
-                                (click)="load()"
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                            {{ t('Refresh') }}
-                        </button>
-                        <button cButton class="ripple ms-1" color="success"
-                                (click)="toggleFullscreenMode()"
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'expand-arrows-alt']"
-                                     [title]="'Toggle full screen mode' |transloco"></fa-icon>
-                        </button>
-                    </c-col>
-                </c-row>
-
-
+            <c-col [xs]="12" [md]="6" [lg]="4" class="text-end">
+              <button cButton class="ripple" color="default"
+                (click)="load()"
+                size="xs">
+                <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                {{ t('Refresh') }}
+              </button>
+              <button cButton class="ripple ms-1" color="success"
+                (click)="toggleFullscreenMode()"
+                size="xs">
+                <fa-icon [icon]="['fas', 'expand-arrows-alt']"
+                [title]="'Toggle full screen mode' |transloco"></fa-icon>
+              </button>
             </c-col>
+          </c-row>
+        </c-col>
+      </c-row>
+    }
 
-        </c-row>
-
-        <c-row>
-            <c-col xs="12" *ngIf="showProgressbar">
-                <c-progress [value]="progress" class="m-3">{{ progress | number: '1.0-0' }}%</c-progress>
-            </c-col>
-            <c-col xs="12" id="dependencyTreeOverview"></c-col>
-        </c-row>
-
-
-        <c-toaster [placement]="'top-end'" class="p-3 toaster-min-width toaster-max-width" position="fixed">
-            <c-toast #toast="cToast"
-                     (timer)="onToastTimerChange($event)"
-                     (visibleChange)="onToastVisibleChange($event)"
-                     [visible]="toastVisible"
-                     [delay]="5000"
-                     class="align-items-center w-100">
-                <div class="d-flex">
-                    <c-toast-header>
-                        <c-progress thin>
-                            <c-progress-bar [value]="toastPercentage"></c-progress-bar>
-                        </c-progress>
-                    </c-toast-header>
-                    <c-toast-body class="w-100">
-                        <div *ngIf="hostSummaryState && selectedNode">
-                            <oitc-host-summary [hostSummaryStat]="hostSummaryState" [selectedNode]="selectedNode">
-                            </oitc-host-summary>
-                        </div>
-
-                        <div *ngIf="hostgroupSummeryState">
-                            <oitc-host-group-summary [hostgroupSummeryState]="hostgroupSummeryState"
-                                                     [selectedNode]="selectedNode"></oitc-host-group-summary>
-                        </div>
-
-                        <div *ngIf="!hostSummaryState && !hostgroupSummeryState">
-                            <oitc-not-in-monitoring [selectedNode]="selectedNode"></oitc-not-in-monitoring>
-                        </div>
+    <c-row>
+      @if (showProgressbar) {
+        <c-col xs="12">
+          <c-progress [value]="progress" class="m-3">{{ progress | number: '1.0-0' }}%</c-progress>
+        </c-col>
+      }
+      <c-col xs="12" id="dependencyTreeOverview"></c-col>
+    </c-row>
 
 
-                        <c-progress thin>
-                            <c-progress-bar [value]="toastPercentage"></c-progress-bar>
-                        </c-progress>
+    <c-toaster [placement]="'top-end'" class="p-3 toaster-min-width toaster-max-width" position="fixed">
+      <c-toast #toast="cToast"
+        (timer)="onToastTimerChange($event)"
+        (visibleChange)="onToastVisibleChange($event)"
+        [visible]="toastVisible"
+        [delay]="5000"
+        class="align-items-center w-100">
+        <div class="d-flex">
+          <c-toast-header>
+            <c-progress thin>
+              <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+            </c-progress>
+          </c-toast-header>
+          <c-toast-body class="w-100">
+            @if (hostSummaryState && selectedNode) {
+              <div>
+                <oitc-host-summary [hostSummaryStat]="hostSummaryState" [selectedNode]="selectedNode">
+                </oitc-host-summary>
+              </div>
+            }
 
-                    </c-toast-body>
-                </div>
-            </c-toast>
-        </c-toaster>
-    </div>
+            @if (hostgroupSummeryState) {
+              <div>
+                <oitc-host-group-summary [hostgroupSummeryState]="hostgroupSummeryState"
+                [selectedNode]="selectedNode"></oitc-host-group-summary>
+              </div>
+            }
+
+            @if (!hostSummaryState && !hostgroupSummeryState) {
+              <div>
+                <oitc-not-in-monitoring [selectedNode]="selectedNode"></oitc-not-in-monitoring>
+              </div>
+            }
+
+
+            <c-progress thin>
+              <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+            </c-progress>
+
+          </c-toast-body>
+        </div>
+      </c-toast>
+    </c-toaster>
+  </div>
 
 </ng-container>

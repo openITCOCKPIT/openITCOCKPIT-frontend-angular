@@ -14,7 +14,7 @@ import {
     TableDirective, TooltipDirective
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
-import { NgIf, NgFor, KeyValuePipe } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 import {
     DefaultAutoreportSettings,
     AllAutoreportSettings,
@@ -33,31 +33,29 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
 @Component({
     selector: 'oitc-autoreport-settings-index',
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        AlertComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        CardBodyComponent,
-        FormDirective,
-        FormsModule,
-        NgIf,
-        NgFor,
-        TableDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        TrueFalseDirective,
-        FormControlDirective,
-        TooltipDirective,
-        CardFooterComponent,
-        XsButtonDirective,
-        DebounceDirective,
-        FormFeedbackComponent,
-        FormErrorDirective
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    PermissionDirective,
+    RouterLink,
+    AlertComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    CardBodyComponent,
+    FormDirective,
+    FormsModule,
+    TableDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    TrueFalseDirective,
+    FormControlDirective,
+    TooltipDirective,
+    CardFooterComponent,
+    XsButtonDirective,
+    DebounceDirective,
+    FormFeedbackComponent,
+    FormErrorDirective
+],
     templateUrl: './autoreport-settings-index.component.html',
     styleUrl: './autoreport-settings-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

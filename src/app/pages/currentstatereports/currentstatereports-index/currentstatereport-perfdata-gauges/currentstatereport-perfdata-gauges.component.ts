@@ -3,16 +3,15 @@ import { CurrentStateReportPerfdataArrayValue } from '../../currentstatereports.
 import {
     CurrentstatereportPerfdataGaugeComponent
 } from '../currentstatereport-perfdata-gauge/currentstatereport-perfdata-gauge.component';
-import { NgIf } from '@angular/common';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-currentstatereport-perfdata-gauges',
     imports: [
-        CurrentstatereportPerfdataGaugeComponent,
-        NgIf,
-        FaIconComponent
-    ],
+    CurrentstatereportPerfdataGaugeComponent,
+    FaIconComponent
+],
     templateUrl: './currentstatereport-perfdata-gauges.component.html',
     styleUrl: './currentstatereport-perfdata-gauges.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
 
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
     ColComponent,
     ProgressBarComponent,
@@ -25,24 +25,22 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'oitc-openstreetmap-toaster',
     imports: [
-        NgIf,
-        NgFor,
-        ProgressBarComponent,
-        ProgressComponent,
-        ToastBodyComponent,
-        ToastComponent,
-        ToastHeaderComponent,
-        ToasterComponent,
-        FaIconComponent,
-        TranslocoDirective,
-        SkeletonModule,
-        RowComponent,
-        ColComponent,
-        LabelLinkComponent,
-        XsButtonDirective,
-        AsyncPipe,
-        RouterLink
-    ],
+    ProgressBarComponent,
+    ProgressComponent,
+    ToastBodyComponent,
+    ToastComponent,
+    ToastHeaderComponent,
+    ToasterComponent,
+    FaIconComponent,
+    TranslocoDirective,
+    SkeletonModule,
+    RowComponent,
+    ColComponent,
+    LabelLinkComponent,
+    XsButtonDirective,
+    AsyncPipe,
+    RouterLink
+],
     templateUrl: './openstreetmap-toaster.component.html',
     styleUrl: './openstreetmap-toaster.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -28,7 +28,7 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -41,38 +41,36 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'oitc-satellites-tasks',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardTitleDirective,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        MatSort,
-        MatSortHeader,
-        MultiSelectComponent,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NoRecordsComponent,
-        PaginateOrScrollComponent,
-        PermissionDirective,
-        RowComponent,
-        TableDirective,
-        TableLoaderComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        BadgeComponent,
-        CardHeaderComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DebounceDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    MatSort,
+    MatSortHeader,
+    MultiSelectComponent,
+    NavComponent,
+    NavItemComponent,
+    NoRecordsComponent,
+    PaginateOrScrollComponent,
+    PermissionDirective,
+    RowComponent,
+    TableDirective,
+    TableLoaderComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    RouterLink,
+    BadgeComponent,
+    CardHeaderComponent
+],
     templateUrl: './satellites-tasks.component.html',
     styleUrl: './satellites-tasks.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

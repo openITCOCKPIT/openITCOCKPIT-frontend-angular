@@ -19,7 +19,6 @@ import { MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primeng/multisel
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { TranslocoService } from '@jsverse/transloco';
 import { debounceTime } from 'rxjs/operators';
-import { AnimationEvent } from '@angular/animations';
 
 import { Select } from 'primeng/select';
 
@@ -276,6 +275,8 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
      * @param event
      */
     public onShow(event: AnimationEvent) {
+        console.log(event);
+        /*
         event.element.parentElement.style.width = event.element.parentElement.style.minWidth;
 
         // 🩹
@@ -289,7 +290,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
                 const selectBoxPosition = this.selectOptgroup.el.nativeElement.getBoundingClientRect();
                 event.element.parentElement.style.left = selectBoxPosition.x + 'px';
             }
-        }
+        }*/
     }
 
     protected readonly String = String;

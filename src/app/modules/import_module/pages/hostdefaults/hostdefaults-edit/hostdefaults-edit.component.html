@@ -1,748 +1,760 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                {{ t('Import Module') }}
-            </li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['importmodule','HostDefaults', 'index']"
-                   [routerLink]="['/', 'import_module', 'HostDefaults', 'index']">
-                    <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
-                    {{ t('Host defaults') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                {{ t('Edit host defaults') }}
-            </li>
-        </ol>
-    </nav>
-    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
-    <form cForm (ngSubmit)="submit()" autocomplete="off" *ngIf="post">
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('Edit host defaults:') }}
-                    <small class="fw-300">
-                        {{ post.name }}
-                    </small>
-                </h5>
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['import_module', 'HostDefaults', 'index']" cButton class="ripple"
-                                color="default"
-                                oitcBackButton
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                            {{ t('Back') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-            </c-card-header>
-            <c-card-body>
-                <oitc-alert *ngIf="showRootAlert"
-                            color="warning"
-                            baseIcon="circle"
-                            [icon]="['fas', 'exclamation-triangle']"
-                            [errorHeadline]="'/root container selected!'"
-                            [errorText]="'Choosing a tenant container is recommended for later permission purposes'">
-                </oitc-alert>
-
-                <div class="mb-3">
-                    <label cLabel for="container">
-                        {{ t('Container') }}
-                        <oitc-required-icon></oitc-required-icon>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a>
+      </li>
+      <li class="breadcrumb-item">
+        <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+        {{ t('Import Module') }}
+      </li>
+      <li class="breadcrumb-item">
+        <a *oitcPermission="['importmodule','HostDefaults', 'index']"
+          [routerLink]="['/', 'import_module', 'HostDefaults', 'index']">
+          <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+          {{ t('Host defaults') }}
+        </a>
+      </li>
+      <li aria-current="page" class="breadcrumb-item active">
+        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+        {{ t('Edit host defaults') }}
+      </li>
+    </ol>
+  </nav>
+  <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
+  @if (post) {
+    <form cForm (ngSubmit)="submit()" autocomplete="off">
+      <c-card class="mb-3">
+        <c-card-header>
+          <h5 cCardTitle>{{ t('Edit host defaults:') }}
+            <small class="fw-300">
+              {{ post.name }}
+            </small>
+          </h5>
+          <c-nav class="card-toolbar card-header-pills">
+            <c-nav-item class="px-1">
+              <button [fallbackUrl]="['import_module', 'HostDefaults', 'index']" cButton class="ripple"
+                color="default"
+                oitcBackButton
+                size="xs">
+                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                {{ t('Back') }}
+              </button>
+            </c-nav-item>
+          </c-nav>
+        </c-card-header>
+        <c-card-body>
+          @if (showRootAlert) {
+            <oitc-alert
+              color="warning"
+              baseIcon="circle"
+              [icon]="['fas', 'exclamation-triangle']"
+              [errorHeadline]="'/root container selected!'"
+              [errorText]="'Choosing a tenant container is recommended for later permission purposes'">
+            </oitc-alert>
+          }
+          <div class="mb-3">
+            <label cLabel for="container">
+              {{ t('Container') }}
+              <oitc-required-icon></oitc-required-icon>
+            </label>
+            <oitc-select
+              name="container"
+              id="container"
+              optionValue="key"
+              optionLabel="value"
+              [options]="containers"
+              [(ngModel)]="post.container_id"
+              [debounce]="true"
+              (onChange)="onContainerChange()">
+            </oitc-select>
+            @if (!post.container_id) {
+              <div class="text-warning-glow pt-1">
+                {{ t('Please select a container.') }}
+              </div>
+            }
+            @if (post.container_id === ROOT_CONTAINER) {
+              <div
+                class="help-block text-warning text-warning-glow">
+                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                {{ t('Hosts in /root can\'t be moved to other containers later') }}
+              </div>
+            }
+            <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+          </div>
+          <div class="mb-3">
+            <label cLabel for="HostdefaultName">
+              {{ t('Name') }}
+              <oitc-required-icon></oitc-required-icon>
+            </label>
+            <input cFormControl id="HostdefaultName" required type="text"
+              name="name"
+              [(ngModel)]="post.name"
+              oitcFormError [errors]="errors" errorField="name">
+            <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+          </div>
+          <div class="mb-3">
+            <label cLabel for="HostdefaultDescription">
+              {{ t('Description') }}
+            </label>
+            <input cFormControl id="HostdefaultDescription" required type="text"
+              name="description"
+              [(ngModel)]="post.description">
+          </div>
+          <c-container
+            [fluid]="true" class="shadow-sm px-2 pb-4 mb-4 bg-body rounded">
+            <fieldset>
+              <legend class="small fieldset-legend-border-bottom">
+                <h4>
+                  <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                  {{ t('Host details ') }}
+                </h4>
+                <div class="help-block">
+                  {{ t('Predefined host settings that are automatically assigned when hosts are imported.') }}
+                </div>
+              </legend>
+              <c-row>
+                <c-col>
+                  <div class="mb-3">
+                    <label cLabel for="host_container">
+                      {{ t('Host container') }}
+                      <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
-                        name="container"
-                        id="container"
+                      name="host_container"
+                      id="host_container"
+                      optionValue="key"
+                      optionLabel="value"
+                      [disabled]="true"
+                      [options]="containers"
+                      placeholder="{{ t('Will be automatically selected') }}"
+                      [(ngModel)]="post.container_id">
+                    </oitc-select>
+                  </div>
+                  <div class="mb-3">
+                    <label cLabel for="HostTemplate">
+                      <oitc-label-link
+                        [objectId]="post.hosttemplate_id"
+                        [route]="'/hosttemplates/edit'"
+                        [permissions]="'hosttemplates.edit'">
+                        {{ t('Host template') }}
+                        <oitc-required-icon></oitc-required-icon>
+                      </oitc-label-link>
+                    </label>
+                    <oitc-select
+                      name="hosttemplate"
+                      id="HostTemplate"
+                      optionValue="key"
+                      optionLabel="value"
+                      placeholder="{{ t('Please choose') }}"
+                      [options]="hosttemplates"
+                      [(ngModel)]="post.hosttemplate_id"
+                      oitcFormError [errors]="errors" errorField="hosttemplates">
+                    </oitc-select>
+                    @if (!post.hosttemplate_id) {
+                      <div class="text-warning-glow pt-1">
+                        {{ t('Please select a host template.') }}
+                      </div>
+                    }
+                    <oitc-form-feedback [errors]="errors"
+                    errorField="hosttemplate_id"></oitc-form-feedback>
+                  </div>
+                  <div class="mb-3">
+                    <label cLabel for="HostSharingContainer">
+                      {{ t('Shared containers') }}
+                    </label>
+                    <oitc-multi-select
+                      name="HostSharingContainer"
+                      id="HostSharingContainer"
+                      optionValue="key"
+                      optionLabel="value"
+                      [(ngModel)]="post.hostdefaults_to_containers_sharing._ids"
+                      [options]="sharingContainers"
+                      oitcFormError [errors]="errors" errorField="hosts_to_containers_sharing">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="hosts_to_containers_sharing">
+                    </oitc-form-feedback>
+                  </div>
+                  @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
+                    <div class="mb-3">
+                      <label cLabel for="SatellitesSelect">
+                        <oitc-label-link
+                          [objectId]="post.satellite_id"
+                          [route]="'/distribute_module/satellites/edit'"
+                          [permissions]="'DistributeModule.satellites.edit'">
+                          {{ t('Satellite') }}
+                        </oitc-label-link>
+                      </label>
+                      <oitc-select
+                        name="SatellitesSelect"
+                        id="SatellitesSelect"
                         optionValue="key"
                         optionLabel="value"
-                        [options]="containers"
-                        [(ngModel)]="post.container_id"
-                        [debounce]="true"
-                        (onChange)="onContainerChange()">
-                    </oitc-select>
-                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
+                        [(ngModel)]="post.satellite_id"
+                        [options]="satellites"
+                        oitcFormError [errors]="errors" errorField="satellite_id">
+                      </oitc-select>
+                      <oitc-form-feedback [errors]="errors"
+                      errorField="satellite_id"></oitc-form-feedback>
                     </div>
-                    <div *ngIf="post.container_id === ROOT_CONTAINER"
-                         class="help-block text-warning text-warning-glow">
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                        {{ t('Hosts in /root can\'t be moved to other containers later') }}
+                  }
+                </c-col>
+              </c-row>
+            </fieldset>
+          </c-container>
+          <!-- Service templates -->
+          <c-container
+            [fluid]="true" class="shadow-sm mt-2 pb-2 bg-body rounded">
+            <fieldset>
+              <legend class="small fieldset-legend-border-bottom mb-3">
+                <h4>
+                  <div class="icon-stack">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <i class="fas fa-font fa-xs text-primary cornered cornered-lr"></i>
+                  </div>
+                  {{ t('Service templates matches') }}
+                  <span class="italic text-info">{{ t(' (optional):') }}</span>
+                </h4>
+                <div class="help-block">
+                  {{ t('If the match is successful, these service templates are assigned to the imported hosts.') }}
+                </div>
+                @if (errors_exists_matches_servicetemplates) {
+                  <div class="text-danger">
+                    {{ t('Do not enter empty matches') }}
+                  </div>
+                }
+                @if (servicetemplates.length === 0 && post.container_id) {
+                  <div class="alert border-faded bg-transparent text-info"
+                    >
+                    <div class="d-flex align-items-center">
+                      <div class="alert-icon me-2">
+                        <span class="icon-stack icon-stack-md">
+                          <i class="base-circle icon-stack-3x text-info"></i>
+                          <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                        </span>
+                      </div>
+                      <div class="flex-1">
+                        <span class="h5 text-info">
+                          {{ t('No service templates are defined!') }}
+                        </span>
+                        <br>
+                          <div>
+                            {{ t('Please create at least one "Service template"') }}
+                          </div>
+                        </div>
+                        <div class="ms-2">
+                          <a *oitcPermission="['servicetemplates', 'index']"
+                            [routerLink]="['/', 'servicetemplates', 'index']"
+                            class="btn btn-outline-info ripple">
+                            <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                            {{ t('Go to "Service templates"') }}
+                          </a>
+                        </div>
+                      </div>
                     </div>
-                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-                </div>
-                <div class="mb-3">
-                    <label cLabel for="HostdefaultName">
-                        {{ t('Name') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="HostdefaultName" required type="text"
-                           name="name"
-                           [(ngModel)]="post.name"
-                           oitcFormError [errors]="errors" errorField="name">
-                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
-                </div>
-                <div class="mb-3">
-                    <label cLabel for="HostdefaultDescription">
-                        {{ t('Description') }}
-                    </label>
-                    <input cFormControl id="HostdefaultDescription" required type="text"
-                           name="description"
-                           [(ngModel)]="post.description">
-                </div>
-
-                <c-container
-                    [fluid]="true" class="shadow-sm px-2 pb-4 mb-4 bg-body rounded">
-                    <fieldset>
-                        <legend class="small fieldset-legend-border-bottom">
-                            <h4>
-                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                {{ t('Host details ') }}
-                            </h4>
-                            <div class="help-block">
-                                {{ t('Predefined host settings that are automatically assigned when hosts are imported.') }}
+                  }
+                </legend>
+                <hr class="border-bottom border-opacity-25 border-dashed">
+                @for (match of post.hostdefaults_to_servicetemplates; track $index) {
+                  <c-row class="mb-2">
+                    <c-col [xs]="12" [md]="12" [lg]="2">
+                      <c-input-group>
+                        <span cInputGroupText class="bg-primary text-white">
+                          <fa-icon [icon]="['fas', 'equals']"></fa-icon>
+                        </span>
+                        <oitc-select
+                          class="flex-1"
+                          name="hd_field_st_match_{{$index}}"
+                          id="hd_field_st_match_{{$index}}"
+                          optionValue="key"
+                          optionLabel="value"
+                          [options]="matchFields"
+                          [(ngModel)]="post.hostdefaults_to_servicetemplates[$index].field"
+                          [showClear]="false">
+                        </oitc-select>
+                      </c-input-group>
+                      <div class="help-block">
+                        {{ t('Field to match') }}
+                      </div>
+                    </c-col>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                      <c-input-group>
+                        <span cInputGroupText class="bg-info text-white">
+                          <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        </span>
+                        <input type="text" cFormControl
+                          name="hd_regex_st{{$index}}"
+                          id="hd_regex_st{{$index}}"
+                          oitcDebounce
+                          placeholder="{{ t('RegEx') }}"
+                          [(ngModel)]="post.hostdefaults_to_servicetemplates[$index].regex"
+                          oitcFormError [errors]="errors"
+                          errorField="hostdefaults_to_servicetemplates.{{$index}}.regex"
+                          />
+                        <span cInputGroupText>
+                          <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
+                        </span>
+                      </c-input-group>
+                      <oitc-form-feedback [errors]="errors"
+                      errorField="hostdefaults_to_servicetemplates.{{$index}}.regex"></oitc-form-feedback>
+                      <div class="help-block">
+                        {{ t('RegEx that needs to match') }}
+                      </div>
+                    </c-col>
+                    <c-col [xs]="12" [md]="12" [lg]="4">
+                      <c-input-group>
+                        <span cInputGroupText class="bg-default">
+                          <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                        </span>
+                        <oitc-select
+                          class="flex-1"
+                          name="hd_field_st_{{$index}}"
+                          id="hd_field_st_{{$index}}"
+                          optionValue="key"
+                          optionLabel="value"
+                          [options]="servicetemplates"
+                          [(ngModel)]="post.hostdefaults_to_servicetemplates[$index].servicetemplate_id"
+                          [showClear]="false"
+                          oitcFormError [errors]="errors"
+                          errorField="hostdefaults_to_servicetemplates.{{$index}}.servicetemplate_id">
+                        </oitc-select>
+                      </c-input-group>
+                      <oitc-form-feedback [errors]="errors"
+                      errorField="hostdefaults_to_servicetemplates.{{$index}}.servicetemplate_id"></oitc-form-feedback>
+                      <div class="help-block">
+                        {{ t('Service template to assign on match') }}
+                      </div>
+                    </c-col>
+                    <c-col [xs]="12" [md]="12" [lg]="1">
+                      <button class="btn btn-danger ripple waves-effect waves-themed"
+                        type="button"
+                        (click)="removeMatchServicetemplate($index)">
+                        <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
+                      </button>
+                    </c-col>
+                  </c-row>
+                }
+                <c-row>
+                  <c-col>
+                  </c-col>
+                  <c-col class="text-end">
+                    @if (servicetemplates.length > 0) {
+                      <button cButton class="ripple" color="success"
+                        type="button"
+                        [disabled]="!servicetemplates.length"
+                        (click)="addMatchServicetemplate()">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('Add') }}
+                      </button>
+                    }
+                  </c-col>
+                </c-row>
+              </fieldset>
+            </c-container>
+            <!-- Service template groups -->
+            <c-container
+              [fluid]="true" class="shadow-sm mt-2 pb-2 bg-body rounded">
+              <fieldset>
+                <legend class="small fieldset-legend-border-bottom mb-3">
+                  <h4>
+                    <div class="icon-stack">
+                      <i class="fa-solid fa-object-group"></i>
+                      <i class="fas fa-font fa-xs text-primary cornered cornered-lr"></i>
+                    </div>
+                    {{ t('Service template groups matches') }}
+                    <span class="italic text-info">{{ t(' (optional):') }}</span>
+                  </h4>
+                  <div class="help-block">
+                    {{ t('If the match is successful, these service template groups are assigned to the imported hosts.') }}
+                  </div>
+                  @if (servicetemplategroups.length === 0 && post.container_id) {
+                    <div class="alert border-faded bg-transparent text-info"
+                      >
+                      <div class="d-flex align-items-center">
+                        <div class="alert-icon me-2">
+                          <span class="icon-stack icon-stack-md">
+                            <i class="base-circle icon-stack-3x text-info"></i>
+                            <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                          </span>
+                        </div>
+                        <div class="flex-1">
+                          <span class="h5 text-info">
+                            {{ t('No service template groups are defined') }}
+                          </span>
+                          <br>
+                            <div>
+                              {{ t('Please create at least one "Service template groups"') }}
                             </div>
-                        </legend>
-                        <c-row>
-                            <c-col>
-                                <div class="mb-3">
-                                    <label cLabel for="host_container">
-                                        {{ t('Host container') }}
-                                        <oitc-required-icon></oitc-required-icon>
-                                    </label>
-                                    <oitc-select
-                                        name="host_container"
-                                        id="host_container"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        [disabled]="true"
-                                        [options]="containers"
-                                        placeholder="{{ t('Will be automatically selected') }}"
-                                        [(ngModel)]="post.container_id">
-                                    </oitc-select>
-                                </div>
-                                <div class="mb-3">
-                                    <label cLabel for="HostTemplate">
-                                        <oitc-label-link
-                                            [objectId]="post.hosttemplate_id"
-                                            [route]="'/hosttemplates/edit'"
-                                            [permissions]="'hosttemplates.edit'">
-                                            {{ t('Host template') }}
-                                            <oitc-required-icon></oitc-required-icon>
-                                        </oitc-label-link>
-                                    </label>
-                                    <oitc-select
-                                        name="hosttemplate"
-                                        id="HostTemplate"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        placeholder="{{ t('Please choose') }}"
-                                        [options]="hosttemplates"
-                                        [(ngModel)]="post.hosttemplate_id"
-                                        oitcFormError [errors]="errors" errorField="hosttemplates">
-                                    </oitc-select>
-                                    <div *ngIf="!post.hosttemplate_id" class="text-warning-glow pt-1">
-                                        {{ t('Please select a host template.') }}
-                                    </div>
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="hosttemplate_id"></oitc-form-feedback>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label cLabel for="HostSharingContainer">
-                                        {{ t('Shared containers') }}
-                                    </label>
-
-                                    <oitc-multi-select
-                                        name="HostSharingContainer"
-                                        id="HostSharingContainer"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        [(ngModel)]="post.hostdefaults_to_containers_sharing._ids"
-                                        [options]="sharingContainers"
-                                        oitcFormError [errors]="errors" errorField="hosts_to_containers_sharing">
-                                    </oitc-multi-select>
-
-                                    <oitc-form-feedback [errors]="errors" errorField="hosts_to_containers_sharing">
-                                    </oitc-form-feedback>
-                                </div>
-                                @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
-                                    <div class="mb-3">
-                                        <label cLabel for="SatellitesSelect">
-                                            <oitc-label-link
-                                                [objectId]="post.satellite_id"
-                                                [route]="'/distribute_module/satellites/edit'"
-                                                [permissions]="'DistributeModule.satellites.edit'">
-                                                {{ t('Satellite') }}
-                                            </oitc-label-link>
-                                        </label>
-
-                                        <oitc-select
-                                            name="SatellitesSelect"
-                                            id="SatellitesSelect"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [(ngModel)]="post.satellite_id"
-                                            [options]="satellites"
-                                            oitcFormError [errors]="errors" errorField="satellite_id">
-                                        </oitc-select>
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="satellite_id"></oitc-form-feedback>
-                                    </div>
-                                }
-                            </c-col>
-                        </c-row>
-                    </fieldset>
-                </c-container>
-                <!-- Service templates -->
-                <c-container
-                    [fluid]="true" class="shadow-sm mt-2 pb-2 bg-body rounded">
-                    <fieldset>
-                        <legend class="small fieldset-legend-border-bottom mb-3">
-                            <h4>
-                                <div class="icon-stack">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    <i class="fas fa-font fa-xs text-primary cornered cornered-lr"></i>
-                                </div>
-                                {{ t('Service templates matches') }}
-                                <span class="italic text-info">{{ t(' (optional):') }}</span>
-                            </h4>
-                            <div class="help-block">
-                                {{ t('If the match is successful, these service templates are assigned to the imported hosts.') }}
+                          </div>
+                          <div class="ms-2">
+                            <a *oitcPermission="['servicetemplategroups', 'index']"
+                              [routerLink]="['/', 'servicetemplategroups', 'index']"
+                              class="btn btn-outline-info ripple">
+                              <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                              {{ t('Go to "Service template groups"') }}
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </legend>
+                  <hr class="border-bottom border-opacity-25 border-dashed">
+                  @for (match of post.hostdefaults_to_servicetemplategroups; track $index) {
+                    <c-row class="mb-2">
+                      <c-col [xs]="12" [md]="12" [lg]="2">
+                        <c-input-group>
+                          <span cInputGroupText class="bg-primary text-white">
+                            <fa-icon [icon]="['fas', 'equals']"></fa-icon>
+                          </span>
+                          <oitc-select
+                            class="flex-1"
+                            name="hd_field_stg_match_{{$index}}"
+                            id="hd_field_stg_match_{{$index}}"
+                            optionValue="key"
+                            optionLabel="value"
+                            [options]="matchFields"
+                            [(ngModel)]="post.hostdefaults_to_servicetemplategroups[$index].field"
+                            [showClear]="false">
+                          </oitc-select>
+                        </c-input-group>
+                        <div class="help-block">
+                          {{ t('Field to match') }}
+                        </div>
+                      </c-col>
+                      <c-col [xs]="12" [md]="12" [lg]="4">
+                        <c-input-group>
+                          <span cInputGroupText class="bg-info text-white">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                          </span>
+                          <input type="text" cFormControl
+                            name="hd_regex_stg_{{$index}}"
+                            id="hd_regex_stg_{{$index}}"
+                            oitcDebounce
+                            placeholder="{{ t('RegEx') }}"
+                            [(ngModel)]="post.hostdefaults_to_servicetemplategroups[$index].regex"
+                            oitcFormError [errors]="errors"
+                            errorField="hostdefaults_to_servicetemplategroups.{{$index}}.regex"
+                            />
+                          <span cInputGroupText>
+                            <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
+                          </span>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors"
+                        errorField="hostdefaults_to_servicetemplategroups.{{$index}}.regex"></oitc-form-feedback>
+                        <div class="help-block">
+                          {{ t('RegEx that needs to match') }}
+                        </div>
+                      </c-col>
+                      <c-col [xs]="12" [md]="12" [lg]="4">
+                        <c-input-group>
+                          <span cInputGroupText class="bg-default">
+                            <fa-icon [icon]="['fas', 'object-group']"></fa-icon>
+                          </span>
+                          <oitc-select
+                            class="flex-1"
+                            name="hd_field_stg_{{$index}}"
+                            id="hd_field_stg_{{$index}}"
+                            optionValue="key"
+                            optionLabel="value"
+                            [options]="servicetemplategroups"
+                            [(ngModel)]="post.hostdefaults_to_servicetemplategroups[$index].servicetemplategroup_id"
+                            [showClear]="false"
+                            oitcFormError [errors]="errors"
+                            errorField="hostdefaults_to_servicetemplategroups.{{$index}}.servicetemplategroup_id">
+                          </oitc-select>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors"
+                        errorField="hostdefaults_to_servicetemplategroups.{{$index}}.servicetemplategroup_id"></oitc-form-feedback>
+                        <div class="help-block">
+                          {{ t('Service template group to assign on match') }}
+                        </div>
+                      </c-col>
+                      <c-col [xs]="12" [md]="12" [lg]="1">
+                        <button class="btn btn-danger ripple waves-effect waves-themed"
+                          type="button"
+                          (click)="removeMatchServicetemplategroup($index)">
+                          <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
+                        </button>
+                      </c-col>
+                    </c-row>
+                  }
+                  <c-row>
+                    <c-col class="text-end">
+                      @if (servicetemplategroups.length > 0) {
+                        <button cButton class="ripple" color="success"
+                          type="button"
+                          [disabled]="!servicetemplategroups.length"
+                          (click)="addMatchServicetemplategroup()">
+                          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                          {{ t('Add') }}
+                        </button>
+                      }
+                    </c-col>
+                  </c-row>
+                </fieldset>
+              </c-container>
+              <!-- Agent Checks -->
+              <c-container
+                [fluid]="true" class="shadow-sm mt-2 pb-2 bg-body rounded">
+                <fieldset>
+                  <legend class="small fieldset-legend-border-bottom mb-3">
+                    <h4>
+                      <div class="icon-stack">
+                        <i class="fa-solid fa-user-secret"></i>
+                        <i class="fas fa-cogs fa-xs text-primary cornered cornered-lr"></i>
+                      </div>
+                      {{ t('Agent checks matches') }}
+                      <span class="italic text-info">{{ t(' (optional):') }}</span>
+                    </h4>
+                    <div class="help-block">
+                      {{ t('If the match is successful, these agent checks are assigned to the imported hosts.') }}
+                    </div>
+                    @if (agentchecks.length === 0 && post.container_id) {
+                      <div class="alert border-faded bg-transparent text-info"
+                        >
+                        <div class="d-flex align-items-center">
+                          <div class="alert-icon me-2">
+                            <span class="icon-stack icon-stack-md">
+                              <i class="base-circle icon-stack-3x text-info"></i>
+                              <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                            </span>
+                          </div>
+                          <div class="flex-1">
+                            <span class="h5 text-info">
+                              {{ t('No agent checks are defined') }}
+                            </span>
+                            <br>
+                              <div>
+                                {{ t('Please create at least one "Agent check"') }}
+                              </div>
                             </div>
-                            <div class="text-danger" *ngIf="errors_exists_matches_servicetemplates">
-                                {{ t('Do not enter empty matches') }}
+                            <div class="ms-2">
+                              <a *oitcPermission="['agentchecks', 'index']"
+                                [routerLink]="['/', 'agentchecks', 'index']"
+                                class="btn btn-outline-info ripple">
+                                <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                                {{ t('Go to "Agent checks"') }}
+                              </a>
                             </div>
-
-                            <div class="alert border-faded bg-transparent text-info"
-                                 *ngIf="servicetemplates.length === 0 && post.container_id">
-                                <div class="d-flex align-items-center">
-                                    <div class="alert-icon me-2">
-                                        <span class="icon-stack icon-stack-md">
-                                            <i class="base-circle icon-stack-3x text-info"></i>
-                                            <i class="fas fa-exclamation icon-stack-1x text-white"></i>
-                                        </span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <span class="h5 text-info">
-                                            {{ t('No service templates are defined!') }}
-                                        </span>
-                                        <br>
-                                        <div>
-                                            {{ t('Please create at least one "Service template"') }}
-                                        </div>
-                                    </div>
-                                    <div class="ms-2">
-                                        <a *oitcPermission="['servicetemplates', 'index']"
-                                           [routerLink]="['/', 'servicetemplates', 'index']"
-                                           class="btn btn-outline-info ripple">
-                                            <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
-                                            {{ t('Go to "Service templates"') }}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </legend>
-                        <hr class="border-bottom border-opacity-25 border-dashed">
-                        @for (match of post.hostdefaults_to_servicetemplates; track $index) {
-                            <c-row class="mb-2">
-                                <c-col [xs]="12" [md]="12" [lg]="2">
-                                    <c-input-group>
-                                        <span cInputGroupText class="bg-primary text-white">
-                                            <fa-icon [icon]="['fas', 'equals']"></fa-icon>
-                                        </span>
-                                        <oitc-select
-                                            class="flex-1"
-                                            name="hd_field_st_match_{{$index}}"
-                                            id="hd_field_st_match_{{$index}}"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [options]="matchFields"
-                                            [(ngModel)]="post.hostdefaults_to_servicetemplates[$index].field"
-                                            [showClear]="false">
-                                        </oitc-select>
-                                    </c-input-group>
-                                    <div class="help-block">
-                                        {{ t('Field to match') }}
-                                    </div>
-                                </c-col>
-                                <c-col [xs]="12" [md]="12" [lg]="4">
-                                    <c-input-group>
-                                        <span cInputGroupText class="bg-info text-white">
-                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                        </span>
-                                        <input type="text" cFormControl
-                                               name="hd_regex_st{{$index}}"
-                                               id="hd_regex_st{{$index}}"
-                                               oitcDebounce
-                                               placeholder="{{ t('RegEx') }}"
-                                               [(ngModel)]="post.hostdefaults_to_servicetemplates[$index].regex"
-                                               oitcFormError [errors]="errors"
-                                               errorField="hostdefaults_to_servicetemplates.{{$index}}.regex"
-                                        />
-                                        <span cInputGroupText>
-                                            <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
-                                        </span>
-                                    </c-input-group>
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="hostdefaults_to_servicetemplates.{{$index}}.regex"></oitc-form-feedback>
-                                    <div class="help-block">
-                                        {{ t('RegEx that needs to match') }}
-                                    </div>
-                                </c-col>
-                                <c-col [xs]="12" [md]="12" [lg]="4">
-                                    <c-input-group>
-                                        <span cInputGroupText class="bg-default">
-                                            <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                                        </span>
-                                        <oitc-select
-                                            class="flex-1"
-                                            name="hd_field_st_{{$index}}"
-                                            id="hd_field_st_{{$index}}"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [options]="servicetemplates"
-                                            [(ngModel)]="post.hostdefaults_to_servicetemplates[$index].servicetemplate_id"
-                                            [showClear]="false"
-                                            oitcFormError [errors]="errors"
-                                            errorField="hostdefaults_to_servicetemplates.{{$index}}.servicetemplate_id">
-                                        </oitc-select>
-                                    </c-input-group>
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="hostdefaults_to_servicetemplates.{{$index}}.servicetemplate_id"></oitc-form-feedback>
-                                    <div class="help-block">
-                                        {{ t('Service template to assign on match') }}
-                                    </div>
-                                </c-col>
-                                <c-col [xs]="12" [md]="12" [lg]="1">
-                                    <button class="btn btn-danger ripple waves-effect waves-themed"
-                                            type="button"
-                                            (click)="removeMatchServicetemplate($index)">
-                                        <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
-                                    </button>
-                                </c-col>
-                            </c-row>
+                          </div>
+                        </div>
+                      }
+                    </legend>
+                    <hr class="border-bottom border-opacity-25 border-dashed">
+                    @for (match of post.hostdefaults_to_agentchecks; track $index) {
+                      <c-row class="mb-2">
+                        <c-col [xs]="12" [md]="12" [lg]="4">
+                          <c-input-group>
+                            <span cInputGroupText>
+                              <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                            </span>
+                            <oitc-select
+                              class="flex-1"
+                              name="hd_field_agent_match_{{$index}}"
+                              id="hd_field_agent_match_{{$index}}"
+                              optionValue="key"
+                              optionLabel="value"
+                              [options]="agentchecks"
+                              [(ngModel)]="post.hostdefaults_to_agentchecks[$index].agentcheck_id"
+                              [showClear]="false"
+                              oitcFormError [errors]="errors"
+                              errorField="hostdefaults_to_agentchecks.{{$index}}.agentcheck_id">
+                            </oitc-select>
+                          </c-input-group>
+                          <oitc-form-feedback [errors]="errors"
+                          errorField="hostdefaults_to_agentchecks.{{$index}}.agentcheck_id"></oitc-form-feedback>
+                          <div class="help-block">
+                            {{ t('Agent check to assign on match') }}
+                          </div>
+                        </c-col>
+                        <c-col [xs]="12" [md]="12" [lg]="6">
+                          <c-input-group>
+                            <span cInputGroupText class="bg-info text-white">
+                              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            </span>
+                            <input type="text" cFormControl
+                              name="hd_regex_ac_{{$index}}"
+                              id="hd_regex_ac_{{$index}}"
+                              oitcDebounce
+                              placeholder="{{ t('RegEx') }}"
+                              [(ngModel)]="post.hostdefaults_to_agentchecks[$index].regex"
+                              oitcFormError [errors]="errors"
+                              errorField="hostdefaults_to_agentchecks.{{$index}}.regex"
+                              />
+                            <span cInputGroupText>
+                              <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
+                            </span>
+                          </c-input-group>
+                          <oitc-form-feedback [errors]="errors"
+                          errorField="hostdefaults_to_agentchecks.{{$index}}.regex"></oitc-form-feedback>
+                          <div class="help-block">
+                            {{ t('RegEx that needs to match') }}
+                          </div>
+                        </c-col>
+                        <c-col [xs]="12" [md]="12" [lg]="1">
+                          <button class="btn btn-danger ripple waves-effect waves-themed"
+                            type="button"
+                            (click)="removeMatchAgentcheck($index)">
+                            <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
+                          </button>
+                        </c-col>
+                      </c-row>
+                    }
+                    <c-row>
+                      <c-col>
+                      </c-col>
+                      <c-col class="text-end">
+                        @if (servicetemplategroups.length > 0) {
+                          <button cButton class="ripple" color="success"
+                            type="button"
+                            [disabled]="!servicetemplategroups.length"
+                            (click)="addMatchAgentcheck()">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('Add') }}
+                          </button>
                         }
-                        <c-row>
-                            <c-col>
-                            </c-col>
-                            <c-col class="text-end">
-                                <button cButton class="ripple" color="success"
-                                        *ngIf="servicetemplates.length > 0" type="button"
-                                        [disabled]="!servicetemplates.length"
-                                        (click)="addMatchServicetemplate()">
-                                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                    {{ t('Add') }}
-                                </button>
-                            </c-col>
-                        </c-row>
-                    </fieldset>
-                </c-container>
-                <!-- Service template groups -->
-                <c-container
-                    [fluid]="true" class="shadow-sm mt-2 pb-2 bg-body rounded">
-                    <fieldset>
-                        <legend class="small fieldset-legend-border-bottom mb-3">
-                            <h4>
-                                <div class="icon-stack">
-                                    <i class="fa-solid fa-object-group"></i>
-                                    <i class="fas fa-font fa-xs text-primary cornered cornered-lr"></i>
-                                </div>
-                                {{ t('Service template groups matches') }}
-                                <span class="italic text-info">{{ t(' (optional):') }}</span>
-                            </h4>
-                            <div class="help-block">
-                                {{ t('If the match is successful, these service template groups are assigned to the imported hosts.') }}
-                            </div>
-                            <div class="alert border-faded bg-transparent text-info"
-                                 *ngIf="servicetemplategroups.length === 0 && post.container_id">
-                                <div class="d-flex align-items-center">
-                                    <div class="alert-icon me-2">
-                                        <span class="icon-stack icon-stack-md">
-                                            <i class="base-circle icon-stack-3x text-info"></i>
-                                            <i class="fas fa-exclamation icon-stack-1x text-white"></i>
-                                        </span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <span class="h5 text-info">
-                                            {{ t('No service template groups are defined') }}
-                                        </span>
-                                        <br>
-                                        <div>
-                                            {{ t('Please create at least one "Service template groups"') }}
-                                        </div>
-                                    </div>
-                                    <div class="ms-2">
-                                        <a *oitcPermission="['servicetemplategroups', 'index']"
-                                           [routerLink]="['/', 'servicetemplategroups', 'index']"
-                                           class="btn btn-outline-info ripple">
-                                            <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
-                                            {{ t('Go to "Service template groups"') }}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </legend>
-                        <hr class="border-bottom border-opacity-25 border-dashed">
-                        @for (match of post.hostdefaults_to_servicetemplategroups; track $index) {
-                            <c-row class="mb-2">
-                                <c-col [xs]="12" [md]="12" [lg]="2">
-                                    <c-input-group>
-                                        <span cInputGroupText class="bg-primary text-white">
-                                            <fa-icon [icon]="['fas', 'equals']"></fa-icon>
-                                        </span>
-                                        <oitc-select
-                                            class="flex-1"
-                                            name="hd_field_stg_match_{{$index}}"
-                                            id="hd_field_stg_match_{{$index}}"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [options]="matchFields"
-                                            [(ngModel)]="post.hostdefaults_to_servicetemplategroups[$index].field"
-                                            [showClear]="false">
-                                        </oitc-select>
-                                    </c-input-group>
-                                    <div class="help-block">
-                                        {{ t('Field to match') }}
-                                    </div>
-                                </c-col>
-                                <c-col [xs]="12" [md]="12" [lg]="4">
-                                    <c-input-group>
-                                        <span cInputGroupText class="bg-info text-white">
-                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                        </span>
-                                        <input type="text" cFormControl
-                                               name="hd_regex_stg_{{$index}}"
-                                               id="hd_regex_stg_{{$index}}"
-                                               oitcDebounce
-                                               placeholder="{{ t('RegEx') }}"
-                                               [(ngModel)]="post.hostdefaults_to_servicetemplategroups[$index].regex"
-                                               oitcFormError [errors]="errors"
-                                               errorField="hostdefaults_to_servicetemplategroups.{{$index}}.regex"
-                                        />
-                                        <span cInputGroupText>
-                                            <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
-                                        </span>
-                                    </c-input-group>
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="hostdefaults_to_servicetemplategroups.{{$index}}.regex"></oitc-form-feedback>
-
-                                    <div class="help-block">
-                                        {{ t('RegEx that needs to match') }}
-                                    </div>
-                                </c-col>
-                                <c-col [xs]="12" [md]="12" [lg]="4">
-                                    <c-input-group>
-                                        <span cInputGroupText class="bg-default">
-                                            <fa-icon [icon]="['fas', 'object-group']"></fa-icon>
-                                        </span>
-                                        <oitc-select
-                                            class="flex-1"
-                                            name="hd_field_stg_{{$index}}"
-                                            id="hd_field_stg_{{$index}}"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [options]="servicetemplategroups"
-                                            [(ngModel)]="post.hostdefaults_to_servicetemplategroups[$index].servicetemplategroup_id"
-                                            [showClear]="false"
-                                            oitcFormError [errors]="errors"
-                                            errorField="hostdefaults_to_servicetemplategroups.{{$index}}.servicetemplategroup_id">
-                                        </oitc-select>
-                                    </c-input-group>
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="hostdefaults_to_servicetemplategroups.{{$index}}.servicetemplategroup_id"></oitc-form-feedback>
-
-                                    <div class="help-block">
-                                        {{ t('Service template group to assign on match') }}
-                                    </div>
-                                </c-col>
-                                <c-col [xs]="12" [md]="12" [lg]="1">
-                                    <button class="btn btn-danger ripple waves-effect waves-themed"
-                                            type="button"
-                                            (click)="removeMatchServicetemplategroup($index)">
-                                        <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
-                                    </button>
-                                </c-col>
-                            </c-row>
-                        }
-                        <c-row>
-                            <c-col class="text-end">
-                                <button cButton class="ripple" color="success"
-                                        *ngIf="servicetemplategroups.length > 0" type="button"
-                                        [disabled]="!servicetemplategroups.length"
-                                        (click)="addMatchServicetemplategroup()">
-                                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                    {{ t('Add') }}
-                                </button>
-                            </c-col>
-                        </c-row>
-                    </fieldset>
-                </c-container>
-                <!-- Agent Checks -->
-                <c-container
-                    [fluid]="true" class="shadow-sm mt-2 pb-2 bg-body rounded">
-                    <fieldset>
-                        <legend class="small fieldset-legend-border-bottom mb-3">
-                            <h4>
-                                <div class="icon-stack">
-                                    <i class="fa-solid fa-user-secret"></i>
-                                    <i class="fas fa-cogs fa-xs text-primary cornered cornered-lr"></i>
-                                </div>
-                                {{ t('Agent checks matches') }}
-                                <span class="italic text-info">{{ t(' (optional):') }}</span>
-                            </h4>
-                            <div class="help-block">
-                                {{ t('If the match is successful, these agent checks are assigned to the imported hosts.') }}
-                            </div>
-                            <div class="alert border-faded bg-transparent text-info"
-                                 *ngIf="agentchecks.length === 0 && post.container_id">
-                                <div class="d-flex align-items-center">
-                                    <div class="alert-icon me-2">
-                                        <span class="icon-stack icon-stack-md">
-                                            <i class="base-circle icon-stack-3x text-info"></i>
-                                            <i class="fas fa-exclamation icon-stack-1x text-white"></i>
-                                        </span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <span class="h5 text-info">
-                                            {{ t('No agent checks are defined') }}
-                                        </span>
-                                        <br>
-                                        <div>
-                                            {{ t('Please create at least one "Agent check"') }}
-                                        </div>
-                                    </div>
-                                    <div class="ms-2">
-                                        <a *oitcPermission="['agentchecks', 'index']"
-                                           [routerLink]="['/', 'agentchecks', 'index']"
-                                           class="btn btn-outline-info ripple">
-                                            <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
-                                            {{ t('Go to "Agent checks"') }}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </legend>
-                        <hr class="border-bottom border-opacity-25 border-dashed">
-                        @for (match of post.hostdefaults_to_agentchecks; track $index) {
-                            <c-row class="mb-2">
-                                <c-col [xs]="12" [md]="12" [lg]="4">
-                                    <c-input-group>
-                                        <span cInputGroupText>
-                                            <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-                                        </span>
-                                        <oitc-select
-                                            class="flex-1"
-                                            name="hd_field_agent_match_{{$index}}"
-                                            id="hd_field_agent_match_{{$index}}"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [options]="agentchecks"
-                                            [(ngModel)]="post.hostdefaults_to_agentchecks[$index].agentcheck_id"
-                                            [showClear]="false"
-                                            oitcFormError [errors]="errors"
-                                            errorField="hostdefaults_to_agentchecks.{{$index}}.agentcheck_id">
-                                        </oitc-select>
-                                    </c-input-group>
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="hostdefaults_to_agentchecks.{{$index}}.agentcheck_id"></oitc-form-feedback>
-
-                                    <div class="help-block">
-                                        {{ t('Agent check to assign on match') }}
-                                    </div>
-                                </c-col>
-                                <c-col [xs]="12" [md]="12" [lg]="6">
-                                    <c-input-group>
-                                        <span cInputGroupText class="bg-info text-white">
-                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                        </span>
-                                        <input type="text" cFormControl
-                                               name="hd_regex_ac_{{$index}}"
-                                               id="hd_regex_ac_{{$index}}"
-                                               oitcDebounce
-                                               placeholder="{{ t('RegEx') }}"
-                                               [(ngModel)]="post.hostdefaults_to_agentchecks[$index].regex"
-                                               oitcFormError [errors]="errors"
-                                               errorField="hostdefaults_to_agentchecks.{{$index}}.regex"
-                                        />
-                                        <span cInputGroupText>
-                                            <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
-                                        </span>
-                                    </c-input-group>
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="hostdefaults_to_agentchecks.{{$index}}.regex"></oitc-form-feedback>
-
-                                    <div class="help-block">
-                                        {{ t('RegEx that needs to match') }}
-                                    </div>
-                                </c-col>
-
-                                <c-col [xs]="12" [md]="12" [lg]="1">
-                                    <button class="btn btn-danger ripple waves-effect waves-themed"
-                                            type="button"
-                                            (click)="removeMatchAgentcheck($index)">
-                                        <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
-                                    </button>
-                                </c-col>
-                            </c-row>
-                        }
-                        <c-row>
-                            <c-col>
-                            </c-col>
-                            <c-col class="text-end">
-                                <button cButton class="ripple" color="success"
-                                        *ngIf="servicetemplategroups.length > 0" type="button"
-                                        [disabled]="!servicetemplategroups.length"
-                                        (click)="addMatchAgentcheck()">
-                                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                    {{ t('Add') }}
-                                </button>
-                            </c-col>
-                        </c-row>
-                    </fieldset>
+                      </c-col>
+                    </c-row>
+                  </fieldset>
                 </c-container>
                 <!-- External Monitoring Checks -->
                 <c-container
-                    [fluid]="true" class="shadow-sm mt-2 pb-2 bg-body rounded">
-                    <fieldset>
-                        <legend class="small fieldset-legend-border-bottom mb-3">
-                            <h4>
-                                <div class="icon-stack">
-                                    <i class="fa-solid fa-tower-observation"></i>
-                                    <i class="fas fa-cog fa-xs text-primary cornered cornered-lr"></i>
-                                </div>
-                                {{ t('External Monitoring Checks') }}
-                                <span class="italic text-info">{{ t(' (optional):') }}</span>
-                            </h4>
-                            <div class="help-block">
-                                {{ t('If the match is successful, these service templates are assigned to the imported hosts.') }}
+                  [fluid]="true" class="shadow-sm mt-2 pb-2 bg-body rounded">
+                  <fieldset>
+                    <legend class="small fieldset-legend-border-bottom mb-3">
+                      <h4>
+                        <div class="icon-stack">
+                          <i class="fa-solid fa-tower-observation"></i>
+                          <i class="fas fa-cog fa-xs text-primary cornered cornered-lr"></i>
+                        </div>
+                        {{ t('External Monitoring Checks') }}
+                        <span class="italic text-info">{{ t(' (optional):') }}</span>
+                      </h4>
+                      <div class="help-block">
+                        {{ t('If the match is successful, these service templates are assigned to the imported hosts.') }}
+                      </div>
+                      @if (servicetemplates.length === 0 && post.container_id) {
+                        <div class="alert border-faded bg-transparent text-info"
+                          >
+                          <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                              <span class="icon-stack icon-stack-md">
+                                <i class="base-circle icon-stack-3x text-info"></i>
+                                <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                              </span>
                             </div>
-                            <div class="alert border-faded bg-transparent text-info"
-                                 *ngIf="servicetemplates.length === 0 && post.container_id">
-                                <div class="d-flex align-items-center">
-                                    <div class="alert-icon me-2">
-                                        <span class="icon-stack icon-stack-md">
-                                            <i class="base-circle icon-stack-3x text-info"></i>
-                                            <i class="fas fa-exclamation icon-stack-1x text-white"></i>
-                                        </span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <span class="h5 text-info">
-                                            {{ t('No service templates are defined!') }}
-                                        </span>
-                                        <br>
-                                        <div>
-                                            {{ t('Please create at least one "Service template"') }}
-                                        </div>
-                                    </div>
-                                    <div class="ms-2">
-                                        <a *oitcPermission="['servicetemplates', 'index']"
-                                           [routerLink]="['/', 'servicetemplates', 'index']"
-                                           class="btn btn-outline-info ripple">
-                                            <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
-                                            {{ t('Go to "Service templates"') }}
-                                        </a>
-                                    </div>
+                            <div class="flex-1">
+                              <span class="h5 text-info">
+                                {{ t('No service templates are defined!') }}
+                              </span>
+                              <br>
+                                <div>
+                                  {{ t('Please create at least one "Service template"') }}
                                 </div>
+                              </div>
+                              <div class="ms-2">
+                                <a *oitcPermission="['servicetemplates', 'index']"
+                                  [routerLink]="['/', 'servicetemplates', 'index']"
+                                  class="btn btn-outline-info ripple">
+                                  <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                                  {{ t('Go to "Service templates"') }}
+                                </a>
+                              </div>
                             </div>
-                        </legend>
-                        <hr class="border-bottom border-opacity-25 border-dashed">
-                        @for (match of post.hostdefaults_to_servicetemplates_external_monitoring; track $index) {
-                            <c-row class="mb-2">
-                                <c-col [xs]="12" [md]="12" [lg]="4">
-                                    <c-input-group>
-                                        <span cInputGroupText class="bg-info text-white">
-                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                        </span>
-                                        <input type="text" cFormControl
-                                               name="hd_regex_sem_{{$index}}"
-                                               id="hd_regex_sem_{{$index}}"
-                                               oitcDebounce
-                                               placeholder="{{ t('RegEx') }}"
-                                               [(ngModel)]="post.hostdefaults_to_servicetemplates_external_monitoring[$index].regex"
-                                               oitcFormError [errors]="errors"
-                                               errorField="hostdefaults_to_servicetemplates_external_monitoring.{{$index}}.regex"
-                                        />
-                                        <span cInputGroupText>
-                                            <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
-                                        </span>
-                                    </c-input-group>
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="hostdefaults_to_servicetemplates_external_monitoring.{{$index}}.regex"></oitc-form-feedback>
-
-                                    <div class="help-block">
-                                        {{ t('RegEx that needs to match') }}
-                                    </div>
-                                </c-col>
-                                <c-col [xs]="12" [md]="12" [lg]="6">
-                                    <c-input-group>
-                                        <span cInputGroupText>
-                                            <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                                        </span>
-                                        <oitc-select
-                                            class="flex-1"
-                                            name="hd_stg_ex_{{$index}}"
-                                            id="hd_stg_ex_{{$index}}"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [options]="servicetemplates"
-                                            [(ngModel)]="post.hostdefaults_to_servicetemplates_external_monitoring[$index].servicetemplate_id"
-                                            [showClear]="false"
-                                            oitcFormError [errors]="errors"
-                                            errorField="hostdefaults_to_servicetemplates_external_monitoring.{{$index}}.servicetemplate_id">
-                                        </oitc-select>
-                                    </c-input-group>
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="hostdefaults_to_servicetemplates_external_monitoring.{{$index}}.servicetemplate_id"></oitc-form-feedback>
-
-                                    <div class="help-block">
-                                        {{ t('Service template to assign on match') }}
-                                    </div>
-                                </c-col>
-
-
-                                <c-col [xs]="12" [md]="12" [lg]="1">
-                                    <button class="btn btn-danger ripple waves-effect waves-themed"
-                                            type="button"
-                                            (click)="removeMatchServicetemplatesExternalMonitoring($index)">
-                                        <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
-                                    </button>
-                                </c-col>
-                            </c-row>
+                          </div>
                         }
-                        <c-row>
-                            <c-col>
-                            </c-col>
-                            <c-col class="text-end">
-                                <button cButton class="ripple" color="success"
-                                        *ngIf="servicetemplates.length > 0" type="button"
-                                        [disabled]="!servicetemplates.length"
-                                        (click)="addMatchServicetemplatesExternalMonitoring()">
-                                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                    {{ t('Add') }}
-                                </button>
-                            </c-col>
+                      </legend>
+                      <hr class="border-bottom border-opacity-25 border-dashed">
+                      @for (match of post.hostdefaults_to_servicetemplates_external_monitoring; track $index) {
+                        <c-row class="mb-2">
+                          <c-col [xs]="12" [md]="12" [lg]="4">
+                            <c-input-group>
+                              <span cInputGroupText class="bg-info text-white">
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                              </span>
+                              <input type="text" cFormControl
+                                name="hd_regex_sem_{{$index}}"
+                                id="hd_regex_sem_{{$index}}"
+                                oitcDebounce
+                                placeholder="{{ t('RegEx') }}"
+                                [(ngModel)]="post.hostdefaults_to_servicetemplates_external_monitoring[$index].regex"
+                                oitcFormError [errors]="errors"
+                                errorField="hostdefaults_to_servicetemplates_external_monitoring.{{$index}}.regex"
+                                />
+                              <span cInputGroupText>
+                                <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
+                              </span>
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors"
+                            errorField="hostdefaults_to_servicetemplates_external_monitoring.{{$index}}.regex"></oitc-form-feedback>
+                            <div class="help-block">
+                              {{ t('RegEx that needs to match') }}
+                            </div>
+                          </c-col>
+                          <c-col [xs]="12" [md]="12" [lg]="6">
+                            <c-input-group>
+                              <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                              </span>
+                              <oitc-select
+                                class="flex-1"
+                                name="hd_stg_ex_{{$index}}"
+                                id="hd_stg_ex_{{$index}}"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="servicetemplates"
+                                [(ngModel)]="post.hostdefaults_to_servicetemplates_external_monitoring[$index].servicetemplate_id"
+                                [showClear]="false"
+                                oitcFormError [errors]="errors"
+                                errorField="hostdefaults_to_servicetemplates_external_monitoring.{{$index}}.servicetemplate_id">
+                              </oitc-select>
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors"
+                            errorField="hostdefaults_to_servicetemplates_external_monitoring.{{$index}}.servicetemplate_id"></oitc-form-feedback>
+                            <div class="help-block">
+                              {{ t('Service template to assign on match') }}
+                            </div>
+                          </c-col>
+                          <c-col [xs]="12" [md]="12" [lg]="1">
+                            <button class="btn btn-danger ripple waves-effect waves-themed"
+                              type="button"
+                              (click)="removeMatchServicetemplatesExternalMonitoring($index)">
+                              <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
+                            </button>
+                          </c-col>
                         </c-row>
+                      }
+                      <c-row>
+                        <c-col>
+                        </c-col>
+                        <c-col class="text-end">
+                          @if (servicetemplates.length > 0) {
+                            <button cButton class="ripple" color="success"
+                              type="button"
+                              [disabled]="!servicetemplates.length"
+                              (click)="addMatchServicetemplatesExternalMonitoring()">
+                              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                              {{ t('Add') }}
+                            </button>
+                          }
+                        </c-col>
+                      </c-row>
                     </fieldset>
-                </c-container>
-            </c-card-body>
-            <c-card-footer class="text-end">
-                <button cButton class="ripple" color="primary" type="submit">
+                  </c-container>
+                </c-card-body>
+                <c-card-footer class="text-end">
+                  <button cButton class="ripple" color="primary" type="submit">
                     {{ t('Update host defaults') }}
-                </button>
-                <button [fallbackUrl]="['import_module','HostDefaults', 'index']" cButton class="ms-1 ripple"
-                        color="default" oitcBackButton type="button">
+                  </button>
+                  <button [fallbackUrl]="['import_module','HostDefaults', 'index']" cButton class="ms-1 ripple"
+                    color="default" oitcBackButton type="button">
                     {{ t('Cancel') }}
-                </button>
-            </c-card-footer>
-        </c-card>
-    </form>
-</ng-container>
+                  </button>
+                </c-card-footer>
+              </c-card>
+            </form>
+          }
+        </ng-container>

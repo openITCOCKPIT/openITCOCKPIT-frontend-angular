@@ -1,143 +1,144 @@
 <ng-container *transloco="let t">
-    <div class="d-flex h-100 flex-column" *ngIf="widget">
-        <oitc-block-loader *ngIf="!resources"></oitc-block-loader>
-        <div *ngIf="resources">
-
-            <!-- status overview -->
-            <c-row>
-                <c-col [xs]="12" [md]="3" [lg]="3">
-                    <div class="p-2 bg-primary rounded overflow-hidden position-relative text-white mb-g h-100">
-                        <div class="position-relative z-1">
-                            <h6 class="display-4 d-block l-h-n m-0 fw-500">
-                                @if (resources.resources.status_overview[0] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
-                                    <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
-                                       [queryParams]="{id: resources.resources.resource_ids[0]}">
-                                        {{ resources.resources.status_overview[0] }}
-                                    </a>
-                                } @else {
-                                    {{ resources.resources.status_overview[0] }}
-                                }
-                            </h6>
-                            <small class="m-0 l-h-n small">
-                                {{ t('Unconfirmed') }}
-                            </small>
-                        </div>
-                        <fa-icon [icon]="['fas', 'question']"
-                                 class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                    </div>
-                </c-col>
-                <c-col [xs]="12" [md]="3" [lg]="3">
-                    <div class="p-2 bg-success rounded overflow-hidden position-relative text-white mb-g h-100">
-                        <div class="position-relative z-1">
-                            <h6 class="display-4 d-block l-h-n m-0 fw-500">
-                                @if (resources.resources.status_overview[1] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
-                                    <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
-                                       [queryParams]="{id: resources.resources.resource_ids[1]}">
-                                        {{ resources.resources.status_overview[1] }}
-                                    </a>
-                                } @else {
-                                    {{ resources.resources.status_overview[1] }}
-                                }
-                            </h6>
-                            <small class="m-0 l-h-n small">
-                                {{ t('Ok') }}
-                            </small>
-                        </div>
-                        <fa-icon [icon]="['fas', 'check']"
-                                 class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                    </div>
-                </c-col>
-                <c-col [xs]="12" [md]="3" [lg]="3">
-                    <div class="p-2 bg-warning rounded overflow-hidden position-relative text-white mb-g h-100">
-                        <div class="position-relative z-1">
-                            <h6 class="display-4 d-block l-h-n m-0 fw-500">
-                                @if (resources.resources.status_overview[2] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
-                                    <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
-                                       [queryParams]="{id: resources.resources.resource_ids[2]}">
-                                        {{ resources.resources.status_overview[2] }}
-                                    </a>
-                                } @else {
-                                    {{ resources.resources.status_overview[2] }}
-                                }
-                            </h6>
-                            <small class="m-0 l-h-n small">
-                                {{ t('Warning') }}
-                            </small>
-                        </div>
-                        <fa-icon [icon]="['far', 'bell']"
-                                 class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                    </div>
-                </c-col>
-                <c-col [xs]="12" [md]="3" [lg]="3">
-                    <div class="p-2 bg-critical rounded overflow-hidden position-relative text-white mb-g h-100">
-                        <div class="position-relative z-1">
-                            <h6 class="display-4 d-block l-h-n m-0 fw-500">
-                                @if (resources.resources.status_overview[3] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
-                                    <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
-                                       [queryParams]="{id: resources.resources.resource_ids[3]}">
-                                        {{ resources.resources.status_overview[3] }}
-                                    </a>
-                                } @else {
-                                    {{ resources.resources.status_overview[3] }}
-                                }
-                            </h6>
-                            <small class="m-0 l-h-n small">
-                                {{ t('Critical') }}
-                            </small>
-                        </div>
-                        <fa-icon [icon]="['fas', 'exclamation']"
-                                 class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                    </div>
-                </c-col>
-            </c-row>
-
-            <!-- accordion -->
-            <c-row class="mt-2">
-                <c-col>
-                    <c-accordion>
-                        @for (deadlineItem of deadlines; track $index) {
-
-                            <c-accordion-item #item0="cAccordionItem" [visible]="false">
-                                <ng-template cTemplateId="accordionHeaderTemplate">
-                                    <button (click)="item0.toggleItem()" [collapsed]="!item0.visible"
-                                            cAccordionButton>
-                                        ⏰ {{ t('Deadline') }}
-
-                                        {{ deadlineItem.key }}
-
-                                        <span class="px-1">
-                                            @if (deadlineItem.exceeded) {
-                                                <span class="text-danger">
-                                                    ‼️ {{ t('Deadline has been exceeded!!') }}
-                                                </span>
-                                            } @else {
-                                                <span class="text-warning">
-                                                    ⚠️ {{ t('Please confirm the missing resource status before the deadline expires!') }}
-                                                </span>
-                                            }
-                                        </span>
-                                    </button>
-                                </ng-template>
-                                <ng-template cTemplateId="accordionBodyTemplate">
-                                    <div class="accordion-body">
-                                        <ul class="list-inline">
-                                            @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
-                                                <li class="list-inline-item  pe-1">
-                                                    •<a *oitcPermission="['scmmodule','resources', 'index']"
-                                                        [routerLink]="['/','scm_module', 'resources', 'index']"
-                                                        [queryParams]="{resourcegroupId: resourcegroup.id}">
-                                                    {{ resourcegroup.name }}
-                                                </a>
-                                                </li>
-                                            }
-                                        </ul>
-                                    </div>
-                                </ng-template>
-                            </c-accordion-item>
+  @if (widget) {
+    <div class="d-flex h-100 flex-column">
+      @if (!resources) {
+        <oitc-block-loader></oitc-block-loader>
+      }
+      @if (resources) {
+        <div>
+          <!-- status overview -->
+          <c-row>
+            <c-col [xs]="12" [md]="3" [lg]="3">
+              <div class="p-2 bg-primary rounded overflow-hidden position-relative text-white mb-g h-100">
+                <div class="position-relative z-1">
+                  <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                    @if (resources.resources.status_overview[0] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
+                      <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
+                        [queryParams]="{id: resources.resources.resource_ids[0]}">
+                        {{ resources.resources.status_overview[0] }}
+                      </a>
+                    } @else {
+                      {{ resources.resources.status_overview[0] }}
+                    }
+                  </h6>
+                  <small class="m-0 l-h-n small">
+                    {{ t('Unconfirmed') }}
+                  </small>
+                </div>
+                <fa-icon [icon]="['fas', 'question']"
+                class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+              </div>
+            </c-col>
+            <c-col [xs]="12" [md]="3" [lg]="3">
+              <div class="p-2 bg-success rounded overflow-hidden position-relative text-white mb-g h-100">
+                <div class="position-relative z-1">
+                  <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                    @if (resources.resources.status_overview[1] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
+                      <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
+                        [queryParams]="{id: resources.resources.resource_ids[1]}">
+                        {{ resources.resources.status_overview[1] }}
+                      </a>
+                    } @else {
+                      {{ resources.resources.status_overview[1] }}
+                    }
+                  </h6>
+                  <small class="m-0 l-h-n small">
+                    {{ t('Ok') }}
+                  </small>
+                </div>
+                <fa-icon [icon]="['fas', 'check']"
+                class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+              </div>
+            </c-col>
+            <c-col [xs]="12" [md]="3" [lg]="3">
+              <div class="p-2 bg-warning rounded overflow-hidden position-relative text-white mb-g h-100">
+                <div class="position-relative z-1">
+                  <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                    @if (resources.resources.status_overview[2] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
+                      <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
+                        [queryParams]="{id: resources.resources.resource_ids[2]}">
+                        {{ resources.resources.status_overview[2] }}
+                      </a>
+                    } @else {
+                      {{ resources.resources.status_overview[2] }}
+                    }
+                  </h6>
+                  <small class="m-0 l-h-n small">
+                    {{ t('Warning') }}
+                  </small>
+                </div>
+                <fa-icon [icon]="['far', 'bell']"
+                class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+              </div>
+            </c-col>
+            <c-col [xs]="12" [md]="3" [lg]="3">
+              <div class="p-2 bg-critical rounded overflow-hidden position-relative text-white mb-g h-100">
+                <div class="position-relative z-1">
+                  <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                    @if (resources.resources.status_overview[3] > 0 && ( PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'index'])|async )) {
+                      <a [routerLink]="['/', 'scm_module', 'resources', 'index']" class="text-white"
+                        [queryParams]="{id: resources.resources.resource_ids[3]}">
+                        {{ resources.resources.status_overview[3] }}
+                      </a>
+                    } @else {
+                      {{ resources.resources.status_overview[3] }}
+                    }
+                  </h6>
+                  <small class="m-0 l-h-n small">
+                    {{ t('Critical') }}
+                  </small>
+                </div>
+                <fa-icon [icon]="['fas', 'exclamation']"
+                class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+              </div>
+            </c-col>
+          </c-row>
+          <!-- accordion -->
+          <c-row class="mt-2">
+            <c-col>
+              <c-accordion>
+                @for (deadlineItem of deadlines; track $index) {
+                  <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                    <ng-template cTemplateId="accordionHeaderTemplate">
+                      <button (click)="item0.toggleItem()" [collapsed]="!item0.visible"
+                        cAccordionButton>
+                        ⏰ {{ t('Deadline') }}
+                        {{ deadlineItem.key }}
+                        <span class="px-1">
+                          @if (deadlineItem.exceeded) {
+                            <span class="text-danger">
+                              ‼️ {{ t('Deadline has been exceeded!!') }}
+                            </span>
+                          } @else {
+                            <span class="text-warning">
+                              ⚠️ {{ t('Please confirm the missing resource status before the deadline expires!') }}
+                            </span>
+                          }
+                        </span>
+                      </button>
+                    </ng-template>
+                    <ng-template cTemplateId="accordionBodyTemplate">
+                      <div class="accordion-body">
+                        <ul class="list-inline">
+                          @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
+                            <li class="list-inline-item  pe-1">
+                              •<a *oitcPermission="['scmmodule','resources', 'index']"
+                              [routerLink]="['/','scm_module', 'resources', 'index']"
+                              [queryParams]="{resourcegroupId: resourcegroup.id}">
+                              {{ resourcegroup.name }}
+                            </a>
+                          </li>
                         }
-                    </c-accordion>
-                </c-col>
-            </c-row>
-        </div>
-    </div>
+                      </ul>
+                    </div>
+                  </ng-template>
+                </c-accordion-item>
+              }
+            </c-accordion>
+          </c-col>
+        </c-row>
+      </div>
+    }
+  </div>
+}
 </ng-container>

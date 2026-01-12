@@ -1,316 +1,332 @@
 <ng-container *transloco="let t">
-    <div class="d-flex h-100 flex-column" #boxContainer>
+  <div class="d-flex h-100 flex-column" #boxContainer>
+    <c-row>
+      <c-col [xs]="12" [md]="1">
+        @if (!isReadonly()) {
+          <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
+            >
+            @if (flipped()) {
+              <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+            } @else {
+              <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+            }
+          </button>
+        }
+      </c-col>
+
+      <c-col [xs]="12" [md]="11">
         <c-row>
-            <c-col [xs]="12" [md]="1">
-                <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-                        *ngIf="!isReadonly()">
-                    @if (flipped()) {
-                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                    } @else {
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    }
-                </button>
+          <c-col [xs]="1" [offset]="{lg: 8}">
+            @if (config && config.useScroll) {
+              <button type="button" cButton class="ripple" color="primary" size="xs"
+                (click)="stopScroll()"
+                [cTooltip]="'Pause scrolling'|transloco" cTooltipPlacement="bottom">
+                <fa-icon [icon]="['fas', 'pause']"></fa-icon>
+              </button>
+            }
+            @if (config && !config.useScroll) {
+              <button type="button" cButton class="ripple" color="primary" size="xs"
+                (click)="startScroll()"
+                [cTooltip]="'Start scrolling'|transloco" cTooltipPlacement="bottom">
+                <fa-icon [icon]="['fas', 'play']"></fa-icon>
+              </button>
+            }
+          </c-col>
+          @if (widget && config) {
+            <c-col [xs]="11" [lg]="3">
+              <oitc-slider-time
+                [name]="'scroll_interval_slider_'+widget.id"
+                [attr.id]="'filter.scroll_interval_slider_'+widget.id"
+                [unit]="'milliseconds'"
+                [size]="'xs'"
+                [label]="'Scroll interval:' | transloco"
+                [disabled]="isReadonly()"
+                [min]="0"
+                [max]="300*1000"
+                [step]="5*1000"
+                [(ngModel)]="config.scroll_interval"
+              (change)="onIntervalSliderChanged()"></oitc-slider-time>
             </c-col>
-
-            <c-col [xs]="12" [md]="11">
-                <c-row>
-                    <c-col [xs]="1" [offset]="{lg: 8}">
-                        @if (config && config.useScroll) {
-                            <button type="button" cButton class="ripple" color="primary" size="xs"
-                                    (click)="stopScroll()"
-                                    [cTooltip]="'Pause scrolling'|transloco" cTooltipPlacement="bottom">
-                                <fa-icon [icon]="['fas', 'pause']"></fa-icon>
-                            </button>
-                        }
-                        @if (config && !config.useScroll) {
-                            <button type="button" cButton class="ripple" color="primary" size="xs"
-                                    (click)="startScroll()"
-                                    [cTooltip]="'Start scrolling'|transloco" cTooltipPlacement="bottom">
-                                <fa-icon [icon]="['fas', 'play']"></fa-icon>
-                            </button>
-                        }
-                    </c-col>
-                    <c-col [xs]="11" [lg]="3" *ngIf="widget && config">
-                        <oitc-slider-time
-                            [name]="'scroll_interval_slider_'+widget.id"
-                            [attr.id]="'filter.scroll_interval_slider_'+widget.id"
-                            [unit]="'milliseconds'"
-                            [size]="'xs'"
-                            [label]="'Scroll interval:' | transloco"
-                            [disabled]="isReadonly()"
-                            [min]="0"
-                            [max]="300*1000"
-                            [step]="5*1000"
-                            [(ngModel)]="config.scroll_interval"
-                            (change)="onIntervalSliderChanged()"></oitc-slider-time>
-                    </c-col>
-                </c-row>
-            </c-col>
-            <c-col [xs]="12">
-                <c-row *ngIf="config">
-                    <c-col [xs]="12" [md]="6">
-                        {{ t('Alert status') }}
-                        @switch (config.state) {
-                            @case ('ok') {
-                                <c-badge color="success">
-                                    {{ t('Ok') }}
-                                </c-badge>
-                            }
-                            @case ('warning') {
-                                <c-badge color="warning">
-                                    {{ t('Warning') }}
-                                </c-badge>
-                            }
-                            @case ('critical') {
-                                <c-badge color="danger">
-                                    {{ t('Critical') }}
-                                </c-badge>
-                            }
-                            @case ('unknown') {
-                                <c-badge color="secondary">
-                                    {{ t('Unknown') }}
-                                </c-badge>
-                            }
-                        }
-                    </c-col>
-                    <c-col [xs]="12" [md]="6" class="text-end">
-                        <span class="pull-right">
-                            {{ t('Period: Last') }} {{ config.not_older_than }}
-                            @switch (config.not_older_than_unit) {
-                                @case ('MINUTE') {
-                                    {{ t('minute(s)') }}
-                                }
-                                @case ('HOUR') {
-                                    {{ t('hour(s)') }}
-                                }
-                                @case ('DAY') {
-                                    {{ t('day(s)') }}
-                                }
-                            }
-                        </span>
-                    </c-col>
-                </c-row>
-            </c-col>
+          }
         </c-row>
+      </c-col>
+      <c-col [xs]="12">
+        @if (config) {
+          <c-row>
+            <c-col [xs]="12" [md]="6">
+              {{ t('Alert status') }}
+              @switch (config.state) {
+                @case ('ok') {
+                  <c-badge color="success">
+                    {{ t('Ok') }}
+                  </c-badge>
+                }
+                @case ('warning') {
+                  <c-badge color="warning">
+                    {{ t('Warning') }}
+                  </c-badge>
+                }
+                @case ('critical') {
+                  <c-badge color="danger">
+                    {{ t('Critical') }}
+                  </c-badge>
+                }
+                @case ('unknown') {
+                  <c-badge color="secondary">
+                    {{ t('Unknown') }}
+                  </c-badge>
+                }
+              }
+            </c-col>
+            <c-col [xs]="12" [md]="6" class="text-end">
+              <span class="pull-right">
+                {{ t('Period: Last') }} {{ config.not_older_than }}
+                @switch (config.not_older_than_unit) {
+                  @case ('MINUTE') {
+                    {{ t('minute(s)') }}
+                  }
+                  @case ('HOUR') {
+                    {{ t('hour(s)') }}
+                  }
+                  @case ('DAY') {
+                    {{ t('day(s)') }}
+                  }
+                }
+              </span>
+            </c-col>
+          </c-row>
+        }
+      </c-col>
+    </c-row>
 
-        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
-             class="box-container">
-            <div class="box-x">
-                <ng-container *ngIf="animationStateShowContent">
-                    <!-- Top Alerts Area -->
-                    <oitc-table-loader *ngIf="!servicesAlerts"></oitc-table-loader>
-                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped
-                           *ngIf="servicesAlerts && config">
-                        <thead>
-                        <tr>
+    <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+      class="box-container">
+      <div class="box-x">
+        @if (animationStateShowContent) {
+          <!-- Top Alerts Area -->
+          @if (!servicesAlerts) {
+            <oitc-table-loader></oitc-table-loader>
+          }
+          @if (servicesAlerts && config) {
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped
+              >
+              <thead>
+                <tr>
                             <th class="text-white" [ngClass]="{
                         'bg-ok': config.state === 'ok',
                         'bg-warning': config.state === 'warning',
                         'bg-critical': config.state === 'critical',
                         'bg-unknown': config.state === 'unknown'}">
-                                {{ t('State') }}
-                            </th>
+                    {{ t('State') }}
+                  </th>
                             <th scope="col" class="text-white" [ngClass]="{
                         'bg-ok': config.state === 'ok',
                         'bg-warning': config.state === 'warning',
                         'bg-critical': config.state === 'critical',
                         'bg-unknown': config.state === 'unknown'}">
-                                {{ t('Host') }}
-                            </th>
+                    {{ t('Host') }}
+                  </th>
                             <th scope="col" class="text-white" [ngClass]="{
                         'bg-ok': config.state === 'ok',
                         'bg-warning': config.state === 'warning',
                         'bg-critical': config.state === 'critical',
                         'bg-unknown': config.state === 'unknown'}">
-                                {{ t('Service') }}
-                            </th>
+                    {{ t('Service') }}
+                  </th>
                             <th class="text-white" [ngClass]="{
                         'bg-ok': config.state === 'ok',
                         'bg-warning': config.state === 'warning',
                         'bg-critical': config.state === 'critical',
                         'bg-unknown': config.state === 'unknown'}">
-                                {{ t('Last date') }}
-                            </th>
+                    {{ t('Last date') }}
+                  </th>
                             <th class="text-white" [ngClass]="{
                         'bg-ok': config.state === 'ok',
                         'bg-warning': config.state === 'warning',
                         'bg-critical': config.state === 'critical',
                         'bg-unknown': config.state === 'unknown'}">
-                                {{ t('Count') }}
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody *ngIf="servicesAlerts">
-                            @for (serviceAlert of servicesAlerts.all_notifications; track $index) {
-                                <tr>
-                                    <td class="text-center">
-                                        <oitc-servicestatus-simple-icon
-                                            [servicestatus]="serviceAlert.NotificationService.state"></oitc-servicestatus-simple-icon>
-                                    </td>
-                                    <td class="word-break">
-                                        {{ serviceAlert.Host.name }}
-                                    </td>
-                                    <td class="word-break">
-                                        @if (PermissionsService.hasPermissionObservable(['notifications', 'index'])|async) {
-                                            <a [routerLink]="['/', 'notifications', 'serviceNotification', serviceAlert.Service.id]">
-                                                {{ serviceAlert.Service.servicename }}
-                                            </a>
-                                        } @else {
-                                            {{ serviceAlert.Service.servicename }}
-                                        }
-                                    </td>
-                                    <td>
-                                        {{ serviceAlert.NotificationService.start_time }}
-                                    </td>
-                                    <td>
-                                        {{ serviceAlert.count }}
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                    <oitc-no-records
-                        *ngIf="servicesAlerts && servicesAlerts.all_notifications.length === 0"></oitc-no-records>
+                    {{ t('Count') }}
+                  </th>
+                </tr>
+              </thead>
+              @if (servicesAlerts) {
+                <tbody>
+                  @for (serviceAlert of servicesAlerts.all_notifications; track $index) {
+                    <tr>
+                      <td class="text-center">
+                        <oitc-servicestatus-simple-icon
+                        [servicestatus]="serviceAlert.NotificationService.state"></oitc-servicestatus-simple-icon>
+                      </td>
+                      <td class="word-break">
+                        {{ serviceAlert.Host.name }}
+                      </td>
+                      <td class="word-break">
+                        @if (PermissionsService.hasPermissionObservable(['notifications', 'index'])|async) {
+                          <a [routerLink]="['/', 'notifications', 'serviceNotification', serviceAlert.Service.id]">
+                            {{ serviceAlert.Service.servicename }}
+                          </a>
+                        } @else {
+                          {{ serviceAlert.Service.servicename }}
+                        }
+                      </td>
+                      <td>
+                        {{ serviceAlert.NotificationService.start_time }}
+                      </td>
+                      <td>
+                        {{ serviceAlert.count }}
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              }
+            </table>
+          }
+          @if (servicesAlerts && servicesAlerts.all_notifications.length === 0) {
+            <oitc-no-records
+            ></oitc-no-records>
+          }
+          <c-container
+            [fluid]="true" class="pt-1 pb-0 mb-0">
+            <c-row>
+              <c-col>
+                <!-- To save space we only use scroll index on dashboards -->
+                @if (servicesAlerts && servicesAlerts.scroll) {
+                  <oitc-scroll-index
+                    (pageChange)="onPaginatorChange($event)"
+                    [scroll]="servicesAlerts.scroll">
+                  </oitc-scroll-index>
+                }
+              </c-col>
+            </c-row>
+          </c-container>
+          <!-- End Top Alerts Area -->
+        }
+      </div>
 
-                    <c-container
-                        [fluid]="true" class="pt-1 pb-0 mb-0">
-                        <c-row>
-                            <c-col>
-                                <!-- To save space we only use scroll index on dashboards -->
-                                <oitc-scroll-index
-                                    *ngIf="servicesAlerts && servicesAlerts.scroll"
-                                    (pageChange)="onPaginatorChange($event)"
-                                    [scroll]="servicesAlerts.scroll">
-                                </oitc-scroll-index>
-                            </c-col>
-                        </c-row>
-                    </c-container>
-                    <!-- End Top Alerts Area -->
-                </ng-container>
-            </div>
-
-            <div class="box-x">
-                <ng-container *ngIf="animationStateShowConfig">
-                    <!-- Config Area -->
-                    <c-row class="mb-2" *ngIf="config && widget">
-                        <c-col>
-                            <fieldset>
-                                <legend class="fs-5">
-                                    {{ t('Service status') }}
-                                </legend>
-                                <c-form-check class="mb-1">
-                                    <input cFormCheckInput
-                                           class="radio-lg radio-success border-success"
-                                           type="radio"
-                                           [id]="'servicestatus-ok-'+widget.id"
-                                           [name]="'servicestatus-ok-'+widget.id"
-                                           [value]="'ok'"
-                                           [(ngModel)]="config.state"
-                                    />
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           [for]="'servicestatus-ok-'+widget.id">
-                                        {{ t('Ok') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check class="mb-1">
-                                    <input cFormCheckInput
-                                           class="radio-lg radio-warning border-warning"
-                                           type="radio"
-                                           [id]="'servicestatus-warning-'+widget.id"
-                                           [name]="'servicestatus-warning-'+widget.id"
-                                           [value]="'warning'"
-                                           [(ngModel)]="config.state"
-                                    />
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           [for]="'servicestatus-warning-'+widget.id">
-                                        {{ t('Warning') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check class="mb-1">
-                                    <input cFormCheckInput
-                                           class="radio-lg radio-danger border-danger"
-                                           type="radio"
-                                           [id]="'servicestatus-critical-'+widget.id"
-                                           [name]="'servicestatus-critical-'+widget.id"
-                                           [value]="'critical'"
-                                           [(ngModel)]="config.state"
-                                    />
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           [for]="'servicestatus-critical-'+widget.id">
-                                        {{ t('Critical') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check class="mb-1">
-                                    <input cFormCheckInput
-                                           class="radio-lg radio-secondary border-secondary"
-                                           type="radio"
-                                           [id]="'servicestatus-unknown-'+widget.id"
-                                           [name]="'servicestatus-unknown-'+widget.id"
-                                           [value]="'unknown'"
-                                           [(ngModel)]="config.state"
-                                    />
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           [for]="'servicestatus-unknown-'+widget.id">
-                                        {{ t('Unknown') }}
-                                    </label>
-                                </c-form-check>
-                            </fieldset>
-                            <fieldset class="mt-2">
-                                <legend class="fs-5">
-                                    {{ t('Not older than interval') }}
-                                </legend>
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'history']" class="text-secondary"></fa-icon>
-                                    </span>
-                                    <input [(ngModel)]="config.not_older_than"
-                                           [placeholder]="'min value 1' | transloco"
-                                           [name]="'not_older_than-'+widget.id"
-                                           cFormControl
-                                           type="number"
-                                           min="1"
-                                    />
-                                    <c-dropdown alignment="end">
-                                        <button cButton cDropdownToggle color="primary">
-                                            @switch (config.not_older_than_unit) {
-                                                @case ('MINUTE') {
-                                                    {{ t('minutes') }}
-                                                }
-                                                @case ('HOUR') {
-                                                    {{ t('hours') }}
-                                                }
-                                                @case ('DAY') {
-                                                    {{ t('days') }}
-                                                }
-                                            }
-                                        </button>
-                                        <ul cDropdownMenu>
-                                            <li cDropdownItem (click)="config.not_older_than_unit = 'MINUTE'">
-                                                {{ t('minutes') }}
-                                            </li>
-                                            <li cDropdownItem (click)="config.not_older_than_unit = 'HOUR'">
-                                                {{ t('hours') }}
-                                            </li>
-                                            <li cDropdownItem (click)="config.not_older_than_unit = 'DAY'">
-                                                {{ t('days') }}
-                                            </li>
-                                        </ul>
-                                    </c-dropdown>
-                                </c-input-group>
-                            </fieldset>
-                        </c-col>
-                    </c-row>
-                    <c-row>
-                        <c-col class="text-end">
-                            <button cButton class="ripple" color="primary" type="button" (click)="saveWidgetConfig()">
-                                {{ t('Save') }}
-                            </button>
-                        </c-col>
-                    </c-row>
-                    <!-- End Config Area -->
-                </ng-container>
-            </div>
-        </div>
+      <div class="box-x">
+        @if (animationStateShowConfig) {
+          <!-- Config Area -->
+          @if (config && widget) {
+            <c-row class="mb-2">
+              <c-col>
+                <fieldset>
+                  <legend class="fs-5">
+                    {{ t('Service status') }}
+                  </legend>
+                  <c-form-check class="mb-1">
+                    <input cFormCheckInput
+                      class="radio-lg radio-success border-success"
+                      type="radio"
+                      [id]="'servicestatus-ok-'+widget.id"
+                      [name]="'servicestatus-ok-'+widget.id"
+                      [value]="'ok'"
+                      [(ngModel)]="config.state"
+                      />
+                    <label cFormCheckLabel class="ms-1 mt-1"
+                      [for]="'servicestatus-ok-'+widget.id">
+                      {{ t('Ok') }}
+                    </label>
+                  </c-form-check>
+                  <c-form-check class="mb-1">
+                    <input cFormCheckInput
+                      class="radio-lg radio-warning border-warning"
+                      type="radio"
+                      [id]="'servicestatus-warning-'+widget.id"
+                      [name]="'servicestatus-warning-'+widget.id"
+                      [value]="'warning'"
+                      [(ngModel)]="config.state"
+                      />
+                    <label cFormCheckLabel class="ms-1 mt-1"
+                      [for]="'servicestatus-warning-'+widget.id">
+                      {{ t('Warning') }}
+                    </label>
+                  </c-form-check>
+                  <c-form-check class="mb-1">
+                    <input cFormCheckInput
+                      class="radio-lg radio-danger border-danger"
+                      type="radio"
+                      [id]="'servicestatus-critical-'+widget.id"
+                      [name]="'servicestatus-critical-'+widget.id"
+                      [value]="'critical'"
+                      [(ngModel)]="config.state"
+                      />
+                    <label cFormCheckLabel class="ms-1 mt-1"
+                      [for]="'servicestatus-critical-'+widget.id">
+                      {{ t('Critical') }}
+                    </label>
+                  </c-form-check>
+                  <c-form-check class="mb-1">
+                    <input cFormCheckInput
+                      class="radio-lg radio-secondary border-secondary"
+                      type="radio"
+                      [id]="'servicestatus-unknown-'+widget.id"
+                      [name]="'servicestatus-unknown-'+widget.id"
+                      [value]="'unknown'"
+                      [(ngModel)]="config.state"
+                      />
+                    <label cFormCheckLabel class="ms-1 mt-1"
+                      [for]="'servicestatus-unknown-'+widget.id">
+                      {{ t('Unknown') }}
+                    </label>
+                  </c-form-check>
+                </fieldset>
+                <fieldset class="mt-2">
+                  <legend class="fs-5">
+                    {{ t('Not older than interval') }}
+                  </legend>
+                  <c-input-group>
+                    <span cInputGroupText>
+                      <fa-icon [icon]="['fas', 'history']" class="text-secondary"></fa-icon>
+                    </span>
+                    <input [(ngModel)]="config.not_older_than"
+                      [placeholder]="'min value 1' | transloco"
+                      [name]="'not_older_than-'+widget.id"
+                      cFormControl
+                      type="number"
+                      min="1"
+                      />
+                    <c-dropdown alignment="end">
+                      <button cButton cDropdownToggle color="primary">
+                        @switch (config.not_older_than_unit) {
+                          @case ('MINUTE') {
+                            {{ t('minutes') }}
+                          }
+                          @case ('HOUR') {
+                            {{ t('hours') }}
+                          }
+                          @case ('DAY') {
+                            {{ t('days') }}
+                          }
+                        }
+                      </button>
+                      <ul cDropdownMenu>
+                        <li cDropdownItem (click)="config.not_older_than_unit = 'MINUTE'">
+                          {{ t('minutes') }}
+                        </li>
+                        <li cDropdownItem (click)="config.not_older_than_unit = 'HOUR'">
+                          {{ t('hours') }}
+                        </li>
+                        <li cDropdownItem (click)="config.not_older_than_unit = 'DAY'">
+                          {{ t('days') }}
+                        </li>
+                      </ul>
+                    </c-dropdown>
+                  </c-input-group>
+                </fieldset>
+              </c-col>
+            </c-row>
+          }
+          <c-row>
+            <c-col class="text-end">
+              <button cButton class="ripple" color="primary" type="button" (click)="saveWidgetConfig()">
+                {{ t('Save') }}
+              </button>
+            </c-col>
+          </c-row>
+          <!-- End Config Area -->
+        }
+      </div>
     </div>
+  </div>
 
 </ng-container>

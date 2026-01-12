@@ -34,7 +34,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 
@@ -75,8 +75,6 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
     FormsModule,
     InputGroupComponent,
     InputGroupTextDirective,
-    NgForOf,
-    NgIf,
     NgSelectModule,
     PermissionDirective,
     QueryHandlerCheckerComponent,

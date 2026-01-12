@@ -1,226 +1,238 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <a>
-                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                    {{ t('IsarFlow Module') }}
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/', 'isarflow_module', 'isarflow_hosts', 'index']"
-                   *oitcPermission="['IsarFlowModule', 'IsarflowHosts', 'index']">
-                    <fa-icon [icon]="['fas', 'square-poll-horizontal']"></fa-icon>
-                    {{ t('IsarFlow Hosts') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Overview') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <a>
+            <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+            {{ t('IsarFlow Module') }}
+          </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/', 'isarflow_module', 'isarflow_hosts', 'index']"
+            *oitcPermission="['IsarFlowModule', 'IsarflowHosts', 'index']">
+            <fa-icon [icon]="['fas', 'square-poll-horizontal']"></fa-icon>
+            {{ t('IsarFlow Hosts') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'list']"></fa-icon>
+          {{ t('Overview') }}
+        </li>
+      </ol>
     </nav>
 
     <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('IsarFlow Hosts') }}
-                <small class="fw-300">
-                    {{ t('overview') }}
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                        {{ t('Filter') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
+      <c-card-header>
+        <h5 cCardTitle>{{ t('IsarFlow Hosts') }}
+          <small class="fw-300">
+            {{ t('overview') }}
+          </small>
+        </h5>
+        <c-nav class="card-toolbar card-header-pills">
+          <c-nav-item class="px-1">
+            <button (click)="load()" cButton class="ripple" color="default" size="xs">
+              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+              {{ t('Refresh') }}
+            </button>
+          </c-nav-item>
+          <c-nav-item class="px-1">
+            <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+              {{ t('Filter') }}
+            </button>
+          </c-nav-item>
+        </c-nav>
+      </c-card-header>
+      <c-card-body>
 
-            <!-- Filter -->
-            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-                <c-row>
-                    <c-col>
-                        <h6 class="pb-2 mb-3 border-bottom">
-                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                            {{ t('Filter') }}
-                        </h6>
-                    </c-col>
-                </c-row>
-                <form cForm>
-                    <c-row class="mb-2">
-                        <c-col [xs]="12" [lg]="6">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[IsarflowHosts.hostname]']"
-                                       [placeholder]="'Filter by host name' | transloco"
-                                       aria-label="hostname"
-                                       cFormControl
-                                       name="hostname"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col [xs]="12" [lg]="6">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[IsarflowHosts.description]']"
-                                       [placeholder]="'Filter by description' | transloco"
-                                       aria-label="description"
-                                       cFormControl
-                                       name="description"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                    </c-row>
-                    <c-row class="mb-2">
-                        <c-col [xs]="12" [lg]="6">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[IsarflowHosts.ipaddress]']"
-                                       [placeholder]="'Filter by ip address' | transloco"
-                                       aria-label="ipaddress"
-                                       cFormControl
-                                       name="ipaddress"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col [xs]="12" [lg]="6">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'ethernet']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[IsarflowInterfaces.interface_name]']"
-                                       [placeholder]="'Filter by interface name' | transloco"
-                                       aria-label="interface_name"
-                                       cFormControl
-                                       name="interface_name"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                    </c-row>
+        <!-- Filter -->
+        <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+          <c-row>
+            <c-col>
+              <h6 class="pb-2 mb-3 border-bottom">
+                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                {{ t('Filter') }}
+              </h6>
+            </c-col>
+          </c-row>
+          <form cForm>
+            <c-row class="mb-2">
+              <c-col [xs]="12" [lg]="6">
+                <c-input-group>
+                  <span cInputGroupText>
+                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                  </span>
+                  <input (debouncedValue)="onFilterChange($event)"
+                    [(ngModel)]="params['filter[IsarflowHosts.hostname]']"
+                    [placeholder]="'Filter by host name' | transloco"
+                    aria-label="hostname"
+                    cFormControl
+                    name="hostname"
+                    oitcDebounce
+                    type="text"
+                    />
+                </c-input-group>
+              </c-col>
+              <c-col [xs]="12" [lg]="6">
+                <c-input-group>
+                  <span cInputGroupText>
+                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                  </span>
+                  <input (debouncedValue)="onFilterChange($event)"
+                    [(ngModel)]="params['filter[IsarflowHosts.description]']"
+                    [placeholder]="'Filter by description' | transloco"
+                    aria-label="description"
+                    cFormControl
+                    name="description"
+                    oitcDebounce
+                    type="text"
+                    />
+                </c-input-group>
+              </c-col>
+            </c-row>
+            <c-row class="mb-2">
+              <c-col [xs]="12" [lg]="6">
+                <c-input-group>
+                  <span cInputGroupText>
+                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                  </span>
+                  <input (debouncedValue)="onFilterChange($event)"
+                    [(ngModel)]="params['filter[IsarflowHosts.ipaddress]']"
+                    [placeholder]="'Filter by ip address' | transloco"
+                    aria-label="ipaddress"
+                    cFormControl
+                    name="ipaddress"
+                    oitcDebounce
+                    type="text"
+                    />
+                </c-input-group>
+              </c-col>
+              <c-col [xs]="12" [lg]="6">
+                <c-input-group>
+                  <span cInputGroupText>
+                    <fa-icon [icon]="['fas', 'ethernet']"></fa-icon>
+                  </span>
+                  <input (debouncedValue)="onFilterChange($event)"
+                    [(ngModel)]="params['filter[IsarflowInterfaces.interface_name]']"
+                    [placeholder]="'Filter by interface name' | transloco"
+                    aria-label="interface_name"
+                    cFormControl
+                    name="interface_name"
+                    oitcDebounce
+                    type="text"
+                    />
+                </c-input-group>
+              </c-col>
+            </c-row>
 
-                    <c-row class="mt-2">
-                        <c-col class="text-end">
-                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                {{ t('Reset filter') }}
-                            </button>
-                        </c-col>
-                    </c-row>
-                </form>
-            </c-container>
-            <!-- End Filter -->
+            <c-row class="mt-2">
+              <c-col class="text-end">
+                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                  {{ t('Reset filter') }}
+                </button>
+              </c-col>
+            </c-row>
+          </form>
+        </c-container>
+        <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!isarflowHosts"></oitc-table-loader>
-            <oitc-no-records *ngIf="isarflowHosts && isarflowHosts.isarflowHosts.length === 0"></oitc-no-records>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="isarflowHosts"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th scope="col" mat-sort-header="Hosts.name">
-                        {{ t('Host name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="IsarflowHosts.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col" mat-sort-header="IsarflowHosts.ipaddress">
-                        {{ t('IP Address') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Interfaces') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody *ngIf="isarflowHosts">
-                <tr *ngFor="let isarflowHost of isarflowHosts.isarflowHosts">
+        @if (!isarflowHosts) {
+          <oitc-table-loader></oitc-table-loader>
+        }
+        @if (isarflowHosts && isarflowHosts.isarflowHosts.length === 0) {
+          <oitc-no-records></oitc-no-records>
+        }
+        @if (isarflowHosts) {
+          <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+            (matSortChange)="onSortChange($event)"
+            [matSortActive]="params.sort" [matSortDirection]="params.direction">
+            <thead>
+              <tr>
+                <th scope="col" mat-sort-header="Hosts.name">
+                  {{ t('Host name') }}
+                </th>
+                <th scope="col" mat-sort-header="IsarflowHosts.description">
+                  {{ t('Description') }}
+                </th>
+                <th scope="col" mat-sort-header="IsarflowHosts.ipaddress">
+                  {{ t('IP Address') }}
+                </th>
+                <th scope="col">
+                  {{ t('Interfaces') }}
+                </th>
+                <th class="text-center width-50" scope="col">
+                  <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                </th>
+              </tr>
+            </thead>
+            @if (isarflowHosts) {
+              <tbody>
+                @for (isarflowHost of isarflowHosts.isarflowHosts; track isarflowHost) {
+                  <tr>
                     <td>
-                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                            <a [routerLink]="['/', 'hosts', 'browser', isarflowHost.host_id]"
-                               [queryParams]="{selectedTab: HostBrowserTabs.IsarFlow}">
-                                {{ isarflowHost.host.name }}
-                            </a>
-                        } @else {
-                            {{ isarflowHost.host.name }}
+                      @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                        <a [routerLink]="['/', 'hosts', 'browser', isarflowHost.host_id]"
+                          [queryParams]="{selectedTab: HostBrowserTabs.IsarFlow}">
+                          {{ isarflowHost.host.name }}
+                        </a>
+                      } @else {
+                        {{ isarflowHost.host.name }}
+                      }
+                    </td>
+                    <td>
+                      {{ isarflowHost.description }}
+                    </td>
+                    <td>
+                      {{ isarflowHost.ipaddress }}
+                    </td>
+                    <td>
+                      <ul>
+                        @for (interface of isarflowHost.isarflow_interfaces; track interface) {
+                          <li>
+                            {{ interface.interface_name }}
+                          </li>
                         }
-                    </td>
-                    <td>
-                        {{ isarflowHost.description }}
-                    </td>
-                    <td>
-                        {{ isarflowHost.ipaddress }}
-                    </td>
-                    <td>
-                        <ul>
-                            <li *ngFor="let interface of isarflowHost.isarflow_interfaces">
-                                {{ interface.interface_name }}
-                            </li>
-                        </ul>
+                      </ul>
                     </td>
                     <td class="width-50">
-                        <oitc-actions-button [permission]="'hosts.browser'"
-                                             [icon]="['fas', 'desktop']"
-                                             [url]="'/hosts/browser/' + isarflowHost.host_id">
-                            <oitc-actions-button-element [permission]="'hosts.browser'"
-                                                         [url]="'/hosts/browser/' + isarflowHost.host_id">
-                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                {{ t('Browser') }}
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
+                      <oitc-actions-button [permission]="'hosts.browser'"
+                        [icon]="['fas', 'desktop']"
+                        [url]="'/hosts/browser/' + isarflowHost.host_id">
+                        <oitc-actions-button-element [permission]="'hosts.browser'"
+                          [url]="'/hosts/browser/' + isarflowHost.host_id">
+                          <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                          {{ t('Browser') }}
+                        </oitc-actions-button-element>
+                      </oitc-actions-button>
                     </td>
-                </tr>
-                </tbody>
-            </table>
+                  </tr>
+                }
+              </tbody>
+            }
+          </table>
+        }
 
-            <c-container class="mt-3"
-                         [fluid]="true">
-                <c-row>
-                    <c-col>
-                        <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="isarflowHosts"
-                                [paginateOrScroll]="isarflowHosts"></oitc-paginate-or-scroll>
-                    </c-col>
-                </c-row>
-            </c-container>
-        </c-card-body>
-        <c-card-footer>
-            &nbsp;
-        </c-card-footer>
+        <c-container class="mt-3"
+          [fluid]="true">
+          <c-row>
+            <c-col>
+              @if (isarflowHosts) {
+                <oitc-paginate-or-scroll
+                  (paginatorChange)="onPaginatorChange($event)"
+                [paginateOrScroll]="isarflowHosts"></oitc-paginate-or-scroll>
+              }
+            </c-col>
+          </c-row>
+        </c-container>
+      </c-card-body>
+      <c-card-footer>
+        &nbsp;
+      </c-card-footer>
     </c-card>
 
-</ng-container>
+  </ng-container>

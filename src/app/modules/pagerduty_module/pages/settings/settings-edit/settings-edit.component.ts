@@ -7,7 +7,7 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
+
 
 import {
     CardBodyComponent,
@@ -39,32 +39,31 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
 @Component({
     selector: 'oitc-settings-edit',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        FormLoaderComponent,
-        NgIf,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        PaginatorModule,
-        RequiredIconComponent,
-        XsButtonDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        ApikeyDocModalComponent
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    FormLoaderComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    PaginatorModule,
+    RequiredIconComponent,
+    XsButtonDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TrueFalseDirective,
+    ApikeyDocModalComponent
+],
     templateUrl: './settings-edit.component.html',
     styleUrl: './settings-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

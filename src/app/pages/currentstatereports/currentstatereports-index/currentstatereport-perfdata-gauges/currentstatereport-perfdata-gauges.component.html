@@ -1,12 +1,13 @@
 <div class="w-100 text-center">
-    @for (gauge of perfdata; track $index) {
-        <oitc-currentstatereport-perfdata-gauge
-            *ngIf="!this.colapsed || $index < 1"
-            [gauge]="gauge"></oitc-currentstatereport-perfdata-gauge>
+  @for (gauge of perfdata; track $index) {
+    @if (!this.colapsed || $index < 1) {
+      <oitc-currentstatereport-perfdata-gauge
+      [gauge]="gauge"></oitc-currentstatereport-perfdata-gauge>
     }
-    @if (perfdata.length > 1) {
-        <div class="cursor-pointer" (click)="colapsed = !colapsed">
-            <fa-icon [icon]="['fas', (colapsed ? 'chevron-down' : 'chevron-up')]"></fa-icon>
-        </div>
-    }
+  }
+  @if (perfdata.length > 1) {
+    <div class="cursor-pointer" (click)="colapsed = !colapsed">
+      <fa-icon [icon]="['fas', (colapsed ? 'chevron-down' : 'chevron-up')]"></fa-icon>
+    </div>
+  }
 </div>

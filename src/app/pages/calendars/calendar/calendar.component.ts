@@ -35,7 +35,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { AddNewEvent, CalendarEvent, Countries } from '../calendars.interface';
 import {
@@ -65,8 +65,6 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
     FaIconComponent,
     FullCalendarModule,
     KeyValuePipe,
-    NgForOf,
-    NgIf,
     RowComponent,
     XsButtonDirective,
     NgClass,

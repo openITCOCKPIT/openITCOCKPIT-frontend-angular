@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, input, TemplateRef } from '@angular/core';
 import { ContainersIndexNested } from '../../containers.interface';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -16,7 +16,6 @@ import { ContainersService } from '../../containers.service';
 @Component({
     selector: 'oitc-container-nest',
     imports: [
-    NgIf,
     TranslocoDirective,
     CommonModule
 ],

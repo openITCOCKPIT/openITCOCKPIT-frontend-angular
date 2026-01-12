@@ -37,33 +37,32 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { ChangecalendarWidgetModalService } from '../../widgets/changecalendar-widget-modal.service';
 import { Subscription } from 'rxjs';
 import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../../services/timezone.service';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-changecalendars-event-viewer',
     imports: [
-        ModalComponent,
-        ModalHeaderComponent,
-        ModalBodyComponent,
-        ModalFooterComponent,
-        RowComponent,
-        ColComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        ReactiveFormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TranslocoPipe,
-        TrustAsHtmlPipe,
-        TranslocoDirective,
-        FormsModule,
-        FaIconComponent,
-        XsButtonDirective,
-        ModalTitleDirective,
-        NgIf,
-    ],
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalBodyComponent,
+    ModalFooterComponent,
+    RowComponent,
+    ColComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    ReactiveFormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    TranslocoPipe,
+    TrustAsHtmlPipe,
+    TranslocoDirective,
+    FormsModule,
+    FaIconComponent,
+    XsButtonDirective,
+    ModalTitleDirective
+],
     templateUrl: './changecalendars-event-viewer.component.html',
     styleUrl: './changecalendars-event-viewer.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

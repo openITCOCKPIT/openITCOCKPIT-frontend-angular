@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, ViewChild } from '@angular/core';
 
-import { NgIf, TitleCasePipe } from '@angular/common';
+import { TitleCasePipe } from '@angular/common';
 import {
     ColComponent,
     ProgressBarComponent,
@@ -34,7 +34,6 @@ import { TrustAsHtmlPipe } from '../../../../../../../pipes/trust-as-html.pipe';
 @Component({
     selector: 'oitc-evc-servicestatus-toaster',
     imports: [
-    NgIf,
     ProgressBarComponent,
     ProgressComponent,
     ToastBodyComponent,

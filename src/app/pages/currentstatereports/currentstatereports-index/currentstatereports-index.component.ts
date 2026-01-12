@@ -25,7 +25,7 @@ import {
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import {
@@ -77,7 +77,6 @@ import { saveAs } from 'file-saver';
     XsButtonDirective,
     RouterLink,
     CardFooterComponent,
-    NgIf,
     FormErrorDirective,
     FormFeedbackComponent,
     FormLabelDirective,
@@ -93,7 +92,6 @@ import { saveAs } from 'file-saver';
     FormsModule,
     SelectComponent,
     BorderDirective,
-    NgForOf,
     NgClass,
     TranslocoPipe,
     LabelLinkComponent,

@@ -13,7 +13,7 @@ import {
   FormSelectDirective,
   TableDirective
 } from '@coreui/angular';
-import { NgIf } from '@angular/common';
+
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -31,7 +31,6 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
     CardComponent,
     CardHeaderComponent,
     CardBodyComponent,
-    NgIf,
     TranslocoDirective,
     FaIconComponent,
     TableDirective,

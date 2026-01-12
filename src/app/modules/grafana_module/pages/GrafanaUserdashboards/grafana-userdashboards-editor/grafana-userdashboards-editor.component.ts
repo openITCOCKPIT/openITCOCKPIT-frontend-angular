@@ -13,7 +13,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -41,32 +41,31 @@ import {
 @Component({
     selector: 'oitc-grafana-userdashboards-editor',
     imports: [
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormDirective,
-        FormsModule,
-        NgIf,
-        OitcAlertComponent,
-        PermissionDirective,
-        ReactiveFormsModule,
-        TranslocoDirective,
-        TranslocoPipe,
-        RouterLink,
-        BackButtonDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        BlockLoaderComponent,
-        GrafanaRowComponent,
-        RowComponent,
-        ColComponent,
-        SynchronizeGrafanaModalComponent,
-        GrafanaPanelOptionsModalComponent,
-        GrafanaMetricOptionsModalComponent
-    ],
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormDirective,
+    FormsModule,
+    OitcAlertComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
+    TranslocoDirective,
+    TranslocoPipe,
+    RouterLink,
+    BackButtonDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    BlockLoaderComponent,
+    GrafanaRowComponent,
+    RowComponent,
+    ColComponent,
+    SynchronizeGrafanaModalComponent,
+    GrafanaPanelOptionsModalComponent,
+    GrafanaMetricOptionsModalComponent
+],
     templateUrl: './grafana-userdashboards-editor.component.html',
     styleUrl: './grafana-userdashboards-editor.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

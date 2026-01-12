@@ -1,4 +1,6 @@
 <div>
-    <ng-content></ng-content>
+  <ng-content></ng-content>
 </div>
-<div class="oitc-blocker" *ngIf="blocked()"></div>
+@if (blocked()) {
+  <div class="oitc-blocker"></div>
+}

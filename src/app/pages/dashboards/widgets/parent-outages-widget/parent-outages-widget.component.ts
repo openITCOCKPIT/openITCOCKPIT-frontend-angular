@@ -14,7 +14,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { HoststatusIconComponent } from '../../../hosts/hoststatus-icon/hoststatus-icon.component';
-import { NgIf } from '@angular/common';
+
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import { ParentOutagesWidgetService } from './parent-outages-widget.service';
 import { ParentOutage } from './parent-outages-widget.interface';
@@ -23,23 +23,22 @@ import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-rec
 @Component({
     selector: 'oitc-parent-outages-widget',
     imports: [
-        DebounceDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TranslocoPipe,
-        TranslocoDirective,
-        HoststatusIconComponent,
-        LabelLinkComponent,
-        NgIf,
-        RowComponent,
-        ColComponent,
-        ListGroupDirective,
-        ListGroupItemDirective,
-        NoRecordsComponent
-    ],
+    DebounceDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    TranslocoPipe,
+    TranslocoDirective,
+    HoststatusIconComponent,
+    LabelLinkComponent,
+    RowComponent,
+    ColComponent,
+    ListGroupDirective,
+    ListGroupItemDirective,
+    NoRecordsComponent
+],
     templateUrl: './parent-outages-widget.component.html',
     styleUrl: './parent-outages-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

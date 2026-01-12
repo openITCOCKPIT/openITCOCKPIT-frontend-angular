@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { Subject, Subscription, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ButtonDirective, HeaderNavComponent, TooltipDirective } from '@coreui/angular';
 import { HeaderStatsService } from './header-stats.service';
@@ -12,15 +12,14 @@ import { PermissionsService } from '../../../../permissions/permissions.service'
 @Component({
     selector: 'oitc-header-stats',
     imports: [
-        TranslocoDirective,
-        NgIf,
-        FaIconComponent,
-        ButtonDirective,
-        TooltipDirective,
-        RouterLink,
-        HeaderNavComponent,
-        AsyncPipe
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    ButtonDirective,
+    TooltipDirective,
+    RouterLink,
+    HeaderNavComponent,
+    AsyncPipe
+],
     templateUrl: './header-stats.component.html',
     styleUrl: './header-stats.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

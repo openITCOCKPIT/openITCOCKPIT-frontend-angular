@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 import { PrometheusAlertRule, PrometheusMetricDetails } from '../../pages/PrometheusQuery/prometheus-query.interface';
 import { ColComponent, RowComponent, TableDirective } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgIf } from '@angular/common';
+
 import { PrometheusQueryService } from '../../pages/PrometheusQuery/prometheus-query.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -24,7 +24,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
     ColComponent,
     TranslocoDirective,
     TableDirective,
-    NgIf,
     FaIconComponent
 ],
     templateUrl: './prometheus-service-browser.component.html',

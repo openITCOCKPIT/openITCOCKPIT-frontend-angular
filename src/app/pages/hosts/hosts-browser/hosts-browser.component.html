@@ -1,435 +1,653 @@
 <ng-container *transloco="let t">
 
-    <oitc-hosts-browser-menu
-        *ngIf="hostBrowserConfig"
-        [config]="hostBrowserConfig"
-        [lastUpdated]="lastUpdated"
-        (toggleRescheduling)="onToggleRescheduling($event)"></oitc-hosts-browser-menu>
+    @if (hostBrowserConfig) {
+        <oitc-hosts-browser-menu
+            [config]="hostBrowserConfig"
+            [lastUpdated]="lastUpdated"
+            (toggleRescheduling)="onToggleRescheduling($event)"></oitc-hosts-browser-menu>
+    }
 
     <oitc-query-handler-checker></oitc-query-handler-checker>
 
 
-    <oitc-browser-loader *ngIf="!result"></oitc-browser-loader>
-    <c-card class="mb-3 mt-3" *ngIf="result">
-        <c-card-header>
-            <h5 cCardTitle class="word-break">{{ t('Host') }}:
-                <small class="fw-300">
-                    {{ result.mergedHost.name }}
-                </small>
-            </h5>
-
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="loadHost()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['hosts', 'index']" cButton class="ripple" color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-
-            <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
-                <c-nav-item>
-                    <button
-                        class="nav-link"
-                        [ngClass]="{'active': selectedTab == HostBrowserTabs.StatusInformation}"
-                        (click)="changeTab(HostBrowserTabs.StatusInformation)">
-                        <fa-icon [icon]="['fas', 'info']"></fa-icon>
-                        {{ t('Status information') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item>
-                    <button
-                        class="nav-link"
-                        [ngClass]="{'active': selectedTab == HostBrowserTabs.DeviceInformation}"
-                        (click)="changeTab(HostBrowserTabs.DeviceInformation)">
-                        <fa-icon [icon]="['fas', 'hdd']"></fa-icon>
-                        {{ t('Device information') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item>
-                    <button
-                        *oitcPermission="['hosts', 'timeline']" class="nav-link"
-                        [ngClass]="{'active': selectedTab == HostBrowserTabs.Timeline}"
-                        (click)="changeTab(HostBrowserTabs.Timeline)">
-                        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                        {{ t('Timeline') }}
-                    </button>
-                </c-nav-item>
-
-                @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'ServicenowSettings', 'hostspecific']) | async )) {
+    @if (!result) {
+        <oitc-browser-loader></oitc-browser-loader>
+    }
+    @if (result) {
+        <c-card class="mb-3 mt-3">
+            <c-card-header>
+                <h5 cCardTitle class="word-break">{{ t('Host') }}:
+                    <small class="fw-300">
+                        {{ result.mergedHost.name }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="loadHost()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['hosts', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+                <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
                     <c-nav-item>
                         <button
                             class="nav-link"
-                            [ngClass]="{'active': selectedTab == HostBrowserTabs.ServiceNow}"
-                            (click)="changeTab(HostBrowserTabs.ServiceNow)">
-                            <fa-icon [icon]="['fas', 'user-circle']"></fa-icon>
-                            {{ t('ServiceNow') }}
+                            [ngClass]="{'active': selectedTab == HostBrowserTabs.StatusInformation}"
+                            (click)="changeTab(HostBrowserTabs.StatusInformation)">
+                            <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                            {{ t('Status information') }}
                         </button>
                     </c-nav-item>
-                }
-
-                @if (( PermissionsService.hasModuleObservable('GrafanaModule')|async ) && GrafanaIframe?.GrafanaDashboardExists) {
                     <c-nav-item>
                         <button
                             class="nav-link"
-                            [ngClass]="{'active': selectedTab == HostBrowserTabs.Grafana}"
-                            (click)="changeTab(HostBrowserTabs.Grafana)">
-                            <fa-icon [icon]="['fas', 'chart-bar']"></fa-icon>
-                            {{ t('Grafana') }}
+                            [ngClass]="{'active': selectedTab == HostBrowserTabs.DeviceInformation}"
+                            (click)="changeTab(HostBrowserTabs.DeviceInformation)">
+                            <fa-icon [icon]="['fas', 'hdd']"></fa-icon>
+                            {{ t('Device information') }}
                         </button>
                     </c-nav-item>
-                }
-
-                @if (( PermissionsService.hasModuleObservable('ImportModule')|async ) && ( PermissionsService.hasPermissionObservable(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])|async )) {
-                    <c-nav-item *ngIf="AdditionalInformationExists">
-                        <button
-                            class="nav-link"
-                            [ngClass]="{'active': selectedTab == HostBrowserTabs.CMDB}"
-                            (click)="changeTab(HostBrowserTabs.CMDB)">
-                            <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                            {{ t('CMDB') }}
-                        </button>
-                    </c-nav-item>
-                }
-
-                @if (( PermissionsService.hasModuleObservable('IsarFlowModule')|async )) {
-                    <c-nav-item *ngIf="isarFlowInformationExists">
-                        <button
-                            class="nav-link"
-                            [ngClass]="{'active': selectedTab == HostBrowserTabs.IsarFlow}"
-                            (click)="changeTab(HostBrowserTabs.IsarFlow)">
-                            <fa-icon [icon]="['fas', 'square-poll-horizontal']"></fa-icon>
-                            {{ t('IsarFlow') }}
-                        </button>
-                    </c-nav-item>
-                }
-
-
-                @if (( PermissionsService.hasModuleObservable('SLAModule')|async ) && SlaOverview) {
                     <c-nav-item>
-                        @if (SlaOverview.state === 'not_available') {
+                        <button
+                            *oitcPermission="['hosts', 'timeline']" class="nav-link"
+                            [ngClass]="{'active': selectedTab == HostBrowserTabs.Timeline}"
+                            (click)="changeTab(HostBrowserTabs.Timeline)">
+                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                            {{ t('Timeline') }}
+                        </button>
+                    </c-nav-item>
+                    @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'ServicenowSettings', 'hostspecific']) | async )) {
+                        <c-nav-item>
                             <button
-                                class="btn btn-labeled btn-primary btn-xs btn-w-m ripple"
-                                (click)="changeTab(HostBrowserTabs.SLA)">
-                                <span class="btn-label-bootstrap-5">
-                                    <fa-icon [icon]="['fas', 'question']"></fa-icon>
-                                </span> {{ t('Not available') }}
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.ServiceNow}"
+                                (click)="changeTab(HostBrowserTabs.ServiceNow)">
+                                <fa-icon [icon]="['fas', 'user-circle']"></fa-icon>
+                                {{ t('ServiceNow') }}
                             </button>
-                        } @else {
+                        </c-nav-item>
+                    }
+                    @if (( PermissionsService.hasModuleObservable('GrafanaModule')|async ) && GrafanaIframe?.GrafanaDashboardExists) {
+                        <c-nav-item>
                             <button
-                                class="btn btn-labeled btn-xs btn-w-m ripple"
-                                [ngClass]="'btn-'+SlaOverview.state"
-                                (click)="changeTab(HostBrowserTabs.SLA)">
-                                <span class="btn-label-bootstrap-5">
-                                    <fa-icon [icon]="['fas', 'check']"
-                                             *ngIf="SlaOverview.state == 'success'"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'triangle-exclamation']"
-                                             *ngIf="SlaOverview.state == 'warning'"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'bolt']"
-                                             *ngIf="SlaOverview.state == 'danger'"></fa-icon>
-                                </span> {{ SlaOverview.determined_availability_percent }} %
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.Grafana}"
+                                (click)="changeTab(HostBrowserTabs.Grafana)">
+                                <fa-icon [icon]="['fas', 'chart-bar']"></fa-icon>
+                                {{ t('Grafana') }}
                             </button>
+                        </c-nav-item>
+                    }
+                    @if (( PermissionsService.hasModuleObservable('ImportModule')|async ) && ( PermissionsService.hasPermissionObservable(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])|async )) {
+                        @if (AdditionalInformationExists) {
+                            <c-nav-item>
+                                <button
+                                    class="nav-link"
+                                    [ngClass]="{'active': selectedTab == HostBrowserTabs.CMDB}"
+                                    (click)="changeTab(HostBrowserTabs.CMDB)">
+                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                    {{ t('CMDB') }}
+                                </button>
+                            </c-nav-item>
                         }
-
-                    </c-nav-item>
-                }
-
-            </c-nav>
-
-        </c-card-header>
-        <c-card-body>
-
-            <!-- Status information start -->
-            <div *ngIf="selectedTab == HostBrowserTabs.StatusInformation">
-
-                <!-- Status for small resolution (mobile) -->
-                <div class="d-md-none p-2 text-white" [ngClass]="result.hoststatus.cssClass">
-                    <c-row>
-                        <c-col [xs]="6">
-                            {{ 'State' }}
-                        </c-col>
-                        <c-col [xs]="6">
-                            {{ result.hoststatus.currentState | hostStatusName }}
-                        </c-col>
-                    </c-row>
-
-                    <c-row *ngIf="result.hoststatus.isInMonitoring">
-                        <c-col [xs]="6">
-                            {{ 'State since' }}
-                        </c-col>
-                        <c-col [xs]="6" [title]="result.hoststatus.last_state_change_user">
-                            {{ result.hoststatus.last_state_change }}
-                        </c-col>
-
-                        <c-col [xs]="6">
-                            {{ 'Last check' }}
-                        </c-col>
-                        <c-col [xs]="6" [title]="result.hoststatus.lastCheckUser">
-                            {{ result.hoststatus.lastCheck }}
-                        </c-col>
-
-                        <c-col [xs]="6">
-                            {{ 'Next check' }}
-                        </c-col>
-                        @if (result.mergedHost.active_checks_enabled && !result.mergedHost.is_satellite_host) {
-                            <c-col [xs]="6" [title]="result.hoststatus.nextCheckUser">
-                                {{ result.hoststatus.nextCheck }}
-                            </c-col>
-                        } @else {
-                            <c-col [xs]="6">
-                                {{ t('n/a') }}
-                            </c-col>
+                    }
+                    @if (( PermissionsService.hasModuleObservable('IsarFlowModule')|async )) {
+                        @if (isarFlowInformationExists) {
+                            <c-nav-item>
+                                <button
+                                    class="nav-link"
+                                    [ngClass]="{'active': selectedTab == HostBrowserTabs.IsarFlow}"
+                                    (click)="changeTab(HostBrowserTabs.IsarFlow)">
+                                    <fa-icon [icon]="['fas', 'square-poll-horizontal']"></fa-icon>
+                                    {{ t('IsarFlow') }}
+                                </button>
+                            </c-nav-item>
                         }
-
-                        <c-col [xs]="6">
-                            {{ 'State type' }}
-                        </c-col>
-                        <c-col [xs]="6">
-                            @if (result.hoststatus.isHardstate) {
-                                {{ t('Hard state') }}
+                    }
+                    @if (( PermissionsService.hasModuleObservable('SLAModule')|async ) && SlaOverview) {
+                        <c-nav-item>
+                            @if (SlaOverview.state === 'not_available') {
+                                <button
+                                    class="btn btn-labeled btn-primary btn-xs btn-w-m ripple"
+                                    (click)="changeTab(HostBrowserTabs.SLA)">
+                                    <span class="btn-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'question']"></fa-icon>
+                                    </span> {{ t('Not available') }}
+                                </button>
                             } @else {
-                                {{ t('Soft state') }}
+                                <button
+                                    class="btn btn-labeled btn-xs btn-w-m ripple"
+                                    [ngClass]="'btn-'+SlaOverview.state"
+                                    (click)="changeTab(HostBrowserTabs.SLA)">
+                                    <span class="btn-label-bootstrap-5">
+                                        @if (SlaOverview.state == 'success') {
+                                            <fa-icon [icon]="['fas', 'check']"
+                                            ></fa-icon>
+                                        }
+                                        @if (SlaOverview.state == 'warning') {
+                                            <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                            ></fa-icon>
+                                        }
+                                        @if (SlaOverview.state == 'danger') {
+                                            <fa-icon [icon]="['fas', 'bolt']"
+                                            ></fa-icon>
+                                        }
+                                    </span> {{ SlaOverview.determined_availability_percent }} %
+                                </button>
                             }
-                            ({{ result.hoststatus.current_check_attempt }}
-                            /{{ result.hoststatus.max_check_attempts }})
-                        </c-col>
-
-                    </c-row>
-
-                    <!-- External Commands Mobile View -->
-                    <c-row
-                        *ngIf="result.canSubmitExternalCommands && result.mergedHost.allowEdit && result.hoststatus.isInMonitoring">
-                        <c-button-toolbar role="group" class="justify-content-center pt-2">
-                            <c-button-group role="group">
-                                <button cButton color="default"
-                                        [cTooltip]="'Reset check time' | transloco" cTooltipPlacement="top"
-                                        (click)="resetChecktime(result.mergedHost)">
-                                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                                </button>
-
-                                <button cButton color="default"
-                                        [cTooltip]="'Schedule maintenance' | transloco" cTooltipPlacement="top"
-                                        (click)="toggleDowntimeModal(result.mergedHost)">
-                                    <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                </button>
-
-                                <button cButton color="default" *ngIf="Number(result.hoststatus.currentState) > 0"
-                                        [cTooltip]="'Acknowledge host status' | transloco" cTooltipPlacement="top"
-                                        (click)="acknowledgeStatus(result.mergedHost)">
-                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                </button>
-
-                                <button cButton color="default"
-                                        [cTooltip]="'Passive transfer check result' | transloco"
-                                        cTooltipPlacement="top"
-                                        (click)="processCheckResult(result.mergedHost)">
-                                    <fa-icon [icon]="['fas', 'download']"></fa-icon>
-                                </button>
-
-                                <button cButton color="default" *ngIf="!result.hoststatus.flap_detection_enabled"
-                                        [cTooltip]="'Enable flap detection' | transloco" cTooltipPlacement="top"
-                                        (click)="enableFlapdetection(result.mergedHost)">
-                                    <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
-                                </button>
-
-                                <button cButton color="default" *ngIf="result.hoststatus.flap_detection_enabled"
-                                        [cTooltip]="'Disable flap detection' | transloco" cTooltipPlacement="top"
-                                        (click)="disableFlapdetection(result.mergedHost)">
-                                    <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
-                                </button>
-
-                                <button cButton color="default" *ngIf="!result.hoststatus.notifications_enabled"
-                                        [cTooltip]="'Enable notifications' | transloco" cTooltipPlacement="top"
-                                        (click)="enableNotifications(result.mergedHost)">
-                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                </button>
-
-                                <button cButton color="default" *ngIf="result.hoststatus.notifications_enabled"
-                                        [cTooltip]="'Disable notifications' | transloco" cTooltipPlacement="top"
-                                        (click)="disableNotifications(result.mergedHost)">
-                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                </button>
-
-                            </c-button-group>
-                        </c-button-toolbar>
-                    </c-row>
-
-
-                </div>
-                <!-- End of mobile status view -->
-
-                <c-row>
-                    <c-col [xs]="12" [sm]="12" [md]="7" [lg]="9">
-
-                        <!-- Check if host is disabled -->
-                        <c-col *ngIf="result.mergedHost.disabled">
-                            <c-card [cBorder]="{top: {color: 'danger', width: 3}}" [textColor]="'danger'"
-                                    class="mb-3">
-                                <c-card-header>
-                                    <h4>{{ t('Attention!') }}</h4>
-                                </c-card-header>
-                                <c-card-body>
-                                    <p cCardText>
-                                        {{ t('This host is currently disabled!') }}
-                                    </p>
-                                </c-card-body>
-                            </c-card>
-                        </c-col>
-
-                        <c-row>
-                            <c-col [xs]="12" class="mt-1">
-                                <h4>{{ t('Status overview') }}</h4>
-                            </c-col>
-                        </c-row>
-
-                        <!-- Downtime -->
-                        <c-row *ngIf="Number(result.hoststatus.scheduledDowntimeDepth) > 0 && result.downtime">
-                            <c-col [xs]="12">
-                                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                                        class="mb-3">
-                                    <c-card-header>
-                                        <h5 class="text-info">
-                                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                            {{ t('The host is currently in a planned maintenance period') }}
-                                        </h5>
-                                    </c-card-header>
-                                    <c-card-body>
-                                        <div>
-                                            {{ t('Downtime was set by') }}
-                                            <b>{{ result.downtime.authorName }}</b>
-                                            {{ t('with an duration of') }}
-                                            <b>{{ result.downtime.durationHuman }}</b>.
-                                        </div>
-                                        <div class="pt-1">
-                                            <small>
-                                                {{ t('Start time:') }}
-                                                {{ result.downtime.scheduledStartTime }}
-                                                {{ t('End time:') }}
-                                                {{ result.downtime.scheduledEndTime }}
-                                            </small>
-                                        </div>
-                                        <div class="pt-1">
-                                            {{ t('Comment: ') }}
-                                            {{ result.downtime.commentData }}
-                                        </div>
-
-                                        <div class="w-100" *oitcPermission="['downtimes', 'delete']">
-                                            <button (click)="toggleCancelDowntimeModal(result.downtime)" cButton
-                                                    class="ripple float-end" color="danger"
-                                                    size="xs"
-                                                    *ngIf="result.downtime.allowEdit && result.downtime.isCancellable">
-                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                {{ t('Cancel') }}
-                                            </button>
-                                        </div>
-
-                                    </c-card-body>
-                                </c-card>
-                            </c-col>
-                        </c-row>
-
-                        <!-- Acknowledgement -->
-                        <c-row *ngIf="result.hoststatus.problemHasBeenAcknowledged && result.acknowledgement">
-                            <c-col [xs]="12">
-                                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                                        class="mb-3">
-                                    <c-card-header>
-                                        <h5 class="text-info">
-                                            <fa-icon
-                                                [icon]="(result.acknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
-                                            {{ t('State of host is acknowledged') }}
-                                            <span [hidden]="!result.acknowledgement.is_sticky">
-                                                ({{ t('Sticky') }})
-                                            </span>
-                                        </h5>
-                                    </c-card-header>
-                                    <c-card-body>
-                                        <div>
-                                            {{ t('Acknowledgement was set by') }}
-                                            <b>{{ result.acknowledgement.author_name }}</b>
-                                            {{ t('at') }}
-                                            {{ result.acknowledgement.entry_time }}.
-                                        </div>
-                                        <div class="pt-1">
-                                            {{ t('Comment: ') }}
-                                            <div class="word-break d-inline"
-                                                 [innerHTML]="String(result.acknowledgement.commentDataHtml) | trustAsHtml "></div>
-                                        </div>
-
-                                        <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
-                                            <button
-                                                (click)="toggleDeleteAcknowledgementModal(result.mergedHost)"
-                                                cButton
-                                                class="ripple float-end" color="danger"
-                                                size="xs"
-                                                *ngIf="result.acknowledgement.allowEdit">
-                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                {{ t('Delete') }}
-                                            </button>
-                                        </div>
-
-                                    </c-card-body>
-                                </c-card>
-                            </c-col>
-                        </c-row>
-
-                        <!-- Flapping alert -->
-                        <c-alert color="warning" [dismissible]="false" *ngIf="result.hoststatus.isFlapping">
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                            {{ t('The state of this host is currently flapping!') }}
-                        </c-alert>
-
-                        <!-- Planned Host Downtimes (downtimes in the future) -->
-                        @if (result && result.plannedDowntimes && result.plannedDowntimes.length > 0) {
+                        </c-nav-item>
+                    }
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <!-- Status information start -->
+                @if (selectedTab == HostBrowserTabs.StatusInformation) {
+                    <div>
+                        <!-- Status for small resolution (mobile) -->
+                        <div class="d-md-none p-2 text-white" [ngClass]="result.hoststatus.cssClass">
                             <c-row>
-                                <c-col [xs]="12">
-                                    <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                                            class="mb-3">
-                                        <c-card-header>
-                                            <h5 class="text-info">
+                                <c-col [xs]="6">
+                                    {{ 'State' }}
+                                </c-col>
+                                <c-col [xs]="6">
+                                    {{ result.hoststatus.currentState | hostStatusName }}
+                                </c-col>
+                            </c-row>
+                            @if (result.hoststatus.isInMonitoring) {
+                                <c-row>
+                                    <c-col [xs]="6">
+                                        {{ 'State since' }}
+                                    </c-col>
+                                    <c-col [xs]="6" [title]="result.hoststatus.last_state_change_user">
+                                        {{ result.hoststatus.last_state_change }}
+                                    </c-col>
+                                    <c-col [xs]="6">
+                                        {{ 'Last check' }}
+                                    </c-col>
+                                    <c-col [xs]="6" [title]="result.hoststatus.lastCheckUser">
+                                        {{ result.hoststatus.lastCheck }}
+                                    </c-col>
+                                    <c-col [xs]="6">
+                                        {{ 'Next check' }}
+                                    </c-col>
+                                    @if (result.mergedHost.active_checks_enabled && !result.mergedHost.is_satellite_host) {
+                                        <c-col [xs]="6" [title]="result.hoststatus.nextCheckUser">
+                                            {{ result.hoststatus.nextCheck }}
+                                        </c-col>
+                                    } @else {
+                                        <c-col [xs]="6">
+                                            {{ t('n/a') }}
+                                        </c-col>
+                                    }
+                                    <c-col [xs]="6">
+                                        {{ 'State type' }}
+                                    </c-col>
+                                    <c-col [xs]="6">
+                                        @if (result.hoststatus.isHardstate) {
+                                            {{ t('Hard state') }}
+                                        } @else {
+                                            {{ t('Soft state') }}
+                                        }
+                                        ({{ result.hoststatus.current_check_attempt }}
+                                        /{{ result.hoststatus.max_check_attempts }})
+                                    </c-col>
+                                </c-row>
+                            }
+                            <!-- External Commands Mobile View -->
+                            @if (result.canSubmitExternalCommands && result.mergedHost.allowEdit && result.hoststatus.isInMonitoring) {
+                                <c-row
+                                >
+                                    <c-button-toolbar role="group" class="justify-content-center pt-2">
+                                        <c-button-group role="group">
+                                            <button cButton color="default"
+                                                    [cTooltip]="'Reset check time' | transloco" cTooltipPlacement="top"
+                                                    (click)="resetChecktime(result.mergedHost)">
+                                                <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                            </button>
+                                            <button cButton color="default"
+                                                    [cTooltip]="'Schedule maintenance' | transloco"
+                                                    cTooltipPlacement="top"
+                                                    (click)="toggleDowntimeModal(result.mergedHost)">
                                                 <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                                {{ t('Upcoming  planned maintenance periods for the host') }}
-                                            </h5>
-                                        </c-card-header>
-                                        <c-card-body>
-                                            <table cTable [striped]="true">
+                                            </button>
+                                            @if (Number(result.hoststatus.currentState) > 0) {
+                                                <button cButton color="default"
+                                                        [cTooltip]="'Acknowledge host status' | transloco"
+                                                        cTooltipPlacement="top"
+                                                        (click)="acknowledgeStatus(result.mergedHost)">
+                                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                                </button>
+                                            }
+                                            <button cButton color="default"
+                                                    [cTooltip]="'Passive transfer check result' | transloco"
+                                                    cTooltipPlacement="top"
+                                                    (click)="processCheckResult(result.mergedHost)">
+                                                <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                                            </button>
+                                            @if (!result.hoststatus.flap_detection_enabled) {
+                                                <button cButton color="default"
+                                                        [cTooltip]="'Enable flap detection' | transloco"
+                                                        cTooltipPlacement="top"
+                                                        (click)="enableFlapdetection(result.mergedHost)">
+                                                    <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                                </button>
+                                            }
+                                            @if (result.hoststatus.flap_detection_enabled) {
+                                                <button cButton color="default"
+                                                        [cTooltip]="'Disable flap detection' | transloco"
+                                                        cTooltipPlacement="top"
+                                                        (click)="disableFlapdetection(result.mergedHost)">
+                                                    <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                                </button>
+                                            }
+                                            @if (!result.hoststatus.notifications_enabled) {
+                                                <button cButton color="default"
+                                                        [cTooltip]="'Enable notifications' | transloco"
+                                                        cTooltipPlacement="top"
+                                                        (click)="enableNotifications(result.mergedHost)">
+                                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                </button>
+                                            }
+                                            @if (result.hoststatus.notifications_enabled) {
+                                                <button cButton color="default"
+                                                        [cTooltip]="'Disable notifications' | transloco"
+                                                        cTooltipPlacement="top"
+                                                        (click)="disableNotifications(result.mergedHost)">
+                                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                </button>
+                                            }
+                                        </c-button-group>
+                                    </c-button-toolbar>
+                                </c-row>
+                            }
+                        </div>
+                        <!-- End of mobile status view -->
+                        <c-row>
+                            <c-col [xs]="12" [sm]="12" [md]="7" [lg]="9">
+                                <!-- Check if host is disabled -->
+                                @if (result.mergedHost.disabled) {
+                                    <c-col>
+                                        <c-card [cBorder]="{top: {color: 'danger', width: 3}}" [textColor]="'danger'"
+                                                class="mb-3">
+                                            <c-card-header>
+                                                <h4>{{ t('Attention!') }}</h4>
+                                            </c-card-header>
+                                            <c-card-body>
+                                                <p cCardText>
+                                                    {{ t('This host is currently disabled!') }}
+                                                </p>
+                                            </c-card-body>
+                                        </c-card>
+                                    </c-col>
+                                }
+                                <c-row>
+                                    <c-col [xs]="12" class="mt-1">
+                                        <h4>{{ t('Status overview') }}</h4>
+                                    </c-col>
+                                </c-row>
+                                <!-- Downtime -->
+                                @if (Number(result.hoststatus.scheduledDowntimeDepth) > 0 && result.downtime) {
+                                    <c-row>
+                                        <c-col [xs]="12">
+                                            <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                                    class="mb-3">
+                                                <c-card-header>
+                                                    <h5 class="text-info">
+                                                        <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                                        {{ t('The host is currently in a planned maintenance period') }}
+                                                    </h5>
+                                                </c-card-header>
+                                                <c-card-body>
+                                                    <div>
+                                                        {{ t('Downtime was set by') }}
+                                                        <b>{{ result.downtime.authorName }}</b>
+                                                        {{ t('with an duration of') }}
+                                                        <b>{{ result.downtime.durationHuman }}</b>.
+                                                    </div>
+                                                    <div class="pt-1">
+                                                        <small>
+                                                            {{ t('Start time:') }}
+                                                            {{ result.downtime.scheduledStartTime }}
+                                                            {{ t('End time:') }}
+                                                            {{ result.downtime.scheduledEndTime }}
+                                                        </small>
+                                                    </div>
+                                                    <div class="pt-1">
+                                                        {{ t('Comment: ') }}
+                                                        {{ result.downtime.commentData }}
+                                                    </div>
+                                                    <div class="w-100" *oitcPermission="['downtimes', 'delete']">
+                                                        @if (result.downtime.allowEdit && result.downtime.isCancellable) {
+                                                            <button (click)="toggleCancelDowntimeModal(result.downtime)"
+                                                                    cButton
+                                                                    class="ripple float-end" color="danger"
+                                                                    size="xs"
+                                                            >
+                                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                                {{ t('Cancel') }}
+                                                            </button>
+                                                        }
+                                                    </div>
+                                                </c-card-body>
+                                            </c-card>
+                                        </c-col>
+                                    </c-row>
+                                }
+                                <!-- Acknowledgement -->
+                                @if (result.hoststatus.problemHasBeenAcknowledged && result.acknowledgement) {
+                                    <c-row>
+                                        <c-col [xs]="12">
+                                            <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                                    class="mb-3">
+                                                <c-card-header>
+                                                    <h5 class="text-info">
+                                                        <fa-icon
+                                                            [icon]="(result.acknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
+                                                        {{ t('State of host is acknowledged') }}
+                                                        <span [hidden]="!result.acknowledgement.is_sticky">
+                                                            ({{ t('Sticky') }})
+                                                        </span>
+                                                    </h5>
+                                                </c-card-header>
+                                                <c-card-body>
+                                                    <div>
+                                                        {{ t('Acknowledgement was set by') }}
+                                                        <b>{{ result.acknowledgement.author_name }}</b>
+                                                        {{ t('at') }}
+                                                        {{ result.acknowledgement.entry_time }}.
+                                                    </div>
+                                                    <div class="pt-1">
+                                                        {{ t('Comment: ') }}
+                                                        <div class="word-break d-inline"
+                                                             [innerHTML]="String(result.acknowledgement.commentDataHtml) | trustAsHtml "></div>
+                                                    </div>
+                                                    <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
+                                                        @if (result.acknowledgement.allowEdit) {
+                                                            <button
+                                                                (click)="toggleDeleteAcknowledgementModal(result.mergedHost)"
+                                                                cButton
+                                                                class="ripple float-end" color="danger"
+                                                                size="xs"
+                                                            >
+                                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                                {{ t('Delete') }}
+                                                            </button>
+                                                        }
+                                                    </div>
+                                                </c-card-body>
+                                            </c-card>
+                                        </c-col>
+                                    </c-row>
+                                }
+                                <!-- Flapping alert -->
+                                @if (result.hoststatus.isFlapping) {
+                                    <c-alert color="warning" [dismissible]="false">
+                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                        {{ t('The state of this host is currently flapping!') }}
+                                    </c-alert>
+                                }
+                                <!-- Planned Host Downtimes (downtimes in the future) -->
+                                @if (result && result.plannedDowntimes && result.plannedDowntimes.length > 0) {
+                                    <c-row>
+                                        <c-col [xs]="12">
+                                            <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                                    class="mb-3">
+                                                <c-card-header>
+                                                    <h5 class="text-info">
+                                                        <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                                        {{ t('Upcoming  planned maintenance periods for the host') }}
+                                                    </h5>
+                                                </c-card-header>
+                                                <c-card-body>
+                                                    <table cTable [striped]="true">
+                                                        <thead>
+                                                        <tr>
+                                                            <th scope="col">{{ t('User') }}</th>
+                                                            <th scope="col">{{ t('Start time') }}</th>
+                                                            <th scope="col">{{ t('End time') }}</th>
+                                                            <th scope="col"> {{ t('Comment') }}</th>
+                                                            <th scope="col" class="text-end">{{ t('Cancel') }}</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @for (downtime of result.plannedDowntimes; track $index) {
+                                                                <tr>
+                                                                    <td>{{ downtime.authorName }}</td>
+                                                                    <td>{{ downtime.scheduledStartTime }}</td>
+                                                                    <td>{{ downtime.scheduledEndTime }}</td>
+                                                                    <td>{{ downtime.commentData }}</td>
+                                                                    <td class="text-end">
+                                                                        @if (downtime.allowEdit && downtime.isCancellable) {
+                                                                            <div class="w-100"
+                                                                                 *oitcPermission="['downtimes', 'delete']">
+                                                                                <button
+                                                                                    (click)="toggleCancelDowntimeModal(downtime)"
+                                                                                    cButton
+                                                                                    class="ripple" color="danger"
+                                                                                    size="xs">
+                                                                                    <fa-icon
+                                                                                        [icon]="['fas', 'trash']"></fa-icon>
+                                                                                    {{ t('Cancel') }}
+                                                                                </button>
+                                                                            </div>
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </c-card-body>
+                                            </c-card>
+                                        </c-col>
+                                    </c-row>
+                                }
+                                <c-row>
+                                    <!-- Check command -->
+                                    <c-col [xs]="12" [sm]="12" [md]="9" class="mt-1">
+                                        <table cTable bordered>
+                                            <tbody>
+                                                @if (PermissionsService.hasPermissionObservable(['hosts', 'checkcommand'])|async) {
+                                                    <tr>
+                                                        <td>{{ t('Check command') }}</td>
+                                                        <td>
+                                                            @if (PermissionsService.hasPermissionObservable(['commands', 'edit'])|async) {
+                                                                <a [routerLink]="['/', 'commands', 'edit', result.checkCommand.Command.id]">
+                                                                    {{ result.checkCommand.Command.name }}
+                                                                </a>
+                                                            } @else {
+                                                                {{ result.checkCommand.Command.name }}
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{{ t('Command line') }}</td>
+                                                        <td>
+                                                            <oitc-copy-to-clipboard
+                                                                [data]="result.mergedHost.hostCommandLine">
+                                                                <code
+                                                                    [ngClass]="{'unblur-on-hover': result.blurryCommandLine}">
+                                                                    {{ result.mergedHost.hostCommandLine }}
+                                                                </code>
+                                                            </oitc-copy-to-clipboard>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            <tr>
+                                                <td>{{ t('Output') }}</td>
+                                                <td>
+                                                    <div class="code-font"
+                                                         [ngClass]="result.hoststatus.textClass"
+                                                         [innerHTML]="String(result.hoststatus.outputHtml) | trustAsHtml "></div>
+                                                </td>
+                                            </tr>
+                                                @if (Number(result.hoststatus.currentState) > 0) {
+                                                    <tr>
+                                                        <td>
+                                                            {{ t('Last time') }}
+                                                            <c-badge color="success">{{ t('UP') }}</c-badge>
+                                                        </td>
+                                                        <td>
+                                                            {{ result.hoststatus.last_time_up }}
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </c-col>
+                                    <!-- Check period -->
+                                    <c-col [xs]="12" [sm]="12" [md]="3" class="mt-1">
+                                        <table cTable bordered>
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ t('Check period') }}</td>
+                                                <td>
+                                                    <oitc-label-link
+                                                        [objectId]=" result.checkPeriod.id"
+                                                        [route]="'/timeperiods/edit'"
+                                                        [permissions]="'timeperiods.edit'"
+                                                    >
+                                                        {{ result.checkPeriod.name }}
+                                                    </oitc-label-link>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>{{ t('Check interval') }}</td>
+                                                <td>
+                                                    {{ result.mergedHost.checkIntervalHuman }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>{{ t('Retry interval') }}</td>
+                                                <td>
+                                                    {{ result.mergedHost.retryIntervalHuman }}
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </c-col>
+                                </c-row>
+                                <!-- Long output -->
+                                @if (result.hoststatus.longOutputHtml) {
+                                    <c-row>
+                                        <c-col [xs]="12" class="mt-1">
+                                            <h4>{{ t('Long output') }}</h4>
+                                        </c-col>
+                                        <c-col [xs]="12">
+                                            <c-card>
+                                                <c-card-body>
+                                                    <div class="word-break"
+                                                         [innerHTML]="String(result.hoststatus.longOutputHtml) | trustAsHtml "></div>
+                                                </c-card-body>
+                                            </c-card>
+                                        </c-col>
+                                    </c-row>
+                                }
+                                <!-- Parent hosts -->
+                                @if (result.parenthosts.length > 0) {
+                                    <c-row>
+                                        <c-col [xs]="12" class="mt-2">
+                                            <h4>{{ t('Parent host overview') }}</h4>
+                                        </c-col>
+                                        <c-col [xs]="12">
+                                            <table cTable bordered>
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col">{{ t('User') }}</th>
-                                                    <th scope="col">{{ t('Start time') }}</th>
-                                                    <th scope="col">{{ t('End time') }}</th>
-                                                    <th scope="col"> {{ t('Comment') }}</th>
-                                                    <th scope="col" class="text-end">{{ t('Cancel') }}</th>
+                                                    <th class="width-130">{{ t('Parent host state') }}</th>
+                                                    <th>{{ t('Parent host name') }}</th>
+                                                    <th>{{ t('Last state change') }}</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @for (downtime of result.plannedDowntimes; track $index) {
+                                                    @for (parenthost of result.parenthosts; track parenthost) {
                                                         <tr>
-                                                            <td>{{ downtime.authorName }}</td>
-                                                            <td>{{ downtime.scheduledStartTime }}</td>
-                                                            <td>{{ downtime.scheduledEndTime }}</td>
-                                                            <td>{{ downtime.commentData }}</td>
-                                                            <td class="text-end">
-                                                                @if (downtime.allowEdit && downtime.isCancellable) {
-                                                                    <div class="w-100"
-                                                                         *oitcPermission="['downtimes', 'delete']">
-                                                                        <button
-                                                                            (click)="toggleCancelDowntimeModal(downtime)"
-                                                                            cButton
-                                                                            class="ripple" color="danger"
-                                                                            size="xs">
-                                                                            <fa-icon
-                                                                                [icon]="['fas', 'trash']"></fa-icon>
-                                                                            {{ t('Cancel') }}
-                                                                        </button>
+                                                            @if (result.parentHostStatus.hasOwnProperty(String(parenthost.uuid))) {
+                                                                <td class="text-center">
+                                                                    <oitc-hoststatus-simple-icon
+                                                                        [hoststatus]="Number(result.parentHostStatus[String(parenthost.uuid)].currentState)"
+                                                                        [hardstate]="Boolean(result.parentHostStatus[String(parenthost.uuid)].isHardstate)"></oitc-hoststatus-simple-icon>
+                                                                </td>
+                                                                <td>
+                                                                    <a [routerLink]="['/', 'hosts', 'browser', parenthost.id]">
+                                                                        {{ parenthost.name }}
+                                                                    </a>
+                                                                </td>
+                                                                <td>
+                                                                    {{ result.parentHostStatus[String(parenthost.uuid)].last_state_change }}
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </c-col>
+                                    </c-row>
+                                }
+                                <!-- Notification overview -->
+                                <c-row>
+                                    <c-col [xs]="12" class="mt-2">
+                                        <h4>{{ t('Notification overview') }}</h4>
+                                    </c-col>
+                                    <c-col [xs]="12" class="text-info" [hidden]="result.areContactsFromHost">
+                                        {{ t('Contacts and contact groups got inherited from') }}
+                                        <oitc-label-link
+                                            [objectId]="result.mergedHost.hosttemplate_id"
+                                            [route]="'/hosttemplates/edit'"
+                                            [permissions]="'hosttemplates.edit'"
+                                        >
+                                            {{ t('host template') }}
+                                        </oitc-label-link>
+                                        .
+                                    </c-col>
+                                </c-row>
+                                @if (result) {
+                                    <c-row>
+                                        <!-- Contacts and Contact groups -->
+                                        <c-col [xs]="12" [md]="6">
+                                            <table cTable bordered>
+                                                <tbody>
+                                                    @if (result.mergedHost.contacts.length > 0) {
+                                                        <tr>
+                                                            <td>{{ t('Contacts') }}</td>
+                                                            <td>
+                                                                @for (
+                                                                    contact of result.mergedHost.contacts; track contact) {
+                                                                    <div>
+                                                                        @if (( PermissionsService.hasPermissionObservable(['contacts', 'edit'])|async ) && contact.allowEdit) {
+                                                                            <a [routerLink]="['/', 'contacts', 'edit', contact.id]">
+                                                                                {{ contact.name }}
+                                                                            </a>
+                                                                        } @else {
+                                                                            {{ contact.name }}
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    @if (result.mergedHost.contactgroups.length > 0) {
+                                                        <tr>
+                                                            <td>{{ t('Contact groups') }}</td>
+                                                            <td>
+                                                                @for (
+                                                                    contactgroup of result.mergedHost.contactgroups; track contactgroup) {
+                                                                    <div
+                                                                    >
+                                                                        @if (( PermissionsService.hasPermissionObservable(['contactgroups', 'edit'])|async ) && contactgroup.allowEdit) {
+                                                                            <a [routerLink]="['/', 'contactgroups', 'edit', contactgroup.id]">
+                                                                                {{ contactgroup.container.name }}
+                                                                            </a>
+                                                                        } @else {
+                                                                            {{ contactgroup.container.name }}
+                                                                        }
                                                                     </div>
                                                                 }
                                                             </td>
@@ -437,775 +655,604 @@
                                                     }
                                                 </tbody>
                                             </table>
-                                        </c-card-body>
-                                    </c-card>
+                                        </c-col>
+                                        <!-- Notification period -->
+                                        <c-col [xs]="12" [md]="6">
+                                            <table cTable bordered>
+                                                <tbody>
+                                                <tr>
+                                                    <td>{{ t('Notification period') }}</td>
+                                                    <td>
+                                                        <oitc-label-link
+                                                            [objectId]=" result.notifyPeriod.id"
+                                                            [route]="'/timeperiods/edit'"
+                                                            [permissions]="'timeperiods.edit'"
+                                                        >
+                                                            {{ result.notifyPeriod.name }}
+                                                        </oitc-label-link>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{{ t('Notification interval') }}</td>
+                                                    <td>{{ result.mergedHost.notificationIntervalHuman }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{{ t('Notification enabled') }}</td>
+                                                    <td>
+                                                        @if (result.hoststatus.notifications_enabled) {
+                                                            <c-badge color="success">{{ t('Yes') }}</c-badge>
+                                                        } @else {
+                                                            <c-badge color="danger">{{ t('No') }}</c-badge>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{{ t('Notify on') }}</td>
+                                                    <td>
+                                                        @if (result.mergedHost.notify_on_recovery) {
+                                                            <c-badge color="success" class="me-1">{{ t('Recover') }}
+                                                            </c-badge>
+                                                        }
+                                                        @if (result.mergedHost.notify_on_down) {
+                                                            <c-badge color="danger" class="me-1">{{ t('Down') }}
+                                                            </c-badge>
+                                                        }
+                                                        @if (result.mergedHost.notify_on_unreachable) {
+                                                            <c-badge color="secondary"
+                                                                     class="me-1">{{ t('Unreachable') }}
+                                                            </c-badge>
+                                                        }
+                                                        @if (result.mergedHost.notify_on_flapping) {
+                                                            <c-badge color="primary" class="me-1">{{ t('Flapping') }}
+                                                            </c-badge>
+                                                        }
+                                                        @if (result.mergedHost.notify_on_downtime) {
+                                                            <c-badge color="primary" class="me-1">{{ t('Downtime') }}
+                                                            </c-badge>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </c-col>
+                                    </c-row>
+                                }
+                            </c-col>
+                            <!-- Desktop status bar -->
+                            @if (result.hoststatus && result.mergedHost) {
+                                <c-col [md]="5" [lg]="3" class="d-none d-md-block"
+                                       [ngClass]="[result.hoststatus.cssClass, result.hoststatus.isInMonitoring ? '' : 'browser-not-monitored']">
+                                    <div class="text-center text-white">
+                                        <div class="display-5">
+                                            {{ result.hoststatus.currentState | hostStatusName }}
+                                        </div>
+                                    </div>
+                                    <!-- State information -->
+                                    @if (result.hoststatus.isInMonitoring) {
+                                        <c-row class="pt-2">
+                                            <c-col [xs]="12" class="text-center text-white">
+                                                <div>{{ t('State since') }}</div>
+                                                <div class="h3"
+                                                     [cTooltip]=" result.hoststatus.last_state_change_user"
+                                                     cTooltipPlacement="top">
+                                                    {{ result.hoststatus.last_state_change }}
+                                                </div>
+                                            </c-col>
+                                            <c-col [xs]="12" class="text-center text-white pt-1">
+                                                <div>{{ t('Last check') }}</div>
+                                                <div class="h3"
+                                                     [cTooltip]=" result.hoststatus.lastCheckUser"
+                                                     cTooltipPlacement="top">
+                                                    {{ result.hoststatus.lastCheck }}
+                                                </div>
+                                            </c-col>
+                                            <c-col [xs]="12" class="text-center text-white pt-1">
+                                                <div>{{ t('Next check') }}</div>
+                                                @if (result.mergedHost.active_checks_enabled && !result.mergedHost.is_satellite_host) {
+                                                    <div class="h3"
+                                                         [cTooltip]="result.hoststatus.nextCheckUser"
+                                                         cTooltipPlacement="top">
+                                                        {{ result.hoststatus.nextCheck }}
+                                                    </div>
+                                                    <div [hidden]="Number(result.hoststatus.latency) < 1"
+                                                         [cTooltip]="'Latency' | transloco"
+                                                         cTooltipPlacement="top">
+                                                        <small class="text-muted">(+ {{ result.hoststatus.latency }}
+                                                            )</small>
+                                                    </div>
+                                                } @else {
+                                                    <div class="h3">
+                                                        {{ t('n/a') }}
+                                                    </div>
+                                                }
+                                            </c-col>
+                                            <c-col [xs]="12" class="text-center text-white pt-1">
+                                                <div>{{ t('State type') }}</div>
+                                                @if (result.hoststatus.isHardstate) {
+                                                    <div class="h3">
+                                                        {{ t('Hard state') }}
+                                                        ({{ result.hoststatus.current_check_attempt }}
+                                                        /{{ result.hoststatus.max_check_attempts }})
+                                                    </div>
+                                                } @else {
+                                                    <div class="h3">
+                                                        {{ t('Soft state') }}
+                                                        ({{ result.hoststatus.current_check_attempt }}
+                                                        /{{ result.hoststatus.max_check_attempts }})
+                                                    </div>
+                                                }
+                                            </c-col>
+                                        </c-row>
+                                    }
+                                    <!-- External Command Buttons -->
+                                    @if (result.canSubmitExternalCommands && result.mergedHost.allowEdit && result.hoststatus.isInMonitoring) {
+                                        <c-row
+                                            class="text-white">
+                                            <div class="browser-action d-flex p-0"
+                                                 (click)="resetChecktime(result.mergedHost)">
+                                                <div
+                                                    class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                                </div>
+                                                <div class="flex-1 browser-action-padding-top">
+                                                    {{ t('Reset check time ') }}
+                                                </div>
+                                            </div>
+                                            <div class="browser-action d-flex p-0 mt-2"
+                                                 (click)="toggleDowntimeModal(result.mergedHost)">
+                                                <div
+                                                    class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                    <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                                </div>
+                                                <div class="flex-1 browser-action-padding-top">
+                                                    {{ t('Schedule maintenance') }}
+                                                </div>
+                                            </div>
+                                            @if (Number(result.hoststatus.currentState) > 0) {
+                                                <div class="browser-action d-flex p-0 mt-2"
+                                                     (click)="acknowledgeStatus(result.mergedHost)">
+                                                    <div
+                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                                    </div>
+                                                    <div class="flex-1 browser-action-padding-top">
+                                                        {{ t('Acknowledge host status') }}
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="browser-action d-flex p-0 mt-2"
+                                                 (click)="processCheckResult(result.mergedHost)">
+                                                <div
+                                                    class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                    <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                                                </div>
+                                                <div class="flex-1 browser-action-padding-top">
+                                                    {{ t('Passive transfer check result') }}
+                                                </div>
+                                            </div>
+                                            @if (!result.hoststatus.flap_detection_enabled) {
+                                                <div class="browser-action d-flex p-0 mt-2"
+                                                     (click)="enableFlapdetection(result.mergedHost)">
+                                                    <div
+                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                                    </div>
+                                                    <div class="flex-1 browser-action-padding-top">
+                                                        {{ t('Enable flap detection') }}
+                                                    </div>
+                                                </div>
+                                            }
+                                            @if (result.hoststatus.flap_detection_enabled) {
+                                                <div class="browser-action d-flex p-0 mt-2"
+                                                     (click)="disableFlapdetection(result.mergedHost)">
+                                                    <div
+                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                                    </div>
+                                                    <div class="flex-1 browser-action-padding-top">
+                                                        {{ t('Disable flap detection') }}
+                                                    </div>
+                                                </div>
+                                            }
+                                            @if (!result.hoststatus.notifications_enabled) {
+                                                <div class="browser-action d-flex p-0 mt-2"
+                                                     (click)="enableNotifications(result.mergedHost)">
+                                                    <div
+                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                    </div>
+                                                    <div class="flex-1 browser-action-padding-top">
+                                                        {{ t('Enable notifications') }}
+                                                    </div>
+                                                </div>
+                                            }
+                                            @if (result.hoststatus.notifications_enabled) {
+                                                <div class="browser-action d-flex p-0 mt-2"
+                                                     (click)="disableNotifications(result.mergedHost)">
+                                                    <div
+                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                    </div>
+                                                    <div class="flex-1 browser-action-padding-top">
+                                                        {{ t('Disable notifications') }}
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="browser-action d-flex p-0 mt-2"
+                                                 (click)="sendCustomNotification(result.mergedHost)">
+                                                <div
+                                                    class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                    <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
+                                                </div>
+                                                <div class="flex-1 browser-action-padding-top">
+                                                    {{ t('Send custom host notification ') }}
+                                                </div>
+                                            </div>
+                                        </c-row>
+                                    }
+                                    <c-row class="mb-2">
+                                        <!-- spacer -->
+                                    </c-row>
+                                </c-col>
+                            }
+                            <!-- End of desktop status bar -->
+                        </c-row>
+                    </div>
+                }
+                <!-- Status information end -->
+                <!-- Device information start -->
+                @if (selectedTab == HostBrowserTabs.DeviceInformation) {
+                    <div>
+                        @if (result && result.mergedHost && result.hoststatus) {
+                            <c-row>
+                                <c-col [xs]="12" class="mt-1">
+                                    <h4>{{ t('Host overview') }}</h4>
+                                </c-col>
+                                <!-- Left panel -->
+                                <c-col [xs]="12" [md]="6">
+                                    <table cTable bordered>
+                                        <tbody>
+                                        <tr>
+                                            <td> {{ t('IP address') }}</td>
+                                            <td>
+                                                <oitc-copy-to-clipboard
+                                                    [data]="result.mergedHost.address">
+                                                    {{ result.mergedHost.address }}
+                                                </oitc-copy-to-clipboard>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ t('Flap detection enabled') }}</td>
+                                            <td>
+                                                @if (result.hoststatus.flap_detection_enabled) {
+                                                    <c-badge color="danger">{{ t('Yes') }}</c-badge>
+                                                } @else {
+                                                    <c-badge color="success">{{ t('No') }}</c-badge>
+                                                }
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </c-col>
+                                <!-- Right panel -->
+                                <c-col [xs]="12" [md]="6">
+                                    <table cTable bordered>
+                                        <tbody>
+                                        <tr>
+                                            <td> {{ t('Priority') }}</td>
+                                            <td>
+                                                @for (priority of priorities; track priority) {
+                                                    <fa-icon
+                                                        [ngClass]="priority"
+                                                        class="me-1"
+                                                        [icon]="['fas', 'fire']"></fa-icon>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ t('UUID') }}</td>
+                                            <td>
+                                                <oitc-copy-to-clipboard
+                                                    [data]="result.mergedHost.uuid">
+                                                    <code>{{ result.mergedHost.uuid }}</code>
+                                                </oitc-copy-to-clipboard>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </c-col>
+                                <!-- Container -->
+                                <c-col [xs]="12">
+                                    <table cTable bordered>
+                                        <tbody>
+                                        <tr>
+                                            <td>{{ t('Container') }}</td>
+                                            <td>
+                                                @if (PermissionsService.hasPermissionObservable(['browsers', 'index'])|async) {
+                                                    @for (container of result.mainContainer; track container) {
+                                                        <span>
+                                                            /
+                                                            @if (container.id != null) {
+                                                                <a
+                                                                    [routerLink]="['/', 'browsers', 'index']"
+                                                                    [queryParams]="{ containerId: container.id }">
+                                                                    {{ container.name }}
+                                                                </a>
+                                                            }
+                                                            @if (container.id === null) {
+                                                                <span>
+                                                                    {{ container.name }}
+                                                                </span>
+                                                            }
+                                                        </span>
+                                                    }
+                                                } @else {
+                                                    @for (container of result.mainContainer; track container) {
+                                                        <span>
+                                                            /
+                                                            {{ container.name }}
+                                                        </span>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ t('Shared containers') }}</td>
+                                            <td>
+                                                @if (PermissionsService.hasPermissionObservable(['browsers', 'index'])|async) {
+                                                    @for (sharing of result.sharedContainers |keyvalue; track sharing) {
+                                                        <div>
+                                                            @for (container of sharing.value; track container) {
+                                                                <span>
+                                                                    /
+                                                                    @if (container.id != null) {
+                                                                        <a
+                                                                            [routerLink]="['/', 'browsers', 'index']"
+                                                                            [queryParams]="{ containerId: container.id }">
+                                                                            {{ container.name }}
+                                                                        </a>
+                                                                    }
+                                                                    @if (container.id === null) {
+                                                                        <span>
+                                                                            {{ container.name }}
+                                                                        </span>
+                                                                    }
+                                                                </span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                } @else {
+                                                    @for (sharing of result.sharedContainers |keyvalue; track sharing) {
+                                                        <div>
+                                                            @for (container of sharing.value; track container) {
+                                                                <span>
+                                                                    /
+                                                                    {{ container.name }}
+                                                                </span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                            @if (tags.length > 0) {
+                                                <tr>
+                                                    <td>{{ t('Tags') }}</td>
+                                                    <td>
+                                                        @for (tag of tags; track tag) {
+                                                            <c-badge
+                                                                color="primary" class="me-1">{{ tag }}
+                                                            </c-badge>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        <!-- Satellite -->
+                                            @if (( PermissionsService.hasModuleObservable('DistributeModule')|async ) && result.mergedHost.is_satellite_host) {
+                                                <tr>
+                                                    <td>{{ t('Satellite') }}</td>
+                                                    <td>
+                                                        <oitc-satellite-name
+                                                            [satelliteId]="Number(result.mergedHost.satellite_id)">
+                                                        </oitc-satellite-name>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        <!-- Master System -->
+                                            @if (!result.mergedHost.is_satellite_host) {
+                                                <tr>
+                                                    <td>{{ t('Satellite') }}</td>
+                                                    <td>{{ result.masterInstanceName }}</td>
+                                                </tr>
+                                            }
+                                            @if (result.mergedHost.notes) {
+                                                <tr>
+                                                    <td>{{ t('Notes') }}</td>
+                                                    <td>{{ result.mergedHost.notes }}</td>
+                                                </tr>
+                                            }
+                                            @if (result.mergedHost.description) {
+                                                <tr>
+                                                    <td>{{ t('Description') }}</td>
+                                                    <td>{{ result.mergedHost.description }}</td>
+                                                </tr>
+                                            }
+                                            @if (result.objects.Autoreports || result.objects.Eventcorrelations || result.objects.Hostgroups || result.objects.Instantreports || result.objects.Maps) {
+                                                <tr>
+                                                    <td>{{ t('Used by') }}</td>
+                                                    <td>
+                                                        @if (PermissionsService.hasPermissionObservable(['hosts', 'usedBy'])|async) {
+                                                            @if (result.objects.Instantreports.length > 0) {
+                                                                <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
+                                                                >
+                                                                    <span
+                                                                        class="badge border border-generic text-generic me-1">
+                                                                        <fa-icon
+                                                                            [icon]="['fas', 'file-invoice']"></fa-icon>
+                                                                        {{ t('Instant reports') }}
+                                                                        ({{ result.objects.Instantreports.length }})
+                                                                    </span>
+                                                                </a>
+                                                            }
+                                                            @if (PermissionsService.hasModuleObservable('AutoreportModule')|async) {
+                                                                @if (result.objects.Autoreports.length > 0) {
+                                                                    <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
+                                                                    >
+                                                                        <span
+                                                                            class="badge border border-generic text-generic me-1">
+                                                                            <fa-icon
+                                                                                [icon]="['fas', 'file-invoice']"></fa-icon>
+                                                                            {{ t('Autoreports') }}
+                                                                            ({{ result.objects.Autoreports.length }})
+                                                                        </span>
+                                                                    </a>
+                                                                }
+                                                            }
+                                                            @if (PermissionsService.hasModuleObservable('EventcorrelationModule')|async) {
+                                                                @if (result.objects.Eventcorrelations.length > 0) {
+                                                                    <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
+                                                                    >
+                                                                        <span
+                                                                            class="badge border border-generic text-generic me-1">
+                                                                            <fa-icon [icon]="['fas', 'sitemap']"
+                                                                                     [rotate]="90"></fa-icon>
+                                                                            {{ t('Event Correlation') }}
+                                                                            ({{ result.objects.Eventcorrelations.length }}
+                                                                            )
+                                                                        </span>
+                                                                    </a>
+                                                                }
+                                                            }
+                                                            @if (PermissionsService.hasModuleObservable('MapModule')|async) {
+                                                                @if (result.objects.Maps.length > 0) {
+                                                                    <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
+                                                                    >
+                                                                        <span
+                                                                            class="badge border border-generic text-generic me-1">
+                                                                            <fa-icon
+                                                                                [icon]="['fas', 'map-marker']"></fa-icon>
+                                                                            {{ t('Maps') }}
+                                                                            ({{ result.objects.Maps.length }})
+                                                                        </span>
+                                                                    </a>
+                                                                }
+                                                            }
+                                                            @if (result.objects.Hostgroups.length > 0) {
+                                                                <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
+                                                                >
+                                                                    <span
+                                                                        class="badge border border-generic text-generic me-1">
+                                                                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                                                        {{ t('Host groups') }}
+                                                                        ({{ result.objects.Hostgroups.length }})
+                                                                    </span>
+                                                                </a>
+                                                            }
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
                                 </c-col>
                             </c-row>
                         }
-
-                        <c-row>
-                            <!-- Check command -->
-                            <c-col [xs]="12" [sm]="12" [md]="9" class="mt-1">
-                                <table cTable bordered>
-                                    <tbody>
-                                        @if (PermissionsService.hasPermissionObservable(['hosts', 'checkcommand'])|async) {
-                                            <tr>
-                                                <td>{{ t('Check command') }}</td>
-                                                <td>
-                                                    @if (PermissionsService.hasPermissionObservable(['commands', 'edit'])|async) {
-                                                        <a [routerLink]="['/', 'commands', 'edit', result.checkCommand.Command.id]">
-                                                            {{ result.checkCommand.Command.name }}
-                                                        </a>
-                                                    } @else {
-                                                        {{ result.checkCommand.Command.name }}
-                                                    }
-                                                </td>
-
-                                            </tr>
-
-                                            <tr>
-                                                <td>{{ t('Command line') }}</td>
-                                                <td>
-                                                    <oitc-copy-to-clipboard
-                                                        [data]="result.mergedHost.hostCommandLine">
-                                                        <code
-                                                            [ngClass]="{'unblur-on-hover': result.blurryCommandLine}">
-                                                            {{ result.mergedHost.hostCommandLine }}
-                                                        </code>
-                                                    </oitc-copy-to-clipboard>
-                                                </td>
-                                            </tr>
-                                        }
-
-                                    <tr>
-                                        <td>{{ t('Output') }}</td>
-                                        <td>
-                                            <div class="code-font"
-                                                 [ngClass]="result.hoststatus.textClass"
-                                                 [innerHTML]="String(result.hoststatus.outputHtml) | trustAsHtml "></div>
-                                        </td>
-                                    </tr>
-
-                                    <tr *ngIf="Number(result.hoststatus.currentState) > 0">
-                                        <td>
-                                            {{ t('Last time') }}
-                                            <c-badge color="success">{{ t('UP') }}</c-badge>
-                                        </td>
-                                        <td>
-                                            {{ result.hoststatus.last_time_up }}
-                                        </td>
-                                    </tr>
-
-                                    </tbody>
-                                </table>
-                            </c-col>
-
-                            <!-- Check period -->
-                            <c-col [xs]="12" [sm]="12" [md]="3" class="mt-1">
-                                <table cTable bordered>
-                                    <tbody>
-                                    <tr>
-                                        <td>{{ t('Check period') }}</td>
-                                        <td>
-                                            <oitc-label-link
-                                                [objectId]=" result.checkPeriod.id"
-                                                [route]="'/timeperiods/edit'"
-                                                [permissions]="'timeperiods.edit'"
-                                            >
-                                                {{ result.checkPeriod.name }}
-                                            </oitc-label-link>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('Check interval') }}</td>
-                                        <td>
-                                            {{ result.mergedHost.checkIntervalHuman }}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('Retry interval') }}</td>
-                                        <td>
-                                            {{ result.mergedHost.retryIntervalHuman }}
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </c-col>
-                        </c-row>
-
-                        <!-- Long output -->
-                        <c-row *ngIf="result.hoststatus.longOutputHtml">
-                            <c-col [xs]="12" class="mt-1">
-                                <h4>{{ t('Long output') }}</h4>
-                            </c-col>
-                            <c-col [xs]="12">
-                                <c-card>
-                                    <c-card-body>
-                                        <div class="word-break"
-                                             [innerHTML]="String(result.hoststatus.longOutputHtml) | trustAsHtml "></div>
-                                    </c-card-body>
-                                </c-card>
-                            </c-col>
-                        </c-row>
-
-                        <!-- Parent hosts -->
-                        <c-row *ngIf="result.parenthosts.length > 0">
-                            <c-col [xs]="12" class="mt-2">
-                                <h4>{{ t('Parent host overview') }}</h4>
-                            </c-col>
-
-                            <c-col [xs]="12">
-                                <table cTable bordered>
-                                    <thead>
-                                    <tr>
-                                        <th class="width-130">{{ t('Parent host state') }}</th>
-                                        <th>{{ t('Parent host name') }}</th>
-                                        <th>{{ t('Last state change') }}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr *ngFor="let parenthost of result.parenthosts">
-                                        @if (result.parentHostStatus.hasOwnProperty(String(parenthost.uuid))) {
-                                            <td class="text-center">
-                                                <oitc-hoststatus-simple-icon
-                                                    [hoststatus]="Number(result.parentHostStatus[String(parenthost.uuid)].currentState)"
-                                                    [hardstate]="Boolean(result.parentHostStatus[String(parenthost.uuid)].isHardstate)"></oitc-hoststatus-simple-icon>
-                                            </td>
-                                            <td>
-                                                <a [routerLink]="['/', 'hosts', 'browser', parenthost.id]">
-                                                    {{ parenthost.name }}
-                                                </a>
-                                            </td>
-                                            <td>
-                                                {{ result.parentHostStatus[String(parenthost.uuid)].last_state_change }}
-                                            </td>
-                                        }
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </c-col>
-                        </c-row>
-
-                        <!-- Notification overview -->
-                        <c-row>
-                            <c-col [xs]="12" class="mt-2">
-                                <h4>{{ t('Notification overview') }}</h4>
-                            </c-col>
-
-                            <c-col [xs]="12" class="text-info" [hidden]="result.areContactsFromHost">
-                                {{ t('Contacts and contact groups got inherited from') }}
-                                <oitc-label-link
-                                    [objectId]="result.mergedHost.hosttemplate_id"
-                                    [route]="'/hosttemplates/edit'"
-                                    [permissions]="'hosttemplates.edit'"
-                                >
-                                    {{ t('host template') }}
-                                </oitc-label-link>
-                                .
-                            </c-col>
-                        </c-row>
-
-                        <c-row *ngIf="result">
-                            <!-- Contacts and Contact groups -->
-                            <c-col [xs]="12" [md]="6">
-                                <table cTable bordered>
-                                    <tbody>
-                                        @if (result.mergedHost.contacts.length > 0) {
-                                            <tr>
-                                                <td>{{ t('Contacts') }}</td>
-                                                <td>
-                                                    <div *ngFor="let contact of result.mergedHost.contacts">
-                                                        @if (( PermissionsService.hasPermissionObservable(['contacts', 'edit'])|async ) && contact.allowEdit) {
-                                                            <a [routerLink]="['/', 'contacts', 'edit', contact.id]">
-                                                                {{ contact.name }}
-                                                            </a>
-                                                        } @else {
-                                                            {{ contact.name }}
-                                                        }
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }
-
-                                        @if (result.mergedHost.contactgroups.length > 0) {
-                                            <tr>
-                                                <td>{{ t('Contact groups') }}</td>
-                                                <td>
-                                                    <div
-                                                        *ngFor="let contactgroup of result.mergedHost.contactgroups">
-                                                        @if (( PermissionsService.hasPermissionObservable(['contactgroups', 'edit'])|async ) && contactgroup.allowEdit) {
-                                                            <a [routerLink]="['/', 'contactgroups', 'edit', contactgroup.id]">
-                                                                {{ contactgroup.container.name }}
-                                                            </a>
-                                                        } @else {
-                                                            {{ contactgroup.container.name }}
-                                                        }
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </c-col>
-
-                            <!-- Notification period -->
-                            <c-col [xs]="12" [md]="6">
-                                <table cTable bordered>
-                                    <tbody>
-                                    <tr>
-                                        <td>{{ t('Notification period') }}</td>
-                                        <td>
-                                            <oitc-label-link
-                                                [objectId]=" result.notifyPeriod.id"
-                                                [route]="'/timeperiods/edit'"
-                                                [permissions]="'timeperiods.edit'"
-                                            >
-                                                {{ result.notifyPeriod.name }}
-                                            </oitc-label-link>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('Notification interval') }}</td>
-                                        <td>{{ result.mergedHost.notificationIntervalHuman }}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('Notification enabled') }}</td>
-                                        <td>
-                                            @if (result.hoststatus.notifications_enabled) {
-                                                <c-badge color="success">{{ t('Yes') }}</c-badge>
-                                            } @else {
-                                                <c-badge color="danger">{{ t('No') }}</c-badge>
-                                            }
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('Notify on') }}</td>
-                                        <td>
-                                            @if (result.mergedHost.notify_on_recovery) {
-                                                <c-badge color="success" class="me-1">{{ t('Recover') }}</c-badge>
-                                            }
-                                            @if (result.mergedHost.notify_on_down) {
-                                                <c-badge color="danger" class="me-1">{{ t('Down') }}</c-badge>
-                                            }
-                                            @if (result.mergedHost.notify_on_unreachable) {
-                                                <c-badge color="secondary" class="me-1">{{ t('Unreachable') }}
-                                                </c-badge>
-                                            }
-                                            @if (result.mergedHost.notify_on_flapping) {
-                                                <c-badge color="primary" class="me-1">{{ t('Flapping') }}</c-badge>
-                                            }
-                                            @if (result.mergedHost.notify_on_downtime) {
-                                                <c-badge color="primary" class="me-1">{{ t('Downtime') }}</c-badge>
-                                            }
-                                        </td>
-                                    </tr>
-
-                                    </tbody>
-                                </table>
-                            </c-col>
-                        </c-row>
-
-                    </c-col>
-
-                    <!-- Desktop status bar -->
-                    <c-col [md]="5" [lg]="3" class="d-none d-md-block"
-                           *ngIf="result?.hoststatus && result?.mergedHost"
-                           [ngClass]="[result.hoststatus.cssClass, result.hoststatus.isInMonitoring ? '' : 'browser-not-monitored']">
-
-                        <div class="text-center text-white">
-                            <div class="display-5">
-                                {{ result.hoststatus.currentState | hostStatusName }}
-                            </div>
-                        </div>
-
-                        <!-- State information -->
-                        <c-row *ngIf="result.hoststatus.isInMonitoring" class="pt-2">
-                            <c-col [xs]="12" class="text-center text-white">
-                                <div>{{ t('State since') }}</div>
-                                <div class="h3"
-                                     [cTooltip]=" result.hoststatus.last_state_change_user" cTooltipPlacement="top">
-                                    {{ result.hoststatus.last_state_change }}
-                                </div>
-                            </c-col>
-
-                            <c-col [xs]="12" class="text-center text-white pt-1">
-                                <div>{{ t('Last check') }}</div>
-                                <div class="h3"
-                                     [cTooltip]=" result.hoststatus.lastCheckUser" cTooltipPlacement="top">
-                                    {{ result.hoststatus.lastCheck }}
-                                </div>
-                            </c-col>
-
-                            <c-col [xs]="12" class="text-center text-white pt-1">
-                                <div>{{ t('Next check') }}</div>
-                                @if (result.mergedHost.active_checks_enabled && !result.mergedHost.is_satellite_host) {
-                                    <div class="h3"
-                                         [cTooltip]="result.hoststatus.nextCheckUser" cTooltipPlacement="top">
-                                        {{ result.hoststatus.nextCheck }}
-                                    </div>
-                                    <div [hidden]="Number(result.hoststatus.latency) < 1"
-                                         [cTooltip]="'Latency' | transloco"
-                                         cTooltipPlacement="top">
-                                        <small class="text-muted">(+ {{ result.hoststatus.latency }})</small>
-                                    </div>
-                                } @else {
-                                    <div class="h3">
-                                        {{ t('n/a') }}
-                                    </div>
-                                }
-                            </c-col>
-
-                            <c-col [xs]="12" class="text-center text-white pt-1">
-                                <div>{{ t('State type') }}</div>
-                                @if (result.hoststatus.isHardstate) {
-                                    <div class="h3">
-                                        {{ t('Hard state') }}
-                                        ({{ result.hoststatus.current_check_attempt }}
-                                        /{{ result.hoststatus.max_check_attempts }})
-                                    </div>
-                                } @else {
-                                    <div class="h3">
-                                        {{ t('Soft state') }}
-                                        ({{ result.hoststatus.current_check_attempt }}
-                                        /{{ result.hoststatus.max_check_attempts }})
-                                    </div>
-                                }
-                            </c-col>
-                        </c-row>
-
-                        <!-- External Command Buttons -->
-                        <c-row
-                            *ngIf="result.canSubmitExternalCommands && result.mergedHost.allowEdit && result.hoststatus.isInMonitoring"
-                            class="text-white">
-
-                            <div class="browser-action d-flex p-0"
-                                 (click)="resetChecktime(result.mergedHost)">
-                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                                </div>
-                                <div class="flex-1 browser-action-padding-top">
-                                    {{ t('Reset check time ') }}
-                                </div>
-                            </div>
-
-                            <div class="browser-action d-flex p-0 mt-2"
-                                 (click)="toggleDowntimeModal(result.mergedHost)">
-                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                    <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                </div>
-                                <div class="flex-1 browser-action-padding-top">
-                                    {{ t('Schedule maintenance') }}
-                                </div>
-                            </div>
-
-                            <div class="browser-action d-flex p-0 mt-2"
-                                 *ngIf="Number(result.hoststatus.currentState) > 0"
-                                 (click)="acknowledgeStatus(result.mergedHost)">
-                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                </div>
-                                <div class="flex-1 browser-action-padding-top">
-                                    {{ t('Acknowledge host status') }}
-                                </div>
-                            </div>
-
-                            <div class="browser-action d-flex p-0 mt-2"
-                                 (click)="processCheckResult(result.mergedHost)">
-                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                    <fa-icon [icon]="['fas', 'download']"></fa-icon>
-                                </div>
-                                <div class="flex-1 browser-action-padding-top">
-                                    {{ t('Passive transfer check result') }}
-                                </div>
-                            </div>
-
-                            <div class="browser-action d-flex p-0 mt-2"
-                                 *ngIf="!result.hoststatus.flap_detection_enabled"
-                                 (click)="enableFlapdetection(result.mergedHost)">
-                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                    <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
-                                </div>
-                                <div class="flex-1 browser-action-padding-top">
-                                    {{ t('Enable flap detection') }}
-                                </div>
-                            </div>
-
-                            <div class="browser-action d-flex p-0 mt-2"
-                                 *ngIf="result.hoststatus.flap_detection_enabled"
-                                 (click)="disableFlapdetection(result.mergedHost)">
-                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                    <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
-                                </div>
-                                <div class="flex-1 browser-action-padding-top">
-                                    {{ t('Disable flap detection') }}
-                                </div>
-                            </div>
-
-                            <div class="browser-action d-flex p-0 mt-2"
-                                 *ngIf="!result.hoststatus.notifications_enabled"
-                                 (click)="enableNotifications(result.mergedHost)">
-                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                </div>
-                                <div class="flex-1 browser-action-padding-top">
-                                    {{ t('Enable notifications') }}
-                                </div>
-                            </div>
-
-                            <div class="browser-action d-flex p-0 mt-2"
-                                 *ngIf="result.hoststatus.notifications_enabled"
-                                 (click)="disableNotifications(result.mergedHost)">
-                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                </div>
-                                <div class="flex-1 browser-action-padding-top">
-                                    {{ t('Disable notifications') }}
-                                </div>
-                            </div>
-
-                            <div class="browser-action d-flex p-0 mt-2"
-                                 (click)="sendCustomNotification(result.mergedHost)">
-                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                    <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
-                                </div>
-                                <div class="flex-1 browser-action-padding-top">
-                                    {{ t('Send custom host notification ') }}
-                                </div>
-                            </div>
-
-                        </c-row>
-
-                        <c-row class="mb-2">
-                            <!-- spacer -->
-                        </c-row>
-
-
-                    </c-col>
-                    <!-- End of desktop status bar -->
-
-                </c-row>
-
-            </div>
-            <!-- Status information end -->
-
-            <!-- Device information start -->
-            <div *ngIf="selectedTab == HostBrowserTabs.DeviceInformation">
-
-                <ng-container *ngIf="result && result.mergedHost && result.hoststatus">
-                    <c-row>
-                        <c-col [xs]="12" class="mt-1">
-                            <h4>{{ t('Host overview') }}</h4>
-                        </c-col>
-
-                        <!-- Left panel -->
-                        <c-col [xs]="12" [md]="6">
-                            <table cTable bordered>
-                                <tbody>
-                                <tr>
-                                    <td> {{ t('IP address') }}</td>
-                                    <td>
-                                        <oitc-copy-to-clipboard
-                                            [data]="result.mergedHost.address">
-                                            {{ result.mergedHost.address }}
-                                        </oitc-copy-to-clipboard>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>{{ t('Flap detection enabled') }}</td>
-                                    <td>
-                                        @if (result.hoststatus.flap_detection_enabled) {
-                                            <c-badge color="danger">{{ t('Yes') }}</c-badge>
-                                        } @else {
-                                            <c-badge color="success">{{ t('No') }}</c-badge>
-                                        }
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </c-col>
-
-                        <!-- Right panel -->
-                        <c-col [xs]="12" [md]="6">
-                            <table cTable bordered>
-                                <tbody>
-                                <tr>
-                                    <td> {{ t('Priority') }}</td>
-                                    <td>
-                                        <fa-icon
-                                            *ngFor="let priority of priorities"
-                                            [ngClass]="priority"
-                                            class="me-1"
-                                            [icon]="['fas', 'fire']"></fa-icon>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>{{ t('UUID') }}</td>
-                                    <td>
-                                        <oitc-copy-to-clipboard
-                                            [data]="result.mergedHost.uuid">
-                                            <code>{{ result.mergedHost.uuid }}</code>
-                                        </oitc-copy-to-clipboard>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </c-col>
-
-                        <!-- Container -->
-                        <c-col [xs]="12">
-                            <table cTable bordered>
-                                <tbody>
-                                <tr>
-                                    <td>{{ t('Container') }}</td>
-                                    <td>
-                                        @if (PermissionsService.hasPermissionObservable(['browsers', 'index'])|async) {
-                                            <span *ngFor="let container of result.mainContainer">
-                                                /
-                                                <a *ngIf="container.id != null"
-                                                   [routerLink]="['/', 'browsers', 'index']"
-                                                   [queryParams]="{ containerId: container.id }">
-                                                    {{ container.name }}
-                                                </a>
-
-                                                <span *ngIf="container.id === null">
-                                                    {{ container.name }}
-                                                </span>
-                                            </span>
-                                        } @else {
-                                            <span *ngFor="let container of result.mainContainer">
-                                                /
-                                                {{ container.name }}
-                                            </span>
-                                        }
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>{{ t('Shared containers') }}</td>
-                                    <td>
-                                        @if (PermissionsService.hasPermissionObservable(['browsers', 'index'])|async) {
-                                            <div *ngFor="let sharing of result.sharedContainers |keyvalue">
-                                                <span *ngFor="let container of sharing.value">
-                                                    /
-                                                    <a *ngIf="container.id != null"
-                                                       [routerLink]="['/', 'browsers', 'index']"
-                                                       [queryParams]="{ containerId: container.id }">
-                                                        {{ container.name }}
-                                                    </a>
-
-                                                    <span *ngIf="container.id === null">
-                                                        {{ container.name }}
-                                                    </span>
-                                                </span>
-                                            </div>
-                                        } @else {
-                                            <div *ngFor="let sharing of result.sharedContainers |keyvalue">
-                                                <span *ngFor="let container of sharing.value">
-                                                    /
-                                                    {{ container.name }}
-                                                </span>
-                                            </div>
-                                        }
-                                    </td>
-                                </tr>
-
-                                <tr *ngIf="tags.length > 0">
-                                    <td>{{ t('Tags') }}</td>
-                                    <td>
-                                        <c-badge
-                                            *ngFor="let tag of tags"
-                                            color="primary" class="me-1">{{ tag }}
-                                        </c-badge>
-                                    </td>
-                                </tr>
-
-                                <!-- Satellite -->
-                                    @if (( PermissionsService.hasModuleObservable('DistributeModule')|async ) && result.mergedHost.is_satellite_host) {
-                                        <tr>
-                                            <td>{{ t('Satellite') }}</td>
-                                            <td>
-                                                <oitc-satellite-name
-                                                    [satelliteId]="Number(result.mergedHost.satellite_id)">
-                                                </oitc-satellite-name>
-                                            </td>
-                                        </tr>
-                                    }
-
-                                <!-- Master System -->
-                                <tr *ngIf="!result.mergedHost.is_satellite_host">
-                                    <td>{{ t('Satellite') }}</td>
-                                    <td>{{ result.masterInstanceName }}</td>
-                                </tr>
-
-                                <tr *ngIf="result.mergedHost.notes">
-                                    <td>{{ t('Notes') }}</td>
-                                    <td>{{ result.mergedHost.notes }}</td>
-                                </tr>
-
-                                <tr *ngIf="result.mergedHost.description">
-                                    <td>{{ t('Description') }}</td>
-                                    <td>{{ result.mergedHost.description }}</td>
-                                </tr>
-
-                                <tr *ngIf="result.objects.Autoreports || result.objects.Eventcorrelations || result.objects.Hostgroups || result.objects.Instantreports || result.objects.Maps">
-                                    <td>{{ t('Used by') }}</td>
-                                    <td>
-                                        @if (PermissionsService.hasPermissionObservable(['hosts', 'usedBy'])|async) {
-
-                                            <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
-                                               *ngIf="result.objects.Instantreports.length > 0">
-                                                <span class="badge border border-generic text-generic me-1">
-                                                    <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-                                                    {{ t('Instant reports') }}
-                                                    ({{ result.objects.Instantreports.length }})
-                                                </span>
-                                            </a>
-
-                                            @if (PermissionsService.hasModuleObservable('AutoreportModule')|async) {
-                                                <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
-                                                   *ngIf="result.objects.Autoreports.length > 0">
-                                                    <span class="badge border border-generic text-generic me-1">
-                                                        <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-                                                        {{ t('Autoreports') }}
-                                                        ({{ result.objects.Autoreports.length }})
-                                                    </span>
-                                                </a>
-                                            }
-
-                                            @if (PermissionsService.hasModuleObservable('EventcorrelationModule')|async) {
-                                                <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
-                                                   *ngIf="result.objects.Eventcorrelations.length > 0">
-                                                    <span class="badge border border-generic text-generic me-1">
-                                                        <fa-icon [icon]="['fas', 'sitemap']"
-                                                                 [rotate]="90"></fa-icon>
-                                                        {{ t('Event Correlation') }}
-                                                        ({{ result.objects.Eventcorrelations.length }})
-                                                    </span>
-                                                </a>
-                                            }
-
-                                            @if (PermissionsService.hasModuleObservable('MapModule')|async) {
-                                                <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
-                                                   *ngIf="result.objects.Maps.length > 0">
-                                                    <span class="badge border border-generic text-generic me-1">
-                                                        <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
-                                                        {{ t('Maps') }}
-                                                        ({{ result.objects.Maps.length }})
-                                                    </span>
-                                                </a>
-                                            }
-
-                                            <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
-                                               *ngIf="result.objects.Hostgroups.length > 0">
-                                                <span class="badge border border-generic text-generic me-1">
-                                                    <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                                                    {{ t('Host groups') }}
-                                                    ({{ result.objects.Hostgroups.length }})
-                                                </span>
-                                            </a>
-                                        }
-                                    </td>
-                                </tr>
-
-                                </tbody>
-                            </table>
-                        </c-col>
-
-                    </c-row>
-
-                </ng-container>
-
-            </div>
-            <!-- Device information end -->
-
-            <!-- Timeline start -->
-            <div *ngIf="selectedTab == HostBrowserTabs.Timeline && result && result.mergedHost">
-                <oitc-browser-timeline
-                    [type]="'Host'"
-                    [objectId]="result.mergedHost.id">
-                    <oitc-host-timeline-legend></oitc-host-timeline-legend>
-                </oitc-browser-timeline>
-            </div>
-            <!-- Timeline end -->
-
-            <!-- ServiceNow Module start -->
-            <div *ngIf="selectedTab == HostBrowserTabs.ServiceNow">
-                @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'ServicenowSettings', 'hostspecific'])|async )) {
-                    <oitc-servicenow-host-browser-tab
-                        *ngIf="result && result.mergedHost"
-                        [hostUuid]="String(result.mergedHost.uuid)"
-                        [allowEdit]="Boolean(result.mergedHost.allowEdit)"
-                        [lastUpdated]="lastUpdated"></oitc-servicenow-host-browser-tab>
+                    </div>
                 }
-            </div>
-            <!-- ServiceNow Module end -->
-
-            <!-- Grafana Module start -->
-            <div *ngIf="selectedTab == HostBrowserTabs.Grafana">
-                @if (( PermissionsService.hasModuleObservable('GrafanaModule')|async ) && GrafanaIframe && GrafanaIframe.GrafanaDashboardExists) {
-                    <c-row>
-                        <c-col>
-                            <oitc-grafana-timepicker class="float-end mb-2"
-                                                     (change)="onGrafanaTimeRangeChange($event)"></oitc-grafana-timepicker>
-                        </c-col>
-                    </c-row>
-                    <oitc-iframe [url]="GrafanaIframe.iframeUrl"></oitc-iframe>
+                <!-- Device information end -->
+                <!-- Timeline start -->
+                @if (selectedTab == HostBrowserTabs.Timeline && result && result.mergedHost) {
+                    <div>
+                        <oitc-browser-timeline
+                            [type]="'Host'"
+                            [objectId]="result.mergedHost.id">
+                            <oitc-host-timeline-legend></oitc-host-timeline-legend>
+                        </oitc-browser-timeline>
+                    </div>
                 }
-            </div>
-            <!-- Grafana Module end -->
-
-            <!-- Import Module start -->
-            <div *ngIf="selectedTab == HostBrowserTabs.CMDB">
-                <oitc-additional-host-information
-                    *ngIf="result && result.mergedHost"
-                    [hostId]="result.mergedHost.id"
-                    [hostname]="String(result.mergedHost.name)"
-                    [lastUpdated]="lastUpdated"></oitc-additional-host-information>
-            </div>
-            <!-- Import Module end -->
-
-            <!-- IsarFlow Module start -->
-            <div *ngIf="selectedTab == HostBrowserTabs.IsarFlow">
-                @if (( PermissionsService.hasModuleObservable('IsarFlowModule')|async ) && ( PermissionsService.hasPermissionObservable(['IsarFlowModule', 'IsarflowHosts', 'isarFlowHostInformation'])|async )) {
-                    <oitc-isar-flow-host-browser-tab
-                        *ngIf="result && result.mergedHost"
-                        [hostId]="Number(result.mergedHost.id)"
-                        [allowEdit]="Boolean(result.mergedHost.allowEdit)"
-                        [lastUpdated]="lastUpdated"></oitc-isar-flow-host-browser-tab>
+                <!-- Timeline end -->
+                <!-- ServiceNow Module start -->
+                @if (selectedTab == HostBrowserTabs.ServiceNow) {
+                    <div>
+                        @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'ServicenowSettings', 'hostspecific'])|async )) {
+                            @if (result && result.mergedHost) {
+                                <oitc-servicenow-host-browser-tab
+                                    [hostUuid]="String(result.mergedHost.uuid)"
+                                    [allowEdit]="Boolean(result.mergedHost.allowEdit)"
+                                    [lastUpdated]="lastUpdated"></oitc-servicenow-host-browser-tab>
+                            }
+                        }
+                    </div>
                 }
-            </div>
-            <!-- IsarFlow Module end -->
-
-            <!-- SLA Module start -->
-            <div *ngIf="selectedTab == HostBrowserTabs.SLA">
-                @if (( PermissionsService.hasModuleObservable('SLAModule')|async )
-                && ( this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'slaHostInformation']) | async )) {
-                    <oitc-sla-host-information-element
-                        [hostId]="result.mergedHost.id"></oitc-sla-host-information-element>
-                } @else {
-                    <label class="text-danger">
-                        {{ t('No permissions') }}
-                    </label>
+                <!-- ServiceNow Module end -->
+                <!-- Grafana Module start -->
+                @if (selectedTab == HostBrowserTabs.Grafana) {
+                    <div>
+                        @if (( PermissionsService.hasModuleObservable('GrafanaModule')|async ) && GrafanaIframe && GrafanaIframe.GrafanaDashboardExists) {
+                            <c-row>
+                                <c-col>
+                                    <oitc-grafana-timepicker class="float-end mb-2"
+                                                             (change)="onGrafanaTimeRangeChange($event)"></oitc-grafana-timepicker>
+                                </c-col>
+                            </c-row>
+                            <oitc-iframe [url]="GrafanaIframe.iframeUrl"></oitc-iframe>
+                        }
+                    </div>
                 }
-            </div>
-            <!-- SLA Module end -->
-
-        </c-card-body>
-    </c-card>
+                <!-- Grafana Module end -->
+                <!-- Import Module start -->
+                @if (selectedTab == HostBrowserTabs.CMDB) {
+                    <div>
+                        @if (result && result.mergedHost) {
+                            <oitc-additional-host-information
+                                [hostId]="result.mergedHost.id"
+                                [hostname]="String(result.mergedHost.name)"
+                                [lastUpdated]="lastUpdated"></oitc-additional-host-information>
+                        }
+                    </div>
+                }
+                <!-- Import Module end -->
+                <!-- IsarFlow Module start -->
+                @if (selectedTab == HostBrowserTabs.IsarFlow) {
+                    <div>
+                        @if (( PermissionsService.hasModuleObservable('IsarFlowModule')|async ) && ( PermissionsService.hasPermissionObservable(['IsarFlowModule', 'IsarflowHosts', 'isarFlowHostInformation'])|async )) {
+                            @if (result && result.mergedHost) {
+                                <oitc-isar-flow-host-browser-tab
+                                    [hostId]="Number(result.mergedHost.id)"
+                                    [allowEdit]="Boolean(result.mergedHost.allowEdit)"
+                                    [lastUpdated]="lastUpdated"></oitc-isar-flow-host-browser-tab>
+                            }
+                        }
+                    </div>
+                }
+                <!-- IsarFlow Module end -->
+                <!-- SLA Module start -->
+                @if (selectedTab == HostBrowserTabs.SLA) {
+                    <div>
+                        @if (( PermissionsService.hasModuleObservable('SLAModule')|async )
+                        && ( this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'slaHostInformation']) | async )) {
+                            <oitc-sla-host-information-element
+                                [hostId]="result.mergedHost.id"></oitc-sla-host-information-element>
+                        } @else {
+                            <label class="text-danger">
+                                {{ t('No permissions') }}
+                            </label>
+                        }
+                    </div>
+                }
+                <!-- SLA Module end -->
+            </c-card-body>
+        </c-card>
+    }
 
     <!-- List of services -->
-    <oitc-hosts-browser-services-list *ngIf="result && result.mergedHost"
-                                      [hoststatus]="result.hoststatus"
-                                      [hostId]="result.mergedHost.id"
-                                      [lastUpdated]="lastUpdated">
-
-    </oitc-hosts-browser-services-list>
+    @if (result && result.mergedHost) {
+        <oitc-hosts-browser-services-list
+            [hoststatus]="result.hoststatus"
+            [hostId]="result.mergedHost.id"
+            [lastUpdated]="lastUpdated">
+        </oitc-hosts-browser-services-list>
+    }
 
 </ng-container>
 

@@ -20,7 +20,7 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { OpenPanelOptionsEvent } from '../grafana-panel/grafana-panel.component';
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
     GrafanaChartTypesEnum,
     GrafanaStackingModesEnum
@@ -37,26 +37,25 @@ import { GrafanaEditorService } from '../grafana-editor.service';
 @Component({
     selector: 'oitc-grafana-panel-options-modal',
     imports: [
-        ButtonCloseDirective,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        XsButtonDirective,
-        TranslocoDirective,
-        FaIconComponent,
-        ModalToggleDirective,
-        ColComponent,
-        RowComponent,
-        FormControlDirective,
-        FormLabelDirective,
-        FormsModule,
-        NgIf,
-        NgClass,
-        UiBlockerComponent,
-        SelectOptgroupComponent
-    ],
+    ButtonCloseDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    XsButtonDirective,
+    TranslocoDirective,
+    FaIconComponent,
+    ModalToggleDirective,
+    ColComponent,
+    RowComponent,
+    FormControlDirective,
+    FormLabelDirective,
+    FormsModule,
+    NgClass,
+    UiBlockerComponent,
+    SelectOptgroupComponent
+],
     templateUrl: './grafana-panel-options-modal.component.html',
     styleUrl: './grafana-panel-options-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

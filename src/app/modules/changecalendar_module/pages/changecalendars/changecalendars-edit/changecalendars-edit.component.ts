@@ -20,7 +20,7 @@ import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {FormErrorDirective} from '../../../../../layouts/coreui/form-error.directive';
 import {FormFeedbackComponent} from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {formatDate, NgIf} from '@angular/common';
+import { formatDate } from '@angular/common';
 import {PermissionDirective} from '../../../../../permissions/permission.directive';
 import {RequiredIconComponent} from '../../../../../components/required-icon/required-icon.component';
 import {SelectComponent} from '../../../../../layouts/primeng/select/select/select.component';
@@ -55,34 +55,33 @@ import {
 @Component({
     selector: 'oitc-changecalendars-edit',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColorPicker,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        FormLoaderComponent,
-        ChangecalendarsEventEditorComponent,
-        ChangecalendarsCalendarEditorComponent
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColorPicker,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    SelectComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FormLoaderComponent,
+    ChangecalendarsEventEditorComponent,
+    ChangecalendarsCalendarEditorComponent
+],
     templateUrl: './changecalendars-edit.component.html',
     styleUrl: './changecalendars-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -18,7 +18,7 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { FormsModule } from '@angular/forms';
-import { NgForOf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
@@ -32,27 +32,26 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
     selector: 'oitc-grafana-userdashboards-copy',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormLoaderComponent,
-        FormsModule,
-        NavComponent,
-        NgForOf,
-        RequiredIconComponent,
-        XsButtonDirective
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormLoaderComponent,
+    FormsModule,
+    NavComponent,
+    RequiredIconComponent,
+    XsButtonDirective
+],
     templateUrl: './grafana-userdashboards-copy.component.html',
     styleUrl: './grafana-userdashboards-copy.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

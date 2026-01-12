@@ -1,103 +1,115 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['agentconnector', 'wizard']" [routerLink]="['/', 'agentconnector', 'wizard']">
-                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-                    {{ t('openITCOCKPIT Agent') }}
-                </a>
-            </li>
-            <li class="breadcrumb-item" *ngIf="mode == AgentModes.Pull">
-                <a *oitcPermission="['agentconnector', 'pull']"
-                   [routerLink]="['/', 'agentconnector', 'pull']">
-                    <fa-icon [icon]="['fas', 'download']"></fa-icon>
-                    {{ t('Pull') }}
-                </a>
-            </li>
-            <li class="breadcrumb-item" *ngIf="mode == AgentModes.Push">
-                <!-- Yes PULL permission check ash Push has no own route -->
-                <a *oitcPermission="['agentconnector', 'pull']"
-                   [routerLink]="['/', 'agentconnector', 'push']">
-                    <fa-icon [icon]="['fas', 'upload']"></fa-icon>
-                    {{ t('Push') }}
-                </a>
-            </li>
-            <li class="breadcrumb-item" *ngIf="mode == AgentModes.PushSatellite">
-                <!-- Yes PULL permission check ash push_satellite has no own route -->
-                <a *oitcPermission="['agentconnector', 'pull']"
-                   [routerLink]="['/', 'agentconnector', 'push_satellite']">
-                    <div class="icon-stack">
-                        <i class="fas fa-satellite opacity-100"></i>
-                        <i class="fas fa-upload opacity-100 fa-xs text-info cornered cornered-lr"></i>
-                    </div>
-                    {{ t('Push via Satellite (Import Module)') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fab', 'js']"></fa-icon>
-                {{ t('Output') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <a *oitcPermission="['agentconnector', 'wizard']" [routerLink]="['/', 'agentconnector', 'wizard']">
+            <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+            {{ t('openITCOCKPIT Agent') }}
+          </a>
+        </li>
+        @if (mode == AgentModes.Pull) {
+          <li class="breadcrumb-item">
+            <a *oitcPermission="['agentconnector', 'pull']"
+              [routerLink]="['/', 'agentconnector', 'pull']">
+              <fa-icon [icon]="['fas', 'download']"></fa-icon>
+              {{ t('Pull') }}
+            </a>
+          </li>
+        }
+        @if (mode == AgentModes.Push) {
+          <li class="breadcrumb-item">
+            <!-- Yes PULL permission check ash Push has no own route -->
+            <a *oitcPermission="['agentconnector', 'pull']"
+              [routerLink]="['/', 'agentconnector', 'push']">
+              <fa-icon [icon]="['fas', 'upload']"></fa-icon>
+              {{ t('Push') }}
+            </a>
+          </li>
+        }
+        @if (mode == AgentModes.PushSatellite) {
+          <li class="breadcrumb-item">
+            <!-- Yes PULL permission check ash push_satellite has no own route -->
+            <a *oitcPermission="['agentconnector', 'pull']"
+              [routerLink]="['/', 'agentconnector', 'push_satellite']">
+              <div class="icon-stack">
+                <i class="fas fa-satellite opacity-100"></i>
+                <i class="fas fa-upload opacity-100 fa-xs text-info cornered cornered-lr"></i>
+              </div>
+              {{ t('Push via Satellite (Import Module)') }}
+            </a>
+          </li>
+        }
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fab', 'js']"></fa-icon>
+          {{ t('Output') }}
+        </li>
+      </ol>
     </nav>
 
     <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('openITCOCKPIT Agent Output of:') }}
-                <small class="fw-300" *ngIf="output && output.pushAgentUuid">
-                    {{ t('Agent: ') }}{{ output.pushAgentUuid }}
-                </small>
-                <small class="fw-300" *ngIf="output && output.host">
-                    {{ output.host.name }} ({{ output.host.address }})
-                </small>
-            </h5>
+      <c-card-header>
+        <h5 cCardTitle>{{ t('openITCOCKPIT Agent Output of:') }}
+          @if (output && output.pushAgentUuid) {
+            <small class="fw-300">
+              {{ t('Agent: ') }}{{ output.pushAgentUuid }}
+            </small>
+          }
+          @if (output && output.host) {
+            <small class="fw-300">
+              {{ output.host.name }} ({{ output.host.address }})
+            </small>
+          }
+        </h5>
 
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="loadAgentOutput()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['agentconnector', 'pull']" cButton class="ripple" color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
+        <c-nav class="card-toolbar card-header-pills">
+          <c-nav-item class="px-1">
+            <button (click)="loadAgentOutput()" cButton class="ripple" color="default" size="xs">
+              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+              {{ t('Refresh') }}
+            </button>
+          </c-nav-item>
+          <c-nav-item class="px-1">
+            <button [fallbackUrl]="['agentconnector', 'pull']" cButton class="ripple" color="default"
+              oitcBackButton
+              size="xs">
+              <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+              {{ t('Back') }}
+            </button>
+          </c-nav-item>
+        </c-nav>
+      </c-card-header>
 
-        <c-card-body>
+      <c-card-body>
 
-            <oitc-block-loader *ngIf="!output"></oitc-block-loader>
+        @if (!output) {
+          <oitc-block-loader></oitc-block-loader>
+        }
 
-            <c-row>
-                <c-col [xs]="12" class="fieldset-legend-border-bottom mb-3">
-                    <h4>
-                        {{ t('openITCOCKPIT Monitoring Agent Output') }}
-                    </h4>
-                </c-col>
+        <c-row>
+          <c-col [xs]="12" class="fieldset-legend-border-bottom mb-3">
+            <h4>
+              {{ t('openITCOCKPIT Monitoring Agent Output') }}
+            </h4>
+          </c-col>
 
-                <c-col xs="12" class="mb-3">
-                    <div #jsoneditor
-                         [ngClass]="{'jse-theme-dark' : (LayoutService.theme$ | async) === 'dark'}"></div>
-                </c-col>
+          <c-col xs="12" class="mb-3">
+            <div #jsoneditor
+            [ngClass]="{'jse-theme-dark' : (LayoutService.theme$ | async) === 'dark'}"></div>
+          </c-col>
 
-            </c-row>
+        </c-row>
 
 
-        </c-card-body>
+      </c-card-body>
 
 
     </c-card>
-</ng-container>
+  </ng-container>
 
 
 

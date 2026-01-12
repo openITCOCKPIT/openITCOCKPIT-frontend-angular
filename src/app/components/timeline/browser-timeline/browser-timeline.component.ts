@@ -18,7 +18,7 @@ import { BrowserTimelineApiResult, VisTimelineRangechangedProperties } from './b
 import { DataSet } from "vis-data/peer";
 import { DataItem, Timeline, TimelineGroup, TimelineItem, TimelineOptions } from "vis-timeline/peer";
 
-import { NgIf } from '@angular/common';
+
 
 import "vis-timeline/styles/vis-timeline-graph2d.css";
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -28,10 +28,9 @@ import { GenericUnixtimerange } from '../../../generic.interfaces';
 @Component({
     selector: 'oitc-browser-timeline',
     imports: [
-        TranslocoDirective,
-        SkeletonModule,
-        NgIf
-    ],
+    TranslocoDirective,
+    SkeletonModule
+],
     templateUrl: './browser-timeline.component.html',
     styleUrl: './browser-timeline.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

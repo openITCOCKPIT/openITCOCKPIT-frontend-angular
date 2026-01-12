@@ -4,19 +4,18 @@ import { TooltipDirective } from '@coreui/angular';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { HeaderInfo } from '../header-info.service';
-import { NgIf } from '@angular/common';
+
 import { ExportSocketClientService } from './export-socket-client.service';
 import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-header-export',
     imports: [
-        TranslocoDirective,
-        TooltipDirective,
-        RouterLink,
-        FaIconComponent,
-        NgIf
-    ],
+    TranslocoDirective,
+    TooltipDirective,
+    RouterLink,
+    FaIconComponent
+],
     templateUrl: './header-export.component.html',
     styleUrl: './header-export.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

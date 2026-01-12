@@ -1,15 +1,17 @@
 @if (!isViewMode()) {
-    <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
-         (cdkDragEnded)="onDragEnd($event)"
-         (cdkDragMoved)="onDragMove($event)"
-         (resizeStop)="onResizeStop($event, type)"
-         cdkDragBoundary=".map-canvas">
-        <canvas cdkDragHandle [id]="'map-temperature-' + item()!.id"></canvas>
-    </div>
-    <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
-                   appendTo="body"></p-contextMenu>
+  <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
+    (cdkDragEnded)="onDragEnd($event)"
+    (cdkDragMoved)="onDragMove($event)"
+    (resizeStop)="onResizeStop($event, type)"
+    cdkDragBoundary=".map-canvas">
+    <canvas cdkDragHandle [id]="'map-temperature-' + item()!.id"></canvas>
+  </div>
+  @if (!isViewMode()) {
+    <p-contextMenu [target]="container" [model]="contextMenuItems"
+    appendTo="body"></p-contextMenu>
+  }
 } @else {
-    <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
-        <canvas [id]="'map-temperature-' + item()!.id"></canvas>
-    </div>
+  <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
+    <canvas [id]="'map-temperature-' + item()!.id"></canvas>
+  </div>
 }

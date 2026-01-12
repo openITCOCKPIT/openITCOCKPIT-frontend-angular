@@ -1,458 +1,473 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                {{ t('Service Capacity Management Module') }}
-            </li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['scmmodule','resources', 'index']"
-                   [routerLink]="['/', 'scm_module', 'resources', 'index']">
-                    <fa-icon [icon]="['fas', 'chalkboard-user']"></fa-icon>
-                    {{ t('Resources') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Overview') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+          {{ t('Service Capacity Management Module') }}
+        </li>
+        <li class="breadcrumb-item">
+          <a *oitcPermission="['scmmodule','resources', 'index']"
+            [routerLink]="['/', 'scm_module', 'resources', 'index']">
+            <fa-icon [icon]="['fas', 'chalkboard-user']"></fa-icon>
+            {{ t('Resources') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'list']"></fa-icon>
+          {{ t('Overview') }}
+        </li>
+      </ol>
     </nav>
     <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Resources') }}
-                <small class="fw-300">
-                    {{ t('Overview') }}
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button cButton
-                            [disabled]="resources && resources.all_resources.length==0"
-                            class="ripple"
-                            color="info"
-                            (click)="myResourcegroupsOnly()"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
-                        {{ t('My resources') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button *oitcPermission="['ScmModule', 'resources', 'add']"
-                            [routerLink]="['/', 'scm_module', 'resources', 'add']"
-                            cButton
-                            class="ripple"
-                            color="success"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                        {{ t('New') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                        {{ t('Filter') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
-            <!-- Filter -->
-            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-                <c-row>
-                    <c-col>
-                        <h6 class="pb-2 mb-3 border-bottom">
-                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                            {{ t('Filter') }}
-                        </h6>
-                    </c-col>
-                </c-row>
-                <form cForm>
-                    <c-row>
-                        <c-col md="6">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Resources.name]']"
-                                       [placeholder]="'Filter by resource name' | transloco"
-                                       aria-label="resourcesName"
-                                       cFormControl
-                                       name="resourcesName"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col md="6">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Resources.description]']"
-                                       [placeholder]="'Filter by resource group description' | transloco"
-                                       aria-label="resourcesDescription"
-                                       cFormControl
-                                       name="resourcesDescription"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                    </c-row>
-                    <c-row class="my-2">
-                        <c-col [xs]="12" [lg]="6" class="ui-fluid">
-                            <fieldset>
-                                <h5>
-                                    {{ t('Resource groups') }}
-                                </h5>
-                                <c-form-check class="d-flex">
-                                    <c-input-group>
-                                        <span cInputGroupText>
-                                            <fa-icon [icon]="['fas', 'user-group']"></fa-icon>
-                                        </span>
-                                        <oitc-multi-select
-                                            class="flex-1"
-                                            name="resourcegroup_id"
-                                            id="resourcegroup_id"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [(ngModel)]="params['filter[Resources.resourcegroup_id][]']"
-                                            [options]="resourcegroups"
-                                            [debounce]="true"
-                                            [placeholder]="'Filter by resource group' | transloco"
-                                            (onChange)="onFilterChange(null)">
-                                        </oitc-multi-select>
-                                    </c-input-group>
-                                </c-form-check>
-                            </fieldset>
-                        </c-col>
-                        <c-col [xs]="12" [lg]="6" class="ui-fluid">
-                            <fieldset>
-                                <h5>
-                                    {{ t('Status') }}
-                                </h5>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="ResourceStatusFilter.unconfirmed"
-                                           cFormCheckInput
-                                           id="ResourceStatusUnconfirmed"
-                                           name="ResourceStatusUnconfirmed"
-                                           class="checkbox-lg checkbox-primary"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="ResourceStatusUnconfirmed">
-                                        <fa-layers [size]="'xl'">
-                                            <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
-                                            <fa-icon [inverse]="true" [icon]="['fas', 'question']"
-                                                     transform="shrink-8"/>
-                                        </fa-layers>
-                                        <span class="pt-1">
-                                            {{ t('Unconfirmed') }}
-                                        </span>
+      <c-card-header>
+        <h5 cCardTitle>{{ t('Resources') }}
+          <small class="fw-300">
+            {{ t('Overview') }}
+          </small>
+        </h5>
+        <c-nav class="card-toolbar card-header-pills">
+          <c-nav-item class="px-1">
+            <button (click)="load()" cButton class="ripple" color="default" size="xs">
+              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+              {{ t('Refresh') }}
+            </button>
+          </c-nav-item>
+          <c-nav-item class="px-1">
+            <button cButton
+              [disabled]="resources && resources.all_resources.length==0"
+              class="ripple"
+              color="info"
+              (click)="myResourcegroupsOnly()"
+              size="xs">
+              <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
+              {{ t('My resources') }}
+            </button>
+          </c-nav-item>
+          <c-nav-item class="px-1">
+            <button *oitcPermission="['ScmModule', 'resources', 'add']"
+              [routerLink]="['/', 'scm_module', 'resources', 'add']"
+              cButton
+              class="ripple"
+              color="success"
+              size="xs">
+              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+              {{ t('New') }}
+            </button>
+          </c-nav-item>
+          <c-nav-item class="px-1">
+            <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+              {{ t('Filter') }}
+            </button>
+          </c-nav-item>
+        </c-nav>
+      </c-card-header>
+      <c-card-body>
+        <!-- Filter -->
+        <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+          <c-row>
+            <c-col>
+              <h6 class="pb-2 mb-3 border-bottom">
+                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                {{ t('Filter') }}
+              </h6>
+            </c-col>
+          </c-row>
+          <form cForm>
+            <c-row>
+              <c-col md="6">
+                <c-input-group>
+                  <span cInputGroupText>
+                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                  </span>
+                  <input (debouncedValue)="onFilterChange($event)"
+                    [(ngModel)]="params['filter[Resources.name]']"
+                    [placeholder]="'Filter by resource name' | transloco"
+                    aria-label="resourcesName"
+                    cFormControl
+                    name="resourcesName"
+                    oitcDebounce
+                    type="text"
+                    />
+                </c-input-group>
+              </c-col>
+              <c-col md="6">
+                <c-input-group>
+                  <span cInputGroupText>
+                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                  </span>
+                  <input (debouncedValue)="onFilterChange($event)"
+                    [(ngModel)]="params['filter[Resources.description]']"
+                    [placeholder]="'Filter by resource group description' | transloco"
+                    aria-label="resourcesDescription"
+                    cFormControl
+                    name="resourcesDescription"
+                    oitcDebounce
+                    type="text"
+                    />
+                </c-input-group>
+              </c-col>
+            </c-row>
+            <c-row class="my-2">
+              <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                <fieldset>
+                  <h5>
+                    {{ t('Resource groups') }}
+                  </h5>
+                  <c-form-check class="d-flex">
+                    <c-input-group>
+                      <span cInputGroupText>
+                        <fa-icon [icon]="['fas', 'user-group']"></fa-icon>
+                      </span>
+                      <oitc-multi-select
+                        class="flex-1"
+                        name="resourcegroup_id"
+                        id="resourcegroup_id"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="params['filter[Resources.resourcegroup_id][]']"
+                        [options]="resourcegroups"
+                        [debounce]="true"
+                        [placeholder]="'Filter by resource group' | transloco"
+                        (onChange)="onFilterChange(null)">
+                      </oitc-multi-select>
+                    </c-input-group>
+                  </c-form-check>
+                </fieldset>
+              </c-col>
+              <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                <fieldset>
+                  <h5>
+                    {{ t('Status') }}
+                  </h5>
+                  <c-form-check>
+                    <input (debouncedValue)="onFilterChange($event)"
+                      [(ngModel)]="ResourceStatusFilter.unconfirmed"
+                      cFormCheckInput
+                      id="ResourceStatusUnconfirmed"
+                      name="ResourceStatusUnconfirmed"
+                      class="checkbox-lg checkbox-primary"
+                      oitcDebounce
+                      type="checkbox"/>
+                    <label cFormCheckLabel class="ms-1 mt-1"
+                      for="ResourceStatusUnconfirmed">
+                      <fa-layers [size]="'xl'">
+                        <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
+                        <fa-icon [inverse]="true" [icon]="['fas', 'question']"
+                          transform="shrink-8"/>
+                      </fa-layers>
+                      <span class="pt-1">
+                        {{ t('Unconfirmed') }}
+                      </span>
 
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="ResourceStatusFilter.ok"
-                                           cFormCheckInput
-                                           id="ResourceStatusOk"
-                                           name="ResourceStatusOk"
-                                           class="checkbox-lg checkbox-success"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="ResourceStatusOk">
-                                        <fa-layers [size]="'xl'">
-                                            <fa-icon [icon]="['fas', 'square']" class="text-success"/>
-                                            <fa-icon [inverse]="true" [icon]="['fas', 'check']"
-                                                     transform="shrink-8"/>
-                                        </fa-layers>
-                                        {{ t('Ok') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="ResourceStatusFilter.warning"
-                                           cFormCheckInput
-                                           id="ResourceStatusWarning"
-                                           name="ResourceStatusWarning"
-                                           class="checkbox-lg checkbox-warning"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="ResourceStatusWarning">
-                                        <fa-layers [size]="'xl'">
-                                            <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
-                                            <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
-                                                     transform="shrink-8"/>
-                                        </fa-layers>
-                                        {{ t('Warning') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="ResourceStatusFilter.critical"
-                                           cFormCheckInput
-                                           id="ResourceStatusCritical"
-                                           name="ResourceStatusCritical"
-                                           class="checkbox-lg checkbox-danger"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="ResourceStatusCritical">
-                                        <fa-layers [size]="'xl'">
-                                            <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
-                                            <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
-                                                     transform="shrink-8"/>
-                                        </fa-layers>
-                                        {{ t('Critical') }}
-                                    </label>
-                                </c-form-check>
-                            </fieldset>
-                        </c-col>
-                    </c-row>
+                    </label>
+                  </c-form-check>
+                  <c-form-check>
+                    <input (debouncedValue)="onFilterChange($event)"
+                      [(ngModel)]="ResourceStatusFilter.ok"
+                      cFormCheckInput
+                      id="ResourceStatusOk"
+                      name="ResourceStatusOk"
+                      class="checkbox-lg checkbox-success"
+                      oitcDebounce
+                      type="checkbox"/>
+                    <label cFormCheckLabel class="ms-1 mt-1"
+                      for="ResourceStatusOk">
+                      <fa-layers [size]="'xl'">
+                        <fa-icon [icon]="['fas', 'square']" class="text-success"/>
+                        <fa-icon [inverse]="true" [icon]="['fas', 'check']"
+                          transform="shrink-8"/>
+                      </fa-layers>
+                      {{ t('Ok') }}
+                    </label>
+                  </c-form-check>
+                  <c-form-check>
+                    <input (debouncedValue)="onFilterChange($event)"
+                      [(ngModel)]="ResourceStatusFilter.warning"
+                      cFormCheckInput
+                      id="ResourceStatusWarning"
+                      name="ResourceStatusWarning"
+                      class="checkbox-lg checkbox-warning"
+                      oitcDebounce
+                      type="checkbox"/>
+                    <label cFormCheckLabel class="ms-1 mt-1"
+                      for="ResourceStatusWarning">
+                      <fa-layers [size]="'xl'">
+                        <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
+                        <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
+                          transform="shrink-8"/>
+                      </fa-layers>
+                      {{ t('Warning') }}
+                    </label>
+                  </c-form-check>
+                  <c-form-check>
+                    <input (debouncedValue)="onFilterChange($event)"
+                      [(ngModel)]="ResourceStatusFilter.critical"
+                      cFormCheckInput
+                      id="ResourceStatusCritical"
+                      name="ResourceStatusCritical"
+                      class="checkbox-lg checkbox-danger"
+                      oitcDebounce
+                      type="checkbox"/>
+                    <label cFormCheckLabel class="ms-1 mt-1"
+                      for="ResourceStatusCritical">
+                      <fa-layers [size]="'xl'">
+                        <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
+                        <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
+                          transform="shrink-8"/>
+                      </fa-layers>
+                      {{ t('Critical') }}
+                    </label>
+                  </c-form-check>
+                </fieldset>
+              </c-col>
+            </c-row>
 
-                    <c-row class="mt-2">
-                        <c-col class="text-end">
-                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                {{ t('Reset filter') }}
-                            </button>
-                        </c-col>
-                    </c-row>
-                </form>
-            </c-container>
-            <!-- End Filter -->
-            <oitc-table-loader *ngIf="!resources"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
+            <c-row class="mt-2">
+              <c-col class="text-end">
+                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                  {{ t('Reset filter') }}
+                </button>
+              </c-col>
+            </c-row>
+          </form>
+        </c-container>
+        <!-- End Filter -->
+        @if (!resources) {
+          <oitc-table-loader></oitc-table-loader>
+        }
+        <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+          (matSortChange)="onSortChange($event)"
+          [matSortActive]="params.sort" [matSortDirection]="params.direction">
+          <thead>
+            <tr>
+              <th class="width-50 text-center" scope="col">
+                <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+              </th>
+              <th scope="col" mat-sort-header="Resources.status">
+                {{ t('Status') }}
+              </th>
+              <th scope="col" mat-sort-header="is_expired">
+                {{ t('Status expired') }}
+              </th>
+              <th scope="col" mat-sort-header="Containers.name">
+                {{ t('Resource group') }}
+              </th>
+              <th scope="col" mat-sort-header="Resources.name">
+                {{ t('Name') }}
+              </th>
+              <th scope="col" mat-sort-header="Resources.description">
+                {{ t('Description') }}
+              </th>
+              <th scope="col">
+                {{ t('Supervisor') }}
+              </th>
+              <th scope="col">
+                {{ t('Comment') }}
+              </th>
+              <th scope="col">
+                {{ t('Last updated') }}
+              </th>
+              <th class="text-center width-50" scope="col">
+                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+              </th>
+            </tr>
+          </thead>
+          @if (resources) {
+            <tbody>
+              @for (resource of resources.all_resources; track $index) {
                 <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Resources.status">
-                        {{ t('Status') }}
-                    </th>
-                    <th scope="col" mat-sort-header="is_expired">
-                        {{ t('Status expired') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Containers.name">
-                        {{ t('Resource group') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Resources.name">
-                        {{ t('Name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Resources.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Supervisor') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Comment') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Last updated') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody *ngIf="resources">
-                    @for (resource of resources.all_resources; track $index) {
-                        <tr>
-                            <td class="text-center">
-                                @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) &&
-                                ( ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'setStatus']) | async ) ||
-                                    ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async ) )) {
-                                    <oitc-item-select
-                                        [disabled]="!(resource.allow_edit || resource.allow_set_status)"
-                                        [item]="resource"></oitc-item-select>
-                                }
-                            </td>
-                            <td class="text-center">
-                                @switch (resource.status) {
-                                    @case (1) {
-                                        <fa-layers [size]="'xl'">
-                                            <fa-icon [icon]="['fas', 'square']" class="text-success"/>
-                                            <fa-icon [inverse]="true" [icon]="['fas', 'check']"
-                                                     transform="shrink-8"/>
-                                        </fa-layers>
-                                    }
-                                    @case (2) {
-                                        <fa-layers [size]="'xl'">
-                                            <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
-                                            <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
-                                                     transform="shrink-8"/>
-                                        </fa-layers>
-                                    }
-                                    @case (3) {
-                                        <fa-layers [size]="'xl'">
-                                            <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
-                                            <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
-                                                     transform="shrink-8"/>
-                                        </fa-layers>
-                                    }
-                                    @default {
-                                        <fa-layers [size]="'xl'">
-                                            <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
-                                            <fa-icon [inverse]="true" [icon]="['fas', 'question']"
-                                                     transform="shrink-8"/>
-                                        </fa-layers>
-                                    }
-                                }
-                            </td>
-                            <td class="text-center">
-                                <c-badge *ngIf="resource.is_expired"
-                                         textColor="danger"
-                                         class="badge-border">
-                                    {{ t('Yes') }}
-                                </c-badge>
-                                <c-badge *ngIf="!resource.is_expired"
-                                         textColor="success"
-                                         class="badge-border">
-                                    {{ t('No') }}
-                                </c-badge>
-                            </td>
-                            <td>
-                                <oitc-label-link
-                                    [objectId]="resource.resourcegroup_id"
-                                    [route]="'/scm_module/resourcegroups/edit'"
-                                    [permissions]="'scmmodule.resourcegroups.edit'">
-                                    {{ resource.resourcegroup.container.name }}
-                                </oitc-label-link>
-                            </td>
-                            <td>
-                                {{ resource.name }}
-                                <c-badge *ngIf="resource.my_resource"
-                                         textColor="info"
-                                         [title]="'My resource' | transloco"
-                                         class="badge-border">
-                                    <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
-                                </c-badge>
-                            </td>
-                            <td>{{ resource.description }}</td>
-
-                            <td>
-                                <span *ngIf="resource.user">
-                                    {{ resource.user.firstname }}  {{ resource.user.lastname }}
-                                </span>
-                            </td>
-                            <td>
-                                {{ resource.comment }}
-                            </td>
-                            <td>
-                                {{ resource.human_last_updated }}
-                            </td>
-                            <td class="width-50">
-                                <oitc-actions-button [permission]="'ScmModule.resources.edit'"
-                                                     [icon]="['fas', 'cog']"
-                                                     [url]="'/scm_module/resources/edit/' + resource.id">
-                                    <oitc-actions-button-element [permission]="'ScmModule.resources.edit'"
-                                                                 *ngIf="resource.allow_edit"
-                                                                 [url]="'/scm_module/resources/edit/' + resource.id">
-                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                        {{ t('Edit') }}
-                                    </oitc-actions-button-element>
-                                    <oitc-actions-button-element [permission]="'ScmModule.resources.setStatus'"
-                                                                 (click)="toggleSetStatusModal(resource)">
-                                        <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
-                                        {{ t('Set status') }}
-                                    </oitc-actions-button-element>
-                                    <oitc-actions-button-element [permission]="'ScmModule.resources.statuslog'"
-                                                                 [url]="'/scm_module/resources/statuslog/' + resource.id">
-                                        <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
-                                        {{ t('Status log') }}
-                                    </oitc-actions-button-element>
-                                    <oitc-actions-button-element [permission]="'ScmModule.scmchangelogs.index'"
-                                                                 [url]="'/scm_module/scm_changelogs/entity/resource/' + resource.id">
-                                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                        {{ t('Changelog') }}
-                                    </oitc-actions-button-element>
-                                    @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) && ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async )) {
-                                        <li cDropdownDivider></li>
-                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(resource)"
-                                                                     *ngIf="resource.allow_edit"
-                                                                     [permission]="'ScmModule.resources.delete'">
-                                            <span class="text-danger">
-                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                {{ t('Delete') }}
-                                            </span>
-                                        </oitc-actions-button-element>
-                                    }
-                                </oitc-actions-button>
-                            </td>
-                        </tr>
+                  <td class="text-center">
+                    @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) &&
+                      ( ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'setStatus']) | async ) ||
+                      ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async ) )) {
+                      <oitc-item-select
+                        [disabled]="!(resource.allow_edit || resource.allow_set_status)"
+                      [item]="resource"></oitc-item-select>
                     }
-                </tbody>
-            </table>
+                  </td>
+                  <td class="text-center">
+                    @switch (resource.status) {
+                      @case (1) {
+                        <fa-layers [size]="'xl'">
+                          <fa-icon [icon]="['fas', 'square']" class="text-success"/>
+                          <fa-icon [inverse]="true" [icon]="['fas', 'check']"
+                            transform="shrink-8"/>
+                        </fa-layers>
+                      }
+                      @case (2) {
+                        <fa-layers [size]="'xl'">
+                          <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
+                          <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
+                            transform="shrink-8"/>
+                        </fa-layers>
+                      }
+                      @case (3) {
+                        <fa-layers [size]="'xl'">
+                          <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
+                          <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
+                            transform="shrink-8"/>
+                        </fa-layers>
+                      }
+                      @default {
+                        <fa-layers [size]="'xl'">
+                          <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
+                          <fa-icon [inverse]="true" [icon]="['fas', 'question']"
+                            transform="shrink-8"/>
+                        </fa-layers>
+                      }
+                    }
+                  </td>
+                  <td class="text-center">
+                    @if (resource.is_expired) {
+                      <c-badge
+                        textColor="danger"
+                        class="badge-border">
+                        {{ t('Yes') }}
+                      </c-badge>
+                    }
+                    @if (!resource.is_expired) {
+                      <c-badge
+                        textColor="success"
+                        class="badge-border">
+                        {{ t('No') }}
+                      </c-badge>
+                    }
+                  </td>
+                  <td>
+                    <oitc-label-link
+                      [objectId]="resource.resourcegroup_id"
+                      [route]="'/scm_module/resourcegroups/edit'"
+                      [permissions]="'scmmodule.resourcegroups.edit'">
+                      {{ resource.resourcegroup.container.name }}
+                    </oitc-label-link>
+                  </td>
+                  <td>
+                    {{ resource.name }}
+                    @if (resource.my_resource) {
+                      <c-badge
+                        textColor="info"
+                        [title]="'My resource' | transloco"
+                        class="badge-border">
+                        <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
+                      </c-badge>
+                    }
+                  </td>
+                  <td>{{ resource.description }}</td>
+                  <td>
+                    @if (resource.user) {
+                      <span>
+                        {{ resource.user.firstname }}  {{ resource.user.lastname }}
+                      </span>
+                    }
+                  </td>
+                  <td>
+                    {{ resource.comment }}
+                  </td>
+                  <td>
+                    {{ resource.human_last_updated }}
+                  </td>
+                  <td class="width-50">
+                    <oitc-actions-button [permission]="'ScmModule.resources.edit'"
+                      [icon]="['fas', 'cog']"
+                      [url]="'/scm_module/resources/edit/' + resource.id">
+                      @if (resource.allow_edit) {
+                        <oitc-actions-button-element [permission]="'ScmModule.resources.edit'"
+                          [url]="'/scm_module/resources/edit/' + resource.id">
+                          <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                          {{ t('Edit') }}
+                        </oitc-actions-button-element>
+                      }
+                      <oitc-actions-button-element [permission]="'ScmModule.resources.setStatus'"
+                        (click)="toggleSetStatusModal(resource)">
+                        <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
+                        {{ t('Set status') }}
+                      </oitc-actions-button-element>
+                      <oitc-actions-button-element [permission]="'ScmModule.resources.statuslog'"
+                        [url]="'/scm_module/resources/statuslog/' + resource.id">
+                        <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
+                        {{ t('Status log') }}
+                      </oitc-actions-button-element>
+                      <oitc-actions-button-element [permission]="'ScmModule.scmchangelogs.index'"
+                        [url]="'/scm_module/scm_changelogs/entity/resource/' + resource.id">
+                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                        {{ t('Changelog') }}
+                      </oitc-actions-button-element>
+                      @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) && ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async )) {
+                        <li cDropdownDivider></li>
+                        @if (resource.allow_edit) {
+                          <oitc-actions-button-element (click)="toggleDeleteAllModal(resource)"
+                            [permission]="'ScmModule.resources.delete'">
+                            <span class="text-danger">
+                              <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                              {{ t('Delete') }}
+                            </span>
+                          </oitc-actions-button-element>
+                        }
+                      }
+                    </oitc-actions-button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          }
+        </table>
 
-            <oitc-no-records
-                *ngIf="resources && resources.all_resources.length === 0"></oitc-no-records>
-            <ng-container *ngIf="resources">
-                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                             [fluid]="true">
-                    <c-row>
-                        <c-col>
-                            <oitc-select-all
-                                [itemsCount]="resources.all_resources.length"></oitc-select-all>
-                        </c-col>
-                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                            <div class="btn-group d-flex flex-row" role="group">
-                                @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) && ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'setStatus']) | async )) {
-                                    <button (click)="toggleSetStatusModal()"
-                                            class="btn btn-outline-info col-3 border-0"
-                                            type="button">
-                                        <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
-                                        {{ t('Set status for selected') }}
-                                    </button>
-                                }
-                                @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) && ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async )) {
-                                    <button (click)="toggleDeleteAllModal()"
-                                            class="btn btn-outline-danger col-3 border-0"
-                                            type="button">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete selected') }}
-                                    </button>
-                                }
-                            </div>
-                        </c-col>
-                    </c-row>
-                </c-container>
-            </ng-container>
+        @if (resources && resources.all_resources.length === 0) {
+          <oitc-no-records
+          ></oitc-no-records>
+        }
+        @if (resources) {
+          <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+            [fluid]="true">
+            <c-row>
+              <c-col>
+                <oitc-select-all
+                [itemsCount]="resources.all_resources.length"></oitc-select-all>
+              </c-col>
+              <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                <div class="btn-group d-flex flex-row" role="group">
+                  @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) && ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'setStatus']) | async )) {
+                    <button (click)="toggleSetStatusModal()"
+                      class="btn btn-outline-info col-3 border-0"
+                      type="button">
+                      <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
+                      {{ t('Set status for selected') }}
+                    </button>
+                  }
+                  @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) && ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async )) {
+                    <button (click)="toggleDeleteAllModal()"
+                      class="btn btn-outline-danger col-3 border-0"
+                      type="button">
+                      <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                      {{ t('Delete selected') }}
+                    </button>
+                  }
+                </div>
+              </c-col>
+            </c-row>
+          </c-container>
+        }
 
-            <c-container
-                [fluid]="true">
-                <c-row>
-                    <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            [paginateOrScroll]="resources"></oitc-paginate-or-scroll>
-                    </c-col>
-                </c-row>
-            </c-container>
-        </c-card-body>
+        <c-container
+          [fluid]="true">
+          <c-row>
+            <c-col>
+              <oitc-paginate-or-scroll
+                (paginatorChange)="onPaginatorChange($event)"
+              [paginateOrScroll]="resources"></oitc-paginate-or-scroll>
+            </c-col>
+          </c-row>
+        </c-container>
+      </c-card-body>
     </c-card>
-</ng-container>
-<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
-<oitc-resources-set-status-modal (completed)="onMassActionComplete($event)"
-                                 [itemsInput]="selectedResourceItems"
-                                 [settings]="settings"></oitc-resources-set-status-modal>
+  </ng-container>
+  <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+  <oitc-resources-set-status-modal (completed)="onMassActionComplete($event)"
+    [itemsInput]="selectedResourceItems"
+  [settings]="settings"></oitc-resources-set-status-modal>

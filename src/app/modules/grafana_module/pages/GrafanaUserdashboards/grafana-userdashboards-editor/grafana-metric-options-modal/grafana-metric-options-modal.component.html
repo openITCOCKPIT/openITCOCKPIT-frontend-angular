@@ -1,123 +1,130 @@
 <ng-container *transloco="let t">
-    <c-modal #grafanaMetricOptionsModal fullscreen="md" id="grafanaMetricOptionsModal" size="lg">
-        <c-modal-header>
-            <h5 cModalTitle>
-                <fa-icon [icon]="['fas', 'pen-to-square']" [flip]="'horizontal'"></fa-icon>
-                <span *ngIf="mode === 'add'">
-                    {{ t('Add new metric') }}
-                </span>
+  <c-modal #grafanaMetricOptionsModal fullscreen="md" id="grafanaMetricOptionsModal" size="lg">
+    <c-modal-header>
+      <h5 cModalTitle>
+        <fa-icon [icon]="['fas', 'pen-to-square']" [flip]="'horizontal'"></fa-icon>
+        @if (mode === 'add') {
+          <span>
+            {{ t('Add new metric') }}
+          </span>
+        }
 
-                <span *ngIf="mode === 'edit'">
-                    {{ t('Update metric') }}
-                </span>
+        @if (mode === 'edit') {
+          <span>
+            {{ t('Update metric') }}
+          </span>
+        }
 
-            </h5>
-            <button [cModalToggle]="grafanaMetricOptionsModal.id" cButtonClose></button>
-        </c-modal-header>
-        <c-modal-body>
+      </h5>
+      <button [cModalToggle]="grafanaMetricOptionsModal.id" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
 
-            <c-row>
-                <c-col [xs]="12" *ngIf="currentMetric">
+      <c-row>
+        @if (currentMetric) {
+          <c-col [xs]="12">
+            <div class="mb-3">
+              <label cLabel for="metric_service">
+                {{ t('Select service') }}
+                <oitc-required-icon></oitc-required-icon>
+              </label>
+              <oitc-select
+                name="metric_service"
+                id="metric_service"
+                optionValue="key"
+                optionLabel="value"
+                [(ngModel)]="currentMetric.service_id"
+                [options]="services"
+                (onChange)="onServiceChange()"
+                [searchCallback]="loadServices"
+                [appendTo]="''"
+                [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
+                oitcFormError [errors]="errors" errorField="service_id">
+              </oitc-select>
+              <oitc-form-feedback [errors]="errors" errorField="service_id"></oitc-form-feedback>
+            </div>
+            <div class="mb-3">
+              <label cLabel for="metric_metric">
+                {{ t('Select metric') }}
+                <oitc-required-icon></oitc-required-icon>
+              </label>
+              <oitc-select
+                name="metric_metric"
+                id="metric_metric"
+                optionValue="key"
+                optionLabel="value"
+                [(ngModel)]="currentMetric.metric"
+                [options]="metrics"
+                (onChange)="onMetricChange()"
+                [appendTo]="''"
+                oitcFormError [errors]="errors" errorField="metric">
+              </oitc-select>
+              <oitc-form-feedback [errors]="errors" errorField="metric"></oitc-form-feedback>
+              @if (unitOfSelectedMetric) {
+                <div class="help-block">
+                  {{ t('Unit') }}:
+                  {{ unitOfSelectedMetric }}
+                </div>
+              }
+            </div>
+          </c-col>
+        }
+      </c-row>
 
-                    <div class="mb-3">
-                        <label cLabel for="metric_service">
-                            {{ t('Select service') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-
-                        <oitc-select
-                            name="metric_service"
-                            id="metric_service"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="currentMetric.service_id"
-                            [options]="services"
-                            (onChange)="onServiceChange()"
-                            [searchCallback]="loadServices"
-                            [appendTo]="''"
-                            [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
-                            oitcFormError [errors]="errors" errorField="service_id">
-                        </oitc-select>
-                        <oitc-form-feedback [errors]="errors" errorField="service_id"></oitc-form-feedback>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="metric_metric">
-                            {{ t('Select metric') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-
-                        <oitc-select
-                            name="metric_metric"
-                            id="metric_metric"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="currentMetric.metric"
-                            [options]="metrics"
-                            (onChange)="onMetricChange()"
-                            [appendTo]="''"
-                            oitcFormError [errors]="errors" errorField="metric">
-                        </oitc-select>
-                        <oitc-form-feedback [errors]="errors" errorField="metric"></oitc-form-feedback>
-                        <div class="help-block" *ngIf="unitOfSelectedMetric">
-                            {{ t('Unit') }}:
-                            {{ unitOfSelectedMetric }}
-                        </div>
-                    </div>
-
-                </c-col>
-            </c-row>
-
-            <c-row *ngIf="currentMetric">
-                @for (color of grafanaColors; track $index) {
-                    <c-col [xs]="12" [md]="6" [lg]="3" class="mb-3">
-
-                        <table>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <div class="grafana-main-color"
-                                         [ngClass]="{'grafana-selected-color': currentMetric.color === color.main}"
-                                         (click)="currentMetric.color = color.main"
-                                         [style.background]="color.main"></div>
-                                </td>
-                                <td class="ps-2">
-                                    {{ color.name }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="pt-1" colspan="2">
-                                    @for (childColor of color.children; track $index) {
-                                        <div class="grafana-child-color d-inline-block me-3px"
-                                             [ngClass]="{'grafana-selected-color': currentMetric.color === childColor}"
-                                             (click)="currentMetric.color = childColor"
-                                             [style.background]="childColor"></div>
-                                    }
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                    </c-col>
-                }
-            </c-row>
+      @if (currentMetric) {
+        <c-row>
+          @for (color of grafanaColors; track $index) {
+            <c-col [xs]="12" [md]="6" [lg]="3" class="mb-3">
+              <table>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="grafana-main-color"
+                        [ngClass]="{'grafana-selected-color': currentMetric.color === color.main}"
+                        (click)="currentMetric.color = color.main"
+                      [style.background]="color.main"></div>
+                    </td>
+                    <td class="ps-2">
+                      {{ color.name }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="pt-1" colspan="2">
+                      @for (childColor of color.children; track $index) {
+                        <div class="grafana-child-color d-inline-block me-3px"
+                          [ngClass]="{'grafana-selected-color': currentMetric.color === childColor}"
+                          (click)="currentMetric.color = childColor"
+                        [style.background]="childColor"></div>
+                      }
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </c-col>
+          }
+        </c-row>
+      }
 
 
-        </c-modal-body>
-        <c-modal-footer>
-            <button cButton color="primary" class="ripple"
-                    (click)="saveMetric()">
-                <span *ngIf="mode === 'add'">
-                    {{ t('Add metric') }}
-                </span>
-                <span *ngIf="mode === 'edit'">
-                    {{ t('Update metric') }}
-                </span>
-            </button>
-            <button [cModalToggle]="grafanaMetricOptionsModal.id" cButton color="default" class="ripple">
-                {{ t('Close') }}
-            </button>
-        </c-modal-footer>
-    </c-modal>
+    </c-modal-body>
+    <c-modal-footer>
+      <button cButton color="primary" class="ripple"
+        (click)="saveMetric()">
+        @if (mode === 'add') {
+          <span>
+            {{ t('Add metric') }}
+          </span>
+        }
+        @if (mode === 'edit') {
+          <span>
+            {{ t('Update metric') }}
+          </span>
+        }
+      </button>
+      <button [cModalToggle]="grafanaMetricOptionsModal.id" cButton color="default" class="ripple">
+        {{ t('Close') }}
+      </button>
+    </c-modal-footer>
+  </c-modal>
 
 </ng-container>

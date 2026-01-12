@@ -38,7 +38,7 @@ import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -106,8 +106,6 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
     MultiSelectComponent,
     NavComponent,
     NavItemComponent,
-    NgForOf,
-    NgIf,
     NgSelectModule,
     NoRecordsComponent,
     PaginateOrScrollComponent,

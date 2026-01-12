@@ -1,358 +1,389 @@
 <ng-container *transloco="let t">
-    <table cTable bordered hover>
-        <tbody>
-        <tr>
-            <td colspan="6">
-                <div class="d-flex flex-align-items-center">
-                    <div>
-                        <fa-layers [fixedWidth]="true" size="4x">
-                            <fa-icon [icon]="['fas', 'square']" class="text-primary"></fa-icon>
-                            <fa-icon [icon]="['fas', 'cloud']" class="text-primary-light white-glow"
-                                     [transform]="'shrink-5'"></fa-icon>
-                            <fa-icon [icon]="['fas', 'server']" [inverse]="true" [transform]="'shrink-10'"></fa-icon>
-                        </fa-layers>
-                    </div>
-                    <div class="iTop-class-label flex-1">
-                        {{ result.response.general_information?.finalclass?.value }}
-                    </div>
-                </div>
-            </td>
-        </tr>
-        <tr class="border-primary-top">
-            <th colspan="2" class="col-4">
-                <fa-icon [icon]="['fas', 'circle-info']" class="text-primary width-15"></fa-icon>
-                {{ t('General information') }}
-            </th>
-            <td class="bold">
-                {{ t('Status') }}
-            </td>
-            <th colspan="2" class="col-4">
-                <fa-icon [icon]="['fas', 'gears']" class="text-primary width-15"></fa-icon>
-                {{ t('Operations') }}
-            </th>
-            <td class="bold">
-                {{ t('Production Critical') }}
-            </td>
-        </tr>
+  <table cTable bordered hover>
+    <tbody>
+      <tr>
+        <td colspan="6">
+          <div class="d-flex flex-align-items-center">
+            <div>
+              <fa-layers [fixedWidth]="true" size="4x">
+                <fa-icon [icon]="['fas', 'square']" class="text-primary"></fa-icon>
+                <fa-icon [icon]="['fas', 'cloud']" class="text-primary-light white-glow"
+                [transform]="'shrink-5'"></fa-icon>
+                <fa-icon [icon]="['fas', 'server']" [inverse]="true" [transform]="'shrink-10'"></fa-icon>
+              </fa-layers>
+            </div>
+            <div class="iTop-class-label flex-1">
+              {{ result.response.general_information?.finalclass?.value }}
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr class="border-primary-top">
+        <th colspan="2" class="col-4">
+          <fa-icon [icon]="['fas', 'circle-info']" class="text-primary width-15"></fa-icon>
+          {{ t('General information') }}
+        </th>
+        <td class="bold">
+          {{ t('Status') }}
+        </td>
+        <th colspan="2" class="col-4">
+          <fa-icon [icon]="['fas', 'gears']" class="text-primary width-15"></fa-icon>
+          {{ t('Operations') }}
+        </th>
+        <td class="bold">
+          {{ t('Production Critical') }}
+        </td>
+      </tr>
 
-        <tr>
-            <th class="col-lg-2 col-md-2">
-                {{ t('Name') }}
-            </th>
-            <td>
-                {{ result.response.general_information?.name?.value }}
-            </td>
-            <td class="col-lg-1 col-md-1">
-                <div [ngSwitch]="result.response.general_information?.status?.value">
-                    <span *ngSwitchCase="'implementation'"
-                          class="badge border-info border text-info w-100">
-                        <fa-icon [icon]="['fas', 'archive']" class="text-info"></fa-icon>
-                        {{ t('implementation') }}
-                    </span>
-                    <span *ngSwitchCase="'production'"
-                          class="badge border-success border text-success w-100">
-                        <fa-icon [icon]="['fas', 'power-off']" class="text-success"></fa-icon>
-                        {{ t('production') }}
-                    </span>
-                    <span *ngSwitchCase="'stock'"
-                          class="badge border-primary border text-primary w-100">
-                        <fa-icon [icon]="['fas', 'archive']" class="text-primary"></fa-icon>
-                        {{ t('stock') }}
-                    </span>
-                    <span *ngSwitchCase="'obsolete'"
-                          class="badge border-danger border text-danger w-100">
-                        <fa-icon [icon]="['fas', 'trash']" class="text-danger"></fa-icon>
-                        {{ t('obsolete') }}
-                    </span>
-                </div>
-            </td>
-
-            <th class="col-lg-1 col-md-1">
-                {{ t('Environment') }}
-            </th>
-            <td>
-                {{ result.response.operations?.environment?.value }}
-            </td>
-            <td class="col-lg-1 col-md-1">
-                @switch (result.response.general_information?.business_criticity?.value) {
-                    @case ("low") {
-                        <span class="badge border-success border text-success w-100 helptext"
-                              title="{{ t('No Production relevance') }}">
-                            {{ t('low') }}
-                        </span>
-                    }
-                    @case ("medium") {
-                        <span class="badge border-warning border text-warning w-100 helptext"
-                              title="{{ t('Production relevant') }}">
-                            {{ t('medium') }}
-                        </span>
-                    }
-                    @case ("hight") {
-                        <span class="badge border-danger border text-danger w-100 helptext"
-                              title="{{ t('Production relevance high') }}">
-                            {{ t('high') }}
-                        </span>
-                    }
-                }
-            </td>
-        </tr>
-
-        <tr>
-            <th> {{ t('DNS domain') }}</th>
-            <td>
-                {{ result.response.general_information?.dnsdomain?.value }}
-            </td>
-            <td rowspan="3" class="text-center align-middle">
-                <span [ngSwitch]="result.response.general_information?.status?.value">
-                    <!-- Gradient colored icons -->
-                    <i class="fas fa-file-circle-check fa-4x status-implementation"
-                       *ngSwitchCase="'implementation'"></i>
-                    <i class="fas fa-plug-circle-check fa-4x status-production lh-sm" *ngSwitchCase="'production'"></i>
-                    <i class="fas fa-boxes-packing fa-4x status-stock lh-sm" *ngSwitchCase="'stock'"></i>
-                    <i class="fas fa-plug-circle-bolt fa-4x status-obsolete lh-sm" *ngSwitchCase="'obsolete'"></i>
+      <tr>
+        <th class="col-lg-2 col-md-2">
+          {{ t('Name') }}
+        </th>
+        <td>
+          {{ result.response.general_information?.name?.value }}
+        </td>
+        <td class="col-lg-1 col-md-1">
+          <div>
+            @switch (result.response.general_information?.status?.value) {
+              @case ('implementation') {
+                <span
+                  class="badge border-info border text-info w-100">
+                  <fa-icon [icon]="['fas', 'archive']" class="text-info"></fa-icon>
+                  {{ t('implementation') }}
                 </span>
-            </td>
-            <th> {{ t('Server role') }}</th>
-            <td>
-                {{ result.response.operations?.server_role?.value }}
-            </td>
-            <td rowspan="3" class="text-center align-middle">
-                <span [ngSwitch]="result.response.general_information?.business_criticity?.value">
-                    <!-- Gradient colored icons -->
-                    <i class="fas fa-bars fa-4x business-criticity-low helptext"
-                       *ngSwitchCase="'low'"
-                       [title]="'No Production relevance' | transloco"></i>
-                    <i class="fas fa-bars fa-4x business-criticity-medium helptext"
-                       *ngSwitchCase="'medium'"
-                       [title]="'Production relevant' | transloco"></i>
-                    <i class="fas fa-bars fa-4x business-criticity-high helptext"
-                       *ngSwitchCase="'high'"
-                       [title]="'Production relevance high' | transloco"></i>
+              }
+              @case ('production') {
+                <span
+                  class="badge border-success border text-success w-100">
+                  <fa-icon [icon]="['fas', 'power-off']" class="text-success"></fa-icon>
+                  {{ t('production') }}
                 </span>
-            </td>
-        </tr>
-
-        <tr>
-            <th>
-                {{ t('External ID') }}
-            </th>
-            <td class="text-primary">
-                {{ result.response.general_information?.id?.value }}
-                <span *ngIf="result.response.externalLink" class="ng-scope">
-                    <a target="_blank" [href]="result.response.externalLink">
-                        <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
-                    </a>
+              }
+              @case ('stock') {
+                <span
+                  class="badge border-primary border text-primary w-100">
+                  <fa-icon [icon]="['fas', 'archive']" class="text-primary"></fa-icon>
+                  {{ t('stock') }}
                 </span>
-            </td>
-            <th>
-                {{ t('Uptime') }}
-            </th>
-            <td>
-                {{ result.response.operations?.uptime?.value }}
-            </td>
-        </tr>
+              }
+              @case ('obsolete') {
+                <span
+                  class="badge border-danger border text-danger w-100">
+                  <fa-icon [icon]="['fas', 'trash']" class="text-danger"></fa-icon>
+                  {{ t('obsolete') }}
+                </span>
+              }
+            }
+          </div>
+        </td>
 
-        <tr>
-            <th>
-                {{ t('Organisation') }}
-            </th>
-            <td>
-                {{ result.response.general_information?.organization_name?.value }}
-            </td>
-            <th>
-                {{ t('Service class') }}
-            </th>
-            <td>
-                {{ result.response.general_information?.serviceclass?.value }}
-            </td>
-        </tr>
+        <th class="col-lg-1 col-md-1">
+          {{ t('Environment') }}
+        </th>
+        <td>
+          {{ result.response.operations?.environment?.value }}
+        </td>
+        <td class="col-lg-1 col-md-1">
+          @switch (result.response.general_information?.business_criticity?.value) {
+            @case ("low") {
+              <span class="badge border-success border text-success w-100 helptext"
+                title="{{ t('No Production relevance') }}">
+                {{ t('low') }}
+              </span>
+            }
+            @case ("medium") {
+              <span class="badge border-warning border text-warning w-100 helptext"
+                title="{{ t('Production relevant') }}">
+                {{ t('medium') }}
+              </span>
+            }
+            @case ("hight") {
+              <span class="badge border-danger border text-danger w-100 helptext"
+                title="{{ t('Production relevance high') }}">
+                {{ t('high') }}
+              </span>
+            }
+          }
+        </td>
+      </tr>
 
-        <tr>
-            <th>
-                {{ t('Short description') }}
-            </th>
-            <td colspan="2">
-                {{ result.response.general_information?.short_description?.value }}
-            </td>
-            <th>
-                {{ t('Host or cluster') }}
-            </th>
-            <td colspan="2">
-                {{ result.response.operations?.virtualhost?.value }}
-            </td>
-        </tr>
+      <tr>
+        <th> {{ t('DNS domain') }}</th>
+        <td>
+          {{ result.response.general_information?.dnsdomain?.value }}
+        </td>
+        <td rowspan="3" class="text-center align-middle">
+          <span>
+            @switch (result.response.general_information?.status?.value) {
+              <!-- Gradient colored icons -->
+              @case ('implementation') {
+                <i class="fas fa-file-circle-check fa-4x status-implementation"
+                ></i>
+              }
+              @case ('production') {
+                <i class="fas fa-plug-circle-check fa-4x status-production lh-sm"></i>
+              }
+              @case ('stock') {
+                <i class="fas fa-boxes-packing fa-4x status-stock lh-sm"></i>
+              }
+              @case ('obsolete') {
+                <i class="fas fa-plug-circle-bolt fa-4x status-obsolete lh-sm"></i>
+              }
+            }
+          </span>
+        </td>
+        <th> {{ t('Server role') }}</th>
+        <td>
+          {{ result.response.operations?.server_role?.value }}
+        </td>
+        <td rowspan="3" class="text-center align-middle">
+          <span>
+            @switch (result.response.general_information?.business_criticity?.value) {
+              <!-- Gradient colored icons -->
+              @case ('low') {
+                <i class="fas fa-bars fa-4x business-criticity-low helptext"
+                [title]="'No Production relevance' | transloco"></i>
+              }
+              @case ('medium') {
+                <i class="fas fa-bars fa-4x business-criticity-medium helptext"
+                [title]="'Production relevant' | transloco"></i>
+              }
+              @case ('high') {
+                <i class="fas fa-bars fa-4x business-criticity-high helptext"
+                [title]="'Production relevance high' | transloco"></i>
+              }
+            }
+          </span>
+        </td>
+      </tr>
 
-        <tr>
-            <th>
-                {{ t('Description') }}
-            </th>
-            <td colspan="2">
-                {{ result.response.general_information?.description?.value }}
-            </td>
-            <th>
-                {{ t('Last OS Patching') }}
-            </th>
-            <td colspan="2">
-                <fa-icon [icon]="['fas', 'calendar-day']" class="text-primary"></fa-icon>
-                {{ result.response.operations?.lastospatch?.value }}
-            </td>
-        </tr>
+      <tr>
+        <th>
+          {{ t('External ID') }}
+        </th>
+        <td class="text-primary">
+          {{ result.response.general_information?.id?.value }}
+          @if (result.response.externalLink) {
+            <span class="ng-scope">
+              <a target="_blank" [href]="result.response.externalLink">
+                <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
+              </a>
+            </span>
+          }
+        </td>
+        <th>
+          {{ t('Uptime') }}
+        </th>
+        <td>
+          {{ result.response.operations?.uptime?.value }}
+        </td>
+      </tr>
 
-        <tr>
-            <th>
-                {{ t('Application solutions') }}
-            </th>
-            <td colspan="2">
-                <ul class="no-padding inside-list">
-                    <li *ngFor="let application of result.response.general_information?.applicationsolution_list?.value">
-                        {{ application }}
-                    </li>
-                </ul>
-            </td>
-            <th>
-                {{ t('Next OS Patching') }}
-            </th>
-            <td colspan="2">
-                <fa-icon [icon]="['fas', 'calendar-day']" class="text-primary"></fa-icon>
-                {{ result.response.operations?.nextospatch?.value }}
-            </td>
-        </tr>
+      <tr>
+        <th>
+          {{ t('Organisation') }}
+        </th>
+        <td>
+          {{ result.response.general_information?.organization_name?.value }}
+        </td>
+        <th>
+          {{ t('Service class') }}
+        </th>
+        <td>
+          {{ result.response.general_information?.serviceclass?.value }}
+        </td>
+      </tr>
 
-        <tr>
-            <th>
-                {{ t('Contacts') }}
-            </th>
-            <td colspan="2">
-                <ul class="no-padding inside-list">
-                    <li *ngFor="let contact of result.response.contacts_list">
-                        <fa-icon [icon]="['fas', 'user']" class="text-primary"></fa-icon>
-                        {{ contact.name.value }}
-                        <fa-icon [icon]="['far', 'envelope']" class="text-primary"></fa-icon>
-                        {{ contact.email.value }}
-                    </li>
-                </ul>
-            </td>
-            <td colspan="3">
-            </td>
-        </tr>
+      <tr>
+        <th>
+          {{ t('Short description') }}
+        </th>
+        <td colspan="2">
+          {{ result.response.general_information?.short_description?.value }}
+        </td>
+        <th>
+          {{ t('Host or cluster') }}
+        </th>
+        <td colspan="2">
+          {{ result.response.operations?.virtualhost?.value }}
+        </td>
+      </tr>
 
-        <tr class="border-primary-top">
-            <th colspan="6" class="border-primary-top">
-                <fa-icon [icon]="['fas', 'server']" class="text-primary width-15"></fa-icon>
-                {{ t('Server details') }}
-            </th>
-        </tr>
-        <tr>
-            <th>
-                {{ t('OS Family') }}
-            </th>
-            <td colspan="5">
-                {{ result.response.server_details?.os_family?.value }}
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {{ t('OS Version') }}
-            </th>
-            <td colspan="5">
-                {{ result.response.server_details?.os_version?.value }}
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {{ t('Management url') }}
-            </th>
-            <td colspan="5">
-                <a target="_blank"
-                   href="{{result.response.server_details?.management_url?.value}}">
-                    {{ result.response.server_details?.management_url?.value }}
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {{ t('Cpu type') }}
-                <sub>
-                    <fa-icon [icon]="['fas', 'microchip']" class="text-primary"></fa-icon>
-                </sub>
-            </th>
-            <td colspan="5">
-                {{ result.response.server_details?.cpu_type?.value }}
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {{ t('Cpu count') }}
-            </th>
-            <td colspan="5">
-                {{ result.response.server_details?.cpu_count?.value }}
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {{ t('Cpu cores') }}
-            </th>
-            <td colspan="5">
-                {{ result.response.server_details?.cpu_cores?.value }}
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {{ t('RAM') }}
-                <sub>
-                    <fa-icon [icon]="['fas', 'memory']" class="text-primary"></fa-icon>
-                </sub>
-            </th>
-            <td colspan="5">
-                {{ result.response.server_details?.ram?.value }}
-            </td>
-        </tr>
-        <tr>
-            <th colspan="6" class="border-primary-top">
-                <fa-icon [icon]="['fas', 'file-invoice']" class="text-primary width-15"></fa-icon>
-                {{ t('Accounting') }}
-            </th>
-        </tr>
-        <tr>
-            <th>
-                {{ t('Provider HW') }}
-            </th>
-            <td colspan="2">
-                {{ result.response.accounting?.provider_hw?.value }}
-            </td>
-            <th>
-                {{ t('Provider OS') }}
-            </th>
-            <td colspan="2">
-                {{ result.response.accounting?.provider_os?.value }}
-            </td>
-        </tr>
+      <tr>
+        <th>
+          {{ t('Description') }}
+        </th>
+        <td colspan="2">
+          {{ result.response.general_information?.description?.value }}
+        </td>
+        <th>
+          {{ t('Last OS Patching') }}
+        </th>
+        <td colspan="2">
+          <fa-icon [icon]="['fas', 'calendar-day']" class="text-primary"></fa-icon>
+          {{ result.response.operations?.lastospatch?.value }}
+        </td>
+      </tr>
 
-        <tr>
-            <th>
-                {{ t('Provider contract') }}
-            </th>
-            <td colspan="2">
-                {{ result.response.accounting?.provider_contract?.value }}
-            </td>
-            <th>
-                {{ t('Provider SLA') }}
-            </th>
-            <td colspan="2">
-                {{ result.response.accounting?.provider_sla?.value }}
-            </td>
-        </tr>
+      <tr>
+        <th>
+          {{ t('Application solutions') }}
+        </th>
+        <td colspan="2">
+          <ul class="no-padding inside-list">
+            @for (application of result.response.general_information?.applicationsolution_list?.value; track application) {
+              <li>
+                {{ application }}
+              </li>
+            }
+          </ul>
+        </td>
+        <th>
+          {{ t('Next OS Patching') }}
+        </th>
+        <td colspan="2">
+          <fa-icon [icon]="['fas', 'calendar-day']" class="text-primary"></fa-icon>
+          {{ result.response.operations?.nextospatch?.value }}
+        </td>
+      </tr>
 
-        <tr>
-            <th>
-                {{ t('PSP operations department') }}
-            </th>
-            <td colspan="2">
-                {{ result.response.accounting?.psp_operations_department?.value }}
-            </td>
-            <td colspan="3">
-            </td>
-        </tr>
-        </tbody>
-    </table>
+      <tr>
+        <th>
+          {{ t('Contacts') }}
+        </th>
+        <td colspan="2">
+          <ul class="no-padding inside-list">
+            @for (contact of result.response.contacts_list; track contact) {
+              <li>
+                <fa-icon [icon]="['fas', 'user']" class="text-primary"></fa-icon>
+                {{ contact.name.value }}
+                <fa-icon [icon]="['far', 'envelope']" class="text-primary"></fa-icon>
+                {{ contact.email.value }}
+              </li>
+            }
+          </ul>
+        </td>
+        <td colspan="3">
+        </td>
+      </tr>
+
+      <tr class="border-primary-top">
+        <th colspan="6" class="border-primary-top">
+          <fa-icon [icon]="['fas', 'server']" class="text-primary width-15"></fa-icon>
+          {{ t('Server details') }}
+        </th>
+      </tr>
+      <tr>
+        <th>
+          {{ t('OS Family') }}
+        </th>
+        <td colspan="5">
+          {{ result.response.server_details?.os_family?.value }}
+        </td>
+      </tr>
+      <tr>
+        <th>
+          {{ t('OS Version') }}
+        </th>
+        <td colspan="5">
+          {{ result.response.server_details?.os_version?.value }}
+        </td>
+      </tr>
+      <tr>
+        <th>
+          {{ t('Management url') }}
+        </th>
+        <td colspan="5">
+          <a target="_blank"
+            href="{{result.response.server_details?.management_url?.value}}">
+            {{ result.response.server_details?.management_url?.value }}
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          {{ t('Cpu type') }}
+          <sub>
+            <fa-icon [icon]="['fas', 'microchip']" class="text-primary"></fa-icon>
+          </sub>
+        </th>
+        <td colspan="5">
+          {{ result.response.server_details?.cpu_type?.value }}
+        </td>
+      </tr>
+      <tr>
+        <th>
+          {{ t('Cpu count') }}
+        </th>
+        <td colspan="5">
+          {{ result.response.server_details?.cpu_count?.value }}
+        </td>
+      </tr>
+      <tr>
+        <th>
+          {{ t('Cpu cores') }}
+        </th>
+        <td colspan="5">
+          {{ result.response.server_details?.cpu_cores?.value }}
+        </td>
+      </tr>
+      <tr>
+        <th>
+          {{ t('RAM') }}
+          <sub>
+            <fa-icon [icon]="['fas', 'memory']" class="text-primary"></fa-icon>
+          </sub>
+        </th>
+        <td colspan="5">
+          {{ result.response.server_details?.ram?.value }}
+        </td>
+      </tr>
+      <tr>
+        <th colspan="6" class="border-primary-top">
+          <fa-icon [icon]="['fas', 'file-invoice']" class="text-primary width-15"></fa-icon>
+          {{ t('Accounting') }}
+        </th>
+      </tr>
+      <tr>
+        <th>
+          {{ t('Provider HW') }}
+        </th>
+        <td colspan="2">
+          {{ result.response.accounting?.provider_hw?.value }}
+        </td>
+        <th>
+          {{ t('Provider OS') }}
+        </th>
+        <td colspan="2">
+          {{ result.response.accounting?.provider_os?.value }}
+        </td>
+      </tr>
+
+      <tr>
+        <th>
+          {{ t('Provider contract') }}
+        </th>
+        <td colspan="2">
+          {{ result.response.accounting?.provider_contract?.value }}
+        </td>
+        <th>
+          {{ t('Provider SLA') }}
+        </th>
+        <td colspan="2">
+          {{ result.response.accounting?.provider_sla?.value }}
+        </td>
+      </tr>
+
+      <tr>
+        <th>
+          {{ t('PSP operations department') }}
+        </th>
+        <td colspan="2">
+          {{ result.response.accounting?.psp_operations_department?.value }}
+        </td>
+        <td colspan="3">
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </ng-container>

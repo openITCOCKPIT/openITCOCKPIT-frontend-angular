@@ -1,862 +1,872 @@
 <ng-container *transloco="let t">
-    <c-card class="mb-3 mt-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Service') }}:
-                <small class="fw-300">
-                    {{ t('overview') }}
-                </small>
-            </h5>
+  <c-card class="mb-3 mt-3">
+    <c-card-header>
+      <h5 cCardTitle>{{ t('Service') }}:
+        <small class="fw-300">
+          {{ t('overview') }}
+        </small>
+      </h5>
 
-            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
-                <c-nav-item>
-                    <a href="javascript:void(0);"
-                       [ngClass]="{'active': activeTab === 'active'}"
-                       (click)="changeTab('active')"
-                       *oitcPermission="['services', 'index']" class="nav-link">
-                        <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
-                        {{ t('Monitored') }}
-                    </a>
-                </c-nav-item>
-                <c-nav-item>
-                    <a href="javascript:void(0);"
-                       [ngClass]="{'active': activeTab === 'notMonitored'}"
-                       (click)="changeTab('notMonitored')"
-                       *oitcPermission="['services', 'notMonitored']" class="nav-link">
-                        <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
-                        {{ t('Not monitored') }}
-                    </a>
-                </c-nav-item>
-                <c-nav-item>
-                    <a href="javascript:void(0);"
-                       [ngClass]="{'active': activeTab === 'disabled'}"
-                       (click)="changeTab('disabled')"
-                       *oitcPermission="['services', 'disabled']" class="nav-link">
-                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                        {{ t('Disabled') }}
-                    </a>
-                </c-nav-item>
-                <c-nav-item>
-                    <a href="javascript:void(0);"
-                       [ngClass]="{'active': activeTab === 'deleted'}"
-                       (click)="changeTab('deleted')"
-                       *oitcPermission="['services', 'deleted']" class="nav-link">
-                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                        {{ t('Deleted') }}
-                    </a>
-                </c-nav-item>
-            </c-nav>
+      <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+        <c-nav-item>
+          <a href="javascript:void(0);"
+            [ngClass]="{'active': activeTab === 'active'}"
+            (click)="changeTab('active')"
+            *oitcPermission="['services', 'index']" class="nav-link">
+            <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
+            {{ t('Monitored') }}
+          </a>
+        </c-nav-item>
+        <c-nav-item>
+          <a href="javascript:void(0);"
+            [ngClass]="{'active': activeTab === 'notMonitored'}"
+            (click)="changeTab('notMonitored')"
+            *oitcPermission="['services', 'notMonitored']" class="nav-link">
+            <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
+            {{ t('Not monitored') }}
+          </a>
+        </c-nav-item>
+        <c-nav-item>
+          <a href="javascript:void(0);"
+            [ngClass]="{'active': activeTab === 'disabled'}"
+            (click)="changeTab('disabled')"
+            *oitcPermission="['services', 'disabled']" class="nav-link">
+            <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+            {{ t('Disabled') }}
+          </a>
+        </c-nav-item>
+        <c-nav-item>
+          <a href="javascript:void(0);"
+            [ngClass]="{'active': activeTab === 'deleted'}"
+            (click)="changeTab('deleted')"
+            *oitcPermission="['services', 'deleted']" class="nav-link">
+            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+            {{ t('Deleted') }}
+          </a>
+        </c-nav-item>
+      </c-nav>
 
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button *oitcPermission="['services', 'add']"
-                            [routerLink]="['/', 'services', 'add', ]"
-                            [queryParams]="{hostId: hostId}"
-                            cButton
-                            class="ripple"
-                            color="success"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                        {{ t('New') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
+      <c-nav class="card-toolbar card-header-pills">
+        <c-nav-item class="px-1">
+          <button (click)="load()" cButton class="ripple" color="default" size="xs">
+            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+            {{ t('Refresh') }}
+          </button>
+        </c-nav-item>
+        <c-nav-item class="px-1">
+          <button *oitcPermission="['services', 'add']"
+            [routerLink]="['/', 'services', 'add', ]"
+            [queryParams]="{hostId: hostId}"
+            cButton
+            class="ripple"
+            color="success"
+            size="xs">
+            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+            {{ t('New') }}
+          </button>
+        </c-nav-item>
+      </c-nav>
 
-        </c-card-header>
-        <c-card-body>
+    </c-card-header>
+    <c-card-body>
 
-            @if (hoststatus) {
-                <c-alert [color]="'warning'" *ngIf="Number(hoststatus.currentState) > 0">
-                    <div class="d-flex align-items-center">
-                        <div class="alert-icon me-2">
-                            <span class="icon-stack icon-stack-md">
-                                <i class="base-circle icon-stack-3x text-yellow-500"></i>
-                                <i class="fa-regular fa-bell icon-stack-1x text-white"></i>
-                            </span>
+      @if (hoststatus) {
+        @if (Number(hoststatus.currentState) > 0) {
+          <c-alert [color]="'warning'">
+            <div class="d-flex align-items-center">
+              <div class="alert-icon me-2">
+                <span class="icon-stack icon-stack-md">
+                  <i class="base-circle icon-stack-3x text-yellow-500"></i>
+                  <i class="fa-regular fa-bell icon-stack-1x text-white"></i>
+                </span>
+              </div>
+              <div class="flex-1">
+                <span class="bold">
+                  {{ t('Problem with host detected.') }}
+                </span>
+                <span
+                class="text-decoration-underline">{{ t('Services output may not as expected!') }}</span>
+              </div>
+            </div>
+          </c-alert>
+        }
+      }
+
+
+      <!-- ACTIVE TAB START -->
+      @if (activeTab === 'active') {
+        @if (!services) {
+          <oitc-table-loader></oitc-table-loader>
+        }
+        @if (services) {
+          <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+            (matSortChange)="onSortChange($event)"
+            [matSortActive]="params.sort" [matSortDirection]="params.direction">
+            <thead>
+              <tr>
+                <th class="width-50 text-center" scope="col">
+                  <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                </th>
+                <th class="text-center" scope="col"
+                  mat-sort-header="Servicestatus.current_state">{{ t('State') }}
+                </th>
+                <th class="text-center" scope="col"
+                  mat-sort-header="Servicestatus.acknowledgement_type">
+                  <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
+                </th>
+                <th class="text-center" scope="col"
+                  mat-sort-header="Servicestatus.scheduled_downtime_depth"
+                  [cTooltip]="'is in downtime' | transloco" cTooltipPlacement="top">
+                  <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                </th>
+                <th class="text-center" scope="col"
+                  mat-sort-header="Servicestatus.notifications_enabled"
+                  [cTooltip]="'Notifications enabled' | transloco" cTooltipPlacement="top">
+                  <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                </th>
+                <th class="text-center" scope="col">
+                  <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
+                </th>
+                <th [cTooltip]="'Passively transferred service' | transloco" cTooltipPlacement="top">
+                  <strong>P</strong>
+                </th>
+                <th class="text-center" scope="col" mat-sort-header="servicepriority"
+                  [cTooltip]="'Priority' | transloco" cTooltipPlacement="top">
+                  <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                </th>
+                <th mat-sort-header="servicename">
+                  {{ t('Service name') }}
+                </th>
+                <th>
+                  {{ t('Service type') }}
+                </th>
+                <th mat-sort-header="Servicestatus.last_state_change">
+                  {{ t('Last state change') }}
+                </th>
+                <th mat-sort-header="Servicestatus.output">
+                  {{ t('Service output') }}
+                </th>
+                <th class="text-center editItemWidth" scope="col">
+                  <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                </th>
+              </tr>
+              <tr>
+                <th colspan="2">
+                  <!-- Ok -->
+                  <input cFormCheckInput id="checkstatusok" type="checkbox"
+                    class="checkbox-lg checkbox-success border border-success me-1"
+                    [(ngModel)]="filter.Servicestatus.current_state.ok"
+                    (debouncedValue)="onFilterChange($event)"
+                    oitcDebounce/>
+                  <!-- Warning -->
+                  <input cFormCheckInput id="checkstatusowarning" type="checkbox"
+                    class="checkbox-lg checkbox-warning border border-warning me-1"
+                    [(ngModel)]="filter.Servicestatus.current_state.warning"
+                    (debouncedValue)="onFilterChange($event)"
+                    oitcDebounce/>
+                  <!-- Critical -->
+                  <input cFormCheckInput id="checkstatuscritical" type="checkbox"
+                    class="checkbox-lg checkbox-danger border border-danger me-1"
+                    [(ngModel)]="filter.Servicestatus.current_state.critical"
+                    (debouncedValue)="onFilterChange($event)"
+                    oitcDebounce/>
+                  <!-- Unknown -->
+                  <input cFormCheckInput id="checkstatusunknown" type="checkbox"
+                    class="checkbox-lg checkbox-secondary border border-secondary me-1"
+                    [(ngModel)]="filter.Servicestatus.current_state.unknown"
+                    (debouncedValue)="onFilterChange($event)"
+                    oitcDebounce/>
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>
+                  <c-input-group>
+                    <span cInputGroupText id="servicename">
+                      <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                    </span>
+                    <input aria-describedby="servicename"
+                      aria-label="servicename"
+                      cFormControl
+                      placeholder="{{t('Filter by service name')}}"
+                      (debouncedValue)="onFilterChange($event)"
+                      oitcDebounce
+                      [(ngModel)]="filter.Services.name"
+                      />
+                    <span cInputGroupText>
+                      <c-form-check>
+                        <label>
+                          {{ t('Enable RegEx') }}
+                          <input cFormCheckInput id="checkregexService" type="checkbox"
+                            oitcDebounce
+                            (debouncedValue)="onFilterChange($event)"
+                            [(ngModel)]="filter.Services.name_regex"
+                            />
+                        </label>
+                      </c-form-check>
+                      <oitc-regex-helper-tooltip/>
+                    </span>
+                  </c-input-group>
+                </th>
+                <th></th>
+                <th></th>
+                <th>
+                  <c-input-group>
+                    <span cInputGroupText id="output">
+                      <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                    </span>
+                    <input aria-describedby="output"
+                      aria-label="output"
+                      cFormControl
+                      (debouncedValue)="onFilterChange($event)"
+                      oitcDebounce
+                      placeholder="{{t('Filter by output')}}"
+                      [(ngModel)]="filter.Servicestatus.output"
+                      />
+                  </c-input-group>
+                </th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (service of services.all_services; track service) {
+                <tr>
+                  <td class="text-center">
+                    <oitc-item-select
+                      [disabled]="!service.Service.allow_edit"
+                    [item]="service"></oitc-item-select>
+                  </td>
+                  <td class="width-50 text-center">
+                    <oitc-servicestatus-icon [servicestatus]="service.Servicestatus"/>
+                  </td>
+                  <td class="width-50 text-center">
+                    <span *oitcPermission="['services', 'browser']">
+                      @if (service.Servicestatus.problemHasBeenAcknowledged) {
+                        <div>
+                          @if (service.Servicestatus.problemHasBeenAcknowledged) {
+                            <oitc-acknowledgement-icon
+                              type="services"
+                              [objectId]="service.Service.id"
+                            [acknowledgement_type]="service.Servicestatus.acknowledgement_type"></oitc-acknowledgement-icon>
+                          }
                         </div>
-                        <div class="flex-1">
-                            <span class="bold">
-                                {{ t('Problem with host detected.') }}
-                            </span>
-                            <span
-                                class="text-decoration-underline">{{ t('Services output may not as expected!') }}</span>
-                        </div>
-                    </div>
-                </c-alert>
-            }
-
-
-            <!-- ACTIVE TAB START -->
-            <ng-container *ngIf="activeTab === 'active'">
-                <oitc-table-loader *ngIf="!services"></oitc-table-loader>
-                <table *ngIf="services" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                       (matSortChange)="onSortChange($event)"
-                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                    <thead>
-                    <tr>
-                        <th class="width-50 text-center" scope="col">
-                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                        </th>
-
-                        <th class="text-center" scope="col"
-                            mat-sort-header="Servicestatus.current_state">{{ t('State') }}
-                        </th>
-
-                        <th class="text-center" scope="col"
-                            mat-sort-header="Servicestatus.acknowledgement_type">
-                            <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
-                        </th>
-
-                        <th class="text-center" scope="col"
-                            mat-sort-header="Servicestatus.scheduled_downtime_depth"
-                            [cTooltip]="'is in downtime' | transloco" cTooltipPlacement="top">
-                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                        </th>
-
-                        <th class="text-center" scope="col"
-                            mat-sort-header="Servicestatus.notifications_enabled"
-                            [cTooltip]="'Notifications enabled' | transloco" cTooltipPlacement="top">
-                            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                        </th>
-
-                        <th class="text-center" scope="col">
-                            <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
-                        </th>
-
-                        <th [cTooltip]="'Passively transferred service' | transloco" cTooltipPlacement="top">
-                            <strong>P</strong>
-                        </th>
-
-                        <th class="text-center" scope="col" mat-sort-header="servicepriority"
-                            [cTooltip]="'Priority' | transloco" cTooltipPlacement="top">
-                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                        </th>
-
-                        <th mat-sort-header="servicename">
-                            {{ t('Service name') }}
-                        </th>
-
-                        <th>
-                            {{ t('Service type') }}
-                        </th>
-
-                        <th mat-sort-header="Servicestatus.last_state_change">
-                            {{ t('Last state change') }}
-                        </th>
-
-                        <th mat-sort-header="Servicestatus.output">
-                            {{ t('Service output') }}
-                        </th>
-
-                        <th class="text-center editItemWidth" scope="col">
-                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="2">
-                            <!-- Ok -->
-                            <input cFormCheckInput id="checkstatusok" type="checkbox"
-                                   class="checkbox-lg checkbox-success border border-success me-1"
-                                   [(ngModel)]="filter.Servicestatus.current_state.ok"
-                                   (debouncedValue)="onFilterChange($event)"
-                                   oitcDebounce/>
-
-                            <!-- Warning -->
-                            <input cFormCheckInput id="checkstatusowarning" type="checkbox"
-                                   class="checkbox-lg checkbox-warning border border-warning me-1"
-                                   [(ngModel)]="filter.Servicestatus.current_state.warning"
-                                   (debouncedValue)="onFilterChange($event)"
-                                   oitcDebounce/>
-
-                            <!-- Critical -->
-                            <input cFormCheckInput id="checkstatuscritical" type="checkbox"
-                                   class="checkbox-lg checkbox-danger border border-danger me-1"
-                                   [(ngModel)]="filter.Servicestatus.current_state.critical"
-                                   (debouncedValue)="onFilterChange($event)"
-                                   oitcDebounce/>
-
-                            <!-- Unknown -->
-                            <input cFormCheckInput id="checkstatusunknown" type="checkbox"
-                                   class="checkbox-lg checkbox-secondary border border-secondary me-1"
-                                   [(ngModel)]="filter.Servicestatus.current_state.unknown"
-                                   (debouncedValue)="onFilterChange($event)"
-                                   oitcDebounce/>
-                        </th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th>
-                            <c-input-group>
-                                <span cInputGroupText id="servicename">
-                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                </span>
-                                <input aria-describedby="servicename"
-                                       aria-label="servicename"
-                                       cFormControl
-                                       placeholder="{{t('Filter by service name')}}"
-                                       (debouncedValue)="onFilterChange($event)"
-                                       oitcDebounce
-                                       [(ngModel)]="filter.Services.name"
-                                />
-                                <span cInputGroupText>
-                                    <c-form-check>
-                                        <label>
-                                            {{ t('Enable RegEx') }}
-                                            <input cFormCheckInput id="checkregexService" type="checkbox"
-                                                   oitcDebounce
-                                                   (debouncedValue)="onFilterChange($event)"
-                                                   [(ngModel)]="filter.Services.name_regex"
-                                            />
-                                        </label>
-                                    </c-form-check>
-                                    <oitc-regex-helper-tooltip/>
-                                </span>
-                            </c-input-group>
-                        </th>
-                        <th></th>
-                        <th></th>
-                        <th>
-                            <c-input-group>
-                                <span cInputGroupText id="output">
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input aria-describedby="output"
-                                       aria-label="output"
-                                       cFormControl
-                                       (debouncedValue)="onFilterChange($event)"
-                                       oitcDebounce
-                                       placeholder="{{t('Filter by output')}}"
-                                       [(ngModel)]="filter.Servicestatus.output"
-                                />
-                            </c-input-group>
-                        </th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let service of services.all_services">
-                        <td class="text-center">
-                            <oitc-item-select
-                                [disabled]="!service.Service.allow_edit"
-                                [item]="service"></oitc-item-select>
-                        </td>
-                        <td class="width-50 text-center">
-                            <oitc-servicestatus-icon [servicestatus]="service.Servicestatus"/>
-                        </td>
-
-                        <td class="width-50 text-center">
-                            <span *oitcPermission="['services', 'browser']">
-                                <div *ngIf="service.Servicestatus.problemHasBeenAcknowledged">
-                                    <oitc-acknowledgement-icon
-                                        *ngIf="service.Servicestatus.problemHasBeenAcknowledged"
-                                        type="services"
-                                        [objectId]="service.Service.id"
-                                        [acknowledgement_type]="service.Servicestatus.acknowledgement_type"></oitc-acknowledgement-icon>
-                                </div>
-                            </span>
-                            <span *oitcPermission="['services', 'browser'];negate:true">
-                                <fa-icon [icon]="['far', 'user']"
-                                         *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == AcknowledgementTypes.Normal"></fa-icon>
-                                <fa-icon [icon]="['fas', 'user']"
-                                         *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == AcknowledgementTypes.Sticky"
-                                         title="{{t('Sticky Acknowledgement')}}"></fa-icon>
-                            </span>
-                        </td>
-                        <td class="width-50 text-center">
-                            <div
-                                *ngIf="service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0">
-                                <oitc-downtime-icon
-                                    *oitcPermission="['services', 'browser']"
-                                    type="services"
-                                    [objectId]="service.Service.id">
-                                </oitc-downtime-icon>
-                                <fa-icon [icon]="['fas', 'power-off']" size="lg"
-                                         *oitcPermission="['services', 'browser'];negate:true"></fa-icon>
-                            </div>
-                        </td>
-                        <td class="width-50 text-center">
-                            <div *ngIf="service.Servicestatus.notifications_enabled"
-                                 [cTooltip]="'Notifications enabled' | transloco" cTooltipPlacement="right">
-                                <fa-stack>
-                                    <fa-icon [icon]="['fas', 'envelope']" stackItemSize="1x"
-                                             pull="right"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'check']" class="ok" stackItemSize="1x"
-                                             transform="shrink-8 right-6 down-6"></fa-icon>
-                                </fa-stack>
-                            </div>
-                            <div *ngIf="!service.Servicestatus.notifications_enabled"
-                                 [cTooltip]="'Notifications disabled' | transloco"
-                                 cTooltipPlacement="right">
-                                <fa-stack>
-                                    <fa-icon [icon]="['fas', 'envelope']" stackItemSize="1x"
-                                             pull="right"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'times']" class="critical" stackItemSize="1x"
-                                             transform="shrink-8 right-6 down-6"></fa-icon>
-                                </fa-stack>
-                            </div>
-                        </td>
-                        <td class="width-50 text-center">
-                            <div *ngIf="service.Service.has_graph">
-                                <!--<fa-icon [icon]="['fas', 'area-chart']"></fa-icon>-->
-                                <oitc-popover-graph [service]="service.Service.uuid"
-                                                    [host]="service.Host.uuid"
-                                                    [timezone]="timezone"></oitc-popover-graph>
-                            </div>
-                        </td>
-                        <td class="width-50 text-center">
-                            <strong [cTooltip]="'Passively transferred service' | transloco"
-                                    cTooltipPlacement="right"
-                                    *ngIf="!service.Service.active_checks_enabled || service.Host.is_satellite_host">
-                                P
-                            </strong>
-                        </td>
-                        <td class="width-50 text-center">
+                      }
+                    </span>
+                    <span *oitcPermission="['services', 'browser'];negate:true">
+                      @if (service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == AcknowledgementTypes.Normal) {
+                        <fa-icon [icon]="['far', 'user']"
+                        ></fa-icon>
+                      }
+                      @if (service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == AcknowledgementTypes.Sticky) {
+                        <fa-icon [icon]="['fas', 'user']"
+                        title="{{t('Sticky Acknowledgement')}}"></fa-icon>
+                      }
+                    </span>
+                  </td>
+                  <td class="width-50 text-center">
+                    @if (service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0) {
+                      <div
+                        >
+                        <oitc-downtime-icon
+                          *oitcPermission="['services', 'browser']"
+                          type="services"
+                          [objectId]="service.Service.id">
+                        </oitc-downtime-icon>
+                        <fa-icon [icon]="['fas', 'power-off']" size="lg"
+                        *oitcPermission="['services', 'browser'];negate:true"></fa-icon>
+                      </div>
+                    }
+                  </td>
+                  <td class="width-50 text-center">
+                    @if (service.Servicestatus.notifications_enabled) {
+                      <div
+                        [cTooltip]="'Notifications enabled' | transloco" cTooltipPlacement="right">
+                        <fa-stack>
+                          <fa-icon [icon]="['fas', 'envelope']" stackItemSize="1x"
+                          pull="right"></fa-icon>
+                          <fa-icon [icon]="['fas', 'check']" class="ok" stackItemSize="1x"
+                          transform="shrink-8 right-6 down-6"></fa-icon>
+                        </fa-stack>
+                      </div>
+                    }
+                    @if (!service.Servicestatus.notifications_enabled) {
+                      <div
+                        [cTooltip]="'Notifications disabled' | transloco"
+                        cTooltipPlacement="right">
+                        <fa-stack>
+                          <fa-icon [icon]="['fas', 'envelope']" stackItemSize="1x"
+                          pull="right"></fa-icon>
+                          <fa-icon [icon]="['fas', 'times']" class="critical" stackItemSize="1x"
+                          transform="shrink-8 right-6 down-6"></fa-icon>
+                        </fa-stack>
+                      </div>
+                    }
+                  </td>
+                  <td class="width-50 text-center">
+                    @if (service.Service.has_graph) {
+                      <div>
+                        <!--<fa-icon [icon]="['fas', 'area-chart']"></fa-icon>-->
+                        <oitc-popover-graph [service]="service.Service.uuid"
+                          [host]="service.Host.uuid"
+                        [timezone]="timezone"></oitc-popover-graph>
+                      </div>
+                    }
+                  </td>
+                  <td class="width-50 text-center">
+                    @if (!service.Service.active_checks_enabled || service.Host.is_satellite_host) {
+                      <strong [cTooltip]="'Passively transferred service' | transloco"
+                        cTooltipPlacement="right"
+                        >
+                        P
+                      </strong>
+                    }
+                  </td>
+                  <td class="width-50 text-center">
                             <fa-icon [icon]="['fas', 'fire']" size="lg" [ngClass]="{'ok-soft' : service.Service.priority==1,
                                         'ok' : service.Service.priority==2, 'warning' : service.Service.priority==3,
                                         'critical-soft' : service.Service.priority==4, 'critical' : service.Service.priority==5}"></fa-icon>
-                        </td>
-                        <td class="word-break">
-                            <span *oitcPermission="['services', 'browser']">
-                                <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
-                            </span>
-                            <span
-                                *oitcPermission="['services', 'browser'];negate:true">{{ service.Service.servicename }}</span>
-                        </td>
-
-                        <td>
-                            <span class="badge border margin-right-10"
-                                  [ngClass]="[service.ServiceType.class, service.ServiceType.color]">
-                                <fa-icon [icon]="service.ServiceType.icon"
-                                         [rotate]="service.ServiceType.rotate"></fa-icon>
-                                {{ service.ServiceType.title }}
-                            </span>
-                        </td>
-
-                        <td>{{ service.Servicestatus.last_state_change }}</td>
-                        <td>
-                            <div [innerHTML]="service.Servicestatus.outputHtml"></div>
-                        </td>
-
-                        <td class="width-50">
-                            <oitc-actions-button [permission]="'services.edit'"
-                                                 [url]="'/services/edit/' + service.Service.id"
-                                                 [allowEdit]="service.Service.allow_edit">
-                                <oitc-actions-button-element [permission]="'services.edit'"
-                                                             *ngIf="service.Service.allow_edit"
-                                                             [url]="'/services/edit/' + service.Service.id">
-                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                    {{ t('Edit') }}
-                                </oitc-actions-button-element>
-
-                                <oitc-actions-button-element [permission]="'services.deactivate'"
-                                                             *ngIf="service.Service.allow_edit"
-                                                             (click)="toggleDisableModal(service.Service)">
-                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                    {{ t('Disable') }}
-                                </oitc-actions-button-element>
-
-                                <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                             [url]="'/changelogs/entity/service/' + service.Service.id">
-                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                    {{ t('Changelog') }}
-                                </oitc-actions-button-element>
-
-                                <li cDropdownDivider *oitcPermission="['services', 'copy']"></li>
-                                <oitc-actions-button-element [permission]="'services.copy'"
-                                                             [url]="'/services/copy/' + service.Service.id">
-                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                    {{ t('Copy') }}
-                                </oitc-actions-button-element>
-
-                                <li cDropdownDivider *ngIf="service.Service.allow_edit"></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(service.Service)"
-                                                             [permission]="'services.delete'">
-                                    <span class="text-danger">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete') }}
-                                    </span>
-                                </oitc-actions-button-element>
-
-                            </oitc-actions-button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <oitc-no-records
-                    *ngIf="services && services.all_services.length === 0"></oitc-no-records>
-                <ng-container *ngIf="services && services.all_services">
-                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                                 [fluid]="true">
-                        <c-row>
-                            <c-col>
-                                <oitc-select-all
-                                    [itemsCount]="services.all_services.length"></oitc-select-all>
-                            </c-col>
-                            <c-col md="6" lg="5">
-                                <div class="btn-group d-flex flex-row" role="group">
-                                    <button class="btn btn-outline-primary col-3 border-0" type="button"
-                                            *oitcPermission="['services', 'copy']"
-                                            (click)="navigateCopy()">
-                                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                        {{ t('Copy') }}
-                                    </button>
-                                    <button (click)="toggleDisableModal()"
-                                            *oitcPermission="['services', 'deactivate']"
-                                            class="btn btn-outline-primary col-3 border-0"
-                                            type="button">
-                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                        {{ t('Disable services') }}
-                                    </button>
-                                    <button (click)="toggleDeleteAllModal()"
-                                            class="btn btn-outline-danger col-3 border-0"
-                                            type="button">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete selected') }}
-                                    </button>
-
-                                    <c-dropdown>
-                                        <button cButton cDropdownToggle color="default">
-                                            {{ t('More actions') }}
-                                        </button>
-                                        <ul cDropdownMenu>
-                                            <li *oitcPermission="['servicegroups', 'add']">
-                                                <a href="javascript:void(0);" cDropdownItem
-                                                   (click)="confirmAddServicesToServicegroup()">
-                                                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                                                    {{ t('Add to service group') }}
-                                                </a>
-                                            </li>
-                                            <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
-                                                <a
-                                                    href="javascript:void(0);" cDropdownItem
-                                                    (click)="resetChecktime()">
-                                                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                                                    {{ t('Reset check time') }}
-                                                </a>
-                                            </li>
-                                            <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
-                                                <a
-                                                    href="javascript:void(0);" cDropdownItem
-                                                    (click)="disableNotifications()">
-                                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                                    {{ t('Disable notification') }}
-                                                </a>
-                                            </li>
-                                            <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
-                                                <a
-                                                    href="javascript:void(0);" cDropdownItem
-                                                    (click)="enableNotifications()">
-                                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                                    {{ t('Enable notification') }}
-                                                </a>
-                                            </li>
-                                            <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
-                                                <a
-                                                    href="javascript:void(0);" cDropdownItem
-                                                    (click)="toggleDowntimeModal()">
-                                                    <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                                                    {{ t('Set planned maintenance times') }}
-                                                </a>
-                                            </li>
-                                            <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
-                                                <a
-                                                    href="javascript:void(0);" cDropdownItem
-                                                    (click)="acknowledgeStatus()">
-                                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                                    {{ t('Acknowledge status') }}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </c-dropdown>
-
-                                </div>
-                            </c-col>
-                        </c-row>
-                    </c-container>
-                </ng-container>
-
-                <c-container
-                    [fluid]="true">
-                    <c-row>
-                        <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="services"
-                                [paginateOrScroll]="services"></oitc-paginate-or-scroll>
-                        </c-col>
-                    </c-row>
-                </c-container>
-            </ng-container>
-            <!-- ACTIVE TAB END -->
+                  </td>
+                  <td class="word-break">
+                    <span *oitcPermission="['services', 'browser']">
+                      <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
+                    </span>
+                    <span
+                    *oitcPermission="['services', 'browser'];negate:true">{{ service.Service.servicename }}</span>
+                  </td>
+                  <td>
+                    <span class="badge border margin-right-10"
+                      [ngClass]="[service.ServiceType.class, service.ServiceType.color]">
+                      <fa-icon [icon]="service.ServiceType.icon"
+                      [rotate]="service.ServiceType.rotate"></fa-icon>
+                      {{ service.ServiceType.title }}
+                    </span>
+                  </td>
+                  <td>{{ service.Servicestatus.last_state_change }}</td>
+                  <td>
+                    <div [innerHTML]="service.Servicestatus.outputHtml"></div>
+                  </td>
+                  <td class="width-50">
+                    <oitc-actions-button [permission]="'services.edit'"
+                      [url]="'/services/edit/' + service.Service.id"
+                      [allowEdit]="service.Service.allow_edit">
+                      @if (service.Service.allow_edit) {
+                        <oitc-actions-button-element [permission]="'services.edit'"
+                          [url]="'/services/edit/' + service.Service.id">
+                          <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                          {{ t('Edit') }}
+                        </oitc-actions-button-element>
+                      }
+                      @if (service.Service.allow_edit) {
+                        <oitc-actions-button-element [permission]="'services.deactivate'"
+                          (click)="toggleDisableModal(service.Service)">
+                          <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                          {{ t('Disable') }}
+                        </oitc-actions-button-element>
+                      }
+                      <oitc-actions-button-element [permission]="'changelogs.index'"
+                        [url]="'/changelogs/entity/service/' + service.Service.id">
+                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                        {{ t('Changelog') }}
+                      </oitc-actions-button-element>
+                      <li cDropdownDivider *oitcPermission="['services', 'copy']"></li>
+                      <oitc-actions-button-element [permission]="'services.copy'"
+                        [url]="'/services/copy/' + service.Service.id">
+                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                        {{ t('Copy') }}
+                      </oitc-actions-button-element>
+                      @if (service.Service.allow_edit) {
+                        <li cDropdownDivider></li>
+                      }
+                      <oitc-actions-button-element (click)="toggleDeleteAllModal(service.Service)"
+                        [permission]="'services.delete'">
+                        <span class="text-danger">
+                          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                          {{ t('Delete') }}
+                        </span>
+                      </oitc-actions-button-element>
+                    </oitc-actions-button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+        @if (services && services.all_services.length === 0) {
+          <oitc-no-records
+          ></oitc-no-records>
+        }
+        @if (services && services.all_services) {
+          <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+            [fluid]="true">
+            <c-row>
+              <c-col>
+                <oitc-select-all
+                [itemsCount]="services.all_services.length"></oitc-select-all>
+              </c-col>
+              <c-col md="6" lg="5">
+                <div class="btn-group d-flex flex-row" role="group">
+                  <button class="btn btn-outline-primary col-3 border-0" type="button"
+                    *oitcPermission="['services', 'copy']"
+                    (click)="navigateCopy()">
+                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                    {{ t('Copy') }}
+                  </button>
+                  <button (click)="toggleDisableModal()"
+                    *oitcPermission="['services', 'deactivate']"
+                    class="btn btn-outline-primary col-3 border-0"
+                    type="button">
+                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                    {{ t('Disable services') }}
+                  </button>
+                  <button (click)="toggleDeleteAllModal()"
+                    class="btn btn-outline-danger col-3 border-0"
+                    type="button">
+                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    {{ t('Delete selected') }}
+                  </button>
+                  <c-dropdown>
+                    <button cButton cDropdownToggle color="default">
+                      {{ t('More actions') }}
+                    </button>
+                    <ul cDropdownMenu>
+                      <li *oitcPermission="['servicegroups', 'add']">
+                        <a href="javascript:void(0);" cDropdownItem
+                          (click)="confirmAddServicesToServicegroup()">
+                          <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                          {{ t('Add to service group') }}
+                        </a>
+                      </li>
+                      <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                        <a
+                          href="javascript:void(0);" cDropdownItem
+                          (click)="resetChecktime()">
+                          <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                          {{ t('Reset check time') }}
+                        </a>
+                      </li>
+                      <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                        <a
+                          href="javascript:void(0);" cDropdownItem
+                          (click)="disableNotifications()">
+                          <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                          {{ t('Disable notification') }}
+                        </a>
+                      </li>
+                      <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                        <a
+                          href="javascript:void(0);" cDropdownItem
+                          (click)="enableNotifications()">
+                          <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                          {{ t('Enable notification') }}
+                        </a>
+                      </li>
+                      <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                        <a
+                          href="javascript:void(0);" cDropdownItem
+                          (click)="toggleDowntimeModal()">
+                          <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                          {{ t('Set planned maintenance times') }}
+                        </a>
+                      </li>
+                      <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                        <a
+                          href="javascript:void(0);" cDropdownItem
+                          (click)="acknowledgeStatus()">
+                          <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                          {{ t('Acknowledge status') }}
+                        </a>
+                      </li>
+                    </ul>
+                  </c-dropdown>
+                </div>
+              </c-col>
+            </c-row>
+          </c-container>
+        }
+        <c-container
+          [fluid]="true">
+          <c-row>
+            <c-col>
+              @if (services) {
+                <oitc-paginate-or-scroll
+                  (paginatorChange)="onPaginatorChange($event)"
+                [paginateOrScroll]="services"></oitc-paginate-or-scroll>
+              }
+            </c-col>
+          </c-row>
+        </c-container>
+      }
+      <!-- ACTIVE TAB END -->
 
 
-            <!-- NOT MONITORED TAB START -->
-            <ng-container *ngIf="activeTab === 'notMonitored'">
-                <oitc-table-loader *ngIf="!notMonitoredServices"></oitc-table-loader>
-                <table *ngIf="notMonitoredServices" bordered cTable class="mt-2 mb-0 table table-fit" hover striped
-                       matSort
-                       (matSortChange)="onSortChange($event)"
-                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                    <thead>
-                    <tr>
-                        <th class="width-50 text-center" scope="col">
-                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                        </th>
+      <!-- NOT MONITORED TAB START -->
+      @if (activeTab === 'notMonitored') {
+        @if (!notMonitoredServices) {
+          <oitc-table-loader></oitc-table-loader>
+        }
+        @if (notMonitoredServices) {
+          <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped
+            matSort
+            (matSortChange)="onSortChange($event)"
+            [matSortActive]="params.sort" [matSortDirection]="params.direction">
+            <thead>
+              <tr>
+                <th class="width-50 text-center" scope="col">
+                  <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                </th>
+                <th class="text-center" scope="col">{{ t('State') }}
+                </th>
+                <th mat-sort-header="servicename">
+                  {{ t('Service name') }}
+                </th>
+                <th class="text-center editItemWidth" scope="col">
+                  <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (service of notMonitoredServices.all_services; track service) {
+                <tr>
+                  <td class="text-center">
+                    <oitc-item-select
+                      *oitcPermission="['services', 'delete']"
+                      [disabled]="!service.Service.allow_edit"
+                    [item]="service"></oitc-item-select>
+                  </td>
+                  <td class="width-50 text-center">
+                    <oitc-servicestatus-simple-icon></oitc-servicestatus-simple-icon>
+                  </td>
+                  <td class="word-break">
+                    <span *oitcPermission="['services', 'browser']">
+                      <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
+                    </span>
+                    <span
+                    *oitcPermission="['services', 'browser'];negate:true">{{ service.Service.servicename }}</span>
+                  </td>
+                  <td class="width-50">
+                    <oitc-actions-button [permission]="'services.edit'"
+                      [url]="'/services/edit/' + service.Service.id"
+                      [allowEdit]="service.Service.allow_edit">
+                      @if (service.Service.allow_edit) {
+                        <oitc-actions-button-element [permission]="'services.edit'"
+                          [url]="'/services/edit/' + service.Service.id">
+                          <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                          {{ t('Edit') }}
+                        </oitc-actions-button-element>
+                      }
+                      @if (service.Service.allow_edit) {
+                        <oitc-actions-button-element [permission]="'services.deactivate'"
+                          (click)="toggleDisableModal(service.Service)">
+                          <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                          {{ t('Disable') }}
+                        </oitc-actions-button-element>
+                      }
+                      <oitc-actions-button-element [permission]="'changelogs.index'"
+                        [url]="'/changelogs/entity/service/' + service.Service.id">
+                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                        {{ t('Changelog') }}
+                      </oitc-actions-button-element>
+                      <li cDropdownDivider *oitcPermission="['services', 'copy']"></li>
+                      <oitc-actions-button-element [permission]="'services.copy'"
+                        [url]="'/services/copy/' + service.Service.id">
+                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                        {{ t('Copy') }}
+                      </oitc-actions-button-element>
+                      @if (service.Service.allow_edit) {
+                        <li cDropdownDivider></li>
+                      }
+                      <oitc-actions-button-element (click)="toggleDeleteAllModal(service.Service)"
+                        [permission]="'services.delete'">
+                        <span class="text-danger">
+                          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                          {{ t('Delete') }}
+                        </span>
+                      </oitc-actions-button-element>
+                    </oitc-actions-button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+        @if (notMonitoredServices && notMonitoredServices.all_services.length === 0) {
+          <oitc-no-records
+          ></oitc-no-records>
+        }
+        @if (notMonitoredServices && notMonitoredServices.all_services) {
+          <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+            [fluid]="true">
+            <c-row>
+              <c-col>
+                <oitc-select-all
+                [itemsCount]="notMonitoredServices.all_services.length"></oitc-select-all>
+              </c-col>
+              <c-col md="6" lg="5">
+                <div class="btn-group d-flex flex-row" role="group">
+                  <button class="btn btn-outline-primary col-3 border-0" type="button"
+                    *oitcPermission="['services', 'copy']"
+                    (click)="navigateCopy()">
+                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                    {{ t('Copy') }}
+                  </button>
+                  <button (click)="toggleDisableModal()"
+                    *oitcPermission="['services', 'deactivate']"
+                    class="btn btn-outline-primary col-3 border-0"
+                    type="button">
+                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                    {{ t('Disable services') }}
+                  </button>
+                  <button (click)="toggleDeleteAllModal()"
+                    *oitcPermission="['services', 'delete']"
+                    class="btn btn-outline-danger col-3 border-0"
+                    type="button">
+                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    {{ t('Delete selected') }}
+                  </button>
+                </div>
+              </c-col>
+            </c-row>
+          </c-container>
+        }
+        <c-container
+          [fluid]="true">
+          <c-row>
+            <c-col>
+              @if (notMonitoredServices) {
+                <oitc-paginate-or-scroll
+                  (paginatorChange)="onPaginatorChange($event)"
+                [paginateOrScroll]="notMonitoredServices"></oitc-paginate-or-scroll>
+              }
+            </c-col>
+          </c-row>
+        </c-container>
+      }
+      <!-- NOT MONITORED TAB END -->
 
-                        <th class="text-center" scope="col">{{ t('State') }}
-                        </th>
+      <!-- DISABLED TAB START -->
+      @if (activeTab === 'disabled') {
+        @if (!disabledServices) {
+          <oitc-table-loader></oitc-table-loader>
+        }
+        @if (disabledServices) {
+          <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped
+            matSort
+            (matSortChange)="onSortChange($event)"
+            [matSortActive]="params.sort" [matSortDirection]="params.direction">
+            <thead>
+              <tr>
+                <th class="width-50 text-center" scope="col">
+                  <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                </th>
+                <th class="text-center" scope="col">{{ t('State') }}
+                </th>
+                <th mat-sort-header="servicename" class="word-break">
+                  {{ t('Service name') }}
+                </th>
+                <th class="text-center editItemWidth" scope="col">
+                  <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (service of disabledServices.all_services; track service) {
+                <tr>
+                  <td class="text-center">
+                    <oitc-item-select
+                      *oitcPermission="['services', 'delete']"
+                      [disabled]="!service.Service.allow_edit"
+                    [item]="service"></oitc-item-select>
+                  </td>
+                  <td class="width-50 text-center">
+                    <oitc-servicestatus-simple-icon></oitc-servicestatus-simple-icon>
+                  </td>
+                  <td>
+                    <span *oitcPermission="['services', 'browser']">
+                      <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
+                    </span>
+                    <span
+                    *oitcPermission="['services', 'browser'];negate:true">{{ service.Service.servicename }}</span>
+                  </td>
+                  <td class="width-50">
+                    <oitc-actions-button [permission]="'services.edit'"
+                      [url]="'/services/edit/' + service.Service.id"
+                      [allowEdit]="service.Service.allow_edit">
+                      @if (service.Service.allow_edit) {
+                        <oitc-actions-button-element [permission]="'services.edit'"
+                          [url]="'/services/edit/' + service.Service.id">
+                          <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                          {{ t('Edit') }}
+                        </oitc-actions-button-element>
+                      }
+                      @if (service.Service.allow_edit) {
+                        <oitc-actions-button-element [permission]="'services.deactivate'"
+                          (click)="toggleEnableModal(service.Service)">
+                          <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                          {{ t('Enable') }}
+                        </oitc-actions-button-element>
+                      }
+                      <oitc-actions-button-element [permission]="'changelogs.index'"
+                        [url]="'/changelogs/entity/service/' + service.Service.id">
+                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                        {{ t('Changelog') }}
+                      </oitc-actions-button-element>
+                      <li cDropdownDivider *oitcPermission="['services', 'copy']"></li>
+                      <oitc-actions-button-element [permission]="'services.copy'"
+                        [url]="'/services/copy/' + service.Service.id">
+                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                        {{ t('Copy') }}
+                      </oitc-actions-button-element>
+                      @if (service.Service.allow_edit) {
+                        <li cDropdownDivider></li>
+                      }
+                      <oitc-actions-button-element (click)="toggleDeleteAllModal(service.Service)"
+                        [permission]="'services.delete'">
+                        <span class="text-danger">
+                          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                          {{ t('Delete') }}
+                        </span>
+                      </oitc-actions-button-element>
+                    </oitc-actions-button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+        @if (disabledServices && disabledServices.all_services.length === 0) {
+          <oitc-no-records
+          ></oitc-no-records>
+        }
+        @if (disabledServices && disabledServices.all_services) {
+          <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+            [fluid]="true">
+            <c-row>
+              <c-col>
+                <oitc-select-all
+                [itemsCount]="disabledServices.all_services.length"></oitc-select-all>
+              </c-col>
+              <c-col md="6" lg="5">
+                <div class="btn-group d-flex flex-row" role="group">
+                  <button class="btn btn-outline-primary col-3 border-0" type="button"
+                    *oitcPermission="['services', 'copy']"
+                    (click)="navigateCopy()">
+                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                    {{ t('Copy') }}
+                  </button>
+                  <button (click)="toggleEnableModal()"
+                    *oitcPermission="['services', 'enable']"
+                    class="btn btn-outline-primary col-3 border-0"
+                    type="button">
+                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                    {{ t('Enable services') }}
+                  </button>
+                  <button (click)="toggleDeleteAllModal()"
+                    *oitcPermission="['services', 'delete']"
+                    class="btn btn-outline-danger col-3 border-0"
+                    type="button">
+                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    {{ t('Delete selected') }}
+                  </button>
+                </div>
+              </c-col>
+            </c-row>
+          </c-container>
+        }
+        <c-container
+          [fluid]="true">
+          <c-row>
+            <c-col>
+              @if (disabledServices) {
+                <oitc-paginate-or-scroll
+                  (paginatorChange)="onPaginatorChange($event)"
+                [paginateOrScroll]="disabledServices"></oitc-paginate-or-scroll>
+              }
+            </c-col>
+          </c-row>
+        </c-container>
+      }
+      <!-- DISABLED TAB END -->
 
-                        <th mat-sort-header="servicename">
-                            {{ t('Service name') }}
-                        </th>
-
-                        <th class="text-center editItemWidth" scope="col">
-                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let service of notMonitoredServices.all_services">
-                        <td class="text-center">
-                            <oitc-item-select
-                                *oitcPermission="['services', 'delete']"
-                                [disabled]="!service.Service.allow_edit"
-                                [item]="service"></oitc-item-select>
-                        </td>
-                        <td class="width-50 text-center">
-                            <oitc-servicestatus-simple-icon></oitc-servicestatus-simple-icon>
-                        </td>
-
-                        <td class="word-break">
-                            <span *oitcPermission="['services', 'browser']">
-                                <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
-                            </span>
-                            <span
-                                *oitcPermission="['services', 'browser'];negate:true">{{ service.Service.servicename }}</span>
-                        </td>
-
-                        <td class="width-50">
-                            <oitc-actions-button [permission]="'services.edit'"
-                                                 [url]="'/services/edit/' + service.Service.id"
-                                                 [allowEdit]="service.Service.allow_edit">
-                                <oitc-actions-button-element [permission]="'services.edit'"
-                                                             *ngIf="service.Service.allow_edit"
-                                                             [url]="'/services/edit/' + service.Service.id">
-                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                    {{ t('Edit') }}
-                                </oitc-actions-button-element>
-
-                                <oitc-actions-button-element [permission]="'services.deactivate'"
-                                                             *ngIf="service.Service.allow_edit"
-                                                             (click)="toggleDisableModal(service.Service)">
-                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                    {{ t('Disable') }}
-                                </oitc-actions-button-element>
-
-                                <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                             [url]="'/changelogs/entity/service/' + service.Service.id">
-                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                    {{ t('Changelog') }}
-                                </oitc-actions-button-element>
-
-                                <li cDropdownDivider *oitcPermission="['services', 'copy']"></li>
-                                <oitc-actions-button-element [permission]="'services.copy'"
-                                                             [url]="'/services/copy/' + service.Service.id">
-                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                    {{ t('Copy') }}
-                                </oitc-actions-button-element>
-
-                                <li cDropdownDivider *ngIf="service.Service.allow_edit"></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(service.Service)"
-                                                             [permission]="'services.delete'">
-                                    <span class="text-danger">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete') }}
-                                    </span>
-                                </oitc-actions-button-element>
-
-                            </oitc-actions-button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <oitc-no-records
-                    *ngIf="notMonitoredServices && notMonitoredServices.all_services.length === 0"></oitc-no-records>
-                <ng-container *ngIf="notMonitoredServices && notMonitoredServices.all_services">
-                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                                 [fluid]="true">
-                        <c-row>
-                            <c-col>
-                                <oitc-select-all
-                                    [itemsCount]="notMonitoredServices.all_services.length"></oitc-select-all>
-                            </c-col>
-                            <c-col md="6" lg="5">
-                                <div class="btn-group d-flex flex-row" role="group">
-                                    <button class="btn btn-outline-primary col-3 border-0" type="button"
-                                            *oitcPermission="['services', 'copy']"
-                                            (click)="navigateCopy()">
-                                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                        {{ t('Copy') }}
-                                    </button>
-                                    <button (click)="toggleDisableModal()"
-                                            *oitcPermission="['services', 'deactivate']"
-                                            class="btn btn-outline-primary col-3 border-0"
-                                            type="button">
-                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                        {{ t('Disable services') }}
-                                    </button>
-                                    <button (click)="toggleDeleteAllModal()"
-                                            *oitcPermission="['services', 'delete']"
-                                            class="btn btn-outline-danger col-3 border-0"
-                                            type="button">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete selected') }}
-                                    </button>
-                                </div>
-                            </c-col>
-                        </c-row>
-                    </c-container>
-                </ng-container>
-
-                <c-container
-                    [fluid]="true">
-                    <c-row>
-                        <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="notMonitoredServices"
-                                [paginateOrScroll]="notMonitoredServices"></oitc-paginate-or-scroll>
-                        </c-col>
-                    </c-row>
-                </c-container>
-            </ng-container>
-            <!-- NOT MONITORED TAB END -->
-
-            <!-- DISABLED TAB START -->
-            <ng-container *ngIf="activeTab === 'disabled'">
-                <oitc-table-loader *ngIf="!disabledServices"></oitc-table-loader>
-                <table *ngIf="disabledServices" bordered cTable class="mt-2 mb-0 table table-fit" hover striped
-                       matSort
-                       (matSortChange)="onSortChange($event)"
-                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                    <thead>
-                    <tr>
-                        <th class="width-50 text-center" scope="col">
-                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                        </th>
-
-                        <th class="text-center" scope="col">{{ t('State') }}
-                        </th>
-
-                        <th mat-sort-header="servicename" class="word-break">
-                            {{ t('Service name') }}
-                        </th>
-
-                        <th class="text-center editItemWidth" scope="col">
-                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let service of disabledServices.all_services">
-                        <td class="text-center">
-                            <oitc-item-select
-                                *oitcPermission="['services', 'delete']"
-                                [disabled]="!service.Service.allow_edit"
-                                [item]="service"></oitc-item-select>
-                        </td>
-                        <td class="width-50 text-center">
-                            <oitc-servicestatus-simple-icon></oitc-servicestatus-simple-icon>
-                        </td>
-
-                        <td>
-                            <span *oitcPermission="['services', 'browser']">
-                                <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
-                            </span>
-                            <span
-                                *oitcPermission="['services', 'browser'];negate:true">{{ service.Service.servicename }}</span>
-                        </td>
-
-                        <td class="width-50">
-                            <oitc-actions-button [permission]="'services.edit'"
-                                                 [url]="'/services/edit/' + service.Service.id"
-                                                 [allowEdit]="service.Service.allow_edit">
-                                <oitc-actions-button-element [permission]="'services.edit'"
-                                                             *ngIf="service.Service.allow_edit"
-                                                             [url]="'/services/edit/' + service.Service.id">
-                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                    {{ t('Edit') }}
-                                </oitc-actions-button-element>
-
-                                <oitc-actions-button-element [permission]="'services.deactivate'"
-                                                             *ngIf="service.Service.allow_edit"
-                                                             (click)="toggleEnableModal(service.Service)">
-                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                    {{ t('Enable') }}
-                                </oitc-actions-button-element>
-
-                                <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                             [url]="'/changelogs/entity/service/' + service.Service.id">
-                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                    {{ t('Changelog') }}
-                                </oitc-actions-button-element>
-
-                                <li cDropdownDivider *oitcPermission="['services', 'copy']"></li>
-                                <oitc-actions-button-element [permission]="'services.copy'"
-                                                             [url]="'/services/copy/' + service.Service.id">
-                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                    {{ t('Copy') }}
-                                </oitc-actions-button-element>
-
-                                <li cDropdownDivider *ngIf="service.Service.allow_edit"></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(service.Service)"
-                                                             [permission]="'services.delete'">
-                                    <span class="text-danger">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete') }}
-                                    </span>
-                                </oitc-actions-button-element>
-
-                            </oitc-actions-button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <oitc-no-records
-                    *ngIf="disabledServices && disabledServices.all_services.length === 0"></oitc-no-records>
-                <ng-container *ngIf="disabledServices && disabledServices.all_services">
-                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                                 [fluid]="true">
-                        <c-row>
-                            <c-col>
-                                <oitc-select-all
-                                    [itemsCount]="disabledServices.all_services.length"></oitc-select-all>
-                            </c-col>
-                            <c-col md="6" lg="5">
-                                <div class="btn-group d-flex flex-row" role="group">
-                                    <button class="btn btn-outline-primary col-3 border-0" type="button"
-                                            *oitcPermission="['services', 'copy']"
-                                            (click)="navigateCopy()">
-                                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                        {{ t('Copy') }}
-                                    </button>
-                                    <button (click)="toggleEnableModal()"
-                                            *oitcPermission="['services', 'enable']"
-                                            class="btn btn-outline-primary col-3 border-0"
-                                            type="button">
-                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                        {{ t('Enable services') }}
-                                    </button>
-                                    <button (click)="toggleDeleteAllModal()"
-                                            *oitcPermission="['services', 'delete']"
-                                            class="btn btn-outline-danger col-3 border-0"
-                                            type="button">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete selected') }}
-                                    </button>
-                                </div>
-                            </c-col>
-                        </c-row>
-                    </c-container>
-                </ng-container>
-
-                <c-container
-                    [fluid]="true">
-                    <c-row>
-                        <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="disabledServices"
-                                [paginateOrScroll]="disabledServices"></oitc-paginate-or-scroll>
-                        </c-col>
-                    </c-row>
-                </c-container>
-            </ng-container>
-            <!-- DISABLED TAB END -->
-
-            <!-- DELETED TAB START -->
-            <ng-container *ngIf="activeTab === 'deleted'">
-                <oitc-table-loader *ngIf="!deletedServices"></oitc-table-loader>
-                <table *ngIf="deletedServices" bordered cTable class="mt-2 mb-0 table table-fit" hover striped
-                       matSort
-                       (matSortChange)="onSortChange($event)"
-                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                    <thead>
-                    <tr>
-                        <th scope="col">
-                            {{ t('Service name') }}
-                        </th>
-                        <th scope="col">
-                            {{ t('UUID') }}
-                        </th>
-                        <th scope="col">
-                            {{ t('Date') }}
-                        </th>
-                        <th scope="col">
-                            {{ t('Performance data deleted') }}
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let service of deletedServices.all_services">
-                        <td class="word-break">
-                            {{ service.DeletedService.name }}
-                        </td>
-
-                        <td>
-                            {{ service.DeletedService.uuid }}
-                        </td>
-
-                        <td>
-                            {{ service.DeletedService.created }}
-                        </td>
-
-                        <td class="text-center">
-                            <span
-                                *ngIf="!service.DeletedService.perfdataDeleted"
-                                class="badge border border-info text-info">
-                                {{ t('Pending') }}
-                            </span>
-                            <span
-                                *ngIf="service.DeletedService.perfdataDeleted"
-                                class="badge border border-success text-success">
-                                {{ t('Yes') }}
-                            </span>
-                        </td>
-
-                    </tr>
-                    </tbody>
-                </table>
-
-                <oitc-no-records
-                    *ngIf="deletedServices && deletedServices.all_services.length === 0"></oitc-no-records>
-
-                <c-container
-                    [fluid]="true" class="mt-3">
-                    <c-row>
-                        <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="deletedServices"
-                                [paginateOrScroll]="deletedServices"></oitc-paginate-or-scroll>
-                        </c-col>
-                    </c-row>
-                </c-container>
-            </ng-container>
-            <!-- DELETED TAB END -->
-        </c-card-body>
-    </c-card>
+      <!-- DELETED TAB START -->
+      @if (activeTab === 'deleted') {
+        @if (!deletedServices) {
+          <oitc-table-loader></oitc-table-loader>
+        }
+        @if (deletedServices) {
+          <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped
+            matSort
+            (matSortChange)="onSortChange($event)"
+            [matSortActive]="params.sort" [matSortDirection]="params.direction">
+            <thead>
+              <tr>
+                <th scope="col">
+                  {{ t('Service name') }}
+                </th>
+                <th scope="col">
+                  {{ t('UUID') }}
+                </th>
+                <th scope="col">
+                  {{ t('Date') }}
+                </th>
+                <th scope="col">
+                  {{ t('Performance data deleted') }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (service of deletedServices.all_services; track service) {
+                <tr>
+                  <td class="word-break">
+                    {{ service.DeletedService.name }}
+                  </td>
+                  <td>
+                    {{ service.DeletedService.uuid }}
+                  </td>
+                  <td>
+                    {{ service.DeletedService.created }}
+                  </td>
+                  <td class="text-center">
+                    @if (!service.DeletedService.perfdataDeleted) {
+                      <span
+                        class="badge border border-info text-info">
+                        {{ t('Pending') }}
+                      </span>
+                    }
+                    @if (service.DeletedService.perfdataDeleted) {
+                      <span
+                        class="badge border border-success text-success">
+                        {{ t('Yes') }}
+                      </span>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+        @if (deletedServices && deletedServices.all_services.length === 0) {
+          <oitc-no-records
+          ></oitc-no-records>
+        }
+        <c-container
+          [fluid]="true" class="mt-3">
+          <c-row>
+            <c-col>
+              @if (deletedServices) {
+                <oitc-paginate-or-scroll
+                  (paginatorChange)="onPaginatorChange($event)"
+                [paginateOrScroll]="deletedServices"></oitc-paginate-or-scroll>
+              }
+            </c-col>
+          </c-row>
+        </c-container>
+      }
+      <!-- DELETED TAB END -->
+    </c-card-body>
+  </c-card>
 </ng-container>
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
@@ -864,8 +874,8 @@
 <oitc-enable-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-enable-modal>
 
 <oitc-service-maintenance-modal (completed)="onMassActionComplete($event)"
-                                [items]="selectedItems"></oitc-service-maintenance-modal>
+[items]="selectedItems"></oitc-service-maintenance-modal>
 <oitc-service-acknowledge-modal (completed)="onMassActionComplete($event)"
-                                [items]="selectedItems"></oitc-service-acknowledge-modal>
+[items]="selectedItems"></oitc-service-acknowledge-modal>
 <oitc-service-add-to-servicegroup-modal (completed)="onMassActionComplete($event)"
-                                        [items]="selectedItems"></oitc-service-add-to-servicegroup-modal>
+[items]="selectedItems"></oitc-service-add-to-servicegroup-modal>

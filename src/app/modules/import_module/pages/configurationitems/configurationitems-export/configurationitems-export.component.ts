@@ -8,7 +8,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ConfigurationitemsService } from '../configurationitems.service';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 import {
@@ -45,7 +45,6 @@ import { DateTime } from 'luxon';
     PermissionDirective,
     TranslocoDirective,
     RouterLink,
-    NgIf,
     FormLoaderComponent,
     CardBodyComponent,
     CardComponent,

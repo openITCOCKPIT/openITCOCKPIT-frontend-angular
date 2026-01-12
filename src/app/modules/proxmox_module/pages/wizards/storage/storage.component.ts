@@ -24,7 +24,7 @@ import {
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
+
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
@@ -39,32 +39,31 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 @Component({
     selector: 'oitc-storage',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        TranslocoDirective,
-        TranslocoPipe,
-        WizardsDynamicfieldsComponent,
-        RouterLink,
-        NgIf,
-        OitcAlertComponent,
-        XsButtonDirective,
-        ColComponent,
-        RowComponent,
-        RequiredIconComponent,
-        AccordionButtonDirective,
-        AccordionComponent,
-        AccordionItemComponent,
-        TemplateIdDirective
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    TranslocoDirective,
+    TranslocoPipe,
+    WizardsDynamicfieldsComponent,
+    RouterLink,
+    OitcAlertComponent,
+    XsButtonDirective,
+    ColComponent,
+    RowComponent,
+    RequiredIconComponent,
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
+    TemplateIdDirective
+],
     templateUrl: './storage.component.html',
     styleUrl: './storage.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

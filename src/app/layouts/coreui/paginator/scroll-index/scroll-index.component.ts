@@ -4,21 +4,20 @@ import { ColComponent, PageItemDirective, PageLinkDirective, PaginationComponent
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight, faAnglesLeft } from '@fortawesome/free-solid-svg-icons';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-scroll-index',
     imports: [
-        PaginationComponent,
-        PageItemDirective,
-        PageLinkDirective,
-        FaIconComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        NgIf,
-        RowComponent,
-        ColComponent
-    ],
+    PaginationComponent,
+    PageItemDirective,
+    PageLinkDirective,
+    FaIconComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    RowComponent,
+    ColComponent
+],
     templateUrl: './scroll-index.component.html',
     styleUrl: './scroll-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -27,7 +27,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputCopyComponent } from '../../../layouts/coreui/input-copy/input-copy.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -65,8 +65,6 @@ import { UsersService } from '../../users/users.service';
     ModalTitleDirective,
     NavComponent,
     NavItemComponent,
-    NgForOf,
-    NgIf,
     NgSelectModule,
     ReactiveFormsModule,
     RequiredIconComponent,

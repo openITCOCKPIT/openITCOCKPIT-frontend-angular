@@ -21,7 +21,6 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
 import { TranslocoService } from '@jsverse/transloco';
 import { debounceTime } from 'rxjs/operators';
 import { Select } from 'primeng/select';
-import { AnimationEvent } from '@angular/animations';
 
 @Component({
     selector: 'oitc-select-optgroup',
@@ -278,6 +277,9 @@ export class SelectOptgroupComponent implements ControlValueAccessor, OnInit, On
      * @param event
      */
     public onShow(event: AnimationEvent) {
+        console.log(event);
+
+        /*
         event.element.parentElement.style.width = event.element.parentElement.style.minWidth;
 
         // 🩹
@@ -291,7 +293,7 @@ export class SelectOptgroupComponent implements ControlValueAccessor, OnInit, On
                 const selectBoxPosition = this.selectOptgroup.el.nativeElement.getBoundingClientRect();
                 event.element.parentElement.style.left = selectBoxPosition.x + 'px';
             }
-        }
+        }*/
     }
 
     protected readonly String = String;

@@ -21,7 +21,6 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import _ from 'lodash';
-import { AnimationEvent } from '@angular/animations';
 
 @Component({
     selector: 'oitc-multi-select',
@@ -278,7 +277,10 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
      *
      * @param event
      */
-    public onShow(event: AnimationEvent) {
+    public onShow(event: any) {
+        console.log(event);
+
+
         event.element.parentElement.style.width = event.element.parentElement.style.minWidth;
 
         // 🩹
@@ -296,4 +298,5 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
     }
 
     protected readonly String = String;
+    protected readonly Infinity = Infinity;
 }

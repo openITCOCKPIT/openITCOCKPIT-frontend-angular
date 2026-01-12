@@ -15,7 +15,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
-import { NgIf } from '@angular/common';
+
 
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ChartAbsolutValue, PieChartMetric } from '../../../../components/charts/charts.interface';
@@ -36,23 +36,22 @@ import {
 @Component({
     selector: 'oitc-instantreport-viewer',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        FaIconComponent,
-        NgIf,
-        RowComponent,
-        TranslocoDirective,
-        HostPieEchartComponent,
-        LabelLinkComponent,
-        ServicePieEchartComponent,
-        PermissionDirective,
-        RouterLink,
-        ServiceProgressbarComponent,
-        HostSimplePieChartComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FaIconComponent,
+    RowComponent,
+    TranslocoDirective,
+    HostPieEchartComponent,
+    LabelLinkComponent,
+    ServicePieEchartComponent,
+    PermissionDirective,
+    RouterLink,
+    ServiceProgressbarComponent,
+    HostSimplePieChartComponent
+],
     templateUrl: './instantreport-viewer.component.html',
     styleUrl: './instantreport-viewer.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

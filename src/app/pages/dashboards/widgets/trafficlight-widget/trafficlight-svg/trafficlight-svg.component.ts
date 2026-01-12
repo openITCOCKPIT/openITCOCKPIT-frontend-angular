@@ -11,13 +11,11 @@ import {
   ViewChild,
   DOCUMENT
 } from '@angular/core';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-trafficlight-svg',
-    imports: [
-        NgIf
-    ],
+    imports: [],
     templateUrl: './trafficlight-svg.component.html',
     styleUrl: './trafficlight-svg.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

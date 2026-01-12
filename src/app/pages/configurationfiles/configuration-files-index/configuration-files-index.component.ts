@@ -19,7 +19,7 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -28,27 +28,26 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 @Component({
     selector: 'oitc-configuration-files-index',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        NgIf,
-        TableLoaderComponent,
-        TableDirective,
-        NoRecordsComponent,
-        CardFooterComponent,
-        ProgressBarModule,
-        RowComponent,
-        ColComponent,
-        AsyncPipe
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    TableLoaderComponent,
+    TableDirective,
+    NoRecordsComponent,
+    CardFooterComponent,
+    ProgressBarModule,
+    RowComponent,
+    ColComponent,
+    AsyncPipe
+],
     templateUrl: './configuration-files-index.component.html',
     styleUrl: './configuration-files-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

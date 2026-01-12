@@ -1,875 +1,846 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['agentconnector', 'wizard']" [routerLink]="['/', 'agentconnector', 'wizard']">
-                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-                    {{ t('openITCOCKPIT Agent') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'wand-magic-sparkles']"></fa-icon>
-                {{ t('Wizard') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <a *oitcPermission="['agentconnector', 'wizard']" [routerLink]="['/', 'agentconnector', 'wizard']">
+            <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+            {{ t('openITCOCKPIT Agent') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'wand-magic-sparkles']"></fa-icon>
+          {{ t('Wizard') }}
+        </li>
+      </ol>
     </nav>
 
     <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('openITCOCKPIT Agent Configuration for:') }}
-                <small class="fw-300" *ngIf="host">
-                    {{ host.name }} ({{ host.address }})
-                </small>
-            </h5>
+      <c-card-header>
+        <h5 cCardTitle>{{ t('openITCOCKPIT Agent Configuration for:') }}
+          @if (host) {
+            <small class="fw-300">
+              {{ host.name }} ({{ host.address }})
+            </small>
+          }
+        </h5>
 
-        </c-card-header>
+      </c-card-header>
 
-        <c-card-body class="p-0">
-            <oitc-agentconnector-wizard-progressbar
-                [stepCount]="2"
-                [step]="AgentconnectorWizardStepsEnum.ConfigureAgent"
-                [mode]="AgentModes.Pull"
-                [disableBack]="false"
-                (goBackEvent)="onBackButtonClick()"
-                [disableNext]="false"
-                (goNextEvent)="onNextButtonClick()"
-            ></oitc-agentconnector-wizard-progressbar>
-        </c-card-body>
+      <c-card-body class="p-0">
+        <oitc-agentconnector-wizard-progressbar
+          [stepCount]="2"
+          [step]="AgentconnectorWizardStepsEnum.ConfigureAgent"
+          [mode]="AgentModes.Pull"
+          [disableBack]="false"
+          (goBackEvent)="onBackButtonClick()"
+          [disableNext]="false"
+          (goNextEvent)="onNextButtonClick()"
+        ></oitc-agentconnector-wizard-progressbar>
+      </c-card-body>
 
-        <oitc-block-loader *ngIf="!config" class="p-2"></oitc-block-loader>
-        <c-card-body *ngIf="config">
-
-            <c-row>
-                <c-col [xs]="12">
-                    <c-card>
-                        <c-card-body>
-                            <fieldset>
-                                <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                                    <h4>
-                                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                                        {{ t('Which operation system do you want to monitor?') }}
-                                    </h4>
-                                </legend>
-                                <div>
-                                    <div class="btn-group btn-group-lg">
-                                        <button type="button"
-                                                class="btn btn-outline-primary ripple"
-                                                [ngClass]="{'btn-primary text-white': config.string.operating_system === AgentconnectorOperatingSystems.Windows}"
-                                                (click)="changeOs(AgentconnectorOperatingSystems.Windows)">
-                                            <fa-icon [icon]="['fab', 'windows']" [size]="'7x'"></fa-icon>
-                                            <br>
-                                            {{ t('Windows') }}
-                                        </button>
-                                        <button type="button"
-                                                class="btn btn-outline-primary ripple"
-                                                [ngClass]="{'btn-primary text-white': config.string.operating_system === AgentconnectorOperatingSystems.Linux}"
-                                                (click)="changeOs(AgentconnectorOperatingSystems.Linux)">
-                                            <fa-icon [icon]="['fab', 'linux']" [size]="'7x'"></fa-icon>
-                                            <br>
-                                            {{ t('Linux') }}
-                                        </button>
-                                        <button type="button"
-                                                class="btn btn-outline-primary ripple"
-                                                [ngClass]="{'btn-primary text-white': config.string.operating_system === AgentconnectorOperatingSystems.Macos}"
-                                                (click)="changeOs(AgentconnectorOperatingSystems.Macos)">
-                                            <fa-icon [icon]="['fab', 'apple']" [size]="'7x'"></fa-icon>
-                                            <br>
-                                            {{ t('macOS') }}
-                                        </button>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </c-card-body>
+      @if (!config) {
+        <oitc-block-loader class="p-2"></oitc-block-loader>
+      }
+      @if (config) {
+        <c-card-body>
+          <c-row>
+            <c-col [xs]="12">
+              <c-card>
+                <c-card-body>
+                  <fieldset>
+                    <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                      <h4>
+                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                        {{ t('Which operation system do you want to monitor?') }}
+                      </h4>
+                    </legend>
+                    <div>
+                      <div class="btn-group btn-group-lg">
+                        <button type="button"
+                          class="btn btn-outline-primary ripple"
+                          [ngClass]="{'btn-primary text-white': config.string.operating_system === AgentconnectorOperatingSystems.Windows}"
+                          (click)="changeOs(AgentconnectorOperatingSystems.Windows)">
+                          <fa-icon [icon]="['fab', 'windows']" [size]="'7x'"></fa-icon>
+                          <br>
+                            {{ t('Windows') }}
+                          </button>
+                          <button type="button"
+                            class="btn btn-outline-primary ripple"
+                            [ngClass]="{'btn-primary text-white': config.string.operating_system === AgentconnectorOperatingSystems.Linux}"
+                            (click)="changeOs(AgentconnectorOperatingSystems.Linux)">
+                            <fa-icon [icon]="['fab', 'linux']" [size]="'7x'"></fa-icon>
+                            <br>
+                              {{ t('Linux') }}
+                            </button>
+                            <button type="button"
+                              class="btn btn-outline-primary ripple"
+                              [ngClass]="{'btn-primary text-white': config.string.operating_system === AgentconnectorOperatingSystems.Macos}"
+                              (click)="changeOs(AgentconnectorOperatingSystems.Macos)">
+                              <fa-icon [icon]="['fab', 'apple']" [size]="'7x'"></fa-icon>
+                              <br>
+                                {{ t('macOS') }}
+                              </button>
+                            </div>
+                          </div>
+                        </fieldset>
+                      </c-card-body>
                     </c-card>
-
-                </c-col>
-            </c-row>
-
-            <c-row class="pt-4">
-                <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex">
+                  </c-col>
+                </c-row>
+                <c-row class="pt-4">
+                  <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex">
                     <c-card class="flex-1">
-                        <c-card-body class="flex-1">
-                            <fieldset>
-                                <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                                    <h4>
-                                        <fa-icon [icon]="['fas', 'wand-magic-sparkles']"></fa-icon>
-                                        {{ t('Basic configuration') }}
-                                    </h4>
-                                </legend>
-                                <div>
-
-                                    <div class="mt-3">
-                                        <label for="enable_push_mode">
-                                            {{ t('Operation mode') }}
-                                        </label>
-                                        <select
-                                            cSelect
-                                            name="enable_push_mode"
-                                            id="enable_push_mode"
-                                            [(ngModel)]="config.bool.enable_push_mode">
-                                            <option [ngValue]="false">{{ t('Pull mode') }}</option>
-                                            <option [ngValue]="true">{{ t('Push mode') }}</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="mt-3">
-                                        <label cLabel for="bind_address">
-                                            {{ t('Agent bind address') }}
-                                            <oitc-required-icon></oitc-required-icon>
-                                        </label>
-                                        <input cFormControl
-                                               id="bind_address" required type="text"
-                                               name="bind_address"
-                                               [placeholder]="'0.0.0.0'|transloco"
-                                               oitcFormError [errors]="errors" errorField="bind_address"
-                                               [(ngModel)]="config.string.bind_address">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="bind_address"></oitc-form-feedback>
-                                    </div>
-                                    <div class="help-block">
-                                        {{ t('IP address that openITCOCKPIT Agent should bind to.') }}
-                                        {{ t('Set 0.0.0.0 to bind to all interfaces.') }}
-                                    </div>
-
-                                    <div class="mt-3">
-                                        <label cLabel for="bind_port">
-                                            {{ t('Agent bind port') }}
-                                            <oitc-required-icon></oitc-required-icon>
-                                        </label>
-                                        <input cFormControl
-                                               id="bind_port" required type="number"
-                                               name="bind_port"
-                                               min="1"
-                                               max="65536"
-                                               placeholder="3333"
-                                               oitcFormError [errors]="errors" errorField="bind_port"
-                                               [(ngModel)]="config.int.bind_port">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="bind_port"></oitc-form-feedback>
-                                    </div>
-                                    <div class="help-block">
-                                        {{ t('Port number that openITCOCKPIT Agent should bind to.') }}
-                                        {{ t('Default: 3333') }}
-                                    </div>
-
-                                    <div class="mt-3">
-                                        <label cLabel for="check_interval">
-                                            {{ t('Check interval') }}
-                                            <oitc-required-icon></oitc-required-icon>
-                                        </label>
-                                        <input cFormControl
-                                               id="check_interval" required type="number"
-                                               name="check_interval"
-                                               min="1"
-                                               max="7200"
-                                               placeholder="30"
-                                               oitcFormError [errors]="errors" errorField="check_interval"
-                                               [(ngModel)]="config.int.check_interval">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="check_interval"></oitc-form-feedback>
-                                    </div>
-                                    <div class="help-block">
-                                        {{ t('Determines in seconds how often the openITCOCKPIT Agent will execute all checks.') }}
-                                        {{ t('Default: 30') }}
-                                    </div>
-
-                                </div>
-
-
-                            </fieldset>
-                        </c-card-body>
+                      <c-card-body class="flex-1">
+                        <fieldset>
+                          <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                            <h4>
+                              <fa-icon [icon]="['fas', 'wand-magic-sparkles']"></fa-icon>
+                              {{ t('Basic configuration') }}
+                            </h4>
+                          </legend>
+                          <div>
+                            <div class="mt-3">
+                              <label for="enable_push_mode">
+                                {{ t('Operation mode') }}
+                              </label>
+                              <select
+                                cSelect
+                                name="enable_push_mode"
+                                id="enable_push_mode"
+                                [(ngModel)]="config.bool.enable_push_mode">
+                                <option [ngValue]="false">{{ t('Pull mode') }}</option>
+                                <option [ngValue]="true">{{ t('Push mode') }}</option>
+                              </select>
+                            </div>
+                            <div class="mt-3">
+                              <label cLabel for="bind_address">
+                                {{ t('Agent bind address') }}
+                                <oitc-required-icon></oitc-required-icon>
+                              </label>
+                              <input cFormControl
+                                id="bind_address" required type="text"
+                                name="bind_address"
+                                [placeholder]="'0.0.0.0'|transloco"
+                                oitcFormError [errors]="errors" errorField="bind_address"
+                                [(ngModel)]="config.string.bind_address">
+                              <oitc-form-feedback [errors]="errors"
+                              errorField="bind_address"></oitc-form-feedback>
+                            </div>
+                            <div class="help-block">
+                              {{ t('IP address that openITCOCKPIT Agent should bind to.') }}
+                              {{ t('Set 0.0.0.0 to bind to all interfaces.') }}
+                            </div>
+                            <div class="mt-3">
+                              <label cLabel for="bind_port">
+                                {{ t('Agent bind port') }}
+                                <oitc-required-icon></oitc-required-icon>
+                              </label>
+                              <input cFormControl
+                                id="bind_port" required type="number"
+                                name="bind_port"
+                                min="1"
+                                max="65536"
+                                placeholder="3333"
+                                oitcFormError [errors]="errors" errorField="bind_port"
+                                [(ngModel)]="config.int.bind_port">
+                              <oitc-form-feedback [errors]="errors"
+                              errorField="bind_port"></oitc-form-feedback>
+                            </div>
+                            <div class="help-block">
+                              {{ t('Port number that openITCOCKPIT Agent should bind to.') }}
+                              {{ t('Default: 3333') }}
+                            </div>
+                            <div class="mt-3">
+                              <label cLabel for="check_interval">
+                                {{ t('Check interval') }}
+                                <oitc-required-icon></oitc-required-icon>
+                              </label>
+                              <input cFormControl
+                                id="check_interval" required type="number"
+                                name="check_interval"
+                                min="1"
+                                max="7200"
+                                placeholder="30"
+                                oitcFormError [errors]="errors" errorField="check_interval"
+                                [(ngModel)]="config.int.check_interval">
+                              <oitc-form-feedback [errors]="errors"
+                              errorField="check_interval"></oitc-form-feedback>
+                            </div>
+                            <div class="help-block">
+                              {{ t('Determines in seconds how often the openITCOCKPIT Agent will execute all checks.') }}
+                              {{ t('Default: 30') }}
+                            </div>
+                          </div>
+                        </fieldset>
+                      </c-card-body>
                     </c-card>
-                </c-col>
-
-                <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex" *ngIf="!config.bool.enable_push_mode">
+                  </c-col>
+                  @if (!config.bool.enable_push_mode) {
+                    <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex">
+                      <c-card class="flex-1">
+                        <c-card-body class="flex-1">
+                          <fieldset>
+                            <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                              <h4>
+                                <fa-icon [icon]="['fas', 'cloud-download-alt']"></fa-icon>
+                                {{ t('Pull mode configuration') }}
+                              </h4>
+                            </legend>
+                            <div>
+                              <div class="mb-3">
+                                <c-form-check>
+                                  <input cFormCheckInput
+                                    name="use_proxy"
+                                    id="use_proxy"
+                                    type="checkbox"
+                                    [(ngModel)]="config.bool.use_proxy"/>
+                                  <label cFormCheckLabel for="use_proxy">
+                                    {{ t('Use Proxy') }}
+                                  </label>
+                                </c-form-check>
+                                <div class="help-block">
+                                  {{ t('Determine if the configured proxy should be used.') }}
+                                  <a
+                                    *oitcPermission="['proxy', 'index']"
+                                    [routerLink]="['/', 'proxy', 'index']">
+                                    {{ t('Go to "Proxy settings"') }}
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </fieldset>
+                        </c-card-body>
+                      </c-card>
+                    </c-col>
+                  }
+                  @if (config.bool.enable_push_mode) {
+                    <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex">
+                      <c-card class="flex-1">
+                        <c-card-body class="flex-1">
+                          <fieldset>
+                            <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                              <h4>
+                                <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                                {{ t('Push mode configuration') }}
+                              </h4>
+                            </legend>
+                            <div>
+                              @if (host && Number(host.satellite_id) == 0) {
+                                <div class="mb-3">
+                                  <!-- Host is on the master -->
+                                  <label cLabel for="push_oitc_server_url_m">
+                                    {{ t('openITCOCKPIT Server Address') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                  </label>
+                                  <input cFormControl
+                                    id="push_oitc_server_url_m" required type="text"
+                                    name="push_oitc_server_url_m"
+                                    [placeholder]="'https://'+hostname"
+                                    oitcFormError [errors]="errors" errorField="push_oitc_server_url"
+                                    [(ngModel)]="config.string.push_oitc_server_url">
+                                  <oitc-form-feedback [errors]="errors"
+                                  errorField="push_oitc_server_url"></oitc-form-feedback>
+                                  <div class="help-block">
+                                    {{ t('External address of your openITCOCKPIT Server.') }}
+                                  </div>
+                                </div>
+                              }
+                              @if (host && Number(host.satellite_id) > 0) {
+                                <div class="mb-3">
+                                  <!-- Host is on a Satellite -->
+                                  <label cLabel for="push_oitc_server_url_s">
+                                    {{ t('openITCOCKPIT Satellite Server Address') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                  </label>
+                                  <input cFormControl
+                                    id="push_oitc_server_url_s" required type="text"
+                                    name="push_oitc_server_url_s"
+                                    [placeholder]="'https://'+satellite?.address"
+                                    oitcFormError [errors]="errors" errorField="push_oitc_server_url"
+                                    [(ngModel)]="config.string.push_oitc_server_url">
+                                  <oitc-form-feedback [errors]="errors"
+                                  errorField="push_oitc_server_url"></oitc-form-feedback>
+                                  <div class="help-block">
+                                    {{ t('External address of your openITCOCKPIT Satellite Server.') }}
+                                  </div>
+                                </div>
+                              }
+                              <div class="mb-3">
+                                <label cLabel for="push_oitc_api_key">
+                                  {{ t('openITCOCKPIT API Key') }}
+                                  <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <input cFormControl
+                                  id="push_oitc_api_key" required type="text"
+                                  name="push_oitc_api_key"
+                                  placeholder="b803b7fb76524e1514bed81cf3a936845cc160511a1c0d51672c..."
+                                  oitcFormError [errors]="errors" errorField="push_oitc_api_key"
+                                  [(ngModel)]="config.string.push_oitc_api_key">
+                                <oitc-form-feedback [errors]="errors"
+                                errorField="push_oitc_api_key"></oitc-form-feedback>
+                                <div class="help-block">
+                                  {{ t('You need to create an openITCOCKPIT user defined API key first.') }}
+                                  <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
+                                </div>
+                              </div>
+                              <div class="mb-3">
+                                <label cLabel for="push_proxy_address">
+                                  {{ t('HTTP Proxy') }}
+                                </label>
+                                <input cFormControl
+                                  id="push_proxy_address" required type="text"
+                                  name="push_proxy_address"
+                                  placeholder="http://proxy.example.org:3128"
+                                  [(ngModel)]="config.string.push_proxy_address">
+                                <div class="help-block">
+                                  {{ t('HTTP Proxy that should be used by the agent. Leave blank for no proxy.') }}
+                                </div>
+                              </div>
+                              <div class="mb-3">
+                                <c-form-check>
+                                  <input cFormCheckInput
+                                    name="push_verify_server_certificate"
+                                    id="push_verify_server_certificate"
+                                    type="checkbox"
+                                    [(ngModel)]="config.bool.push_verify_server_certificate"/>
+                                  <label cFormCheckLabel for="push_verify_server_certificate">
+                                    {{ t('Verify server certificate') }}
+                                  </label>
+                                </c-form-check>
+                                <div class="help-block">
+                                  {{ t('Require valid TLS certificates (e.g. Let\'s Encrypt)') }}
+                                </div>
+                              </div>
+                              <div class="mb-3">
+                                <label cLabel for="push_timeout">
+                                  {{ t('Push timeout') }}
+                                  <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <input cFormControl
+                                  id="push_timeout" required type="text"
+                                  name="push_timeout"
+                                  min="1"
+                                  max="40"
+                                  placeholder="1"
+                                  oitcFormError [errors]="errors" errorField="push_timeout"
+                                  [(ngModel)]="config.int.push_timeout">
+                                <oitc-form-feedback [errors]="errors"
+                                errorField="push_timeout"></oitc-form-feedback>
+                                <div class="help-block">
+                                  {{ t('HTTP timeout in seconds') }}
+                                </div>
+                              </div>
+                            </div>
+                          </fieldset>
+                        </c-card-body>
+                      </c-card>
+                    </c-col>
+                  }
+                </c-row>
+                <c-row class="pt-4">
+                  <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex">
                     <c-card class="flex-1">
-                        <c-card-body class="flex-1">
-                            <fieldset>
-                                <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                                    <h4>
-                                        <fa-icon [icon]="['fas', 'cloud-download-alt']"></fa-icon>
-                                        {{ t('Pull mode configuration') }}
-                                    </h4>
-                                </legend>
-                                <div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="use_proxy"
-                                                   id="use_proxy"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.use_proxy"/>
-                                            <label cFormCheckLabel for="use_proxy">
-                                                {{ t('Use Proxy') }}
-                                            </label>
-                                        </c-form-check>
-                                        <div class="help-block">
-                                            {{ t('Determine if the configured proxy should be used.') }}
-                                            <a
-                                                *oitcPermission="['proxy', 'index']"
-                                                [routerLink]="['/', 'proxy', 'index']">
-                                                {{ t('Go to "Proxy settings"') }}
-                                            </a>
-                                        </div>
-                                    </div>
-
+                      <c-card-body class="flex-1">
+                        <fieldset>
+                          <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                            <h4>
+                              <fa-icon [icon]="['fas', 'shield-alt']"></fa-icon>
+                              {{ t('Security configuration') }}
+                            </h4>
+                          </legend>
+                          <div>
+                            <!-- Connection type in PULL mode -->
+                            @if (config.bool.enable_push_mode === false) {
+                              <div class="mt-3"
+                                >
+                                <label for="connectionType">
+                                  {{ t('Connection type') }}
+                                </label>
+                                <select
+                                  cSelect
+                                  name="connectionType"
+                                  id="connectionType"
+                                  [(ngModel)]="connectionType">
+                                  <option
+                                    [ngValue]="AgentconnectorConnectionTypes.AutoTls">{{ t('Auto-TLS') }}
+                                  </option>
+                                  <option [ngValue]="AgentconnectorConnectionTypes.Https">{{ t('HTTPS') }}
+                                  </option>
+                                  <option
+                                    [ngValue]="AgentconnectorConnectionTypes.Http">{{ t('HTTP (plaintext)') }}
+                                  </option>
+                                </select>
+                                @if (connectionType === AgentconnectorConnectionTypes.AutoTls) {
+                                  <div class="help-block"
+                                    >
+                                    {{ t('openITCOCKPIT automatically generate a TLS certificate for authentication and encryption purpose. Auto-TLS is only available in Pull mode.') }}
+                                  </div>
+                                }
+                                @if (connectionType === AgentconnectorConnectionTypes.AutoTls) {
+                                  <div class="mt-3">
+                                    <c-form-check>
+                                      <input cFormCheckInput
+                                        name="verify_autossl_expiry"
+                                        id="verify_autossl_expiry"
+                                        type="checkbox"
+                                        [(ngModel)]="config.bool.verify_autossl_expiry"/>
+                                      <label cFormCheckLabel for="verify_autossl_expiry">
+                                        {{ t('Verify expiry of Auto-TLS certificate') }}
+                                      </label>
+                                      <div class="help-block">
+                                        {{ t('The generated client certificate is valid for 10 years. If enabled, openITCOCKPIT will not be able to query the Agent after the certificate has been expired.') }}
+                                      </div>
+                                    </c-form-check>
+                                  </div>
+                                }
+                                @if (connectionType === AgentconnectorConnectionTypes.Https) {
+                                  <div class="help-block"
+                                    >
+                                    {{ t('Start the Agents web server with own TLS certificates from Let\'s Encrypt for example.') }}
+                                  </div>
+                                }
+                                @if (connectionType === AgentconnectorConnectionTypes.Https) {
+                                  <div class="help-block text-danger"
+                                    >
+                                    {{ t('It\'s recommended to also enable HTTP Basic Authentication to restrict the access to the agent.') }}
+                                  </div>
+                                }
+                                @if (connectionType === AgentconnectorConnectionTypes.Http) {
+                                  <div class="help-block text-danger"
+                                    >
+                                    {{ t('Communication will be plaintext. No encryption and authentication. Not recommended!') }}
+                                  </div>
+                                }
+                              </div>
+                            }
+                            <!-- End connection type -->
+                            <!-- Webserver settings in PUSH mode -->
+                            @if (config.bool.enable_push_mode) {
+                              <div class="mt-3"
+                                >
+                                <c-form-check>
+                                  <input cFormCheckInput
+                                    name="push_enable_webserver"
+                                    id="push_enable_webserver"
+                                    type="checkbox"
+                                    [(ngModel)]="config.bool.push_enable_webserver"/>
+                                  <label cFormCheckLabel for="push_enable_webserver">
+                                    {{ t('Enable Webserver') }}
+                                  </label>
+                                </c-form-check>
+                                <div class="help-block">
+                                  {{ t('By default the web server of the Agent is disabled when running in Push mode.') }}
                                 </div>
-                            </fieldset>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-
-                <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex" *ngIf="config.bool.enable_push_mode">
-                    <c-card class="flex-1">
-                        <c-card-body class="flex-1">
-                            <fieldset>
-                                <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                                    <h4>
-                                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
-                                        {{ t('Push mode configuration') }}
-                                    </h4>
-                                </legend>
-                                <div>
-
-                                    <div class="mb-3" *ngIf="host && Number(host.satellite_id) == 0">
-                                        <!-- Host is on the master -->
-                                        <label cLabel for="push_oitc_server_url_m">
-                                            {{ t('openITCOCKPIT Server Address') }}
-                                            <oitc-required-icon></oitc-required-icon>
-                                        </label>
-                                        <input cFormControl
-                                               id="push_oitc_server_url_m" required type="text"
-                                               name="push_oitc_server_url_m"
-                                               [placeholder]="'https://'+hostname"
-                                               oitcFormError [errors]="errors" errorField="push_oitc_server_url"
-                                               [(ngModel)]="config.string.push_oitc_server_url">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="push_oitc_server_url"></oitc-form-feedback>
-
-                                        <div class="help-block">
-                                            {{ t('External address of your openITCOCKPIT Server.') }}
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3" *ngIf="host && Number(host.satellite_id) > 0">
-                                        <!-- Host is on a Satellite -->
-                                        <label cLabel for="push_oitc_server_url_s">
-                                            {{ t('openITCOCKPIT Satellite Server Address') }}
-                                            <oitc-required-icon></oitc-required-icon>
-                                        </label>
-                                        <input cFormControl
-                                               id="push_oitc_server_url_s" required type="text"
-                                               name="push_oitc_server_url_s"
-                                               [placeholder]="'https://'+satellite?.address"
-                                               oitcFormError [errors]="errors" errorField="push_oitc_server_url"
-                                               [(ngModel)]="config.string.push_oitc_server_url">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="push_oitc_server_url"></oitc-form-feedback>
-
-                                        <div class="help-block">
-                                            {{ t('External address of your openITCOCKPIT Satellite Server.') }}
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label cLabel for="push_oitc_api_key">
-                                            {{ t('openITCOCKPIT API Key') }}
-                                            <oitc-required-icon></oitc-required-icon>
-                                        </label>
-                                        <input cFormControl
-                                               id="push_oitc_api_key" required type="text"
-                                               name="push_oitc_api_key"
-                                               placeholder="b803b7fb76524e1514bed81cf3a936845cc160511a1c0d51672c..."
-                                               oitcFormError [errors]="errors" errorField="push_oitc_api_key"
-                                               [(ngModel)]="config.string.push_oitc_api_key">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="push_oitc_api_key"></oitc-form-feedback>
-
-                                        <div class="help-block">
-                                            {{ t('You need to create an openITCOCKPIT user defined API key first.') }}
-                                            <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label cLabel for="push_proxy_address">
-                                            {{ t('HTTP Proxy') }}
-                                        </label>
-                                        <input cFormControl
-                                               id="push_proxy_address" required type="text"
-                                               name="push_proxy_address"
-                                               placeholder="http://proxy.example.org:3128"
-                                               [(ngModel)]="config.string.push_proxy_address">
-                                        <div class="help-block">
-                                            {{ t('HTTP Proxy that should be used by the agent. Leave blank for no proxy.') }}
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="push_verify_server_certificate"
-                                                   id="push_verify_server_certificate"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.push_verify_server_certificate"/>
-                                            <label cFormCheckLabel for="push_verify_server_certificate">
-                                                {{ t('Verify server certificate') }}
-                                            </label>
-                                        </c-form-check>
-                                        <div class="help-block">
-                                            {{ t('Require valid TLS certificates (e.g. Let\'s Encrypt)') }}
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label cLabel for="push_timeout">
-                                            {{ t('Push timeout') }}
-                                            <oitc-required-icon></oitc-required-icon>
-                                        </label>
-                                        <input cFormControl
-                                               id="push_timeout" required type="text"
-                                               name="push_timeout"
-                                               min="1"
-                                               max="40"
-                                               placeholder="1"
-                                               oitcFormError [errors]="errors" errorField="push_timeout"
-                                               [(ngModel)]="config.int.push_timeout">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="push_timeout"></oitc-form-feedback>
-
-                                        <div class="help-block">
-                                            {{ t('HTTP timeout in seconds') }}
-                                        </div>
-                                    </div>
-
+                                <div class="help-block text-danger">
+                                  {{ t('It is highly recommended to enable at least HTTP Basic Authentication!') }}
                                 </div>
-                            </fieldset>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-            </c-row>
-
-            <c-row class="pt-4">
-                <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex">
-                    <c-card class="flex-1">
-                        <c-card-body class="flex-1">
-                            <fieldset>
-                                <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                                    <h4>
-                                        <fa-icon [icon]="['fas', 'shield-alt']"></fa-icon>
-                                        {{ t('Security configuration') }}
-                                    </h4>
-                                </legend>
-                                <div>
-
-                                    <!-- Connection type in PULL mode -->
-                                    <div class="mt-3"
-                                         *ngIf="config.bool.enable_push_mode === false">
-                                        <label for="connectionType">
-                                            {{ t('Connection type') }}
-                                        </label>
-                                        <select
-                                            cSelect
-                                            name="connectionType"
-                                            id="connectionType"
-                                            [(ngModel)]="connectionType">
-                                            <option
-                                                [ngValue]="AgentconnectorConnectionTypes.AutoTls">{{ t('Auto-TLS') }}
-                                            </option>
-                                            <option [ngValue]="AgentconnectorConnectionTypes.Https">{{ t('HTTPS') }}
-                                            </option>
-                                            <option
-                                                [ngValue]="AgentconnectorConnectionTypes.Http">{{ t('HTTP (plaintext)') }}
-                                            </option>
-                                        </select>
-
-                                        <div class="help-block"
-                                             *ngIf="connectionType === AgentconnectorConnectionTypes.AutoTls">
-                                            {{ t('openITCOCKPIT automatically generate a TLS certificate for authentication and encryption purpose. Auto-TLS is only available in Pull mode.') }}
-                                        </div>
-
-                                        @if (connectionType === AgentconnectorConnectionTypes.AutoTls) {
-                                            <div class="mt-3">
-                                                <c-form-check>
-                                                    <input cFormCheckInput
-                                                           name="verify_autossl_expiry"
-                                                           id="verify_autossl_expiry"
-                                                           type="checkbox"
-                                                           [(ngModel)]="config.bool.verify_autossl_expiry"/>
-                                                    <label cFormCheckLabel for="verify_autossl_expiry">
-                                                        {{ t('Verify expiry of Auto-TLS certificate') }}
-                                                    </label>
-                                                    <div class="help-block">
-                                                        {{ t('The generated client certificate is valid for 10 years. If enabled, openITCOCKPIT will not be able to query the Agent after the certificate has been expired.') }}
-                                                    </div>
-                                                </c-form-check>
-                                            </div>
-                                        }
-
-                                        <div class="help-block"
-                                             *ngIf="connectionType === AgentconnectorConnectionTypes.Https">
-                                            {{ t('Start the Agents web server with own TLS certificates from Let\'s Encrypt for example.') }}
-                                        </div>
-                                        <div class="help-block text-danger"
-                                             *ngIf="connectionType === AgentconnectorConnectionTypes.Https">
-                                            {{ t('It\'s recommended to also enable HTTP Basic Authentication to restrict the access to the agent.') }}
-                                        </div>
-                                        <div class="help-block text-danger"
-                                             *ngIf="connectionType === AgentconnectorConnectionTypes.Http">
-                                            {{ t('Communication will be plaintext. No encryption and authentication. Not recommended!') }}
-                                        </div>
-                                    </div>
-                                    <!-- End connection type -->
-
-                                    <!-- Webserver settings in PUSH mode -->
-                                    <div class="mt-3"
-                                         *ngIf="config.bool.enable_push_mode">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="push_enable_webserver"
-                                                   id="push_enable_webserver"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.push_enable_webserver"/>
-                                            <label cFormCheckLabel for="push_enable_webserver">
-                                                {{ t('Enable Webserver') }}
-                                            </label>
-                                        </c-form-check>
-                                        <div class="help-block">
-                                            {{ t('By default the web server of the Agent is disabled when running in Push mode.') }}
-                                        </div>
-                                        <div class="help-block text-danger">
-                                            {{ t('It is highly recommended to enable at least HTTP Basic Authentication!') }}
-                                        </div>
-                                    </div>
-
-                                    <div class="mt-3"
-                                         *ngIf="config.bool.enable_push_mode">
-                                        <label for="webserverType">
-                                            {{ t('Web server type') }}
-                                        </label>
-                                        <select
-                                            cSelect
-                                            name="webserverType"
-                                            id="webserverType"
-                                            [disabled]="!config.bool.push_enable_webserver"
-                                            [(ngModel)]="webserverType">
-                                            <option
-                                                [ngValue]="AgentconnectorWebserverTypes.Https">{{ t('HTTPS') }}
-                                            </option>
-                                            <option
-                                                [ngValue]="AgentconnectorWebserverTypes.Http">{{ t('HTTP (plaintext)') }}
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    @if (connectionType === AgentconnectorConnectionTypes.AutoTls || connectionType === AgentconnectorConnectionTypes.Https || config.bool.enable_push_mode) {
-                                        <div class="mt-3">
-                                            <label for="tls_security_level">
-                                                {{ t('TLS security level') }}
-                                            </label>
-                                            <select
-                                                cSelect
-                                                name="tls_security_level"
-                                                id="tls_security_level"
-                                                [(ngModel)]="config.string.tls_security_level">
-                                                <option
-                                                    [ngValue]="'lax'">{{ t('Lax - Compatible with very old systems (TLS 1.2 no restrictions on cipher suites)') }}
-                                                </option>
-                                                <option
-                                                    [ngValue]="'intermediate'">{{ t('Intermediate - General-purpose (TLS 1.2, restrict usage of cipher suites to a secure subset)') }}
-                                                </option>
-                                                <option
-                                                    [ngValue]="'modern'">{{ t('Modern - Most secure (TLS 1.3 only)') }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    }
-                                    <!-- End Webserver settings -->
-
-                                    <!-- TLS certificate settings -->
-                                    <div class="mt-3"
-                                         *ngIf="connectionType === AgentconnectorConnectionTypes.Https">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="use_https_verify"
-                                                   id="use_https_verify"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.use_https_verify"/>
-                                            <label cFormCheckLabel for="use_https_verify">
-                                                {{ t('Verify certificate') }}
-                                            </label>
-                                        </c-form-check>
-                                        <div class="help-block">
-                                            {{ t('Enabled TLS certificate validation. This requires valid certificates like from Let\'s Encrypt') }}
-                                        </div>
-                                    </div>
-
-                                    <div class="mt-3"
-                                         *ngIf="(connectionType === AgentconnectorConnectionTypes.Https && !config.bool.enable_push_mode) || (webserverType === AgentconnectorWebserverTypes.Https && config.bool.enable_push_mode)">
-                                        <label cLabel for="ssl_certfile">
-                                            {{ t('TLS certificate file') }}
-                                            <oitc-required-icon></oitc-required-icon>
-                                        </label>
-                                        <input cFormControl
-                                               id="ssl_certfile" required type="text"
-                                               name="ssl_certfile"
-                                               [disabled]="(config.bool.enable_push_mode === true && config.bool.push_enable_webserver === false )"
-                                               [placeholder]="'/etc/ssl/acme.sh/example.org/cert.pem'|transloco"
-                                               oitcFormError [errors]="errors" errorField="ssl_certfile"
-                                               [(ngModel)]="config.string.ssl_certfile">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="ssl_certfile"></oitc-form-feedback>
-                                        <div class="help-block">
-                                            {{ t('Full path to certificate file the Agent should use') }}
-                                        </div>
-                                    </div>
-
-                                    <div class="mt-3"
-                                         *ngIf="(connectionType === AgentconnectorConnectionTypes.Https && !config.bool.enable_push_mode) || (webserverType === AgentconnectorWebserverTypes.Https && config.bool.enable_push_mode)">
-                                        <label cLabel for="ssl_keyfile">
-                                            {{ t('TLS key file') }}
-                                            <oitc-required-icon></oitc-required-icon>
-                                        </label>
-                                        <input cFormControl
-                                               id="ssl_keyfile" required type="text"
-                                               name="ssl_keyfile"
-                                               [disabled]="(config.bool.enable_push_mode === true && config.bool.push_enable_webserver === false )"
-                                               [placeholder]="'/etc/ssl/acme.sh/example.org/privkey.pem'|transloco"
-                                               oitcFormError [errors]="errors" errorField="ssl_keyfile"
-                                               [(ngModel)]="config.string.ssl_keyfile">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="ssl_keyfile"></oitc-form-feedback>
-                                        <div class="help-block">
-                                            {{ t('Full path to key file the Agent should use') }}
-                                        </div>
-                                    </div>
-                                    <!-- End TLS certificate settings -->
-
-                                    <!-- Basic Auth settings -->
-                                    <div class="mt-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="use_http_basic_auth"
-                                                   id="use_http_basic_auth"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.use_http_basic_auth"/>
-                                            <label cFormCheckLabel for="use_http_basic_auth">
-                                                {{ t('Enable HTTP Basic Authentication') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mt-3">
-                                        <label cLabel for="username">
-                                            {{ t('Username') }}
-                                            <oitc-required-icon></oitc-required-icon>
-                                        </label>
-                                        <input cFormControl
-                                               id="username" required type="text"
-                                               name="username"
-                                               [disabled]="!config.bool.use_http_basic_auth"
-                                               [placeholder]="'Username'|transloco"
-                                               oitcFormError [errors]="errors" errorField="username"
-                                               [(ngModel)]="config.string.username">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="username"></oitc-form-feedback>
-                                    </div>
-
-                                    <div class="mt-3">
-                                        <label cLabel for="password">
-                                            {{ t('Password') }}
-                                            <oitc-required-icon></oitc-required-icon>
-                                        </label>
-                                        <input cFormControl
-                                               id="password" required type="password"
-                                               name="password"
-                                               [disabled]="!config.bool.use_http_basic_auth"
-                                               [placeholder]="'Password'|transloco"
-                                               oitcFormError [errors]="errors" errorField="password"
-                                               [(ngModel)]="config.string.password">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="password"></oitc-form-feedback>
-                                    </div>
-                                    <!-- End Basic Auth settings -->
-
-                                    <!-- Config update mode -->
-                                    <div class="mt-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="enable_remote_config_update"
-                                                   id="enable_remote_config_update"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.enable_remote_config_update"/>
-                                            <label cFormCheckLabel for="enable_remote_config_update">
-                                                {{ t('Enable remote configuration update mode') }}
-                                            </label>
-                                        </c-form-check>
-                                        <div class="help-block">
-                                            {{ t('Enables the remote agent configuration update mode.') }}
-                                            <br>
-                                            {{ t('Should only be configured after an successful TLS configuration.') }}
-                                            <br>
-                                            <p class="text-danger">
-                                                {{ t('Warning: This could lead to remote code execution!') }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- End config update mode -->
-
+                              </div>
+                            }
+                            @if (config.bool.enable_push_mode) {
+                              <div class="mt-3"
+                                >
+                                <label for="webserverType">
+                                  {{ t('Web server type') }}
+                                </label>
+                                <select
+                                  cSelect
+                                  name="webserverType"
+                                  id="webserverType"
+                                  [disabled]="!config.bool.push_enable_webserver"
+                                  [(ngModel)]="webserverType">
+                                  <option
+                                    [ngValue]="AgentconnectorWebserverTypes.Https">{{ t('HTTPS') }}
+                                  </option>
+                                  <option
+                                    [ngValue]="AgentconnectorWebserverTypes.Http">{{ t('HTTP (plaintext)') }}
+                                  </option>
+                                </select>
+                              </div>
+                            }
+                            @if (connectionType === AgentconnectorConnectionTypes.AutoTls || connectionType === AgentconnectorConnectionTypes.Https || config.bool.enable_push_mode) {
+                              <div class="mt-3">
+                                <label for="tls_security_level">
+                                  {{ t('TLS security level') }}
+                                </label>
+                                <select
+                                  cSelect
+                                  name="tls_security_level"
+                                  id="tls_security_level"
+                                  [(ngModel)]="config.string.tls_security_level">
+                                  <option
+                                    [ngValue]="'lax'">{{ t('Lax - Compatible with very old systems (TLS 1.2 no restrictions on cipher suites)') }}
+                                  </option>
+                                  <option
+                                    [ngValue]="'intermediate'">{{ t('Intermediate - General-purpose (TLS 1.2, restrict usage of cipher suites to a secure subset)') }}
+                                  </option>
+                                  <option
+                                    [ngValue]="'modern'">{{ t('Modern - Most secure (TLS 1.3 only)') }}
+                                  </option>
+                                </select>
+                              </div>
+                            }
+                            <!-- End Webserver settings -->
+                            <!-- TLS certificate settings -->
+                            @if (connectionType === AgentconnectorConnectionTypes.Https) {
+                              <div class="mt-3"
+                                >
+                                <c-form-check>
+                                  <input cFormCheckInput
+                                    name="use_https_verify"
+                                    id="use_https_verify"
+                                    type="checkbox"
+                                    [(ngModel)]="config.bool.use_https_verify"/>
+                                  <label cFormCheckLabel for="use_https_verify">
+                                    {{ t('Verify certificate') }}
+                                  </label>
+                                </c-form-check>
+                                <div class="help-block">
+                                  {{ t('Enabled TLS certificate validation. This requires valid certificates like from Let\'s Encrypt') }}
                                 </div>
-
-
-                            </fieldset>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-                <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex">
-                    <c-card class="flex-1">
-                        <c-card-body class="flex-1">
-                            <fieldset>
-                                <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                                    <h4>
-                                        <fa-icon [icon]="['far', 'check-square']"></fa-icon>
-                                        {{ t('Enable/disable checks') }}
-                                    </h4>
-                                </legend>
-                                <div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="cpustats"
-                                                   id="cpustats"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.cpustats"/>
-                                            <label cFormCheckLabel for="cpustats">
-                                                {{ t('Enable CPU stats') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="memory"
-                                                   id="memory"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.memory"/>
-                                            <label cFormCheckLabel for="memory">
-                                                {{ t('Enable Memory stats') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="swap"
-                                                   id="swap"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.swap"/>
-                                            <label cFormCheckLabel for="swap">
-                                                {{ t('Enable Swap stats') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="processstats"
-                                                   id="processstats"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.processstats"/>
-                                            <label cFormCheckLabel for="processstats">
-                                                {{ t('Enable Process checks') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="netstats"
-                                                   id="netstats"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.netstats"/>
-                                            <label cFormCheckLabel for="processstats">
-                                                {{ t('Enable Network stats') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="netio"
-                                                   id="netio"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.netio"/>
-                                            <label cFormCheckLabel for="netio">
-                                                {{ t('Enable Network I/O stats') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="diskstats"
-                                                   id="diskstats"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.diskstats"/>
-                                            <label cFormCheckLabel for="diskstats">
-                                                {{ t('Enable Disk usage checks') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="diskio"
-                                                   id="diskio"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.diskio"/>
-                                            <label cFormCheckLabel for="diskio">
-                                                {{ t('Enable Disk I/O stats') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="systemdservices"
-                                                   id="systemdservices"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.systemdservices"/>
-                                            <label cFormCheckLabel for="systemdservices">
-                                                {{ t('Enable Systemd checks (only affects Linux)') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="launchdservices"
-                                                   id="launchdservices"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.launchdservices"/>
-                                            <label cFormCheckLabel for="launchdservices">
-                                                {{ t('Enable Launchd checks (only affects macOS)') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="winservices"
-                                                   id="winservices"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.winservices"/>
-                                            <label cFormCheckLabel for="winservices">
-                                                {{ t('Enable Windows Services checks (only affects Windows)') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="wineventlog"
-                                                   id="wineventlog"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.wineventlog"/>
-                                            <label cFormCheckLabel for="wineventlog">
-                                                {{ t('Enable Windows Event Log checks (only affects Windows)') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="sensorstats"
-                                                   id="sensorstats"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.sensorstats"/>
-                                            <label cFormCheckLabel for="sensorstats">
-                                                {{ t('Enable Sensor stats (only affects Linux and macOS)') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="dockerstats"
-                                                   id="dockerstats"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.dockerstats"/>
-                                            <label cFormCheckLabel for="dockerstats">
-                                                {{ t('Enable Docker checks') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="libvirt"
-                                                   id="libvirt"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.libvirt"/>
-                                            <label cFormCheckLabel for="libvirt">
-                                                {{ t('Enable KVM checks through libvirt') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="userstats"
-                                                   id="userstats"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.userstats"/>
-                                            <label cFormCheckLabel for="userstats">
-                                                {{ t('Collect information about logged in users') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <c-form-check>
-                                            <input cFormCheckInput
-                                                   name="ntp"
-                                                   id="ntp"
-                                                   type="checkbox"
-                                                   [(ngModel)]="config.bool.ntp"/>
-                                            <label cFormCheckLabel for="ntp">
-                                                {{ t('Monitor of system clock is synchronized (NTP)') }}
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
+                              </div>
+                            }
+                            @if ((connectionType === AgentconnectorConnectionTypes.Https && !config.bool.enable_push_mode) || (webserverType === AgentconnectorWebserverTypes.Https && config.bool.enable_push_mode)) {
+                              <div class="mt-3"
+                                >
+                                <label cLabel for="ssl_certfile">
+                                  {{ t('TLS certificate file') }}
+                                  <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <input cFormControl
+                                  id="ssl_certfile" required type="text"
+                                  name="ssl_certfile"
+                                  [disabled]="(config.bool.enable_push_mode === true && config.bool.push_enable_webserver === false )"
+                                  [placeholder]="'/etc/ssl/acme.sh/example.org/cert.pem'|transloco"
+                                  oitcFormError [errors]="errors" errorField="ssl_certfile"
+                                  [(ngModel)]="config.string.ssl_certfile">
+                                <oitc-form-feedback [errors]="errors"
+                                errorField="ssl_certfile"></oitc-form-feedback>
+                                <div class="help-block">
+                                  {{ t('Full path to certificate file the Agent should use') }}
                                 </div>
+                              </div>
+                            }
+                            @if ((connectionType === AgentconnectorConnectionTypes.Https && !config.bool.enable_push_mode) || (webserverType === AgentconnectorWebserverTypes.Https && config.bool.enable_push_mode)) {
+                              <div class="mt-3"
+                                >
+                                <label cLabel for="ssl_keyfile">
+                                  {{ t('TLS key file') }}
+                                  <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <input cFormControl
+                                  id="ssl_keyfile" required type="text"
+                                  name="ssl_keyfile"
+                                  [disabled]="(config.bool.enable_push_mode === true && config.bool.push_enable_webserver === false )"
+                                  [placeholder]="'/etc/ssl/acme.sh/example.org/privkey.pem'|transloco"
+                                  oitcFormError [errors]="errors" errorField="ssl_keyfile"
+                                  [(ngModel)]="config.string.ssl_keyfile">
+                                <oitc-form-feedback [errors]="errors"
+                                errorField="ssl_keyfile"></oitc-form-feedback>
+                                <div class="help-block">
+                                  {{ t('Full path to key file the Agent should use') }}
+                                </div>
+                              </div>
+                            }
+                            <!-- End TLS certificate settings -->
+                            <!-- Basic Auth settings -->
+                            <div class="mt-3">
+                              <c-form-check>
+                                <input cFormCheckInput
+                                  name="use_http_basic_auth"
+                                  id="use_http_basic_auth"
+                                  type="checkbox"
+                                  [(ngModel)]="config.bool.use_http_basic_auth"/>
+                                <label cFormCheckLabel for="use_http_basic_auth">
+                                  {{ t('Enable HTTP Basic Authentication') }}
+                                </label>
+                              </c-form-check>
+                            </div>
+                            <div class="mt-3">
+                              <label cLabel for="username">
+                                {{ t('Username') }}
+                                <oitc-required-icon></oitc-required-icon>
+                              </label>
+                              <input cFormControl
+                                id="username" required type="text"
+                                name="username"
+                                [disabled]="!config.bool.use_http_basic_auth"
+                                [placeholder]="'Username'|transloco"
+                                oitcFormError [errors]="errors" errorField="username"
+                                [(ngModel)]="config.string.username">
+                              <oitc-form-feedback [errors]="errors"
+                              errorField="username"></oitc-form-feedback>
+                            </div>
+                            <div class="mt-3">
+                              <label cLabel for="password">
+                                {{ t('Password') }}
+                                <oitc-required-icon></oitc-required-icon>
+                              </label>
+                              <input cFormControl
+                                id="password" required type="password"
+                                name="password"
+                                [disabled]="!config.bool.use_http_basic_auth"
+                                [placeholder]="'Password'|transloco"
+                                oitcFormError [errors]="errors" errorField="password"
+                                [(ngModel)]="config.string.password">
+                              <oitc-form-feedback [errors]="errors"
+                              errorField="password"></oitc-form-feedback>
+                            </div>
+                            <!-- End Basic Auth settings -->
+                            <!-- Config update mode -->
+                            <div class="mt-3">
+                              <c-form-check>
+                                <input cFormCheckInput
+                                  name="enable_remote_config_update"
+                                  id="enable_remote_config_update"
+                                  type="checkbox"
+                                  [(ngModel)]="config.bool.enable_remote_config_update"/>
+                                <label cFormCheckLabel for="enable_remote_config_update">
+                                  {{ t('Enable remote configuration update mode') }}
+                                </label>
+                              </c-form-check>
+                              <div class="help-block">
+                                {{ t('Enables the remote agent configuration update mode.') }}
+                                <br>
+                                  {{ t('Should only be configured after an successful TLS configuration.') }}
+                                  <br>
+                                    <p class="text-danger">
+                                      {{ t('Warning: This could lead to remote code execution!') }}
+                                    </p>
+                                  </div>
+                                </div>
+                                <!-- End config update mode -->
+                              </div>
                             </fieldset>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-
-            </c-row>
-
-        </c-card-body>
-    </c-card>
-</ng-container>
+                          </c-card-body>
+                        </c-card>
+                      </c-col>
+                      <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex">
+                        <c-card class="flex-1">
+                          <c-card-body class="flex-1">
+                            <fieldset>
+                              <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                <h4>
+                                  <fa-icon [icon]="['far', 'check-square']"></fa-icon>
+                                  {{ t('Enable/disable checks') }}
+                                </h4>
+                              </legend>
+                              <div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="cpustats"
+                                      id="cpustats"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.cpustats"/>
+                                    <label cFormCheckLabel for="cpustats">
+                                      {{ t('Enable CPU stats') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="memory"
+                                      id="memory"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.memory"/>
+                                    <label cFormCheckLabel for="memory">
+                                      {{ t('Enable Memory stats') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="swap"
+                                      id="swap"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.swap"/>
+                                    <label cFormCheckLabel for="swap">
+                                      {{ t('Enable Swap stats') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="processstats"
+                                      id="processstats"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.processstats"/>
+                                    <label cFormCheckLabel for="processstats">
+                                      {{ t('Enable Process checks') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="netstats"
+                                      id="netstats"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.netstats"/>
+                                    <label cFormCheckLabel for="processstats">
+                                      {{ t('Enable Network stats') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="netio"
+                                      id="netio"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.netio"/>
+                                    <label cFormCheckLabel for="netio">
+                                      {{ t('Enable Network I/O stats') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="diskstats"
+                                      id="diskstats"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.diskstats"/>
+                                    <label cFormCheckLabel for="diskstats">
+                                      {{ t('Enable Disk usage checks') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="diskio"
+                                      id="diskio"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.diskio"/>
+                                    <label cFormCheckLabel for="diskio">
+                                      {{ t('Enable Disk I/O stats') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="systemdservices"
+                                      id="systemdservices"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.systemdservices"/>
+                                    <label cFormCheckLabel for="systemdservices">
+                                      {{ t('Enable Systemd checks (only affects Linux)') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="launchdservices"
+                                      id="launchdservices"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.launchdservices"/>
+                                    <label cFormCheckLabel for="launchdservices">
+                                      {{ t('Enable Launchd checks (only affects macOS)') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="winservices"
+                                      id="winservices"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.winservices"/>
+                                    <label cFormCheckLabel for="winservices">
+                                      {{ t('Enable Windows Services checks (only affects Windows)') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="wineventlog"
+                                      id="wineventlog"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.wineventlog"/>
+                                    <label cFormCheckLabel for="wineventlog">
+                                      {{ t('Enable Windows Event Log checks (only affects Windows)') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="sensorstats"
+                                      id="sensorstats"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.sensorstats"/>
+                                    <label cFormCheckLabel for="sensorstats">
+                                      {{ t('Enable Sensor stats (only affects Linux and macOS)') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="dockerstats"
+                                      id="dockerstats"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.dockerstats"/>
+                                    <label cFormCheckLabel for="dockerstats">
+                                      {{ t('Enable Docker checks') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="libvirt"
+                                      id="libvirt"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.libvirt"/>
+                                    <label cFormCheckLabel for="libvirt">
+                                      {{ t('Enable KVM checks through libvirt') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="userstats"
+                                      id="userstats"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.userstats"/>
+                                    <label cFormCheckLabel for="userstats">
+                                      {{ t('Collect information about logged in users') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                                <div class="mb-3">
+                                  <c-form-check>
+                                    <input cFormCheckInput
+                                      name="ntp"
+                                      id="ntp"
+                                      type="checkbox"
+                                      [(ngModel)]="config.bool.ntp"/>
+                                    <label cFormCheckLabel for="ntp">
+                                      {{ t('Monitor of system clock is synchronized (NTP)') }}
+                                    </label>
+                                  </c-form-check>
+                                </div>
+                              </div>
+                            </fieldset>
+                          </c-card-body>
+                        </c-card>
+                      </c-col>
+                    </c-row>
+                  </c-card-body>
+                }
+              </c-card>
+            </ng-container>

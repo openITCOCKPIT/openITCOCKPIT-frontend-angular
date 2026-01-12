@@ -1,348 +1,335 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <a>
-                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                    {{ t('Jira Module') }}
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/', 'jira_module', 'jira_settings', 'index']"
-                   *oitcPermission="['JiraModule', 'JiraSettings', 'index']">
-                    <fa-icon [icon]="['fab', 'jira']"></fa-icon>
-                    {{ t('Jira Settings') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                {{ t('Settings') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <a>
+            <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+            {{ t('Jira Module') }}
+          </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/', 'jira_module', 'jira_settings', 'index']"
+            *oitcPermission="['JiraModule', 'JiraSettings', 'index']">
+            <fa-icon [icon]="['fab', 'jira']"></fa-icon>
+            {{ t('Jira Settings') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+          {{ t('Settings') }}
+        </li>
+      </ol>
     </nav>
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
 
-    <form cForm (ngSubmit)="updateJiraSettings()" *ngIf="post">
+    @if (post) {
+      <form cForm (ngSubmit)="updateJiraSettings()">
         <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>
-                    {{ t('Edit Jira Settings') }}
-                </h5>
-            </c-card-header>
-            <c-card-body>
-
-                <div class="mb-3">
-                    <label cLabel for="jiraType">
-                        {{ t('Jira Type') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-
-                    <oitc-select
-                        name="jiraType"
-                        id="jiraType"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.jira_type"
-                        [options]="jiraTypes"
-                        oitcFormError [errors]="errors" errorField="jira_type">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors" errorField="jira_type"></oitc-form-feedback>
+          <c-card-header>
+            <h5 cCardTitle>
+              {{ t('Edit Jira Settings') }}
+            </h5>
+          </c-card-header>
+          <c-card-body>
+            <div class="mb-3">
+              <label cLabel for="jiraType">
+                {{ t('Jira Type') }}
+                <oitc-required-icon></oitc-required-icon>
+              </label>
+              <oitc-select
+                name="jiraType"
+                id="jiraType"
+                optionValue="key"
+                optionLabel="value"
+                [(ngModel)]="post.jira_type"
+                [options]="jiraTypes"
+                oitcFormError [errors]="errors" errorField="jira_type">
+              </oitc-select>
+              <oitc-form-feedback [errors]="errors" errorField="jira_type"></oitc-form-feedback>
+            </div>
+            <div class="mb-3">
+              <label cLabel for="jira_url">
+                {{ t('Jira URL') }}
+                <oitc-required-icon></oitc-required-icon>
+              </label>
+              <input cFormControl
+                name="jira_url"
+                id="jira_url"
+                placeholder="https://jira-example.itsm.love"
+                [(ngModel)]="post.jira_url"
+                oitcFormError [errors]="errors" errorField="jira_url"/>
+              <oitc-form-feedback [errors]="errors" errorField="jira_url"></oitc-form-feedback>
+              <div class="help-block">
+                {{ t('The URL of your Jira Server') }}
+              </div>
+            </div>
+            <div class="mb-3">
+              <c-form-check>
+                <input cFormCheckInput
+                  name="ignore_ssl_certificate"
+                  id="ignore_ssl_certificate"
+                  type="checkbox"
+                  [(ngModel)]="post.ignore_ssl_certificate"
+                  oitcFormError [errors]="errors" errorField="ignore_ssl_certificate"/>
+                <oitc-form-feedback [errors]="errors" errorField="ignore_ssl_certificate"></oitc-form-feedback>
+                <label cFormCheckLabel for="ignore_ssl_certificate">
+                  {{ t('Disable SSL certificate validation to allow self-signed certificates') }}
+                </label>
+              </c-form-check>
+            </div>
+            <div class="mb-3">
+              <c-form-check>
+                <input cFormCheckInput
+                  name="use_proxy"
+                  id="use_proxy"
+                  type="checkbox"
+                  [(ngModel)]="post.use_proxy"
+                  oitcFormError [errors]="errors" errorField="use_proxy"/>
+                <oitc-form-feedback [errors]="errors" errorField="use_proxy"></oitc-form-feedback>
+                <label cFormCheckLabel for="use_proxy">
+                  {{ t('Use Proxy Server') }}
+                </label>
+              </c-form-check>
+              <div class="help-block">
+                <span *oitcPermission="['proxy', 'index'];negate:true">
+                  {{ t('Determine if the configured proxy should be used.') }}
+                </span>
+                <a *oitcPermission="['proxy', 'index']" [routerLink]="['/', 'proxy', 'index']">
+                  {{ t('Determine if the configured proxy should be used.') }}
+                </a>
+              </div>
+            </div>
+            @if (post.jira_type === JiraType.Cloud) {
+              <div class="mb-3">
+                <label cLabel for="api_key">
+                  {{ t('Jira Username / E-Mail address') }}
+                  <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                  name="username"
+                  id="username"
+                  [(ngModel)]="post.username"
+                  oitcFormError [errors]="errors" errorField="username"/>
+                <oitc-form-feedback [errors]="errors" errorField="username"></oitc-form-feedback>
+                <div class="help-block">
+                  {{ t('Jira username') }}
                 </div>
-
-                <div class="mb-3">
-                    <label cLabel for="jira_url">
-                        {{ t('Jira URL') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl
-                           name="jira_url"
-                           id="jira_url"
-                           placeholder="https://jira-example.itsm.love"
-                           [(ngModel)]="post.jira_url"
-                           oitcFormError [errors]="errors" errorField="jira_url"/>
-                    <oitc-form-feedback [errors]="errors" errorField="jira_url"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('The URL of your Jira Server') }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <c-form-check>
-                        <input cFormCheckInput
-                               name="ignore_ssl_certificate"
-                               id="ignore_ssl_certificate"
-                               type="checkbox"
-                               [(ngModel)]="post.ignore_ssl_certificate"
-                               oitcFormError [errors]="errors" errorField="ignore_ssl_certificate"/>
-                        <oitc-form-feedback [errors]="errors" errorField="ignore_ssl_certificate"></oitc-form-feedback>
-                        <label cFormCheckLabel for="ignore_ssl_certificate">
-                            {{ t('Disable SSL certificate validation to allow self-signed certificates') }}
-                        </label>
-                    </c-form-check>
-                </div>
-
-                <div class="mb-3">
-                    <c-form-check>
-                        <input cFormCheckInput
-                               name="use_proxy"
-                               id="use_proxy"
-                               type="checkbox"
-                               [(ngModel)]="post.use_proxy"
-                               oitcFormError [errors]="errors" errorField="use_proxy"/>
-                        <oitc-form-feedback [errors]="errors" errorField="use_proxy"></oitc-form-feedback>
-                        <label cFormCheckLabel for="use_proxy">
-                            {{ t('Use Proxy Server') }}
-                        </label>
-                    </c-form-check>
-                    <div class="help-block">
-                        <span *oitcPermission="['proxy', 'index'];negate:true">
-                            {{ t('Determine if the configured proxy should be used.') }}
-                        </span>
-                        <a *oitcPermission="['proxy', 'index']" [routerLink]="['/', 'proxy', 'index']">
-                            {{ t('Determine if the configured proxy should be used.') }}
-                        </a>
-                    </div>
-                </div>
-
-                <div class="mb-3" *ngIf="post.jira_type === JiraType.Cloud">
-                    <label cLabel for="api_key">
-                        {{ t('Jira Username / E-Mail address') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl
-                           name="username"
-                           id="username"
-                           [(ngModel)]="post.username"
-                           oitcFormError [errors]="errors" errorField="username"/>
-                    <oitc-form-feedback [errors]="errors" errorField="username"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('Jira username') }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="api_key">
-                        {{ t('API Token / Personal Access Tokens') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl
-                           name="api_key"
-                           id="api_key"
-                           [(ngModel)]="post.api_key"
-                           oitcFormError [errors]="errors" errorField="api_key"/>
-                    <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('Jira Cloud uses API Tokens. Jira Data Center uses Personal Access Tokens') }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <c-form-check>
-                        <input cFormCheckInput
-                               name="enable_two_way"
-                               id="enable_two_way"
-                               type="checkbox"
-                               [(ngModel)]="post.enable_two_way"
-                               oitcFormError [errors]="errors" errorField="enable_two_way"/>
-                        <oitc-form-feedback [errors]="errors" errorField="enable_two_way"></oitc-form-feedback>
-                        <label cFormCheckLabel for="enable_two_way">
-                            {{ t('Enable Two-Way Integration') }}
-                        </label>
-                    </c-form-check>
-                    <div class="help-block">
-                    </div>
-                    <div class="help-block">
-                        {{ t('Via the Two-Way Integration Jira is able, to acknowledge host and service problems.') }}
-                        <br/>
-                        {{ t('For this it is required, that the Jira server can connect to the openITCOCKPIT System.') }}
-                    </div>
-                </div>
-
-                <div class="mb-3" *ngIf="post.enable_two_way">
-                    <label cLabel for="webhook_url_acknowledgements">
-                        {{ t('Webhook URL for acknowledgements') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl
-                           name="webhook_url_acknowledgements"
-                           id="webhook_url_acknowledgements"
-                           [(ngModel)]="webhook_url_acknowledgements"
-                           disabled/>
-                    <span class="help-block">
-                        {{ t('Use this Webhook URL in Jira so that Jira can acknowledgement host and services in openITCOCKPIT. You need to create an openITCOCKPIT user defined API key first.') }}
-                        <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
-                    </span>
-                </div>
-
-                <div class="mb-3" *ngIf="post.enable_two_way">
-                    <label cLabel for="webhook_url_closed">
-                        {{ t('Webhook URL to close issues') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl
-                           name="webhook_url_closed"
-                           id="webhook_url_closed"
-                           [(ngModel)]="webhook_url_closed"
-                           disabled/>
-                    <span class="help-block">
-                        {{ t('Webhook URL for Jira to tell openITCOCKPIT when a Issue got closed. You need to create an openITCOCKPIT user defined API key first.') }}
-                        <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
-                    </span>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="jira_projects">
-                        {{ t('Jira Projects') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-
-                    <c-input-group>
-                        <oitc-multi-select
-                            name="jira_projects"
-                            id="jira_projects"
-                            optionValue="key"
-                            optionLabel="value"
-                            class="flex-1"
-                            [(ngModel)]="selectedJiraProjects"
-                            (onChange)="onJiraProjectsSelectChange($event)"
-                            [options]="jiraProjectsForSelect"
-                            oitcFormError [errors]="getJiraProjectGeneralErrors()" errorField="jira_projects">
-                        </oitc-multi-select>
-                        <button cButton color="primary"
-                                class="ripple me-2"
-                                [disabled]="isLoadingJiraProjects"
-                                (click)="loadJiraProjects()">
-                            <fa-icon [hidden]="!isLoadingJiraProjects"
-                                     [icon]="['fas', 'spinner']"
-                                     animation="spin"></fa-icon>
-                            {{ t('Refresh Jira Projects') }}
-                        </button>
-                    </c-input-group>
-                    <oitc-form-feedback [errors]="getJiraProjectGeneralErrors()"
-                                        errorField="jira_projects"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('openITCOCKPIT can create Issues in different Jira projects. Please select all Jira Projects, openITCOCKPIT should use from the list.') }}
-                        <br/>
-                        {{ t('Set the "JIRA_PROJECT" custom variable for a contact, to overwrite the default Jira Project') }}
-                    </div>
-                    <div class="help-block text-danger" *ngIf="loadProjectsError">
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                        {{ loadProjectsError }}
-                    </div>
-                </div>
-
-                <c-row>
-                    <c-col [xs]="12" *ngFor="let jira_project of post.jira_projects;let i = index ">
-
-                        <c-card class="mb-4" *ngIf="projectDetails[jira_project.project_key]">
-                            <c-card-body>
-                                <h5>
-                                    <fa-icon
-                                        [icon]="['fas', 'star']"
-                                        *ngIf="jira_project.is_default"
-                                        class="text-warning-glow"
-                                        [title]="'Default Project'|transloco"></fa-icon>
-                                    {{ t('Project') }}:
-                                    <small class="fw-300">
-                                        {{ jira_project.project_key }}
-                                    </small>
-                                </h5>
-
-                                <c-row cCardText>
-                                    <c-col [xs]="12">
-
-                                        <div class="mb-3">
-                                            <c-form-check>
-                                                <input cFormCheckInput
-                                                       [name]="i+'is_default'"
-                                                       [attr.id]="i+'is_default'"
-                                                       type="checkbox"
-                                                       [(ngModel)]="jira_project.is_default"
-                                                       (ngModelChange)="ensureOnlyOneDefaultProjectsIsSelected(jira_project.project_key, $event)"
-                                                       oitcFormError [errors]="errors" errorField="is_default"/>
-                                                <oitc-form-feedback [errors]="errors"
-                                                                    errorField="is_default"></oitc-form-feedback>
-                                                <label cFormCheckLabel [for]="i+'is_default'">
-                                                    {{ t('Default Project') }}
-                                                </label>
-                                            </c-form-check>
-                                            <div class="help-block">
-                                                {{ t('The default project is used, if no project is set for a contact through the JIRA_PROJECT macro.') }}
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label cLabel [for]="i+'issue_type_id'">
-                                                {{ t('Issue Type') }}
-                                                <oitc-required-icon></oitc-required-icon>
-                                            </label>
-
-                                            <oitc-select
-                                                [name]="i+'issue_type_id'"
-                                                [attr.id]="i+'issue_type_id'"
-                                                optionValue="key"
-                                                optionLabel="value"
-                                                [(ngModel)]="jira_project.issue_type_id"
-                                                [options]="projectDetails[jira_project.project_key].issueTypes"
-                                                (onChange)="findIssueTypeNameById(i, jira_project.issue_type_id, jira_project.project_key)"
-                                                [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
-                                                oitcFormError [errors]="getJiraProjectErrors(i)"
-                                                errorField="issue_type_id">
-                                            </oitc-select>
-                                            <oitc-form-feedback [errors]="getJiraProjectErrors(i)"
-                                                                errorField="issue_type_id"></oitc-form-feedback>
-                                            <div class="help-block">
-                                                {{ t('The issue type is used to create Jira Issues in the selected Jira Project. Can be overwritten through the JIRA_ISSUE_TYPE contact macro.') }}
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label cLabel [for]="i+'close_transition_id'">
-                                                {{ t('Close transitions ID') }}
-                                            </label>
-                                            <input cFormControl
-                                                   [name]="i+'close_transition_id'"
-                                                   [attr.id]="i+'close_transition_id'"
-                                                   placeholder="41"
-                                                   type="number"
-                                                   [(ngModel)]="jira_project.close_transition_id"
-                                                   oitcFormError [errors]="getJiraProjectErrors(i)"
-                                                   errorField="close_transition_id"/>
-                                            <oitc-form-feedback [errors]="getJiraProjectErrors(i)"
-                                                                errorField="close_transition_id"></oitc-form-feedback>
-                                            <div class="help-block">
-                                                {{ t('The transition ID is a numeric value that can be used by openITCOCKPIT to close Jira Issues.') }}
-                                                {{ t('Unfortunately Jira does not provide an API endpoint to fetch transitions IDs.') }}
-                                                <br>
-                                                {{ t('Can be overwritten through the JIRA_CLOSE_TRANSITION_ID contact macro.') }}
-                                            </div>
-                                        </div>
-
-                                    </c-col>
-                                </c-row>
-
-
-                            </c-card-body>
-                        </c-card>
-
-
-                    </c-col>
-                </c-row>
-
-
-            </c-card-body>
-
-            <c-card-footer class="text-end">
-                <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Save') }}
+              </div>
+            }
+            <div class="mb-3">
+              <label cLabel for="api_key">
+                {{ t('API Token / Personal Access Tokens') }}
+                <oitc-required-icon></oitc-required-icon>
+              </label>
+              <input cFormControl
+                name="api_key"
+                id="api_key"
+                [(ngModel)]="post.api_key"
+                oitcFormError [errors]="errors" errorField="api_key"/>
+              <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
+              <div class="help-block">
+                {{ t('Jira Cloud uses API Tokens. Jira Data Center uses Personal Access Tokens') }}
+              </div>
+            </div>
+            <div class="mb-3">
+              <c-form-check>
+                <input cFormCheckInput
+                  name="enable_two_way"
+                  id="enable_two_way"
+                  type="checkbox"
+                  [(ngModel)]="post.enable_two_way"
+                  oitcFormError [errors]="errors" errorField="enable_two_way"/>
+                <oitc-form-feedback [errors]="errors" errorField="enable_two_way"></oitc-form-feedback>
+                <label cFormCheckLabel for="enable_two_way">
+                  {{ t('Enable Two-Way Integration') }}
+                </label>
+              </c-form-check>
+              <div class="help-block">
+              </div>
+              <div class="help-block">
+                {{ t('Via the Two-Way Integration Jira is able, to acknowledge host and service problems.') }}
+                <br/>
+                {{ t('For this it is required, that the Jira server can connect to the openITCOCKPIT System.') }}
+              </div>
+            </div>
+            @if (post.enable_two_way) {
+              <div class="mb-3">
+                <label cLabel for="webhook_url_acknowledgements">
+                  {{ t('Webhook URL for acknowledgements') }}
+                  <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                  name="webhook_url_acknowledgements"
+                  id="webhook_url_acknowledgements"
+                  [(ngModel)]="webhook_url_acknowledgements"
+                  disabled/>
+                <span class="help-block">
+                  {{ t('Use this Webhook URL in Jira so that Jira can acknowledgement host and services in openITCOCKPIT. You need to create an openITCOCKPIT user defined API key first.') }}
+                  <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
+                </span>
+              </div>
+            }
+            @if (post.enable_two_way) {
+              <div class="mb-3">
+                <label cLabel for="webhook_url_closed">
+                  {{ t('Webhook URL to close issues') }}
+                  <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                  name="webhook_url_closed"
+                  id="webhook_url_closed"
+                  [(ngModel)]="webhook_url_closed"
+                  disabled/>
+                <span class="help-block">
+                  {{ t('Webhook URL for Jira to tell openITCOCKPIT when a Issue got closed. You need to create an openITCOCKPIT user defined API key first.') }}
+                  <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
+                </span>
+              </div>
+            }
+            <div class="mb-3">
+              <label cLabel for="jira_projects">
+                {{ t('Jira Projects') }}
+                <oitc-required-icon></oitc-required-icon>
+              </label>
+              <c-input-group>
+                <oitc-multi-select
+                  name="jira_projects"
+                  id="jira_projects"
+                  optionValue="key"
+                  optionLabel="value"
+                  class="flex-1"
+                  [(ngModel)]="selectedJiraProjects"
+                  (onChange)="onJiraProjectsSelectChange($event)"
+                  [options]="jiraProjectsForSelect"
+                  oitcFormError [errors]="getJiraProjectGeneralErrors()" errorField="jira_projects">
+                </oitc-multi-select>
+                <button cButton color="primary"
+                  class="ripple me-2"
+                  [disabled]="isLoadingJiraProjects"
+                  (click)="loadJiraProjects()">
+                  <fa-icon [hidden]="!isLoadingJiraProjects"
+                    [icon]="['fas', 'spinner']"
+                  animation="spin"></fa-icon>
+                  {{ t('Refresh Jira Projects') }}
                 </button>
+              </c-input-group>
+              <oitc-form-feedback [errors]="getJiraProjectGeneralErrors()"
+              errorField="jira_projects"></oitc-form-feedback>
+              <div class="help-block">
+                {{ t('openITCOCKPIT can create Issues in different Jira projects. Please select all Jira Projects, openITCOCKPIT should use from the list.') }}
+                <br/>
+                {{ t('Set the "JIRA_PROJECT" custom variable for a contact, to overwrite the default Jira Project') }}
+              </div>
+              @if (loadProjectsError) {
+                <div class="help-block text-danger">
+                  <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                  {{ loadProjectsError }}
+                </div>
+              }
+            </div>
+            <c-row>
+              @for (jira_project of post.jira_projects; track jira_project; let i = $index) {
+                <c-col [xs]="12">
+                  @if (projectDetails[jira_project.project_key]) {
+                    <c-card class="mb-4">
+                      <c-card-body>
+                        <h5>
+                          @if (jira_project.is_default) {
+                            <fa-icon
+                              [icon]="['fas', 'star']"
+                              class="text-warning-glow"
+                            [title]="'Default Project'|transloco"></fa-icon>
+                          }
+                          {{ t('Project') }}:
+                          <small class="fw-300">
+                            {{ jira_project.project_key }}
+                          </small>
+                        </h5>
+                        <c-row cCardText>
+                          <c-col [xs]="12">
+                            <div class="mb-3">
+                              <c-form-check>
+                                <input cFormCheckInput
+                                  [name]="i+'is_default'"
+                                  [attr.id]="i+'is_default'"
+                                  type="checkbox"
+                                  [(ngModel)]="jira_project.is_default"
+                                  (ngModelChange)="ensureOnlyOneDefaultProjectsIsSelected(jira_project.project_key, $event)"
+                                  oitcFormError [errors]="errors" errorField="is_default"/>
+                                <oitc-form-feedback [errors]="errors"
+                                errorField="is_default"></oitc-form-feedback>
+                                <label cFormCheckLabel [for]="i+'is_default'">
+                                  {{ t('Default Project') }}
+                                </label>
+                              </c-form-check>
+                              <div class="help-block">
+                                {{ t('The default project is used, if no project is set for a contact through the JIRA_PROJECT macro.') }}
+                              </div>
+                            </div>
+                            <div class="mb-3">
+                              <label cLabel [for]="i+'issue_type_id'">
+                                {{ t('Issue Type') }}
+                                <oitc-required-icon></oitc-required-icon>
+                              </label>
+                              <oitc-select
+                                [name]="i+'issue_type_id'"
+                                [attr.id]="i+'issue_type_id'"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="jira_project.issue_type_id"
+                                [options]="projectDetails[jira_project.project_key].issueTypes"
+                                (onChange)="findIssueTypeNameById(i, jira_project.issue_type_id, jira_project.project_key)"
+                                [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
+                                oitcFormError [errors]="getJiraProjectErrors(i)"
+                                errorField="issue_type_id">
+                              </oitc-select>
+                              <oitc-form-feedback [errors]="getJiraProjectErrors(i)"
+                              errorField="issue_type_id"></oitc-form-feedback>
+                              <div class="help-block">
+                                {{ t('The issue type is used to create Jira Issues in the selected Jira Project. Can be overwritten through the JIRA_ISSUE_TYPE contact macro.') }}
+                              </div>
+                            </div>
+                            <div class="mb-3">
+                              <label cLabel [for]="i+'close_transition_id'">
+                                {{ t('Close transitions ID') }}
+                              </label>
+                              <input cFormControl
+                                [name]="i+'close_transition_id'"
+                                [attr.id]="i+'close_transition_id'"
+                                placeholder="41"
+                                type="number"
+                                [(ngModel)]="jira_project.close_transition_id"
+                                oitcFormError [errors]="getJiraProjectErrors(i)"
+                                errorField="close_transition_id"/>
+                              <oitc-form-feedback [errors]="getJiraProjectErrors(i)"
+                              errorField="close_transition_id"></oitc-form-feedback>
+                              <div class="help-block">
+                                {{ t('The transition ID is a numeric value that can be used by openITCOCKPIT to close Jira Issues.') }}
+                                {{ t('Unfortunately Jira does not provide an API endpoint to fetch transitions IDs.') }}
+                                <br>
+                                  {{ t('Can be overwritten through the JIRA_CLOSE_TRANSITION_ID contact macro.') }}
+                                </div>
+                              </div>
+                            </c-col>
+                          </c-row>
+                        </c-card-body>
+                      </c-card>
+                    }
+                  </c-col>
+                }
+              </c-row>
+            </c-card-body>
+            <c-card-footer class="text-end">
+              <button cButton class="ripple" color="primary" type="submit">
+                {{ t('Save') }}
+              </button>
             </c-card-footer>
-
-        </c-card>
-    </form>
-</ng-container>
+          </c-card>
+        </form>
+      }
+    </ng-container>

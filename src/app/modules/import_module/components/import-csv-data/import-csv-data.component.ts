@@ -24,7 +24,7 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
@@ -53,27 +53,25 @@ import _ from 'lodash';
 @Component({
     selector: 'oitc-import-csv-data',
     imports: [
-        ButtonCloseDirective,
-        ColComponent,
-        FaIconComponent,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgIf,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        PermissionDirective,
-        RouterLink,
-        FormsModule,
-        TableDirective,
-        NgForOf,
-        NgClass
-    ],
+    ButtonCloseDirective,
+    ColComponent,
+    FaIconComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    FaStackComponent,
+    FaStackItemSizeDirective,
+    PermissionDirective,
+    RouterLink,
+    FormsModule,
+    TableDirective,
+    NgClass
+],
     templateUrl: './import-csv-data.component.html',
     styleUrl: './import-csv-data.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

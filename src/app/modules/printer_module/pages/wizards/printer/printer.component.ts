@@ -22,31 +22,30 @@ import { FormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
-import { NgIf } from '@angular/common';
+
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-printer',
     imports: [
-        FaIconComponent,
-        TranslocoDirective,
-        RouterLink,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        TranslocoPipe,
-        WizardsDynamicfieldsComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        RequiredIconComponent,
-        SelectComponent,
-        NgIf,
-        BackButtonDirective
-    ],
+    FaIconComponent,
+    TranslocoDirective,
+    RouterLink,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    TranslocoPipe,
+    WizardsDynamicfieldsComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    RequiredIconComponent,
+    SelectComponent,
+    BackButtonDirective
+],
     templateUrl: './printer.component.html',
     styleUrl: './printer.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,308 +1,320 @@
 <ng-container *transloco="let t">
 
+  @if (serviceBrowserConfig) {
     <oitc-services-browser-menu
-        *ngIf="serviceBrowserConfig"
-        [config]="serviceBrowserConfig"></oitc-services-browser-menu>
+    [config]="serviceBrowserConfig"></oitc-services-browser-menu>
+  }
 
-    <c-card class="mb-3 mt-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Service') }}
-                <small class="fw-300">
-                    {{ t('check history') }}
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="loadServicechecks()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                        {{ t('Filter') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
-            <!-- Filter -->
-            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-                <c-row>
-                    <c-col>
-                        <h6 class="pb-2 mb-3 border-bottom">
-                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                            {{ t('Filter') }}
-                        </h6>
-                    </c-col>
-                </c-row>
-                <form cForm>
-                    <c-row>
-                        <c-col md="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    {{ t('From') }}
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="from"
-                                       [placeholder]="'From date' | transloco"
-                                       aria-label="from"
-                                       name="from"
-                                       cFormControl
-                                       oitcDebounce
-                                       type="datetime-local"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col md="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    {{ t('To') }}
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="to"
-                                       [placeholder]="'From date' | transloco"
-                                       aria-label="to"
-                                       name="to"
-                                       cFormControl
-                                       oitcDebounce
-                                       type="datetime-local"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col md="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Servicechecks.output]']"
-                                       [placeholder]="'Filter by output' | transloco"
-                                       aria-label="name"
-                                       cFormControl
-                                       name="Servicechecks.output"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
+  <c-card class="mb-3 mt-3">
+    <c-card-header>
+      <h5 cCardTitle>{{ t('Service') }}
+        <small class="fw-300">
+          {{ t('check history') }}
+        </small>
+      </h5>
+      <c-nav class="card-toolbar card-header-pills">
+        <c-nav-item class="px-1">
+          <button (click)="loadServicechecks()" cButton class="ripple" color="default" size="xs">
+            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+            {{ t('Refresh') }}
+          </button>
+        </c-nav-item>
+        <c-nav-item class="px-1">
+          <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+            {{ t('Filter') }}
+          </button>
+        </c-nav-item>
+      </c-nav>
+    </c-card-header>
+    <c-card-body>
+      <!-- Filter -->
+      <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+        <c-row>
+          <c-col>
+            <h6 class="pb-2 mb-3 border-bottom">
+              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+              {{ t('Filter') }}
+            </h6>
+          </c-col>
+        </c-row>
+        <form cForm>
+          <c-row>
+            <c-col md="6" class="mb-2">
+              <c-input-group>
+                <span cInputGroupText>
+                  {{ t('From') }}
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="from"
+                  [placeholder]="'From date' | transloco"
+                  aria-label="from"
+                  name="from"
+                  cFormControl
+                  oitcDebounce
+                  type="datetime-local"
+                  />
+              </c-input-group>
+            </c-col>
+            <c-col md="6" class="mb-2">
+              <c-input-group>
+                <span cInputGroupText>
+                  {{ t('To') }}
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="to"
+                  [placeholder]="'From date' | transloco"
+                  aria-label="to"
+                  name="to"
+                  cFormControl
+                  oitcDebounce
+                  type="datetime-local"
+                  />
+              </c-input-group>
+            </c-col>
+            <c-col md="6" class="mb-2">
+              <c-input-group>
+                <span cInputGroupText>
+                  <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="params['filter[Servicechecks.output]']"
+                  [placeholder]="'Filter by output' | transloco"
+                  aria-label="name"
+                  cFormControl
+                  name="Servicechecks.output"
+                  oitcDebounce
+                  type="text"
+                  />
+              </c-input-group>
+            </c-col>
 
-                    </c-row>
-                    <c-row class="my-3">
-                        <c-col [xs]="12" lg="2">
-                            <fieldset>
-                                <h5>
-                                    {{ t('States') }}
-                                </h5>
-                                <c-form-check>
-                                    <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-success"
-                                        name="stateFilter.ok"
-                                        id="stateFilter.ok"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [(ngModel)]="stateFilter.ok"/>
+          </c-row>
+          <c-row class="my-3">
+            <c-col [xs]="12" lg="2">
+              <fieldset>
+                <h5>
+                  {{ t('States') }}
+                </h5>
+                <c-form-check>
+                  <input
+                    (debouncedValue)="onFilterChange($event)"
+                    cFormCheckInput
+                    class="checkbox-lg checkbox-success"
+                    name="stateFilter.ok"
+                    id="stateFilter.ok"
+                    type="checkbox"
+                    trueFalseValue
+                    oitcDebounce
+                    [(ngModel)]="stateFilter.ok"/>
 
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="stateFilter.ok">{{ t('Ok') }}</label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-warning"
-                                        name="stateFilter.warning"
-                                        id="stateFilter.warning"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [(ngModel)]="stateFilter.warning"/>
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="stateFilter.warning">{{ t('Warning') }}</label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-danger"
-                                        name="stateFilter.critical"
-                                        id="stateFilter.critical"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [(ngModel)]="stateFilter.critical"/>
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="stateFilter.critical">{{ t('Critical') }}</label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-secondary"
-                                        name="stateFilter.unknown"
-                                        id="stateFilter.unknown"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [(ngModel)]="stateFilter.unknown"/>
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="stateFilter.unknown">{{ t('Unknown') }}</label>
-                                </c-form-check>
-                            </fieldset>
-                        </c-col>
-                        <c-col [xs]="12" lg="2">
-                            <fieldset>
-                                <h5>
-                                    {{ t('State Types') }}
-                                </h5>
-                                <c-form-check>
-                                    <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        name="Servicechecks.soft"
-                                        id="Servicechecks.soft"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [(ngModel)]="state_typesFilter.soft"/>
+                  <label cFormCheckLabel class="ms-1 mt-1"
+                  for="stateFilter.ok">{{ t('Ok') }}</label>
+                </c-form-check>
+                <c-form-check>
+                  <input
+                    (debouncedValue)="onFilterChange($event)"
+                    cFormCheckInput
+                    class="checkbox-lg checkbox-warning"
+                    name="stateFilter.warning"
+                    id="stateFilter.warning"
+                    type="checkbox"
+                    trueFalseValue
+                    oitcDebounce
+                    [(ngModel)]="stateFilter.warning"/>
+                  <label cFormCheckLabel class="ms-1 mt-1"
+                  for="stateFilter.warning">{{ t('Warning') }}</label>
+                </c-form-check>
+                <c-form-check>
+                  <input
+                    (debouncedValue)="onFilterChange($event)"
+                    cFormCheckInput
+                    class="checkbox-lg checkbox-danger"
+                    name="stateFilter.critical"
+                    id="stateFilter.critical"
+                    type="checkbox"
+                    trueFalseValue
+                    oitcDebounce
+                    [(ngModel)]="stateFilter.critical"/>
+                  <label cFormCheckLabel class="ms-1 mt-1"
+                  for="stateFilter.critical">{{ t('Critical') }}</label>
+                </c-form-check>
+                <c-form-check>
+                  <input
+                    (debouncedValue)="onFilterChange($event)"
+                    cFormCheckInput
+                    class="checkbox-lg checkbox-secondary"
+                    name="stateFilter.unknown"
+                    id="stateFilter.unknown"
+                    type="checkbox"
+                    trueFalseValue
+                    oitcDebounce
+                    [(ngModel)]="stateFilter.unknown"/>
+                  <label cFormCheckLabel class="ms-1 mt-1"
+                  for="stateFilter.unknown">{{ t('Unknown') }}</label>
+                </c-form-check>
+              </fieldset>
+            </c-col>
+            <c-col [xs]="12" lg="2">
+              <fieldset>
+                <h5>
+                  {{ t('State Types') }}
+                </h5>
+                <c-form-check>
+                  <input
+                    (debouncedValue)="onFilterChange($event)"
+                    cFormCheckInput
+                    class="checkbox-lg checkbox-primary"
+                    name="Servicechecks.soft"
+                    id="Servicechecks.soft"
+                    type="checkbox"
+                    trueFalseValue
+                    oitcDebounce
+                    [(ngModel)]="state_typesFilter.soft"/>
 
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="Servicechecks.soft">{{ t('Soft') }}</label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        name="Servicechecks.hard"
-                                        id="Servicechecks.hard"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [(ngModel)]="state_typesFilter.hard"/>
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="Servicechecks.hard">{{ t('Hard') }}</label>
-                                </c-form-check>
-                            </fieldset>
-                        </c-col>
-                    </c-row>
-                    <c-row class="mt-2">
-                        <c-col class="text-end">
-                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                {{ t('Reset filter') }}
-                            </button>
-                        </c-col>
-                    </c-row>
-                </form>
-            </c-container>
-            <!-- End Filter -->
+                  <label cFormCheckLabel class="ms-1 mt-1"
+                  for="Servicechecks.soft">{{ t('Soft') }}</label>
+                </c-form-check>
+                <c-form-check>
+                  <input
+                    (debouncedValue)="onFilterChange($event)"
+                    cFormCheckInput
+                    class="checkbox-lg checkbox-primary"
+                    name="Servicechecks.hard"
+                    id="Servicechecks.hard"
+                    type="checkbox"
+                    trueFalseValue
+                    oitcDebounce
+                    [(ngModel)]="state_typesFilter.hard"/>
+                  <label cFormCheckLabel class="ms-1 mt-1"
+                  for="Servicechecks.hard">{{ t('Hard') }}</label>
+                </c-form-check>
+              </fieldset>
+            </c-col>
+          </c-row>
+          <c-row class="mt-2">
+            <c-col class="text-end">
+              <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                {{ t('Reset filter') }}
+              </button>
+            </c-col>
+          </c-row>
+        </form>
+      </c-container>
+      <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!servicechecks"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="servicechecks"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col" mat-sort-header="Servicechecks.state">
-                        {{ t('State') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicechecks.start_time">
-                        {{ t('Date') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicechecks.execution_time">
-                        {{ t('Execution time') }}
-                        &nbsp;
-                        <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
-                                 [cTooltip]="'Time in seconds required by the plugin to collect the status information' | transloco"
-                                 cTooltipPlacement="bottom"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Servicechecks.current_check_attempt">
-                        {{ t('Check attempt') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicechecks.is_hardstate">
-                        {{ t('State type') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicechecks.output">
-                        {{ t('Service output') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicechecks.perfdata">
-                        {{ t('Performance data') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let servicecheck of servicechecks.all_servicechecks">
-                    <td class="text-center">
-                        <oitc-servicestatus-simple-icon
-                            [servicestatus]="servicecheck.Servicecheck.state"
-                            [hardstate]="servicecheck.Servicecheck.is_hardstate">
-                        </oitc-servicestatus-simple-icon>
-                    </td>
-                    <td>
-                        {{ servicecheck.Servicecheck.start_time }}
-                    </td>
-                    <td>
-                        {{ servicecheck.Servicecheck.execution_time|localNumber }}s
-                    </td>
-                    <td class="text-center">
-                        {{ servicecheck.Servicecheck.current_check_attempt }}/
-                        {{ servicecheck.Servicecheck.max_check_attempts }}
-                    </td>
-                    <td class="text-center">
-                        <span class="badge text-uppercase"
+      @if (!servicechecks) {
+        <oitc-table-loader></oitc-table-loader>
+      }
+      @if (servicechecks) {
+        <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+          (matSortChange)="onSortChange($event)"
+          [matSortActive]="params.sort" [matSortDirection]="params.direction">
+          <thead>
+            <tr>
+              <th class="width-50 text-center" scope="col" mat-sort-header="Servicechecks.state">
+                {{ t('State') }}
+              </th>
+              <th scope="col" mat-sort-header="Servicechecks.start_time">
+                {{ t('Date') }}
+              </th>
+              <th scope="col" mat-sort-header="Servicechecks.execution_time">
+                {{ t('Execution time') }}
+                &nbsp;
+                <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
+                  [cTooltip]="'Time in seconds required by the plugin to collect the status information' | transloco"
+                cTooltipPlacement="bottom"></fa-icon>
+              </th>
+              <th scope="col" mat-sort-header="Servicechecks.current_check_attempt">
+                {{ t('Check attempt') }}
+              </th>
+              <th scope="col" mat-sort-header="Servicechecks.is_hardstate">
+                {{ t('State type') }}
+              </th>
+              <th scope="col" mat-sort-header="Servicechecks.output">
+                {{ t('Service output') }}
+              </th>
+              <th scope="col" mat-sort-header="Servicechecks.perfdata">
+                {{ t('Performance data') }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (servicecheck of servicechecks.all_servicechecks; track servicecheck) {
+              <tr>
+                <td class="text-center">
+                  <oitc-servicestatus-simple-icon
+                    [servicestatus]="servicecheck.Servicecheck.state"
+                    [hardstate]="servicecheck.Servicecheck.is_hardstate">
+                  </oitc-servicestatus-simple-icon>
+                </td>
+                <td>
+                  {{ servicecheck.Servicecheck.start_time }}
+                </td>
+                <td>
+                  {{ servicecheck.Servicecheck.execution_time|localNumber }}s
+                </td>
+                <td class="text-center">
+                  {{ servicecheck.Servicecheck.current_check_attempt }}/
+                  {{ servicecheck.Servicecheck.max_check_attempts }}
+                </td>
+                <td class="text-center">
+                  @if (servicecheck.Servicecheck.is_hardstate) {
+                    <span class="badge text-uppercase"
                               [ngClass]="{
                                     'bg-ok': servicecheck.Servicecheck.state == 0,
                                     'bg-warning': servicecheck.Servicecheck.state == 1,
                                     'bg-critical': servicecheck.Servicecheck.state == 2,
                                     'bg-unknown': servicecheck.Servicecheck.state == 3
                                     }"
-                              *ngIf="servicecheck.Servicecheck.is_hardstate">
-                            {{ 'Hard' | transloco }}
-                        </span>
-                        <span class="badge text-uppercase opacity-50"
+                      >
+                      {{ 'Hard' | transloco }}
+                    </span>
+                  }
+                  @if (!servicecheck.Servicecheck.is_hardstate) {
+                    <span class="badge text-uppercase opacity-50"
                               [ngClass]="{
                                     'bg-ok': servicecheck.Servicecheck.state == 0,
                                     'bg-warning': servicecheck.Servicecheck.state == 1,
                                     'bg-critical': servicecheck.Servicecheck.state == 2,
                                     'bg-unknown': servicecheck.Servicecheck.state == 3
                                     }"
-                              *ngIf="!servicecheck.Servicecheck.is_hardstate">
-                            {{ 'Soft' | transloco }}
-                        </span>
-                    </td>
-                    <td>
-                        <div class="word-break"
-                             [innerHTML]="servicecheck.Servicecheck.outputHtml | trustAsHtml "></div>
-                    </td>
-                    <td>
-                        {{ servicecheck.Servicecheck.perfdata }}
-                    </td>
-
-                </tr>
-                </tbody>
-            </table>
-            <oitc-no-records
-                *ngIf="servicechecks && servicechecks.all_servicechecks.length === 0"></oitc-no-records>
-            <c-container
-                [fluid]="true" class="mb-3 py-3">
-                <c-row>
-                    <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="servicechecks"
-                            [paginateOrScroll]="servicechecks"></oitc-paginate-or-scroll>
-                    </c-col>
-                </c-row>
-            </c-container>
-        </c-card-body>
-        <c-card-footer>
-            &nbsp;
-        </c-card-footer>
-    </c-card>
+                      >
+                      {{ 'Soft' | transloco }}
+                    </span>
+                  }
+                </td>
+                <td>
+                  <div class="word-break"
+                  [innerHTML]="servicecheck.Servicecheck.outputHtml | trustAsHtml "></div>
+                </td>
+                <td>
+                  {{ servicecheck.Servicecheck.perfdata }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+      @if (servicechecks && servicechecks.all_servicechecks.length === 0) {
+        <oitc-no-records
+        ></oitc-no-records>
+      }
+      <c-container
+        [fluid]="true" class="mb-3 py-3">
+        <c-row>
+          <c-col>
+            @if (servicechecks) {
+              <oitc-paginate-or-scroll
+                (paginatorChange)="onPaginatorChange($event)"
+              [paginateOrScroll]="servicechecks"></oitc-paginate-or-scroll>
+            }
+          </c-col>
+        </c-row>
+      </c-container>
+    </c-card-body>
+    <c-card-footer>
+      &nbsp;
+    </c-card-footer>
+  </c-card>
 </ng-container>

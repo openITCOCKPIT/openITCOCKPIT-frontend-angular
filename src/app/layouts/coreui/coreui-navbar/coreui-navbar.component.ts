@@ -15,7 +15,7 @@ import { SidebarService } from './sidebar.service';
 import { NavigationService } from '../../../components/navigation/navigation.service';
 import { Subscription } from 'rxjs';
 import { MenuHeadline, NavigationInterface } from '../../../components/navigation/navigation.interface';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NavbarGroupComponent } from './navbar-group/navbar-group.component';
 import { SidebarAction } from './sidebar.interface';
@@ -28,15 +28,14 @@ import { Skeleton } from 'primeng/skeleton';
 @Component({
     selector: 'oitc-coreui-navbar',
     imports: [
-        RouterLink,
-        FaIconComponent,
-        NavbarGroupComponent,
-        NgClass,
-        NgIf,
-        NavbarSearchComponent,
-        AsyncPipe,
-        Skeleton
-    ],
+    RouterLink,
+    FaIconComponent,
+    NavbarGroupComponent,
+    NgClass,
+    NavbarSearchComponent,
+    AsyncPipe,
+    Skeleton
+],
     templateUrl: './coreui-navbar.component.html',
     styleUrl: './coreui-navbar.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

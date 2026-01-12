@@ -19,7 +19,7 @@ import {
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../required-icon/required-icon.component';
 import { TrueFalseDirective } from '../../directives/true-false.directive';
@@ -33,24 +33,22 @@ import { MultiSelectComponent } from '../../layouts/primeng/multi-select/multi-s
 @Component({
     selector: 'oitc-dynamical-form-fields',
     imports: [
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        NgForOf,
-        NgIf,
-        PaginatorModule,
-        RequiredIconComponent,
-        TrueFalseDirective,
-        TranslocoDirective,
-        NgSelectComponent,
-        SelectComponent,
-        FormsModule,
-        MultiSelectComponent
-    ],
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    PaginatorModule,
+    RequiredIconComponent,
+    TrueFalseDirective,
+    TranslocoDirective,
+    NgSelectComponent,
+    SelectComponent,
+    FormsModule,
+    MultiSelectComponent
+],
     templateUrl: './dynamical-form-fields.component.html',
     styleUrl: './dynamical-form-fields.component.css',
     providers: [

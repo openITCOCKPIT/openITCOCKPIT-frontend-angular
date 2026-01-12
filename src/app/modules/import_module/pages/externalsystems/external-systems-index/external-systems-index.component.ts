@@ -21,7 +21,7 @@ import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component'
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -65,8 +65,6 @@ import { IndexPage } from '../../../../../pages.interface';
     RouterLink,
     NavComponent,
     NavItemComponent,
-    NgForOf,
-    NgIf,
     PermissionDirective,
     XsButtonDirective,
     CardBodyComponent,

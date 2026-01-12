@@ -40,7 +40,7 @@ import {
     HostDowntimesParams
 } from '../downtimes.interface';
 import { Subscription } from 'rxjs';
-import { AsyncPipe, formatDate, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, formatDate } from '@angular/common';
 import { DowntimesService } from '../downtimes.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -90,8 +90,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
     TrueFalseDirective,
     MatSort,
     MatSortHeader,
-    NgForOf,
-    NgIf,
     TableDirective,
     ItemSelectComponent,
     DowntimeSimpleIconComponent,

@@ -17,16 +17,15 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import {CalendarEvent} from '../../../../pages/calendars/calendars.interface';
-import {NgIf, NgStyle} from '@angular/common';
+import { NgStyle } from '@angular/common';
 
 @Component({
     selector: 'oitc-changecalendars-calendar',
     imports: [
-        TranslocoDirective,
-        FullCalendarModule,
-        NgStyle,
-        NgIf
-    ],
+    TranslocoDirective,
+    FullCalendarModule,
+    NgStyle
+],
     templateUrl: './changecalendars-calendar.component.html',
     styleUrl: './changecalendars-calendar.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

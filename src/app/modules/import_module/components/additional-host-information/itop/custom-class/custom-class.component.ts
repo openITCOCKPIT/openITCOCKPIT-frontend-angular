@@ -3,7 +3,7 @@ import { AdditionalHostInformationResult } from '../../../../pages/externalsyste
 import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { TableDirective } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 import { CustomClassInformationComponent } from './custom-class-information/custom-class-information.component';
 
 
@@ -14,8 +14,6 @@ import { CustomClassInformationComponent } from './custom-class-information/cust
     FaLayersComponent,
     TableDirective,
     TranslocoDirective,
-    NgIf,
-    NgForOf,
     KeyValuePipe,
     CustomClassInformationComponent
 ],
