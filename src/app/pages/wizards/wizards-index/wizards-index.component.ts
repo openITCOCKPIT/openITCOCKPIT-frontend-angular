@@ -80,7 +80,8 @@ export class WizardsIndexComponent implements OnInit, OnDestroy {
             docker: true,
             macos: true,
             virtualization: true,
-            hardware: true
+            hardware: true,
+            webserver: true
         }
     }
 
