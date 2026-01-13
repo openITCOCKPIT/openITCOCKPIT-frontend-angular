@@ -311,12 +311,15 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
                 nameGap: 35,
             },
             grid: {
-                left: 10,
-                right: 20,
-                top: 10
+                left: 40,
+                right: 10,
+                top: 20,
+                bottom: 10,
+                containLabel: true
             },
-            
+
             legend: {
+                top: 'top',
                 data: [
                     this.TranslocoService.translate('Load 1'),
                     this.TranslocoService.translate('Load 5'),
