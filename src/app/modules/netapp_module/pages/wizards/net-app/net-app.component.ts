@@ -10,16 +10,12 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    AccordionButtonDirective,
-    AccordionComponent,
-    AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     FormControlDirective,
     FormLabelDirective,
-    TemplateIdDirective
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -46,11 +42,7 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
         BackButtonDirective,
         FormFeedbackComponent,
         FormErrorDirective,
-        FormsModule,
-        AccordionButtonDirective,
-        AccordionComponent,
-        AccordionItemComponent,
-        TemplateIdDirective
+        FormsModule
     ],
     templateUrl: './net-app.component.html',
     styleUrl: './net-app.component.css',
